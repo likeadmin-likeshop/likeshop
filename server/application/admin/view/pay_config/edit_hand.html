@@ -1,0 +1,60 @@
+{layout name="layout2" /}
+<style>
+    #div1{padding-top:15px;}
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付手续费:</label>
+        <div class="layui-input-inline" style="display: inline;">
+            <input type="text" name="commission"  lay-verify="required" lay-verType="tips"  placeholder="请输入手续费" autocomplete="off" class="layui-input">
+
+        </div><div id="div1" class="layui-input-inline" style="display: inline;"> %</div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">支付时根据订单应付金额额外收取的手续费</label>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款启用:</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" lay-filter="disable" name="pay_use" lay-skin="switch" lay-text="启用|关闭" {if ($info.pay_use==1)}checked {/if} >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">退款启用:</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" lay-filter="disable" name="refund_use" lay-skin="switch" lay-text="启用|关闭" {if ($info.refund_use==1)}checked {/if} >
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">余额支付订单退款时,余额退款原路返回</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提现启用:</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" lay-filter="disable" name="withdraw_use" lay-skin="switch" lay-text="启用|关闭" {if ($info.withdraw_use==1)}checked {/if} >
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">默认关闭</label>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+    })
+</script>

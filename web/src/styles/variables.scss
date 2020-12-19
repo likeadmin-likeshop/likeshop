@@ -1,0 +1,37 @@
+
+/// color|1|Background Color|1
+$--color-primary: #FF2C3C !default;
+/// color|1|Background Color|1
+$--color-white: #FFFFFF !default;
+/// color|1|Background Color|1
+$--color-black: #000000 !default;
+$--color-primary-light: #9AC3E9 !default;
+$--color-yellow: #FFA630;
+$--color-yellow-light: #FFF1E6;
+
+// Background
+/// color|1|Background Color|4
+$--background-color-base: #F5F5F5 !default;
+$--background-color-gray: #F4F4F4 !default;
+$--color-text-primary: $--color-primary !default;
+/// color|1|Font Color|2
+$--color-text-normal: #333333 !default;
+/// color|1|Font Color|2
+$--color-text-regular: #666666 !default;
+/// color|1|Font Color|2
+$--color-text-secondary: #999999 !default;
+/// color|1|Font Color|2
+$--color-text-placeholder: #B5B5B5 !default;
+/// color|1|Border Color|3
+$--border-color-base: #E5E5E5 !default;
+/// color|1|Border Color|3
+$--border-color-light: #E4E7ED !default;
+/// color|1|Border Color|3
+$--border-color-lighter: #EBEEF5 !default;
+
+/* Border
+-------------------------- */
+$--border-width-base: 1px !default;
+$--border-style-base: solid !default;
+$--border-color-hover: $--color-text-placeholder !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;

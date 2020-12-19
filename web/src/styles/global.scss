@@ -1,0 +1,403 @@
+@charset "utf-8";
+
+/* 初始化 */
+body,
+div,
+ul,
+li,
+ol,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+textarea,
+select,
+p,
+dl,
+dt,
+dd,
+a,
+img,
+button,
+form,
+table,
+th,
+tr,
+td,
+tbody,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* 禁止缩放表单 */
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input {
+    resize: none;
+    border: none;
+}
+
+
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+
+input::placeholder {
+    color: $--color-text-placeholder !important
+}
+
+
+body {
+    font: 14px/1.3 'PingFang SC', 'Microsoft YaHei', '宋体', Tahoma, Arial, sans-serif;
+    color: $--color-text-normal;
+    background-color: $--background-color-base;
+    overflow-x: hidden;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.bg-gray {
+    background-color: #F2F2F2;
+}
+
+.bg-primary {
+    background-color: $--color-text-primary;
+}
+
+.normal {
+    color: #333333;
+}
+
+.lighter {
+    color: #666666;
+}
+
+.muted {
+    color: #999999;
+}
+
+.white {
+    color: white;
+}
+
+.primary {
+    color: $--color-text-primary;
+}
+
+/* 定义字体大小 */
+
+.xxl {
+    font-size: 18px;
+}
+
+.xl {
+    font-size: 17px;
+}
+
+.lg {
+    font-size: 16px;
+}
+
+.md {
+    font-size: 15px;
+}
+
+.nr {
+    font-size: 14px;
+}
+
+.sm {
+    font-size: 13px;
+}
+
+.xs {
+    font-size: 12px;
+}
+
+.xxs {
+    font-size: 11px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/*单行溢出*/
+.one-txt-cut {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/*多行溢出 手机端使用*/
+.two-txt-cut {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.br30 {
+    border-radius: 30px;
+}
+
+.br60 {
+    border-radius: 60px;
+}
+
+//******外边距原子样式******/
+.mr5 {
+    margin-right: 5px;
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.mr20 {
+    margin-right: 20px;
+}
+
+.ml5 {
+    margin-left: 5px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.mt5 {
+    margin-top: 5px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb5 {
+    margin-bottom: 5px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+//******布局样式******/
+.wrap {
+    flex-wrap: wrap;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.row-start {
+    @extend .row;
+    align-items: flex-start;
+}
+
+.row-center {
+    @extend .row;
+    justify-content: center;
+}
+
+.row-between {
+    @extend .row;
+    justify-content: space-between;
+}
+
+.row-around {
+    @extend .row;
+    justify-content: space-around;
+}
+
+.row-end {
+    @extend .row;
+    justify-content: flex-end;
+}
+
+
+.column {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.column-start {
+    @extend .column;
+    justify-content: flex-start;
+}
+
+.column-center {
+    @extend .column;
+    align-items: center;
+}
+
+.column-around {
+    @extend .column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.column-between {
+    @extend .column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container {
+    @extend .column;
+}
+
+//******图标******/
+
+@mixin icon-image($size) {
+    min-height: $size;
+    min-width: $size;
+    height: $size;
+    width: $size;
+    vertical-align: middle;
+}
+
+.icon-xs {
+    @include icon-image(14px);
+}
+
+.icon-sm {
+    @include icon-image(15px);
+}
+
+.icon {
+    @include icon-image(22px);
+}
+
+.icon-lg {
+    @include icon-image(26px);
+}
+
+.icon-xl {
+    @include icon-image(32px);
+}
+
+.icon-xxl {
+    @include icon-image(60px);
+}
+
+.img-null {
+    width: 150px;
+    height: 150px;
+}
+
+button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+/* 按钮大小 */
+button[size="xs"] {
+    line-height: 29px;
+    height: 29px;
+    font-size: 13px;
+    padding: 0 15px;
+}
+
+button[size="sm"] {
+    line-height: 31px;
+    height: 31px;
+    font-size: 14px;
+    padding: 0 15px;
+}
+
+button[size="md"] {
+    line-height: 35px;
+    height: 35px;
+    font-size: 15px;
+    padding: 0 15px;
+}
+
+button[size="lg"] {
+    line-height: 42px;
+    height: 42px;
+    font-size: 16px;
+    padding: 0 15px;
+}
+
+/* 中划线 */
+.line-through {
+    text-decoration: line-through;
+}
+
+#app .van-fade-enter-active,
+#app .van-fade-leave-active {
+    width: 100%;
+    position: absolute;
+    top: 0;
+}
+
+#app .van-search {
+    padding: 7.5px 10px;
+}
+#app .van-tabs .van-tabs__wrap,
+#app .van-tabs .van-tab {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+
+#app .van-tabs .van-tab--active {
+    color: $--color-primary;
+}
+
+.van-tabs .van-hairline--top-bottom:after {
+    border-width: 0;
+}
+#app .van-tabs__line {
+    background-color: $--color-primary;
+    height: 2px;
+}
+.hidden-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.van-overlay {
+    width: 100vw;
+    height: 100vh;
+}

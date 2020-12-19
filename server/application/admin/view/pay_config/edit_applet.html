@@ -1,0 +1,359 @@
+{layout name="layout2" /}
+<style>
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+    .goods-li-a {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;}
+
+    .goods-img-del-x-a {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+
+    .label-dir{
+        color: #0C0C0C;
+    }
+
+
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">APPID:</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="app_id" value="{$res.app_id}" lay-verify="" lay-verType="tips"  placeholder="请输入APPID" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">微信支付关联的微信小程序APPID</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">AppSecrect:</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="app_secrect" value="{$res.app_secrect}" lay-verify="" lay-verType="tips"  placeholder="请输入AppSecrect" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">微信支付关联的微信小程序AppSecrect</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">paySignKey:</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="pay_sign_key" value="{$res.pay_sign_key}" lay-verify="" lay-verType="tips"  placeholder="请输入paySignKey" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">微信支付商户API密钥</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">MCHID:</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="mch_id" value="{$res.mch_id}" lay-verify="" lay-verType="tips"  placeholder="请输入MCHID" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux">微信支付商户号</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px;">支付授权目录:</label>
+        <div class="layui-input-block" style="width: 360px;margin-left: 120px">
+            <label class="label-dir" >{$domain}/mobile/common/</label>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" style="margin-left: 43px;">复制</button>
+        </div>
+        <div class="layui-input-block" style="width: 360px;margin-left: 120px">
+            <label class="label-dir" >{$domain}/common/confirmorder/</label>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy"  style="margin-left: 6px;">复制</button>
+        </div>
+        <div class="layui-input-block" style="width: 360px;margin-left: 120px">
+            <label  class="label-dir">{$domain}/mobile/user/</label>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" style="margin-left: 70px;">复制</button>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <label class="layui-form-label">apiclient_cert.pem:</label>
+        <div class="layui-inline" id="icon">
+
+            <div class="cc" style="margin-left:30px">
+                <div class="layui-input-inline" style="width: 120px;" >
+                <input class="hid" name="apiclient_cert" type="hidden"  value="{$res.apiclient_cert}" >
+                </div>
+                {if !empty($res.apiclient_cert)}
+                <div class="layui-input-inline" style="width: 120px;" >
+                <button  class="aa"  style="display: none;background: none;border: none" > <img class="goods-img"  src="/static/common/image/default/upload.png" style="cursor: pointer"></button>
+                </div>
+                <div class="goods-li">
+                    <img class="goods-img"  src="/static/common/image/default/upload.png">
+                    <a class="goods-img-del-x" style="display: none">x</a>
+                </div>
+                {else}
+                <div class="layui-input-inline" style="width: 120px;" >
+                <button  class="aa" style="background: none;border: none"> <img class="goods-img"  src="/static/common/image/default/upload.png" style="cursor: pointer"></button>
+                </div>
+                {/if}
+            </div>
+            <div class=" layui-form-mid layui-word-aux" style="left:30px">微信支付证书,在微信商家平台可以下载!文件名一般为apiclient_cert.pem.</div>
+
+        </div>
+    </div>
+
+    <div class="layui-form-item ">
+        <label class="layui-form-label">apiclient_key.pem:</label>
+        <div class="layui-inline" >
+
+            <div class="dd" style="margin-left:30px">
+                <div class="layui-input-inline" style="width: 120px;" >
+                    <input class="hid" name="apiclient_key" type="hidden"  value="{$res.apiclient_key}" >
+                </div>
+                {if !empty($res.apiclient_key)}
+                <div class="layui-input-inline" style="width: 120px;" >
+                    <button  class="bb"  style="display: none;background: none;border: none" > <img class="goods-img"  src="/static/common/image/default/upload.png" style="cursor: pointer"></button>
+                </div>
+                <div class="goods-li-a">
+                    <img class="goods-img"  src="/static/common/image/default/upload.png">
+                    <a class="goods-img-del-x-a" style="display: none">x</a>
+                </div>
+                {else}
+                <div class="layui-input-inline" style="width: 120px;" >
+                    <button  class="bb" style="background: none;border: none"> <img class="goods-img"  src="/static/common/image/default/upload.png" style="cursor: pointer"></button>
+                </div>
+                {/if}
+            </div>
+            <div class=" layui-form-mid layui-word-aux" style="left:30px">微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem</div>
+
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态:</label>
+            <div class="layui-input-block">
+                <input type="radio" name="pay_use" value=1 title="启用"{if condition="$res.pay_use eq 1" }checked{/if}>
+                <input type="radio" name="pay_use" value=0 title="关闭" {if condition="$res.pay_use eq 0" }checked{/if}>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
+        </div>
+</div>
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','upload','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,upload = layui.upload;
+
+        //上传
+        var uploadInst = upload.render({
+            elem: '.upload_pem' //绑定元素
+            // elem: '#apiclient_cert' //绑定元素
+            ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
+            ,accept:'file'
+            ,exts:'pem' //允许上传的文件后缀
+            // ,auto: false //选择文件后不自动上传
+            // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
+            ,choose: function(obj){
+                var file_name = this.item.parent().next().children()[0];
+                obj.preview(function(index, file, result){
+                    file_name.innerHTML = file.name;
+                });
+            }
+            ,done: function(res, index, upload){ //上传完毕回调
+                this.item.prev().val(res.data);
+            }
+            ,error: function(res){
+                //请求异常回调
+                layer.msg('上传异常', {
+                    offset: '15px'
+                    , icon: 2
+                    , time: 1000
+                });
+            }
+        });
+
+
+
+        $(document).on('click', '.copy', function () {
+            var Copytext = $(this).prev().html();
+            var input = document.createElement('input');
+            input.setAttribute('readonly', 'readonly');
+            input.setAttribute('value', Copytext);
+            document.body.appendChild(input);
+            input.select();
+            input.setSelectionRange(0, 9999);
+            document.execCommand("Copy");
+            layui.layer.msg('复制成功', {
+                offset: '15px'
+                , icon: 1
+                , time: 1000
+            });
+        })
+
+
+        //上传
+         upload.render({
+            elem: '.aa' //绑定元素
+            // elem: '#apiclient_cert' //绑定元素
+            ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
+             ,accept:'file'
+             ,exts:'pem|txt|doc' //允许上传的文件后缀
+            // ,auto: false //选择文件后不自动上传
+            // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
+
+            ,done: function(res, index, upload){ //上传完毕回调
+
+                 var html = '<div class="goods-li">\n' +
+                     '<img class="goods-img" ' +
+                     'src="/static/common/image/default/upload.png">' +
+                     '<a class="goods-img-del-x" style="display: none">x</a>' +
+                     '</div>';
+
+                 $('.cc').append(html);
+                 $('.aa').css('display','none');
+                 $("input[name='apiclient_cert']").attr("value",res.data.uri);
+
+
+                 var item = this.item;
+                 console.log(res);
+                 layer.msg('上传成功', {
+                     offset: '15px'
+                     , icon: 1
+                     , time: 1000
+                 });
+            }
+            ,error: function(res){
+                //请求异常回调
+                layer.msg('上传异常', {
+                    offset: '15px'
+                    , icon: 2
+                    , time: 1000
+                });
+            }
+        });
+
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+
+            $('.aa').css('display','block');
+            $('.goods-li').remove();
+            $("input[name='apiclient_cert']").val('');
+        });
+
+        //上传
+        upload.render({
+            elem: '.bb' //绑定元素
+            // elem: '#apiclient_cert' //绑定元素
+            ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
+            ,accept:'file'
+            ,exts:'pem|txt|doc' //允许上传的文件后缀
+            // ,auto: false //选择文件后不自动上传
+            // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
+
+            ,done: function(res, index, upload){ //上传完毕回调
+
+                var html = '<div class="goods-li-a">\n' +
+                    '<img class="goods-img" ' +
+                    'src="/static/common/image/default/upload.png">' +
+                    '<a class="goods-img-del-x-a" style="display: none">x</a>' +
+                    '</div>';
+
+                $('.dd').append(html);
+                $('.bb').css('display','none');
+                $("input[name='apiclient_key']").attr("value",res.data.uri);
+
+
+                var item = this.item;
+                console.log(res);
+                layer.msg('上传成功', {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                });
+            }
+            ,error: function(res){
+                //请求异常回调
+                layer.msg('上传异常', {
+                    offset: '15px'
+                    , icon: 2
+                    , time: 1000
+                });
+            }
+        });
+
+        //删除图片
+        $(document).on('click', '.goods-img-del-x-a', function () {
+
+            $('.bb').css('display','block');
+            $('.goods-li-a').remove();
+            $("input[name='apiclient_key']").val('');
+        });
+
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x-a', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x-a', function () {
+            $(this).hide();
+        });
+
+    })
+</script>

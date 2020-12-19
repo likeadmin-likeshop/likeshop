@@ -1,0 +1,115 @@
+<?php
+// +----------------------------------------------------------------------
+// | LikeShop有特色的全开源社交分销电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | 微信公众号：好象科技
+// | 访问官网：http://www.likemarket.net
+// | 访问社区：http://bbs.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+namespace app\api\model;
+use app\common\server\UrlServer;
+use think\Db;
+use think\Model;
+
+class Goods extends Model{
+    public function getImageAttr($value,$data){
+        if($value){
+            return UrlServer::getFileUrl($value);
+        }
+        return $value;
+    }
+    public function getContentAttr($value,$data){
+        $preg = '/(<img .*?src=")[^https|^http](.*?)(".*?>)/is';
+        $local_url = UrlServer::getFileUrl().'/';
+        return  preg_replace($preg, "\${1}$local_url\${2}\${3}",$value);
+    }
+
+    public function getStockAttr($value,$data){
+       if($data['is_show_stock']){
+            return $value;
+       }
+       return true;
+    }
+    public function GoodsImage(){
+        return $this->hasMany('GoodsImage','goods_id','id')->field('goods_id,uri');
+    }
+    public function Spec()
+    {
+        return $this->hasMany('GoodsSpec', 'goods_id', 'id');
+    }
+    public function GoodsItem(){
+        return $this->hasMany('GoodsItem', 'goods_id', 'id')->field('id,goods_id,image,spec_value_ids,spec_value_str,market_price,price,stock');
+    }
+    public function GoodsSpecValue(){
+
+        return $this->hasMany('GoodsSpecValue','goods_id','id');
+    }
+
+    public function GoodsSpec()
+    {
+        $spec = $this->Spec->toarray();
+        $spec_value = $this->GoodsSpecValue->toarray();
+        $spec = array_column($spec,null,'id');
+
+        foreach ($spec_value as $item){
+            if(isset($spec[$item['spec_id']])){
+                $spec[$item['spec_id']]['spec_value'][]= $item;
+            }
+        }
+        return array_values($spec);
+    }
+
+    public function Like(){
+        $goods = new self();
+        return $goods->where(['del'=>0,'is_like'=>1,'status'=>1])->field('id,name,image,min_price as price,market_price')->select();
+    }
+
+
+    public function getCommentAttr($value,$data){
+        $comment = [];
+        $goods_comment = Db::name('goods_comment g')
+                ->join('user u','g.user_id = u.id')
+                ->where(['goods_id'=>$data['id'],'g.del'=>0,'u.del'=>0,'g.status'=>1])
+                ->order('g.id desc')
+                ->field('g.id,user_id,item_id,comment,g.create_time,nickname,avatar')
+                ->find();
+        if($goods_comment){
+            //好评人数
+            $goods_count = Db::name('goods_comment')
+                    ->where(['goods_id'=>$data['id'],'del'=>0])
+                    ->where('goods_comment','>',3)
+                    ->count();
+            //总评论人数
+            $comment_count = Db::name('goods_comment')
+                        ->where(['goods_id'=>$data['id'],'del'=>0])
+                        ->count();
+            //评论图片
+            $comment_image = Db::name('goods_comment_image')->where(['goods_comment_id'=>$goods_comment])->column('uri');
+
+            $comment = $goods_comment;
+            $comment['goods_rate'] = round(($goods_count/$comment_count)*100).'%';
+            $comment['avatar'] = UrlServer::getFileUrl($comment['avatar']);
+            $comment['spec_value_str'] = '';
+            $comment['create_time'] = date('Y-m-d H:i:s',$comment['create_time']);
+            foreach ($comment_image as &$image_item){
+                $image_item =  UrlServer::getFileUrl($image_item);
+            }
+            $comment['image'] = $comment_image;
+            foreach ($this->goods_item as $item){
+                if($item['id'] == $comment['item_id']){
+                    $comment['spec_value_str'] = $item['spec_value_str'];
+                }
+            }
+        }
+        return $comment;
+    }
+
+
+}

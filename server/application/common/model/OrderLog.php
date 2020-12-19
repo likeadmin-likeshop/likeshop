@@ -1,0 +1,77 @@
+<?php
+// +----------------------------------------------------------------------
+// | LikeShop有特色的全开源社交分销电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | 微信公众号：好象科技
+// | 访问官网：http://www.likemarket.net
+// | 访问社区：http://bbs.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+namespace app\common\model;
+
+use think\Db;
+use think\Model;
+
+class OrderLog extends Model
+{
+    //操作人类型
+    const TYPE_USER = 0;//会员
+    const TYPE_SHOP = 1;//门店
+
+    //订单动作
+    const USER_ADD_ORDER = 101;//提交订单
+    const USER_CANCEL_ORDER = 102;//取消订单
+    const USER_DEL_ORDER = 103;//删除订单
+    const USER_CONFIRM_ORDER = 104;//确认收货
+    const USER_PAID_ORDER = 105;//支付订单
+
+    const SHOP_CANCEL_ORDER = 201;//商家取消订单
+    const SHOP_DEL_ORDER = 202;//商家删除订单
+    const SHOP_DELIVERY_ORDER = 203;//商家发货
+    const SHOP_CONFIRM_ORDER = 204;//商家确认收货
+
+    //订单动作明细
+    public static function getLogDesc($log)
+    {
+        $desc = [
+            self::USER_ADD_ORDER => '会员提交订单',
+            self::USER_CANCEL_ORDER => '会员取消订单',
+            self::USER_DEL_ORDER => '会员删除订单',
+            self::USER_CONFIRM_ORDER => '会员确认收货',
+            self::USER_PAID_ORDER => '会员支付订单',
+
+            self::SHOP_CANCEL_ORDER => '商家取消订单',
+            self::SHOP_DEL_ORDER => '商家删除订单',
+            self::SHOP_DELIVERY_ORDER => '商家发货',
+            self::SHOP_CONFIRM_ORDER => '商家确认收货',
+        ];
+
+        if ($log === true) {
+            return $desc;
+        }
+
+        return isset($desc[$log]) ? $desc[$log] : $log;
+    }
+
+    //订单日志
+    public static function getOrderLog($order_id)
+    {
+        $logs = Db::name('order_log')
+            ->where('order_id', $order_id)
+            ->select();
+
+        foreach ($logs as &$log){
+            $log['create_time'] = date('Y-m-d H:i:s', $log['create_time']);
+            $log['channel'] = self::getLogDesc($log['channel']);
+        }
+
+        return $logs;
+    }
+}

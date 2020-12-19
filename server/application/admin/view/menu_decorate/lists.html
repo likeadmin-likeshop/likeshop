@@ -1,0 +1,372 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show tips">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-menu_decorate {$view_theme_color}" data-type="add">添加菜单</button>
+            </div>
+
+            <table id="menu_decorate-lists" lay-filter="menu_decorate-lists"></table>
+            <script type="text/html" id="image">
+                <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">
+            </script>
+            <script type="text/html" id="status">
+                <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='is_show'  lay-skin="switch"
+                       lay-text="显示|隐藏" {{#  if(d.is_show){ }} checked  {{#  } }} />
+            </script>
+            <script type="text/html" id="menu_decorate-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,type = {$type}
+            ,client = {$client}
+            ,tips = '';
+        switch (client) {
+            case 1:
+                if(type === 1){
+                    tips = '*设置小程序商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
+                }else{
+                    tips = '*设置小程序商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
+                }
+                break;
+            case 2:
+                if(type === 1){
+                    tips = '*设置H5商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
+                }else{
+                    tips = '*设置H5商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
+                }
+                break;
+            case 3:
+                if(type === 1){
+                    tips = '*设置APP商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
+                }else{
+                    tips = '*设置APP商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
+                }
+                break;
+        }
+        $('.tips').text(tips);
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src);
+        });
+        //监听搜索
+        form.on('submit(menu_decorate-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('article-lists', {
+                where: field
+            });
+        });
+        form.on('switch(switch-status)',function (obj) {
+            var ids = [];
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var fields = obj.elem.attributes['data-field'].nodeValue
+            var field_value = 0;
+            ids.push(id);
+            if(this.checked){
+                field_value = 1;
+            }
+            changeFields(ids,fields,field_value)
+
+        })
+
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加菜单'
+                    ,content: '{:url("menu_decorate/add")}?type='+type
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-menu_decorate-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['decorate_type'] = type,
+                            field['client'] = client,
+                            $.ajax({
+                                url:'{:url("menu_decorate/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('menu_decorate-lists'); //数据刷新
+                                    }else{
+                                        iframeWindow.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-menu_decorate').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //管理员管理
+        table.render({
+            elem: '#menu_decorate-lists'
+            ,url: '{:url("menu_decorate/lists")}?client='+client+'&type='+type //模拟接口
+            ,cols: [[
+                {field: 'name', title: '菜单名称',width: 200,}
+                ,{field: 'image', title: '菜单图标', width: 160,style:'height:100px;',toolbar: '#image'}
+                ,{field: 'link_address', title: '链接地址',width: 180}
+                ,{field: 'sort', title: '排序',width: 100,event: 'tips',edit:'text'}
+                ,{field: 'is_show', title:'显示', templet: '#status', width: 100, align: 'center'}
+                ,{title: '操作', align: 'center', toolbar: '#menu_decorate-operation'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            }
+        });
+
+        table.on('edit(menu_decorate-lists)', function (obj) {
+            var ids = [];
+            var id = obj.data.id;
+            var fields = obj.field;
+            var field_value = obj.value;
+            ids.push(id);
+            if(isNaN(field_value)){
+                var old_value=$(this).prev().text();
+
+                layer.tips('请输入数字', $(this), {tips: [1, '#FF5722']});
+                $(this).val(old_value);
+
+                return false;
+            }
+
+            changeFields(ids,fields,field_value)
+
+        });
+        //监听工具条
+        table.on('tool(menu_decorate-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                layer.confirm('确定删除该菜单吗？', function(index){
+                    $.ajax({
+                        url:'{:url("menu_decorate/del")}',
+                        data:{'id':id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                obj.del();
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                            }else{
+                                layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 2
+                                    , time: 1000
+                                });
+                            }
+
+                        }
+                    });
+                });
+            }
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑菜单'
+                    ,content: '{:url("menu_decorate/edit")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-menu_decorate-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['decorate_type'] = type
+                            $.ajax({
+                                url:'{:url("menu_decorate/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('menu_decorate-lists'); //数据刷新
+                                    }else{
+                                        iframeWindow.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'copy'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '复制菜单'
+                    ,content: '{:url("menu_decorate/copy")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'copy-menu_decorate-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['decorate_type'] = type,
+                                field['client_type'] = client,
+                                $.ajax({
+                                    url:'{:url("menu_decorate/add")}',
+                                    data:field,
+                                    type:"post",
+                                    success:function(res)
+                                    {
+                                        if(res.code == 1)
+                                        {
+                                            layui.layer.msg(res.msg, {
+                                                offset: '15px'
+                                                , icon: 1
+                                                , time: 1000
+                                            });
+                                            layer.close(index); //关闭弹层
+                                            table.reload('menu_decorate-lists'); //数据刷新
+                                        }else{
+                                            iframeWindow.layer.msg(res.msg, {
+                                                offset: '15px'
+                                                , icon: 2
+                                                , time: 1000
+                                            });
+                                        }
+
+                                    }
+                                });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'tips'){
+                layer.tips('数字越大，越靠前', $(this), {tips: [1, '#FF5722'],time:1500});
+            }
+        });
+    });
+
+
+
+
+    function changeFields(ids,fields,value) {
+        if(fields === 'is_show' && ids.length == 0){
+            layer.msg('请选择菜单');
+            return false;
+
+        }
+
+        $.ajax({
+            url:'{:url("menu_decorate/changeFields")}',
+            data:{id:ids,field:fields,value:value},
+            type:'post',
+            dataType:'json',
+            success:function (res) {
+                if(res.code == 1) {
+                    layui.layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                    });
+
+                } else {
+                    layui.layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 1000
+                    }, function(){
+                        location.href = location.href;
+                    });
+                }
+            }
+        })
+
+    }
+</script>

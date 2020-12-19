@@ -1,0 +1,349 @@
+{layout name="layout1" /}
+<style>
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;}
+    #kword{white-space: nowrap;}
+
+</style>
+<div class="layui-col-md12">
+
+    <div class="layui-fluid">
+        <div class="layui-card">
+
+        <div class="layui-card-body" >
+            <div class="layui-form" lay-filter="">
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"><font color="red">*</font>网站名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name"  lay-verify="required" lay-verType="tips" autocomplete="off" value="{$config.name}" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item  layui-col-sm6  layui-col-md4">
+                    <label class="layui-form-label" id ='kword' >网站关键字：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="keyword"  lay-verType="tips" autocomplete="off"  value="{$config.keyword}"  class="layui-input">
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux"style="left:110px">用于网站搜索引擎的优化，多个关键字请用英文逗号分隔</div>
+                </div>
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label" style="white-space: nowrap;">登录页logo：</label>
+                        <div class="layui-inline" id="icon">
+
+                            <div class="" style="height:80px;line-height:80px;">
+                                <input name="login_logo" type="hidden" value="{$config.login_logo}" >
+                                {if !empty($config.login_logo)}
+                                <div class="goods-img-add" style="display: none"></div>
+                                <div class="goods-li">
+                                    <img class="goods-img" style="width: auto;height: 50px" src="{$config.login_logo}">
+                                    <a class="goods-img-del-x" style="display: none">x</a>
+                                </div>
+                                {else}
+                                <div class="goods-img-add"></div>
+                                {/if}
+                            </div>
+                            <div class=" layui-form-mid layui-word-aux">建议尺寸：宽152px*高42px。jpg，jpeg，png格式</div>
+
+                        </div>
+                    </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label " style="white-space: nowrap;right:20px">登录页logo标语：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="slogan_status" value="1" title="显示" {if condition="$config.slogan_status eq 1"} checked {/if} >
+                        <input type="radio" name="slogan_status" value="2" title="隐藏" {if condition="$config.slogan_status eq 2"} checked {/if} >
+                    </div>
+                    <div class="layui-inline" >
+                    <div class="" style="height:80px;line-height:80px">
+                        <input name="slogan" type="hidden" value="{$config.slogan}" >
+                        {if !empty($config.slogan)}
+                        <div class="goods-img-add" style="display: none"></div>
+                        <div class="goods-li">
+                            <img class="goods-img" style="height: 50px;width:auto" src="{$config.slogan}">
+                            <a class="goods-img-del-x" style="display: none">x</a>
+                        </div>
+                        {else}
+                        <div class="goods-img-add"></div>
+                        {/if}
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" >建议尺寸：宽176px*高42px。jpg，jpeg，png格式</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;">后台logo：</label>
+                    <div class="layui-inline" >
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="backstage_logo" type="hidden" value="{$config.backstage_logo}" >
+                            {if !empty($config.backstage_logo)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img"  src="{$config.backstage_logo} " style="background-color: #EEEEEE;height: 50px;width:auto">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽148px*高42px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;left:10px">商城logo：</label>
+                    <div class="layui-inline" >
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="shop_logo" type="hidden" value="{$config.shop_logo}" >
+                            {if !empty($config.shop_logo)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.shop_logo}" style="background-color:#EEEEEE ;height: 50px;width:auto">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽258px*高77px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;right:20px">平台登录表单主图：</label>
+                    <div class="layui-inline" >
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="admin_image" type="hidden" value="{$config.admin_image}" >
+                            {if !empty($config.admin_image)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.admin_image}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽500px*高500px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+
+                <div class="layui-form-item  layui-col-sm6  layui-col-md4">
+                    <label class="layui-form-label" style="white-space: nowrap;right:25px" >平台登录表单标题：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="admin_title"  lay-verType="tips" autocomplete="off"  value="{$config.admin_title}"  class="layui-input">
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;right:20px">机构登录表单主图：</label>
+                    <div class="layui-inline" >
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="partner_image" type="hidden" value="{$config.partner_image}" >
+                            {if !empty($config.partner_image)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.partner_image}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽500px*高500px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+
+                <div class="layui-form-item  layui-col-sm6  layui-col-md4">
+                    <label class="layui-form-label" style="white-space: nowrap;right:25px" >机构登录表单标题：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="partner_title"  lay-verType="tips" autocomplete="off"  value="{$config.partner_title}"  class="layui-input">
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;">会员默认头像：</label>
+                    <div class="layui-inline" >
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="user_image" type="hidden" value="{$config.user_image}" >
+                            {if !empty($config.user_image)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.user_image}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;">商品默认主图：</label>
+                    <div class="layui-inline" >
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="goods_image" type="hidden" value="{$config.goods_image}" >
+                            {if !empty($config.goods_image)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.goods_image}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</div>
+<script>
+
+
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.verify({
+
+        });
+        form.on('submit(setmnp)',function (data) {
+            layui.$.ajax({
+                url: '{:url("Basic/setWebsite")}'//实际使用请改成服务端真实接口
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+
+                    // if(res.code == 0)
+                    // {
+                    //     layer.msg(res.msg, {
+                    //         offset: '15px'
+                    //         ,icon: 2
+                    //         ,time: 1000
+                    //     });
+                    //     return false;
+                    // }
+
+                    //登入成功的提示与跳转
+                    if(res.code == 1)
+                    {
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        location.href = location.href; //后台主页
+                    });
+                }else{
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 2
+                            , time: 1000
+                        }, function(){
+                            location.href = location.href; //后台主页
+                        });
+                    }},
+                error:function(res){
+                    layer.msg('网络错误', {
+                        offset: '15px'
+                        ,icon: 2
+                        ,time: 1000
+                    }, function(){
+                        return;
+                    });
+                }
+            });
+        });
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="' + '/' + uri + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val('/'+uri);
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image, 400);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+    });
+
+</script>

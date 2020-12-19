@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>评分</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md6">
+        <div class="layui-card">
+          <div class="layui-card-header">基础效果</div>
+          <div class="layui-card-body">
+            <div id="test-rate-dome1"></div>
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">显示文字</div>
+          <div class="layui-card-body">
+            <div id="test-rate-dome2"></div>
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">半星效果</div>
+          <div class="layui-card-body">
+            <div id="test-rate-dome3"></div>
+            <div><div id="test-rate-dome4"></div></div>
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">自定义主题色</div>
+          <div class="layui-card-body">
+            <ul>
+              <li><div id="test-rate-dome10"></div></li>
+              <li><div id="test-rate-dome11"></div></li>
+              <li><div id="test-rate-dome12"></div></li>
+              <li><div id="test-rate-dome13"></div></li>
+              <li><div id="test-rate-dome14"></div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md6">
+        <div class="layui-card">
+          <div class="layui-card-header">只读</div>
+          <div class="layui-card-body">
+            <div id="test-rate-dome9"></div>
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">自定义内容</div>
+          <div class="layui-card-body">
+            <div id="test-rate-dome5"></div>
+            <div><div id="test-rate-dome6"></div></div> 
+          </div>
+        </div>
+        <div class="layui-card">
+          <div class="layui-card-header">自定义长度</div>
+          <div class="layui-card-body">
+            <div id="test-rate-dome7"></div>
+            <div><div id="test-rate-dome8"></div></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  
+  <script src="../../../layuiadmin/layui/layui.js"></script>  
+  <script>
+  layui.config({
+    base: '../../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'rate'], function(){
+    var rate = layui.rate;
+    //基础效果
+    rate.render({
+      elem: '#test-rate-dome1'
+    })
+   
+    //显示文字
+    rate.render({
+      elem: '#test-rate-dome2'
+      ,value: 2 //初始值
+      ,text: true //开启文本
+    });
+   
+    //半星效果
+    rate.render({
+      elem: '#test-rate-dome3'
+      ,value: 2.5 //初始值
+      ,half: true //开启半星
+    })
+    rate.render({
+      elem: '#test-rate-dome4'
+      ,value: 3.5
+      ,half: true
+      ,text: true
+    })
+   
+    //自定义文本
+    rate.render({
+      elem: '#test-rate-dome5'
+      ,value: 3
+      ,text: true
+      ,setText: function(value){ //自定义文本的回调
+        var arrs = {
+          '1': '极差'
+          ,'2': '差'
+          ,'3': '中等'
+          ,'4': '好'
+          ,'5': '极好'
+        };
+        this.span.text(arrs[value] || ( value + "星"));
+      }
+    })
+    rate.render({
+      elem: '#test-rate-dome6'
+      ,value: 1.5
+      ,half: true
+      ,text: true
+      ,setText: function(value){
+        this.span.text(value);
+      }
+    })
+   
+    //自定义长度
+    rate.render({
+      elem: '#test-rate-dome7'
+      ,length: 3
+    });
+    rate.render({
+      elem: '#test-rate-dome8'
+      ,length: 10
+      ,value: 8 //初始值
+    });
+   
+    //只读
+    rate.render({
+      elem: '#test-rate-dome9'
+      ,value: 4
+      ,readonly: true
+    });
+ 
+    //主题色
+    rate.render({
+      elem: '#test-rate-dome10'
+      ,value: 3
+      ,theme: '#FF8000' //自定义主题色
+    });
+    rate.render({
+      elem: '#test-rate-dome11'
+      ,value: 3
+      ,theme: '#009688'
+    });
+   
+    rate.render({
+      elem: '#test-rate-dome12'
+      ,value: 2.5
+      ,half: true
+      ,theme: '#1E9FFF'
+    })
+    rate.render({
+      elem: '#test-rate-dome13'
+      ,value: 2.5
+      ,half: true
+      ,theme: '#2F4056'
+    });
+    rate.render({
+      elem: '#test-rate-dome14'
+      ,value: 2.5
+      ,half: true
+      ,theme: '#FE0000'
+    })
+  });
+  </script>
+</body>
+</html>

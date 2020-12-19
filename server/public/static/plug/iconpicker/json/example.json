@@ -1,0 +1,28 @@
+{
+  "code": 10000,
+  "msg": "操作成功",
+  "data": [
+    {
+      "name": "系统管理",
+      "icon": "layui-icon-login-wechat",
+      "subMenus": [
+        {
+          "name": "用户管理",
+          "icon": "layui-icon-star",
+          "url": "http://www.njedusoft.com:80/joauth2/user/"
+        },
+        {
+          "name": "登录日志",
+          "icon": "layui-icon-star",
+          "url": "http://www.njedusoft.com:80/joauth2/loginRecord/"
+        },
+        {
+          "name": "操作日志",
+          "icon": "layui-icon-star",
+          "url": "http://www.njedusoft.com:80/joauth2/log/"
+        }
+      ],
+      "url": "javascript:;"
+    }
+  ]
+}

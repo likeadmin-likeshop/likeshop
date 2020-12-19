@@ -1,0 +1,88 @@
+<div class="layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-header">修改密码</div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">当前密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="old_password" lay-verify="required" lay-verType="tips" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" maxlength="16" name="password" lay-verify="required|length" lay-verType="tips" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">6到16个字符</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认新密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="re_password" lay-verify="required|comparison" lay-verType="tips" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmypass">确认修改</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    layui.form.verify({
+        length:function(value,item){
+            if(value.length<6){
+                return '密码必须大于6位';
+            }
+        },
+        comparison:function(value,item){
+            password = layui.$('[name=password]').val();
+            if(password!=value)
+            {
+                return '两次密码输入不一致';
+            }
+        }
+    });
+    layui.form.on('submit(setmypass)',function (data) {
+        layui.$.ajax({
+            url: '{:url()}' //实际使用请改成服务端真实接口
+            ,data: data.field
+            ,type: 'post'
+            ,success: function(res){
+
+                if(res.code == 0)
+                {
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 2
+                        ,time: 1000
+                    });
+                    return false;
+                }
+
+                //登入成功的提示与跳转
+                layer.msg(res.msg, {
+                    offset: '15px'
+                    ,icon: 1
+                    ,time: 1500
+                }, function(){
+                    location.href = location.href; //后台主页
+                });
+            },
+            error:function(res){
+                layer.msg('网络错误', {
+                    offset: '15px'
+                    ,icon: 2
+                    ,time: 1000
+                }, function(){
+                    return;
+                });
+            }
+        });
+    });
+</script>
+<script type='text/javascript'>layui.form.verify({between5e538b096d666:function(value,item){if(value.length<6 || value.length>16){return '密码长度为6到16位之间';}},custom_5e538b096d745:function(value,item){password = layui.$('[name=password]').val();if(password!=value){return '两次密码输入不一致';}}});</script>

@@ -1,0 +1,108 @@
+{layout name="layout2" /}
+<style>
+    #div1{padding-top:15px;}
+    #api_id{
+        padding-left:50px;
+    }
+    #AppSecrect_id{
+        padding-left:50px;
+    }
+    #paySignKey{
+        padding-left:50px;
+    }
+    #MCHID{
+        padding-left:50px;
+    }
+    #commission{
+        padding-left:50px;
+    }
+    #pay_use{
+
+        padding-left:40px;
+    }
+    #refund_use{
+        padding-left:40px;
+    }
+    #withdraw_use{
+        padding-left:40px;}
+    #api_a{left:50px;}
+    #private_a{left:40px;}
+    #public_a{left:40px;}
+    #commission_a{
+        left:45px;
+    }
+    #api_b{
+        left:50px;
+    }
+    #private_b{left:50px;}
+    #public_b{left:50px;}
+    #MCHID_a{left:50px;}
+    #commission_b{left:50px;}
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label" id="api_a">API_ID:</label>
+        <div>
+        <div class="layui-input-inline" id='api_id' style="width: 400px">
+            <input type="text" name="api_id"  value="{$res.api_id}" lay-verify="" lay-verType="tips"  placeholder="请输入APPID" autocomplete="off" class="layui-input">
+            <label class="layui-form-mid layui-word-aux" >应用APPID</label>
+        </div>
+    </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" id="private_a">PRIVATE_KEY:</label>
+        <div class="layui-input-inline" id="AppSecrect_id" style="width: 400px">
+            <input type="text" name="private_key" value="{$res.private_key}" lay-verify="" lay-verType="tips"  placeholder="请输入AppSecrect" autocomplete="off" class="layui-input">
+            <div class="layui-form-mid layui-word-aux" >应用私钥</div>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" id="public_a">PUBLIC_KEY:</label>
+        <div class="layui-input-inline" id="paySignKey" style="width: 400px">
+            <input type="text" name="public_key" value="{$res.public_key}" lay-verify="" lay-verType="tips"  placeholder="请输入paySignKey" autocomplete="off" class="layui-input">
+            <label class="layui-form-mid layui-word-aux" >应用公钥</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">ALIPAY_PUBLIC_KEY:</label>
+        <div class="layui-input-inline" id="MCHID" style="width: 400px">
+            <input type="text" name="alipay_public_key" value="{$res.alipay_public_key}" lay-verify="" lay-verType="tips"  placeholder="请输入MCHID" autocomplete="off" class="layui-input">
+            <label class="layui-form-mid layui-word-aux" >支付宝公钥</label>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <!--<label class="layui-form-label" id="commission_a">支付手续费:</label>
+        <div class="layui-input-inline" style="display: inline;" id="commission">
+            <input type="text" name="commission" value="{$res.commission}" lay-verify="required" lay-verType="tips"  placeholder="请输入手续费" autocomplete="off" class="layui-input">
+
+        </div><div id="div1" class="layui-input-inline" style="display: inline;"> %</div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class="layui-form-mid layui-word-aux" id="commission_b">支付时根据订单应付金额额外收取的手续费</label>
+        </div>-->
+    <div class="layui-form-item" id="pay_use">
+        <label class="layui-form-label" >状态:</label>
+        <div class="layui-input-block">
+            <input type="radio" name="pay_use" value=1 title="启用"{if condition="$res.pay_use eq 1" }checked{/if}>
+            <input type="radio" name="pay_use" value=0 title="关闭" {if condition="$res.pay_use eq 0" }checked{/if}>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+    })
+</script>

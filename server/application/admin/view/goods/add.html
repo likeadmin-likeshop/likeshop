@@ -1,0 +1,1330 @@
+{layout name="layout2" /}
+<link rel="stylesheet" href="/static/admin/css/goods.css" media="all">
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title" style="background-color: #f3f5f9">
+        <li class="goods-tab layui-this" style="color: #6a6f6c">基础设置</li>
+        <li class="goods-tab" style="color: #6a6f6c">价格库存</li>
+        <li class="goods-tab" style="color: #6a6f6c">商品详情</li>
+        <li class="goods-tab" style="color: #6a6f6c">销售设置</li>
+        <li class="goods-tab" style="color: #6a6f6c">分销设置</li>
+    </ul>
+    <div class="layui-tab-content layui-form">
+        <div class="layui-tab-item goods-content layui-show">
+            <div class="layui-card-body" pad15>
+                <div lay-filter="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="form-label-asterisk">*</span>商品名称：</label>
+                        <div class="layui-input-block">
+                            <input name="goods_id" type="hidden">
+                            <input type="text" name="name" lay-verify="custom_required" lay-verType="tips"
+                                   autocomplete="off"
+                                   switch-tab="0" verify-msg="请输入商品名称，最多64个字符" placeholder="请输入商品名称，最多64个字符"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品编码：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="code" lay-verType="tips" autocomplete="off" switch-tab="0" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="form-label-asterisk">*</span>商品分类：</label>
+                        <div class="layui-input-inline">
+                            <select name="first_category_id" lay-filter="first_category" lay-verify="custom_required"
+                                    lay-verType="tips" switch-tab="0" verify-msg="请选择分类">
+                                <option value="">请选择分类</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="second_category_id" lay-filter="second_category" lay-verify="custom_required"
+                                    lay-verType="tips" switch-tab="0" verify-msg="请选择分类">
+                                <option value="">请选择分类</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="third_category_id" lay-filter="third_category" lay-verify="custom_required"
+                                    lay-verType="tips" switch-tab="0" verify-msg="请选择分类" lay-filter="first_category">
+                                <option value="">请选择分类</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品卖点：</label>
+                        <div class="layui-input-block">
+                            <input type="text" maxlength="32" name="remark" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="margin-bottom: 0px">
+                        <label class="layui-form-label"><span class="form-label-asterisk">*</span>商品主图：</label>
+                        <div style="height:80px;line-height:80px">
+                            <div class="master-image" ></div>
+                            <div class="goods-img-add goods-image" lay-verify="image" lay-verType="tips" switch-tab="0" verify-msg="选择图片"></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" style="margin-bottom: 0px">
+                        <label class="layui-form-label"><span class="form-label-asterisk">*</span>商品轮播图：</label>
+                        <div class="" style="height:80px;line-height:80px">
+                            <ul>
+                            </ul>
+                            <div class="goods-img-add" lay-verify="goods_image" lay-verType="tips" switch-tab="0"
+                                 verify-msg="至少选择一张图片"></div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="layui-form-item"><label class="layui-form-label"></label><span
+                            style="color: #a3a3a3;font-size: 9px">建议尺寸：800*800像素，你可以拖拽图片调整顺序，最多上传8张</span></div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品品牌：</label>
+                        <div class="layui-input-inline">
+                            <select name="brand_id" lay-verType="tips" switch-tab="0" verify-msg="请选择商品品牌">
+                                <option value="">请选择品牌</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">供货商：</label>
+                        <div class="layui-input-inline">
+                            <select name="supplier_id" lay-verType="tips" switch-tab="0" verify-msg="请选择供货商">
+                                <option value="">请选择供货商</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item goods-content">
+            <div class="layui-card-body" pad15>
+                <div lay-filter="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="form-label-asterisk">*</span>商品规格：</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="spec_type" lay-filter="spec-type" value="1" title="统一规格" checked>
+                            <input type="radio" name="spec_type" lay-filter="spec-type" value="2" title="多规格">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label"></label>
+                        <div class="layui-input-block goods-spec-div" id="goods-spec-project">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label"></label>
+                        <button class="layui-btn layui-btn-normal layui-btn-sm" id="add-spec" lay-verify="add_more_spec"
+                                lay-verType="tips" autocomplete="off" switch-tab="1" verify-msg="至少添加一个规格">添加规格项目
+                        </button>
+                    </div>
+                    <div class="layui-form-item" id="one-spec-lists">
+                        <label class="layui-form-label">规格明细：</label>
+                        <div class="layui-input-block goods-spec-div">
+                            <table id="one-spec-lists-table" class="layui-table spec-lists-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="60px">
+                                </colgroup>
+                                <thead>
+                                <tr style="background-color: #f3f5f9">
+                                    <th>规格图片</th>
+                                    <th>市场价(元)</th>
+                                    <th><span class="form-label-asterisk">*</span>价格(元)</th>
+                                    <th><span class="form-label-asterisk">*</span>成本价(元)</th>
+                                    <th><span class="form-label-asterisk">*</span>库存</th>
+                                    <th><span class="form-label-asterisk">*</span>体积(m3)</th>
+                                    <th><span class="form-label-asterisk">*</span>重量(kg)</th>
+                                    <th>条码</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="goods-spec-img-div"><input name="one_spec_image" type="hidden"
+                                                                               value=""><img
+                                                src="/static/common/image/plug/goods-lists-add-image.png"
+                                                class="goods-one-spec-img-add"></div>
+                                    </td>
+                                    <td><input type="number" class="layui-input"
+                                               lay-verify="one_spec_required|one_market_price"
+                                               lay-verType="tips"
+                                               autocomplete="off" switch-tab="1" verify-msg="请输入市场价"
+                                               name="one_market_price"></td>
+                                    <td><input type="number" class="layui-input"
+                                               lay-verify="one_spec_required|one_price"
+                                               lay-verType="tips"
+                                               autocomplete="off" switch-tab="1" verify-msg="请输入价格"
+                                               name="one_price"></td>
+                                    <td><input type="number" class="layui-input"
+                                               lay-verify="one_spec_required|one_cost_price"
+                                               lay-verType="tips"
+                                               autocomplete="off" switch-tab="1" verify-msg="请输入成本价"
+                                               name="one_cost_price"></td>
+                                    <td><input type="number" class="layui-input" lay-verify="one_spec_required|one_stock"
+                                               lay-verType="tips"
+                                               autocomplete="off" switch-tab="1" verify-msg="请输入库存" name="one_stock">
+                                    </td>
+                                    <td><input type="number" class="layui-input" lay-verify="one_spec_required|one_volume" lay-verType="tips"
+                                               name="one_volume" autocomplete="off" switch-tab="1" verify-msg="请输入体积"></td>
+                                    <td><input type="number" class="layui-input"
+                                               lay-verify="one_spec_required|one_weight" name="one_weight"
+                                               lay-verType="tips" autocomplete="off" switch-tab="1" verify-msg="请输入重量">
+                                    </td>
+                                    <td><input type="number" name="one_bar_code" class="layui-input"
+                                               lay-verType="tips" autocomplete="off" switch-tab="1" verify-msg="请输入条码"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="more-spec-lists" style="display: none">
+                        <label class="layui-form-label">规格明细：</label>
+                        <div class="layui-input-block goods-spec-div">
+                            <div class="batch-div"><span class="batch-spec-title">批量设置：</span>
+                                <div>
+                                    <span class="batch-spec-content click-a" input-name="market_price">市场价</span>
+                                    <span class="batch-spec-content click-a" input-name="price">价格</span>
+                                    <span class="batch-spec-content click-a" input-name="cost_price">成本价</span>
+                                    <span class="batch-spec-content click-a" input-name="stock">库存</span>
+                                    <span class="batch-spec-content click-a" input-name="volume">体积</span>
+                                    <span class="batch-spec-content click-a" input-name="weight">重量</span>
+                                    <span class="batch-spec-content click-a" input-name="bar_code">条码</span>
+                                </div>
+                            </div>
+                            <table id="more-spec-lists-table" class="layui-table spec-lists-table" lay-size="sm">
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item goods-content">
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品详情</label>
+                <div class="layui-input-block">
+                    <textarea name="content" id="content" lay-verify="content" class="field-content"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-form-item">
+                <label class="layui-form-label">虚拟销量：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="virtual_sales_sum" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">库存预警：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="stock_warn" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item"><label class="layui-form-label"></label><span
+                    style="color: #a3a3a3;font-size: 9px">设置最低库存预警值，当库存低于预警值时会出现在库存预警商品列表页，0为不预警。</span></div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">库存显示：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="is_show_stock" value="1" title="显示" checked>
+                    <input type="radio" name="is_show_stock" value="0" title="不显示" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">快递运费：</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="free_shipping_type" value="1" title="包邮" checked>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                        <input type="radio" name="free_shipping_type" value="2" title="统一运费">
+                    </div>
+                    <div class="layui-input-inline" style="width: 110px">
+                        <input type="number" name="free_shipping" class="layui-input">
+                    </div>
+                    <div class="unit-tips">元</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                        <input type="radio" name="free_shipping_type" value="3" title="运费模板">
+                    </div>
+                    <div class="layui-input-inline" style="width: 110px">
+                        <select name="free_shipping_template_id">
+                            <option value=""></option>
+
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="form-label-asterisk">*</span>销售状态：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" value="1" title="立即上架" verify-msg="选择销售状态" lay-verify="status" >
+                    <input type="radio" name="status" value="0" title="放入仓库" verify-msg="选择销售状态" lay-verify="status" checked>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-form-item">
+                <label class="layui-form-label">分销佣金：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="is_commission" value="1" title="开启" checked>
+                    <input type="radio" name="is_commission" value="0" title="不开启" >
+                </div>
+            </div>
+            <div class="layui-form-item"><label class="layui-form-label"></label><span
+                    style="color: #a3a3a3;font-size: 9px">开启后商品可以参与分销佣金</span></div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">一级分销比例：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="first_ratio"  autocomplete="off" class="layui-input first_ratio">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">二级分销比例：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="second_ratio" autocomplete="off" class="layui-input second_ratio">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">三级分销比例：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="three_ratio"  lay-verify="distribution" autocomplete="off" class="layui-input three_ratio">
+                </div>
+            </div>
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">区域股东分红：</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="radio" name="is_share_bouns" value="1" title="开启" checked>-->
+<!--                    <input type="radio" name="is_share_bouns" value="0" title="不开启" >-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item"><label class="layui-form-label"></label><span-->
+<!--                    style="color: #a3a3a3;font-size: 9px">开启后商品可以参与区域及股东分红</span></div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">区域分红比例：</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="region_ratio" autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">股东分红比例：</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="shareholder_ratio"  autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="goods-submit" id="goods-submit" value="确认">
+        </div>
+    </div>
+</div>
+
+<!---------------------------------html模板---------------------------------->
+<script type="text/html" id="template-goods-image">
+    <li class="goods-li">
+        <input name="goods_image[]" type="hidden" value="{image-src}">
+        <img class="goods-img goods_image" src="{image-src}">
+        <a class="goods-img-del-x" style="display: none;">x</a></li>
+</script>
+<script type="text/html" id="template-spec">
+    <div class="goods-spec-div goods-spec" lay-verify="add_more_spec|repetition_spec_name" lay-verType="tips"
+         autocomplete="off"
+         switch-tab="1" verify-msg="至少添加一个规格，且规格需要规格值">
+        <a class="goods-spec-del-x" style="display: none;">x</a>
+        <div class="layui-form-item"><label class="layui-form-label">规格项：</label>
+            <div class="layui-input-block" style="width: 500px">
+                <div class="layui-input-inline">
+                    <input type="hidden" name="spec_id[]" value="0">
+                <input type="text" name="spec_name[]" lay-verify="more_spec_required" lay-verType="tips" switch-tab="1"
+                       verify-msg="规格项不能为空"
+                       placeholder="请填写规格名" autocomplete="off" class="layui-input spec_name" value="{value}">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="checkbox" class="batch-spec-image-switch" lay-filter="batch-spec-image-switch" lay-skin="switch" lay-text="有图片|无图片">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label"></label>
+            <div class="layui-input-block goods-spec-value-dev" lay-verify="repetition_spec_value" lay-verType="tips"
+                 switch-tab="1">
+                <div class="layui-input-inline">
+                    <input type="hidden" class="spec_values" name="spec_values[]" value="">
+                    <input type="hidden" class="spec_value_ids" name="spec_value_ids[]" value="">
+                    <a href="#" class="add-spec-value">+ 添加规格值</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="template-spec-value">
+    <div class="layui-input-inline goods-spec-value" style="width: 90px">
+        <a class="goods-spec-value-del-x" style="display: none;">x</a>
+        <input value="{spec_value}" spec-value-temp-id="{spec_value_temp_id}" class="layui-input goods-spec-value-input"
+               placeholder="规格值"
+               lay-verify="more_spec_required" lay-verType="tips" switch-tab="1" verify-msg="规格值不能为空">
+        <a class="click-a batch-spec-image">添加图片</a>
+        <input type="hidden" class="goods-sepc-value-id-input" value="{spec_value_id}">
+    </div>
+</script>
+<script type="text/html" id="template-spec-table-th">
+    <colgroup>
+        <col width="60px">
+    </colgroup>
+    <thead>
+    <tr style="background-color: #f3f5f9">
+        {spec_th}
+        <th>规格图片</th>
+        <th>市场价(元)</th>
+        <th><span class="form-label-asterisk">*</span>价格(元)</th>
+        <th><span class="form-label-asterisk">*</span>成本价(元)</th>
+        <th><span class="form-label-asterisk">*</span>库存</th>
+        <th><span class="form-label-asterisk">*</span>体积(m3)</th>
+        <th><span class="form-label-asterisk">*</span>重量(kg)</th>
+        <th>条码</th>
+    </tr>
+    </thead>
+</script>
+<script type="text/html" id="template-spec-table-tr">
+    {spec_td}
+    <td>
+        <div class="goods-spec-img-div"><input name="spec_image[]" type="hidden" value=""><img
+                src="/static/common/image/plug/goods-lists-add-image.png"
+                class="goods-spec-img-add"></div>
+    </td>
+    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_market_price" lay-verType="tips"
+               autocomplete="off" switch-tab="1" verify-msg="请输入市场价" name="market_price[]"></td>
+    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_price" lay-verType="tips"
+               autocomplete="off" switch-tab="1" verify-msg="请输入价格" name="price[]"></td>
+    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_cost_price" lay-verType="tips"
+               autocomplete="off" switch-tab="1" verify-msg="请输入成本价" name="cost_price[]"></td>
+    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_stock" lay-verType="tips"
+               autocomplete="off" switch-tab="1" verify-msg="请输入库存" name="stock[]"></td>
+    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_volume" lay-verType="tips"
+               name="volume[]" autocomplete="off" switch-tab="1" verify-msg="请输入体积"></td>
+    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_weight" lay-verType="tips"
+               name="weight[]" autocomplete="off" switch-tab="1" verify-msg="请输入重量"></td>
+    <td><input type="number" name="bar_code[]" class="layui-input"
+               lay-verType="tips" autocomplete="off" switch-tab="1"></td>
+    </tr>
+</script>
+
+
+<script type="text/javascript">
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    var dragstart = 0;
+    var swop_element_ed = -1;
+    var create_table_by_spec = null;
+    var spec_table_data = [];
+    var spec_value_temp_id_number = 0;
+
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'element', 'jquery', 'like', 'likeedit'], function () {
+        var $ = layui.$;
+        var like = layui.like;
+        var form = layui.form;
+        var likeedit = layui.likeedit;
+
+        $('.first_ratio').bind('input propertychange', function() {
+            var that = $(this);
+            var value = that.val();
+            format(that,value)
+
+        });
+        $('.second_ratio').bind('input propertychange', function() {
+            var that = $(this);
+            var value = that.val();
+            format(that,value)
+
+        });
+        $('.three_ratio').bind('input propertychange', function() {
+            var that = $(this);
+            var value = that.val();
+            format(that,value)
+
+        });
+        //格式化分销比例
+        function format(that,value){
+            value = value.replace(/[^0-9.]/g,'');
+
+            value = value.replace(/\.{2,}/g,".");
+            value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+
+            value = value.replace(/^(\-)*(\d+)\.(\d)(\d).*$/,'$1$2.$3$4');
+            if(value.indexOf(".")< 0 && value !=""){
+                value= parseFloat(value);
+            }
+            if(value > 100){
+                that.val(100);
+                return false;
+            }
+            that.val(value);
+        }
+
+
+        //------------------------基本信息----------------------------------
+        //商品主图事件
+        $(document).on('mouseenter', '.goods-li', function () {
+            $(this).children().last().show();
+        });
+        $(document).on('mouseleave', '.goods-li', function () {
+            $(this).children().last().hide();
+        });
+        $(document).on('click', '.goods-li', function () {
+            var src = $(this).children('img').attr('src');
+            like.showImg(src, 400);
+        });
+        //主图显示删除按钮
+        $(document).on('mouseenter','.master-image',function () {
+            $(this).children('.goods-image-del').show();
+        })
+        $(document).on('mouseleave', '.master-image', function () {
+            $(this).children('.goods-image-del').hide();
+        });
+        $(document).on('click', '.master-image', function () {
+            var src = $(this).children('img').attr('src');
+            like.showImg(src, 400);
+        });
+        $(document).on('click', '.goods-img-del-x', function () {
+
+            if($(this).hasClass('goods-image-del')){
+                $(this).parent().next().show();
+                $(this).parent().children().remove();
+            }
+
+            $(this).parent().remove();
+            return false;
+        });
+        like.imageUpload('.goods-img-add', function (uris, element) {
+            if(element.hasClass('goods-image')){
+                if(uris.length>1){
+                    layer.msg('最多最能选中1张图片');
+                    return;
+                }
+                var html = '' +
+                    '<input name="image" type="hidden" value="'+ '/' + uris[0] + '">' +
+                    '  <img class="goods-img" src="' + '/' + uris[0] + '">\n' +
+                    '<a class="goods-img-del-x goods-image-del">x</a>'
+                element.prev().append(html);
+                element.css('display','none');;
+                return 0;
+            }
+
+            var count = element.prev().children().length;
+
+            count = !count ? 0:count;
+            if (count+uris.length > 8) {
+                layer.msg('最多最能选中8张图片');
+                return;
+            }
+            for(var i in uris){
+                var uri = uris[i];
+                var template_goods_image = $('#template-goods-image').html();
+                element.prev().append(template_goods_image.replace('{image-src}', '/'+uri).replace('{image-src}', '/'+uri));
+            }
+        }, true);
+
+        //图片拉拽
+        $(document).on('dragstart', '.goods-li', function (e) {
+            dragstart = e.offsetX;
+        });
+        $(document).on('dragend', '.goods-li', function (e) {
+            swop_element_ed = -1;
+        });
+        $(document).on('mousedown', '.goods-li', function (e) {
+            swop_element_ed = -1;
+        });
+        $(document).on('dragover', '.goods-li', function (e) {
+            e.preventDefault();
+            swop_element = parseInt((e.clientX - dragstart) / 100) - 1;
+            swop_element = swop_element <= 0 ? 0 : swop_element;
+            my_element = $(this).prevAll().length;
+            if (swop_element == my_element) {
+                return;
+            }
+            if (swop_element == swop_element_ed) {
+                return;
+            }
+            swop_element_ed = swop_element;
+            swop($(this), $(this).parent().children().eq(swop_element));
+        });
+
+        //渲染品牌
+        var brands = {$brand_lists | raw};
+
+        setBrand();
+        function setBrand(default_id) {
+            var brand_select_html = '<option value="">请选择品牌</option>';
+            for (var i in brands) {
+                brand_select_html += '<option value="' + brands[i]['id'] + '">' + brands[i]['name'] + '</option>';
+            }
+            $('select[name="brand_id"]').html(brand_select_html);
+            $('select[name="brand_id"]').val(default_id);
+            form.render('select');
+        }
+
+        //渲染供应商
+        var supplier = {$supplier_lists | raw};
+        setSupplier();
+        function setSupplier(default_id) {
+            var supplier_select_html = '<option value="">请选择供应商</option>';
+            for (var i in supplier) {
+                supplier_select_html += '<option value="' + supplier[i]['id'] + '">' + supplier[i]['name'] + '</option>';
+            }
+            $('select[name="supplier_id"]').html(supplier_select_html);
+            $('select[name="supplier_id"]').val(default_id);
+            form.render('select');
+        }
+        //渲染运费模板
+        var freight_template = {$freight_lists | raw};
+        setFreightTemplate();
+        function setFreightTemplate(default_id) {
+            var template_select_html = '<option value="">请选择运费模板</option>';
+            for (var i in freight_template) {
+                template_select_html += '<option value="' + freight_template[i]['id'] + '">' + freight_template[i]['name'] + '</option>';
+            }
+            $('select[name="free_shipping_template_id"]').html(template_select_html);
+            $('select[name="free_shipping_template_id"]').val(default_id);
+            form.render('select');
+        }
+
+
+
+        //分类联动
+        var categorys = {$category_lists | raw};
+
+        setSelectFirst();
+
+
+        function setSelectFirst(default_id) {
+            var category_select_html = '<option value="">请选择分类</option>';
+            for (var i in categorys) {
+                if (categorys[i]['pid'] == 0) {
+                    category_select_html += '<option value="' + categorys[i]['id'] + '">' + categorys[i]['name'] + '</option>';
+                }
+            }
+            $('select[name="first_category_id"]').html(category_select_html);
+            $('select[name="first_category_id"]').val(default_id);
+            form.render('select');
+        }
+        function setSelectSecond(default_id, pid) {
+            pid = pid === undefined ? $('select[name="first_category_id"]').val() : pid;
+            $('select[name="second_category_id"]').html('<option value="">请选择分类</option>');
+            $('select[name="third_category_id"]').html('<option value="">请选择分类</option>');
+            var category_select_html = '<option value="">请选择分类</option>';
+            for (var i in categorys) {
+                if (categorys[i]['pid'] == pid) {
+                    category_select_html += '<option value="' + categorys[i]['id'] + '">' + categorys[i]['name'] + '</option>';
+                }
+            }
+            $('select[name="second_category_id"]').html(category_select_html);
+            $('select[name="second_category_id"]').val(default_id);
+            form.render('select');
+        }
+        function setSelectThird(default_id, pid) {
+            pid = pid === undefined ? $('select[name="second_category_id"]').val() : pid;
+            $('select[name="third_category_id"]').html('<option value="">请选择分类</option>');
+            var first_category_id = $('select[name="first_category_id"]').val();
+            var category_select_html = '<option value="">请选择分类</option>';
+            for (var i in categorys) {
+                if (categorys[i]['pid'] == pid) {
+                    category_select_html += '<option value="' + categorys[i]['id'] + '">' + categorys[i]['name'] + '</option>';
+                }
+            }
+            $('select[name="third_category_id"]').html(category_select_html);
+            $('select[name="third_category_id"]').val(default_id);
+            form.render('select');
+        }
+
+        form.on('select(first_category)', function (data) {
+            setSelectSecond('', data.value);
+        });
+        form.on('select(second_category)', function (data) {
+            setSelectThird('', data.value);
+        });
+
+
+        //------------------------价格库存----------------------------------
+
+        //统一规格与多规格切换事件
+        function switchSpecType(value)
+        {
+            var goods_spec_project = $('#goods-spec-project');
+            if (value == 2) {
+                $('#add-spec').parent().show();
+                if (goods_spec_project.children().length > 0) {
+                    goods_spec_project.parent().show();
+                    $('#more-spec-lists').show();
+                }
+                $('#one-spec-lists').hide();
+            } else {
+                $('#add-spec').parent().hide();
+                goods_spec_project.parent().hide();
+                $('#one-spec-lists').show();
+                $('#more-spec-lists').hide();
+            }
+        }
+        form.on('radio(spec-type)', function (data) {
+            switchSpecType(data.value);
+        });
+
+
+
+        //添加规格项目
+        function addSpec(value){
+            value = value===undefined?'':value;
+            var element_spec = $('#goods-spec-project');
+            var count = $('.goods-spec').size();
+            if (count > 2) {
+                layer.msg('最多添加3个规格项目');
+                return;
+            }
+            var template_spec = $('#template-spec').html();
+            element_spec.append(template_spec.replace('{value}',value));
+            $('#goods-spec-project').parent().show();
+            form.render('checkbox');
+        }
+        $('#add-spec').click(function () {
+            addSpec();
+        });
+
+        //显示或隐藏规格项目删除按钮绑定
+        $(document).on('mouseenter', '.goods-spec', function () {
+            $(this).find('.goods-spec-del-x').show();
+        });
+        $(document).on('mouseleave', '.goods-spec', function () {
+            $(this).find('.goods-spec-del-x').hide();
+        });
+
+        //删除规格项目绑定
+        $(document).on('click', '.goods-spec-del-x', function () {
+            $(this).parent().remove();
+            var goods_spec_project = $('#goods-spec-project');
+            if (goods_spec_project.children().length == 0) {
+                goods_spec_project.parent().hide();
+            }
+        });
+
+
+        //添加或删除规格项目后续操作
+        function specValueLater(){
+            $('.add-spec-value').each(function(){
+                add_spec_value = $(this);
+                var spec_values = '';
+                add_spec_value.parent().parent().find('.goods-spec-value-input').each(function () {
+                    spec_values += $(this).val() + ',';
+                });
+                add_spec_value.parent().find('.spec_values').val(spec_values.substring(0, spec_values.lastIndexOf(',')));
+
+                var spec_value_ids = '';
+                add_spec_value.parent().parent().find('.goods-sepc-value-id-input').each(function () {
+                    spec_value_ids += $(this).val() + ',';
+                });
+                add_spec_value.parent().find('.spec_value_ids').val(spec_value_ids.substring(0, spec_value_ids.lastIndexOf(',')));
+                triggerCreateTableBySepc();
+            });
+        }
+
+        //添加规格项
+        function addSpecvalue(add_spec_value,spec,spec_id){
+            var template_spec_value = $('#template-spec-value').html();
+            var template_spec_value_html = template_spec_value.replace('{spec_value_temp_id}', spec_value_temp_id_number--);
+            template_spec_value_html = template_spec_value_html.replace('{spec_value_id}',spec_id);
+            template_spec_value_html = template_spec_value_html.replace('{spec_value}', spec)
+            add_spec_value.parent().before(template_spec_value_html);
+            var div = add_spec_value.parent().parent().parent().parent();
+            var status = div.find('.batch-spec-image-switch').first().is(':checked');
+            if(status){
+                div.find('.batch-spec-image').show();
+            }else{
+                div.find('.batch-spec-image').hide();
+            }
+        }
+        form.on('switch(batch-spec-image-switch)', function(data){
+            var status = data.elem.checked;
+            $('.batch-spec-image-switch').prop("checked",false);
+            if(status) {
+                $('.batch-spec-image').hide();
+                $(this).parent().parent().parent().parent().find('.batch-spec-image').show();
+                $(this).prop("checked",true);
+            }else{
+                $(this).parent().parent().parent().parent().find('.batch-spec-image').hide();
+            }
+            form.render('checkbox');
+        });
+
+        //批量添加规格项绑定
+        $(document).on('click', '.add-spec-value', function () {
+            var add_spec_value = $(this);
+            layer.prompt({title: '输入规格值，多个请换行', formType: 2}, function (text, index) {
+                layer.close(index);
+                var specs = text.split('\n');
+                for (var i in specs) {
+                    specs[i] = specs[i].trim();
+                }
+                specs = unique(specs);
+                var added_specs = [];
+                add_spec_value.parent().parent().find('.goods-spec-value-input').each(function () {
+                    added_specs.push($(this).val().trim());
+                });
+                for (var i in specs) {
+                    var spec = specs[i].trim();
+                    if (spec == '' || in_array(spec, added_specs)) {
+                        //已存或为空的不添加
+                        continue;
+                    }
+                    addSpecvalue(add_spec_value,spec,0);
+                }
+                specValueLater();
+            });
+        });
+
+
+        //删除规格项
+        $(document).on('click', '.goods-spec-value-del-x', function () {
+            var add_spec_value = $(this).parent().parent().find('.add-spec-value').first();
+            $(this).parent().remove();
+            specValueLater();
+        });
+
+
+        //批量填充规格图片
+        like.imageUpload('.batch-spec-image',function(uri,element){
+            var temp_id = element.prev().attr('spec-value-temp-id');
+            $('input[name="spec_image[]"]').each(function(){
+                var temp_ids = $(this).parent().parent().parent().attr('spec-value-temp-ids');
+                temp_ids_arr = temp_ids.split(',');
+                var key = $(this).attr('name') + temp_ids;
+                if(in_array(temp_id,temp_ids_arr)) {
+                    spec_table_data[key] = '/'+uri;
+                }
+            });
+            setTableValue();
+        });
+
+        //批量填充
+        $('.batch-spec-content').click(function(){
+            var title = $(this).text();
+            var input_name = $(this).attr('input-name');
+            layer.prompt({
+                formType: 3
+                ,title: '批量填写'+title
+            },function(value, index, elem){
+                $('input[name="'+input_name+'[]"]').val(value);
+                //保存值到本地
+                $('#more-spec-lists-table input').each(function(){
+                    var key = $(this).attr('name') + $(this).parent().parent().attr('spec-value-temp-ids');
+                    spec_table_data[key] = $(this).val();
+                });
+                layer.close(index);
+            });
+        });
+
+        //显示或隐藏规格项删除按钮
+        $(document).on('mouseenter', '.goods-spec-value', function () {
+            $(this).find('.goods-spec-value-del-x').show();
+        });
+        $(document).on('mouseleave', '.goods-spec-value', function () {
+            $(this).find('.goods-spec-value-del-x').hide();
+        });
+
+
+        // 单规格图片
+        like.imageUpload('.goods-one-spec-img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            element.hide();
+            var key = element.parent().parent().parent().attr('spec-value-temp-ids');
+            spec_table_data["spec_image[]"+key] = uris[0];//保存图片地址
+            $(element).parent().html('<input name="one_spec_image" type="hidden" value="/' + uris[0] + '"><a class="goods-one-spec-img-del-x">x</a><img class="goods-spec-img" src="/' + uris[0] + '">');
+        });
+        $(document).on('mouseenter', '.goods-spec-img-div', function () {
+            $(this).find('.goods-one-spec-img-del-x').show();
+        });
+        $(document).on('mouseleave', '.goods-spec-img-div', function () {
+            $(this).find('.goods-one-spec-img-del-x').hide();
+        });
+        $(document).on('click', '.goods-one-spec-img-del-x', function () {
+            $(this).parent().html('<input type="hidden" name="one_spec_image"><img src="/static/common/image/plug/goods-lists-add-image.png" class="goods-one-spec-img-add">');
+        });
+
+        //多规格图片
+        like.imageUpload('.goods-spec-img-add', function (uris, element) {
+
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            element.hide();
+            var key = element.parent().parent().parent().attr('spec-value-temp-ids');
+            spec_table_data["spec_image[]"+key] = uris[0];//保存图片地址
+            $(element).parent().html('<input name="spec_image[]" type="hidden" value="/' + uris[0] + '"><a class="goods-spec-img-del-x">x</a><img class="goods-spec-img" src="/' + uris[0] + '">');
+        });
+        $(document).on('mouseenter', '.goods-spec-img-div', function () {
+            $(this).find('.goods-spec-img-del-x').show();
+        });
+        $(document).on('mouseleave', '.goods-spec-img-div', function () {
+            $(this).find('.goods-spec-img-del-x').hide();
+        });
+        $(document).on('click', '.goods-spec-img-del-x', function () {
+            var key = 'spec_image[]' + $(this).parent().parent().parent().attr('spec-value-temp-ids');
+            $(this).parent().html('<input type="hidden" name="spec_image[]"><img src="/static/common/image/plug/goods-lists-add-image.png" class="goods-spec-img-add">');
+            spec_table_data[key] = '';
+
+        });
+        $(document).on('click', '.goods-spec-img', function () {
+            like.showImg($(this).attr('src'), 500);
+        });
+
+
+        //规格生成表格
+        createTableBySepc = function () {
+            if ($('.goods-spec').size() <= 0) {
+                $('#more-spec-lists').hide();
+                return;
+            }
+            $('#more-spec-lists').show();
+            var table_title = [];
+            var table_data = [];
+            var spec_value_temp_arr = [];
+            var i = 0;
+            var th_html = $('#template-spec-table-th').html();
+            var tr_html = $('#template-spec-table-tr').html();
+
+            //遍历规格项目
+            $('.goods-spec').each(function () {
+                var spec_name = $(this).find('.spec_name').first().val();
+                if (isEmptyString(spec_name)) {
+                    return true;
+                }
+                table_title[i] = spec_name;
+                table_data[i] = [];
+                spec_value_temp_arr[i] = [];
+                var j = 0;
+                $(this).find('.goods-spec-value .goods-spec-value-input').each(function () {
+                    var spec_value = $(this).val();
+                    var spec_value_temp_id = $(this).attr('spec-value-temp-id');
+                    if (isEmptyString(spec_value)) {
+                        return true;
+                    }
+                    table_data[i][j] = spec_value;
+                    spec_value_temp_arr[i][j] = spec_value_temp_id;
+                    j++;
+                });
+                i++;
+            });
+
+            table_html = '';
+
+            //表格头部组装
+            spec_th_html = '';
+            for (var i in table_title) {
+                spec_th_html += '<th>' + table_title[i] + '</th>';
+            }
+            table_html = th_html.replace('{spec_th}', spec_th_html);
+
+            spec_value_temp_arr = cartesianProduct(spec_value_temp_arr);
+            table_data = cartesianProduct(table_data);
+            for (var i in table_data) {
+                var spec_tr_html = '';
+                var tr_name_arr = [];
+                var specs = '';
+                if (Array.isArray(table_data[i])) {
+                    //根据规格创建tr的id
+                    var spec_value_temp_ids = '';
+                    for(var j in spec_value_temp_arr[i]){
+                        spec_value_temp_ids += spec_value_temp_arr[i][j]+',';
+                    }
+                    spec_value_temp_ids = spec_value_temp_ids.substring(0, spec_value_temp_ids.lastIndexOf(','));
+                    spec_tr_html += '<tr spec-value-temp-ids="'+spec_value_temp_ids+'">';
+
+                    for (var j in table_data[i]) {
+                        spec_tr_html += '<td>' + table_data[i][j] + '</td>';
+                        tr_name_arr[j] = table_data[i][j];
+                        specs += table_data[i][j].replace(',', '') + ',';
+                    }
+                } else {
+                    var spec_value_temp_ids = spec_value_temp_arr[i];
+                    spec_tr_html = '<tr spec-value-temp-ids="'+spec_value_temp_ids+'">';
+                    spec_tr_html += '<td>' + table_data[i] + '</td>';
+                    specs += table_data[i].replace(',', '') + ',';
+                }
+                specs = specs.substring(0, specs.lastIndexOf(','));
+                spec_tr_html += '<td style="display: none"><input type="hidden" name="spec_value_str[]" value="' + specs + '"><input type="hidden" name="item_id[]" value=""></td>';
+                table_html += tr_html.replace('{spec_td}', spec_tr_html);
+
+            }
+            $('#more-spec-lists-table').html(table_html);
+            setTableValue();
+        }
+        //触发规格生成表格
+        function triggerCreateTableBySepc() {
+            clearTimeout(create_table_by_spec);
+            create_table_by_spec = setTimeout(createTableBySepc, 1000);
+        }
+
+        //各种触发生成规格事件
+        triggerCreateTableBySepc();
+        $('#add-spec').click(function () {
+            triggerCreateTableBySepc();
+        });
+        $(document).on('click', '.goods-spec-del-x', function () {
+            triggerCreateTableBySepc();
+        });
+        $(document).on('click', '.add-spec-value', function () {
+            triggerCreateTableBySepc();
+        });
+        $(document).on('click', '.goods-spec-value-del-x', function () {
+            triggerCreateTableBySepc();
+        });
+        $(document).on('input', '.goods-spec input', function () {
+            triggerCreateTableBySepc();
+            specValueLater();
+        });
+
+        //规格数据本地保存
+        $(document).on('input', '#more-spec-lists-table input', function () {
+            var key = $(this).attr('name') + $(this).parent().parent().attr('spec-value-temp-ids');
+            spec_table_data[key] = $(this).val();
+        });
+
+        //动态渲染已保存的值
+        function setTableValue() {
+            $('#more-spec-lists-table').find('input').each(function () {
+                var key = $(this).attr('name') + $(this).parent().parent().attr('spec-value-temp-ids');
+                if(spec_table_data[key]!== undefined){
+                    $(this).val(spec_table_data[key]);
+                }
+            });
+            $('.goods-spec-img-div').each(function(){
+                var key = $(this).parent().parent().attr('spec-value-temp-ids');
+                if(spec_table_data["spec_image[]"+key]){
+                    $(this).html('<input name="spec_image[]" type="hidden" value="' + spec_table_data["spec_image[]"+key] + '"><a class="goods-spec-img-del-x">x</a><img class="goods-spec-img" src="' + spec_table_data["spec_image[]"+key] + '">');
+                }
+            });
+        }
+
+        likeedit.set({
+            uploadImage: {
+                url: "{:url('file/image')}",
+                type: 'post'
+            }
+        })
+        var likeedit_index = likeedit.build('content'); //建立编辑器
+        form.verify({
+
+            content: function () {
+                likeedit.sync(likeedit_index)
+            }
+        });
+
+
+        //------------------------数据验证----------------------------------
+        function switchTab(number) {
+            $('.goods-tab').removeClass('layui-this');
+            $('.goods-content').removeClass('layui-show');
+            $('.goods-tab').eq(number).addClass('layui-this');
+            $('.goods-content').eq(number).addClass('layui-show');
+
+        }
+
+        form.verify({
+            custom_required: function (value, item) {
+                if (!value) {
+                    switchTab($(item).attr('switch-tab'));
+                    return $(item).attr('verify-msg');
+                }
+            }
+            ,image:function(value, item) {
+                var image = $('input[name="image"]').val();
+                if(!image){
+                    switchTab($(item).attr('switch-tab'));
+                    return $(item).attr('verify-msg');
+                }
+            }
+            ,goods_image: function (value, item) {
+                if (($('.goods_image').prevAll().length) == 0) {
+                    switchTab($(item).attr('switch-tab'));
+                    return $(item).attr('verify-msg');
+                }
+            },
+            status:function(value,item){
+                if(!$('input[name="status"]:checked').val()){
+                    return $(item).attr('verify-msg');
+                }
+            },
+            one_spec_required: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 1) {
+                    if (!value) {
+                        switchTab($(item).attr('switch-tab'));
+                        return $(item).attr('verify-msg');
+                    }
+                }
+            },
+            add_more_spec: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if ($('#more-spec-lists-table tbody tr').length == 0) {
+                        switchTab($(item).attr('switch-tab'));
+                        return $(item).attr('verify-msg');
+                    }
+                }
+            },
+            more_spec_required: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (!value) {
+                        switchTab($(item).attr('switch-tab'));
+                        return $(item).attr('verify-msg');
+                    }
+                }
+            },
+            delivery: function (value, item) {
+                var choose = 0;
+                $('.delivery').each(function () {
+                    if ($(this).is(':checked')) {
+                        choose++;
+                    }
+                });
+                if (choose == 0) {
+                    switchTab($(item).attr('switch-tab'));
+                    return $(item).attr('verify-msg');
+                }
+            },
+            one_volume: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 1) {
+                    if (value && value < 0) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '体积必须大于0';
+                    }
+                }
+            },
+            one_weight: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 1) {
+                    if (value && value < 0) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '重量必须大于0';
+                    }
+                }
+            },
+            // one_market_price: function (value, item) {
+            //     if ($('input[name="spec_type"]:checked').val() == 1) {
+            //         if (value && value < 0.01) {
+            //             switchTab($(item).attr('switch-tab'));
+            //             return '市场价必须大于或等于0.01';
+            //         }
+            //     }
+            // },
+            one_price: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0.01) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '价格必须大于或等于0.01';
+                    }
+                }
+            },
+            one_cost_price: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0.01) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '成本价格必须大于或等于0.01';
+                    }
+                }
+            },
+            more_price:function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0.01) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '价格必须大于或等于0.01';
+                    }
+                }
+            },
+            more_cost_price:function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0.01) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '成本价格必须大于或等于0.01';
+                    }
+                }
+            },
+            // more_market_price:function (value, item) {
+            //     if ($('input[name="spec_type"]:checked').val() == 2) {
+            //         if (value && value < 0.01) {
+            //             switchTab($(item).attr('switch-tab'));
+            //             return '市场价必须大于或等于0.01';
+            //         }
+            //     }
+            // },
+            more_stock: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '库存必须大于0';
+                    }
+                }
+            },
+            more_weight: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '重量必须大于0';
+                    }
+                }
+            },
+            more_volume: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    if (value && value < 0) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '体积必须大于0';
+                    }
+                }
+            },
+            repetition_spec_name: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    var spec_names = [];
+                    $('.spec_name').each(function () {
+                        spec_names.push($(this).val());
+                    });
+                    if ((new Set(spec_names)).size != spec_names.length) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '规格名称重复';
+                    }
+                }
+            },
+            repetition_spec_value: function (value, item) {
+                if ($('input[name="spec_type"]:checked').val() == 2) {
+                    var spec_values = [];
+                    $(item).find('.goods-spec-value-input').each(function () {
+                        spec_values.push($(this).val());
+                    });
+                    if ((new Set(spec_values)).size != spec_values.length) {
+                        switchTab($(item).attr('switch-tab'));
+                        return '同一规格中，规格值不能重复';
+                    }
+                }
+            },
+            distribution:function (value,item) {
+                var first_ratio = parseFloat($('.first_ratio').val());
+                var second_ratio = parseFloat($('.second_ratio').val());
+                var three_ratio = parseFloat(value);
+                if(first_ratio + second_ratio + three_ratio > 100){
+                    return '分销比例不可超过100';
+                }
+
+            }
+        });
+        //------------------------数据验证----------------------------------
+
+
+        //------------------------编辑页面----------------------------------
+        {notempty name='info'}
+        var goods_info= {$info|raw|default=''};
+        $('input[name="goods_id"]').val(goods_info['base']['id']);
+        $('input[name="name"]').val(goods_info['base']['name']);
+        $('input[name="code"]').val(goods_info['base']['code']);
+
+        setSelectFirst(goods_info['base']['first_category_id']);
+        setSelectSecond(goods_info['base']['second_category_id']);
+        setSelectThird(goods_info['base']['third_category_id']);
+        setBrand(goods_info['base']['brand_id']);    //渲染品牌
+        setSupplier(goods_info['base']['supplier_id']);    //渲染品供应商
+        setFreightTemplate(goods_info['base']['free_shipping_template_id']);   //渲染运费模板
+        $('input[name="remark"]').val(goods_info['base']['remark']);
+
+        var image_html = '';
+        for(var i in goods_info['base']['goods_image']) {
+            var template_goods_image = $('#template-goods-image').html();
+            image_html+= template_goods_image.replace('{image-src}', goods_info['base']['goods_image'][i]).replace('{image-src}',  goods_info['base']['goods_image'][i]);
+        }
+        if(image_html) {
+            $('.goods-img-add').parent().find('ul').append(image_html);
+        }
+        //渲染商品主图
+        if(goods_info['base']['image']){
+            var html = '' +
+                '<input name="image" type="hidden" value="' + goods_info['base']['image'] + '">' +
+                '  <img class="goods-img" src="' + goods_info['base']['image'] + '">\n' +
+                '<a class="goods-img-del-x goods-image-del">x</a>'
+            $('.master-image').html(html);
+            $('.goods-image').hide();
+        }
+
+        $("input[name=status][value="+goods_info['base']['status']+"]").prop("checked",true);           //销售状态
+        $("input[name=spec_type][value="+goods_info['base']['spec_type']+"]").prop('checked',"true");   //商品规格
+        $('input[name="virtual_sales_sum"]').val(goods_info['base']['virtual_sales_sum']);              //虚拟销量
+        $('input[name="stock_warn"]').val(goods_info['base']['stock_warn']);                            //库存预警
+
+        $("input[name=is_show_stock][value="+goods_info['base']['is_show_stock']+"]").prop("checked",true);     //是否显示库存
+        $("input[name=free_shipping_type][value="+goods_info['base']['free_shipping_type']+"]").prop("checked",true);   //快递运费类型
+        $('input[name="free_shipping"]').val(goods_info['base']['free_shipping']);                                      //运费
+
+        $("input[name=is_commission][value="+goods_info['base']['is_commission']+"]").prop("checked",true);     //分销设置
+        $("input[name=is_share_bouns][value="+goods_info['base']['is_share_bouns']+"]").prop("checked",true);   //区域股东分红
+        $('input[name="first_ratio"]').val(goods_info['base']['first_ratio']);                                  //一级分销
+        $('input[name="second_ratio"]').val(goods_info['base']['second_ratio']);                                //二级分销
+        $('input[name="three_ratio"]').val(goods_info['base']['three_ratio']);                                  //三级分销
+        $('input[name="region_ratio"]').val(goods_info['base']['region_ratio']);                                //区域股东分红
+        $('input[name="shareholder_ratio"]').val(goods_info['base']['shareholder_ratio']);                      //股东分红
+
+        form.render();
+        switchSpecType(goods_info['base']['spec_type']);
+        if(goods_info['base']['spec_type'] == 1){
+            var template_goods_image = $('#template-goods-image').html();
+            if(goods_info['item'][0]['image']){
+                $('.goods-one-spec-img-add').parent().html('<input name="one_spec_image" type="hidden" value="' + goods_info['item'][0]['image'] + '"><a class="goods-one-spec-img-del-x">x</a><img class="goods-spec-img" src="' + goods_info['item'][0]['image'] + '">');
+            }
+            $('input[name="one_price"]').val(goods_info['item'][0]['price']);
+            $('input[name="one_cost_price"]').val(goods_info['item'][0]['cost_price']);
+            $('input[name="one_market_price"]').val(goods_info['item'][0]['market_price']);
+            $('input[name="one_stock"]').val(goods_info['item'][0]['stock']);
+            $('input[name="one_volume"]').val(goods_info['item'][0]['volume']);
+            $('input[name="one_weight"]').val(goods_info['item'][0]['weight']);
+            $('input[name="one_bar_code"]').val(goods_info['item'][0]['bar_code']);
+        }
+        if(goods_info['base']['spec_type'] == 2) {
+            for(var i in goods_info['spec']){
+                addSpec(goods_info['spec'][i]['name']);
+                var spes_values = goods_info['spec'][i]['values'];
+                for(var j in  spes_values){
+                    addSpecvalue($('.add-spec-value').eq(i),spes_values[j]['value'],spes_values[j]['id']);
+                }
+
+            }
+            for(var i in goods_info['spec']){
+                $('input[name="spec_id[]"]').eq(i).val(goods_info['spec'][i]['id']);
+            }
+            specValueLater();
+            createTableBySepc();
+            for(var i in goods_info['item']){
+                $('#more-spec-lists-table tbody tr').each(function() {
+                    var spec_value_str = $(this).find('input[name="spec_value_str[]"]').first().val();
+                    if(spec_value_str == goods_info['item'][i]['spec_value_str']){
+                        spec_value_temp_ids = $(this).attr('spec-value-temp-ids');
+                        spec_table_data["spec_image[]"+spec_value_temp_ids] = goods_info['item'][i]['image'];
+                        spec_table_data["price[]"+spec_value_temp_ids] = goods_info['item'][i]['price'];
+                        spec_table_data["cost_price[]"+spec_value_temp_ids] = goods_info['item'][i]['cost_price'];
+                        spec_table_data["market_price[]"+spec_value_temp_ids] = goods_info['item'][i]['market_price'];
+                        spec_table_data["stock[]"+spec_value_temp_ids] = goods_info['item'][i]['stock'];
+                        spec_table_data["volume[]"+spec_value_temp_ids] = goods_info['item'][i]['volume'];
+                        spec_table_data["weight[]"+spec_value_temp_ids] = goods_info['item'][i]['weight'];
+                        spec_table_data["bar_code[]"+spec_value_temp_ids] = goods_info['item'][i]['bar_code'];
+                        spec_table_data["item_id[]"+spec_value_temp_ids] = goods_info['item'][i]['id'];
+                        return false;
+                    }
+                });
+
+
+            }
+            setTableValue();
+        }
+        likeedit.setContent(likeedit_index,goods_info['base']['content']);
+        form.render();
+        {/notempty}
+            //------------------------编辑页面----------------------------------
+        });
+</script>

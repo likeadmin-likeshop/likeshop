@@ -1,0 +1,172 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*商城支付方式设置，不同应用场景支持的支付方式不同。</p>
+                    <p>*请前往微信和支付宝平台申请对应的支付端口。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <h1 class="site-h1">支付设置</h1>
+
+        </div>
+
+        <div class="layui-card-body" id="card-body">
+
+            <table id="pay_config-lists" lay-filter="pay_config-lists"></table>
+            <!--            <label class="layui-form-mid layui-word-aux">*微信公众号支付和微信小程序支付配置可以相同</label>-->
+            <script type="text/html" id="icon">
+                <img src="{{d.icon}}" class="image-show">
+            </script>
+            
+
+            <script type="text/html" id="pay_config-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>配置</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src);
+        });
+
+        table.render({
+            id: 'pay_config-lists',
+            elem: '#pay_config-lists'
+            ,url: '{:url("pay_config/lists")}'
+            ,cols: [[
+                // {type: 'checkbox'}
+                // ,{field: 'id', width: 80, title: 'ID'}
+                {field: 'name', width: 200, title: '支付方式'}
+                ,{field: '#icon', title: '图标', width: 150,toolbar: '#icon', align: 'center'}
+                ,{field: 'abbreviation', width: 150, title: '简称'}
+                ,{field: 'use',width:450, title: '适用场景'}
+                ,{field: 'pay_use', title: '状态', width: 100, templet: '#pay_use', minWidth: 40, align: 'center'}
+                ,{field: 'sort', title: '排序', width: 100,event: 'tips',edit:'number',sort: true}
+                ,{title: '操作', width: 150, align: 'center', toolbar: '#pay_config-operation'}
+            ]]
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list, //解析数据列表
+                };
+            }
+        });
+
+
+        var pay_config_table = document.getElementById("card-body");
+        var para = document.createElement("label");
+        var text_Node = document.createTextNode("*微信公众号支付和微信小程序支付配置可以相同");
+        para.appendChild(text_Node);
+        pay_config_table.appendChild(para);
+
+        form.on('switch(switch-use)',function (obj) {
+            var name = obj.elem.attributes['data-id'].nodeValue;
+            var switch_name = obj.elem.attributes['data-switch_name'].nodeValue;
+            var status = 0;
+            if(this.checked){
+                status = 1;
+            }
+
+            like.ajax({
+                url:'{:url("pay_config/switchStatus")}',
+                data:{name:name,switchName:switch_name,status:status},
+                type:"get",
+                success:function(res)
+                {
+                    if(res.code == 1)
+                    {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+                }
+            });
+        });
+
+
+
+
+        table.on('tool(pay_config-lists)', function(obj){
+            if(obj.event === 'edit'){
+                var name = obj.data.name;
+                var edit_page;
+                if (name=='余额支付'){
+                    edit_page = 'editBalance';
+                }else if (name=='微信公众号支付'){
+                    edit_page = 'editOfficial';
+                }else if (name=='微信小程序支付'){
+                    edit_page = 'editApplet';
+                }else if (name=='支付宝APP支付'){
+                    edit_page = 'editAlipay';
+                }else if (name=='货到付款'){
+                    edit_page = 'editHand';
+                }else if (name=='微信APP支付'){
+                    edit_page = 'editApp';
+                }
+                layer.open({
+                    type: 2
+                    ,title: '编辑'+name
+                    ,content: '{:url("pay_config/'+edit_page+'")}?name='+name
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#pay_config-submit-edit');
+                        //监听提交
+
+                        iframeWindow.layui.form.on('submit(pay_config-submit-edit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("pay_config/'+edit_page+'")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('pay_config-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+    });
+
+</script>

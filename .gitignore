@@ -1,0 +1,10 @@
+/.idea
+/.vscode
+
+
+
+/server/vendor
+/server/public/uploads
+/server/runtime
+/server/thinkphp
+/server/.env

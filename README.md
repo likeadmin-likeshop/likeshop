@@ -31,7 +31,7 @@ LikeShop免费提供运营手册，开发文档，接口文档，让电商创业
 好象团队做什么，LikeShop如何而来。
 
 ## 联系
-<img src = "https://www.likemarket.net/images/lxwm.gif" align = left>
+<img src = "https://www.likemarket.net/images/lxwm.gif">
 <br/>
 <br/>官方网站：<a target="_blank" href="http://www.likemarket.net">http://www.likemarket.net</a>
 <br/>文档手册：<a target="_blank" href="http://doc.likemarket.net">http://doc.likemarket.net/</a>

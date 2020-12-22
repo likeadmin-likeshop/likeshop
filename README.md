@@ -32,10 +32,10 @@ LikeShop免费提供运营手册，开发文档，接口文档，让电商创业
 
 ## 联系
 <img src = "https://www.likemarket.net/images/lxwm.gif" align = left>
-<br>
-<br>官方网站：<a target="_blank" href="http://www.likemarket.net">http://www.likemarket.net</a>
-<br>文档手册：<a target="_blank" href="http://doc.likemarket.net">http://doc.likemarket.net/</a>
-<br>知识社区：<a  target="_blank" href="http://home.likemarket.net">http://home.likemarket.net/</a>
+<br/>
+<br/>官方网站：<a target="_blank" href="http://www.likemarket.net">http://www.likemarket.net</a>
+<br/>文档手册：<a target="_blank" href="http://doc.likemarket.net">http://doc.likemarket.net/</a>
+<br/>知识社区：<a  target="_blank" href="http://home.likemarket.net">http://home.likemarket.net/</a>
 
 qq技术群：371752229
 
@@ -109,7 +109,7 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
 
 ### 管理后台
 https://likeshop.likemarket.net/admin      
-<br>账号：test  密码：test
+<br/>账号：test  密码：test
 
 
 

@@ -6,12 +6,13 @@
 
 
 
-[![PHP Version](https://img.shields.io/badge/down-131.5MB-0677B8.svg)](http://www.likemarket.net/)
+[![PHP Version](https://img.shields.io/badge/down-100.6MB-0677B8.svg)](http://www.likemarket.net/)
 [![PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-8892BF.svg)](http://www.php.net/)
 [![License](https://img.shields.io/badge/license-Apache2.0-success.svg)](https://packagist.org/packages/topthink/framework)
 
 [![star](https://gitee.com/likemarket/likeshopv2/badge/star.svg?theme=dark)](https://gitee.com/likemarket/likeshopv2/stargazers)
 [![fork](https://gitee.com/likemarket/likeshopv2/badge/fork.svg?theme=gray)](https://gitee.com/likemarket/likeshopv2/members)
+
 [![Fork me on Gitee](https://gitee.com/likemarket/likeshopv2/widgets/widget_3.svg)](https://gitee.com/likemarket/likeshopv2)
 
 您的支持是好象团队前进的动力！点星星，请你喝🍺🍺🍺

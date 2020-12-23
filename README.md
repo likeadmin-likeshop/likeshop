@@ -110,7 +110,7 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
 
 ### 管理后台
 https://likeshop.likemarket.net/admin      
-<br/>账号：test  密码：test
+<br/>账号：test  密码：123456
 
 
 

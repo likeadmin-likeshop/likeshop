@@ -433,6 +433,7 @@ class LoginLogic extends LogicBase
     public static function registerAward($user_id){
         $register_award_integral_status = ConfigServer::get('marketing','register_award_integral_status',0);
         $register_award_coupon_status = ConfigServer::get('marketing','register_award_coupon_status',0);
+        //赠送积分
         if($register_award_integral_status){
             $register_award_integral = ConfigServer::get('marketing','register_award_integral',0);
             //赠送的积分
@@ -445,6 +446,11 @@ class LoginLogic extends LogicBase
         $register_award_coupon = ConfigServer::get('marketing','register_award_coupon','');
         if($register_award_coupon_status && $register_award_coupon){
             Cache::tag('register_coupon')->set('register_coupon_'.$user_id,$register_award_coupon);
+        }
+        //会员等级
+        $user_level = Db::name('user_level')->where(['del'=>0,'growth_value'=>0])->find();
+        if($user_level){
+            Db::name('user')->where(['id'=>$user_id])->update(['level'=>$user_level['id']]);
         }
     }
 

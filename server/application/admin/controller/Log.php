@@ -33,7 +33,7 @@ class Log extends AdminBase
 
         if ($this->request->isAjax()) {
             $limit = $this->request->get('limit', 20);
-            $page_no = $this->request->get('page_no', 1);
+            $page_no = $this->request->get('page', 1);
             $get = $this->request->get();
             $this->success('', LogLogic::lists($page_no, $limit, $get));
         }

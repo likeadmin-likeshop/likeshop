@@ -48,7 +48,7 @@
         <div class="layui-input-block">
             <select name="cid"  placeholder="请选择文章分类" >
                 {foreach $category_list as $item => $val}
-                <option value="{$item}" {if condition="$item eq $article.id "}selected="selected"{/if} >{$val.name}</option>
+                <option value="{$item}" {if condition="$item eq $article.cid "}selected="selected"{/if} >{$val.name}</option>
                 {/foreach}
             </select>
         </div>

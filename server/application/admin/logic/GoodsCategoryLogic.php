@@ -28,11 +28,9 @@ class GoodsCategoryLogic
      */
     public static function add($post)
     {
-        $goods_category = new GoodsCategory();
-
         $level = 0;
         if ($post['pid']) {
-            $level = $goods_category->where(['id' => $post['pid']], ['del' => 0])->value('level');
+            $level = Db::name('goods_category')->where(['id' => $post['pid']], ['del' => 0])->value('level');
         }
         $data = [
             'name'              => $post['name'],
@@ -43,8 +41,9 @@ class GoodsCategoryLogic
             'level'             => $level + 1,
             'remark'            => $post['remark'],
             'create_time'       => time(),
+            'update_time'       => time(),
         ];
-        return $goods_category->save($data);
+        return Db::name('goods_category')->insert($data);
     }
 
     /**
@@ -54,8 +53,10 @@ class GoodsCategoryLogic
      */
     public static function edit($post)
     {
-        $goods_category = new GoodsCategory();
-        $level = Db::name('goods_category')->where(['id'=>$post['pid']])->value('level');
+        $level = 0;
+        if ($post['pid']) {
+            $level = Db::name('goods_category')->where(['id' => $post['pid']], ['del' => 0])->value('level');
+        }
         $data = [
             'name'              => $post['name'],
             'sort'              => $post['sort'],
@@ -66,7 +67,7 @@ class GoodsCategoryLogic
             'remark'            => $post['remark'],
             'update_time'       => time(),
         ];
-        return $goods_category->save($data, ['del' => 0, 'id' => $post['id']]);
+        return Db::name('goods_category')->where(['id'=>$post['id']])->update($data);
     }
 
     /**
@@ -105,10 +106,7 @@ class GoodsCategoryLogic
      */
     public static function categoryThirdTree()
     {
-
-        $goods_category = new GoodsCategory();
-
-        $category_all = $goods_category->where(['del' => 0])->column('id,name,pid,is_show,level,image,sort', 'id');
+        $category_all = Db::name('goods_category')->where(['del' => 0])->column('id,name,pid,is_show,level,image,sort', 'id');
         $lists = [];
         $leve2 = [];
         $leve3 = [];
@@ -128,7 +126,6 @@ class GoodsCategoryLogic
             }
 
         }
-
 
         //开始拼接全部数据
         foreach ($leve3 as $item) {

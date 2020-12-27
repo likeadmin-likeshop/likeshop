@@ -62,6 +62,7 @@ class AdLogic
             $url = '';
             $item['status_info'] = '停用';
             $item['status_switch'] = '启用';
+            $item['client_name'] = Ad::getAdTypeDesc($item['client']);
             if (isset($position[$item['pid']])) {
                 $item['position_name'] = $position[$item['pid']];
             }

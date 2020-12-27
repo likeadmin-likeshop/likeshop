@@ -21,5 +21,6 @@ class DevMessage extends Model{
         'ZCYZ',     //注册验证
         'ZHMM',     //找回密码
         'YZMDL',    //验证码登录
+        'BGSJHM',   //变更手机号码
     ];
 }

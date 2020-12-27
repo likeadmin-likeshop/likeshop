@@ -1,16 +1,24 @@
 {layout name="layout2" /}
 <div class="layui-form" lay-filter="layuiadmin-form-comment" id="layuiadmin-form--comment" style="padding: 20px 30px 0 0;">
     <input type="hidden" value="{$res.id}" name="id">
-    <div class="layui-form-item" style="margin-left: 30px">
-       会员评论：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{if condition = "$res.comment == ''"}“未填写评价”{else}{$res.comment}{/if}
-    </div>
-
     <div class="layui-form-item">
         <div class="layui-inline">
-        <label class="layui-form-label"><font color="red">*</font>商家回复:</label>
+            <label class="layui-form-label">会员评论：</label>
+        </div>
+        <div class="layui-inline" style="margin-left: -12px;">
+            {if condition = "$res.comment == ''"}
+            未填写评价
+            {else}
+            {$res.comment}
+            {/if}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style="display:block;">
+            <label class="layui-form-label" style="padding-top: 0px"><font color="red">*</font>商家回复：</label>
         </div>
         <div class="layui-inline">
-            <textarea name="reply" placeholder="" class="layui-textarea" style="width: 300px;height: 200px"></textarea>
+            <textarea name="reply" placeholder="" class="layui-textarea"></textarea>
         </div>
     </div>
 

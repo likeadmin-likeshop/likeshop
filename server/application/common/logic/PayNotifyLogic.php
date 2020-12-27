@@ -68,7 +68,15 @@ class PayNotifyLogic
         //余额支付,扣除余额
         if ($order['pay_way'] == Pay::BALANCE_PAY){
             $user->user_money = ['dec', $order['order_amount']];
-            AccountLogLogic::AccountRecord($order['user_id'], $order['order_amount'], 2, AccountLog::balance_pay_order);
+            AccountLogLogic::AccountRecord(
+                $order['user_id'],
+                $order['order_amount'],
+                2,
+                AccountLog::balance_pay_order,
+                '',
+                $order['id'],
+                $order_sn
+            );
         }
         $user->save();
 
@@ -133,8 +141,10 @@ class PayNotifyLogic
 
         // 钩子-记录足迹(下单结算)
         Hook::listen('footprint', [
-            'type'     => Footprint::place_order,
-            'user_id'  => $user['id']
+            'type'       => Footprint::place_order,
+            'user_id'    => $user['id'],
+            'foreign_id' => $order['id'], //订单ID
+            'total_money' => $order['order_amount'] //订单应付金额
         ]);
     }
     /**

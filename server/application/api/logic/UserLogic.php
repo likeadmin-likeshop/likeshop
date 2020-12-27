@@ -16,6 +16,7 @@
 namespace app\api\logic;
 use app\api\model\User;
 use app\common\logic\LogicBase;
+use app\common\logic\NoticeLogic;
 use app\common\model\AccountLog;
 use app\common\model\AfterSale;
 use app\common\model\DistributionOrder;
@@ -45,12 +46,25 @@ class UserLogic extends LogicBase {
             ->where(['del'=>0,'user_id'=>$user_id])
             ->where('status','<>',AfterSale::STATUS_SUCCESS_REFUND)
             ->count();
-        $user->coupon = Db::name('coupon_list')->where(['user_id'=>$user_id,'status'=>0])->count();
+        $user->coupon = Db::name('coupon_list')->where(['user_id'=>$user_id,'del'=>0,'status'=>0])->count();
         //分销开关
         $user->distribution_setting = ConfigServer::get('distribution', 'is_open',1);
-        $user->visible(['id','nickname','avatar','user_money','total_order_amount','total_recharge_amount',
+        //消息数量
+        $user->notice_num = NoticeLogic::unRead($user_id) ? 1 : 0;
+        //下个会员等级提示
+        $user_level = Db::name('user_level')
+            ->where([
+                ['id','>',$user->getData('level')],
+                ['del','=',0]
+            ])->order('growth_value asc')
+            ->find();
+        $user['next_level_tips'] = '';
+        if($user_level){
+            $user['next_level_tips'] = '距离升级还差'.intval($user_level['growth_value'] - $user['user_growth']);
+        }
+        $user->visible(['id','nickname','sn','avatar','next_level_tips','user_money','total_order_amount','total_recharge_amount',
             'coupon','user_integral','level','wait_pay','wait_take','wait_delivery',
-            'wait_comment','after_sale', 'distribution_setting', 'distribution_code']);
+            'wait_comment','after_sale', 'distribution_setting', 'distribution_code', 'notice_num']);
 
         return $user;
     }

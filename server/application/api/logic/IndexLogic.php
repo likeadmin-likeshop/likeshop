@@ -103,14 +103,14 @@ class IndexLogic{
 
 
         //商城logo
-        $shop_logo =UrlServer::getFileUrl(ConfigServer::get('website', 'shop_logo', '')).'?=v1';
+        $shop_logo =UrlServer::getFileUrl(ConfigServer::get('website', 'shop_logo','/static/common/image/default/backstage_logo.png')).'?=v1';
 
         //新品推荐
         $goods = new Goods();
         $new_goods = $goods
                     ->where(['del'=>0,'status'=>1,'is_new'=>1])
                     ->field('id,name,image,min_price as price,market_price,sales_sum+virtual_sales_sum as sales_sum')
-                    ->order('id,sort desc')
+                    ->order('id desc,sort desc')
                     ->limit(5)
                     ->select();
         $mall_logo =UrlServer::getFileUrl(ConfigServer::get('website', 'mall_logo', '')).'?=v1';

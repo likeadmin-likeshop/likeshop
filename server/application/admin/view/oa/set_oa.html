@@ -75,7 +75,7 @@
                     <label class="layui-form-label">公众号二维码：</label>
                     <div class="layui-input-block">
                         <div class="img-content">
-                            <input name="qr_code" type="hidden" value="">
+                            <input name="qr_code" type="hidden" value="{$oa.qr_code}">
                             <div class="img-add" {if $oa.qr_code } style="display: none" {/if}></div>
                         {if !empty($oa.qr_code)}
                         <div class="img-container">

@@ -18,15 +18,17 @@ class Menu_{
     /*
      * 首页菜单
      */
-    const index_seckill       = 1;
-    const index_team_activity = 2;
-    const index_hot_sell      = 3;
-    const index_coupon_list   = 4;
-    const index_sign_in       = 5;
-    const index_member_centre = 6;
-    const index_my_collect    = 7;
-    const index_store_news    = 8;
-    const index_store_help    = 9;
+    const index_seckill             = 1;
+    const index_team_activity       = 2;
+    const index_hot_sell            = 3;
+    const index_coupon_list         = 4;
+    const index_sign_in             = 5;
+    const index_member_centre       = 6;
+    const index_my_collect          = 7;
+    const index_store_news          = 8;
+    const index_store_help          = 9;
+    const index_delivery_address    = 10;
+    const index_goods_category      = 11;
     /*
      * 个人中心菜单
      */
@@ -44,9 +46,9 @@ class Menu_{
             self::index_seckill            => [
                 'name'          => '限时秒杀',
                 'link'          => [
-                      'link1' => '/pages/goods_seckill/goods_seckill',
-                      'link2' => '/home/goodsSeckill',
-                      'link3' => 'SeckillActivity',
+                      'link1' => '/pages/goods_seckill/goods_seckill',  //小程序
+                      'link2' => '/home/goodsSeckill',                  //H5
+                      'link3' => 'SeckillActivity',                     //APP
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -131,7 +133,27 @@ class Menu_{
                 'is_tab'        => 0,
                 'type'          => 1,
             ],
-        ];
+            self::index_delivery_address   => [
+                'name'          => '收货地址',
+                'link'          => [
+                    'link1' => '/pages/user_address/user_address',
+                    'link2' => '/user/userAddress',
+                    'link3' => 'UserAddress',
+                ],
+                'is_tab'        => 0,
+                'type'          => 1,
+            ],
+            self::index_goods_category     => [
+                'name'          => '商品分类',
+                'link'          => [
+                    'link1' => '/pages/sort/sort',
+                    'link2' => '/index/sort',
+                    'link3' => 'Classify',
+                ],
+                'is_tab'        => 0,
+                'type'          => 1,
+            ],
+        ];//首页菜单
         $config2 = [
             self::centre_my_wallet         => [
                 'name'          => '我的钱包',
@@ -213,7 +235,7 @@ class Menu_{
                 'is_tab'        => 0,
                 'type'          => 3,
             ],
-        ];
+        ];//个人中心
         $config_name = 'config'.$scene;
         $content = $$config_name;
         if($scene === true){

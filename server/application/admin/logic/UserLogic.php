@@ -41,7 +41,7 @@ class UserLogic{
 
         //查询
         if(isset($get['keyword']) && $get['keyword']){
-            $where[] = ['nickname|mobile','like','%'.$get['keyword'].'%'];
+            $where[] = [$get['keyword_type'],'like','%'.$get['keyword'].'%'];
         }
         //等级查询
         if(isset($get['level']) && $get['level']){
@@ -53,18 +53,18 @@ class UserLogic{
         }
         //消费金额
         if(isset($get['total_amount_start']) && $get['total_amount_start']){
-            $where[] = ['total_amount','>=',$get['total_amount_start']];
+            $where[] = ['total_order_amount','>=',$get['total_amount_start']];
         }
         if(isset($get['total_amount_end']) && $get['total_amount_end']){
-            $where[] = ['total_amount','<=',$get['total_amount_end']];
+            $where[] = ['total_order_amount','<=',$get['total_amount_end']];
         }
 
         //注册时间
-        if(isset($get['create_start']) && $get['create_start']!=''){
-            $where[] = ['create_time','>=',strtotime($get['create_start'])];
+        if(isset($get['start_time']) && $get['start_time']!=''){
+            $where[] = ['create_time','>=',strtotime($get['start_time'])];
         }
-        if(isset($get['create_end']) && $get['create_end']!=''){
-            $where[] = ['create_time','<=',strtotime($get['create_end'])];
+        if(isset($get['end_time']) && $get['end_time']!=''){
+            $where[] = ['end_time','<=',strtotime($get['end_time'])];
         }
 
         $user_count = $user
@@ -112,7 +112,6 @@ class UserLogic{
                  }
             }
 
-            $item['total_order_amount'] = '￥'.$item['total_order_amount'];
 
             if(isset($group_list[$item['group_id']])){
                 $item['group_name'] = $group_list[$item['group_id']];
@@ -122,8 +121,13 @@ class UserLogic{
 
         return ['count'=>$user_count , 'lists'=>$user_list];
     }
-    /*
-     * 获取用户信息
+
+    /**
+     * Notes: 获取会员信息
+     * @param $id
+     * @param bool $getdata 是否获取原始数据
+     * @param bool $expenditure 是否显示会员消费
+     * @return User|mixed
      */
     public static function getUser($id,$getdata = false,$expenditure = false){
         $user =  User::get($id);

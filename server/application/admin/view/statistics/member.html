@@ -1,0 +1,292 @@
+{layout name="layout1" /}
+
+
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+
+        <div class="layui-form" lay-filter="">
+            <div class="layui-card" >
+                <div class="layui-card-body">
+                    <div class="layui-input-inline">
+                        <div class="layui-card-header" >概况</div>
+                    </div>
+
+                    <div class="layui-input-inline" style="left: 50px">
+                        <div class="layui-input-inline">
+                            <select name="days" lay-verify="required" lay-filter="days">
+                                <option value="today" >今日实时</option>
+                                <option value="ago_seven" >近7天</option>
+                                <option value="ago_thirty" >近30天</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-input-inline " id="days" style="white-space: nowrap;left:70px">
+                        {$res.start} 至 {$res.end}
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-sm6 layui-col-md3" >
+                    <div class="layui-card" >
+                        <div class="layui-card-header" >
+                            会员数量
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" >
+                            <p class="layuiadmin-big-font" id="count_user">{$res.count}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            新增会员数量
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font" id="add_user">{$res.add}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--会员分析图-->
+            <div class="layui-card" style="margin-top:20px">
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline layui-card-header" style="">会员趋势分析</div>
+                        <div class="layui-input-inline" style="right: 100px">
+                            <select name="member" lay-verify="required"  lay-filter="member">
+                                <option value="ago_seven">近7天</option>
+                                <option value="ago_thirty">近30天</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline" id="member_days" style="white-space: nowrap;top:8px;right:80px">
+                            {$res.start_seven} 至 {$res.end_seven}
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div id="EchartZhe" style="width: 80%;height: 80vh;"> </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','echarts','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,echarts = layui.echarts;
+
+        like.ajax({
+            url: '{:url("statistics/default")}',
+            data: {},
+            type: "post",
+            success: function (res) {
+                var option = {
+                    //title: {
+                    //   text: '堆叠区域图'
+                    // },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985',
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['会员数量', '新增会员数量']
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            name:'(天)',
+                            type: 'category',
+                            boundaryGap: false,
+                            data: ['1', '2', '3', '4', '5', '6', '7']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            name:'(个)',
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '会员数量',
+                            type: 'line',
+
+                            areaStyle: {},
+                            data: res.data.echarts_count,
+                            itemStyle: {
+                                normal: {
+                                    areaStyle: {
+                                        color: 'rgba(255,182,193,0.5)'
+                                    },
+
+                                },
+                            }
+                        },
+                        {
+                            name: '新增会员数量',
+                            type: 'line',
+                            areaStyle: {},
+                            itemStyle: {
+                                normal: {
+                                    areaStyle: {
+                                        color: 'rgba(225,255,255,0.5)'
+                                    },
+
+                                },
+                            },
+                            data: res.data.echarts_add
+                        },
+
+                    ]
+                };
+                //准备好dom元素 创建Echart实例
+                var chartZhe = echarts.init(document.getElementById('EchartZhe'));
+                chartZhe.setOption(option, true);
+                window.addEventListener('resize', function () {
+                    chartZhe.resize()
+                });
+            }
+        });
+
+
+
+        form.on('select(days)', function(data){
+            like.ajax({
+                url:'{:url("statistics/member")}',
+                data:{'days':data.value},
+                type:"post",
+                success:function(res)
+                {
+                    $('#days').html(res.data.start+  ' 至 ' +res.data.end );
+                    $('#count_user').html(res.data.count);
+                    $('#add_user').html(res.data.add);
+                }
+            });
+        });
+
+
+        form.on('select(member)', function(data){
+            like.ajax({
+                url: '{:url("statistics/member")}',
+                data: {member:data.value},
+                type: "post",
+                success: function (res) {
+                    $('#member_days').html(res.data.start+  ' 至 ' +res.data.end );
+                    var option = {
+                        //title: {
+                        //   text: '堆叠区域图'
+                        // },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985',
+                                }
+                            }
+                        },
+                        legend: {
+                            data: ['会员数量', '新增会员数量']
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                name:'(天)',
+                                type: 'category',
+                                boundaryGap: false,
+                                data: Array(res.data.days).fill(1).map((v,k)=>k+1) //填充数组
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                name:'(个)',
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '会员数量',
+                                type: 'line',
+
+                                areaStyle: {},
+                                data: res.data.echarts_count,
+                                itemStyle: {
+                                    normal: {
+                                        areaStyle: {
+                                            color: 'rgba(255,182,193,0.5)'
+                                        },
+
+                                    },
+                                }
+                            },
+                            {
+                                name: '新增会员数量',
+                                type: 'line',
+
+                                areaStyle: {},
+                                itemStyle: {
+                                    normal: {
+                                        areaStyle: {
+                                            color: 'rgba(225,255,255,0.5)'
+                                        },
+
+                                    },
+                                },
+                                data: res.data.echarts_add
+                            },
+
+                        ]
+                    }
+                    //准备好dom元素 创建Echart实例
+                    var chartZhe = echarts.init(document.getElementById('EchartZhe'));
+                    chartZhe.setOption(option, true);
+                    window.addEventListener('resize', function () {
+                        chartZhe.resize()
+                    });
+                }
+            });
+        });
+    });
+
+</script>

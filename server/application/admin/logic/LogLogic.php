@@ -70,7 +70,6 @@ class LogLogic
 
         $count = Db::name('system_log')
             ->where($where)
-            ->page($page_no, $size)
             ->count();
         return ['lists' => $lists, 'count' => $count];
     }

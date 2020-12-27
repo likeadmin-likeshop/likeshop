@@ -22,6 +22,6 @@ class GoodsCategory extends ApiBase{
      */
     public function lists(){
         $cateogry = GoodsCategoryLogic::categoryThirdTree();
-        return $this->success('获取成功',$cateogry);
+        $this->success('获取成功',$cateogry);
     }
 }

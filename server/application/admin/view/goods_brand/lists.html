@@ -13,37 +13,31 @@
         </div>
         </div>
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">品牌名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="name" id="keyword" placeholder="请输入品牌名称" autocomplete="off" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">品牌名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="keyword" placeholder="请输入品牌名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods_brand {$view_theme_color}" lay-submit lay-filter="goods_brand-search">
+                        <i class="layui-icon  layuiadmin-button-btn"></i>查询
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm  layui-btn-primary layuiadmin-btn-goods_brand  " lay-submit lay-filter="goods_brand-clear-search">清空查询</button>
                 </div>
             </div>
-            <div class="layui-inline">
-                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods_brand {$view_theme_color}" lay-submit lay-filter="goods_brand-search">
-                    <i class="layui-icon  layuiadmin-button-btn"></i>查询
-                </button>
-            </div>
-            <div class="layui-inline">
-                <button class="layui-btn layui-btn-sm  layui-btn-primary layuiadmin-btn-goods_brand  " lay-submit lay-filter="goods_brand-clear-search">清空查询</button>
-            </div>
-            <div class="layui-inline">
-<!--                <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-goods_brand " lay-submit lay-filter="user-search">导出</button>-->
-            </div>
-
         </div>
-
-
-
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods_brand {$view_theme_color}" data-type="add">添加品牌</button>
-            </div>
-        </div>
-
 
         <div class="layui-card-body">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods_brand {$view_theme_color}" data-type="add">添加品牌</button>
+                </div>
+            </div>
+
             <table id="goods_brand-lists" lay-filter="goods_brand-lists"></table>
             <script type="text/html" id="img">
                 <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">

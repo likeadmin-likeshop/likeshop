@@ -140,7 +140,7 @@
 
                         <!--会员信息-->
                         <script type="text/html" id="user">
-                            <img src="{{d.user.avatar}}" style="height:80px;width: 80px" class="image-show">
+                            <img src="{{d.user.base_avatar}}" style="height:80px;width: 80px" class="image-show">
                             <div class="layui-input-inline"  style="text-align: left">
                                 <p>会员编号:{{d.user_id}}</p>
                                 <p>昵称:{{d.user.nickname}}</p>
@@ -155,7 +155,7 @@
                             <div class="goods-content">
                                 {{#  layui.each(d.order_goods, function(index, item){ }}
                                 <div style="text-align: left;" class="goods-info">
-                                    <img src="{{ item.image }}" style="height:80px;width: 80px" class="image-show layui-col-md4">
+                                    <img src="{{ item.base_image }}" style="height:80px;width: 80px" class="image-show layui-col-md4">
                                     <div class="layui-input-inline layui-col-md8">
                                         <span class="layui-col-md7 goods_name_hide">{{ item.goods_name }}</span>
                                         <span class="layui-col-md5">￥{{ item.goods_price }}</span>

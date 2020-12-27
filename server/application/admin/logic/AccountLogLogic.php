@@ -66,6 +66,7 @@ class AccountLogLogic{
 
         foreach ($list as &$item){
             $item['source_type_desc'] = AccountLog::getAcccountDesc($item['source_type']);
+            $item['create_time'] = date('Y-m-d H:i:s',$item['create_time']);
         }
         return ['count'=>$count,'lists'=>$list];
     }
@@ -88,7 +89,7 @@ class AccountLogLogic{
                         'name'       => '钱包充值',
                     ],
                     [
-                        'source'     => '',
+                        'source'     => AccountLog::withdraw_to_balance,
                         'name'       => '佣金提现',
                     ],
 
@@ -97,11 +98,11 @@ class AccountLogLogic{
             case 2:
                 $list = [
                     [
-                        'source'     => '',
+                        'source'     => AccountLog::register_add_integral,
                         'name'       => '关注赠送积分',
                     ],
                     [
-                        'source'     => '',
+                        'source'     => AccountLog::invite_add_integral,
                         'name'       => '邀请赠送积分',
                     ],
                     [
@@ -113,11 +114,11 @@ class AccountLogLogic{
                         'name'       => '充值赠送积分',
                     ],
                     [
-                        'source'     => '',
+                        'source'     => AccountLog::order_add_integral,
                         'name'       => '消费赠送积分',
                     ],
                     [
-                        'source'     => '',
+                        'source'     => AccountLog::order_deduction_integral,
                         'name'       => '订单抵扣积分',
                     ],
 

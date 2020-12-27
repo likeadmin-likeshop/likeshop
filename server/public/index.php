@@ -18,7 +18,7 @@ require __DIR__ . '/../thinkphp/base.php';
 // 支持事先使用静态方法设置Request对象和Config对象
 
 if (!file_exists(__DIR__ .'/../config/install.lock')) {
-    header("location:./install/install.php");
+    header("location:/install/install.php");
     exit;
 }
 

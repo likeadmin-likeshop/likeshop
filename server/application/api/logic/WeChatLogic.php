@@ -20,6 +20,7 @@ namespace app\api\logic;
 
 use app\common\model\WeChat;
 use app\common\server\WeChatServer;
+use EasyWeChat\Kernel\Exceptions\Exception;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Factory;
 use think\Db;
@@ -42,7 +43,11 @@ class WeChatLogic
         $url = urldecode($url);
         $app->jssdk->setUrl($url);
         $apis = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'openLocation', 'getLocation', 'chooseWXPay', 'updateAppMessageShareData', 'updateTimelineShareData','openAddress'];
+        try{
         $data = $app->jssdk->getConfigArray($apis, $debug = false, $beta = false);
+        }catch (Exception $e){
+            return [];
+        }
         return $data;
     }
 

@@ -16,21 +16,21 @@
 
         <div class="layui-card-body">
             <div style="padding-bottom: 10px;">
-                <button class="layui-btn layui-btn-help_category {$view_theme_color}" data-type="add">新增帮助分类</button>
+                <button class="layui-btn layui-btn-sm layui-btn-help_category {$view_theme_color}" data-type="add">新增帮助分类</button>
             </div>
 
             <table id="help_category-lists" lay-filter="help_category-lists"></table>
 
             <script type="text/html" id="help-operation">
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">
                     {{#  if(d.is_show == 1){ }}
-                        停用
+                    停用
                     {{#  } else { }}
-                        启用
+                    启用
                     {{#  } }}
                 </a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
             </script>
         </div>
     </div>
@@ -131,7 +131,8 @@
         table.on('tool(help_category-lists)', function(obj){
             if(obj.event === 'del'){
                 var id = obj.data.id;
-                layer.confirm('确认删除该分类？', function(index){
+                var name = obj.data.name;
+                layer.confirm('确定删除帮助分类：'+'<span style="color: red">'+name+'</span>', function(index){
                     like.ajax({
                         url:'{:url("help_category/del")}',
                         data:{'id':id},
@@ -195,15 +196,17 @@
             }else if(obj.event === 'status_switch'){
                 var id = obj.data.id;
                 var status = obj.data.is_show;
-                var confirm_text = '请确定启用操作';
+                var name = obj.data.name;
+                var confirm_text = '';
                 if (status == 1){
-                    confirm_text = '请确定停用操作';
+                    confirm_text = '确定停用帮助分类：';
                     status = 0;
                 }else {
+                    confirm_text = '确定启用帮助分类：';
                     status = 1;
                 }
 
-                layer.confirm(confirm_text, function(index){
+                layer.confirm(confirm_text+'<span style="color: red">'+name+'</span>', function(index){
                     like.ajax({
                         url:'{:url("help_category/switchStatus")}',
                         data:{id:id,is_show:status},

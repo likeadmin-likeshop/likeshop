@@ -13,7 +13,7 @@
         </div>
         <div class="layui-card-body">
             <div style="padding-bottom: 10px;">
-                <button class="layui-btn layuiadmin-btn-menu_decorate {$view_theme_color}" data-type="add">添加菜单</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-menu_decorate {$view_theme_color}" data-type="add">添加菜单</button>
             </div>
 
             <table id="menu_decorate-lists" lay-filter="menu_decorate-lists"></table>
@@ -59,9 +59,9 @@
                 break;
             case 2:
                 if(type === 1){
-                    tips = '*设置H5商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
-                }else{
                     tips = '*设置H5商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
+                }else{
+                    tips = '*设置H5商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
                 }
                 break;
             case 3:
@@ -202,7 +202,14 @@
         table.on('tool(menu_decorate-lists)', function(obj){
             if(obj.event === 'del'){
                 var id = obj.data.id;
-                layer.confirm('确定删除该菜单吗？', function(index){
+                var name = obj.data.name;
+                var decorate_type = obj.data.decorate_type;
+                var tips = '确定删除菜单：';
+                if(decorate_type == 2){
+                    tips = '确定删除导航：';
+                }
+
+                layer.confirm(tips+'<span style="color: red">'+name+'</span>', function(index){
                     $.ajax({
                         url:'{:url("menu_decorate/del")}',
                         data:{'id':id},

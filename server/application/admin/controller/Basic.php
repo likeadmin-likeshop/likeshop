@@ -65,15 +65,10 @@ class Basic extends AdminBase
 
             ConfigServer::set('website', 'name', $post['name']);
             ConfigServer::set('website', 'login_logo', $post['login_logo']);
-            ConfigServer::set('website', 'keyword', $post['keyword']);
 
-            ConfigServer::set('website', 'slogan_status', $post['slogan_status']);
-            ConfigServer::set('website', 'slogan', $post['slogan']);
             ConfigServer::set('website', 'backstage_logo', $post['backstage_logo']);
             ConfigServer::set('website', 'admin_image', $post['admin_image']);
             ConfigServer::set('website', 'admin_title', $post['admin_title']);
-            ConfigServer::set('website', 'partner_image', $post['partner_image']);
-            ConfigServer::set('website', 'partner_title', $post['partner_title']);
             ConfigServer::set('website', 'shop_logo', $post['shop_logo']);
             ConfigServer::set('website', 'user_image', $post['user_image']);
             ConfigServer::set('website', 'goods_image', $post['goods_image']);

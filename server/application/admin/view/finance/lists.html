@@ -1,0 +1,108 @@
+{layout name="layout1" /}
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+        <div class="layui-form" lay-filter="">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-sm6 layui-col-md3" >
+                    <div class="layui-card" >
+                        <div class="layui-card-header" >
+                            本月订单金额
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" >
+                            <p class="layuiadmin-big-font" >{$data.month_order_amount}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            订单总金额
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font" >{$data.total_amount}</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form" lay-filter="">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-sm6 layui-col-md3" >
+                    <div class="layui-card" >
+                        <div class="layui-card-header" >
+                            会员余额
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" >
+                            <p class="layuiadmin-big-font" >{$data.total_user_money}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            会员积分
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font">{$data.total_user_integral}</p>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="layui-form" lay-filter="">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-sm6 layui-col-md3" >
+                    <div class="layui-card" >
+                        <div class="layui-card-header" >
+                            本月分销佣金金额
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" >
+                            <p class="layuiadmin-big-font" >{$data.month_earnings}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            分销佣金总金额
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font">{$data.distribution_earnings}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            会员可提现佣金
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font" >{$data.able_earnings}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            会员已提现佣金
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font" >{$data.have_withdraw_earnings}</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

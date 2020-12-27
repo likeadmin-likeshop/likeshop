@@ -17,15 +17,15 @@ namespace app\common\model;
 use think\Model;
 
 class SmsLog extends Model{
-    const SEND_ING = 0;
-    const SEND_SUCCESS = 1;
-    const SEND_FAIL = 2;
+    const send_ing = 0;
+    const send_success = 1;
+    const send_fail = 2;
 
     public static function getSendStatusDesc($from){
         $desc = [
-            self::SEND_ING          => '发送中',
-            self::SEND_SUCCESS      => '发送成功',
-            self::SEND_FAIL         => '发送失败',
+            self::send_ing          => '发送中',
+            self::send_success      => '发送成功',
+            self::send_fail         => '发送失败',
         ];
         if($from === true){
             return $desc;

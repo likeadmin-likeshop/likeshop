@@ -18,6 +18,8 @@ namespace app\common\logic;
 
 
 use app\common\model\Notice_;
+use app\common\server\ConfigServer;
+use app\common\server\UrlServer;
 use think\Db;
 use think\Exception;
 
@@ -70,9 +72,21 @@ class NoticeLogic
             ->order('id desc')
             ->find();
 
-        $data['system'] = $server['content'] ?? '暂无系统消息';
-        $data['earning'] = $earning['content'] ?? '暂无收益消息';
-        return $data;
+        $data['system'] = [
+            'title' => '系统通知',
+            'content' => $server['content'] ?? '暂无系统消息',
+            'img' => UrlServer::getFileUrl(ConfigServer::get('website', 'system_notice')),
+            'type' => 'system',
+        ];
+
+        $data['earning'] = [
+            'title' => '收益通知',
+            'content' => $earning['content'] ?? '暂无收益消息',
+            'img' => UrlServer::getFileUrl(ConfigServer::get('website', 'earning_notice')),
+            'type' => 'earning',
+        ];
+        $res = array_values($data);
+        return $res;
     }
 
     //消息列表
@@ -80,10 +94,13 @@ class NoticeLogic
     {
         $where = [];
         $where[] = ['user_id', '=', $user_id];
-        $where[] = ['type', '=', Notice_::NOTICE_SYSTEM];//系统通知
-        if ($type == 'earnings') {
-            $where[] = ['type', '=', Notice_::NOTICE_EARNINGS];//收益通知
+
+        if ($type == 'earning') {
+            $type = Notice_::NOTICE_EARNINGS;
+        }else{
+            $type = Notice_::NOTICE_SYSTEM;
         }
+        $where[] = ['type', '=', $type];
 
         $count = Db::name('notice')->where($where)->count();
 
@@ -105,6 +122,28 @@ class NoticeLogic
             'count' => $count,
             'more' =>  is_more($count, $page, $size)
         ];
+        self::setRead($user_id, $type);
         return $data;
+    }
+
+
+    //更新为已读
+    public static function setRead($user_id, $type)
+    {
+        //进入列表后全部已读
+        Db::name('notice')
+            ->where(['user_id' => $user_id, 'type' => $type])
+            ->where('read','<>', 1)
+            ->update(['read' => 1]);
+    }
+
+    //是否有未读的消息
+    public static function unRead($user_id)
+    {
+        $un_read = Db::name('notice')->where(['user_id' => $user_id, 'read' => 0])->find();
+        if ($un_read){
+            return true;
+        }
+        return false;
     }
 }

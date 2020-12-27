@@ -1,5 +1,8 @@
 {layout name="layout1" /}
 <style>
+    .layui-form-label{
+        width: 140px;
+    }
     .goods-li {
         float: left;
         opacity: 1;
@@ -24,9 +27,8 @@
         text-align: center;
         cursor: pointer;
         background: hsla(0, 0%, 60%, .6);
-        border-radius: 10px;}
-    #kword{white-space: nowrap;}
-
+        border-radius: 10px;
+    }
 </style>
 <div class="layui-col-md12">
 
@@ -35,69 +37,21 @@
 
         <div class="layui-card-body" >
             <div class="layui-form" lay-filter="">
-                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+<!--                网站名称-->
+                <div class="layui-form-item">
                     <label class="layui-form-label"><font color="red">*</font>网站名称：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="text" name="name"  lay-verify="required" lay-verType="tips" autocomplete="off" value="{$config.name}" class="layui-input">
                     </div>
                 </div>
-
-                <div class="layui-form-item  layui-col-sm6  layui-col-md4">
-                    <label class="layui-form-label" id ='kword' >网站关键字：</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="keyword"  lay-verType="tips" autocomplete="off"  value="{$config.keyword}"  class="layui-input">
-                    </div>
-                    <div class=" layui-form-mid layui-word-aux"style="left:110px">用于网站搜索引擎的优化，多个关键字请用英文逗号分隔</div>
-                </div>
-
-                    <div class="layui-form-item ">
-                        <label class="layui-form-label" style="white-space: nowrap;">登录页logo：</label>
-                        <div class="layui-inline" id="icon">
-
-                            <div class="" style="height:80px;line-height:80px;">
-                                <input name="login_logo" type="hidden" value="{$config.login_logo}" >
-                                {if !empty($config.login_logo)}
-                                <div class="goods-img-add" style="display: none"></div>
-                                <div class="goods-li">
-                                    <img class="goods-img" style="width: auto;height: 50px" src="{$config.login_logo}">
-                                    <a class="goods-img-del-x" style="display: none">x</a>
-                                </div>
-                                {else}
-                                <div class="goods-img-add"></div>
-                                {/if}
-                            </div>
-                            <div class=" layui-form-mid layui-word-aux">建议尺寸：宽152px*高42px。jpg，jpeg，png格式</div>
-
-                        </div>
-                    </div>
-
                 <div class="layui-form-item">
-                    <label class="layui-form-label " style="white-space: nowrap;right:20px">登录页logo标语：</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="slogan_status" value="1" title="显示" {if condition="$config.slogan_status eq 1"} checked {/if} >
-                        <input type="radio" name="slogan_status" value="2" title="隐藏" {if condition="$config.slogan_status eq 2"} checked {/if} >
-                    </div>
-                    <div class="layui-inline" >
-                    <div class="" style="height:80px;line-height:80px">
-                        <input name="slogan" type="hidden" value="{$config.slogan}" >
-                        {if !empty($config.slogan)}
-                        <div class="goods-img-add" style="display: none"></div>
-                        <div class="goods-li">
-                            <img class="goods-img" style="height: 50px;width:auto" src="{$config.slogan}">
-                            <a class="goods-img-del-x" style="display: none">x</a>
-                        </div>
-                        {else}
-                        <div class="goods-img-add"></div>
-                        {/if}
-                    </div>
-                    <div class=" layui-form-mid layui-word-aux" >建议尺寸：宽176px*高42px。jpg，jpeg，png格式</div>
-                    </div>
+                    <label class="layui-form-label"></label>
+                    <span style="color: #a3a3a3;font-size: 9px">网站标题</span>
                 </div>
-
+<!--                后台logo-->
                 <div class="layui-form-item ">
-                    <label class="layui-form-label" style="white-space: nowrap;">后台logo：</label>
+                    <label class="layui-form-label">后台logo：</label>
                     <div class="layui-inline" >
-
                         <div class="" style="height:80px;line-height:80px">
                             <input name="backstage_logo" type="hidden" value="{$config.backstage_logo}" >
                             {if !empty($config.backstage_logo)}
@@ -110,34 +64,36 @@
                             <div class="goods-img-add"></div>
                             {/if}
                         </div>
-                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽148px*高42px。jpg，jpeg，png格式</div>
+                        <div class=" layui-form-mid layui-word-aux">登录管理后台之后，左上角logo。建议尺寸：宽152px*高42px。jpg，jpeg，png格式</div>
 
                     </div>
                 </div>
-                <div class="layui-form-item ">
-                    <label class="layui-form-label" style="white-space: nowrap;left:10px">商城logo：</label>
-                    <div class="layui-inline" >
 
-                        <div class="" style="height:80px;line-height:80px">
-                            <input name="shop_logo" type="hidden" value="{$config.shop_logo}" >
-                            {if !empty($config.shop_logo)}
+<!--                后台登录页logo-->
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">后台登录页logo：</label>
+                    <div class="layui-inline" id="icon">
+
+                        <div class="" style="height:80px;line-height:80px;">
+                            <input name="login_logo" type="hidden" value="{$config.login_logo}" >
+                            {if !empty($config.login_logo)}
                             <div class="goods-img-add" style="display: none"></div>
                             <div class="goods-li">
-                                <img class="goods-img" src="{$config.shop_logo}" style="background-color:#EEEEEE ;height: 50px;width:auto">
+                                <img class="goods-img" style="width: auto;height: 50px" src="{$config.login_logo}">
                                 <a class="goods-img-del-x" style="display: none">x</a>
                             </div>
                             {else}
                             <div class="goods-img-add"></div>
                             {/if}
                         </div>
-                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽258px*高77px。jpg，jpeg，png格式</div>
+                        <div class=" layui-form-mid layui-word-aux">管理后台登录页左上角logo，建议尺寸：宽152px*高42px。jpg，jpeg，png格式</div>
 
                     </div>
                 </div>
 
-
+<!--                后台登录页表单主图-->
                 <div class="layui-form-item ">
-                    <label class="layui-form-label" style="white-space: nowrap;right:20px">平台登录表单主图：</label>
+                    <label class="layui-form-label">后台登录页表单主图：</label>
                     <div class="layui-inline" >
 
                         <div class="" style="height:80px;line-height:80px">
@@ -152,50 +108,47 @@
                             <div class="goods-img-add"></div>
                             {/if}
                         </div>
-                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽500px*高500px。jpg，jpeg，png格式</div>
+                        <div class=" layui-form-mid layui-word-aux">管理后台登录页表单主图，建议尺寸：宽500px*高500px。jpg，jpeg，png格式</div>
 
                     </div>
                 </div>
 
-                <div class="layui-form-item  layui-col-sm6  layui-col-md4">
-                    <label class="layui-form-label" style="white-space: nowrap;right:25px" >平台登录表单标题：</label>
-                    <div class="layui-input-block">
+<!--                后台登录页表单标题-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">后台登录页表单标题：</label>
+                    <div class="layui-input-inline">
                         <input type="text" name="admin_title"  lay-verType="tips" autocomplete="off"  value="{$config.admin_title}"  class="layui-input">
                     </div>
 
                 </div>
-
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <span style="color: #a3a3a3;font-size: 9px">管理后台登录页表单标题</span>
+                </div>
+<!--                商城logo-->
                 <div class="layui-form-item ">
-                    <label class="layui-form-label" style="white-space: nowrap;right:20px">机构登录表单主图：</label>
+                    <label class="layui-form-label">商城logo：</label>
                     <div class="layui-inline" >
 
                         <div class="" style="height:80px;line-height:80px">
-                            <input name="partner_image" type="hidden" value="{$config.partner_image}" >
-                            {if !empty($config.partner_image)}
+                            <input name="shop_logo" type="hidden" value="{$config.shop_logo}" >
+                            {if !empty($config.shop_logo)}
                             <div class="goods-img-add" style="display: none"></div>
                             <div class="goods-li">
-                                <img class="goods-img" src="{$config.partner_image}">
+                                <img class="goods-img" src="{$config.shop_logo}" style="background-color:#EEEEEE ;height: 50px;width:auto">
                                 <a class="goods-img-del-x" style="display: none">x</a>
                             </div>
                             {else}
                             <div class="goods-img-add"></div>
                             {/if}
                         </div>
-                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽500px*高500px。jpg，jpeg，png格式</div>
+                        <div class=" layui-form-mid layui-word-aux">商城首页左上角logo，建议尺寸：宽172px*高48px。jpg，jpeg，png格式</div>
 
                     </div>
                 </div>
-
-                <div class="layui-form-item  layui-col-sm6  layui-col-md4">
-                    <label class="layui-form-label" style="white-space: nowrap;right:25px" >机构登录表单标题：</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="partner_title"  lay-verType="tips" autocomplete="off"  value="{$config.partner_title}"  class="layui-input">
-                    </div>
-
-                </div>
-
+<!--                会员默认头像-->
                 <div class="layui-form-item ">
-                    <label class="layui-form-label" style="white-space: nowrap;">会员默认头像：</label>
+                    <label class="layui-form-label">会员默认头像：</label>
                     <div class="layui-inline" >
 
                         <div class="" style="height:80px;line-height:80px">
@@ -210,12 +163,13 @@
                             <div class="goods-img-add"></div>
                             {/if}
                         </div>
-                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</div>
+                        <div class=" layui-form-mid layui-word-aux">商城会员默认头像，建议尺寸：宽200px*高200px。jpg，jpeg，png格式</div>
 
                     </div>
                 </div>
+<!--                商品默认主图-->
                 <div class="layui-form-item ">
-                    <label class="layui-form-label" style="white-space: nowrap;">商品默认主图：</label>
+                    <label class="layui-form-label">商品默认封面图：</label>
                     <div class="layui-inline" >
 
                         <div class="" style="height:80px;line-height:80px">
@@ -230,7 +184,7 @@
                             <div class="goods-img-add"></div>
                             {/if}
                         </div>
-                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</div>
+                        <div class=" layui-form-mid layui-word-aux">商城商品默认封面图，建议尺寸：宽400px*高400px。jpg，jpeg，png格式</div>
 
                     </div>
                 </div>
@@ -238,7 +192,7 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
                     </div>
                 </div>
             </div>

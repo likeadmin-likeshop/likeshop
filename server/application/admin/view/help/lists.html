@@ -49,18 +49,18 @@
 
 
                 <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-help {$view_theme_color}" lay-submit lay-filter="help-search">
-                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-help {$view_theme_color}" lay-submit lay-filter="help-search">
+                        <i class="layui-icon   layui-icon-search layuiadmin-button-btn"></i>
                     </button>
-                    <button class="layui-btn layui-btn-primary layuiadmin-btn-help }" lay-submit lay-filter="help-clear-search">重置</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-help }" lay-submit lay-filter="help-clear-search">重置</button>
                 </div>
             </div>
         </div>
 
         <div class="layui-card-body">
             <div style="padding-bottom: 10px;">
-                <button class="layui-btn layuiadmin-btn-help {$view_theme_color}" data-type="add">新增帮助</button>
-                <button class="layui-btn layuiadmin-btn-help layui-btn-danger" data-type="batchdel">删除所选</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-help {$view_theme_color}" data-type="add">新增帮助</button>
+<!--                <button class="layui-btn layuiadmin-btn-help layui-btn-danger" data-type="batchdel">删除所选</button>-->
             </div>
 
             <table id="help-lists" lay-filter="help-lists"></table>
@@ -69,15 +69,15 @@
             </script>
 
             <script type="text/html" id="help-operation">
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">
                     {{#  if(d.is_show == 1){ }}
-                        隐藏
+                    隐藏
                     {{#  } else { }}
-                        显示
+                    显示
                     {{#  } }}
                 </a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
             </script>
         </div>
     </div>
@@ -237,7 +237,8 @@
         table.on('tool(help-lists)', function(obj){
             if(obj.event === 'del'){
                 var id = obj.data.id;
-                layer.confirm('确认删除该帮助？', function(index){
+                var title = obj.data.title;
+                layer.confirm('确定删除帮助：'+'<span style="color: red">'+title+'</span>', function(index){
                     like.ajax({
                         url:'{:url("help/del")}',
                         data:{'id':id},
@@ -300,14 +301,15 @@
             }else if(obj.event === 'status_switch'){
                 var id = obj.data.id;
                 var status = obj.data.is_show;
-                var confirm_text = '请确定隐藏操作';
+                var title = obj.data.title;
+                var confirm_text = '确定隐藏帮助：';
                 if (status == 1){
                     status = 0;
                 }else{
                     status = 1;
-                    confirm_text = '请确定显示操作';
+                    confirm_text = '确定显示帮助：';
                 }
-                layer.confirm(confirm_text, function(index){
+                layer.confirm(confirm_text+'<span style="color: red">'+title+'</span>', function(index){
                     like.ajax({
                         url:'{:url("help/switchStatus")}',
                         data:{id:id,is_show:status},

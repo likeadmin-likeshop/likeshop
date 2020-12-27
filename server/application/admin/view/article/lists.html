@@ -49,18 +49,18 @@
 
 
                 <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-article {$view_theme_color}" lay-submit lay-filter="article-search">
+                    <button class="layui-btn layui-btn-sm  layuiadmin-btn-article {$view_theme_color}" lay-submit lay-filter="article-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
-                    <button class="layui-btn layui-btn-primary layuiadmin-btn-article }" lay-submit lay-filter="article-clear-search">重置</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-article }" lay-submit lay-filter="article-clear-search">重置</button>
                 </div>
             </div>
         </div>
 
         <div class="layui-card-body">
             <div style="padding-bottom: 10px;">
-                <button class="layui-btn layuiadmin-btn-article {$view_theme_color}" data-type="add">新增文章</button>
-                <button class="layui-btn layuiadmin-btn-article layui-btn-danger" data-type="batchdel">删除所选</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-article {$view_theme_color}" data-type="add">新增文章</button>
+<!--                <button class="layui-btn layui-btn-sm layuiadmin-btn-article layui-btn-danger" data-type="batchdel">删除所选</button>-->
             </div>
 
             <table id="article-lists" lay-filter="article-lists"></table>
@@ -70,15 +70,15 @@
 
 
             <script type="text/html" id="article-operation">
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">
                     {{#  if(d.is_show == 1){ }}
-                        隐藏
+                    隐藏
                     {{#  } else { }}
-                        显示
+                    显示
                     {{#  } }}
                 </a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
             </script>
         </div>
     </div>
@@ -240,7 +240,8 @@
         table.on('tool(article-lists)', function(obj){
             if(obj.event === 'del'){
                 var id = obj.data.id;
-                layer.confirm('确认删除该文章？', function(index){
+                var title = obj.data.title;
+                layer.confirm('确定要删除文章：'+'<span style="color: red">'+title+'</span>', function(index){
                     like.ajax({
                         url:'{:url("article/del")}',
                         data:{'id':id},
@@ -303,13 +304,13 @@
                 var id = obj.data.id;
                 var status = obj.data.is_show;
                 var title = obj.data.title;
-
-                var confirm_text = '请确定隐藏文章:';
+                var confirm_text = '';
                 if (status == 1){
+                    confirm_text = '确定隐藏文章：';
                     status = 0;
                 } else {
                    status = 1;
-                    confirm_text = '请确定显示文章:';
+                    confirm_text = '确定显示文章：';
                 }
 
                 layer.confirm(confirm_text+'<span style="color: red">'+title+'</span>', function(index){

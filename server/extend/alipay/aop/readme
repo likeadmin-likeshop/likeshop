@@ -1,0 +1,14 @@
+SDK版本升级说明
+1、去除已经放弃维护的lotusphp框架
+2、公私钥模式开发者请直接初始化AopClient，使用方法详见：aop/test/AopClientTest.php
+3、证书模式开发者请直接初始化AopCertClient，使用方法详见：aop/test/AopCertClientTest.php
+4、兼容PHP7.2以上版本
+
+使用过程中有任何问题，请加入钉钉群咨询：23311489
+
+更新时间:2020-04-15
+
+备注：
+使用证书模式本地必须开始SSL
+如果出现SSL certificate: unable to get local issuer certificate错误信息
+解决办法：到http://curl.haxx.se/ca/cacert.pem下载pem文件，并将文件拷贝到D:\phpStudy\PHPTutorial\cacert.pem 在php.ini 增加curl.cainfo = "D:\phpStudy\PHPTutorial\cacert.pem"

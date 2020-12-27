@@ -177,7 +177,7 @@
                 ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#admin-operation'}
                 ,{title: '', width: '',align: 'center', fixed: 'right'}
             ]]
-            ,text: '对不起，加载出现异常！'
+            ,text: {none: '暂无相关数据'}
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                 return {
                     "code":res.code,

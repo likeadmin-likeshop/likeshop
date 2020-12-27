@@ -42,8 +42,8 @@ class AccountLog extends AdminBase{
             $list = AccountLogLogic::lists($get);
             $this->success('',$list);
         }
-        $this->assign('time',AccountLogLogic::getTime());
         $this->assign('order_source',AccountLogLogic::orderSourceList(2));
+        $this->assign('time',AccountLogLogic::getTime());
         return $this->fetch();
     }
 

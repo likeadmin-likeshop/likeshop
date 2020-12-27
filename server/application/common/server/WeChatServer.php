@@ -21,7 +21,6 @@ namespace app\common\server;
 
 
 use app\common\model\Client_;
-use app\common\server\ConfigServer;
 use think\Db;
 
 class WeChatServer
@@ -33,10 +32,10 @@ class WeChatServer
     public static function getMnpConfig()
     {
         $config = [
-            'app_id' => ConfigServer::get('mnp', 'app_id',''),
-            'secret' => ConfigServer::get('mnp', 'secret', ''),
-            'mch_id' => ConfigServer::get('mnp', 'mch_id',''),
-            'key' => ConfigServer::get('mnp', 'key',''),
+            'app_id' => ConfigServer::get('mnp', 'app_id'),
+            'secret' => ConfigServer::get('mnp', 'secret' ),
+            'mch_id' => ConfigServer::get('mnp', 'mch_id'),
+            'key' => ConfigServer::get('mnp', 'key'),
             'response_type' => 'array',
             'log' => [
                 'level' => 'debug',
@@ -53,10 +52,10 @@ class WeChatServer
     public static function getOaConfig()
     {
         $config = [
-            'app_id' => ConfigServer::get('oa', 'app_id',''),
-            'secret' => ConfigServer::get('oa', 'secret',''),
-            'mch_id' => ConfigServer::get('oa', 'mch_id',''),
-            'key' => ConfigServer::get('oa', 'key',''),
+            'app_id' => ConfigServer::get('oa', 'app_id'),
+            'secret' => ConfigServer::get('oa', 'secret'),
+            'mch_id' => ConfigServer::get('oa', 'mch_id'),
+            'key' => ConfigServer::get('oa', 'key'),
             'token' => ConfigServer::get('oa', 'token',''),
             'response_type' => 'array',
             'log' => [
@@ -74,8 +73,8 @@ class WeChatServer
     public static function getOpConfig()
     {
         $config = [
-            'app_id' => '',
-            'secret' => '',
+            'app_id' => ConfigServer::get('op', 'app_id'),
+            'secret' => ConfigServer::get('op', 'secret'),
             'response_type' => 'array',
             'log' => [
                 'level' => 'debug',

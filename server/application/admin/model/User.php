@@ -68,14 +68,14 @@ class User extends Model
 
     public function getLevelNameAttr($value,$data){
         $leve_name = '-';
-        if($value){
+        if($data['level']){
             $leve_name = Db::name('user_level')->where(['id'=>$data['level']])->value('name');
         }
         return $leve_name;
     }
     public function getGroupNameAttr($value,$data){
         $user_group = '-';
-        if($value){
+        if($data['group_id']){
             $user_group = Db::name('user_group')->where(['del'=>0,'id'=>$data['group_id']])->value('name');
         }
         return $user_group;

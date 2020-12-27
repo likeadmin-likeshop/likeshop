@@ -55,9 +55,9 @@ class SmsSend{
                     ->sendSms();
 
                 if($res !== false){
-                    $send_status = SmsLog::SEND_FAIL;
+                    $send_status = SmsLog::send_fail;
                     if(isset($res['Code']) && $res['Code'] == 'OK'){
-                        $send_status = SmsLog::SEND_SUCCESS;
+                        $send_status = SmsLog::send_success;
                     }
 
                 }
@@ -108,7 +108,7 @@ class SmsSend{
         $this->sms_log->mobile = $this->mobile;
         $this->sms_log->content = $this->content;
         $this->sms_log->code = $this->code;
-        $this->sms_log->send_status = SmsLog::SEND_ING;
+        $this->sms_log->send_status = SmsLog::send_ing;
         $this->sms_log->send_time = time();
         $this->sms_log->create_time = time();
         $this->sms_log->save();

@@ -16,6 +16,7 @@
 namespace app\api\logic;
 use app\api\model\Goods;
 use app\common\model\Footprint;
+use app\common\server\ConfigServer;
 use think\Db;
 use think\facade\Hook;
 
@@ -90,37 +91,38 @@ class GoodsLogic{
     public static function getGoodsDetail($user_id,$id){
 
         $goods = Goods::get(['id'=>$id,'status'=>1],['goods_image','goods_item']);
-
         if($goods){
             //点击量
             $goods->click_count = $goods->click_count  + 1;
             $goods->save();
-
+            $goods->sales_sum += $goods->virtual_sales_sum;
             $goods->is_collect = 0;
-            $goods->sales_sum = $goods->sales_sum + $goods->virtual_sales_sum;
             //检查商品是否整在参加活动，如果正在参加活动替换商品的价格为活动价
             $goods = self::checkActivity($goods);
-            $goods->price = $goods->goods_item[0]->price;
-            $goods->market_price = $goods->goods_item[0]->market_price;
             if($user_id){
                 //是否收藏
                 $collect = Db::name('goods_collect')->where(['user_id'=>$user_id,'goods_id'=>$id])->find();
                 $goods->is_collect= $collect ? 1 : 0;
             }
             //猜你喜欢
-            $like = $goods->Like();
-            $goods->like = $like;
+            $goods->Like();
             //商品规格
-            $goods_spec = $goods->GoodsSpec();
-            $goods->goods_spec = $goods_spec;
+            $goods->GoodsSpec();
 
             $goods->append(['comment'])->hidden(['Spec','GoodsSpecValue'])->visible(['id','name','image','stock','remark','content','sales_sum','click_count','price','market_price','is_collect','goods_spec','goods_image','goods_item','activity']);
 
             // 钩子-记录足迹(浏览商品)
             Hook::listen('footprint', [
-                'type'     => Footprint::browse_goods,
-                'user_id'  => $user_id,
-                'goods_id' => $id
+                'type'       => Footprint::browse_goods,
+                'user_id'    => $user_id,
+                'foreign_id' => $id //商品ID
+            ]);
+
+
+            Db::name('goods_click')->insert([
+                'user_id' => $user_id,
+                'goods_id' => $id,
+                'create_time' => time(),
             ]);
 
             return $goods;
@@ -137,8 +139,8 @@ class GoodsLogic{
 
         $goods_list = $goods
                     ->where(['del'=>0,'status'=>1,'is_best'=>1])
-                    ->field('id,name,image,min_price as price,market_price,sales_sum+virtual_sales_sum as sales_sum')
-                    ->order('sort desc')
+                    ->field('id,name,image,min_price as price,market_price')
+                    ->order('sort desc,id desc')
                     ->page($page,$size)
                     ->select();
 
@@ -163,7 +165,7 @@ class GoodsLogic{
         $goods_list = $goods
             ->where(['del'=>0,'status'=>1])
             ->field('id,name,image,min_price as price,market_price,sales_sum+virtual_sales_sum as sales_sum,click_count')
-            ->order('sales_sum DESC,click_count DESC')
+            ->order('sales_sum desc,click_count desc')
             ->page($page,$size)
             ->select();
 
@@ -188,9 +190,10 @@ class GoodsLogic{
             ->limit($limit)
             ->order('id desc')
             ->column('keyword');
+        $hot_lists = ConfigServer::get('hot_search','hot_keyword',[]);
         return[
             'history_lists' => $history_list,
-            'hot_lists' => [],
+            'hot_lists' => $hot_lists,
         ];
     }
 
@@ -215,6 +218,14 @@ class GoodsLogic{
 
         }
         return $goods;
+
+    }
+
+    //清空搜索记录
+    public static function clearSearch($user_id){
+        return Db::name('search_record')
+                ->where(['user_id'=>$user_id])
+                ->update(['del'=>1,'update_time'=>time()]);
 
     }
 }

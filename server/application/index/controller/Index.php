@@ -16,21 +16,11 @@
 namespace app\index\controller;
 
 use think\Controller;
-use think\facade\Hook;
 
 class Index extends Controller
 {
     public function index()
     {
         return view(app()->getRootPath() . 'public/mobile/index.html');
-    }
-
-    public function ceshi()
-    {
-        Hook::listen('wx_message_send', [
-           'user_id' => 56,
-           'scene' => 3,
-           'order_id' => 279
-        ]);
     }
 }

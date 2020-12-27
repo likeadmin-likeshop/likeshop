@@ -19,5 +19,7 @@ return [
         'user_image'=>'/static/common/image/default/user.png',//用户默认头像
         'partner_logo'=>'/static/common/image/default/main.png',//店铺logo
         'goods_image'=>'/static/common/image/default/main.png',//商品主图
-    ]
+        'system_notice' => '/static/common/image/default/system_notice.png',//系统通知图标
+        'earning_notice' => '/static/common/image/default/earning_notice.png',//收益通知图标
+    ],
 ];

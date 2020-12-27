@@ -71,13 +71,14 @@ class AdminBase extends Controller
         $this->assign('view_admin_name', $app['admin_name']);
         $this->assign('view_theme_color', $app['theme_color']);
         $this->assign('view_theme_button', $app['theme_button']);
+        $this->assign('version', $app['version']);
 
         $this->assignJs('image_upload_url', Url::build('file/image'));
 
         //用户权限uri，用于隐藏无权限的按钮
         $note_auth_uris = AuthServer::getRoleNoneAuthUris($this->admin_info['role_id']);
-        $note_auth_uris = array_map('strtolower',$note_auth_uris);
-        $this->assignJs('note_auth_uris',$note_auth_uris);
+        $note_auth_uris = array_map('strtolower', $note_auth_uris);
+        $this->assignJs('note_auth_uris', $note_auth_uris);
     }
 
     /**

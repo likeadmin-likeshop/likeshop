@@ -63,7 +63,8 @@ class SignLogic
                 ->where(['del'=>0])
                 ->order('type asc,days asc')
                 ->column('*','days');
-
+        $sign_total_days = '';
+        $days_list = [];
         if($sign_list){
             $start_sign = current($sign_list);      //第一次签到规则
             $end_sign = end($sign_list);     //最后一次签到规则
@@ -76,7 +77,7 @@ class SignLogic
                 ->order('id desc')
                 ->value('days');
 
-            $days_list = [];
+
             for($days = 1; $days <= $end_sign['days'] ;$days++){
                 $send_integral = $everyday_send_integral;
                 //连接签到赠送的积分
@@ -221,14 +222,14 @@ class SignLogic
         Db::name('user_sign')->insert($sign_add);
 
         if($total_integral){
-            db::name('user')
+            Db::name('user')
                 ->where(['del'=>0 , 'id'=>$user_id])
                 ->setInc('user_integral',$total_integral);
             AccountLogLogic::AccountRecord($user_id,$total_integral,1, AccountLog::sign_in_integral);
         }
         if($total_growth){
             //用户成长值
-            db::name('user')
+            Db::name('user')
                 ->where(['del'=>0 , 'id'=>$user_id])
                 ->setInc('user_growth',$total_growth);
             AccountLogLogic::AccountRecord($user_id,$total_growth,1,AccountLog::sign_give_growth);

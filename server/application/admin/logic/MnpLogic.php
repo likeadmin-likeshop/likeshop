@@ -24,22 +24,22 @@ class MnpLogic{
         $domain_name = ConfigServer::get('website', 'domain_name', '',$_SERVER['SERVER_NAME']);
 
         $config = [
-            'name' => ConfigServer::get('mnp', 'name', '',''),
-            'original_id' => ConfigServer::get('mnp', 'original_id', '',''),
-            'qr_code' => ConfigServer::get('mnp', 'qr_code', '',''),
-            'app_id' => ConfigServer::get('mnp', 'app_id', '',''),
-            'app_secret' => ConfigServer::get('mnp', 'secret', '',''),
-            'request_domain' => ConfigServer::get('mnp', 'request_domain', '','https://'.$domain_name),
-            'socket_domain' => ConfigServer::get('mnp', 'socket_domain', '','wss://'.$domain_name),
-            'uploadfile_domain' => ConfigServer::get('mnp', 'uploadfile_domain', '','https://'.$domain_name),
-            'downloadfile_domain' => ConfigServer::get('mnp', 'downloadfile_domain', '','https://'.$domain_name),
-            'udp_domain' => ConfigServer::get('mnp', 'udp_domain', '','udp://'.$domain_name),
-            'business_domain' => ConfigServer::get('mnp', 'business_domain', '',''),
-            'url' => ConfigServer::get('mnp', 'url', '',''),
-            'token' => ConfigServer::get('mnp', 'token', '',''),
-            'encoding_ses_key' => ConfigServer::get('mnp', 'encoding_ses_key', '',''),
-            'encryption_type' => ConfigServer::get('mnp', 'encryption_type', '',''),
-            'data_type' => ConfigServer::get('mnp', 'data_type', '',''),
+            'name' => ConfigServer::get('mnp', 'name', ''),
+            'original_id' => ConfigServer::get('mnp', 'original_id', ''),
+            'qr_code' => ConfigServer::get('mnp', 'qr_code', ''),
+            'app_id' => ConfigServer::get('mnp', 'app_id', ''),
+            'app_secret' => ConfigServer::get('mnp', 'secret', ''),
+            'request_domain' => ConfigServer::get('mnp', 'request_domain', 'https://'.$domain_name),
+            'socket_domain' => ConfigServer::get('mnp', 'socket_domain', 'wss://'.$domain_name),
+            'uploadfile_domain' => ConfigServer::get('mnp', 'uploadfile_domain', 'https://'.$domain_name),
+            'downloadfile_domain' => ConfigServer::get('mnp', 'downloadfile_domain', 'https://'.$domain_name),
+            'udp_domain' => ConfigServer::get('mnp', 'udp_domain', 'udp://'.$domain_name),
+            'business_domain' => ConfigServer::get('mnp', 'business_domain', ''),
+            'url' => ConfigServer::get('mnp', 'url', ''),
+            'token' => ConfigServer::get('mnp', 'token', ''),
+            'encoding_ses_key' => ConfigServer::get('mnp', 'encoding_ses_key', ''),
+            'encryption_type' => ConfigServer::get('mnp', 'encryption_type', ''),
+            'data_type' => ConfigServer::get('mnp', 'data_type', ''),
         ];
         return $config;
     }

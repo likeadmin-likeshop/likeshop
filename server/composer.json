@@ -16,15 +16,15 @@
         }
     ],
     "require": {
-        "php": ">=7.2.4",
+        "php": ">=7.0.0",
         "topthink/framework": "5.1.*",
         "topthink/think-captcha": "2.0.*",
         "overtrue/wechat": "~4.0",
-        "topthink/think-worker": "v2.0.9",
         "mtdowling/cron-expression": "^1.2",
         "topthink/think-helper": "1.0.*",
-        "endroid/qr-code": "^3.9",
-        "rmccue/requests": "^1.7"
+        "rmccue/requests": "^1.7",
+        "alibabacloud/client": "^1.5",
+        "endroid/qr-code": "^2.5"
     },
     "autoload": {
         "psr-4": {

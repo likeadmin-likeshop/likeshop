@@ -51,7 +51,7 @@ class GoodsComment extends ApiBase{
         if ($result === true) {
             $result = GoodsCommentLogic::addGoodsComment( $post,$this->user_id);
             if($result === true){
-                return $this->success('评论成功');
+                $this->success('评论成功');
             }
         }
         $this->error($result);
@@ -63,7 +63,7 @@ class GoodsComment extends ApiBase{
     public function getOrderGoods(){
         $type = $this->request->get('type',1);
         $list = GoodsCommentLogic::getOrderGoods($type,$this->user_id, $this->page_no, $this->page_size);
-        return $this->success('',$list);
+        $this->success('',$list);
     }
 
     /**
@@ -76,6 +76,6 @@ class GoodsComment extends ApiBase{
             $goods = GoodsCommentLogic::getGoods($id);
             $this->success('获取成功',$goods);
         }
-        return $this->success('请选择评论的商品');
+        $this->success('请选择评论的商品');
     }
 }

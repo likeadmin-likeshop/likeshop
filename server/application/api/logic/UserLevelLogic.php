@@ -14,6 +14,7 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\api\logic;
+use function AlibabaCloud\Client\value;
 use app\common\server\ConfigServer;
 use app\common\server\UrlServer;
 use think\Db;
@@ -41,20 +42,25 @@ class UserLevelLogic{
             $user_level[$key]['privilege_list'] = [];
             $user_level[$key]['image'] = UrlServer::getFileUrl($level['image']);
             $user_level[$key]['background_image'] = UrlServer::getFileUrl($level['background_image']);
+            $user_level[$key]['tips'] = '';
+            //下个等级
+            $next_level = next($user_level);
 
+            $next_level && $user_level[$key]['tips'] = '升级'.$next_level['growth_value'];
 
             //当前等级
             if($user['level'] === $level['id']){
                 $user_level[$key]['present_level'] = 1;
+//                $user_level[$key]['tips'] = '';
                 $level_name = $level['name'];
                 //把当前等级之前的标记未已解锁
                 for ($index = $key - 1;$index >= 0;$index--){
                     $user_level[$index]['present_level'] = 0;
+                    $user_level[$index]['tips'] = '';
                 }
             }
-            //下个等级
-            $next_level = next($user_level);
-            $next_level && $user_level[$key]['next_level'] = '下个等级' . $next_level['name'];
+
+            $next_level && $user_level[$key]['next_level'] = '下个等级 ' . $next_level['name'];
 
             //等级权益
             if($level['privilege']){
@@ -76,17 +82,20 @@ class UserLevelLogic{
                     ->select();
         //成长值规则
         $rule = '';
+        $tip_id = 1;
         foreach ($sign_daily as $sign){
             if( 1 == $sign['type'] && 0 == $sign['days'] && $sign['growth_status'] && $sign['growth']){
-                $rule.= '会员连续签到1天，赠送'.$sign['growth'].'成长值，';
+                $rule.= $tip_id.'.会员连续签到1天，赠送' .$sign['growth']. "成长值。".PHP_EOL;
             }
             if( 2 == $sign['type'] && $sign['growth_status'] && $sign['growth']){
-                $rule.= '会员连续签到'.$sign['days'].'天，赠送'.$sign['growth'].'成长值；';
+                $rule.= $tip_id.'.会员连续签到'.$sign['days'].'天，赠送'.$sign['growth']."成长值。".PHP_EOL;
             }
+            $tip_id++;
         }
+
         $give_growth  = ConfigServer::get('recharge', 'give_growth', 0);
         if($give_growth > 0){
-            $rule.='使用余额充值，每元赠送'.$give_growth.'成长值';
+            $rule.=$tip_id.'.使用余额充值，每元赠送'.$give_growth."成长值。".PHP_EOL;
         }
 
         //合并数据

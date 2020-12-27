@@ -47,7 +47,7 @@ class FootprintLogic
     {
         try {
             ConfigServer::set('footprint', 'footprint_duration', $post['duration']);
-            ConfigServer::set('footprint', 'footprint_duration', $post['status']);
+            ConfigServer::set('footprint', 'footprint_status', $post['status']);
             return true;
         } catch (\Exception $e) {
             return false;

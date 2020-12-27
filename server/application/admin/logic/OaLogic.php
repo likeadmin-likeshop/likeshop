@@ -23,18 +23,18 @@ use EasyWeChat\Kernel\Exceptions\Exception;
 class OaLogic  extends LogicBase{
     public static function getOa(){
         $config = [
-            'name' => ConfigServer::get('oa', 'name', '',''),
-            'original_id' => ConfigServer::get('oa', 'original_id', '',''),
-            'qr_code' => ConfigServer::get('oa', 'qr_code', '',''),
-            'app_id' => ConfigServer::get('oa', 'app_id', '',''),
-            'app_secret' => ConfigServer::get('oa', 'secret', '',''),
-            'url' => ConfigServer::get('oa', 'url', '',''),
-            'token' => ConfigServer::get('oa', 'token', '',''),
-            'encoding_ses_key' => ConfigServer::get('oa', 'encoding_ses_key', '',''),
-            'encryption_type' => ConfigServer::get('oa', 'encryption_type', '',''),
-            'business_domain' => ConfigServer::get('oa', 'business_domain', '',''),
-            'safety_domain' => ConfigServer::get('oa', 'safety_domain', '',''),
-            'auth_domain' => ConfigServer::get('oa', 'auth_domain', '',''),
+            'name' => ConfigServer::get('oa', 'name', ''),
+            'original_id' => ConfigServer::get('oa', 'original_id', ''),
+            'qr_code' => ConfigServer::get('oa', 'qr_code', ''),
+            'app_id' => ConfigServer::get('oa', 'app_id', ''),
+            'app_secret' => ConfigServer::get('oa', 'secret', ''),
+            'url' => ConfigServer::get('oa', 'url', ''),
+            'token' => ConfigServer::get('oa', 'token', ''),
+            'encoding_ses_key' => ConfigServer::get('oa', 'encoding_ses_key', ''),
+            'encryption_type' => ConfigServer::get('oa', 'encryption_type', ''),
+            'business_domain' => ConfigServer::get('oa', 'business_domain', ''),
+            'safety_domain' => ConfigServer::get('oa', 'safety_domain', ''),
+            'auth_domain' => ConfigServer::get('oa', 'auth_domain', ''),
             ];
         return $config;
     }

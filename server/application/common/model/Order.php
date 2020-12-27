@@ -154,7 +154,7 @@ class Order extends Model
     //订单用户
     public function user()
     {
-        return $this->hasOne('app\admin\model\User', 'id', 'user_id')
+        return $this->hasOne('user', 'id', 'user_id')
             ->field('id,sn,nickname,avatar,mobile,sex,create_time');
     }
 

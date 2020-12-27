@@ -28,7 +28,7 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.order_num_today}</p>
                     <p>昨日：{$res.order_num_yesterday}
-                        <span {if condition="$res.order_num_change lt 0" } style="color: #07ff00" {elseif condition="$res.order_num_change egt 0" } style="color: #dd241e" {/if}>{$res.order_num_change}</span></p>
+                        <span {if condition="$res.order_num_change lt 0" } style="color: #009688" {elseif condition="$res.order_num_change egt 0" } style="color: #dd241e" {/if}>{$res.order_num_change}</span></p>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                     <p class="layuiadmin-big-font">{$res.order_amount_today}</p>
 
                     <p>昨日:{$res.order_amount_yesterday}
-                        <span {if condition="$res.order_amount_change lt 0" } style="color: #07ff00" {elseif condition="$res.order_amount_change egt 0" } style="color: #dd241e" {/if}>{$res.order_amount_change}</span></p>
+                        <span {if condition="$res.order_amount_change lt 0" } style="color: #009688" {elseif condition="$res.order_amount_change egt 0" } style="color: #dd241e" {/if}>{$res.order_amount_change}</span></p>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.add_user_today}</p>
                     <p>昨日:{$res.add_user_yesterday}
-                        <span {if condition="$res.add_user_change lt 0" } style="color: #07ff00" {elseif condition="$res.add_user_change egt 0" } style="color: #dd241e" {/if}>{$res.add_user_change}</span></p>
+                        <span {if condition="$res.add_user_change lt 0" } style="color: #009688" {elseif condition="$res.add_user_change egt 0" } style="color: #dd241e" {/if}>{$res.add_user_change}</span></p>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.today_user_pv}</p>
                     <p>昨日:{$res.yesterday_user_pv}
-                        <span {if condition="$res.pv_change lt 0" } style="color: #07ff00" {elseif condition="$res.pv_change egt 0" } style="color: #dd241e" {/if}>{$res.pv_change}</span></p>
+                        <span {if condition="$res.pv_change lt 0" } style="color: #009688" {elseif condition="$res.pv_change egt 0" } style="color: #dd241e" {/if}>{$res.pv_change}</span></p>
                 </div>
             </div>
         </div>
@@ -103,10 +103,10 @@
         <div class="layui-col-sm3 ">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    总用户访问量（件）
+                    总用户访问量（人）
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
-                    <p class="layuiadmin-big-font">{$res.today_user_pv}</p>
+                    <p class="layuiadmin-big-font">{$res.total_user_pv}</p>
                 </div>
             </div>
         </div>
@@ -201,7 +201,10 @@
 
     </div>
 </div>
-
+<footer class="info_footer">
+    Copyright © 2019-2020 广州好象科技有限公司&nbsp;&nbsp;|&nbsp;&nbsp;LikeShopV2-{$version}
+    <br><br>
+</footer>
 <script>
     layui.config({
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径

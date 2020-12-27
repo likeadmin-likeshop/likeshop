@@ -16,7 +16,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">会员信息：</label>
                     <div class="layui-input-inline" style="width: 200px;">
-                        <input type="text" id="keyword" name="keyword" placeholder="请输入昵称、编号、手机号码" autocomplete="off" class="layui-input">
+                        <select name="keyword_type" id="keyword_type">
+                            <option value="sn">会员编号</option>
+                            <option value="nickname">会员昵称</option>
+                            <option value="mobile">会员手机号码</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="keyword" name="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -62,13 +69,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">注册时间:</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="create_start" name="create_start"  autocomplete="off">
+                        <input type="text" class="layui-input" id="start_time" name="start_time"  autocomplete="off">
                     </div>
                     <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
                         <label class="layui-form-mid">-</label>
                     </div>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="create_end" name="create_end"  autocomplete="off">
+                        <input type="text" class="layui-input" id="end_time" name="end_time"  autocomplete="off">
                     </div>
                 </div>
 
@@ -91,10 +98,11 @@
             <script type="text/html" id="user-info">
                 <img src="{{d.avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
                 <div class="layui-input-inline">
-
-                    <label>手机号码：{{d.mobile}}</label>
+                    <label>会员编号：{{d.sn}}</label>
                     <br/>
                     <label>昵称：{{d.nickname}}</label>
+                    <br/>
+                    <label>手机号码：{{d.mobile}}</label>
                     <br/>
                     <label>性别：{{d.sex}}</label>
                     <br/>
@@ -148,11 +156,12 @@
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index','table','like'], function(){
+    }).use(['index','table','like','laydate'], function(){
         var $ = layui.$
             ,form = layui.form
             ,table = layui.table
-            ,like = layui.like;
+            ,like = layui.like
+            , laydate = layui.laydate;
 
         //监听搜索
         form.on('submit(user-search)', function(data){
@@ -162,14 +171,27 @@
                 where: field
             });
         });
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'datetime'
+        });
+
+        //日期时间范围
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'datetime'
+        });
+
 
         //清空查询
         form.on('submit(user-clear-search)', function(){
+            $('#keyword_type').val('sn');
             $('#keyword').val('');  //清空输入框
             $('#level').val('');  //清空输入框
             $('#group_id').val('');  //清空输入框
-            $('#create_start').val('');  //清空输入框
-            $('#create_end').val('');  //清空输入框
+            $('#start_time').val('');  //清空输入框
+            $('#end_time').val('');  //清空输入框
             form.render('select');
             //刷新列表
             table.reload('user-lists', {
@@ -257,7 +279,7 @@
                     type: 2
                     ,title: '设置分组'
                     ,content: '{:url("user/setGroup")}'
-                    ,area: ['90%', '90%']
+                    ,area: ['60%', '60%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         var iframeWindow = window['layui-layer-iframe'+ index]
@@ -317,7 +339,7 @@
             ,cols: [[
                 {type: 'checkbox'}
                 ,{field: 'id', width: 80, title: 'ID', sort: true, hide:true}
-                ,{field: 'avatar', title: '会员信息',width: 300,align: 'center', toolbar: '#user-info'}
+                ,{field: 'avatar', title: '会员信息',width: 350,align: 'center', toolbar: '#user-info'}
                 ,{field: 'level_name', title: '会员等级',width: 100,}
                 ,{field: 'group_name', title: '会员分组',width: 100,}
                 ,{field: 'referrals', title: '推荐人信息',align: 'center',width: 300,toolbar: '#referrer'}

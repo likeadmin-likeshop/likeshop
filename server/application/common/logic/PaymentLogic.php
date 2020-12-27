@@ -16,9 +16,9 @@
 
 namespace app\common\logic;
 
+use app\common\server\AliPayServer;
 use app\common\server\WeChatServer;
-use app\common\logic\LogicBase;
-use app\common\model\{Client_, Pay};
+use app\common\model\{Client_};
 use EasyWeChat\Factory;
 use think\Db;
 use think\Exception;
@@ -69,8 +69,6 @@ class PaymentLogic extends LogicBase
                         'attach' => 'recharge'
                     ];
                     break;
-
-
             }
 
             //app支付类型
@@ -154,4 +152,48 @@ class PaymentLogic extends LogicBase
         return $data;
     }
 
+
+
+    //支付宝APP支付
+    public static function appAlipay($from, $order, $order_source)
+    {
+        try{
+
+            if ($order_source != Client_::ios && $order_source != Client_::android){
+                throw new Exception('错误的支付方式');
+            }
+
+            $notify_url = url('payment/aliNotify', '', '', true);
+
+            switch ($from) {
+                case 'order':
+                    $data = [
+                        'body'=>'订单',
+                        'subject'=>'商品名',
+                        'out_trade_no'=> $order['order_sn'],
+                        'timeout_express'=>'30m',
+                        'total_amount'=> $order['order_amount'],
+                        'product_code'=>'QUICK_MSECURITY_PAY'
+                    ];
+                    break;
+                case 'recharge':
+                    $data = [
+                        'body'=>'充值',
+                        'subject'=>'商品名',
+                        'out_trade_no'=> $order['order_sn'],
+                        'timeout_express'=>'30m',
+                        'total_amount'=> $order['order_amount'],
+                        'product_code'=>'QUICK_MSECURITY_PAY'
+                    ];
+                    break;
+            }
+
+            $alipay = new AliPayServer();
+            $result = $alipay->appAlipay($data, $notify_url);
+            return self::dataSuccess('', $result, 10002);
+
+        } catch (Exception $e) {
+            return self::dataError($e->getMessage());
+        }
+    }
 }

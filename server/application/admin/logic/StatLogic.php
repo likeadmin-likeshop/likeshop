@@ -131,17 +131,20 @@ class StatLogic
         list($start_t, $end_t) = Time::dayToNow(30);
 
         //echarts图表数据
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 1; $i <= 30; $i++) {
+            $where_start = strtotime("+ ".$i."day", $start_t);
+            $where_end = strtotime("+ ".$i."day", $start_t) + 86399;
+
             //每天订单金额
             $echarts_order_amount[] = Db::name('order')
-                ->where('create_time', '<=', $end_t - $i * 86400)
-                ->where('create_time', '>=', $start_t - $i * 86400)
+                ->where('create_time', '<=', $where_end)
+                ->where('create_time', '>=', $where_start)
                 ->sum('order_amount') ?? 0;
 
             //每天用户访问量
             $echarts_user_pv[] = Db::name('stat')
-                ->where('create_time', '<=', $end_t - $i * 86400)
-                ->where('create_time', '>=', $start_t - $i * 86400)
+                ->where('create_time', '<=', $where_end)
+                ->where('create_time', '>=', $where_start)
                 ->value('today_user_pv') ?? 0;
         }
 

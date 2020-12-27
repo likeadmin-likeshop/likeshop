@@ -29,7 +29,7 @@ class Sms extends ApiBase{
      * @return {"code":1,"msg":"发送成功","data":[],"show":0,"time":"0.612711","debug":{"request":{"get":[],"post":{"mobile":"13172565144","key":"ZCYZ"},"header":{"content-length":"278","content-type":"multipart\/form-data; boundary=--------------------------990456238154467810004652","connection":"keep-alive","accept-encoding":"gzip, deflate, br","host":"www.likeb2b2c.com:20002","postman-token":"d517ed7f-5a49-46e2-b975-8828e0475501","cache-control":"no-cache","accept":"*\/*","user-agent":"PostmanRuntime\/7.26.3"}}}}
      * @return_param id int 订单id
      * @param mobile 必填 int 手机号码
-     * @param key 必填 int 事件：ZCYZ-注册验证；ZHMM-找回密码;YZMDL-验证码登录; GHSJ-更换手机号
+     * @param key 必填 int 事件：ZCYZ-注册验证；ZHMM-找回密码;YZMDL-验证码登录; BGSJHM-更换手机号
      * @remark 这里是备注信息
      * @number 0
      */

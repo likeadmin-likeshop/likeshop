@@ -1,3 +1,19 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50729
+ Source Host           : 127.0.0.1:3306
+ Source Schema         : yx_b2c
+
+ Target Server Type    : MySQL
+ Target Server Version : 50729
+ File Encoding         : 65001
+
+ Date: 28/12/2020 00:37:58
+*/
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -5,233 +21,256 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for yx_account_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_account_log`;
-CREATE TABLE `yx_account_log`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `log_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流水单号（20位）',
-                                `user_id` int(11) NOT NULL COMMENT '用户id',
-                                `source_type` smallint(5) UNSIGNED NOT NULL DEFAULT 100 COMMENT '来源类型',
-                                `source_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '来源id',
-                                `source_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '来源单号',
-                                `change_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '变动总数',
-                                `left_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '剩余总数',
-                                `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '说明',
-                                `extra` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '额外的字段说明',
-                                `change_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1-增加；2-减少',
-                                `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '会员账户流水记录表';
+CREATE TABLE `yx_account_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_sn` varchar(32) NOT NULL COMMENT '流水单号（20位）',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `source_type` smallint(5) unsigned NOT NULL DEFAULT '100' COMMENT '来源类型',
+  `source_id` int(11) unsigned DEFAULT '0' COMMENT '来源id',
+  `source_sn` varchar(32) DEFAULT NULL COMMENT '来源单号',
+  `change_amount` decimal(10,2) DEFAULT '0.00' COMMENT '变动总数',
+  `left_amount` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '剩余总数',
+  `remark` varchar(255) DEFAULT '' COMMENT '说明',
+  `extra` varchar(255) DEFAULT '' COMMENT '额外的字段说明',
+  `change_type` tinyint(1) unsigned DEFAULT '0' COMMENT '1-增加；2-减少',
+  `create_time` int(10) unsigned NOT NULL COMMENT '变动时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员账户流水记录表';
 
 -- ----------------------------
--- Table structure for yx_activity_area
+-- Records of yx_account_log
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_activity_area`;
-CREATE TABLE `yx_activity_area`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT,
-                                    `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动名称',
-                                    `title` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动副标题',
-                                    `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动图片',
-                                    `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '上下架：1-是；0-否',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '活动区域表';
-
--- ----------------------------
--- Table structure for yx_activity_goods
--- ----------------------------
-DROP TABLE IF EXISTS `yx_activity_goods`;
-CREATE TABLE `yx_activity_goods`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT,
-                                    `activity_id` int(1) NOT NULL COMMENT '活动id',
-                                    `goods_id` int(11) NOT NULL COMMENT '商品id',
-                                    `item_id` int(11) NOT NULL COMMENT '规格id',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '活动区域商品表' ROW_FORMAT = Dynamic;
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_ad
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_ad`;
-CREATE TABLE `yx_ad`  (
-                        `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '广告id',
-                        `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
-                        `pid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '广告位置ID',
-                        `client` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '终端,1-H5,2-小程序,3-APP',
-                        `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片地址',
-                        `link_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '链接类型：0-为空；1-商场页面；2-商品页面；3-自定义类型',
-                        `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '链接地址：ad_type为1时，保存商品页面路径id；ad_type为2时，保存商品id；ad_type为3时，保存自定义链接',
-                        `status` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '广告状态：1-开启；0-关闭',
-                        `start_time` int(10) NULL DEFAULT 0 COMMENT '投放时间',
-                        `end_time` int(10) NULL DEFAULT 0 COMMENT '结束时间',
-                        `sort` smallint(6) NULL DEFAULT 50 COMMENT '排序',
-                        `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-                        `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-                        `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '广告表' ROW_FORMAT = Dynamic;
+CREATE TABLE `yx_ad` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '广告id',
+  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '广告标题',
+  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '广告位置ID',
+  `client` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '终端,1-H5,2-小程序,3-APP',
+  `image` varchar(255) NOT NULL COMMENT '图片地址',
+  `link_type` tinyint(1) unsigned DEFAULT '0' COMMENT '链接类型：0-为空；1-商场页面；2-商品页面；3-自定义类型',
+  `link` varchar(255) DEFAULT '' COMMENT '链接地址：ad_type为1时，保存商品页面路径id；ad_type为2时，保存商品id；ad_type为3时，保存自定义链接',
+  `status` tinyint(1) unsigned DEFAULT NULL COMMENT '广告状态：1-开启；0-关闭',
+  `start_time` int(10) DEFAULT '0' COMMENT '投放时间',
+  `end_time` int(10) DEFAULT '0' COMMENT '结束时间',
+  `sort` smallint(6) DEFAULT '50' COMMENT '排序',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `del` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='广告表';
+
+-- ----------------------------
+-- Records of yx_ad
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_ad_position
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_ad_position`;
-CREATE TABLE `yx_ad_position`  (
-                                `id` int(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告位置名称',
-                                `attr` tinyint(2) NOT NULL COMMENT '广告位属性,1-系统默认,0-自定义',
-                                `client` tinyint(3) UNSIGNED NOT NULL COMMENT '终端,1-小程序,2-H5,3-APP',
-                                `width` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议宽度',
-                                `height` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议高度',
-                                `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '广告描述',
-                                `status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1上架,0下架',
-                                `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-                                `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-                                `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '广告位置表' ROW_FORMAT = Dynamic;
+CREATE TABLE `yx_ad_position` (
+  `id` int(3) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '广告位置名称',
+  `attr` tinyint(2) NOT NULL COMMENT '广告位属性,1-系统默认,0-自定义',
+  `client` tinyint(3) unsigned NOT NULL COMMENT '终端,1-小程序,2-H5,3-APP',
+  `width` smallint(5) unsigned DEFAULT '0' COMMENT '广告位建议宽度',
+  `height` smallint(5) unsigned DEFAULT '0' COMMENT '广告位建议高度',
+  `desc` varchar(255) DEFAULT '' COMMENT '广告描述',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '1上架,0下架',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `del` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='广告位置表';
+
+-- ----------------------------
+-- Records of yx_ad_position
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_admin
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_admin`;
-CREATE TABLE `yx_admin`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `root` tinyint(1) NULL DEFAULT 1 COMMENT '0-非超级管理员；1-超级管理；',
-                            `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '名称',
-                            `type` tinyint(4) NULL DEFAULT 0 COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
-                            `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '账号',
-                            `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
-                            `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-                            `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '角色id',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                            `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-                            `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-                            `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-                            `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-                            PRIMARY KEY (`id`) USING BTREE,
-                            UNIQUE INDEX `account`(`account`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '后台管理员表' ROW_FORMAT = Dynamic;
+CREATE TABLE `yx_admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `root` tinyint(1) DEFAULT '1' COMMENT '0-非超级管理员；1-超级管理；',
+  `name` varchar(8) NOT NULL DEFAULT '0' COMMENT '名称',
+  `type` tinyint(4) DEFAULT '0' COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
+  `account` varchar(16) NOT NULL DEFAULT '' COMMENT '账号',
+  `password` varchar(32) NOT NULL COMMENT '密码',
+  `salt` varchar(4) NOT NULL DEFAULT '' COMMENT '密码盐',
+  `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '角色id',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `login_time` int(10) DEFAULT NULL COMMENT '最后登录时间',
+  `login_ip` varchar(15) DEFAULT '' COMMENT '最后登录ip',
+  `disable` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用：0-否；1-是；',
+  `del` tinyint(10) NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `account` (`account`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='后台管理员表';
+
+-- ----------------------------
+-- Records of yx_admin
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_after_sale
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_after_sale`;
-CREATE TABLE `yx_after_sale`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT,
-                                `sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '退款单号',
-                                `user_id` int(10) NOT NULL COMMENT '用户id',
-                                `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-                                `order_goods_id` int(10) NULL DEFAULT NULL COMMENT '订单商品关联表id',
-                                `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
-                                `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
-                                `goods_num` int(10) NULL DEFAULT NULL COMMENT '商品数量',
-                                `refund_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款原因',
-                                `refund_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款说明',
-                                `refund_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款图片',
-                                `refund_type` tinyint(1) NULL DEFAULT NULL COMMENT '退款类型;0-仅退款;1-退款退货',
-                                `refund_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
-                                `express_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递公司名称',
-                                `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递单号',
-                                `express_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流备注说明',
-                                `express_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流凭证',
-                                `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
-                                `status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-申请退款;1-商家拒绝;2-商品待退货;3-商家待收货;4-商家拒收货;5-等待退款;6-退款成功',
-                                `audit_time` int(10) NULL DEFAULT NULL COMMENT '审核时间',
-                                `admin_id` int(10) NULL DEFAULT NULL COMMENT '门店管理员id',
-                                `admin_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '售后说明',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(1) NULL DEFAULT 0 COMMENT '撤销状态;0-正常;1-已撤销',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '售后表' ROW_FORMAT = Dynamic;
+CREATE TABLE `yx_after_sale` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `sn` varchar(20) DEFAULT '' COMMENT '退款单号',
+  `user_id` int(10) NOT NULL COMMENT '用户id',
+  `order_id` int(10) DEFAULT NULL COMMENT '订单id',
+  `order_goods_id` int(10) DEFAULT NULL COMMENT '订单商品关联表id',
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
+  `item_id` int(10) DEFAULT '0' COMMENT '规格id',
+  `goods_num` int(10) DEFAULT NULL COMMENT '商品数量',
+  `refund_reason` varchar(255) DEFAULT NULL COMMENT '退款原因',
+  `refund_remark` varchar(255) DEFAULT NULL COMMENT '退款说明',
+  `refund_image` varchar(255) DEFAULT NULL COMMENT '退款图片',
+  `refund_type` tinyint(1) DEFAULT NULL COMMENT '退款类型;0-仅退款;1-退款退货',
+  `refund_price` decimal(10,2) DEFAULT NULL COMMENT '退款金额',
+  `express_name` varchar(255) DEFAULT NULL COMMENT '快递公司名称',
+  `invoice_no` varchar(255) DEFAULT NULL COMMENT '快递单号',
+  `express_remark` varchar(255) DEFAULT NULL COMMENT '物流备注说明',
+  `express_image` varchar(255) DEFAULT NULL COMMENT '物流凭证',
+  `confirm_take_time` int(10) DEFAULT NULL COMMENT '确认收货时间',
+  `status` tinyint(1) DEFAULT '0' COMMENT '售后状态;0-申请退款;1-商家拒绝;2-商品待退货;3-商家待收货;4-商家拒收货;5-等待退款;6-退款成功',
+  `audit_time` int(10) DEFAULT NULL COMMENT '审核时间',
+  `admin_id` int(10) DEFAULT NULL COMMENT '门店管理员id',
+  `admin_remark` varchar(255) DEFAULT NULL COMMENT '售后说明',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '撤销状态;0-正常;1-已撤销',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='售后表';
+
+-- ----------------------------
+-- Records of yx_after_sale
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_after_sale_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_after_sale_log`;
-CREATE TABLE `yx_after_sale_log`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                    `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
-                                    `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
-                                    `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-                                    `after_sale_id` int(11) NULL DEFAULT NULL COMMENT '售后订单id',
-                                    `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
-                                    `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '售后日志表' ROW_FORMAT = Dynamic;
+CREATE TABLE `yx_after_sale_log` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `type` tinyint(1) DEFAULT '0' COMMENT '操作类型;0-会员;1-门店',
+  `channel` smallint(5) unsigned DEFAULT '0' COMMENT '渠道编号。变动方式。',
+  `order_id` int(10) DEFAULT NULL COMMENT '订单id',
+  `after_sale_id` int(11) DEFAULT NULL COMMENT '售后订单id',
+  `handle_id` int(10) DEFAULT NULL COMMENT '操作人id',
+  `content` varchar(255) DEFAULT NULL COMMENT '日志内容',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='售后日志表';
+
+-- ----------------------------
+-- Records of yx_after_sale_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_article
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_article`;
-CREATE TABLE `yx_article`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
-                            `cid` int(11) NULL DEFAULT NULL COMMENT '文章分类',
-                            `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',
-                            `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文字简介',
-                            `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章图片',
-                            `is_notice` tinyint(1) NULL DEFAULT 0 COMMENT '是否公告:1-是.0-否',
-                            `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
-                            `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
-                            `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-                            `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
-                            `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-                            `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
-                            `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '文章表';
+CREATE TABLE `yx_article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
+  `cid` int(11) DEFAULT NULL COMMENT '文章分类',
+  `title` varchar(255) DEFAULT NULL COMMENT '文章标题',
+  `synopsis` varchar(255) DEFAULT NULL COMMENT '文字简介',
+  `image` varchar(128) DEFAULT NULL COMMENT '文章图片',
+  `is_notice` tinyint(1) DEFAULT '0' COMMENT '是否公告:1-是.0-否',
+  `content` text COMMENT '文章内容',
+  `visit` int(11) DEFAULT '0' COMMENT '浏览人数',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是.0-否',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1;已删除',
+  `likes` int(11) DEFAULT '0' COMMENT '点赞数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表';
+
+-- ----------------------------
+-- Records of yx_article
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_article_category
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_article_category`;
-CREATE TABLE `yx_article_category`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
-                                    `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
-                                    `sort` tinyint(1) NULL DEFAULT 0 COMMENT '排序',
-                                    `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '文章分类';
+CREATE TABLE `yx_article_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
+  `name` varchar(128) DEFAULT NULL COMMENT '分类名称',
+  `sort` tinyint(1) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是;0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章分类';
+
+-- ----------------------------
+-- Records of yx_article_category
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_cart
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_cart`;
-CREATE TABLE `yx_cart`  (
-                            `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '购物车表',
-                            `user_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
-                            `goods_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品id',
-                            `goods_num` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '购买数量',
-                            `item_id` int(11) NULL DEFAULT 0 COMMENT '规格ID',
-                            `selected` tinyint(1) NULL DEFAULT 1 COMMENT '选中状态;1-选中;0-未选中',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                            PRIMARY KEY (`id`) USING BTREE,
-                            INDEX `user_id`(`user_id`) USING BTREE,
-                            INDEX `goods_id`(`goods_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '购物车表';
+CREATE TABLE `yx_cart` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '购物车表',
+  `user_id` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `goods_id` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `goods_num` smallint(5) unsigned DEFAULT '0' COMMENT '购买数量',
+  `item_id` int(11) DEFAULT '0' COMMENT '规格ID',
+  `selected` tinyint(1) DEFAULT '1' COMMENT '选中状态;1-选中;0-未选中',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE,
+  KEY `goods_id` (`goods_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车表';
+
+-- ----------------------------
+-- Records of yx_cart
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_config
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_config`;
-CREATE TABLE `yx_config`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
-                            `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-                            `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '值',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '配置表';
+CREATE TABLE `yx_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(24) DEFAULT NULL COMMENT '类型',
+  `name` varchar(32) NOT NULL COMMENT '名称',
+  `value` text COMMENT '值',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8 COMMENT='配置表';
 
 -- ----------------------------
 -- Records of yx_config
@@ -289,7 +328,6 @@ INSERT INTO `yx_config` VALUES (62, 'oa', 'encryption_type', '', 1607071674);
 INSERT INTO `yx_config` VALUES (63, 'oa', 'business_domain', '', 1607071674);
 INSERT INTO `yx_config` VALUES (64, 'oa', 'safety_domain', '', 1607071674);
 INSERT INTO `yx_config` VALUES (65, 'oa', 'auth_domain', '', 1607071674);
-INSERT INTO `yx_config` VALUES (66, 'website', 'shop_logo', '/uploads/images/background/20201116/ee6d0c035824f48773f94c3cd69d5e19.png', 1606718581);
 INSERT INTO `yx_config` VALUES (67, 'website', 'goods_image', '/static/common/image/default/main.png', 1606718581);
 INSERT INTO `yx_config` VALUES (68, 'kd100', 'appkey', '3833C699F50967179307310E67735609', 1605600478);
 INSERT INTO `yx_config` VALUES (69, 'kd100', 'appsecret', 'B7EA9CAB2E55AC572E0D3467C1CD1815', 1605600478);
@@ -305,6 +343,7 @@ INSERT INTO `yx_config` VALUES (78, 'withdraw', 'poundage', '10', 1606361203);
 INSERT INTO `yx_config` VALUES (79, 'recharge', 'open_racharge', '1', 1606704451);
 INSERT INTO `yx_config` VALUES (80, 'distribution', 'is_open', '1', 1606720913);
 INSERT INTO `yx_config` VALUES (81, 'distribution', 'member_apply', '1', 1606720913);
+INSERT INTO `yx_config` VALUES (82, 'menu', 'wechat_menu', '[{\"name\":\"\\u6d4b\\u8bd5\",\"key\":\"111\",\"type\":\"click\"},{\"name\":\"\\u6d4b\\u8bd52\",\"key\":\"111\",\"type\":\"click\"}]', NULL);
 INSERT INTO `yx_config` VALUES (83, 'marketing', 'order_award_integral', '20', 1607159785);
 INSERT INTO `yx_config` VALUES (84, 'marketing', 'invited_award_integral', '2', NULL);
 INSERT INTO `yx_config` VALUES (85, 'marketing', 'register_award_integral', '2', 1607074871);
@@ -314,115 +353,62 @@ INSERT INTO `yx_config` VALUES (94, 'marketing', 'register_award_coupon_status',
 COMMIT;
 
 -- ----------------------------
--- Table structure for yx_coupon
--- ----------------------------
-DROP TABLE IF EXISTS `yx_coupon`;
-CREATE TABLE `yx_coupon`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '优惠券名称',
-                            `send_time_start` int(10) NOT NULL COMMENT '发放开始时间',
-                            `send_time_end` int(10) NOT NULL COMMENT '发放结束时间',
-                            `money` decimal(10, 2) NOT NULL COMMENT '优惠券面额(元)',
-                            `condition_type` tinyint(1) NULL DEFAULT NULL COMMENT '使用条件类型：1-无门槛；2-订单满足金额',
-                            `condition_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '使用条件类型为2时：该字段为订单满足金额可使用',
-                            `send_total_type` tinyint(1) NULL DEFAULT NULL COMMENT '发送总量类型：1-不限制；2-限制张数',
-                            `send_total` int(10) NULL DEFAULT NULL COMMENT '发送总量类型为2时：该字段为限制的张数',
-                            `use_time_type` tinyint(1) NULL DEFAULT NULL COMMENT '用券时间类型：1-固定时间；2-领券当天起；3-领券次日起',
-                            `use_time_start` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用开始时间；',
-                            `use_time_end` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用结束时间；',
-                            `use_time` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为2、3时：该字段为多少天内可用；',
-                            `get_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取类型：1-直接领取；2-平台赠送；3-活动赠送',
-                            `get_num_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取次数类型：1-不限制领取传次数；2-限制次数；3-每天限制数量',
-                            `get_num` int(10) NULL DEFAULT NULL COMMENT '领取次数类型为：2、3时：该字段为领取限制的数量',
-                            `use_goods_type` tinyint(1) NULL DEFAULT NULL COMMENT '适用商品类型:1-全部商品；2-指定商品；3-指定商品不可用',
-                            `status` tinyint(255) NOT NULL DEFAULT 0 COMMENT '优惠券状态：1-进行中；0-关闭',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                            `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '优惠券表';
-
--- ----------------------------
--- Table structure for yx_coupon_goods
--- ----------------------------
-DROP TABLE IF EXISTS `yx_coupon_goods`;
-CREATE TABLE `yx_coupon_goods`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
-                                `goods_id` int(10) NOT NULL COMMENT '商品id',
-                                `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '优惠券商品管理表';
-
--- ----------------------------
--- Table structure for yx_coupon_list
--- ----------------------------
-DROP TABLE IF EXISTS `yx_coupon_list`;
-CREATE TABLE `yx_coupon_list`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT,
-                                `user_id` int(10) NOT NULL COMMENT '用户id',
-                                `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
-                                `coupon_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '优惠券券码',
-                                `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态；0-未使用;1-已使用',
-                                `order_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '优惠券使用的订单id',
-                                `use_time` int(10) NULL DEFAULT NULL COMMENT '使用时间',
-                                `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '用户优惠券';
-
--- ----------------------------
 -- Table structure for yx_delivery
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_delivery`;
-CREATE TABLE `yx_delivery`  (
-                                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '发货单ID',
-                                `order_id` int(11) UNSIGNED NOT NULL COMMENT '订单ID',
-                                `order_sn` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '订单编号',
-                                `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
-                                `admin_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '管理员ID',
-                                `consignee` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '收货人',
-                                `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '联系手机',
-                                `province` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '省ID',
-                                `city` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '市ID',
-                                `district` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '区ID',
-                                `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
-                                `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态;0-未发货;1-已发货',
-                                `shipping_id` int(10) NULL DEFAULT NULL COMMENT '物流公司id',
-                                `shipping_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递名称',
-                                `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '物流单号',
-                                `send_type` tinyint(1) NULL DEFAULT 0 COMMENT '配送方式:1-快递配送;2-无需快递',
-                                `create_time` int(11) NOT NULL COMMENT '创建时间',
-                                `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除',
-                                PRIMARY KEY (`id`) USING BTREE,
-                                INDEX `order_id`(`order_id`) USING BTREE,
-                                INDEX `user_id`(`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '发货单表';
+CREATE TABLE `yx_delivery` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '发货单ID',
+  `order_id` int(11) unsigned NOT NULL COMMENT '订单ID',
+  `order_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
+  `admin_id` int(11) unsigned DEFAULT '0' COMMENT '管理员ID',
+  `consignee` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人',
+  `mobile` varchar(20) DEFAULT '' COMMENT '联系手机',
+  `province` int(11) unsigned DEFAULT NULL COMMENT '省ID',
+  `city` int(11) unsigned DEFAULT NULL COMMENT '市ID',
+  `district` int(11) unsigned DEFAULT NULL COMMENT '区ID',
+  `address` varchar(255) DEFAULT '' COMMENT '地址',
+  `shipping_status` tinyint(1) unsigned DEFAULT '0' COMMENT '发货状态;0-未发货;1-已发货',
+  `shipping_id` int(10) DEFAULT NULL COMMENT '物流公司id',
+  `shipping_name` varchar(64) DEFAULT NULL COMMENT '快递名称',
+  `invoice_no` varchar(255) DEFAULT '' COMMENT '物流单号',
+  `send_type` tinyint(1) DEFAULT '0' COMMENT '配送方式:1-快递配送;2-无需快递',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `order_id` (`order_id`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发货单表';
+
+-- ----------------------------
+-- Records of yx_delivery
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_auth`;
-CREATE TABLE `yx_dev_auth`  (
-                            `id` int(4) NOT NULL AUTO_INCREMENT,
-                            `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-菜单；2-权限',
-                            `system` tinyint(1) NULL DEFAULT 0 COMMENT '是否为系统级菜单',
-                            `pid` int(4) NOT NULL DEFAULT 0 COMMENT '分级id',
-                            `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-                            `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-                            `uri` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '后台uri',
-                            `sort` int(4) NULL DEFAULT 50 COMMENT '排序',
-                            `disable` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-启用；1-禁用；',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                            `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-                            `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '菜单表';
+CREATE TABLE `yx_dev_auth` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `type` tinyint(1) DEFAULT '1' COMMENT '1-菜单；2-权限',
+  `system` tinyint(1) DEFAULT '0' COMMENT '是否为系统级菜单',
+  `pid` int(4) NOT NULL DEFAULT '0' COMMENT '分级id',
+  `name` varchar(12) NOT NULL COMMENT '名称',
+  `icon` varchar(32) DEFAULT NULL COMMENT '图标',
+  `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '后台uri',
+  `sort` int(4) DEFAULT '50' COMMENT '排序',
+  `disable` tinyint(1) DEFAULT '0' COMMENT '状态：0-启用；1-禁用；',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `del` tinyint(10) NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '机构id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
--- Records of b2b2c_dev_auth
+-- Records of yx_dev_auth
 -- ----------------------------
 BEGIN;
 INSERT INTO `yx_dev_auth` VALUES (1, 1, 0, 18, '权限管理', 'layui-icon-auz', '', 50, 0, 1597593692, 1597636523, 0, 0);
@@ -458,6 +444,7 @@ INSERT INTO `yx_dev_auth` VALUES (31, 1, 0, 29, '分类管理', 'layui-icon-app'
 INSERT INTO `yx_dev_auth` VALUES (32, 1, 0, 29, '供货商', '', 'supplier/lists', 50, 0, 1602559943, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (33, 1, 0, 0, '会员', 'layui-icon-username', '', 80, 0, 1602570345, 1606449026, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (34, 1, 0, 33, '会员管理', 'layui-icon-user', 'user/lists', 50, 0, 1602570372, 1605522382, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (35, 1, 0, 33, '会员等级', 'layui-icon-diamond', 'userLevel/lists', 50, 0, 1602570437, 1605522366, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 100, 0, 1602576261, 1606448979, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (38, 1, 0, 37, '订单列表', 'layui-icon-cart-simple', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, NULL, 0, 0);
@@ -503,9 +490,9 @@ INSERT INTO `yx_dev_auth` VALUES (80, 1, 0, 17, '短信管理', 'layui-icon-auz'
 INSERT INTO `yx_dev_auth` VALUES (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 20, 0, 1605664275, 1606449617, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (83, 1, 0, 0, '财务', 'layui-icon-rmb', '', 50, 0, 1605671949, NULL, 1, 0);
 INSERT INTO `yx_dev_auth` VALUES (84, 1, 0, 81, '资金记录', 'layui-icon-survey', 'accountLog/capitalList', 50, 0, 1605693585, 1605865218, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (86, 1, 0, 85, '分销会员列表', '', 'distributionMember/index', 50, 0, 1605949513, 1605950702, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (87, 1, 0, 81, '积分记录', 'layui-icon-templeate-1', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (89, 1, 0, 39, '专区活动', 'layui-icon-code-circle', 'Activity/Lists', 50, 0, 1606182362, 1606200704, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (90, 1, 0, 56, '会员提现', '', 'shopSetting/withdraw', 50, 0, 1606357500, 1606361192, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 50, 0, 1606449120, 1606792217, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (93, 1, 0, 92, 'H5装修', 'layui-icon-cellphone', '', 100, 0, 1606449177, 1606792239, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (96, 1, 0, 93, '首页导航装修', 'layui-icon-username', 'MenuDecorate/h5IndexList', 100, 0, 1606449403, 1606891059, 0, 0);
@@ -519,14 +506,13 @@ INSERT INTO `yx_dev_auth` VALUES (103, 1, 0, 102, '会员', '', '', 100, 0, 1606
 INSERT INTO `yx_dev_auth` VALUES (104, 1, 0, 102, '商品', '', '', 90, 0, 1606449713, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (105, 1, 0, 102, '交易', '', '', 80, 0, 1606449733, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (106, 1, 0, 102, '访问', '', '', 70, 0, 1606449750, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (107, 1, 0, 85, '分销设置', '', 'distribution/setting', 50, 0, 1606459007, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (108, 1, 0, 18, '系统任务', 'layui-icon-rate-solid', 'crontab/lists', 50, 0, 1606816642, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (111, 1, 0, 50, '模板消息管理', '', 'oaMessage/lists', 50, 0, 1606960631, 1606964829, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (112, 1, 0, 39, '邀请会员', 'layui-icon-radio', 'MarketingConfig/invitedAwardConfig', 50, 0, 1606962893, 1606962961, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (113, 1, 0, 39, '下单奖励', 'layui-icon-radio', 'MarketingConfig/orderAwardConfig', 50, 0, 1606962912, 1606962981, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (114, 1, 0, 39, '注册奖励', 'layui-icon-radio', 'MarketingConfig/registerAwardConfig', 50, 0, 1606962930, 1606963010, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (115, 1, 0, 53, '订阅消息管理', '', 'mnpMessage/lists', 50, 0, 1607066949, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (116, 1, 0, 50, '回复管理', 'layui-icon-reply-fill', 'WechatReply/lists', 50, 0, 1607139107, 1607151465, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (116, 1, 0, 50, '回复管理', 'layui-icon-reply-fill', 'WeChatReply/lists', 50, 0, 1607139107, 1607151465, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (117, 1, 0, 39, '积分抵扣', 'layui-icon-rate-half', 'marketingConfig/integralDeduction', 50, 0, 1607149356, 1607149390, 0, 0);
 COMMIT;
 
@@ -534,24 +520,24 @@ COMMIT;
 -- Table structure for yx_dev_crontab
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_crontab`;
-CREATE TABLE `yx_dev_crontab`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                                `type` tinyint(1) NULL DEFAULT NULL COMMENT '类型：1-定时任务；2-守护进程',
-                                `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-                                `command` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '命令内容',
-                                `parameter` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数',
-                                `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：1-运行；2-停止；3-错误；',
-                                `expression` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '运行规则',
-                                `error` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行失败原因',
-                                `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
-                                `last_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
-                                `time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '实时执行时长',
-                                `max_time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '最大执行时长',
-                                `system` tinyint(4) NULL DEFAULT 0 COMMENT '是否系统任务：0-否；1-是；',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `yx_dev_crontab` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `type` tinyint(1) DEFAULT NULL COMMENT '类型：1-定时任务；2-守护进程',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `command` varchar(64) NOT NULL COMMENT '命令内容',
+  `parameter` varchar(64) DEFAULT '' COMMENT '参数',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：1-运行；2-停止；3-错误；',
+  `expression` varchar(64) NOT NULL COMMENT '运行规则',
+  `error` varchar(256) DEFAULT NULL COMMENT '运行失败原因',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '最后执行时间',
+  `last_time` int(11) DEFAULT NULL COMMENT '最后执行时间',
+  `time` varchar(11) DEFAULT '0' COMMENT '实时执行时长',
+  `max_time` varchar(11) DEFAULT '0' COMMENT '最大执行时长',
+  `system` tinyint(4) DEFAULT '0' COMMENT '是否系统任务：0-否；1-是；',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yx_dev_crontab
@@ -565,18 +551,18 @@ COMMIT;
 -- Table structure for yx_dev_message
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_message`;
-CREATE TABLE `yx_dev_message`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息名称',
-                                `key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
-                                `dev_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-会员消息；2-店铺消息',
-                                `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                                PRIMARY KEY (`id`) USING BTREE,
-                                UNIQUE INDEX `key`(`key`) USING BTREE COMMENT '消息唯一标识'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '消息管理表';
+CREATE TABLE `yx_dev_message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '消息名称',
+  `key` varchar(32) NOT NULL COMMENT '消息key',
+  `dev_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型：1-会员消息；2-店铺消息',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `key` (`key`) USING BTREE COMMENT '消息唯一标识'
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='消息管理表';
 
 -- ----------------------------
--- Records of b2b2c_dev_message
+-- Records of yx_dev_message
 -- ----------------------------
 BEGIN;
 INSERT INTO `yx_dev_message` VALUES (1, '订单提交通知', 'DDTJTZ', 1, 0);
@@ -593,17 +579,17 @@ COMMIT;
 -- Table structure for yx_dev_message_extend
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_message_extend`;
-CREATE TABLE `yx_dev_message_extend`  (
-                                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                                        `message_id` int(11) NOT NULL COMMENT '信息管理id',
-                                        `message_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-短信',
-                                        `template_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板',
-                                        `variable` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '变量',
-                                        `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '内容',
-                                        `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
-                                        `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `yx_dev_message_extend` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message_id` int(11) NOT NULL COMMENT '信息管理id',
+  `message_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型：1-短信',
+  `template_code` varchar(64) DEFAULT NULL COMMENT '模板',
+  `variable` varchar(255) DEFAULT NULL COMMENT '变量',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：0-关闭；1-开启',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yx_dev_message_extend
@@ -623,19 +609,19 @@ COMMIT;
 -- Table structure for yx_dev_message_template
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_message_template`;
-CREATE TABLE `yx_dev_message_template`  (
-                                        `id` int(4) NOT NULL AUTO_INCREMENT,
-                                        `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-公众号；2-小程序',
-                                        `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板名称',
-                                        `template_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息模板ID',
-                                        `template_id_short` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板库ID',
-                                        `keywords` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '关键词库(小程序端使用)',
-                                        `msg_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息类型',
-                                        `scene` tinyint(1) NOT NULL DEFAULT 1 COMMENT '消息场景',
-                                        `disable` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态: 0-启用; 1-禁用;',
-                                        `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板内容',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息通知模板表' ;
+CREATE TABLE `yx_dev_message_template` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `type` tinyint(1) DEFAULT '1' COMMENT '1-公众号；2-小程序',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '模板名称',
+  `template_id` varchar(100) NOT NULL DEFAULT '' COMMENT '消息模板ID',
+  `template_id_short` varchar(100) NOT NULL DEFAULT '' COMMENT '模板库ID',
+  `keywords` varchar(30) NOT NULL DEFAULT '' COMMENT '关键词库(小程序端使用)',
+  `msg_type` varchar(30) NOT NULL DEFAULT '' COMMENT '消息类型',
+  `scene` tinyint(1) NOT NULL DEFAULT '1' COMMENT '消息场景',
+  `disable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态: 0-启用; 1-禁用;',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '模板内容',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='消息通知模板表';
 
 -- ----------------------------
 -- Records of yx_dev_message_template
@@ -650,60 +636,31 @@ INSERT INTO `yx_dev_message_template` VALUES (6, 1, '退款成功通知', '_ixwy
 COMMIT;
 
 -- ----------------------------
--- Table structure for yx_dev_partner_auth
--- ----------------------------
-DROP TABLE IF EXISTS `yx_dev_partner_auth`;
-CREATE TABLE `yx_dev_partner_auth`  (
-                                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                                        `pid` int(11) NOT NULL DEFAULT 0 COMMENT '父级id',
-                                        `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '名字',
-                                        `params` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '参数',
-                                        `sort` tinyint(2) NOT NULL DEFAULT 50 COMMENT '排序：数字越大越靠前',
-                                        `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '失效：0-否；1-是；',
-                                        `desc` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
-                                        `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '机构权限表（开发人员维护）';
-
--- ----------------------------
--- Records of yx_dev_partner_auth
--- ----------------------------
-BEGIN;
-INSERT INTO `yx_dev_partner_auth` VALUES (100, 0, '设置', '', 50, 0, '', 1);
-INSERT INTO `yx_dev_partner_auth` VALUES (110, 100, '权限管理', '', 50, 0, '', 1);
-INSERT INTO `yx_dev_partner_auth` VALUES (111, 110, '管理员', 'admin_lists,admin_add,admin_updte,admin_del', 50, 0, '', 1);
-INSERT INTO `yx_dev_partner_auth` VALUES (112, 110, '角色', 'role_lists,role_add,role_update,role_del', 50, 0, '', 1);
-INSERT INTO `yx_dev_partner_auth` VALUES (200, 0, '商品', '', 50, 0, '', 1);
-INSERT INTO `yx_dev_partner_auth` VALUES (201, 200, '商品管理', 'good_lists', 50, 0, '', 1);
-INSERT INTO `yx_dev_partner_auth` VALUES (202, 200, '订单管理', 'order_lists', 50, 0, '', 1);
-COMMIT;
-
--- ----------------------------
 -- Table structure for yx_dev_pay
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_pay`;
-CREATE TABLE `yx_dev_pay`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付方式',
-                                `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-                                `use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '使用场景',
-                                `commission` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手续费',
-                                `pay_use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '启用状态',
-                                `abbreviation` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '简称',
-                                `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-                                `app_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `app_secrect` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `pay_sign_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `mch_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `apiclient_cert` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `apiclient_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `api_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `private_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `alipay_public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                                `type` tinyint(2) NULL DEFAULT NULL COMMENT '1-余额 2-公众号 3-小程序 4-支付宝',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '支付配置';
+CREATE TABLE `yx_dev_pay` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL COMMENT '支付方式',
+  `icon` varchar(128) DEFAULT NULL COMMENT '图标',
+  `use` varchar(128) DEFAULT NULL COMMENT '使用场景',
+  `commission` varchar(128) DEFAULT NULL COMMENT '手续费',
+  `pay_use` varchar(128) DEFAULT NULL COMMENT '启用状态',
+  `abbreviation` varchar(128) DEFAULT NULL COMMENT '简称',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `app_id` varchar(128) DEFAULT NULL,
+  `app_secrect` varchar(128) DEFAULT NULL,
+  `pay_sign_key` varchar(128) DEFAULT NULL,
+  `mch_id` varchar(128) DEFAULT NULL,
+  `apiclient_cert` varchar(128) DEFAULT NULL,
+  `apiclient_key` varchar(128) DEFAULT NULL,
+  `api_id` varchar(128) DEFAULT NULL,
+  `private_key` varchar(128) DEFAULT NULL,
+  `public_key` varchar(128) DEFAULT NULL,
+  `alipay_public_key` varchar(128) DEFAULT NULL,
+  `type` tinyint(2) DEFAULT NULL COMMENT '1-余额 2-公众号 3-小程序 4-支付宝',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='支付配置';
 
 -- ----------------------------
 -- Records of yx_dev_pay
@@ -718,22 +675,22 @@ COMMIT;
 -- Table structure for yx_dev_region
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_region`;
-CREATE TABLE `yx_dev_region`  (
-                                `id` int(10) NOT NULL DEFAULT 0 COMMENT '地区编号',
-                                `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '父级地区编码',
-                                `level` tinyint(1) NOT NULL DEFAULT 0 COMMENT '等级 0-国家；1-省份；2-地级市；3-县区',
-                                `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-                                `short` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '简称',
-                                `city_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区编码',
-                                `zip_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮政编码',
-                                `gcj02_lng` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-                                `gcj02_lat` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-                                `db09_lng` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-                                `db09_lat` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-                                `remark1` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-                                `remark2` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '地区表';
+CREATE TABLE `yx_dev_region` (
+  `id` int(10) NOT NULL DEFAULT '0' COMMENT '地区编号',
+  `parent_id` int(10) NOT NULL DEFAULT '0' COMMENT '父级地区编码',
+  `level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '等级 0-国家；1-省份；2-地级市；3-县区',
+  `name` varchar(64) NOT NULL COMMENT '名称',
+  `short` varchar(64) NOT NULL COMMENT '简称',
+  `city_code` varchar(10) DEFAULT NULL COMMENT '地区编码',
+  `zip_code` varchar(10) DEFAULT NULL COMMENT '邮政编码',
+  `gcj02_lng` varchar(24) DEFAULT NULL COMMENT '纬度',
+  `gcj02_lat` varchar(24) DEFAULT NULL COMMENT '经度',
+  `db09_lng` varchar(64) DEFAULT NULL COMMENT '纬度',
+  `db09_lat` varchar(64) DEFAULT NULL COMMENT '经度',
+  `remark1` varchar(64) DEFAULT '',
+  `remark2` varchar(64) DEFAULT '',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地区表';
 
 -- ----------------------------
 -- Records of yx_dev_region
@@ -5070,979 +5027,1192 @@ COMMIT;
 -- Table structure for yx_distribution_member_apply
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_distribution_member_apply`;
-CREATE TABLE `yx_distribution_member_apply`  (
-                                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                                `user_id` int(11) NOT NULL COMMENT '用户id',
-                                                `real_name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '真实姓名',
-                                                `mobile` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '手机号码',
-                                                `province` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '省份',
-                                                `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
-                                                `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
-                                                `reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '申请原因',
-                                                `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
-                                                `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_distribution_member_apply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `real_name` varchar(12) NOT NULL COMMENT '真实姓名',
+  `mobile` varchar(15) NOT NULL DEFAULT '' COMMENT '手机号码',
+  `province` int(11) unsigned DEFAULT '0' COMMENT '省份',
+  `city` int(11) unsigned DEFAULT '0' COMMENT '城市',
+  `district` int(11) unsigned DEFAULT '0' COMMENT '县区',
+  `reason` varchar(255) DEFAULT '' COMMENT '申请原因',
+  `status` tinyint(1) DEFAULT '0' COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_distribution_member_apply
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_distribution_order_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_distribution_order_goods`;
-CREATE TABLE `yx_distribution_order_goods`  (
-                                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                                `sn` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '记录编号',
-                                                `user_id` int(11) NOT NULL COMMENT '用户id',
-                                                `real_name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '真实姓名',
-                                                `order_goods_id` int(11) NOT NULL COMMENT '订单商品id',
-                                                `goods_num` int(10) NOT NULL DEFAULT 1 COMMENT '商品数量',
-                                                `money` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '佣金',
-                                                `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态：1-待返佣；2-已结算；3-已失效；',
-                                                `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                                PRIMARY KEY (`id`) USING BTREE,
-                                                INDEX `user_id_source_id`(`user_id`) USING BTREE COMMENT '一个用户只有一个订单商品的分佣订单'
+CREATE TABLE `yx_distribution_order_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sn` varchar(25) DEFAULT NULL COMMENT '记录编号',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `real_name` varchar(12) NOT NULL COMMENT '真实姓名',
+  `order_goods_id` int(11) NOT NULL COMMENT '订单商品id',
+  `goods_num` int(10) NOT NULL DEFAULT '1' COMMENT '商品数量',
+  `money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '佣金',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：1-待返佣；2-已结算；3-已失效；',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `user_id_source_id` (`user_id`) USING BTREE COMMENT '一个用户只有一个订单商品的分佣订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_distribution_order_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_express
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_express`;
-CREATE TABLE `yx_express`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递公司',
-                                `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递图标',
-                                `website` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公司网址',
-                                `code` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递编码',
-                                `code100` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递100编码',
-                                `sort` int(10) NOT NULL DEFAULT 0 COMMENT '排序',
-                                `codebird` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递鸟编码',
-                                `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-                                `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_express` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '快递公司',
+  `icon` varchar(128) NOT NULL COMMENT '快递图标',
+  `website` varchar(128) NOT NULL COMMENT '公司网址',
+  `code` varchar(128) NOT NULL COMMENT '快递编码',
+  `code100` varchar(128) NOT NULL COMMENT '快递100编码',
+  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序',
+  `codebird` varchar(128) NOT NULL COMMENT '快递鸟编码',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_express
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_file
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_file`;
-CREATE TABLE `yx_file`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
-                            `cate_id` int(10) NULL DEFAULT 0 COMMENT '分类id',
-                            `type` tinyint(1) NOT NULL COMMENT '类型',
-                            `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
-                            `create_time` int(10) NOT NULL COMMENT '创建时间',
-                            `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-                            `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '文件表';
+CREATE TABLE `yx_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '文件名',
+  `cate_id` int(10) DEFAULT '0' COMMENT '分类id',
+  `type` tinyint(1) NOT NULL COMMENT '类型',
+  `uri` varchar(255) NOT NULL COMMENT '文件相对路径',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '机构id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件表';
+
+-- ----------------------------
+-- Records of yx_file
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_file_cate
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_file_cate`;
-CREATE TABLE `yx_file_cate`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '店铺id',
-                                `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
-                                `pid` int(11) NOT NULL COMMENT '父级id',
-                                `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
-                                `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(1) NULL DEFAULT 0 COMMENT '0-未删除;1-已删除',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '文件分类表';
+CREATE TABLE `yx_file_cate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '店铺id',
+  `name` varchar(90) NOT NULL COMMENT '分类名称',
+  `pid` int(11) NOT NULL COMMENT '父级id',
+  `level` tinyint(1) DEFAULT NULL COMMENT '等级',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '0-未删除;1-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件分类表';
+
+-- ----------------------------
+-- Records of yx_file_cate
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_freight
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_freight`;
-CREATE TABLE `yx_freight`  (
-                                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
-                                `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板名称',
-                                `charge_way` tinyint(1) NULL DEFAULT 0 COMMENT '计费方式:1-重量计费;2-体积计费;3-件数计费',
-                                `remark` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
-                                `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-                                `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '运费模板表';
+CREATE TABLE `yx_freight` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `name` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `charge_way` tinyint(1) DEFAULT '0' COMMENT '计费方式:1-重量计费;2-体积计费;3-件数计费',
+  `remark` varchar(256) DEFAULT '' COMMENT '备注',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='运费模板表';
+
+-- ----------------------------
+-- Records of yx_freight
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_freight_config
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_freight_config`;
-CREATE TABLE `yx_freight_config`  (
-                                    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
-                                    `freight_id` int(11) NULL DEFAULT NULL COMMENT '模板id',
-                                    `first_unit` int(10) NULL DEFAULT NULL COMMENT '首重/件',
-                                    `first_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
-                                    `continue_unit` int(10) NULL DEFAULT NULL COMMENT '续重/件',
-                                    `continue_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
-                                    `region` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '地区id',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '运费模板配置表';
+CREATE TABLE `yx_freight_config` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `freight_id` int(11) DEFAULT NULL COMMENT '模板id',
+  `first_unit` int(10) DEFAULT NULL COMMENT '首重/件',
+  `first_money` decimal(10,0) DEFAULT NULL COMMENT '首重/件价格',
+  `continue_unit` int(10) DEFAULT NULL COMMENT '续重/件',
+  `continue_money` decimal(10,0) DEFAULT NULL COMMENT '首重/件价格',
+  `region` text COMMENT '地区id',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='运费模板配置表';
+
+-- ----------------------------
+-- Records of yx_freight_config
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods`;
-CREATE TABLE `yx_goods`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品状态；；0-下架1-上架',
-                            `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
-                            `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
-                            `first_category_id` int(11) NOT NULL COMMENT '一级分类id',
-                            `second_category_id` int(11) NOT NULL COMMENT '二级分类id',
-                            `third_category_id` int(11) NOT NULL COMMENT '三级分类id',
-                            `brand_id` int(11) NULL DEFAULT NULL COMMENT '品牌id',
-                            `supplier_id` int(11) NULL DEFAULT NULL COMMENT '供应商id',
-                            `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '商品状态:-1-回收站；0-下架；1-上架',
-                            `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图',
-                            `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品简介',
-                            `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品详细描述',
-                            `sort` int(10) NULL DEFAULT 0 COMMENT '排序',
-                            `sales_sum` int(10) NULL DEFAULT 0 COMMENT '商品销量',
-                            `virtual_sales_sum` int(10) NULL DEFAULT 0 COMMENT '虚拟销量',
-                            `click_count` int(10) NULL DEFAULT 0 COMMENT '商品点击量',
-                            `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
-                            `max_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最高价格',
-                            `min_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最低价格',
-                            `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价（sku中最高的市场价）',
-                            `stock` int(10) NULL DEFAULT 0 COMMENT '总库存',
-                            `stock_warn` int(10) NULL DEFAULT 0 COMMENT '库存预警',
-                            `is_show_stock` tinyint(1) NOT NULL COMMENT '是否显示库存：1-是；0-否',
-                            `free_shipping_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '运费类型：1-包邮；2-统一运费；3-运费模板',
-                            `free_shipping` decimal(10, 2) NULL DEFAULT NULL COMMENT '统一运费金额',
-                            `free_shipping_template_id` int(11) NULL DEFAULT NULL COMMENT '运费模板',
-                            `is_commission` tinyint(1) NOT NULL DEFAULT 0 COMMENT '分销佣金：1-开启；0-不开启',
-                            `first_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '一级分销比例',
-                            `second_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二级分销比例',
-                            `three_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '三级分销比例',
-                            `is_share_bouns` tinyint(1) NOT NULL DEFAULT 0 COMMENT '区域股东分红：1-开启；0-不开启',
-                            `region_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区域分红比例',
-                            `shareholder_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '股东分红比例',
-                            `is_new` tinyint(1) NULL DEFAULT 0 COMMENT '新品推荐：1-是；0-否',
-                            `is_best` tinyint(1) NULL DEFAULT 0 COMMENT '好物优选：1-是；0-否',
-                            `is_like` tinyint(1) NULL DEFAULT 0 COMMENT '猜你喜欢：1-是；0-否',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '商品创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '商品更新时间',
-                            `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品主表';
+CREATE TABLE `yx_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品状态；；0-下架1-上架',
+  `name` varchar(64) NOT NULL COMMENT '商品名称',
+  `code` varchar(32) DEFAULT NULL COMMENT '商品编码',
+  `first_category_id` int(11) NOT NULL COMMENT '一级分类id',
+  `second_category_id` int(11) NOT NULL COMMENT '二级分类id',
+  `third_category_id` int(11) NOT NULL COMMENT '三级分类id',
+  `brand_id` int(11) DEFAULT NULL COMMENT '品牌id',
+  `supplier_id` int(11) DEFAULT NULL COMMENT '供应商id',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品状态:-1-回收站；0-下架；1-上架',
+  `image` varchar(128) NOT NULL COMMENT '商品主图',
+  `remark` varchar(255) DEFAULT '' COMMENT '商品简介',
+  `content` text COMMENT '商品详细描述',
+  `sort` int(10) DEFAULT '0' COMMENT '排序',
+  `sales_sum` int(10) DEFAULT '0' COMMENT '商品销量',
+  `virtual_sales_sum` int(10) DEFAULT '0' COMMENT '虚拟销量',
+  `click_count` int(10) DEFAULT '0' COMMENT '商品点击量',
+  `spec_type` tinyint(1) DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
+  `max_price` decimal(10,2) DEFAULT NULL COMMENT '最高价格',
+  `min_price` decimal(10,2) DEFAULT NULL COMMENT '最低价格',
+  `market_price` decimal(10,2) DEFAULT NULL COMMENT '市场价（sku中最高的市场价）',
+  `stock` int(10) DEFAULT '0' COMMENT '总库存',
+  `stock_warn` int(10) DEFAULT '0' COMMENT '库存预警',
+  `is_show_stock` tinyint(1) NOT NULL COMMENT '是否显示库存：1-是；0-否',
+  `free_shipping_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '运费类型：1-包邮；2-统一运费；3-运费模板',
+  `free_shipping` decimal(10,2) DEFAULT NULL COMMENT '统一运费金额',
+  `free_shipping_template_id` int(11) DEFAULT NULL COMMENT '运费模板',
+  `is_commission` tinyint(1) NOT NULL DEFAULT '0' COMMENT '分销佣金：1-开启；0-不开启',
+  `first_ratio` varchar(10) DEFAULT NULL COMMENT '一级分销比例',
+  `second_ratio` varchar(10) DEFAULT NULL COMMENT '二级分销比例',
+  `three_ratio` varchar(10) DEFAULT NULL COMMENT '三级分销比例',
+  `is_share_bouns` tinyint(1) NOT NULL DEFAULT '0' COMMENT '区域股东分红：1-开启；0-不开启',
+  `region_ratio` varchar(10) DEFAULT NULL COMMENT '区域分红比例',
+  `shareholder_ratio` varchar(10) DEFAULT NULL COMMENT '股东分红比例',
+  `is_new` tinyint(1) DEFAULT '0' COMMENT '新品推荐：1-是；0-否',
+  `is_best` tinyint(1) DEFAULT '0' COMMENT '好物优选：1-是；0-否',
+  `is_like` tinyint(1) DEFAULT '0' COMMENT '猜你喜欢：1-是；0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '商品创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '商品更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除：1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品主表';
+
+-- ----------------------------
+-- Records of yx_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_brand
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_brand`;
-CREATE TABLE `yx_goods_brand`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT,
-                                    `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌名称',
-                                    `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌图片',
-                                    `initial` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌首字母',
-                                    `is_show` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
-                                    `sort` int(5) NULL DEFAULT 0 COMMENT '排序',
-                                    `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌描述',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品品牌';
+CREATE TABLE `yx_goods_brand` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '品牌名称',
+  `image` varchar(255) NOT NULL COMMENT '品牌图片',
+  `initial` varchar(8) NOT NULL COMMENT '品牌首字母',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示:1-是.0-否',
+  `sort` int(5) DEFAULT '0' COMMENT '排序',
+  `remark` varchar(255) DEFAULT NULL COMMENT '品牌描述',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品品牌';
+
+-- ----------------------------
+-- Records of yx_goods_brand
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_category
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_category`;
-CREATE TABLE `yx_goods_category`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                    `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
-                                    `pid` int(11) NOT NULL COMMENT '父级id',
-                                    `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
-                                    `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-                                    `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-                                    `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分类图片',
-                                    `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类描述',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(10) NULL DEFAULT 0 COMMENT '删除标志:1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品分类';
+CREATE TABLE `yx_goods_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(90) NOT NULL COMMENT '分类名称',
+  `pid` int(11) NOT NULL COMMENT '父级id',
+  `level` tinyint(1) DEFAULT NULL COMMENT '等级',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是;0-否',
+  `image` varchar(128) DEFAULT '' COMMENT '分类图片',
+  `remark` varchar(255) DEFAULT NULL COMMENT '分类描述',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(10) DEFAULT '0' COMMENT '删除标志:1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品分类';
+
+-- ----------------------------
+-- Records of yx_goods_category
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_goods_click
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_goods_click`;
+CREATE TABLE `yx_goods_click` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `goods_id` int(11) NOT NULL COMMENT '产品id',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_goods_click
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_collect
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_collect`;
-CREATE TABLE `yx_goods_collect`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                                    `user_id` int(11) NOT NULL COMMENT '用户id',
-                                    `goods_id` int(11) NOT NULL COMMENT '产品id',
-                                    `create_time` int(11) NOT NULL COMMENT '创建时间',
-                                    PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_goods_collect` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `goods_id` int(11) NOT NULL COMMENT '产品id',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_goods_collect
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_comment`;
-CREATE TABLE `yx_goods_comment`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品评论id',
-                                    `goods_id` int(128) NULL DEFAULT NULL COMMENT '商品id',
-                                    `item_id` int(128) NULL DEFAULT NULL COMMENT '规格id',
-                                    `user_id` int(11) NOT NULL COMMENT '用户id',
-                                    `order_goods_id` int(11) NOT NULL COMMENT '订单商品表id',
-                                    `goods_comment` tinyint(1) NULL DEFAULT NULL COMMENT '商品评论星级 1 一星 2 二星 3三星 4四星 5五星',
-                                    `service_comment` tinyint(1) NULL DEFAULT NULL COMMENT '服务评论星级 1 一星 2 二星 3三星 4四星 5五星',
-                                    `express_comment` tinyint(1) NULL DEFAULT NULL COMMENT '物流评论星级 1 一星 2 二星 3三星 4四星 5五星',
-                                    `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品评论',
-                                    `create_time` int(11) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-删除',
-                                    `description_comment` tinyint(1) NULL DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
-                                    `status` tinyint(2) NULL DEFAULT 1 COMMENT '显示状态 0-隐藏 1-显示 ',
-                                    `reply` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商家回复',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品评论表';
+CREATE TABLE `yx_goods_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品评论id',
+  `goods_id` int(128) DEFAULT NULL COMMENT '商品id',
+  `item_id` int(128) DEFAULT NULL COMMENT '规格id',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `order_goods_id` int(11) NOT NULL COMMENT '订单商品表id',
+  `goods_comment` tinyint(1) DEFAULT NULL COMMENT '商品评论星级 1 一星 2 二星 3三星 4四星 5五星',
+  `service_comment` tinyint(1) DEFAULT NULL COMMENT '服务评论星级 1 一星 2 二星 3三星 4四星 5五星',
+  `express_comment` tinyint(1) DEFAULT NULL COMMENT '物流评论星级 1 一星 2 二星 3三星 4四星 5五星',
+  `comment` varchar(255) DEFAULT NULL COMMENT '商品评论',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1-删除',
+  `description_comment` tinyint(1) DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
+  `status` tinyint(2) DEFAULT '1' COMMENT '显示状态 0-隐藏 1-显示 ',
+  `reply` varchar(255) DEFAULT NULL COMMENT '商家回复',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品评论表';
+
+-- ----------------------------
+-- Records of yx_goods_comment
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_comment_image
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_comment_image`;
-CREATE TABLE `yx_goods_comment_image`  (
-                                        `id` int(10) NOT NULL AUTO_INCREMENT,
-                                        `goods_comment_id` int(10) NOT NULL COMMENT '商品评价id',
-                                        `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
-                                        PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_goods_comment_image` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `goods_comment_id` int(10) NOT NULL COMMENT '商品评价id',
+  `uri` varchar(128) DEFAULT NULL COMMENT '图片',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_goods_comment_image
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_image
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_image`;
-CREATE TABLE `yx_goods_image`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT,
-                                `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
-                                `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品轮播图表';
+CREATE TABLE `yx_goods_image` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
+  `uri` varchar(128) DEFAULT NULL COMMENT '图片',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品轮播图表';
+
+-- ----------------------------
+-- Records of yx_goods_image
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_item
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_item`;
-CREATE TABLE `yx_goods_item`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图',
-                                `goods_id` int(11) NOT NULL COMMENT '商品主表id',
-                                `spec_value_ids` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格id，隔开',
-                                `spec_value_str` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格名称，隔开',
-                                `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价',
-                                `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
-                                `cost_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '成本价',
-                                `stock` int(10) NULL DEFAULT NULL COMMENT '库存',
-                                `volume` int(10) NULL DEFAULT NULL COMMENT '体积',
-                                `weight` int(10) NULL DEFAULT NULL COMMENT '重量',
-                                `bar_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '条码',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品的SKU';
+CREATE TABLE `yx_goods_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `image` varchar(128) DEFAULT NULL COMMENT '商品图',
+  `goods_id` int(11) NOT NULL COMMENT '商品主表id',
+  `spec_value_ids` varchar(32) DEFAULT '' COMMENT '多个规格id，隔开',
+  `spec_value_str` varchar(64) DEFAULT '' COMMENT '多个规格名称，隔开',
+  `market_price` decimal(10,2) DEFAULT NULL COMMENT '市场价',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '价格',
+  `cost_price` decimal(10,2) DEFAULT NULL COMMENT '成本价',
+  `stock` int(10) DEFAULT NULL COMMENT '库存',
+  `volume` int(10) DEFAULT NULL COMMENT '体积',
+  `weight` int(10) DEFAULT NULL COMMENT '重量',
+  `bar_code` varchar(32) DEFAULT NULL COMMENT '条码',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品的SKU';
+
+-- ----------------------------
+-- Records of yx_goods_item
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_goods_sale
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_goods_sale`;
+CREATE TABLE `yx_goods_sale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `goods_id` int(11) NOT NULL COMMENT '产品id',
+  `goods_num` int(11) DEFAULT '1' COMMENT '商品购买数量',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_goods_sale
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_spec
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_spec`;
-CREATE TABLE `yx_goods_spec`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `goods_id` int(11) NOT NULL COMMENT '商品主表id',
-                                `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格名称',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品规格';
+CREATE TABLE `yx_goods_spec` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL COMMENT '商品主表id',
+  `name` varchar(16) NOT NULL COMMENT '规格名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品规格';
+
+-- ----------------------------
+-- Records of yx_goods_spec
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_spec_value
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_spec_value`;
-CREATE TABLE `yx_goods_spec_value`  (
-                                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                                        `goods_id` int(11) NOT NULL COMMENT '商品id',
-                                        `spec_id` int(11) NOT NULL COMMENT '规格id',
-                                        `value` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格属性值',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '商品规格属性值表';
+CREATE TABLE `yx_goods_spec_value` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL COMMENT '商品id',
+  `spec_id` int(11) NOT NULL COMMENT '规格id',
+  `value` varchar(32) NOT NULL COMMENT '规格属性值',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品规格属性值表';
+
+-- ----------------------------
+-- Records of yx_goods_spec_value
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_help
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_help`;
-CREATE TABLE `yx_help`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助id',
-                            `cid` int(11) NULL DEFAULT NULL COMMENT '帮助分类',
-                            `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助标题',
-                            `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助简介',
-                            `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助封面图',
-                            `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '帮助内容',
-                            `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
-                            `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-                            `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '帮助状态:1-显示.0-否',
-                            `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-                            `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
-                            `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '帮助表';
+CREATE TABLE `yx_help` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助id',
+  `cid` int(11) DEFAULT NULL COMMENT '帮助分类',
+  `title` varchar(255) DEFAULT NULL COMMENT '帮助标题',
+  `synopsis` varchar(255) DEFAULT NULL COMMENT '帮助简介',
+  `image` varchar(128) DEFAULT NULL COMMENT '帮助封面图',
+  `content` text COMMENT '帮助内容',
+  `visit` int(11) DEFAULT '0' COMMENT '浏览人数',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '帮助状态:1-显示.0-否',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1-已删除',
+  `likes` int(11) DEFAULT '0' COMMENT '点赞数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帮助表';
+
+-- ----------------------------
+-- Records of yx_help
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_help_category
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_help_category`;
-CREATE TABLE `yx_help_category`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助分类id',
-                                    `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
-                                    `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '帮助分类表';
+CREATE TABLE `yx_help_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助分类id',
+  `name` varchar(128) DEFAULT NULL COMMENT '分类名称',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是;0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1;已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帮助分类表';
+
+-- ----------------------------
+-- Records of yx_help_category
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_menu_decorate
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_menu_decorate`;
-CREATE TABLE `yx_menu_decorate`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT,
-                                    `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
-                                    `client_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '终端类型：1-小程序；2-H5；3-APP',
-                                    `decorate_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '菜单类型：1-首页导航；2-个人中心',
-                                    `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
-                                    `link_type` tinyint(1) NOT NULL COMMENT '链接类型：1-商场模块；2-自定义链接',
-                                    `link_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接地址',
-                                    `sort` int(10) NULL DEFAULT 0 COMMENT '菜单排序',
-                                    `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示；1-是；0-否',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '菜单表';
+CREATE TABLE `yx_menu_decorate` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '菜单名称',
+  `client` tinyint(1) NOT NULL DEFAULT '1' COMMENT '终端类型：1-小程序；2-H5；3-APP',
+  `decorate_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '菜单类型：1-首页导航；2-个人中心',
+  `image` varchar(255) DEFAULT NULL COMMENT '菜单图标',
+  `link_type` tinyint(1) NOT NULL COMMENT '链接类型：1-商场模块；2-自定义链接',
+  `link_address` varchar(255) NOT NULL COMMENT '链接地址',
+  `sort` int(10) DEFAULT '0' COMMENT '菜单排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示；1-是；0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除；0-否；1-是',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单表';
+
+-- ----------------------------
+-- Records of yx_menu_decorate
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_notice`;
+CREATE TABLE `yx_notice` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL COMMENT '内容',
+  `type` tinyint(1) unsigned DEFAULT '0' COMMENT '类型,0,系统通知,1,收益通知',
+  `read` tinyint(1) DEFAULT '0' COMMENT '已读状态;0-未读,1-已读',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_notice
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order`;
-CREATE TABLE `yx_order`  (
-                            `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '订单id',
-                            `order_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单编号',
-                            `user_id` int(8) UNSIGNED NULL DEFAULT 0 COMMENT '用户id',
-                            `order_type` tinyint(1) NULL DEFAULT 0 COMMENT '订单类型;0-普通订单;1-秒杀订单;2-拼团订单;3-砍价订单',
-                            `order_source` tinyint(1) NULL DEFAULT 1 COMMENT '订单来源;1-小程序;2-h5;3-ios;4-安卓',
-                            `order_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单状态;0-待付款;1-待发货;2-待收货;3-已完成;4-已关闭',
-                            `pay_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付状态;0-待支付;1-已支付;2-已退款;3-拒绝退款',
-                            `pay_way` tinyint(2) NULL DEFAULT 1 COMMENT '1-微信支付  2-支付宝支付 3-余额支付',
-                            `pay_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '支付时间',
-                            `consignee` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '收货人',
-                            `province` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '省份',
-                            `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
-                            `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
-                            `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
-                            `mobile` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机',
-                            `delivery_type` tinyint(1) NULL DEFAULT 1 COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
-                            `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单商品总价',
-                            `order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '应付款金额',
-                            `discount_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
-                            `integral_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣金额',
-                            `total_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单总价',
-                            `total_num` int(10) NULL DEFAULT 0 COMMENT '订单商品数量',
-                            `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态',
-                            `shipping_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '运费',
-                            `shipping_time` int(11) NULL DEFAULT 0 COMMENT '最后新发货时间',
-                            `transaction_id` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-                            `user_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户备注',
-                            `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
-                            `cancel_time` int(10) NULL DEFAULT NULL COMMENT '订单取消时间',
-                            `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '退款状态：0-未退款；1-部分退款；2-全部退款',
-                            `settle_id` int(11) NULL DEFAULT 0 COMMENT '结算id；0-未结算',
-                            `settle_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '结算金额',
-                            `refund_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
-                            `platform_commission` decimal(10, 2) NULL DEFAULT NULL COMMENT '平台抽成',
-                            `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除标识;1-删除;0-未删除',
-                            `create_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '下单时间',
-                            `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
-                            `coupon_list_id` int(10) NULL DEFAULT NULL COMMENT '用户优惠券id',
-                            PRIMARY KEY (`id`) USING BTREE,
-                            UNIQUE INDEX `order_sn`(`order_sn`) USING BTREE,
-                            INDEX `user_id`(`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '订单表';
+CREATE TABLE `yx_order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '订单id',
+  `order_sn` varchar(20) DEFAULT '' COMMENT '订单编号',
+  `user_id` int(8) unsigned DEFAULT '0' COMMENT '用户id',
+  `order_type` tinyint(1) DEFAULT '0' COMMENT '订单类型;0-普通订单;1-秒杀订单;2-拼团订单;3-砍价订单',
+  `order_source` tinyint(1) DEFAULT '1' COMMENT '订单来源;1-小程序;2-h5;3-ios;4-安卓',
+  `order_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '订单状态;0-待付款;1-待发货;2-待收货;3-已完成;4-已关闭',
+  `pay_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '支付状态;0-待支付;1-已支付;2-已退款;3-拒绝退款',
+  `pay_way` tinyint(2) DEFAULT '1' COMMENT '1-微信支付  2-支付宝支付 3-余额支付',
+  `pay_time` int(10) unsigned DEFAULT '0' COMMENT '支付时间',
+  `consignee` varchar(60) DEFAULT '' COMMENT '收货人',
+  `province` int(11) unsigned DEFAULT '0' COMMENT '省份',
+  `city` int(11) unsigned DEFAULT '0' COMMENT '城市',
+  `district` int(11) unsigned DEFAULT '0' COMMENT '县区',
+  `address` varchar(255) DEFAULT '' COMMENT '地址',
+  `mobile` varchar(60) DEFAULT '' COMMENT '手机',
+  `delivery_type` tinyint(1) DEFAULT '1' COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
+  `goods_price` decimal(10,2) DEFAULT '0.00' COMMENT '订单商品总价',
+  `order_amount` decimal(10,2) DEFAULT '0.00' COMMENT '应付款金额',
+  `discount_amount` decimal(10,2) DEFAULT '0.00' COMMENT '优惠金额',
+  `integral_amount` decimal(10,2) DEFAULT '0.00' COMMENT '积分抵扣金额',
+  `total_amount` decimal(10,2) DEFAULT '0.00' COMMENT '订单总价',
+  `total_num` int(10) DEFAULT '0' COMMENT '订单商品数量',
+  `shipping_status` tinyint(1) unsigned DEFAULT '0' COMMENT '发货状态',
+  `shipping_price` decimal(10,2) DEFAULT '0.00' COMMENT '运费',
+  `shipping_time` int(11) DEFAULT '0' COMMENT '最后新发货时间',
+  `transaction_id` varchar(40) DEFAULT NULL COMMENT '第三方平台交易流水号',
+  `user_remark` varchar(255) DEFAULT '' COMMENT '用户备注',
+  `confirm_take_time` int(10) DEFAULT NULL COMMENT '确认收货时间',
+  `cancel_time` int(10) DEFAULT NULL COMMENT '订单取消时间',
+  `refund_status` tinyint(1) DEFAULT '0' COMMENT '退款状态：0-未退款；1-部分退款；2-全部退款',
+  `settle_id` int(11) DEFAULT '0' COMMENT '结算id；0-未结算',
+  `settle_amount` decimal(10,2) DEFAULT NULL COMMENT '结算金额',
+  `use_integral` int(10) DEFAULT '0' COMMENT '使用的积分',
+  `refund_amount` decimal(10,2) DEFAULT NULL COMMENT '退款金额',
+  `del` tinyint(1) DEFAULT '0' COMMENT '删除标识;1-删除;0-未删除',
+  `create_time` int(10) unsigned DEFAULT NULL COMMENT '下单时间',
+  `update_time` int(10) unsigned DEFAULT NULL COMMENT '更新时间',
+  `coupon_list_id` int(10) DEFAULT NULL COMMENT '用户优惠券id',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `order_sn` (`order_sn`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- ----------------------------
+-- Records of yx_order
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order_goods`;
-CREATE TABLE `yx_order_goods`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                `order_id` int(10) NULL DEFAULT 0 COMMENT '订单id',
-                                `goods_id` int(10) NULL DEFAULT 0 COMMENT '商品id',
-                                `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
-                                `goods_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
-                                `goods_num` int(10) NULL DEFAULT 0 COMMENT '商品数量',
-                                `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品价格',
-                                `total_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品总价',
-                                `total_pay_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '实际支付商品金额',
-                                `discount_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
-                                `spec_value_ids` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品规格id',
-                                `delivery_id` int(11) NULL DEFAULT 0 COMMENT '发货单ID',
-                                `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
-                                `is_comment` tinyint(1) NULL DEFAULT 0 COMMENT '是否已评论；0-否；1-是',
-                                `commission_ratio` decimal(10, 0) NULL DEFAULT NULL COMMENT '抽成比例',
-                                `is_seckill` tinyint(1) NULL DEFAULT 0 COMMENT '秒杀商品;0-不是;1-是',
-                                `create_time` int(10) NULL DEFAULT 0 COMMENT '创建时间',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '订单商品表';
+CREATE TABLE `yx_order_goods` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `order_id` int(10) DEFAULT '0' COMMENT '订单id',
+  `goods_id` int(10) DEFAULT '0' COMMENT '商品id',
+  `item_id` int(10) DEFAULT '0' COMMENT '规格id',
+  `goods_name` varchar(64) DEFAULT NULL COMMENT '商品名称',
+  `goods_num` int(10) DEFAULT '0' COMMENT '商品数量',
+  `goods_price` decimal(10,2) DEFAULT '0.00' COMMENT '商品价格',
+  `total_price` decimal(10,2) DEFAULT '0.00' COMMENT '商品总价',
+  `total_pay_price` decimal(10,2) DEFAULT '0.00' COMMENT '实际支付商品金额',
+  `discount_price` decimal(10,2) DEFAULT '0.00' COMMENT '优惠金额',
+  `integral_price` decimal(10,2) DEFAULT '0.00' COMMENT '积分抵扣的金额',
+  `spec_value_ids` varchar(40) DEFAULT NULL COMMENT '商品规格id',
+  `delivery_id` int(11) DEFAULT '0' COMMENT '发货单ID',
+  `refund_status` tinyint(1) DEFAULT '0' COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
+  `is_comment` tinyint(1) DEFAULT '0' COMMENT '是否已评论；0-否；1-是',
+  `is_seckill` tinyint(1) DEFAULT '0' COMMENT '秒杀商品;0-不是;1-是',
+  `create_time` int(10) DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单商品表';
+
+-- ----------------------------
+-- Records of yx_order_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order_log`;
-CREATE TABLE `yx_order_log`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
-                                `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
-                                `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-                                `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
-                                `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '订单日志表';
+CREATE TABLE `yx_order_log` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `type` tinyint(1) DEFAULT '0' COMMENT '操作类型;0-会员;1-门店',
+  `channel` smallint(5) unsigned DEFAULT '0' COMMENT '渠道编号。变动方式。',
+  `order_id` int(10) DEFAULT NULL COMMENT '订单id',
+  `handle_id` int(10) DEFAULT NULL COMMENT '操作人id',
+  `content` varchar(255) DEFAULT NULL COMMENT '日志内容',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单日志表';
+
+-- ----------------------------
+-- Records of yx_order_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order_refund
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order_refund`;
-CREATE TABLE `yx_order_refund`  (
-                                    `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                    `order_id` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '订单id',
-                                    `user_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '下单用户id，冗余字段',
-                                    `refund_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款单号，一个订单分多次退款则有多个退款单号',
-                                    `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '订单总的应付款金额，冗余字段',
-                                    `refund_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '本次退款金额',
-                                    `transaction_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-                                    `refund_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款状态，0退款中，1完成退款，2退款失败，3退款异常（人工去后台查询）',
-                                    `refund_way` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款方式，0原路退',
-                                    `refund_at` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款时间',
-                                    `wechat_refund_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信返回退款id',
-                                    `refund_msg` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '微信返回信息',
-                                    `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '订单退款表';
+CREATE TABLE `yx_order_refund` (
+  `id` int(6) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `order_id` int(1) unsigned DEFAULT '0' COMMENT '订单id',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '下单用户id，冗余字段',
+  `refund_sn` varchar(32) NOT NULL DEFAULT '' COMMENT '退款单号，一个订单分多次退款则有多个退款单号',
+  `order_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单总的应付款金额，冗余字段',
+  `refund_amount` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '本次退款金额',
+  `transaction_id` varchar(255) DEFAULT NULL COMMENT '第三方平台交易流水号',
+  `refund_status` tinyint(1) unsigned DEFAULT '0' COMMENT '退款状态，0退款中，1完成退款，2退款失败，3退款异常（人工去后台查询）',
+  `refund_way` tinyint(1) unsigned DEFAULT '0' COMMENT '退款方式，0原路退',
+  `refund_at` int(1) unsigned DEFAULT '0' COMMENT '退款时间',
+  `wechat_refund_id` varchar(30) DEFAULT NULL COMMENT '微信返回退款id',
+  `refund_msg` text COMMENT '微信返回信息',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单退款表';
 
 -- ----------------------------
--- Table structure for yx_partner
+-- Records of yx_order_refund
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_partner`;
-CREATE TABLE `yx_partner`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '机构名称',
-                            `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '机构表';
-
--- ----------------------------
--- Table structure for yx_partner_admin
--- ----------------------------
-DROP TABLE IF EXISTS `yx_partner_admin`;
-CREATE TABLE `yx_partner_admin`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                                    `root` tinyint(1) NULL DEFAULT 0 COMMENT '0-非超级管理员；1-超级管理；',
-                                    `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '名称',
-                                    `type` tinyint(4) NULL DEFAULT 0 COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
-                                    `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '账号',
-                                    `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
-                                    `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-                                    `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '角色id',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                                    `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-                                    `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-                                    `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-                                    `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-                                    `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-                                    PRIMARY KEY (`id`) USING BTREE,
-                                    UNIQUE INDEX `account`(`account`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '机构后台管理员表';
-
--- ----------------------------
--- Table structure for yx_partner_role
--- ----------------------------
-DROP TABLE IF EXISTS `yx_partner_role`;
-CREATE TABLE `yx_partner_role`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                                    `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '父级id',
-                                    `auth_ids` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '权限',
-                                    `desc` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
-                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-                                    PRIMARY KEY (`id`, `del`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '机构角色表';
-
--- ----------------------------
--- Table structure for yx_recharge_order
--- ----------------------------
-DROP TABLE IF EXISTS `yx_recharge_order`;
-CREATE TABLE `yx_recharge_order`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                    `order_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单编号',
-                                    `transaction_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-                                    `order_source` tinyint(1) NULL DEFAULT 1 COMMENT '订单来源：1-小程序;2-h5;3-ios;4-安卓',
-                                    `pay_way` tinyint(2) NOT NULL DEFAULT 1 COMMENT '支付方式：1-微信支付  2-支付宝支付 3-余额支付',
-                                    `pay_status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '支付状态：0-待支付；1-已支付',
-                                    `pay_time` int(10) NULL DEFAULT NULL COMMENT '支付时间',
-                                    `user_id` int(11) NOT NULL COMMENT '用户id',
-                                    `template_id` int(11) NULL DEFAULT NULL COMMENT '模板id',
-                                    `order_amount` decimal(10, 2) NOT NULL COMMENT '充值金额',
-                                    `give_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '赠送金额',
-                                    `give_integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
-                                    `give_growth` int(10) NULL DEFAULT NULL COMMENT '赠送成长值',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '充值订单表';
-
--- ----------------------------
--- Table structure for yx_recharge_template
--- ----------------------------
-DROP TABLE IF EXISTS `yx_recharge_template`;
-CREATE TABLE `yx_recharge_template`  (
-                                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                                        `money` decimal(10, 2) NOT NULL COMMENT '充值金额',
-                                        `give_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '赠送金额',
-                                        `sort` int(10) NULL DEFAULT NULL COMMENT '排序',
-                                        `is_recommend` tinyint(1) NULL DEFAULT 0 COMMENT '是否推荐：1-是；0-否',
-                                        `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                        `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                        `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '充值模板';
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_role
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_role`;
-CREATE TABLE `yx_role`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '父级id',
-                            `auth_ids` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '权限',
-                            `desc` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
-                            `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                            PRIMARY KEY (`id`, `del`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '角色表';
+CREATE TABLE `yx_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(8) NOT NULL DEFAULT '0' COMMENT '父级id',
+  `auth_ids` text COMMENT '权限',
+  `desc` varchar(128) DEFAULT '' COMMENT '描述',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`,`del`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+-- ----------------------------
+-- Records of yx_role
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_role_dev_auth_index
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_role_dev_auth_index`;
-CREATE TABLE `yx_role_dev_auth_index`  (
-                                        `role_id` int(11) NOT NULL,
-                                        `menu_auth_id` int(11) NOT NULL,
-                                        PRIMARY KEY (`role_id`, `menu_auth_id`) USING BTREE
+CREATE TABLE `yx_role_dev_auth_index` (
+  `role_id` int(11) NOT NULL,
+  `menu_auth_id` int(11) NOT NULL,
+  PRIMARY KEY (`role_id`,`menu_auth_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_role_dev_auth_index
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_search_record
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_search_record`;
-CREATE TABLE `yx_search_record`  (
-                                    `id` int(20) NOT NULL AUTO_INCREMENT,
-                                    `user_id` int(11) NULL DEFAULT 0 COMMENT '用户id',
-                                    `keyword` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '关键字',
-                                    `update_time` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-                                    `count` int(11) NULL DEFAULT 1 COMMENT '次数',
-                                    `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否已删除,0-未删除,1-已删除',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '用户热门搜索';
+CREATE TABLE `yx_search_record` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT '0' COMMENT '用户id',
+  `keyword` varchar(64) DEFAULT '' COMMENT '关键字',
+  `update_time` int(11) DEFAULT '0' COMMENT '更新时间',
+  `count` int(11) DEFAULT '1' COMMENT '次数',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否已删除,0-未删除,1-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户热门搜索';
+
+-- ----------------------------
+-- Records of yx_search_record
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_seckill_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_seckill_goods`;
-CREATE TABLE `yx_seckill_goods`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT,
-                                    `seckill_id` int(10) NOT NULL COMMENT '秒杀时间id',
-                                    `goods_id` int(10) NOT NULL COMMENT '参与秒杀商品的id',
-                                    `item_id` int(11) NULL DEFAULT NULL COMMENT '参与秒杀规格id',
-                                    `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '秒杀活动价',
-                                    `sales_sum` int(10) NULL DEFAULT 0 COMMENT '销量',
-                                    `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除；1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_seckill_goods` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `seckill_id` int(10) NOT NULL COMMENT '秒杀时间id',
+  `goods_id` int(10) NOT NULL COMMENT '参与秒杀商品的id',
+  `item_id` int(11) DEFAULT NULL COMMENT '参与秒杀规格id',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '秒杀活动价',
+  `sales_sum` int(10) DEFAULT '0' COMMENT '销量',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT NULL COMMENT '是否删除；1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_seckill_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_seckill_time
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_seckill_time`;
-CREATE TABLE `yx_seckill_time`  (
-                                    `id` int(10) NOT NULL AUTO_INCREMENT,
-                                    `start_time` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开始时间',
-                                    `end_time` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '结束时间',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除时间；1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_seckill_time` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `start_time` varchar(16) NOT NULL COMMENT '开始时间',
+  `end_time` varchar(16) NOT NULL COMMENT '结束时间',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除时间；1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_seckill_time
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_session
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_session`;
-CREATE TABLE `yx_session`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `user_id` int(11) NOT NULL COMMENT '用户id',
-                            `token` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '令牌',
-                            `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
-                            `update_time` int(10) NOT NULL COMMENT '更新时间',
-                            `expire_time` int(10) NOT NULL COMMENT '到期时间',
-                            PRIMARY KEY (`id`) USING BTREE,
-                            UNIQUE INDEX `user_id_client`(`user_id`, `client`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '会话表';
+CREATE TABLE `yx_session` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `token` varchar(32) NOT NULL COMMENT '令牌',
+  `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
+  `update_time` int(10) NOT NULL COMMENT '更新时间',
+  `expire_time` int(10) NOT NULL COMMENT '到期时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `user_id_client` (`user_id`,`client`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会话表';
+
+-- ----------------------------
+-- Records of yx_session
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_sign_daily
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_sign_daily`;
-CREATE TABLE `yx_sign_daily`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT,
-                                `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
-                                `integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
-                                `integral_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送积分状态：1-是；0-否；',
-                                `growth_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送优惠劵状态：1-是；0-否；',
-                                `days` int(24) NULL DEFAULT 1 COMMENT '连续签到天数',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
-                                `growth` int(16) NULL DEFAULT NULL COMMENT '成长值',
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_sign_daily` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `type` varchar(24) DEFAULT NULL COMMENT '类型',
+  `integral` int(10) DEFAULT NULL COMMENT '赠送积分',
+  `integral_status` tinyint(1) DEFAULT NULL COMMENT '赠送积分状态：1-是；0-否；',
+  `growth_status` tinyint(1) DEFAULT NULL COMMENT '赠送优惠劵状态：1-是；0-否；',
+  `days` int(24) DEFAULT '1' COMMENT '连续签到天数',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
+  `growth` int(16) DEFAULT NULL COMMENT '成长值',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_sign_daily
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_sms_config
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_sms_config`;
-CREATE TABLE `yx_sms_config`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '短信通道',
-                                `describe` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
-                                `sign` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '签名',
-                                `app_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'app_key',
-                                `secret_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'secret_key',
-                                `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
-                                `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_sms_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '短信通道',
+  `describe` varchar(255) DEFAULT NULL COMMENT '描述',
+  `sign` varchar(64) DEFAULT NULL COMMENT '签名',
+  `app_key` varchar(64) DEFAULT NULL COMMENT 'app_key',
+  `secret_key` varchar(64) DEFAULT NULL COMMENT 'secret_key',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：0-关闭；1-开启',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除；0-否；1-是',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_sms_config
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_sms_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_sms_log`;
-CREATE TABLE `yx_sms_log`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `message_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
-                            `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号码',
-                            `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发送内容',
-                            `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送关键字（注册、找回密码）',
-                            `is_verify` tinyint(1) NULL DEFAULT 0 COMMENT '是否已验证；0-否；1-是',
-                            `send_status` tinyint(1) NOT NULL COMMENT '发送状态：0-发送中；1-发送成功；2-发送失败',
-                            `send_time` int(10) NOT NULL COMMENT '发送时间',
-                            `results` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '短信结果',
-                            `create_time` int(10) NOT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '短信发送记录表';
+CREATE TABLE `yx_sms_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message_key` varchar(32) NOT NULL COMMENT '消息key',
+  `mobile` varchar(11) NOT NULL COMMENT '手机号码',
+  `content` varchar(255) NOT NULL COMMENT '发送内容',
+  `code` varchar(32) DEFAULT NULL COMMENT '发送关键字（注册、找回密码）',
+  `is_verify` tinyint(1) DEFAULT '0' COMMENT '是否已验证；0-否；1-是',
+  `send_status` tinyint(1) NOT NULL COMMENT '发送状态：0-发送中；1-发送成功；2-发送失败',
+  `send_time` int(10) NOT NULL COMMENT '发送时间',
+  `results` varchar(255) DEFAULT NULL COMMENT '短信结果',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信发送记录表';
+
+-- ----------------------------
+-- Records of yx_sms_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_stat
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_stat`;
-CREATE TABLE `yx_stat`  (
-                            `id` int(10) NOT NULL AUTO_INCREMENT,
-                            `today_user_pv` int(10) NULL DEFAULT 0 COMMENT '今日用户访问量',
-                            `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '统计表';
+CREATE TABLE `yx_stat` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `today_user_pv` int(10) DEFAULT '0' COMMENT '今日用户访问量',
+  `create_time` int(10) unsigned NOT NULL COMMENT '变动时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='统计表';
+
+-- ----------------------------
+-- Records of yx_stat
+-- ----------------------------
+BEGIN;
+INSERT INTO `yx_stat` VALUES (1, 36, 1608703901);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_supplier
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_supplier`;
-CREATE TABLE `yx_supplier`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-                                `del` tinyint(2) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
-                                `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-                                `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
-                                `contact` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
-                                `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备注',
-                                `province_id` int(11) NULL DEFAULT NULL COMMENT '省',
-                                `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
-                                `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
-                                `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '供货商表';
+CREATE TABLE `yx_supplier` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL COMMENT '名称',
+  `del` tinyint(2) DEFAULT '0' COMMENT '删除,0-未删除,1-已删除',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `tel` varchar(255) DEFAULT NULL COMMENT '联系电话',
+  `contact` varchar(255) DEFAULT NULL COMMENT '联系人',
+  `remark` varchar(255) NOT NULL COMMENT '备注',
+  `province_id` int(11) DEFAULT NULL COMMENT '省',
+  `city_id` int(11) DEFAULT NULL COMMENT '市',
+  `district_id` int(11) DEFAULT NULL COMMENT '区',
+  `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供货商表';
+
+-- ----------------------------
+-- Records of yx_supplier
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_system_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_system_log`;
-CREATE TABLE `yx_system_log`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `admin_id` int(11) NOT NULL COMMENT '管理员',
-                                `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员名称',
-                                `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员账号',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '访问链接',
-                                `type` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '请求方式',
-                                `param` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '请求数据',
-                                `ip` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'Ip地址',
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_system_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL COMMENT '管理员',
+  `name` varchar(16) NOT NULL DEFAULT '' COMMENT '管理员名称',
+  `account` varchar(16) NOT NULL DEFAULT '' COMMENT '管理员账号',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `uri` varchar(255) NOT NULL COMMENT '访问链接',
+  `type` varchar(8) NOT NULL COMMENT '请求方式',
+  `param` text COMMENT '请求数据',
+  `ip` varchar(11) NOT NULL DEFAULT '' COMMENT 'Ip地址',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_system_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_temp
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_temp`;
-CREATE TABLE `yx_temp`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-                            PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_temp` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_temp
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user`;
-CREATE TABLE `yx_user`  (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会员码',
-                            `root` tinyint(255) NULL DEFAULT 0 COMMENT '是否为超级管理：0-否；1-是；',
-                            `nickname` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户昵称',
-                            `avatar` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
-                            `mobile` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
-                            `level` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '等级',
-                            `group_id` int(11) NULL DEFAULT NULL COMMENT '所属分组id',
-                            `sex` tinyint(1) NULL DEFAULT 0 COMMENT '性别:0-未知；1-男；2-女',
-                            `birthday` int(11) NULL DEFAULT NULL COMMENT '生日',
-                            `user_money` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '用户余额',
-                            `user_integral` int(10) NULL DEFAULT 0 COMMENT '用户积分',
-                            `total_order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '消费累计额度',
-                            `total_recharge_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '累计充值金额',
-                            `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
-                            `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
-                            `pay_password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付密码',
-                            `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-                            `first_leader` int(11) NULL DEFAULT 0 COMMENT '第一个上级',
-                            `second_leader` int(11) NULL DEFAULT 0 COMMENT '第二个上级',
-                            `third_leader` int(11) NULL DEFAULT 0 COMMENT '第三个上级',
-                            `ancestor_relation` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '所有的上级关系链',
-                            `is_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '是否分销会员：1-是；0-否；',
-                            `freeze_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '冻结分销资格: 1-冻结; 0-正常',
-                            `distribution_h5_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销h5二维码\n',
-                            `distribution_mnp_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销小程序二维码\n',
-                            `distribution_app_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销app二维码\n',
-                            `distribution_code` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分销码',
-                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                            `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-                            `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-                            `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-                            `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-                            `user_growth` int(128) NULL DEFAULT 0 COMMENT '用户成长值',
-                            `earnings` float(10, 2) NULL DEFAULT 0.00 COMMENT '佣金收益',
-                            PRIMARY KEY (`id`) USING BTREE,
-                            UNIQUE INDEX `distribution_code`(`distribution_code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '用户表';
+CREATE TABLE `yx_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sn` varchar(32) DEFAULT NULL COMMENT '会员码',
+  `root` tinyint(255) DEFAULT '0' COMMENT '是否为超级管理：0-否；1-是；',
+  `nickname` varchar(16) CHARACTER SET utf8mb4 NOT NULL COMMENT '用户昵称',
+  `avatar` varchar(256) NOT NULL COMMENT '用户头像',
+  `mobile` varchar(15) DEFAULT '' COMMENT '手机号码',
+  `level` tinyint(1) unsigned DEFAULT '0' COMMENT '等级',
+  `group_id` int(11) DEFAULT NULL COMMENT '所属分组id',
+  `sex` tinyint(1) DEFAULT '0' COMMENT '性别:0-未知；1-男；2-女',
+  `birthday` int(11) DEFAULT NULL COMMENT '生日',
+  `user_money` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '用户余额',
+  `user_integral` int(10) unsigned DEFAULT '0' COMMENT '用户积分',
+  `total_order_amount` decimal(10,2) DEFAULT '0.00' COMMENT '消费累计额度',
+  `total_recharge_amount` decimal(10,2) DEFAULT '0.00' COMMENT '累计充值金额',
+  `account` varchar(16) DEFAULT '' COMMENT '账号',
+  `password` varchar(32) DEFAULT NULL COMMENT '密码',
+  `pay_password` varchar(32) DEFAULT NULL COMMENT '支付密码',
+  `salt` varchar(4) NOT NULL DEFAULT '' COMMENT '密码盐',
+  `first_leader` int(11) DEFAULT '0' COMMENT '第一个上级',
+  `second_leader` int(11) DEFAULT '0' COMMENT '第二个上级',
+  `third_leader` int(11) DEFAULT '0' COMMENT '第三个上级',
+  `ancestor_relation` text COMMENT '所有的上级关系链',
+  `is_distribution` tinyint(1) DEFAULT '0' COMMENT '是否分销会员：1-是；0-否；',
+  `freeze_distribution` tinyint(1) DEFAULT '0' COMMENT '冻结分销资格: 1-冻结; 0-正常',
+  `distribution_h5_qr_code` varchar(255) DEFAULT '' COMMENT '分销h5二维码\n',
+  `distribution_mnp_qr_code` varchar(255) DEFAULT '' COMMENT '分销小程序二维码\n',
+  `distribution_app_qr_code` varchar(255) DEFAULT '' COMMENT '分销app二维码\n',
+  `distribution_code` varchar(12) DEFAULT NULL COMMENT '分销码',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `login_time` int(10) DEFAULT NULL COMMENT '最后登录时间',
+  `login_ip` varchar(15) DEFAULT '' COMMENT '最后登录ip',
+  `disable` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用：0-否；1-是；',
+  `del` tinyint(10) NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  `user_growth` int(128) DEFAULT '0' COMMENT '用户成长值',
+  `earnings` float(10,2) DEFAULT '0.00' COMMENT '佣金收益',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `distribution_code` (`distribution_code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+-- ----------------------------
+-- Records of yx_user
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_address
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_address`;
-CREATE TABLE `yx_user_address`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                                    `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户id',
-                                    `contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货人',
-                                    `telephone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '联系方式',
-                                    `province_id` int(11) NOT NULL COMMENT '省',
-                                    `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
-                                    `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
-                                    `address` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
-                                    `post_code` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '邮编',
-                                    `longitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '经度',
-                                    `latitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '纬度',
-                                    `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否默认(1为默认)',
-                                    `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
-                                    `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '用户地址表';
+CREATE TABLE `yx_user_address` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+  `contact` varchar(20) NOT NULL COMMENT '收货人',
+  `telephone` varchar(16) NOT NULL COMMENT '联系方式',
+  `province_id` int(11) NOT NULL COMMENT '省',
+  `city_id` int(11) DEFAULT NULL COMMENT '市',
+  `district_id` int(11) DEFAULT NULL COMMENT '区',
+  `address` varchar(64) DEFAULT NULL COMMENT '详细地址',
+  `post_code` int(10) unsigned DEFAULT NULL COMMENT '邮编',
+  `longitude` varchar(16) DEFAULT '0' COMMENT '经度',
+  `latitude` varchar(16) DEFAULT '0' COMMENT '纬度',
+  `is_default` tinyint(1) unsigned DEFAULT '0' COMMENT '是否默认(1为默认)',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '修改时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '删除,0-未删除,1-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户地址表';
+
+-- ----------------------------
+-- Records of yx_user_address
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_auth`;
-CREATE TABLE `yx_user_auth`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `user_id` int(11) NOT NULL COMMENT '用户id',
-                                `openid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '微信openid',
-                                `unionid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '微信unionid',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
-                                PRIMARY KEY (`id`) USING BTREE,
-                                UNIQUE INDEX `openid`(`openid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '用户授权表';
+CREATE TABLE `yx_user_auth` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `openid` varchar(32) NOT NULL COMMENT '微信openid',
+  `unionid` varchar(32) DEFAULT '' COMMENT '微信unionid',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `openid` (`openid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户授权表';
 
 -- ----------------------------
--- Table structure for yx_user_distribution
+-- Records of yx_user_auth
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_user_distribution`;
-CREATE TABLE `yx_user_distribution`  (
-                                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                                        `user_id` int(10) NULL DEFAULT NULL COMMENT '会员id',
-                                        `distribution_order_num` int(10) NULL DEFAULT 0 COMMENT '分销订单数量',
-                                        `distribution_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '分销金额',
-                                        `fans` int(10) NULL DEFAULT 0 COMMENT '粉丝数量',
-                                        `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                        `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '用户分销信息表';
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_file
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_file`;
-CREATE TABLE `yx_user_file`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
-                                `type` tinyint(1) NOT NULL COMMENT '类型',
-                                `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
-                                `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-                                `user_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '文件表';
+CREATE TABLE `yx_user_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL COMMENT '文件名',
+  `type` tinyint(1) NOT NULL COMMENT '类型',
+  `uri` varchar(255) NOT NULL COMMENT '文件相对路径',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件表';
+
+-- ----------------------------
+-- Records of yx_user_file
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_group
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_group`;
-CREATE TABLE `yx_user_group`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-                                `remark` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '会员分组表';
+CREATE TABLE `yx_user_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(16) DEFAULT NULL COMMENT '名称',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除；1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员分组表';
+
+-- ----------------------------
+-- Records of yx_user_group
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_level
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_level`;
-CREATE TABLE `yx_user_level`  (
-                                `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-                                `growth_value` int(11) NOT NULL DEFAULT 0 COMMENT '成长值',
-                                `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级备注',
-                                `background_image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景图片',
-                                `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级图标',
-                                `privilege` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '等级权益',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(10) NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '会员等级表';
+CREATE TABLE `yx_user_level` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(128) DEFAULT NULL COMMENT '名称',
+  `growth_value` int(11) NOT NULL DEFAULT '0' COMMENT '成长值',
+  `remark` varchar(255) DEFAULT NULL COMMENT '等级备注',
+  `background_image` varchar(128) DEFAULT NULL COMMENT '背景图片',
+  `image` varchar(128) DEFAULT NULL COMMENT '等级图标',
+  `privilege` text COMMENT '等级权益',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(10) DEFAULT '0' COMMENT '是否删除;1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员等级表';
 
 -- ----------------------------
--- Table structure for yx_user_privilege
+-- Records of yx_user_level
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_user_privilege`;
-CREATE TABLE `yx_user_privilege`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                    `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益名称',
-                                    `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益图标',
-                                    `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权益说明',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NOT NULL COMMENT '是否删除：1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '会员权益';
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_sign
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_sign`;
-CREATE TABLE `yx_user_sign`  (
-                                `id` int(10) NOT NULL AUTO_INCREMENT,
-                                `days` int(11) NULL DEFAULT 0 COMMENT '连续签到天数',
-                                `integral` int(11) NULL DEFAULT 0 COMMENT '签到奖励积分',
-                                `continuous_integral` int(11) NULL DEFAULT 0 COMMENT '连续奖励积分',
-                                `sign_time` int(10) NULL DEFAULT NULL COMMENT '签到时间',
-                                `user_id` int(10) NULL DEFAULT NULL COMMENT '用户id',
-                                `growth` int(11) NULL DEFAULT 0 COMMENT '签到奖励成长值',
-                                `continuous_growth` int(11) NULL DEFAULT 0 COMMENT '连续签到奖励成长值',
-                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `yx_user_sign` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `days` int(11) DEFAULT '0' COMMENT '连续签到天数',
+  `integral` int(11) DEFAULT '0' COMMENT '签到奖励积分',
+  `continuous_integral` int(11) DEFAULT '0' COMMENT '连续奖励积分',
+  `sign_time` int(10) DEFAULT NULL COMMENT '签到时间',
+  `user_id` int(10) DEFAULT NULL COMMENT '用户id',
+  `growth` int(11) DEFAULT '0' COMMENT '签到奖励成长值',
+  `continuous_growth` int(11) DEFAULT '0' COMMENT '连续签到奖励成长值',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yx_user_sign
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_wechat_reply
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_wechat_reply`;
-CREATE TABLE `yx_wechat_reply`  (
-                                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                                    `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则名称',
-                                    `keyword` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关键词',
-                                    `reply_type` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复类型：0-默认回复',
-                                    `matching_type` tinyint(1) NULL DEFAULT NULL COMMENT '匹配方式：null-不设置；1-全匹配；2-模糊匹配',
-                                    `content_type` tinyint(1) NULL DEFAULT NULL COMMENT '内容类型：null-不设置；1-文本；',
-                                    `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复内容',
-                                    `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '启动状态：1-启动；0-关闭',
-                                    `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '微信公众号回复';
+CREATE TABLE `yx_wechat_reply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '规则名称',
+  `keyword` varchar(16) DEFAULT NULL COMMENT '关键词',
+  `reply_type` varchar(16) NOT NULL COMMENT '回复类型',
+  `matching_type` tinyint(1) DEFAULT NULL COMMENT '匹配方式：null-不设置；1-全匹配；2-模糊匹配',
+  `content_type` tinyint(1) DEFAULT NULL COMMENT '内容类型：null-不设置；1-文本；',
+  `content` text NOT NULL COMMENT '回复内容',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '启动状态：1-启动；0-关闭',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信公众号回复';
+
+-- ----------------------------
+-- Records of yx_wechat_reply
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_withdraw_apply
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_withdraw_apply`;
-CREATE TABLE `yx_withdraw_apply`  (
-                                    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                                    `sn` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '提现单号',
-                                    `user_id` int(11) NOT NULL COMMENT '用户id',
-                                    `real_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
-                                    `account` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
-                                    `type` tinyint(1) NOT NULL COMMENT '类型：1-提现到余额；2-提现到微信；3-提现到支付宝',
-                                    `money` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '提现金额',
-                                    `left_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '用户可得的金额(扣除手续费后)',
-                                    `money_qr_code` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '收款二维码',
-                                    `poundage` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '手续费',
-                                    `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
-                                    `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
-                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
-                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '提现申请记录表';INSERT INTO `yx_admin` VALUES (1, 1, 'admin', NULL, 'admin', 
-                '55d3b8eab457a567d4f17058de9703d0', '6719', 0, '1607762951', '1607762951', '1607762951', '', 0, 0);INSERT INTO `yx_admin` VALUES (1, 1, 'admin', NULL, 'admin', 
-                '57171ec3cd098d5610e7945eaefc5d79', '6ced', 0, '1607763437', '1607763437', '1607763437', '', 0, 0);INSERT INTO `yx_admin` VALUES (1, 1, 'admin', NULL, 'admin', 
-                '66dfcaed3ce98528899396f8e5802526', '029b', 0, '1608272838', '1608272838', '1608272838', '', 0, 0);INSERT INTO `yx_admin` VALUES (1, 1, 'admin', NULL, 'admin', 
-                '3400dce0f471511e096b66734abb5712', '10a3', 0, '1608273813', '1608273813', '1608273813', '', 0, 0);INSERT INTO `yx_admin` VALUES (1, 1, 'admin', NULL, 'admin', 
-                '71ae4db9de5ad8946b7fca88b7f88c5d', '27d1', 0, '1608386605', '1608386605', '1608386605', '', 0, 0);
+CREATE TABLE `yx_withdraw_apply` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `sn` varchar(25) DEFAULT NULL COMMENT '提现单号',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `real_name` varchar(255) DEFAULT NULL COMMENT '真实姓名',
+  `account` varchar(32) DEFAULT '' COMMENT '账号',
+  `type` tinyint(1) NOT NULL COMMENT '类型：1-提现到余额；2-提现到微信；3-提现到支付宝',
+  `money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '提现金额',
+  `left_money` decimal(10,2) DEFAULT '0.00' COMMENT '用户可得的金额(扣除手续费后)',
+  `money_qr_code` varchar(128) DEFAULT '' COMMENT '收款二维码',
+  `poundage` decimal(10,2) DEFAULT '0.00' COMMENT '手续费',
+  `remark` varchar(255) DEFAULT '' COMMENT '备注',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='提现申请记录表';
+
+-- ----------------------------
+-- Records of yx_withdraw_apply
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;

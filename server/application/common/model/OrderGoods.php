@@ -36,4 +36,9 @@ class OrderGoods extends Model
         return $value;
     }
 
+    public function getBaseImageAttr($value, $data)
+    {
+        return $data['image'];
+    }
+
 }

@@ -59,27 +59,29 @@ class GoodsCategoryLogic{
             ->field('id,name,image')
             ->order('sort desc,id desc')
             ->select();
+        if($goods_brand){
+            foreach ($goods_brand as &$brand_item){
+                $brand_item['type'] = 0;
+                $brand_item['image'] = UrlServer::getFileUrl($brand_item['image']);
+            }
 
-        foreach ($goods_brand as &$brand_item){
-            $brand_item['type'] = 0;
-            $brand_item['image'] = UrlServer::getFileUrl($brand_item['image']);
+            $brand = [
+                'id'    => 0,
+                'name'  => '品牌推荐',
+                'type'  => 0,
+                'sons'  =>[
+                    [
+                        'id'    => 0,
+                        'name'  => '热门品牌',
+                        'type'  => 0,
+                        'sons'  => $goods_brand,
+
+                    ]
+                ],
+            ];
+            array_unshift($level1,$brand);
         }
 
-        $brand = [
-            'id'    => 0,
-            'name'  => '品牌推荐',
-            'type'  => 0,
-            'sons'  =>[
-                [
-                    'id'    => 0,
-                    'name'  => '热门品牌',
-                    'type'  => 0,
-                    'sons'  => $goods_brand,
-
-                ]
-            ],
-        ];
-        array_unshift($level1,$brand);
         return array_values($level1);
     }
 }

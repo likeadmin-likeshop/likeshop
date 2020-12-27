@@ -75,7 +75,7 @@
                     <label class="layui-form-label">小程序码：</label>
                     <div class="layui-input-block">
                         <div class="img-content">
-                            <input name="qr_code" type="hidden" value="">
+                            <input name="qr_code" type="hidden" value="{$mnp.qr_code}">
                             <div class="img-add" {if $mnp.qr_code } style="display: none" {/if}></div>
                         {if !empty($mnp.qr_code)}
                         <div class="img-container">

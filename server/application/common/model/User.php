@@ -30,6 +30,11 @@ class User extends Model
         return $value;
     }
 
+    public function getBaseAvatarAttr($value, $data)
+    {
+        return $data['avatar'];
+    }
+
     //加入时间
     public function getCreateTimeAttr($value, $data)
     {

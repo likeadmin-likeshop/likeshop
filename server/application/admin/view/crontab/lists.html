@@ -18,42 +18,37 @@
             </div>
             <br>
             <div style="padding-bottom: 10px;">
-                <button class="layui-btn layuiadmin-btn-crontab {$view_theme_color}" data-type="add">添加</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-crontab {$view_theme_color}" data-type="add">添加</button>
             </div>
             <table id="crontab-lists" lay-filter="crontab-lists"></table>
             <script type="text/html" id="status">
                 {{#  if(d.status == 1){ }}
-                <button class="layui-btn layui-btn-xs {$view_theme_button}">运行</button>
+                <button class="layui-btn layui-btn-sm {$view_theme_button}">运行</button>
                 {{#  } }}
 
                 {{#  if(d.status == 2){ }}
-                <button class="layui-btn layui-btn-xs layui-btn-warm">停止</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger">停止</button>
                 {{#  } }}
 
                 {{#  if(d.status == 3){ }}
-                <button class="layui-btn layui-btn-xs layui-btn-danger">错误</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger">错误</button>
                 {{#  } }}
             </script>
             <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
                 {{#  if(d.status == 1){ }}
-                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="stop">
-                    <i class="layui-icon layui-icon-close"></i>停止</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="stop">停止</a>
                 {{#  } }}
                 {{#  if(d.status == 2 ||d.status == 3){ }}
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="start">
-                    <i class="layui-icon layui-icon-triangle-r"></i>启动</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="start">启动</a>
                 {{#  } }}
                 <!--<a class="layui-btn layui-btn-xs" lay-event="restart">
                     <i class="layui-icon layui-icon-refresh"></i>重启</a>-->
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">
-                    <i class="layui-icon  layui-icon-edit"></i>编辑</a>
                 {{#  if(d.system == 0){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">
-                    <i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</a>
                 {{#  } }}
                 {{#  if(d.system == 1){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-danger layui-btn-disabled">
-                    <i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-sm layui-btn-danger layui-btn-disabled">删除</a>
                 {{#  } }}
             </script>
 

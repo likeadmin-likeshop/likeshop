@@ -17,6 +17,8 @@ namespace app\common\command;
 use app\api\model\{
     Order,Goods,GoodsItem
 };
+use app\common\logic\AccountLogLogic;
+use app\common\model\AccountLog;
 use app\common\model\Pay;
 use app\common\server\ConfigServer;
 use think\console\Command;
@@ -32,17 +34,22 @@ class OrderClose extends Command{
     }
     protected function execute(Input $input, Output $output)
     {
+        //是否下单扣库存
+        $deduct_type = ConfigServer::get('trading', 'deduct_type', 1);
+        //取消订单时长
         $order_cancel_time = ConfigServer::get('trading','order_cancel', '',30) * 60;
         $now = time();
+
+        $order = new Order();
         $where[] = ['order_status','=',\app\common\model\Order::STATUS_WAIT_PAY];
         $where[] = ['pay_status','=',Pay::UNPAID];
-        $order = new Order();
 
         $order_list = $order
             ->where($where)
             ->where(Db::raw("create_time+$order_cancel_time < $now"))
             ->with(['orderGoods'])
             ->select()->toArray();
+
 
         $update_total_stock = [];       //更新总库存
         $update_stock = [];             //更新规格库存
@@ -55,33 +62,45 @@ class OrderClose extends Command{
             if($order['coupon_list_id']){
                 $update_coupon_ids[] = $order['coupon_list_id'];
             }
+            //更新积分
+            if($order['use_integral'] > 0){
+                Db::name('user')->where(['id'=>$order['user_id']])->setInc('user_integral',$order['use_integral']);
+                AccountLogLogic::AccountRecord(
+                    $order['user_id'],
+                    $order['use_integral'],
+                    1,
+                    AccountLog::cancel_order_refund_integral
+                );
+            }
             foreach ($order['order_goods'] as $order_goods){
-                //更新商品总库存数据
-                if(isset($update_total_stock[$order_goods['goods_id']])){
-                    $total_stock_num[$order_goods['goods_id']] = $total_stock_num[$order_goods['goods_id']] + $order_goods['goods_num'];
-                    $update_total_stock[$order_goods['goods_id']]['stock'] = Db::raw('stock+'.$total_stock_num[$order_goods['goods_id']]);
-                }else{
-                    $total_stock_num[$order_goods['goods_id']] = $order_goods['goods_num'];
-                    $update_total_stock[$order_goods['goods_id']] = [
-                        'id'        => $order_goods['goods_id'],
-                        'stock'     => Db::raw('stock+'.$total_stock_num[$order_goods['goods_id']])
-                    ];
-                }
-                //更新商品规格库存数据
-                if(isset($update_stock[$order_goods['item_id']])){
-                    $stock_num[$order_goods['item_id']] = $stock_num[$order_goods['item_id']] + $order_goods['goods_num'];
-                    $update_stock[$order_goods['item_id']]['stock'] = Db::raw('stock+'.$stock_num[$order_goods['item_id']]);
-                }else{
-                    $stock_num[$order_goods['item_id']] = $order_goods['goods_num'];
-                    $update_stock[$order_goods['item_id']] = [
-                        'id'        => $order_goods['item_id'],
-                        'stock'     => Db::raw('stock+'.$stock_num[$order_goods['item_id']])
-                    ];
+                //更新库存
+                if($deduct_type){
+                    //更新商品总库存数据
+                    if(isset($update_total_stock[$order_goods['goods_id']])){
+                        $total_stock_num[$order_goods['goods_id']] = $total_stock_num[$order_goods['goods_id']] + $order_goods['goods_num'];
+                        $update_total_stock[$order_goods['goods_id']]['stock'] = Db::raw('stock+'.$total_stock_num[$order_goods['goods_id']]);
+                    }else{
+                        $total_stock_num[$order_goods['goods_id']] = $order_goods['goods_num'];
+                        $update_total_stock[$order_goods['goods_id']] = [
+                            'id'        => $order_goods['goods_id'],
+                            'stock'     => Db::raw('stock+'.$total_stock_num[$order_goods['goods_id']])
+                        ];
+                    }
+                    //更新商品规格库存数据
+                    if(isset($update_stock[$order_goods['item_id']])){
+                        $stock_num[$order_goods['item_id']] = $stock_num[$order_goods['item_id']] + $order_goods['goods_num'];
+                        $update_stock[$order_goods['item_id']]['stock'] = Db::raw('stock+'.$stock_num[$order_goods['item_id']]);
+                    }else{
+                        $stock_num[$order_goods['item_id']] = $order_goods['goods_num'];
+                        $update_stock[$order_goods['item_id']] = [
+                            'id'        => $order_goods['item_id'],
+                            'stock'     => Db::raw('stock+'.$stock_num[$order_goods['item_id']])
+                        ];
+                    }
                 }
             }
 
         }
-
 
         if($update_total_stock){
             $update_data = [

@@ -26,7 +26,7 @@
                 <div class="layui-card">
                     <div class="layui-card-body">
                         <div style="padding-bottom: 10px;">
-                            <button class="layui-btn layuiadmin-btn-reply {$view_theme_color}" data-type="add">新增回复</button>
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-reply {$view_theme_color}" data-type="add">新增回复</button>
                         </div>
                         <table id="reply-lists" lay-filter="reply-lists"></table>
                         <script type="text/html" id="status">
@@ -151,9 +151,7 @@
             switch (type) {
                 case "subscribe":
                     var cols = [
-                        {type: 'checkbox'}
-                        , {field: 'id', width: 80, title: 'ID', sort: true, align: 'center'}
-                        , {field: 'name', title: '规则名称', align: 'center'}
+                        {field: 'name', title: '规则名称', align: 'center'}
                         , {field: 'content_type', title: '回复类型', align: 'center'}
                         , {field: 'content', title: '回复内容', align: 'center'}
                         , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
@@ -162,9 +160,7 @@
                     break;
                 case "text":
                     var cols = [
-                        {type: 'checkbox'}
-                        , {field: 'id', width: 80, title: 'ID', sort: true, align: 'center'}
-                        , {field: 'keyword', title: '关键词', align: 'center'}
+                         {field: 'keyword', title: '关键词', align: 'center'}
                         , {field: 'matching_type', title: '匹配方式', align: 'center'}
                         , {field: 'content_type', title: '回复类型', align: 'center'}
                         , {field: 'content', title: '回复内容', align: 'center'}
@@ -175,9 +171,7 @@
                     break;
                 case "default":
                     var cols = [
-                        {type: 'checkbox'}
-                        , {field: 'id', width: 80, title: 'ID', sort: true, align: 'center'}
-                        , {field: 'name', title: '规则名称', align: 'center'}
+                       {field: 'name', title: '规则名称', align: 'center'}
                         , {field: 'content_type', title: '回复类型', align: 'center'}
                         , {field: 'content', title: '回复内容', align: 'center'}
                         , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
@@ -212,7 +206,7 @@
                 var id = obj.data.id;
                 var attr = obj.data.attr;
                 var name = obj.data.name;
-                layer.confirm('确认删除回复:'+name, function(index){
+                layer.confirm('确认删除回复:'+'<span style="color: red">'+name+'</span>', function(index){
                     like.ajax({
                         url:'{:url("WechatReply/del")}',
                         data:{id:id},

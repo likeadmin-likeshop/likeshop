@@ -204,7 +204,7 @@
 
                         <!--会员信息-->
                         <script type="text/html" id="user">
-                            <img src="{{d.user.avatar}}" style="height:80px;width: 80px" class="image-show">
+                            <img src="{{d.user.base_avatar}}" style="height:80px;width: 80px" class="image-show">
                             <div class="layui-input-inline"  style="text-align: left">
                                 <p>会员编号:{{d.user.sn}}</p>
                                 <p>手机号码:{{d.user.mobile}}</p>
@@ -360,12 +360,12 @@
                 ]]
                 , page: true
                 , text: {none: '暂无数据！'}
-                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                , parseData: function (res) {
                     return {
                         "code": res.code,
                         "msg": res.msg,
-                        "count": res.data.count, //解析数据长度
-                        "data": res.data.lists, //解析数据列表
+                        "count": res.data.count,
+                        "data": res.data.lists,
                     };
                 }
             });
@@ -381,7 +381,7 @@
                     ,content: '{:url("order/detail")}?id='+id
                     ,area: ['90%', '90%']
                     ,yes: function(index, layero){
-                        table.reload('order-lists'); //再执行关闭
+                        table.reload('order-lists');
                     }
                 })
             }

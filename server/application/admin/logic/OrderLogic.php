@@ -108,7 +108,7 @@ class OrderLogic
             ->join('order_goods g', 'g.order_id = o.id')
             ->with(['order_goods', 'user'])
             ->where($where)
-            ->append(['delivery_address', 'pay_status_text', 'order_type_text'])
+            ->append(['delivery_address', 'pay_status_text', 'order_type_text', 'user.base_avatar'])
             ->page($get['page'], $get['limit'])
             ->order('o.id desc')
             ->group('o.id')
@@ -144,11 +144,11 @@ class OrderLogic
             ->append(['delivery_address', 'pay_status_text', 'order_status_text', 'pay_way_text', 'order_type_text'])
             ->find();
 
-        foreach ($result['order_goods'] as $order_goods) {
+        foreach ($result['order_goods'] as &$order_goods) {
             $info = Goods::getOneByItem($order_goods['item_id'], 'g.name,g.image,i.spec_value_str,i.image as spec_image');
             $order_goods['goods_name'] = $info['name'];
             $order_goods['spec_value'] = $info['spec_value_str'];
-            $order_goods['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
+            $order_goods['goods_image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }
         return $result;
     }
@@ -158,8 +158,7 @@ class OrderLogic
     {
         $order = Order::get(['del' => 0, 'id' => $order_id], ['order_goods']);
 
-        //todo 判断库存扣减方式(下单扣库存or支付扣库存)
-        OrderGoodsLogic::backStock($order['order_goods']);
+        OrderGoodsLogic::backStock($order['order_goods'], $order['pay_status']);
 
         $order->save(['order_status' => Order::STATUS_CLOSE, 'update_time' => time(), 'cancel_time' => time()]);
 
@@ -263,8 +262,8 @@ class OrderLogic
             'user_id'  => $order['user_id'],
             'scene'    => MessageScene_::DELIVER_GOODS_SUCCESS,
             'order_id' => $order_id,
-            'shipping_name' => $delivery_data['shipping_name'],
-            'invoice_no'    => $data['invoice_no'],
+            'shipping_name' => $delivery_data['shipping_name'] ?? '无需快递',
+            'invoice_no'    => $data['invoice_no'] ?? '',
             'delivery_time' => date('Y-m-d H:i:s')
         ]);
 

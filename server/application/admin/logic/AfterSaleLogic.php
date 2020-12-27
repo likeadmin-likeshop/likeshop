@@ -20,7 +20,7 @@ use app\common\logic\AccountLogLogic;
 use app\common\server\WeChatServer;
 use app\common\logic\AfterSaleLogLogic;
 use app\common\logic\PaymentLogic;
-use app\common\model\{AccountLog, AfterSale, AfterSaleLog, Client_, Goods, MessageScene_, Order, OrderGoods, Pay};
+use app\common\model\{AccountLog, AfterSale, AfterSaleLog, Goods, MessageScene_, Order, OrderGoods, Pay};
 use think\Db;
 use think\Exception;
 use think\facade\Env;
@@ -100,8 +100,9 @@ class AfterSaleLogic
             ->where($where)
             ->page($get['page'], $get['limit'])
             ->order('a.id desc')
+            ->append(['user.base_avatar', 'order_goods.base_image'])
             ->group('a.id')
-            ->select()->toArray();
+            ->select();
 
         $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
 
@@ -138,7 +139,6 @@ class AfterSaleLogic
         $result['order']['pay_way'] = Pay::getPayWay($result['order']['pay_way']);
         $result['order']['order_status'] = Order::getOrderStatus($result['order']['order_status']);
         $result['create_time'] = date('Y-m-d H:i:s', $result['create_time']);
-
 
         $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
 

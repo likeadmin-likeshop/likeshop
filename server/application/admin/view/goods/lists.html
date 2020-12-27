@@ -94,7 +94,7 @@
                         </script>
                         <script type="text/html" id="goods-operation">
                             {{# if(d.type == 0 || d.type == 1 || d.type == 2 || d.type == 3){ }}
-                              <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="detail">编辑</a>
+                              <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
                                 {{# if(d.status == 1){ }}
                                     <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status">下架</a>
                                 {{# }else{ }}
@@ -251,7 +251,7 @@
                 var field_value = -1;
                 if(obj.data.status == -1){
                     field_value = 0;
-                    tips = '确定放回仓库：'+name;
+                    tips = '确定放回仓库：'+'<span style="color: red">'+name+'</span>';
                 }
                 layer.confirm(tips, function(index){
                     var fields = 'status';

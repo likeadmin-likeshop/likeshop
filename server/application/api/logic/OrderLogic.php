@@ -11,14 +11,20 @@
 // | 访问手册：http://doc.likemarket.net
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-// | Author: LikeShopTeam
+// | Author: LikeShopTeam-段誉
 // +----------------------------------------------------------------------
 
 namespace app\api\logic;
 
 use app\api\model\{Coupon, Order, User};
 use app\common\server\WeChatServer;
-use app\common\logic\{AccountLogLogic, LogicBase, OrderGoodsLogic, OrderLogLogic, PaymentLogic, PayNotifyLogic};
+use app\common\logic\{AccountLogLogic,
+    IntegralLogic,
+    LogicBase,
+    OrderGoodsLogic,
+    OrderLogLogic,
+    PaymentLogic,
+    PayNotifyLogic};
 use app\common\model\{AccountLog,
     Client_,
     DistributionOrder,
@@ -88,6 +94,7 @@ class OrderLogic extends LogicBase
 
             //用户地址
             $user_address = UserAddressLogic::getOrderUserAddress($post, $user_id);
+
             //运费
             $total_shipping_price = FreightLogic::calculateFreight($goods_lists, $user_address);
 
@@ -368,8 +375,7 @@ class OrderLogic extends LogicBase
 
             $order_id = Db::name('order')->insertGetId($order_data);
 
-            $goods_data = [];
-            $cart_items = [];
+            $goods_data = $cart_items = [];
 
             foreach ($goods_lists as $k1 => $good) {
                 //商品验证
@@ -402,6 +408,16 @@ class OrderLogic extends LogicBase
             Db::name('order_goods')->insertAll($goods_data);
 
             self::addOrderAfter($order_id, $user_id, $type, $cart_items, $data);
+            //短信通知
+            Hook::listen('sms_send', [
+                'key'       => 'DDTJTZ',
+                'mobile'    => $order_data['mobile'],
+                'params'    => [
+                    'nickname'      => $user->mobile,
+                    'order_sn'      => $order_data['order_sn'],
+                    'order_money'   => $order_data['order_amount']
+                ],
+            ]);
 
             //支付方式为余额支付,扣除余额,更新订单状态,支付状态
             if ($data['pay_way'] == Pay::BALANCE_PAY || $data['order_amount'] == 0){
@@ -425,18 +441,8 @@ class OrderLogic extends LogicBase
         //下单时扣减商品库存
         $deduct_type = ConfigServer::get('trading','deduct_type', '', 1);
         if ($deduct_type == 1) {
-            //扣除库存,增加销量
             OrderGoodsLogic::decStock($goods_data);
         }
-
-        //3,增加订单日志
-        OrderLogLogic::record(
-            OrderLog::TYPE_USER,
-            OrderLog::USER_ADD_ORDER,
-            $order_id,
-            $user_id,
-            OrderLog::USER_ADD_ORDER
-        );
 
         //删除购物车商品
         if ($type == 'cart') {
@@ -449,35 +455,22 @@ class OrderLogic extends LogicBase
 
         //是否有使用积分抵扣金额
         if ($data['user_use_integral'] > 0){
-            //扣减用户积分
-            $user = User::get($user_id);
-            $user->user_integral = ['dec', $data['user_use_integral']];
-            $user->save();
-
-            AccountLogLogic::AccountRecord(
-                $user_id,
-                $data['user_use_integral'],
-                2,
-                AccountLog::order_deduction_integral,
-                '',
-                $order_id,
-                ''
-            );
+            IntegralLogic::useIntegralByOrder($user_id,$order_id, $data['user_use_integral']);
         }
 
-        //有使用优惠券时更新coupon_list表
+        //有使用优惠券时更新coupon_list
         if ($data['coupon_id'] > 0){
-            $update_coupon = [
-                'status' => 1,
-                'order_id' => $order_id,
-                'use_time' => time(),
-                'update_time' => time(),
-            ];
-
-            Db::name('coupon_list')
-                ->where('id',$data['coupon_id'])
-                ->update($update_coupon);
+            \app\common\logic\CouponLogic::useCouponByOrder($order_id, $data['coupon_id']);
         }
+
+        //增加订单日志
+        OrderLogLogic::record(
+            OrderLog::TYPE_USER,
+            OrderLog::USER_ADD_ORDER,
+            $order_id,
+            $user_id,
+            OrderLog::USER_ADD_ORDER
+        );
     }
 
 
@@ -607,10 +600,7 @@ class OrderLogic extends LogicBase
         Db::startTrans();
         try {
             //下单扣库存的话(deduct_type=1),回退库存,支付后扣库存的话(deduct_type=0),判断订单是否支付才去回退库存
-            $deduct_type = ConfigServer::get('trading', 'deduct_type', 1);
-            if ($deduct_type == 1 || $order['pay_status'] == Pay::ISPAID) {
-                OrderGoodsLogic::backStock($order['orderGoods']);
-            }
+            OrderGoodsLogic::backStock($order['orderGoods'], $order['pay_status']);
 
             //已支付的订单,取消,退款
             if ($order['pay_status'] == Pay::ISPAID) {
@@ -631,23 +621,7 @@ class OrderLogic extends LogicBase
 
             $order->save(['order_status' => CommonOrder::STATUS_CLOSE, 'update_time' => time(), 'cancel_time' => time()]);
 
-            OrderLogLogic::record(
-                OrderLog::TYPE_USER,
-                OrderLog::USER_CANCEL_ORDER,
-                $order_id,
-                $user_id,
-                OrderLog::USER_CANCEL_ORDER
-            );
-
-            //订单取消后更新分销订单为已失效状态
-            Db::name('distribution_order_goods d')
-                ->join('order_goods og', 'og.id = d.order_goods_id')
-                ->join('order o', 'o.id = og.order_id')
-                ->where('o.id', $order_id)
-                ->update([
-                    'd.status' => DistributionOrder::STATUS_ERROR,
-                    'd.update_time' => time(),
-                ]);
+            self::cancelAfter($order_id, $user_id);
 
             Db::commit();
             Hook::listen('wx_message_send', [
@@ -666,6 +640,40 @@ class OrderLogic extends LogicBase
             return self::dataError($e->getMessage());
         }
     }
+
+
+    //取消订单后
+    public static function cancelAfter($order_id, $user_id)
+    {
+        $order = Order::get($order_id);
+
+        OrderLogLogic::record(
+            OrderLog::TYPE_USER,
+            OrderLog::USER_CANCEL_ORDER,
+            $order_id,
+            $user_id,
+            OrderLog::USER_CANCEL_ORDER
+        );
+
+        //订单取消后更新分销订单为已失效状态
+        Db::name('distribution_order_goods d')
+            ->join('order_goods og', 'og.id = d.order_goods_id')
+            ->join('order o', 'o.id = og.order_id')
+            ->where('o.id', $order_id)
+            ->update([
+                'd.status' => DistributionOrder::STATUS_ERROR,
+                'd.update_time' => time(),
+            ]);
+
+        if ($order['coupon_list_id'] > 0){
+            \app\common\logic\CouponLogic::rollBackCouponByOrder($order['coupon_list_id']);
+        }
+
+        if ($order['use_integral'] > 0){
+            IntegralLogic::rollbackIntegralByOrder($user_id, $order_id, $order['use_integral']);
+        }
+    }
+
 
     //删除订单
     public static function del($order_id, $user_id)
@@ -888,7 +896,15 @@ class OrderLogic extends LogicBase
             $user = \app\common\model\User::get($order['user_id']);
             //余额支付,回退余额
             $user->user_money = ['inc', $order['order_amount']];
-            AccountLogLogic::AccountRecord($order['user_id'], $order['order_amount'], 1, AccountLog::cancel_order_refund);
+            AccountLogLogic::AccountRecord(
+                $order['user_id'],
+                $order['order_amount'],
+                1,
+                AccountLog::cancel_order_refund,
+                '',
+                $order['id'],
+                $order['order_sn']
+            );
             $user->save();
             return true;
         }
@@ -960,6 +976,7 @@ class OrderLogic extends LogicBase
 
         //下单奖励开关;0-关闭;1-开启;
         $order_award_integral = ConfigServer::get('marketing', 'order_award_integral', 0);
+
         if ($order_award_integral == 0 || $check){
             return;
         }

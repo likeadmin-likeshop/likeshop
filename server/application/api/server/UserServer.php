@@ -65,7 +65,7 @@ class UserServer
             $data = [
                 'nickname' => $nickname,
                 'sn'       => create_user_sn(),
-                'avatar' => $avatar,
+                'avatar' => '/'.$avatar,
                 'create_time' => $time,
                 'distribution_code' => generate_invite_code(),//分销邀请码
             ];
@@ -129,6 +129,7 @@ class UserServer
         $user_info = [];
         $time = time();
         try {
+
             switch ($client) {
                 case Client_::mnp:
                     $openid = $response['openId'];
@@ -147,7 +148,6 @@ class UserServer
             }
 
             Db::startTrans();
-
 
             //ios,android
             if (in_array($client, [Client_::ios, Client_::android])) {
@@ -173,16 +173,15 @@ class UserServer
             }
 
             $user_info = Db::name('user u')
+                ->field(['u.nickname', 'u.avatar', 'u.level', 'u.id', 'au.unionid'])
                 ->join('user_auth au', 'u.id=au.user_id')
                 ->where(['au.openid' => $openid])
-                ->field(['u.nickname', 'u.avatar', 'u.level', 'u.id', 'au.unionid'])
                 ->find();
-
 
             //无头像需要更新头像
             if (empty($user_info['avatar'])) {
                 $file_name = md5($openid . $time) . '.jpeg';
-                $data['avatar'] = download_file($avatar_url, 'uploads/user/avatar/', $file_name);
+                $data['avatar'] = '/'.download_file($avatar_url, 'uploads/user/avatar/', $file_name);
                 $data['update_time'] = $time;
                 $data['nickname'] = $nickname;
                 Db::name('user')
@@ -192,6 +191,7 @@ class UserServer
 
             //之前无unionid需要更新
             if (empty($user_info['unionid']) && isset($unionid)) {
+                $data = [];
                 $data['unionid'] = $unionid;
                 $data['update_time'] = $time;
                 Db::name('user_auth')
@@ -203,7 +203,7 @@ class UserServer
                 ->where(['id' => $user_info['id']])
                 ->field(['id', 'nickname', 'avatar', 'level', 'disable'])
                 ->find();
-            $user_info['avatar'] = UrlServer::getFileUrl($user_info['avatar']);
+
             if (empty($user_info['avatar'])) {
                 $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image', ''));
             } else {

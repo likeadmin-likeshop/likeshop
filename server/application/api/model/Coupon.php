@@ -32,7 +32,7 @@ class Coupon extends Model
     {
         $result = Db::name('coupon c')
             ->join('coupon_list cl', 'c.id = cl.coupon_id')
-            ->where(['cl.id ' => $coupon_id, 'c.del' => 0, 'cl.del' => 0, 'c.status' => 1, 'cl.status' => 0])
+            ->where(['cl.id ' => $coupon_id, 'c.del' => 0, 'cl.del' => 0, 'cl.status' => 0])
             ->field('c.*')
             ->find();
 

@@ -66,7 +66,7 @@
 
                     {if condition =" $item.region neq 'all' "}
                     <td  style="text-align: center">
-                        <button class='layui-btn layui-btn-sm layui-btn-warm' type='button' onclick='editArea("{$k}")'>
+                        <button class='layui-btn layui-btn-sm layui-btn-normal' type='button' onclick='editArea("{$k}")'>
                             <i class="layui-icon layui-icon-edit"></i>
                         </button>
                         <button class='layui-btn layui-btn-sm layui-btn-danger' type='button' onclick='delArea("{$k}")'>
@@ -86,7 +86,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"></label>
         <div class="layui-input-inline">
-            <button type="button" id="btn-area" class="layui-btn layui-btn-normal layuiadmin-btn-select_area">
+            <button type="button" id="btn-area" class="layui-btn layui-btn-sm layui-btn-normal layuiadmin-btn-select_area">
                 添加运费规则
             </button>
         </div>
@@ -171,7 +171,7 @@
             "<td><input type='text' name='continue_unit["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
             "<td><input type='text' name='continue_money["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
             "<td style='text-align:center'>" +
-            "<button class='layui-btn layui-btn-sm layui-btn-warm' type='button' onclick='editArea(" + v + ")'>" +
+            "<button class='layui-btn layui-btn-sm layui-btn-normal' type='button' onclick='editArea(" + v + ")'>" +
             "<i class='layui-icon layui-icon-edit'></i>" +
             "</button>" +
             "<button class='layui-btn layui-btn-sm layui-btn-danger' type='button' onclick='delArea(" + v + ")'>" +

@@ -26,7 +26,7 @@ class Goods extends ApiBase{
     public function getGoodsList(){
         $get = $this->request->get();
         $goods_list = GoodsLogic::getGoodsList($this->user_id, $get, $this->page_no, $this->page_size);
-        return $this->success('获取成功',$goods_list);
+        $this->success('获取成功',$goods_list);
 
     }
 
@@ -39,9 +39,9 @@ class Goods extends ApiBase{
         $id = $this->request->get('id');
         $goods = GoodsLogic::getGoodsDetail($this->user_id,$id);
         if($goods){
-            return $this->success('获取成功',$goods);
+            $this->success('获取成功',$goods);
         }
-        return $this->error('商品不存在',[]);
+        $this->error('商品不存在',[]);
     }
 
     /**
@@ -50,7 +50,7 @@ class Goods extends ApiBase{
      */
     public function getBestList()  {
         $goods_list = GoodsLogic::getBestList($this->page_no, $this->page_size);
-        return $this->success('获取成功', $goods_list);
+        $this->success('获取成功', $goods_list);
 
     }
     /**
@@ -59,7 +59,7 @@ class Goods extends ApiBase{
      */
     public function getHostList(){
         $goods_list = GoodsLogic::getHostList($this->page_no, $this->page_size);
-        return $this->success('获取成功', $goods_list);
+        $this->success('获取成功', $goods_list);
     }
 
 
@@ -70,6 +70,18 @@ class Goods extends ApiBase{
     public function getSearchPage(){
         $limit = $this->request->get('limit ',10);
         $list = GoodsLogic::getSearchPage($this->user_id,$limit);
-        return $this->success('',$list);
+        $this->success('',$list);
+    }
+    /**
+     * note 清空搜索记录
+     * create_time 2020/12/18 10:26
+     */
+    public function clearSearch(){
+        $result = GoodsLogic::clearSearch($this->user_id);
+        if($result){
+            $this->success('清理成功','');
+        }
+        $this->error('清理失败','');
+
     }
 }

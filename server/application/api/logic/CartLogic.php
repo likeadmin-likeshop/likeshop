@@ -75,7 +75,7 @@ class CartLogic
         Hook::listen('footprint', [
             'type'     => Footprint::add_cart,
             'user_id'  => $user_id,
-            'goods_id' => $goods['goods_id']
+            'foreign_id' => $goods['goods_id'] //商品ID
         ]);
 
         return true;
@@ -189,8 +189,8 @@ class CartLogic
     {
         $num = Db::name('cart')
             ->where('user_id', $user_id)
-            ->count();
-        return ['num' => $num];
+            ->sum('goods_num');
+        return ['num' => $num ?? 0];
     }
 
 }

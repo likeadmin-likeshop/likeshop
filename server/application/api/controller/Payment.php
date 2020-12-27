@@ -16,9 +16,11 @@
 
 namespace app\api\controller;
 
+use alipay\aop\AopClient;
 use app\api\logic\OrderLogic;
 use app\common\model\MessageScene_;
 use app\api\model\{Order};
+use app\common\server\AliPayServer;
 use app\common\server\WeChatServer;
 use app\common\logic\{PaymentLogic, PayNotifyLogic};
 use app\common\model\Pay;
@@ -29,7 +31,7 @@ use think\facade\Hook;
 class Payment extends ApiBase
 {
 
-    public $like_not_need_login = ['notify'];
+    public $like_not_need_login = ['notify', 'aliNotify'];
 
 
     public function prepay()
@@ -58,8 +60,11 @@ class Payment extends ApiBase
             return PaymentLogic::unifiedOrder($post['from'], $order, $post['order_source']);
         }
 
-        $this->error('订单状态未知', ['order_id' => $order['id']]);
+        if ($order['pay_way'] == Pay::ALI_PAY){
+            return PaymentLogic::appAlipay($post['from'], $order, $post['order_source']);
+        }
 
+        $this->error('订单状态未知', ['order_id' => $order['id']]);
     }
 
     public function notify()
@@ -105,4 +110,21 @@ class Payment extends ApiBase
         });
         $response->send();
     }
+
+
+    //支付宝回调
+    public function aliNotify()
+    {
+        $aop = new AopClient();
+        $config = AliPayServer::getAliConfig();
+        $aop->alipayrsaPublicKey = $config['alipayrsaPublicKey'];
+
+        $flag = $aop->rsaCheckV1($_POST, NULL, "RSA");
+        cache('alipay', json_encode($flag, true));
+        if($flag){
+            $order_no = $flag['out_trade_no'];
+        }
+        echo 'success';
+    }
+
 }

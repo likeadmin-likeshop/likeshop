@@ -92,7 +92,7 @@ class FileServer extends ServerBase
             $data = [
                 'name' => $file->getInfo('name'),
                 'type' => File::type_image,
-                'uri' => $save_dir . '/' . $info->getSaveName(),
+                'uri' => '/'.  $save_dir . '/' . $info->getSaveName(),
                 'create_time' => time(),
                 'user_id' => $user_id,
             ];

@@ -18,6 +18,7 @@ namespace app\admin\logic;
 
 
 use app\admin\model\AdPosition;
+use app\common\model\Ad;
 use think\Db;
 use think\Exception;
 
@@ -63,7 +64,7 @@ class AdPositionLogic
 
 
         foreach ($ad_position_list as $item) {
-
+            $item['client_name'] =  Ad::getAdTypeDesc($item['client']);
             if ($item['attr'] == 1) {
                 $item['attr_show'] = '系统默认';
 

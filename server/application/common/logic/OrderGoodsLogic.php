@@ -18,6 +18,8 @@ namespace app\common\logic;
 
 
 use app\api\logic\SeckillLogic;
+use app\common\model\Pay;
+use app\common\server\ConfigServer;
 use think\Db;
 
 /**
@@ -28,14 +30,20 @@ use think\Db;
 class OrderGoodsLogic
 {
     //返回订单库存,销量
-    public static function backStock($order_goods)
+    public static function backStock($order_goods, $pay_status)
     {
+        $deduct_type = ConfigServer::get('trading', 'deduct_type', 1);
+        //支付后扣减
+        if ($deduct_type == 0 && $pay_status == Pay::UNPAID) {
+            return;
+        }
+
         foreach ($order_goods as $good) {
             //回退库存,回退规格库存,减少商品销量
             Db::name('goods')
                 ->where('id', $good['goods_id'])
                 ->update([
-                    'sales_sum' => Db::raw("sales_sum-" . $good['goods_num']),
+//                    'sales_sum' => Db::raw("sales_sum-" . $good['goods_num']),
                     'stock' => Db::raw('stock+' . $good['goods_num'])
                 ]);
 

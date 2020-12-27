@@ -19,24 +19,27 @@ use think\Db;
 use think\Model;
 
 class Goods extends Model{
+    //商品图片
     public function getImageAttr($value,$data){
         if($value){
             return UrlServer::getFileUrl($value);
         }
         return $value;
     }
+    //商品详情
     public function getContentAttr($value,$data){
         $preg = '/(<img .*?src=")[^https|^http](.*?)(".*?>)/is';
         $local_url = UrlServer::getFileUrl().'/';
         return  preg_replace($preg, "\${1}$local_url\${2}\${3}",$value);
     }
-
+    //商品库存
     public function getStockAttr($value,$data){
        if($data['is_show_stock']){
             return $value;
        }
        return true;
     }
+    //商品轮播图
     public function GoodsImage(){
         return $this->hasMany('GoodsImage','goods_id','id')->field('goods_id,uri');
     }
@@ -54,21 +57,34 @@ class Goods extends Model{
 
     public function GoodsSpec()
     {
-        $spec = $this->Spec->toarray();
-        $spec_value = $this->GoodsSpecValue->toarray();
+        $spec = $this->Spec->toArray();
+        $spec_value = $this->GoodsSpecValue;
         $spec = array_column($spec,null,'id');
+        $goods_item = $this->getAttr('goods_item');
 
+        //将商品价格替换成商品规格价
+        $this->setAttr('price',$goods_item[0]['price']);
+        $this->setAttr('market_price',$goods_item[0]['market_price']);
+
+        //拼接规格
         foreach ($spec_value as $item){
             if(isset($spec[$item['spec_id']])){
                 $spec[$item['spec_id']]['spec_value'][]= $item;
             }
         }
-        return array_values($spec);
+        $this->setAttr('goods_spec',array_values($spec));
+        //规格图片为空则替换商品主图
+        foreach ($goods_item as $item_key => $item_value){
+            if(empty($item_value['image'])){
+                $goods_item[$item_key]['image'] = $this->getAttr('image');
+            }
+        }
+        $this->setAttr('goods_item',$goods_item);
     }
 
     public function Like(){
         $goods = new self();
-        return $goods->where(['del'=>0,'is_like'=>1,'status'=>1])->field('id,name,image,min_price as price,market_price')->select();
+        $this->setAttr('like', $goods->where(['del'=>0,'is_like'=>1,'status'=>1])->field('id,name,image,min_price as price,market_price')->select());
     }
 
 

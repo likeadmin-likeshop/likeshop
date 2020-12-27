@@ -23,9 +23,9 @@ class Ad extends Model{
 
     public static function getAdTypeDesc($from){
         $desc = [
-            self::H5    => 'H5商场',
+            self::H5    => 'H5商城',
             self::MNP   => '微信小程序',
-            self::APP   => 'app',
+            self::APP   => 'APP商城',
         ];
         if($from === true){
             return $desc;

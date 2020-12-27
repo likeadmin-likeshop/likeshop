@@ -69,7 +69,7 @@ class User extends ApiBase{
     public function changeMobile()
     {
         $data = $this->request->post();
-        $data['message_key'] = 'YZMDL';
+        $data['message_key'] = 'BGSJHM';
         $data['user_id'] = $this->user_id;
         $check = $this->validate($data, 'app\api\validate\ChangeMobile.change');
         if (true !== $check) {

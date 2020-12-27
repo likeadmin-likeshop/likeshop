@@ -106,11 +106,12 @@ class AdminLogic
         $salt = substr(md5($time . $post['name']), 0, 4);//随机4位密码盐
         $password = create_password($post['password'], $salt);//生成密码
         $data = [
-            'name' => $post['name'],
-            'account' => $post['account'],
+            'name'     => $post['name'],
+            'root'     => 0,
+            'account'  => $post['account'],
             'password' => $password,
-            'salt' => $salt,
-            'role_id' => $post['role_id'],
+            'salt'     => $salt,
+            'role_id'  => $post['role_id'],
             'create_time' => $time,
             'disable' => $post['disable']
         ];

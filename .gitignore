@@ -1,8 +1,9 @@
 /.idea
 /.vscode
+/server/config/install.lock
 
-
-
+/sever/uploads/images
+/sever/uploads/user
 /server/vendor
 /server/thinkphp
 /server/.env

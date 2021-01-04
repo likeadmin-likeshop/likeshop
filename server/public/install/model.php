@@ -442,9 +442,10 @@ class installModel
     public function createTable($version, $post)
     {
         $dbFile = $this->getInstallRoot() . '/db/like.sql';
-        file_put_contents($dbFile, $this->initAccount($post), FILE_APPEND);
+        //file_put_contents($dbFile, $this->initAccount($post), FILE_APPEND);
         $content = str_replace(";\r\n", ";\n", file_get_contents($dbFile));
         $tables = explode(";\n", $content);
+        $tables[] = $this->initAccount($post);
         $installTime = microtime(true) * 10000;
 
         foreach ($tables as $table) {

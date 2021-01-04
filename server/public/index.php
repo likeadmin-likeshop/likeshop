@@ -12,6 +12,11 @@
 // [ 应用入口文件 ]
 namespace think;
 
+if(!file_exists(__DIR__.'/../thinkphp') || !file_exists(__DIR__.'/../vendor')){
+    echo '当前未安装php依赖，请参考文档安装：<a target="_blank" href="http://doc.likemarket.net/likeshop_develop_v2_x/2086345">http://doc.likemarket.net/likeshop_develop_v2_x/2086345</a>';
+    exit;
+}
+
 // 加载基础文件
 require __DIR__ . '/../thinkphp/base.php';
 

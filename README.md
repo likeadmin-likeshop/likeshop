@@ -5,43 +5,55 @@
 </p> 
 
 
+<div align="center">
 
+[![star](https://gitee.com/likemarket/likeshopv2/badge/star.svg?theme=dark)](https://www.likemarket.net)
+[![fork](https://gitee.com/likemarket/likeshopv2/badge/fork.svg?theme=gray)](https://www.likemarket.net)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-8892BF.svg)](https://www.likemarket.net)
+[![License](https://img.shields.io/badge/license-Apache2.0-success.svg)](https://www.likemarket.net)
 
-[![PHP Version](https://img.shields.io/badge/down-100.6MB-0677B8.svg)](http://www.likemarket.net/)
-[![PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-8892BF.svg)](http://www.php.net/)
-[![License](https://img.shields.io/badge/license-Apache2.0-success.svg)](https://packagist.org/packages/topthink/framework)
+</div>
+<p align="center">    
+    如果项目对您起到一定的帮助，点右上角 "Star" 支持一下，干一杯，谢谢！ 
+</p>
 
-[![star](https://gitee.com/likemarket/likeshopv2/badge/star.svg?theme=dark)](https://gitee.com/likemarket/likeshopv2/stargazers)
-[![fork](https://gitee.com/likemarket/likeshopv2/badge/fork.svg?theme=gray)](https://gitee.com/likemarket/likeshopv2/members)
+### ⚽ chapter one 《欢迎朋友》
+> 我们始终追求：让商城开发更简单，安全稳定的落地，降低99%的项目成本甚至0成本。真诚欢迎朋友们使用并且前往知识社区提问、反馈及宝贵建议：https://home.likemarket.net/
 
-[![Fork me on Gitee](https://gitee.com/likemarket/likeshopv2/widgets/widget_3.svg)](https://gitee.com/likemarket/likeshopv2)
+### 🏀 chapter two 《自我介绍》
 
-您的支持是好象团队前进的动力！点星星，请你喝🍺🍺🍺
+> LikeShop——100%开源免费商用电商系统。五年磨一剑，砥砺前行，乘风破浪，V2全新发布！
+>
+> LikeShop包含PC、H5、小程序、安卓APP、苹果APP全终端数据打通。三级分销，秒杀，拼团，砍价，优惠券，签到，积分等丰富的营销模块。
+>
+> LikeShop依托新零售社交营销场景，全渠道将会员分销系统与社交电商系统深度融合，助力企业将公域流量转为私域流量，帮助企业完善商业闭环降低营销成本。
+>
+> LikeShop免费提供运营手册，开发文档，接口文档，让商城开发更简单，让电商创业不受制于系统成本。
 
-## 简介
-LikeShop——100%开源免费商用电商系统。五年磨一剑，砥砺前行，乘风破浪，LikeShop电商系统V2全新发布！
+### 🏓 chapter three 《谁合适用》
 
-LikeShopV2，包含H5、小程序、独立安卓APP、苹果APP，三级分销，秒杀，拼团，砍价，优惠券，签到，积分，全终端数据打通。100%开源，免费商用，依托新零售社交营销场景，全渠道将会员分销系统与社交电商系统深度融合，助力企业将公域流量转为私域流量，帮助企业完善商业闭环，降低营销成本。
+- 电商公司：需要用到电商系统的场景，一键部署搭建私有流量交易闭环，免费商用，0成本【真的可去界面版权】。
+- 软件公司：电商项目二次开发的场景，100%开源，放心的做改动，免费商用，0成本【真的可去界面版权】。
+- 个人开发者：学习如何用ThinkPHP、Vue、React Native、MySQL、websocket等”前沿技术“开发企业级电商项目，以及无忧无虑0成本接私活【好吧，这可能是主要目的】。
+- 学生：纸上得来终觉浅，绝知此事要躬行，看了再多不如下载一套代码改一改，玩一玩。
+- 特殊收藏癖好者：也不知道暂时的用处，点个star，先收藏吧。
 
-LikeShop免费提供运营手册，开发文档，接口文档，让电商创业更简单，让电商开发更轻松。
+### ⚾ chapter four 《喔，团队》
 
+> 我们做了好多年电商项目了，终于决定把之前积累的各种轮子组装起来并且免费开源出去，给世界做一些小小小的贡献。
+>
+> LikeShop。Like有好像，喜欢的意思，与团队名称好象科技有一丝巧合的呼应。所以名字就是这样简单取的，不需要过分深思。
 
-
-## 故事
-我们将这套内部积累演化的电商系统取名为LikeShop。Like有好像，喜欢的意思，与团队名称好象科技有一丝巧合的呼应。具体故事详见：
-
-好象团队做什么，LikeShop如何而来。
-
-## 联系
+#### 可以这样联系我们
 <img src = "https://www.likemarket.net/images/lxwm.gif">
 <br/>
-<br/>官方网站：<a target="_blank" href="http://www.likemarket.net">http://www.likemarket.net</a>
-<br/>文档手册：<a target="_blank" href="http://doc.likemarket.net">http://doc.likemarket.net/</a>
-<br/>知识社区：<a  target="_blank" href="http://home.likemarket.net">http://home.likemarket.net/</a>
+<br/>官方网站：<a target="_blank" href="https://www.likemarket.net">https://www.likemarket.net</a>
+<br/>知识社区：<a  target="_blank" href="https://home.likemarket.net">https://home.likemarket.net/</a>
+<br/>文档手册：<a target="_blank" href="https://doc.likemarket.net">https://doc.likemarket.net/</a>
 
 qq技术群：371752229
 
-## 功能
+### 🏸 chapter five 《功能细节》
 LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如下：
 
     🍇 分销裂变
@@ -104,19 +116,17 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
     🥔 更多功能
     更多功能模块详询客服，我们始终走在创新的路上，做有特色的电商系统
 
-## 演示
+### 🎾 chapter six 《来演示吧》
 
-### 公众号和小程序
+#### 公众号和小程序
 <img src="https://www.likemarket.net/images/yszx.png" />
 
-### 管理后台
+#### 管理后台
 https://likeshop.likemarket.net/admin      
 <br/>账号：test  密码：123456
 
 
-
-
-## PC管理后台截图
+#### PC管理后台截图
 <img src="https://www.likemarket.net/images/index/index__houtai_01.png" />
 <img src="https://www.likemarket.net/images/index/index__houtai_02.png" />
 <img src="https://www.likemarket.net/images/index/index__houtai_03.png" />
@@ -124,15 +134,14 @@ https://likeshop.likemarket.net/admin
 <img src="https://www.likemarket.net/images/index/index__houtai_05.png" />
 <img src="https://www.likemarket.net/images/index/index__houtai_06.png" />
 
-## 小程序截图
+#### 小程序截图
+<div>
+
+<img src = "https://www.likemarket.net/images/mmpdemo.png" >
+
+</div>
 
 
-<img src = "https://www.likemarket.net/images/mmpdemo.png" align = left>
+### 🎮 chapter seven 《通用结尾》
 
-## 版权
-
-LikeShopV2开源版本支持免费商用！
-
-好象科技团队，版权所有。
-
-好象科技团队，拥有最终解释权。
+好象科技团队，版权所有。好象科技团队拥有最终解释权。

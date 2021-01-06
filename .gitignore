@@ -2,8 +2,11 @@
 /.vscode
 /server/config/install.lock
 
+/sever/runtime/cache
+/sever/runtime/log
+/sever/runtime/temp
 /sever/uploads/images
 /sever/uploads/user
-/server/vendor
-/server/thinkphp
+/sever/uploads/qr_code
+/sever/uploads/other
 /server/.env

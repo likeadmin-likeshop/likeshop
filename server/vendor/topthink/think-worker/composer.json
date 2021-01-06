@@ -1,0 +1,33 @@
+{
+    "name": "topthink/think-worker",
+    "description": "workerman extend for thinkphp5.1",
+    "license": "Apache-2.0",
+    "type": "think-extend",
+    "authors": [
+        {
+            "name": "liu21st",
+            "email": "liu21st@gmail.com"
+        }
+    ],
+    "require": {
+        "workerman/workerman": "^3.3.0",
+        "workerman/gateway-worker": "^3.0.0",
+        "topthink/think-installer": "^2.0",
+        "topthink/framework": "^5.1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "think\\worker\\": "src"
+        },
+        "files": [
+            "src/command.php"
+        ]
+    },
+    "extra": {
+        "think-config": {
+            "worker": "src/config/worker.php",
+            "worker_server": "src/config/server.php",
+            "gateway_worker": "src/config/gateway.php"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "name": "endroid/qr-code",
+    "description": "Endroid QR Code",
+    "keywords": ["endroid", "qrcode", "qr", "code", "bundle", "php"],
+    "homepage": "https://github.com/endroid/qr-code",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeroen van den Enden",
+            "email": "info@endroid.nl"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-gd": "*",
+        "bacon/bacon-qr-code": "^2.0",
+        "khanamiryan/qrcode-detector-decoder": "^1.0.2",
+        "symfony/options-resolver": "^3.4||^4.4||^5.0",
+        "symfony/property-access": "^3.4||^4.4||^5.0",
+        "myclabs/php-enum": "^1.5"
+    },
+    "require-dev": {
+        "endroid/quality": "dev-master",
+        "setasign/fpdf": "^1.8"
+    },
+    "suggest": {
+        "roave/security-advisories": "Avoids installation of package versions with vulnerabilities",
+        "symfony/security-checker": "Checks your composer.lock for vulnerabilities",
+        "setasign/fpdf": "Required to use the FPDF writer."
+    },
+    "autoload": {
+        "psr-4": {
+            "Endroid\\QrCode\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Endroid\\QrCode\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
+    }
+}

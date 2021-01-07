@@ -23,53 +23,48 @@ namespace Zxing\Qrcode\Decoder;
  *
  * @author Sean Owen
  */
-class Mode
-{
-    public static $TERMINATOR;
-    public static $NUMERIC;
-    public static $ALPHANUMERIC;
-    public static $STRUCTURED_APPEND;
-    public static $BYTE;
-    public static $ECI;
-    public static $KANJI;
-    public static $FNC1_FIRST_POSITION;
-    public static $FNC1_SECOND_POSITION;
-    public static $HANZI;
+class Mode {
+    static  $TERMINATOR;
+    static  $NUMERIC;
+    static  $ALPHANUMERIC;
+    static  $STRUCTURED_APPEND;
+    static  $BYTE;
+    static  $ECI;
+    static  $KANJI;
+    static  $FNC1_FIRST_POSITION;
+    static  $FNC1_SECOND_POSITION;
+    static  $HANZI;
 
-    private $characterCountBitsForVersions;
-    private $bits;
 
-    public function __construct($characterCountBitsForVersions, $bits)
-    {
+    private  $characterCountBitsForVersions;
+    private  $bits;
+
+    function __construct($characterCountBitsForVersions, $bits) {
         $this->characterCountBitsForVersions = $characterCountBitsForVersions;
-        $this->bits                          = $bits;
+        $this->bits = $bits;
     }
-
-    public static function Init()
+    static function Init()
     {
 
 
-        self::$TERMINATOR           = new Mode([0, 0, 0], 0x00); // Not really a mode...
-        self::$NUMERIC              = new Mode([10, 12, 14], 0x01);
-        self::$ALPHANUMERIC         = new Mode([9, 11, 13], 0x02);
-        self::$STRUCTURED_APPEND    = new Mode([0, 0, 0], 0x03); // Not supported
-        self::$BYTE                 = new Mode([8, 16, 16], 0x04);
-        self::$ECI                  = new Mode([0, 0, 0], 0x07); // character counts don't apply
-        self::$KANJI                = new Mode([8, 10, 12], 0x08);
-        self::$FNC1_FIRST_POSITION  = new Mode([0, 0, 0], 0x05);
-        self::$FNC1_SECOND_POSITION = new Mode([0, 0, 0], 0x09);
+        self::$TERMINATOR = new Mode(array(0, 0, 0), 0x00); // Not really a mode...
+        self::$NUMERIC = new Mode(array(10, 12, 14), 0x01);
+        self::$ALPHANUMERIC = new Mode(array(9, 11, 13), 0x02);
+        self::$STRUCTURED_APPEND = new Mode(array(0, 0, 0), 0x03); // Not supported
+        self::$BYTE = new Mode(array(8, 16, 16), 0x04);
+        self::$ECI = new Mode(array(0, 0, 0), 0x07); // character counts don't apply
+        self::$KANJI = new Mode(array(8, 10, 12), 0x08);
+        self::$FNC1_FIRST_POSITION = new Mode(array(0, 0, 0), 0x05);
+        self::$FNC1_SECOND_POSITION  =new Mode(array(0, 0, 0), 0x09);
         /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
-        self::$HANZI = new Mode([8, 10, 12], 0x0D);
+        self::$HANZI = new Mode(array(8, 10, 12), 0x0D);
     }
-
     /**
      * @param bits four bits encoding a QR Code data mode
-     *
      * @return Mode encoded by these bits
-     * @throws InvalidArgumentException if bits do not correspond to a known mode
+     * @throws IllegalArgumentException if bits do not correspond to a known mode
      */
-    public static function forBits($bits)
-    {
+    public static function forBits($bits) {
         switch ($bits) {
             case 0x0:
                 return self::$TERMINATOR;
@@ -99,12 +94,10 @@ class Mode
 
     /**
      * @param version version in question
-     *
      * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
      *         count of characters that will follow encoded in this Mode
      */
-    public function getCharacterCountBits($version)
-    {
+    public function getCharacterCountBits($version) {
         $number = $version->getVersionNumber();
         $offset = 0;
         if ($number <= 9) {
@@ -114,15 +107,12 @@ class Mode
         } else {
             $offset = 2;
         }
-
         return $this->characterCountBitsForVersions[$offset];
     }
 
-    public function getBits()
-    {
+    public function getBits() {
         return $this->bits;
     }
 
 }
-
 Mode::Init();

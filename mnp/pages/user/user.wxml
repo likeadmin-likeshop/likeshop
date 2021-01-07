@@ -1,0 +1,130 @@
+<!-- pages/user/user.wxml -->
+<view class="user">
+    <view class="header">
+        <view class="header-line" style="height: 1px;"></view>
+        <mp-navigation-bar background="{{ navBg }}" color="{{ navC }}" back="{{false}}" animated="{{true}}"
+            title="个人中心" />
+        <view class="user-info row-between">
+            <button class="info row" hover-class="none">
+                <image class="avatar mr20"
+                    bind:tap="goLogin"
+                    src="{{$state.isLogin ? userInfo.avatar : '/images/my_portrait_empty.png'}}" />
+                <view class="white column" wx:if="{{$state.isLogin}}">
+                    <view class="name xxl">{{userInfo.nickname}}</view>
+                    <view class="invite-code-box row">
+                        <view class="xs white ml20 mr20">会员ID: {{userInfo.sn}}</view>
+                        <view class="xs normal copy-btn row-center ml5" catchtap="onCopy">复制</view>
+                    </view>
+                </view>
+                <view class="white" wx:else bind:tap="goLogin">
+                    <view style="font-size: 42rpx">点击登录</view>
+                    <view class="sm">登录体验更多功能</view>
+                </view>
+            </button>
+        </view>
+        <view class="member">
+            <navigator url="/pages/user_vip/user_vip" hover-class="none" class="member-con row-between"
+                style="color: #FFE0A1">
+                <view class="row">
+                    <image style="width: 42rpx;height: 42rpx" src="/images/icon_vip.png"></image>
+                    <view class="ml10">{{$state.isLogin ? userInfo.level : "登录查看会员权益"}}</view>
+                </view>
+                <view class="row">
+                    <view class="sm">{{userInfo.next_level_tips || '查看会员权益'}}</view>
+                    <van-icon name="arrow" />
+                </view>
+            </navigator>
+        </view>
+    </view>
+    <view class="my-assets bg-white">
+        <view class="title row lg">我的资产</view>
+        <view class="nav row">
+            <view class="column-center mb20 assets-item" bindtap="goPage" data-url="/pages/user_wallet/user_wallet">
+                <view class="xl primary">{{userInfo.user_money}}</view>
+                <view class="sm">余额</view>
+            </view>
+            <view class="column-center mb20 assets-item" bindtap="goPage" data-url="/pages/user_sign/user_sign">
+                <view class="xl primary">{{userInfo.user_integral}}</view>
+                <view class="sm">积分</view>
+            </view>
+            <view class="column-center mb20 assets-item" bindtap="goPage" data-url="/pages/user_coupon/user_coupon">
+                <view class="xl primary">{{userInfo.coupon}}</view>
+                <view class="sm">优惠券</view>
+            </view>
+        </view>
+    </view>
+    <view class="order-nav bg-white">
+        <view class="title row-between" data-url="/pages/user_order/user_order" bind:tap="goPage">
+            <view class="lg">我的订单</view>
+            <view class="muted sm row">
+                全部订单
+                <image class="icon-sm ml10" src="/images/arrow_right.png" />
+            </view>
+        </view>
+        <view class="nav row">
+            <view class="item column-center mb20" data-url="/pages/user_order/user_order?type=pay" bind:tap="goPage">
+                <view class="icon-contain">
+                    <view wx:if="{{userInfo.wait_pay}}" class="badge xs row-center bg-white">
+                        {{userInfo.wait_pay}}
+                    </view>
+                    <image class="nav-icon" src="/images/icon_my_payment.png" />
+                </view>
+                <view class="sm mt10">待付款</view>
+            </view>
+            <view class="item column-center mb20" data-url="/pages/user_order/user_order?type=delivery"
+                bindtap="goPage">
+                <view class="icon-contain">
+                    <view wx:if="{{userInfo.wait_delivery}}" class="badge xs row-center bg-white">
+                        {{userInfo.wait_delivery}}
+                    </view>
+                    <image class="nav-icon mb10" src="/images/icon_my_fahuo.png" />
+                </view>
+                <view class="sm">待发货</view>
+            </view>
+            <view class="item column-center mb20" data-url="/pages/user_order/user_order?type=delivery"
+                bind:tap="goPage">
+                <view class="icon-contain">
+                    <view wx:if="{{userInfo.wait_take}}" class="badge xs row-center bg-white">
+                        {{userInfo.wait_take}}
+                    </view>
+                    <image class="nav-icon" src="/images/icon_my_shouhuo.png" />
+                </view>
+                <view class="sm mt10">待收货</view>
+            </view>
+            <view class="item column-center mb20" data-url="/pages/goods_comment_list/goods_comment_list"
+                bind:tap="goPage">
+                <view class="icon-contain">
+                    <view wx:if="{{userInfo.wait_comment}}" class="badge xs row-center bg-white">
+                        {{userInfo.wait_comment}}
+                    </view>
+                    <image class="nav-icon" src="/images/icon_my_pingjia.png" />
+                </view>
+                <view class="sm mt10">商品评价</view>
+            </view>
+            <view class="item column-center mb20" data-url="/pages/post_sale/post_sale" bind:tap="goPage">
+                <view class="icon-contain">
+                    <view wx:if="{{userInfo.after_sale}}" class="badge xs row-center bg-white">
+                        {{userInfo.after_sale}}
+                    </view>
+                    <image class="nav-icon" src="/images/icon_my_shouhou.png" />
+                </view>
+                <view class="sm mt10">退款/售后</view>
+            </view>
+        </view>
+    </view>
+    <view class="server-nav bg-white">
+        <view>
+            <view class="title row-between">
+                <view class="lg">我的功能</view>
+            </view>
+        </view>
+        <view class="nav row wrap">
+            <button wx:for="{{myOptList}}" class="item column-center mb20" hover-class="none" open-type="{{item.link_type == 3 ?'contact' :'' }}"
+                data-item="{{item}}" bindtap="navigateTo" wx:key="index">
+                <image class="nav-server-icon" src="{{item.image}}"></image>
+                <view class="sm mt10">{{item.name}}</view>
+            </button>
+        </view>
+    </view>
+    <recommend></recommend>
+</view>

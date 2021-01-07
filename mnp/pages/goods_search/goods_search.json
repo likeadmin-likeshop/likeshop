@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "mp-navigation-bar": "/components/navigation-bar/navigation-bar",
+    "goods-list": "/components/goods-list/goods-list",
+    "trigonometry": "/components/trigonometry/trigonometry",
+    "loading-footer": "/components/loading-footer/loading-footer",
+    "van-search": "/components/weapp/search/index",
+    "van-sticky": "/components/weapp/sticky/index"
+  },
+  "navigationBarTitleText": ""
+}

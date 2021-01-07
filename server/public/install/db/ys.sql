@@ -1,17 +1,17 @@
 /*
- Navicat Premium Data Transfer
+ Navicat MySQL Data Transfer
 
- Source Server         : 正式意象
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 50729
- Source Host           : 47.106.20.131:3307
- Source Schema         : pro_likeshop
+ Source Host           : 127.0.0.1:3306
+ Source Schema         : yx_b2c
 
  Target Server Type    : MySQL
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 11/12/2020 10:55:45
+ Date: 07/01/2021 16:13:20
 */
 
 SET NAMES utf8mb4;
@@ -21,95 +21,54 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for yx_account_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_account_log`;
-CREATE TABLE `yx_account_log`  (
+CREATE TABLE `yx_account_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `log_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流水单号（20位）',
+  `log_sn` varchar(32) NOT NULL COMMENT '流水单号（20位）',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `source_type` smallint(5) UNSIGNED NOT NULL DEFAULT 100 COMMENT '来源类型',
-  `source_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '来源id',
-  `source_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '来源单号',
-  `change_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '变动总数',
-  `left_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '剩余总数',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '说明',
-  `extra` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '额外的字段说明',
-  `change_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1-增加；2-减少',
-  `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
+  `source_type` smallint(5) unsigned NOT NULL DEFAULT '100' COMMENT '来源类型',
+  `source_id` int(11) unsigned DEFAULT '0' COMMENT '来源id',
+  `source_sn` varchar(32) DEFAULT NULL COMMENT '来源单号',
+  `change_amount` decimal(10,2) DEFAULT '0.00' COMMENT '变动总数',
+  `left_amount` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '剩余总数',
+  `remark` varchar(255) DEFAULT '' COMMENT '说明',
+  `extra` varchar(255) DEFAULT '' COMMENT '额外的字段说明',
+  `change_type` tinyint(1) unsigned DEFAULT '0' COMMENT '1-增加；2-减少',
+  `create_time` int(10) unsigned NOT NULL COMMENT '变动时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员账户流水记录表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员账户流水记录表';
 
 -- ----------------------------
--- Table structure for yx_activity_area
+-- Records of yx_account_log
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_activity_area`;
-CREATE TABLE `yx_activity_area`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动名称',
-  `title` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动副标题',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动图片',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '上下架：1-是；0-否',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '活动区域表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_activity_area
--- ----------------------------
-INSERT INTO `yx_activity_area` VALUES (1, '热销榜单', '开学季必备', '/uploads/images/background/20201210/a3bf099101793a2e0bfe087b92e51403.png', 1, 1607587777, 1607588071, 0);
-INSERT INTO `yx_activity_area` VALUES (2, '品牌闪购', '享惊喜折扣', '/uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png', 1, 1607588059, NULL, 0);
-INSERT INTO `yx_activity_area` VALUES (3, '新品首发', '抢惊喜福利', '/uploads/images/background/20201210/4b06036c7e6c8f653a51fd94d4cb5bc5.png', 1, 1607588142, NULL, 0);
-
--- ----------------------------
--- Table structure for yx_activity_goods
--- ----------------------------
-DROP TABLE IF EXISTS `yx_activity_goods`;
-CREATE TABLE `yx_activity_goods`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `activity_id` int(1) NOT NULL COMMENT '活动id',
-  `goods_id` int(11) NOT NULL COMMENT '商品id',
-  `item_id` int(11) NOT NULL COMMENT '规格id',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '活动区域商品表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_activity_goods
--- ----------------------------
-INSERT INTO `yx_activity_goods` VALUES (1, 1, 1, 1, 1607588194, NULL, 0);
-INSERT INTO `yx_activity_goods` VALUES (2, 2, 9, 9, 1607588206, NULL, 0);
-INSERT INTO `yx_activity_goods` VALUES (3, 3, 10, 10, 1607588218, NULL, 0);
-INSERT INTO `yx_activity_goods` VALUES (4, 1, 8, 8, 1607588231, NULL, 0);
-INSERT INTO `yx_activity_goods` VALUES (5, 2, 3, 3, 1607588241, NULL, 0);
-INSERT INTO `yx_activity_goods` VALUES (6, 3, 7, 7, 1607588250, NULL, 0);
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_ad
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_ad`;
-CREATE TABLE `yx_ad`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '广告id',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
-  `pid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '广告位置ID',
-  `client` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '终端,1-H5,2-小程序,3-APP',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片地址',
-  `link_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '链接类型：0-为空；1-商场页面；2-商品页面；3-自定义类型',
-  `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '链接地址：ad_type为1时，保存商品页面路径id；ad_type为2时，保存商品id；ad_type为3时，保存自定义链接',
-  `status` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '广告状态：1-开启；0-关闭',
-  `start_time` int(10) NULL DEFAULT 0 COMMENT '投放时间',
-  `end_time` int(10) NULL DEFAULT 0 COMMENT '结束时间',
-  `sort` smallint(6) NULL DEFAULT 50 COMMENT '排序',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-  `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
+CREATE TABLE `yx_ad` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '广告id',
+  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '广告标题',
+  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '广告位置ID',
+  `client` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '终端,1-H5,2-小程序,3-APP',
+  `image` varchar(255) NOT NULL COMMENT '图片地址',
+  `link_type` tinyint(1) unsigned DEFAULT '0' COMMENT '链接类型：0-为空；1-商场页面；2-商品页面；3-自定义类型',
+  `link` varchar(255) DEFAULT '' COMMENT '链接地址：ad_type为1时，保存商品页面路径id；ad_type为2时，保存商品id；ad_type为3时，保存自定义链接',
+  `status` tinyint(1) unsigned DEFAULT NULL COMMENT '广告状态：1-开启；0-关闭',
+  `start_time` int(10) DEFAULT '0' COMMENT '投放时间',
+  `end_time` int(10) DEFAULT '0' COMMENT '结束时间',
+  `sort` smallint(6) DEFAULT '50' COMMENT '排序',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `del` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '广告表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='广告表';
 
 -- ----------------------------
 -- Records of yx_ad
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_ad` VALUES (1, '妥妥的', 1, 1, '/uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1, '0', 1, 0, 0, 50, 1605520417, 1607589473, 0);
 INSERT INTO `yx_ad` VALUES (2, '分销会员', 3, 3, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605521571, 1607589667, 0);
 INSERT INTO `yx_ad` VALUES (3, '广告广告', 2, 2, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605521876, 1607589488, 0);
@@ -126,29 +85,31 @@ INSERT INTO `yx_ad` VALUES (13, '智能', 16, 2, '/uploads/images/background/202
 INSERT INTO `yx_ad` VALUES (14, '秒杀广告位', 14, 1, '/uploads/images/background/20201210/a664cf34b0a5f5de424ab24701f41c5a.jpeg', 1, '0', 1, 0, 0, 50, 1605855781, 1607589445, 0);
 INSERT INTO `yx_ad` VALUES (15, '秒杀广告2', 14, 1, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605855818, 1607589423, 0);
 INSERT INTO `yx_ad` VALUES (16, '活动开启', 4, 1, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1606443246, 1607589404, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_ad_position
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_ad_position`;
-CREATE TABLE `yx_ad_position`  (
-  `id` int(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告位置名称',
+CREATE TABLE `yx_ad_position` (
+  `id` int(3) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '广告位置名称',
   `attr` tinyint(2) NOT NULL COMMENT '广告位属性,1-系统默认,0-自定义',
-  `client` tinyint(3) UNSIGNED NOT NULL COMMENT '终端,1-小程序,2-H5,3-APP',
-  `width` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议宽度',
-  `height` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议高度',
-  `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '广告描述',
-  `status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1上架,0下架',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-  `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
+  `client` tinyint(3) unsigned NOT NULL COMMENT '终端,1-小程序,2-H5,3-APP',
+  `width` smallint(5) unsigned DEFAULT '0' COMMENT '广告位建议宽度',
+  `height` smallint(5) unsigned DEFAULT '0' COMMENT '广告位建议高度',
+  `desc` varchar(255) DEFAULT '' COMMENT '广告描述',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '1上架,0下架',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  `del` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '广告位置表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='广告位置表';
 
 -- ----------------------------
 -- Records of yx_ad_position
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_ad_position` VALUES (1, '首页轮播广告', 1, 1, 300, 200, '描述', 1, 1583301143, 0, 0);
 INSERT INTO `yx_ad_position` VALUES (2, '首页轮播广告', 1, 2, 300, 200, '描述', 1, 1583301143, 0, 0);
 INSERT INTO `yx_ad_position` VALUES (3, '首页轮播广告', 1, 3, 300, 200, '描述', 1, 1583421712, 0, 0);
@@ -169,167 +130,163 @@ INSERT INTO `yx_ad_position` VALUES (17, '热销广告位', 0, 2, 300, 300, '', 
 INSERT INTO `yx_ad_position` VALUES (18, '秒杀广告位', 0, 3, 0, 0, '', 1, 1599634879, 0, 0);
 INSERT INTO `yx_ad_position` VALUES (19, '热销榜单', 0, 3, 0, 0, '', 1, 1600160518, 0, 0);
 INSERT INTO `yx_ad_position` VALUES (20, 'app启动页面', 1, 3, 300, 300, '', 1, 0, 0, 0);
-
--- ----------------------------
--- Table structure for yx_admin
--- ----------------------------
-DROP TABLE IF EXISTS `yx_admin`;
-CREATE TABLE `yx_admin`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `root` tinyint(1) NULL DEFAULT 1 COMMENT '0-非超级管理员；1-超级管理；',
-  `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '名称',
-  `type` tinyint(4) NULL DEFAULT 0 COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
-  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '账号',
-  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
-  `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-  `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '角色id',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-  `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-  `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-  `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `account`(`account`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台管理员表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_admin
--- ----------------------------
-INSERT INTO `yx_admin` VALUES (2, 1, '账号1', NULL, 'admin', '307eaa52fe4e5a45b32c119d96dc3251', 'GZYX', 0, 1111111, 1606718902, 1607590329, '58.62.167.117', 0, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_after_sale
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_after_sale`;
-CREATE TABLE `yx_after_sale`  (
+CREATE TABLE `yx_after_sale` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '退款单号',
+  `sn` varchar(20) DEFAULT '' COMMENT '退款单号',
   `user_id` int(10) NOT NULL COMMENT '用户id',
-  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-  `order_goods_id` int(10) NULL DEFAULT NULL COMMENT '订单商品关联表id',
-  `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
-  `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
-  `goods_num` int(10) NULL DEFAULT NULL COMMENT '商品数量',
-  `refund_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款原因',
-  `refund_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款说明',
-  `refund_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款图片',
-  `refund_type` tinyint(1) NULL DEFAULT NULL COMMENT '退款类型;0-仅退款;1-退款退货',
-  `refund_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
-  `express_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递公司名称',
-  `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递单号',
-  `express_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流备注说明',
-  `express_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流凭证',
-  `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
-  `status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-申请退款;1-商家拒绝;2-商品待退货;3-商家待收货;4-商家拒收货;5-等待退款;6-退款成功',
-  `audit_time` int(10) NULL DEFAULT NULL COMMENT '审核时间',
-  `admin_id` int(10) NULL DEFAULT NULL COMMENT '门店管理员id',
-  `admin_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '售后说明',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '撤销状态;0-正常;1-已撤销',
+  `order_id` int(10) DEFAULT NULL COMMENT '订单id',
+  `order_goods_id` int(10) DEFAULT NULL COMMENT '订单商品关联表id',
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
+  `item_id` int(10) DEFAULT '0' COMMENT '规格id',
+  `goods_num` int(10) DEFAULT NULL COMMENT '商品数量',
+  `refund_reason` varchar(255) DEFAULT NULL COMMENT '退款原因',
+  `refund_remark` varchar(255) DEFAULT NULL COMMENT '退款说明',
+  `refund_image` varchar(255) DEFAULT NULL COMMENT '退款图片',
+  `refund_type` tinyint(1) DEFAULT NULL COMMENT '退款类型;0-仅退款;1-退款退货',
+  `refund_price` decimal(10,2) DEFAULT NULL COMMENT '退款金额',
+  `express_name` varchar(255) DEFAULT NULL COMMENT '快递公司名称',
+  `invoice_no` varchar(255) DEFAULT NULL COMMENT '快递单号',
+  `express_remark` varchar(255) DEFAULT NULL COMMENT '物流备注说明',
+  `express_image` varchar(255) DEFAULT NULL COMMENT '物流凭证',
+  `confirm_take_time` int(10) DEFAULT NULL COMMENT '确认收货时间',
+  `status` tinyint(1) DEFAULT '0' COMMENT '售后状态;0-申请退款;1-商家拒绝;2-商品待退货;3-商家待收货;4-商家拒收货;5-等待退款;6-退款成功',
+  `audit_time` int(10) DEFAULT NULL COMMENT '审核时间',
+  `admin_id` int(10) DEFAULT NULL COMMENT '门店管理员id',
+  `admin_remark` varchar(255) DEFAULT NULL COMMENT '售后说明',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '撤销状态;0-正常;1-已撤销',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '售后表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='售后表';
+
+-- ----------------------------
+-- Records of yx_after_sale
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_after_sale_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_after_sale_log`;
-CREATE TABLE `yx_after_sale_log`  (
+CREATE TABLE `yx_after_sale_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
-  `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
-  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-  `after_sale_id` int(11) NULL DEFAULT NULL COMMENT '售后订单id',
-  `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+  `type` tinyint(1) DEFAULT '0' COMMENT '操作类型;0-会员;1-门店',
+  `channel` smallint(5) unsigned DEFAULT '0' COMMENT '渠道编号。变动方式。',
+  `order_id` int(10) DEFAULT NULL COMMENT '订单id',
+  `after_sale_id` int(11) DEFAULT NULL COMMENT '售后订单id',
+  `handle_id` int(10) DEFAULT NULL COMMENT '操作人id',
+  `content` varchar(255) DEFAULT NULL COMMENT '日志内容',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '售后日志表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='售后日志表';
+
+-- ----------------------------
+-- Records of yx_after_sale_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_article
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_article`;
-CREATE TABLE `yx_article`  (
+CREATE TABLE `yx_article` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
-  `cid` int(11) NULL DEFAULT NULL COMMENT '文章分类',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',
-  `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文字简介',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章图片',
-  `is_notice` tinyint(1) NULL DEFAULT 0 COMMENT '是否公告:1-是.0-否',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
-  `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
-  `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
+  `cid` int(11) DEFAULT NULL COMMENT '文章分类',
+  `title` varchar(255) DEFAULT NULL COMMENT '文章标题',
+  `synopsis` varchar(255) DEFAULT NULL COMMENT '文字简介',
+  `image` varchar(128) DEFAULT NULL COMMENT '文章图片',
+  `is_notice` tinyint(1) DEFAULT '0' COMMENT '是否公告:1-是.0-否',
+  `content` text COMMENT '文章内容',
+  `visit` int(11) DEFAULT '0' COMMENT '浏览人数',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是.0-否',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1;已删除',
+  `likes` int(11) DEFAULT '0' COMMENT '点赞数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_article
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_article` VALUES (1, 1, '电商商城管理规章制度', '电商商城管理规章制度', '/uploads/images/background/20201210/5b82112f4d294b11b80da87edd422772.jpg', 1, '<p style=\"text-align: justify;\"><span class=\"bjh-p\">今年，以直播带货为代表的“内容+电商”成为淘宝、京东等电商平台和以央视为代表的媒体共同探索的变现新渠道。</span></p><p style=\"text-align: justify;\"><span class=\"bjh-p\">作为产业门类齐全、产业规模庞大的新型主流媒体及综合文化产业集团，SMG如何利用广电平台多渠道流量矩阵创新全域营销玩法？</span></p><p style=\"text-align: justify;\"><span class=\"bjh-p\">一切都在11月27日B+商城举办的“没内容，不电商”发布会上揭晓。从7月初成立至今，B+商城以东方购物视频电商为基础，依托SMG既有的相关服务能力和体系，面向都市成熟人群和家庭需求，正在向“魔都”生活第一入口的方向迈进。它的成长体现了SMG内容和渠道打通、大屏和小屏联动所发挥的巨大效应。</span></p><div><span class=\"bjh-p\"><br></span></div>', 2, 10, 1, 1607568471, NULL, 0, 0);
 INSERT INTO `yx_article` VALUES (2, 1, '双12活动预告~~~', '双12活动预告~~~', '/uploads/images/background/20201210/a664cf34b0a5f5de424ab24701f41c5a.jpeg', 1, '<p>LikeShop商城定于2020-12-12日开启限量五折活动，不要错过哦！！！</p><p>届时会有大牌明星在线派送现金礼包！！！</p>', 1, 9, 1, 1607568882, NULL, 0, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_article_category
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_article_category`;
-CREATE TABLE `yx_article_category`  (
+CREATE TABLE `yx_article_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
-  `sort` tinyint(1) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
+  `name` varchar(128) DEFAULT NULL COMMENT '分类名称',
+  `sort` tinyint(1) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是;0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_article_category
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_article_category` VALUES (1, '商城公告', 0, 1, 1607568395, NULL, 0);
 INSERT INTO `yx_article_category` VALUES (2, '用户公告', 0, 1, 1607568405, NULL, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_cart
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_cart`;
-CREATE TABLE `yx_cart`  (
-  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '购物车表',
-  `user_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
-  `goods_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品id',
-  `goods_num` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '购买数量',
-  `item_id` int(11) NULL DEFAULT 0 COMMENT '规格ID',
-  `selected` tinyint(1) NULL DEFAULT 1 COMMENT '选中状态;1-选中;0-未选中',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
+CREATE TABLE `yx_cart` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '购物车表',
+  `user_id` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `goods_id` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `goods_num` smallint(5) unsigned DEFAULT '0' COMMENT '购买数量',
+  `item_id` int(11) DEFAULT '0' COMMENT '规格ID',
+  `selected` tinyint(1) DEFAULT '1' COMMENT '选中状态;1-选中;0-未选中',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE,
-  INDEX `goods_id`(`goods_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表' ROW_FORMAT = Dynamic;
+  KEY `user_id` (`user_id`) USING BTREE,
+  KEY `goods_id` (`goods_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='购物车表';
+
+-- ----------------------------
+-- Records of yx_cart
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_config
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_config`;
-CREATE TABLE `yx_config`  (
+CREATE TABLE `yx_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '值',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `type` varchar(24) DEFAULT NULL COMMENT '类型',
+  `name` varchar(32) NOT NULL COMMENT '名称',
+  `value` text COMMENT '值',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='配置表';
 
 -- ----------------------------
 -- Records of yx_config
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_config` VALUES (1, 'marketing', 'invited_award_integral', '10', NULL);
 INSERT INTO `yx_config` VALUES (2, 'marketing', 'order_award_integral', '20', NULL);
 INSERT INTO `yx_config` VALUES (3, 'marketing', 'register_award_integral_status', '1', NULL);
@@ -350,282 +307,302 @@ INSERT INTO `yx_config` VALUES (17, 'mnp', 'token', '', NULL);
 INSERT INTO `yx_config` VALUES (18, 'mnp', 'encoding_ses_key', '', NULL);
 INSERT INTO `yx_config` VALUES (19, 'mnp', 'encryption_type', '', NULL);
 INSERT INTO `yx_config` VALUES (20, 'mnp', 'data_type', '', NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_coupon
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_coupon`;
-CREATE TABLE `yx_coupon`  (
+CREATE TABLE `yx_coupon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '优惠券名称',
+  `name` varchar(32) NOT NULL COMMENT '优惠券名称',
   `send_time_start` int(10) NOT NULL COMMENT '发放开始时间',
   `send_time_end` int(10) NOT NULL COMMENT '发放结束时间',
-  `money` decimal(10, 2) NOT NULL COMMENT '优惠券面额(元)',
-  `condition_type` tinyint(1) NULL DEFAULT NULL COMMENT '使用条件类型：1-无门槛；2-订单满足金额',
-  `condition_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '使用条件类型为2时：该字段为订单满足金额可使用',
-  `send_total_type` tinyint(1) NULL DEFAULT NULL COMMENT '发送总量类型：1-不限制；2-限制张数',
-  `send_total` int(10) NULL DEFAULT NULL COMMENT '发送总量类型为2时：该字段为限制的张数',
-  `use_time_type` tinyint(1) NULL DEFAULT NULL COMMENT '用券时间类型：1-固定时间；2-领券当天起；3-领券次日起',
-  `use_time_start` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用开始时间；',
-  `use_time_end` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用结束时间；',
-  `use_time` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为2、3时：该字段为多少天内可用；',
-  `get_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取类型：1-直接领取；2-平台赠送；3-活动赠送',
-  `get_num_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取次数类型：1-不限制领取传次数；2-限制次数；3-每天限制数量',
-  `get_num` int(10) NULL DEFAULT NULL COMMENT '领取次数类型为：2、3时：该字段为领取限制的数量',
-  `use_goods_type` tinyint(1) NULL DEFAULT NULL COMMENT '适用商品类型:1-全部商品；2-指定商品；3-指定商品不可用',
-  `status` tinyint(255) NOT NULL DEFAULT 0 COMMENT '优惠券状态：1-进行中；0-关闭',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
+  `money` decimal(10,2) NOT NULL COMMENT '优惠券面额(元)',
+  `condition_type` tinyint(1) DEFAULT NULL COMMENT '使用条件类型：1-无门槛；2-订单满足金额',
+  `condition_money` decimal(10,2) DEFAULT NULL COMMENT '使用条件类型为2时：该字段为订单满足金额可使用',
+  `send_total_type` tinyint(1) DEFAULT NULL COMMENT '发送总量类型：1-不限制；2-限制张数',
+  `send_total` int(10) DEFAULT NULL COMMENT '发送总量类型为2时：该字段为限制的张数',
+  `use_time_type` tinyint(1) DEFAULT NULL COMMENT '用券时间类型：1-固定时间；2-领券当天起；3-领券次日起',
+  `use_time_start` int(10) DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用开始时间；',
+  `use_time_end` int(10) DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用结束时间；',
+  `use_time` int(10) DEFAULT NULL COMMENT '用券时间类型为2、3时：该字段为多少天内可用；',
+  `get_type` tinyint(1) DEFAULT NULL COMMENT '领取类型：1-直接领取；2-平台赠送；3-活动赠送',
+  `get_num_type` tinyint(1) DEFAULT NULL COMMENT '领取次数类型：1-不限制领取传次数；2-限制次数；3-每天限制数量',
+  `get_num` int(10) DEFAULT NULL COMMENT '领取次数类型为：2、3时：该字段为领取限制的数量',
+  `use_goods_type` tinyint(1) DEFAULT NULL COMMENT '适用商品类型:1-全部商品；2-指定商品；3-指定商品不可用',
+  `status` tinyint(255) NOT NULL DEFAULT '0' COMMENT '优惠券状态：1-进行中；0-关闭',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除；1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优惠券表';
 
 -- ----------------------------
 -- Records of yx_coupon
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_coupon` VALUES (1, '满500可用', 1607588307, 1639065600, 500.00, 2, 500.00, 1, 0, 1, 1607588325, 1639065600, 0, 1, 1, 0, 1, 1, 1607588370, 1607588370, 0);
 INSERT INTO `yx_coupon` VALUES (2, '满50可用', 1607588378, 1623945600, 5.00, 2, 50.00, 2, 2000, 2, 0, 0, 10, 1, 2, 10, 1, 1, 1607588445, 1607588445, 0);
 INSERT INTO `yx_coupon` VALUES (3, '新人专享', 1607588457, 1671783661, 10.00, 2, 10.00, 1, 0, 2, 0, 0, 10, 1, 2, 1, 1, 1, 1607588498, 1607588498, 0);
 INSERT INTO `yx_coupon` VALUES (4, '大牌商品专享', 1607588529, 1619107200, 500.00, 2, 5000.00, 2, 600, 2, 0, 0, 10, 1, 3, 0, 2, 1, 1607588599, 1607588599, 0);
 INSERT INTO `yx_coupon` VALUES (5, '后台赠送', 1607588613, 1640361600, 500.00, 1, 0.00, 1, 0, 2, 0, 0, 10, 2, 1, 0, 1, 1, 1607588676, 1607588676, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_coupon_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_coupon_goods`;
-CREATE TABLE `yx_coupon_goods`  (
+CREATE TABLE `yx_coupon_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
   `goods_id` int(10) NOT NULL COMMENT '商品id',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券商品管理表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优惠券商品管理表';
 
 -- ----------------------------
 -- Records of yx_coupon_goods
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_coupon_goods` VALUES (1, 4, 9, 1607588599);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_coupon_list
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_coupon_list`;
-CREATE TABLE `yx_coupon_list`  (
+CREATE TABLE `yx_coupon_list` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) NOT NULL COMMENT '用户id',
   `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
-  `coupon_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '优惠券券码',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态；0-未使用;1-已使用',
-  `order_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '优惠券使用的订单id',
-  `use_time` int(10) NULL DEFAULT NULL COMMENT '使用时间',
+  `coupon_code` varchar(32) DEFAULT NULL COMMENT '优惠券券码',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态；0-未使用;1-已使用',
+  `order_id` text COMMENT '优惠券使用的订单id',
+  `use_time` int(10) DEFAULT NULL COMMENT '使用时间',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除;1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户优惠券' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户优惠券';
+
+-- ----------------------------
+-- Records of yx_coupon_list
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_delivery
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_delivery`;
-CREATE TABLE `yx_delivery`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '发货单ID',
-  `order_id` int(11) UNSIGNED NOT NULL COMMENT '订单ID',
-  `order_sn` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '订单编号',
-  `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
-  `admin_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '管理员ID',
-  `consignee` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '收货人',
-  `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '联系手机',
-  `province` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '省ID',
-  `city` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '市ID',
-  `district` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '区ID',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
-  `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态;0-未发货;1-已发货',
-  `shipping_id` int(10) NULL DEFAULT NULL COMMENT '物流公司id',
-  `shipping_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递名称',
-  `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '物流单号',
-  `send_type` tinyint(1) NULL DEFAULT 0 COMMENT '配送方式:1-快递配送;2-无需快递',
+CREATE TABLE `yx_delivery` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '发货单ID',
+  `order_id` int(11) unsigned NOT NULL COMMENT '订单ID',
+  `order_sn` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
+  `admin_id` int(11) unsigned DEFAULT '0' COMMENT '管理员ID',
+  `consignee` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人',
+  `mobile` varchar(20) DEFAULT '' COMMENT '联系手机',
+  `province` int(11) unsigned DEFAULT NULL COMMENT '省ID',
+  `city` int(11) unsigned DEFAULT NULL COMMENT '市ID',
+  `district` int(11) unsigned DEFAULT NULL COMMENT '区ID',
+  `address` varchar(255) DEFAULT '' COMMENT '地址',
+  `shipping_status` tinyint(1) unsigned DEFAULT '0' COMMENT '发货状态;0-未发货;1-已发货',
+  `shipping_id` int(10) DEFAULT NULL COMMENT '物流公司id',
+  `shipping_name` varchar(64) DEFAULT NULL COMMENT '快递名称',
+  `invoice_no` varchar(255) DEFAULT '' COMMENT '物流单号',
+  `send_type` tinyint(1) DEFAULT '0' COMMENT '配送方式:1-快递配送;2-无需快递',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `order_id`(`order_id`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '发货单表' ROW_FORMAT = Dynamic;
+  KEY `order_id` (`order_id`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='发货单表';
+
+-- ----------------------------
+-- Records of yx_delivery
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_auth`;
-CREATE TABLE `yx_dev_auth`  (
+CREATE TABLE `yx_dev_auth` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-菜单；2-权限',
-  `system` tinyint(1) NULL DEFAULT 0 COMMENT '是否为系统级菜单',
-  `pid` int(4) NOT NULL DEFAULT 0 COMMENT '分级id',
-  `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `uri` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '后台uri',
-  `sort` int(4) NULL DEFAULT 50 COMMENT '排序',
-  `disable` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-启用；1-禁用；',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
+  `type` tinyint(1) DEFAULT '1' COMMENT '1-菜单；2-权限',
+  `system` tinyint(1) DEFAULT '0' COMMENT '是否为系统级菜单',
+  `pid` int(4) NOT NULL DEFAULT '0' COMMENT '分级id',
+  `name` varchar(12) NOT NULL COMMENT '名称',
+  `icon` varchar(32) DEFAULT NULL COMMENT '图标',
+  `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '后台uri',
+  `sort` int(4) DEFAULT '50' COMMENT '排序',
+  `disable` tinyint(1) DEFAULT '0' COMMENT '状态：0-启用；1-禁用；',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `del` tinyint(10) NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '机构id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 118 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of yx_dev_auth
 -- ----------------------------
-INSERT INTO `yx_dev_auth` VALUES (1, 1, 0, 18, '权限管理', 'layui-icon-auz', '', 50, 0, 1597593692, 1597636523, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (2, 1, 0, 1, '菜单权限', 'layui-icon-align-left', 'auth/lists', 50, 0, 1597593762, 1597636524, 0, 0);
+BEGIN;
+INSERT INTO `yx_dev_auth` VALUES (1, 1, 0, 18, '权限管理', '', '', 95, 0, 1597593692, 1608102122, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (2, 1, 0, 1, '菜单权限', '', 'auth/lists', 50, 0, 1597593762, 1597636524, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (3, 2, 0, 2, '添加菜单', '', 'auth/add', 50, 0, 1597593846, 1597636533, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (4, 2, 0, 2, '编辑菜单', '', 'auth/edit', 50, 0, 1597593909, 1597636533, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (5, 2, 0, 2, '删除', '', 'auth/del', 50, 0, 1597594342, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (6, 1, 0, 1, '管理员', 'layui-icon-username', 'admin/lists', 51, 0, 1597594526, 1597636523, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (6, 1, 0, 1, '管理员', '', 'admin/lists', 51, 0, 1597594526, 1597636523, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (7, 2, 0, 6, '添加管理员', '', 'admin/add', 50, 0, 1597594556, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (8, 2, 0, 6, '编辑管理员', '', 'admin/edit', 50, 0, 1597594595, 1597594610, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (9, 2, 0, 6, '删除管理员', '', 'admin/del', 50, 0, 1597594639, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (10, 1, 0, 1, '角色', 'layui-icon-friends', 'role/lists', 50, 0, 1597596178, 1597635420, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (10, 1, 0, 1, '角色', '', 'role/lists', 50, 0, 1597596178, 1597635420, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (12, 2, 0, 6, '管理员列表', '', 'admin/lists', 51, 0, 1597631850, 1597636529, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (13, 2, 0, 2, '菜单列表', '', 'menu/lists', 51, 0, 1597632028, 1597632039, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (14, 2, 0, 10, '角色列表', '', 'role/lists', 50, 0, 1597632555, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (15, 2, 0, 10, '添加角色', '', 'role/add', 50, 0, 1597632944, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (16, 2, 0, 10, '编辑角色', '', 'role/edit', 50, 0, 1597632999, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (17, 1, 0, 18, '基础设置', 'layui-icon-set-sm', '', 50, 0, 1597633276, 1597636706, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (18, 1, 0, 0, '设置', 'layui-icon-set', '', 9, 0, 1597633295, 1606449769, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (19, 1, 0, 0, '个人中心', 'layui-icon-friends', 'my/password', 110, 0, 1597633558, 1606448962, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (17, 1, 0, 18, '基础设置', '', '', 99, 0, 1597633276, 1608102098, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (18, 1, 0, 0, '设置', 'layui-icon-set', '', 79, 0, 1597633295, 1608102027, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (19, 1, 0, 0, '个人', 'layui-icon-friends', 'my/password', 50, 0, 1597633558, 1608102250, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (20, 1, 0, 19, '修改密码', '', 'my/password', 100, 0, 1597633582, 1606442853, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (21, 1, 0, 17, '网站设置', 'layui-icon-website', 'basic/website', 50, 0, 1597658026, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (22, 1, 0, 17, '版权备案', 'layui-icon-ok-circle', 'basic/copyright', 50, 0, 1597658101, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (21, 1, 0, 17, '网站设置', '', 'basic/website', 99, 0, 1597658026, 1608467331, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (22, 1, 0, 17, '版权备案', '', 'basic/copyright', 97, 0, 1597658101, 1608467338, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (23, 2, 0, 21, '查看网站设置', '', 'basic/copyright', 51, 0, 1597658275, 1597663235, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (24, 2, 0, 21, '修改网站设置', '', 'basic/setWebsite', 50, 0, 1597663008, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (25, 2, 0, 22, '查看版权备案', '', 'basic/copyright', 51, 0, 1597663176, 1597663223, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (26, 2, 0, 22, '修改版权备案', '', 'basic/setCopyright', 50, 0, 1597663205, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (27, 2, 0, 2, '设置菜单权限状态', '', 'auth/status', 50, 0, 1597663631, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (28, 2, 0, 20, '修改密码', '', 'my/password', 50, 0, 1597668756, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (29, 1, 0, 0, '商品', 'layui-icon-cart-simple', '', 90, 0, 1602555146, 1606449000, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (30, 1, 0, 29, '品牌管理', 'layui-icon-rate', 'goodsBrand/lists', 50, 0, 1602555190, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (31, 1, 0, 29, '分类管理', 'layui-icon-app', 'goodsCategory/lists', 50, 0, 1602555225, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (32, 1, 0, 29, '供货商', '', 'supplier/lists', 50, 0, 1602559943, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (33, 1, 0, 0, '会员', 'layui-icon-username', '', 80, 0, 1602570345, 1606449026, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (34, 1, 0, 33, '会员管理', 'layui-icon-user', 'user/lists', 50, 0, 1602570372, 1605522382, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (35, 1, 0, 33, '会员等级', 'layui-icon-diamond', 'userLevel/lists', 50, 0, 1602570437, 1605522366, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 100, 0, 1602576261, 1606448979, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (38, 1, 0, 37, '订单列表', 'layui-icon-cart-simple', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (42, 1, 0, 18, '配送设置', '', '', 50, 0, 1602665749, 1602666084, 1, 0);
+INSERT INTO `yx_dev_auth` VALUES (29, 1, 0, 0, '商品', 'layui-icon-cart-simple', '', 100, 0, 1602555146, 1608721714, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (30, 1, 0, 29, '品牌管理', '', 'goodsBrand/lists', 95, 0, 1602555190, 1608256821, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (31, 1, 0, 29, '分类管理', '', 'goodsCategory/lists', 97, 0, 1602555225, 1608102166, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (32, 1, 0, 29, '供货商', '', 'supplier/lists', 93, 0, 1602559943, 1608102224, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (33, 1, 0, 0, '会员', 'layui-icon-username', '', 95, 0, 1602570345, 1608101864, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (34, 1, 0, 33, '会员管理', '', 'user/lists', 99, 0, 1602570372, 1608262169, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (35, 1, 0, 33, '会员等级', '', 'userLevel/lists', 97, 0, 1602570437, 1608262182, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (36, 1, 0, 33, '会员分组', '', 'userGroup/lists', 95, 0, 1602570466, 1608262193, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 97, 0, 1602576261, 1608101850, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (38, 1, 0, 37, '订单列表', '', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (39, 1, 0, 0, '营销', 'layui-icon-component', '', 93, 0, 1602579530, 1608101924, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (40, 1, 0, 39, '会员签到', '', 'signDaily/lists', 50, 0, 1602647177, 1606963046, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, 1608102230, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (43, 1, 0, 56, '配送管理', '', 'freight/lists', 50, 0, 1602666008, 1603525668, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (44, 1, 0, 29, '商品管理', 'layui-icon-cart-simple', 'goods/lists', 50, 0, 1603159926, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (45, 1, 0, 37, '售后退款', 'layui-icon-rmb', 'afterSale/lists', 50, 0, 1603160367, 1605522422, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (46, 1, 0, 0, '系统维护', 'layui-icon-util', '', 8, 0, 1603176542, 1606449787, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (47, 1, 0, 46, '系统日志', '', '', 49, 0, 1603176576, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (48, 1, 0, 39, '优惠券', 'layui-icon-theme', 'coupon/lists', 50, 0, 1603338116, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (49, 1, 0, 0, '微信', 'layui-icon-login-wechat', '', 30, 0, 1603417725, 1606449600, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (50, 1, 0, 49, '微信公众号', 'layui-icon-senior', '', 50, 0, 1603417748, 1603417842, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (51, 1, 0, 50, '公众号设置', '', 'oa/setoa', 50, 0, 1603417764, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (52, 1, 0, 50, '菜单管理', '', 'oa/oamenu', 50, 0, 1603417789, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (53, 1, 0, 49, '微信小程序', 'layui-icon-cellphone', '', 50, 0, 1603417800, 1603417852, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (54, 1, 0, 53, '小程序设置', '', 'mnp/setmnp', 50, 0, 1603417818, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (55, 1, 0, 39, '会员充值', 'layui-icon-add-circle', 'Recharge/lists', 50, 0, 1603511580, 1606963083, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (56, 1, 0, 18, '商城设置', '', '', 50, 0, 1603524640, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (57, 1, 0, 56, '交易设置', '', 'shopSetting/trading', 50, 0, 1603524686, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (44, 1, 0, 29, '商品管理', '', 'goods/lists', 99, 0, 1603159926, 1608102157, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (45, 1, 0, 37, '售后退款', '', 'afterSale/lists', 50, 0, 1603160367, 1605522422, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (46, 1, 0, 0, '系统', 'layui-icon-util', '', 77, 0, 1603176542, 1608102244, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (47, 1, 0, 46, '系统日志', '', 'log/lists', 49, 0, 1603176576, 1608344566, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (48, 1, 0, 39, '优惠券', '', 'coupon/lists', 50, 0, 1603338116, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (49, 1, 0, 0, '微信', 'layui-icon-login-wechat', '', 85, 0, 1603417725, 1608101989, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (50, 1, 0, 49, '微信公众号', '', '', 99, 0, 1603417748, 1608193993, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (51, 1, 0, 50, '公众号设置', '', 'oa/setoa', 99, 0, 1603417764, 1608193146, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (52, 1, 0, 50, '菜单管理', '', 'oa/oamenu', 97, 0, 1603417789, 1608193168, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (53, 1, 0, 49, '微信小程序', '', '', 97, 0, 1603417800, 1608194002, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (54, 1, 0, 53, '小程序设置', '', 'mnp/setmnp', 99, 0, 1603417818, 1608193191, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (56, 1, 0, 18, '商城设置', '', '', 97, 0, 1603524640, 1608102112, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (57, 1, 0, 56, '交易设置', '', 'shopSetting/trading', 99, 0, 1603524686, 1608467395, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (58, 1, 0, 56, '政策协议', '', 'shopSetting/policy', 50, 0, 1603524707, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (59, 1, 0, 17, '支付设置', '', 'payConfig/lists', 50, 0, 1603779401, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (59, 1, 0, 17, '支付设置', '', 'payConfig/lists', 95, 0, 1603779401, 1608467354, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (60, 2, 0, 59, '支付设置列表', '', 'payConfig/lists', 50, 0, 1603779630, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (61, 2, 0, 59, '编辑余额支付', '', 'payConfig/editBalance', 50, 0, 1603779649, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (62, 2, 0, 59, '编辑公众号', '', 'payConfig/editOfficial', 50, 0, 1603779679, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (63, 2, 0, 59, '编辑小程序', '', 'payConfig/editApplet', 50, 0, 1603779768, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (64, 2, 0, 59, '编辑支付宝', '', 'payConfig/editAlipay', 50, 0, 1603779802, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (65, 1, 0, 0, '内容', 'layui-icon-read', '', 60, 0, 1605172316, 1606449077, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (66, 1, 0, 65, '广告', 'layui-icon-note', '', 50, 0, 1605172328, 1605522463, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (65, 1, 0, 0, '内容', 'layui-icon-read', '', 89, 0, 1605172316, 1608101965, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (66, 1, 0, 65, '广告', '', '', 50, 0, 1605172328, 1605522463, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (67, 1, 0, 66, '广告管理', '', 'ad/lists', 50, 0, 1605172346, 1605172376, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (68, 1, 0, 66, '广告位管理', '', 'adPosition/lists', 50, 0, 1605172428, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (69, 1, 0, 65, '帮助', 'layui-icon-survey', '', 50, 0, 1605177392, 1605522474, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (69, 1, 0, 65, '帮助', '', '', 50, 0, 1605177392, 1605522474, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (70, 1, 0, 69, '帮助管理', '', 'help/lists', 50, 0, 1605177427, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (71, 1, 0, 69, '帮助分类', '', 'helpCategory/lists', 50, 0, 1605177450, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (72, 1, 0, 39, '限时秒杀', 'layui-icon-release', 'seckill/lists', 50, 0, 1605238672, 1605238700, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (73, 1, 0, 65, '文章', 'layui-icon-read', '', 50, 0, 1605250150, 1605522487, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (73, 1, 0, 65, '文章', '', '', 50, 0, 1605250150, 1605522487, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (74, 1, 0, 73, '文章管理', '', 'article/lists', 50, 0, 1605250172, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (75, 1, 0, 73, '文章分类', '', 'articleCategory/lists', 50, 0, 1605250217, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (76, 1, 0, 72, '限时秒杀', 'layui-icon-release', 'seckill/lists', 50, 0, 1605257233, NULL, 1, 0);
-INSERT INTO `yx_dev_auth` VALUES (77, 1, 0, 56, '物流管理', 'layui-icon-find-fill', 'express/lists', 50, 0, 1605582713, 1605582751, 1, 0);
-INSERT INTO `yx_dev_auth` VALUES (78, 1, 0, 17, '消息管理', 'layui-icon-notice', 'message/config', 50, 0, 1605602063, NULL, 1, 0);
-INSERT INTO `yx_dev_auth` VALUES (79, 1, 0, 17, '消息管理', 'layui-icon-notice', 'message/config', 50, 0, 1605602385, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (80, 1, 0, 17, '短信管理', 'layui-icon-auz', 'sms/lists', 50, 0, 1605603890, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 20, 0, 1605664275, 1606449617, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (83, 1, 0, 0, '财务', 'layui-icon-rmb', '', 50, 0, 1605671949, NULL, 1, 0);
-INSERT INTO `yx_dev_auth` VALUES (84, 1, 0, 81, '资金记录', 'layui-icon-survey', 'accountLog/capitalList', 50, 0, 1605693585, 1605865218, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (87, 1, 0, 81, '积分记录', 'layui-icon-templeate-1', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (89, 1, 0, 39, '专区活动', 'layui-icon-code-circle', 'Activity/Lists', 50, 0, 1606182362, 1606200704, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (79, 1, 0, 17, '消息管理', '', 'message/config', 93, 0, 1605602385, 1608467368, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (80, 1, 0, 17, '短信管理', '', 'sms/lists', 91, 0, 1605603890, 1608467380, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (87, 1, 0, 81, '积分记录', '', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (90, 1, 0, 56, '会员提现', '', 'shopSetting/withdraw', 50, 0, 1606357500, 1606361192, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 50, 0, 1606449120, 1606792217, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (93, 1, 0, 92, 'H5装修', 'layui-icon-cellphone', '', 100, 0, 1606449177, 1606792239, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (96, 1, 0, 93, '首页导航装修', 'layui-icon-username', 'MenuDecorate/h5IndexList', 100, 0, 1606449403, 1606891059, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (97, 1, 0, 93, '个人中心装修', 'layui-icon-cellphone', 'MenuDecorate/h5CenterList', 90, 0, 1606449425, 1606891046, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (98, 1, 0, 94, '首页导航装修', 'layui-icon-username', 'MenuDecorate/mnpIndexList', 100, 0, 1606449451, 1606890579, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (99, 1, 0, 94, '个人中心装修', 'layui-icon-cellphone', 'MenuDecorate/mnpCenterList', 90, 0, 1606449483, 1606890602, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (100, 1, 0, 95, '首页导航装修', 'layui-icon-username', 'MenuDecorate/appIndexList', 100, 0, 1606449508, 1606890658, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (101, 1, 0, 95, '个人中心装修', 'layui-icon-cellphone', 'MenuDecorate/appCenterList', 90, 0, 1606449534, 1606890646, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (102, 1, 0, 0, '数据', 'layui-icon-website', '', 10, 0, 1606449677, 1606449891, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (103, 1, 0, 102, '会员', '', '', 100, 0, 1606449697, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (104, 1, 0, 102, '商品', '', '', 90, 0, 1606449713, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (105, 1, 0, 102, '交易', '', '', 80, 0, 1606449733, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (106, 1, 0, 102, '访问', '', '', 70, 0, 1606449750, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (108, 1, 0, 18, '系统任务', 'layui-icon-rate-solid', 'crontab/lists', 50, 0, 1606816642, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (93, 1, 0, 92, 'H5装修', '', '', 100, 0, 1606449177, 1606792239, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (94, 1, 0, 92, '小程序装修', '', '', 90, 0, 1606449275, 1606792694, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (95, 1, 0, 92, 'APP装修', '', '', 80, 0, 1606449294, 1606792704, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (96, 1, 0, 93, '首页导航装修', '', 'MenuDecorate/h5IndexList', 100, 0, 1606449403, 1606891059, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (97, 1, 0, 93, '个人中心装修', '', 'MenuDecorate/h5CenterList', 90, 0, 1606449425, 1606891046, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (98, 1, 0, 94, '首页导航装修', '', 'MenuDecorate/mnpIndexList', 100, 0, 1606449451, 1606890579, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (99, 1, 0, 94, '个人中心装修', '', 'MenuDecorate/mnpCenterList', 90, 0, 1606449483, 1606890602, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (100, 1, 0, 95, '首页导航装修', '', 'MenuDecorate/appIndexList', 100, 0, 1606449508, 1606890658, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (101, 1, 0, 95, '个人中心装修', '', 'MenuDecorate/appCenterList', 90, 0, 1606449534, 1606890646, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (102, 1, 0, 0, '数据', 'layui-icon-website', '', 81, 0, 1606449677, 1608102018, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (103, 1, 0, 102, '会员', '', 'statistics/member', 100, 0, 1606449697, 1608719516, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (104, 1, 0, 102, '商品', '', 'statistics/goods', 90, 0, 1606449713, 1608719471, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (105, 1, 0, 102, '交易', '', 'statistics/deal', 80, 0, 1606449733, 1608719534, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (108, 1, 0, 18, '系统任务', '', 'crontab/lists', 50, 0, 1606816642, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (109, 1, 0, 17, 'APP设置', '', 'basic/app', 50, 0, 1606819436, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (110, 1, 0, 33, '会员权益', '', 'UserPrivilege/lists', 50, 0, 1606891617, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (111, 1, 0, 50, '模板消息管理', '', 'oaMessage/lists', 50, 0, 1606960631, 1606964829, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (112, 1, 0, 39, '邀请会员', 'layui-icon-radio', 'MarketingConfig/invitedAwardConfig', 50, 0, 1606962893, 1606962961, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (113, 1, 0, 39, '下单奖励', 'layui-icon-radio', 'MarketingConfig/orderAwardConfig', 50, 0, 1606962912, 1606962981, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (114, 1, 0, 39, '注册奖励', 'layui-icon-radio', 'MarketingConfig/registerAwardConfig', 50, 0, 1606962930, 1606963010, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (115, 1, 0, 53, '订阅消息管理', '', 'mnpMessage/lists', 50, 0, 1607066949, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (116, 1, 0, 50, '回复管理', 'layui-icon-reply-fill', 'WeChatReply/lists', 50, 0, 1607139107, 1607151465, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (117, 1, 0, 39, '积分抵扣', 'layui-icon-rate-half', 'marketingConfig/integralDeduction', 50, 0, 1607149356, 1607149390, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (116, 1, 0, 50, '回复管理', '', 'WechatReply/lists', 95, 0, 1607139107, 1608193178, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (120, 1, 0, 49, ' 微信开放平台', '', '', 50, 0, 1608200356, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (121, 1, 0, 120, '微信开放平台设置', '', 'Op/config', 50, 0, 1608200416, 1608256807, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (122, 1, 0, 81, '财务概况', '', 'finance/lists', 99, 0, 1608363142, 1608455635, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (123, 1, 0, 56, '热门搜索', '', 'hotSearch/index', 50, 0, 1608607023, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (124, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608972991, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (125, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608974504, NULL, 0, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_crontab
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_crontab`;
-CREATE TABLE `yx_dev_crontab`  (
+CREATE TABLE `yx_dev_crontab` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `type` tinyint(1) NULL DEFAULT NULL COMMENT '类型：1-定时任务；2-守护进程',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `command` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '命令内容',
-  `parameter` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：1-运行；2-停止；3-错误；',
-  `expression` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '运行规则',
-  `error` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行失败原因',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
-  `last_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
-  `time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '实时执行时长',
-  `max_time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '最大执行时长',
-  `system` tinyint(4) NULL DEFAULT 0 COMMENT '是否系统任务：0-否；1-是；',
+  `name` varchar(32) NOT NULL,
+  `type` tinyint(1) DEFAULT NULL COMMENT '类型：1-定时任务；2-守护进程',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `command` varchar(64) NOT NULL COMMENT '命令内容',
+  `parameter` varchar(64) DEFAULT '' COMMENT '参数',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：1-运行；2-停止；3-错误；',
+  `expression` varchar(64) NOT NULL COMMENT '运行规则',
+  `error` varchar(256) DEFAULT NULL COMMENT '运行失败原因',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '最后执行时间',
+  `last_time` int(11) DEFAULT NULL COMMENT '最后执行时间',
+  `time` varchar(11) DEFAULT '0' COMMENT '实时执行时长',
+  `max_time` varchar(11) DEFAULT '0' COMMENT '最大执行时长',
+  `system` tinyint(4) DEFAULT '0' COMMENT '是否系统任务：0-否；1-是；',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_dev_crontab
 -- ----------------------------
-INSERT INTO `yx_dev_crontab` VALUES (1, '更新会员分销信息', 1, '', 'docker exec -it like-php7.2.4 php /project-services/LikeShop-ser', '', 1, '*/5 * * * *', NULL, 1606816709, NULL, NULL, '0', '0', 0);
-INSERT INTO `yx_dev_crontab` VALUES (2, '结算分销订单', 1, '', 'docker exec -it like-php7.2.4 php /project-services/LikeShop-ser', '', 1, '0 23 * * *', NULL, 1606817054, NULL, NULL, '0', '0', 0);
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_message
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_message`;
-CREATE TABLE `yx_dev_message`  (
+CREATE TABLE `yx_dev_message` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息名称',
-  `key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
-  `dev_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-会员消息；2-店铺消息',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+  `name` varchar(32) NOT NULL COMMENT '消息名称',
+  `key` varchar(32) NOT NULL COMMENT '消息key',
+  `dev_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型：1-会员消息；2-店铺消息',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `key`(`key`) USING BTREE COMMENT '消息唯一标识'
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消息管理表' ROW_FORMAT = Dynamic;
+  UNIQUE KEY `key` (`key`) USING BTREE COMMENT '消息唯一标识'
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='消息管理表';
 
 -- ----------------------------
 -- Records of yx_dev_message
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_dev_message` VALUES (1, '订单提交通知', 'DDTJTZ', 1, 0);
 INSERT INTO `yx_dev_message` VALUES (2, '订单支付通知', 'DDZFTZ', 1, 0);
 INSERT INTO `yx_dev_message` VALUES (3, '订单发货通知', 'DDFHTZ', 1, 0);
@@ -634,26 +611,28 @@ INSERT INTO `yx_dev_message` VALUES (5, '商家拒绝售后退款', 'SJJJSHTK', 
 INSERT INTO `yx_dev_message` VALUES (6, '注册验证', 'ZCYZ', 1, 0);
 INSERT INTO `yx_dev_message` VALUES (7, '找回密码', 'ZHMM', 1, 0);
 INSERT INTO `yx_dev_message` VALUES (10, '验证码登录', 'YZMDL', 1, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_message_extend
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_message_extend`;
-CREATE TABLE `yx_dev_message_extend`  (
+CREATE TABLE `yx_dev_message_extend` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message_id` int(11) NOT NULL COMMENT '信息管理id',
-  `message_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-短信',
-  `template_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板',
-  `variable` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '变量',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '内容',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+  `message_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型：1-短信',
+  `template_code` varchar(64) DEFAULT NULL COMMENT '模板',
+  `variable` varchar(255) DEFAULT NULL COMMENT '变量',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：0-关闭；1-开启',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_dev_message_extend
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_dev_message_extend` VALUES (1, 1, 1, 'SMS_186948179', '{\"nickname\":\"\\u4f1a\\u5458\\u6635\\u79f0\",\"order_sn\":\"\\u8ba2\\u5355\\u53f7\",\"order_money\":\"\\u8ba2\\u5355\\u91d1\\u989d\"}', '亲爱的{nickname}，您的订单已发货，订单号：{order_sn}，订单金额{order_money}元。', 1, 0);
 INSERT INTO `yx_dev_message_extend` VALUES (2, 2, 1, 'SMS_186948179', '{\"nickname\":\"\\u4f1a\\u5458\\u6635\\u79f0\",\"order_sn\":\"\\u8ba2\\u5355\\u53f7\",\"order_money\":\"\\u8ba2\\u5355\\u91d1\\u989d\"}', '亲爱的{nickname}，您的订单已支付，订单号{order_sn}，订单金额{order_money}元。', 1, 0);
 INSERT INTO `yx_dev_message_extend` VALUES (3, 3, 1, 'SMS_186948179', '{\"nickname\":\"\\u4f1a\\u5458\\u6635\\u79f0\",\"order_sn\":\"\\u8ba2\\u5355\\u53f7\"}', '亲爱的{nickname}，您的订单已发货，订单号{order_sn}。', 1, 0);
@@ -662,93 +641,99 @@ INSERT INTO `yx_dev_message_extend` VALUES (5, 5, 1, 'SMS_186948179', '{\"nickna
 INSERT INTO `yx_dev_message_extend` VALUES (6, 6, 1, 'SMS_175615071', '{\"code\":\"\\u9a8c\\u8bc1\\u7801\"}', '您的验证码为：{code}，正在进行注册验证，该验证码 5 分钟内有效，请勿泄漏于他人。', 1, 0);
 INSERT INTO `yx_dev_message_extend` VALUES (7, 7, 1, 'SMS_175615071', '{\"code\":\"\\u9a8c\\u8bc1\\u7801\"}', '您的验证码为：{code}，正在进行找回密码，该验证码 5 分钟内有效，请勿泄漏于他人。', 1, 0);
 INSERT INTO `yx_dev_message_extend` VALUES (10, 10, 1, 'SMS_175615071', '{\"code\":\"\\u9a8c\\u8bc1\\u7801\"}', '您的验证码为：{code}，该验证码 5 分钟内有效，请勿泄漏于他人。', 1, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_message_template
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_message_template`;
-CREATE TABLE `yx_dev_message_template`  (
+CREATE TABLE `yx_dev_message_template` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-公众号；2-小程序',
-  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板名称',
-  `template_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息模板ID',
-  `template_id_short` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板库ID',
-  `keywords` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '关键词库(小程序端使用)',
-  `msg_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息类型',
-  `scene` tinyint(1) NOT NULL DEFAULT 1 COMMENT '消息场景',
-  `disable` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态: 0-启用; 1-禁用;',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板内容',
+  `type` tinyint(1) DEFAULT '1' COMMENT '1-公众号；2-小程序',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '模板名称',
+  `template_id` varchar(100) NOT NULL DEFAULT '' COMMENT '消息模板ID',
+  `template_id_short` varchar(100) NOT NULL DEFAULT '' COMMENT '模板库ID',
+  `keywords` varchar(30) NOT NULL DEFAULT '' COMMENT '关键词库(小程序端使用)',
+  `msg_type` varchar(30) NOT NULL DEFAULT '' COMMENT '消息类型',
+  `scene` tinyint(1) NOT NULL DEFAULT '1' COMMENT '消息场景',
+  `disable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态: 0-启用; 1-禁用;',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '模板内容',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_dev_message_template
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_dev_message_template` VALUES (1, 2, '购买成功通知', 'GXFtj0H_jsRMRg6IbJQJqjeAkxoTzblzLklZCZ6BbpM', 'OPENTM417997194', '', '买家消息', 1, 0, '{{first.DATA}}\r\n订单号：{{keyword1.DATA}}\r\n购买数量：{{keyword2.DATA}}\r\n实付金额：{{keyword3.DATA}}\r\n下单时间：{{keyword4.DATA}}\r\n{{remark.DATA}}');
 INSERT INTO `yx_dev_message_template` VALUES (2, 2, '发货提醒', '_SlhocRyvNOcqEMhXlAvTSssnj8IFNkWogfMG9fmwJc', 'OPENTM416317950', '', '买家消息', 2, 0, '{{first.DATA}}\r\n手机号：{{keyword1.DATA}}\r\n订单号：{{keyword2.DATA}}\r\n金额：{{keyword3.DATA}}\r\n{{remark.DATA}}');
 INSERT INTO `yx_dev_message_template` VALUES (3, 2, '退款成功通知', '4OQyjTGQphpOVMXrsBwkQfjcr4qi1E2m4j6v0fkHHow', 'OPENTM202723917', '', '买家消息', 3, 0, '{{first.DATA}}\r\n订单编号：{{keyword1.DATA}}\r\n退款金额：{{keyword2.DATA}}\r\n{{remark.DATA}}');
 INSERT INTO `yx_dev_message_template` VALUES (4, 1, '支付成功通知', '9Ln6PVfzOGdl9Lqlx1pscfhRMye__XHNosZLFxlAwOw', '6271', '1,2,3,4', '买家消息', 1, 0, '订单编号{{character_string1.DATA}}\r\n支付时间{{time2.DATA}}\r\n订单金额{{amount3.DATA}}\r\n商品名称{{thing4.DATA}}\r\n商家名称{{thing5.DATA}}');
 INSERT INTO `yx_dev_message_template` VALUES (5, 1, '订单发货通知', 'aNesjOwY8s4ZiscRLX8OQpbEl8EoTbravuGJR7PI0qI', '3637', '1,2,3,4,5', '买家消息', 2, 0, '商品名称  {{thing1.DATA}}\r\n订单号    {{character_string2.DATA}}\r\n发货时间  {{date3.DATA}}\r\n快递公司  {{thing4.DATA}}\r\n快递单号  {{character_string5.DATA}}');
 INSERT INTO `yx_dev_message_template` VALUES (6, 1, '退款成功通知', '_ixwyuowGUM1Sr214nfjN5a3YlbCVMPGji5jZj1f90M', '5668', '1,2,3,4', '买家消息', 3, 0, '退款金额 {{amount1.DATA}}\r\n商品名称 {{thing2.DATA}}\r\n订单编号 {{character_string3.DATA}}\r\n退款时间 {{date4.DATA}}');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_pay
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_pay`;
-CREATE TABLE `yx_dev_pay`  (
+CREATE TABLE `yx_dev_pay` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付方式',
-  `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '使用场景',
-  `commission` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手续费',
-  `pay_use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '启用状态',
-  `abbreviation` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '简称',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `app_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `app_secrect` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pay_sign_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mch_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `apiclient_cert` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `apiclient_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `api_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `private_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `alipay_public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `type` tinyint(2) NULL DEFAULT NULL COMMENT '1-余额 2-公众号 3-小程序 4-支付宝',
+  `name` varchar(64) DEFAULT NULL COMMENT '支付方式',
+  `icon` varchar(128) DEFAULT NULL COMMENT '图标',
+  `use` varchar(128) DEFAULT NULL COMMENT '使用场景',
+  `commission` varchar(128) DEFAULT NULL COMMENT '手续费',
+  `pay_use` varchar(128) DEFAULT NULL COMMENT '启用状态',
+  `abbreviation` varchar(128) DEFAULT NULL COMMENT '简称',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `app_id` varchar(128) DEFAULT NULL,
+  `app_secrect` varchar(128) DEFAULT NULL,
+  `pay_sign_key` varchar(128) DEFAULT NULL,
+  `mch_id` varchar(128) DEFAULT NULL,
+  `apiclient_cert` varchar(128) DEFAULT NULL,
+  `apiclient_key` varchar(128) DEFAULT NULL,
+  `api_id` varchar(128) DEFAULT NULL,
+  `private_key` varchar(128) DEFAULT NULL,
+  `public_key` varchar(128) DEFAULT NULL,
+  `alipay_public_key` varchar(128) DEFAULT NULL,
+  `type` tinyint(2) DEFAULT NULL COMMENT '1-余额 2-公众号 3-小程序 4-支付宝',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '支付配置' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='支付配置';
 
 -- ----------------------------
 -- Records of yx_dev_pay
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_dev_pay` VALUES (1, '微信小程序支付', '/static/common/image/pay/icon_wechatApplet.png', '微信小程序', '44', '1', '微信支付', 0, '', '', '', '1579289011', '', '', NULL, NULL, NULL, NULL, 3);
 INSERT INTO `yx_dev_pay` VALUES (2, '微信公众号支付', '/static/common/image/pay/icon_weChatPublic.png', '微信公众号', '22', '1', '微信支付', 0, '', '', '', '1579289011', '', '', NULL, NULL, NULL, NULL, 2);
 INSERT INTO `yx_dev_pay` VALUES (3, '微信APP支付', '/static/common/image/pay/icon_wechatApplet.png', '微信APP', '44', '0', '微信支付', 0, '', '', '', '1579289011', '', '', NULL, NULL, NULL, NULL, 5);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_dev_region
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_dev_region`;
-CREATE TABLE `yx_dev_region`  (
-  `id` int(10) NOT NULL DEFAULT 0 COMMENT '地区编号',
-  `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '父级地区编码',
-  `level` tinyint(1) NOT NULL DEFAULT 0 COMMENT '等级 0-国家；1-省份；2-地级市；3-县区',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `short` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '简称',
-  `city_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区编码',
-  `zip_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮政编码',
-  `gcj02_lng` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-  `gcj02_lat` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-  `db09_lng` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-  `db09_lat` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-  `remark1` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `remark2` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+CREATE TABLE `yx_dev_region` (
+  `id` int(10) NOT NULL DEFAULT '0' COMMENT '地区编号',
+  `parent_id` int(10) NOT NULL DEFAULT '0' COMMENT '父级地区编码',
+  `level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '等级 0-国家；1-省份；2-地级市；3-县区',
+  `name` varchar(64) NOT NULL COMMENT '名称',
+  `short` varchar(64) NOT NULL COMMENT '简称',
+  `city_code` varchar(10) DEFAULT NULL COMMENT '地区编码',
+  `zip_code` varchar(10) DEFAULT NULL COMMENT '邮政编码',
+  `gcj02_lng` varchar(24) DEFAULT NULL COMMENT '纬度',
+  `gcj02_lat` varchar(24) DEFAULT NULL COMMENT '经度',
+  `db09_lng` varchar(64) DEFAULT NULL COMMENT '纬度',
+  `db09_lat` varchar(64) DEFAULT NULL COMMENT '经度',
+  `remark1` varchar(64) DEFAULT '',
+  `remark2` varchar(64) DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地区表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='地区表';
 
 -- ----------------------------
 -- Records of yx_dev_region
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_dev_region` VALUES (100000, 0, 0, '中国', '中国', NULL, NULL, '116.3683244', '39.915085', '116.374821', '39.92105', '行政区', NULL);
 INSERT INTO `yx_dev_region` VALUES (110000, 100000, 1, '北京', '北京', NULL, NULL, '116.405285', '39.904989', '116.411665', '39.911323', '行政区', NULL);
 INSERT INTO `yx_dev_region` VALUES (110100, 110000, 2, '北京市', '北京', '010', '100000', '116.405285', '39.904989', '116.411665', '39.911323', '行政区', '直辖市');
@@ -5074,83 +5059,53 @@ INSERT INTO `yx_dev_region` VALUES (820201, 820200, 3, '嘉模堂区', '嘉模�
 INSERT INTO `yx_dev_region` VALUES (820300, 820000, 2, '路环岛', '路环岛', '00853', '999078', '113.564857', '22.116226', '113.571422', '22.121991', '行政区', NULL);
 INSERT INTO `yx_dev_region` VALUES (820301, 820300, 3, '圣方济各堂区', '圣方济各堂区', '00853', '999078', '113.559954', '22.123486', '113.566502', '22.129319', '行政区', NULL);
 INSERT INTO `yx_dev_region` VALUES (900000, 100000, 1, '钓鱼岛', '钓鱼岛', NULL, NULL, '123.478088', '25.742385', '123.484509', '25.748753', '行政区', NULL);
-
--- ----------------------------
--- Table structure for yx_distribution_member_apply
--- ----------------------------
-DROP TABLE IF EXISTS `yx_distribution_member_apply`;
-CREATE TABLE `yx_distribution_member_apply`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `real_name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '真实姓名',
-  `mobile` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '手机号码',
-  `province` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '省份',
-  `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
-  `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
-  `reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '申请原因',
-  `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for yx_distribution_order_goods
--- ----------------------------
-DROP TABLE IF EXISTS `yx_distribution_order_goods`;
-CREATE TABLE `yx_distribution_order_goods`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sn` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '记录编号',
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `real_name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '真实姓名',
-  `order_goods_id` int(11) NOT NULL COMMENT '订单商品id',
-  `goods_num` int(10) NOT NULL DEFAULT 1 COMMENT '商品数量',
-  `money` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '佣金',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态：1-待返佣；2-已结算；3-已失效；',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `user_id_source_id`(`user_id`) USING BTREE COMMENT '一个用户只有一个订单商品的分佣订单'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_express
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_express`;
-CREATE TABLE `yx_express`  (
+CREATE TABLE `yx_express` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递公司',
-  `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递图标',
-  `website` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公司网址',
-  `code` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递编码',
-  `code100` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递100编码',
-  `sort` int(10) NOT NULL DEFAULT 0 COMMENT '排序',
-  `codebird` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递鸟编码',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
+  `name` varchar(32) NOT NULL COMMENT '快递公司',
+  `icon` varchar(128) NOT NULL COMMENT '快递图标',
+  `website` varchar(128) NOT NULL COMMENT '公司网址',
+  `code` varchar(128) NOT NULL COMMENT '快递编码',
+  `code100` varchar(128) NOT NULL COMMENT '快递100编码',
+  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序',
+  `codebird` varchar(128) NOT NULL COMMENT '快递鸟编码',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_express
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_file
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_file`;
-CREATE TABLE `yx_file`  (
+CREATE TABLE `yx_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
-  `cate_id` int(10) NULL DEFAULT 0 COMMENT '分类id',
+  `name` varchar(128) NOT NULL COMMENT '文件名',
+  `cate_id` int(10) DEFAULT '0' COMMENT '分类id',
   `type` tinyint(1) NOT NULL COMMENT '类型',
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
+  `uri` varchar(255) NOT NULL COMMENT '文件相对路径',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '机构id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文件表';
 
 -- ----------------------------
 -- Records of yx_file
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_file` VALUES (1, 'home_icon_@3x.png', 0, 1, 'uploads/images/background/20201210/b80089e7224871ee70ef7014453b6a28.png', 1607566134, 0, 0);
 INSERT INTO `yx_file` VALUES (2, 'home_icon_collect@3x(1).png', 0, 1, 'uploads/images/background/20201210/643833719ae963e6a9035e4b98a6279c.png', 1607566134, 0, 0);
 INSERT INTO `yx_file` VALUES (3, 'home_icon_member@3x.png', 0, 1, 'uploads/images/background/20201210/1fbb2fb37597896efd7b95506ed7cdda.png', 1607566134, 0, 0);
@@ -5231,104 +5186,124 @@ INSERT INTO `yx_file` VALUES (77, '1607585802(1).png', 0, 1, 'uploads/images/bac
 INSERT INTO `yx_file` VALUES (78, '1607585829(1).png', 0, 1, 'uploads/images/background/20201210/930d0719e718db9bfaf2f3acacc1fbe8.png', 1607585908, 0, 0);
 INSERT INTO `yx_file` VALUES (79, '88bc1a42240ee3aba127b3fc3410d9a5', 0, 1, 'uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1607589348, 0, 0);
 INSERT INTO `yx_file` VALUES (80, '1acd6abcaba4b25bcf91f2c8525905ed', 0, 1, 'uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1607589434, 0, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_file_cate
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_file_cate`;
-CREATE TABLE `yx_file_cate`  (
+CREATE TABLE `yx_file_cate` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '店铺id',
-  `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
+  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '店铺id',
+  `name` varchar(90) NOT NULL COMMENT '分类名称',
   `pid` int(11) NOT NULL COMMENT '父级id',
-  `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '0-未删除;1-已删除',
+  `level` tinyint(1) DEFAULT NULL COMMENT '等级',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '0-未删除;1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件分类表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文件分类表';
+
+-- ----------------------------
+-- Records of yx_file_cate
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_freight
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_freight`;
-CREATE TABLE `yx_freight`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板名称',
-  `charge_way` tinyint(1) NULL DEFAULT 0 COMMENT '计费方式:1-重量计费;2-体积计费;3-件数计费',
-  `remark` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+CREATE TABLE `yx_freight` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `name` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `charge_way` tinyint(1) DEFAULT '0' COMMENT '计费方式:1-重量计费;2-体积计费;3-件数计费',
+  `remark` varchar(256) DEFAULT '' COMMENT '备注',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='运费模板表';
+
+-- ----------------------------
+-- Records of yx_freight
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_freight_config
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_freight_config`;
-CREATE TABLE `yx_freight_config`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
-  `freight_id` int(11) NULL DEFAULT NULL COMMENT '模板id',
-  `first_unit` int(10) NULL DEFAULT NULL COMMENT '首重/件',
-  `first_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
-  `continue_unit` int(10) NULL DEFAULT NULL COMMENT '续重/件',
-  `continue_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
-  `region` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '地区id',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+CREATE TABLE `yx_freight_config` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表id',
+  `freight_id` int(11) DEFAULT NULL COMMENT '模板id',
+  `first_unit` int(10) DEFAULT NULL COMMENT '首重/件',
+  `first_money` decimal(10,0) DEFAULT NULL COMMENT '首重/件价格',
+  `continue_unit` int(10) DEFAULT NULL COMMENT '续重/件',
+  `continue_money` decimal(10,0) DEFAULT NULL COMMENT '首重/件价格',
+  `region` text COMMENT '地区id',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板配置表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='运费模板配置表';
+
+-- ----------------------------
+-- Records of yx_freight_config
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods`;
-CREATE TABLE `yx_goods`  (
+CREATE TABLE `yx_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品状态；；0-下架1-上架',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
-  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+  `name` varchar(64) NOT NULL COMMENT '商品名称',
+  `code` varchar(32) DEFAULT NULL COMMENT '商品编码',
   `first_category_id` int(11) NOT NULL COMMENT '一级分类id',
   `second_category_id` int(11) NOT NULL COMMENT '二级分类id',
   `third_category_id` int(11) NOT NULL COMMENT '三级分类id',
-  `brand_id` int(11) NULL DEFAULT NULL COMMENT '品牌id',
-  `supplier_id` int(11) NULL DEFAULT NULL COMMENT '供应商id',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '商品状态:-1-回收站；0-下架；1-上架',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品简介',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品详细描述',
-  `sort` int(10) NULL DEFAULT 0 COMMENT '排序',
-  `sales_sum` int(10) NULL DEFAULT 0 COMMENT '商品销量',
-  `virtual_sales_sum` int(10) NULL DEFAULT 0 COMMENT '虚拟销量',
-  `click_count` int(10) NULL DEFAULT 0 COMMENT '商品点击量',
-  `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
-  `max_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最高价格',
-  `min_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最低价格',
-  `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价（sku中最高的市场价）',
-  `stock` int(10) NULL DEFAULT 0 COMMENT '总库存',
-  `stock_warn` int(10) NULL DEFAULT 0 COMMENT '库存预警',
+  `brand_id` int(11) DEFAULT NULL COMMENT '品牌id',
+  `supplier_id` int(11) DEFAULT NULL COMMENT '供应商id',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品状态:-1-回收站；0-下架；1-上架',
+  `image` varchar(128) NOT NULL COMMENT '商品主图',
+  `remark` varchar(255) DEFAULT '' COMMENT '商品简介',
+  `content` text COMMENT '商品详细描述',
+  `sort` int(10) DEFAULT '0' COMMENT '排序',
+  `sales_sum` int(10) DEFAULT '0' COMMENT '商品销量',
+  `virtual_sales_sum` int(10) DEFAULT '0' COMMENT '虚拟销量',
+  `click_count` int(10) DEFAULT '0' COMMENT '商品点击量',
+  `spec_type` tinyint(1) DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
+  `max_price` decimal(10,2) DEFAULT NULL COMMENT '最高价格',
+  `min_price` decimal(10,2) DEFAULT NULL COMMENT '最低价格',
+  `market_price` decimal(10,2) DEFAULT NULL COMMENT '市场价（sku中最高的市场价）',
+  `stock` int(10) DEFAULT '0' COMMENT '总库存',
+  `stock_warn` int(10) DEFAULT '0' COMMENT '库存预警',
   `is_show_stock` tinyint(1) NOT NULL COMMENT '是否显示库存：1-是；0-否',
-  `free_shipping_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '运费类型：1-包邮；2-统一运费；3-运费模板',
-  `free_shipping` decimal(10, 2) NULL DEFAULT NULL COMMENT '统一运费金额',
-  `free_shipping_template_id` int(11) NULL DEFAULT NULL COMMENT '运费模板',
-  `is_commission` tinyint(1) NOT NULL DEFAULT 0 COMMENT '分销佣金：1-开启；0-不开启',
-  `first_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '一级分销比例',
-  `second_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二级分销比例',
-  `three_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '三级分销比例',
-  `is_share_bouns` tinyint(1) NOT NULL DEFAULT 0 COMMENT '区域股东分红：1-开启；0-不开启',
-  `region_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区域分红比例',
-  `shareholder_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '股东分红比例',
-  `is_new` tinyint(1) NULL DEFAULT 0 COMMENT '新品推荐：1-是；0-否',
-  `is_best` tinyint(1) NULL DEFAULT 0 COMMENT '好物优选：1-是；0-否',
-  `is_like` tinyint(1) NULL DEFAULT 0 COMMENT '猜你喜欢：1-是；0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '商品创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '商品更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+  `free_shipping_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '运费类型：1-包邮；2-统一运费；3-运费模板',
+  `free_shipping` decimal(10,2) DEFAULT NULL COMMENT '统一运费金额',
+  `free_shipping_template_id` int(11) DEFAULT NULL COMMENT '运费模板',
+  `is_commission` tinyint(1) NOT NULL DEFAULT '0' COMMENT '分销佣金：1-开启；0-不开启',
+  `first_ratio` varchar(10) DEFAULT NULL COMMENT '一级分销比例',
+  `second_ratio` varchar(10) DEFAULT NULL COMMENT '二级分销比例',
+  `three_ratio` varchar(10) DEFAULT NULL COMMENT '三级分销比例',
+  `is_share_bouns` tinyint(1) NOT NULL DEFAULT '0' COMMENT '区域股东分红：1-开启；0-不开启',
+  `region_ratio` varchar(10) DEFAULT NULL COMMENT '区域分红比例',
+  `shareholder_ratio` varchar(10) DEFAULT NULL COMMENT '股东分红比例',
+  `is_new` tinyint(1) DEFAULT '0' COMMENT '新品推荐：1-是；0-否',
+  `is_best` tinyint(1) DEFAULT '0' COMMENT '好物优选：1-是；0-否',
+  `is_like` tinyint(1) DEFAULT '0' COMMENT '猜你喜欢：1-是；0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '商品创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '商品更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品主表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品主表';
 
 -- ----------------------------
 -- Records of yx_goods
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods` VALUES (1, '晨光中性笔笔芯黑0.5mm黑色碳素签字笔GP-1008按动式水笔学生考试用蓝黑医生处方笔教师专用红笔圆珠笔文具', '2646541621', 1, 4, 9, 1, 1, 1, '/uploads/images/background/20201210/45b6bb2224e4051ecf407cabb54cd781.png', '耐用好书写', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i4.440377deK9wjsl\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i3.440377deK9wjsl\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;GP1008\">型号:&nbsp;GP1008</li><li title=\"&nbsp;办公\">功能:&nbsp;办公</li><li title=\"&nbsp;按动\">闭合方式:&nbsp;按动</li><li title=\"&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装\">颜色分类:&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝</li><li title=\"&nbsp;否\">是否可擦:&nbsp;否</li><li title=\"&nbsp;盒装\">包装方式:&nbsp;盒装</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;晨光文具</li><li title=\"&nbsp;AGP02301\">货号:&nbsp;AGP02301</li><li title=\"&nbsp;日常书写&nbsp;备考\">适用场景:&nbsp;日常书写&nbsp;备考</li><li title=\"&nbsp;12支\">支数:&nbsp;12支</li><li title=\"&nbsp;小学生&nbsp;中学生\">适用人群:&nbsp;小学生&nbsp;中学生</li><li title=\"&nbsp;塑料\">笔杆材质:&nbsp;塑料</li><li title=\"&nbsp;子弹头型\">笔头类型:&nbsp;子弹头型</li><li title=\"&nbsp;水性墨水\">适用墨水类型:&nbsp;水性墨水</li><li title=\"&nbsp;否\">墨水是否速干:&nbsp;否</li><li title=\"&nbsp;滚珠式\">出墨方式:&nbsp;滚珠式</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><a name=\"hnhb_35262147071570768519_start\"></a><div class=\"J_TWidget maGong\" data-title=\"\"><div class=\"J_TWidget abs_father\"><div class=\"abs_father abs sn-simple-logo\"><div class=\"abs sn-simple-logo\"><img src=\"https://img.alicdn.com/imgextra/i3/3526214707/O1CN01bqIvqE1kdqodqmbyw_!!3526214707.jpg\" usemap=\"#GGQDK\" class=\"img-ks-lazyload\"><map name=\"GGQDK\"><area shape=\"rect\" coords=\"6,1459,395,1954\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.54.35b02c1di2LqW3&amp;id=562104876494&amp;rn=f5f37d71881463703d64fdf111995028&amp;abbucket=11\"><area shape=\"rect\" coords=\"400,1463,790,1954\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.47.2f502c1drqo8QB&amp;id=579893286030&amp;rn=5c00e93c8f01c53c34458de734c14417&amp;abbucket=11\"><area shape=\"rect\" coords=\"0,1979,395,2488\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\"><area shape=\"rect\" coords=\"397,1975,785,2490\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\"><area shape=\"rect\" coords=\"2,958,397,1458\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.270.62452c1d9xKvsz&amp;id=566618504016&amp;rn=ae469d5cacdaaba31b309ebe684e36f8&amp;abbucket=11\"><area shape=\"rect\" coords=\"398,955,787,1455\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.55.516f2c1dA6r4oP&amp;id=562043025193&amp;rn=e47834e9c60d4db10f1a5ee7d9e3484e&amp;abbucket=11\"><area shape=\"rect\" coords=\"8,121,199,377\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=24b977154bbe433fa8e79788b1d00e08\"><area shape=\"rect\" coords=\"205,121,391,381\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=1d1c066bb7794ed8a88f359a564ea55d\"><area shape=\"rect\" coords=\"397,124,587,382\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=5f5f49e8899946f6bae8cd360ce335b5\"><area shape=\"rect\" coords=\"590,119,779,383\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=14feb924955941cfa151092b4529de61\"></map></div></div><ul><li></li></ul></div></div><a name=\"hnhb_35262147071570768519_end\"></a><a name=\"hnhb_35262147071585543173_start\"></a><div class=\"J_TWidget maGong\" data-title=\"\"><div class=\"J_TWidget abs_father\"><div class=\"abs_father abs sn-simple-logo\"><div class=\"abs sn-simple-logo\"><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN010nnE8U1kdqsAvdQ2l_!!3526214707.jpg\" usemap=\"#UHATE\" class=\"img-ks-lazyload\"><map name=\"UHATE\"><area shape=\"rect\" coords=\"5,1459,394,1954\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.37.2dde2c1dAkoMdP&amp;id=562239844865&amp;rn=16d62b1b41445d6797bf0629d67bfd86&amp;abbucket=9\"><area shape=\"rect\" coords=\"399,1464,789,1955\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.59.4d722c1dphoapI&amp;id=562043025193&amp;rn=75c2c3736cf3e6a3d863436e17bc7e66&amp;abbucket=9\"><area shape=\"rect\" coords=\"0,1979,395,2488\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\"><area shape=\"rect\" coords=\"397,1975,785,2490\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\"><area shape=\"rect\" coords=\"1,125,790,915\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.89.5eaf2c1df2itrv&amp;id=562976052813&amp;rn=7af77012f8e4cd76454bb83058579bca&amp;abbucket=9\"><area shape=\"rect\" coords=\"4,957,395,1450\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.283.5eaf2c1df2itrv&amp;id=562164922383&amp;rn=7af77012f8e4cd76454bb83058579bca\"><area shape=\"rect\" coords=\"401,958,785,1443\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.279.5eaf2c1df2itrv&amp;id=563519378087&amp;rn=7af77012f8e4cd76454bb83058579bca\"></map></div></div><ul><li></li></ul></div></div><a name=\"hnhb_35262147071585543173_end\"></a><div><div><br><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN011kdqkKOiKQZjEV6_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN011kdqkEFE7PehA5E_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN019FRnnd1kdqsx0xA5F_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN011kdqkKgwkZ00RV9_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/3526214707/O1CN011kdqkJsJeoDb6zd_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/3526214707/O1CN011kdqkLfoilfGe0C_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN011kdqkM3UUHnW9SE_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/3526214707/O1CN011kdqkEFCqUqV98K_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/3526214707/O1CN011kdqkL1EEg3jfbW_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/3526214707/O1CN011kdqkL9uvcY7OZL_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN011kdqkJPHqM3TyeD_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN01rQyABc1kdql6sjmxP_!!3526214707.jpg\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN01a4NMGi1kdql7sytmi_!!3526214707.jpg\" class=\"img-ks-lazyload\"></div></div></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_ZebraPriceDesc\" class=\"j-mdv\"><img width=\"790\" src=\"https://img.alicdn.com/tfs/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\"></div></div><div id=\"J_Detail\"><div id=\"J_Reviews\" class=\"J_DetailSection\"></div></div>', 0, 0, 6873, 5, 1, 44.82, 44.82, 55.00, 9863, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607571853, 1607571834, 0);
 INSERT INTO `yx_goods` VALUES (2, '晨光文具速干中性笔直液式签字笔学生考试大容量全针管子弹头水笔直液式笔黑色0.5/0.38', '75687', 1, 4, 9, 1, 1, 1, '/uploads/images/background/20201210/5a23d75c44ef8c293aa2a1bed1f10e41.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i2.4a277eb8mClAGN\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;ARP57501A\">型号:&nbsp;ARP57501A</li><li title=\"&nbsp;速干\">功能:&nbsp;速干</li><li title=\"&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装\">颜色分类:&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色</li><li title=\"&nbsp;否\">是否可擦:&nbsp;否</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;晨光文具</li><li title=\"&nbsp;ARP57501\">货号:&nbsp;ARP57501</li><li title=\"&nbsp;日常书写&nbsp;备考\">适用场景:&nbsp;日常书写&nbsp;备考</li><li title=\"&nbsp;12支\">支数:&nbsp;12支</li><li title=\"&nbsp;大学生&nbsp;商务办公人士\">适用人群:&nbsp;大学生&nbsp;商务办公人士</li><li title=\"&nbsp;是\">墨水是否速干:&nbsp;是</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01PQkKHu1jhgaxfBt9y_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><a href=\"http://detail.tmall.com/item.htm?id=565519962541\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01xMiOTk1jhgazbwagf_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></a><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01gBVSbQ1jhgaorKXoa_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01oXbdqx1jhgav0RNCP_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN017Nr4IO1jhgb1qSV0N_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01EetLax1jhgatXxojO_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01omJeFd1jhgazbx3nx_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01hSmDW31jhgb29dBRi_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01h463731jhgaxfEyPY_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01y6ctID1jhgaorJKy5_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01WbNw7Q1jhgb1qSleG_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN0105duS21jhgax0kT5z_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01Aaf51O1jhgaxVpmEC_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><p data-spm-anchor-id=\"a220o.1000855.0.i3.4a277eb8mClAGN\">温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p><div><a name=\"maijsoft_s1_191268_end\"></a></div><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 6863, 1, 1, 43.90, 43.90, 78.00, 8676, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607572135, 1607572125, 0);
 INSERT INTO `yx_goods` VALUES (3, '晨光文具经典六角木杆铅笔中小学生考试绘图铅笔 2B铅笔练字笔20支 AWP35715', '654161', 1, 4, 10, 1, 1, 1, '/uploads/images/background/20201210/2d62627fef767a38034162c066f9c253.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i2.99cd68a70vn9mz\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i4.99cd68a70vn9mz\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"M＆G/晨光 AWP35715\">产品名称：M＆G/晨光 AWP35715</li><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;AWP35715\">晨光型号:&nbsp;AWP35715</li><li title=\"&nbsp;其他\">包装种类:&nbsp;其他</li><li title=\"&nbsp;六角杆  2B  2包（20支）&nbsp;六角杆 2B 30支装\">颜色分类:&nbsp;六角杆 2B 2包（20支）&nbsp;六角杆 2B 30支装</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;晨光文具</li><li title=\"&nbsp;2B\">笔芯硬度:&nbsp;2B</li><li title=\"&nbsp;书写&nbsp;考试专用\">适用场景:&nbsp;书写&nbsp;考试专用</li><li title=\"&nbsp;10支\">支数:&nbsp;10支</li><li title=\"&nbsp;单色\">颜色数:&nbsp;单色</li><li title=\"&nbsp;gb国标标准\">安全标准:&nbsp;gb国标标准</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01UZMdzf1jhgXJJMNic_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\" data-spm-anchor-id=\"a220o.1000855.0.i3.99cd68a70vn9mz\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01xseJHg1jhgXOdNiME_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01Ny1E3X1jhgXDmsuri_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN018JKuJ71jhgXOARXnX_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01ipHvdk1jhgXLMwMWL_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01rAj6AB1jhgXL5VEwy_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01wT3uFw1jhgXJV8bqe_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01Nye0M91jhgXOATgoY_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 35368, 3, 1, 13.50, 13.50, 21.00, 56832, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607572312, 1607572580, 0);
@@ -5339,56 +5314,60 @@ INSERT INTO `yx_goods` VALUES (7, '得力直液式走珠笔0.5mm红色黑色中�
 INSERT INTO `yx_goods` VALUES (8, 'HERO/英雄钢笔HS208女神钢笔成人女士商务高档礼盒装办公时尚练字女生专用精致送礼官方正品代写贺卡', '356161', 1, 7, 14, 5, 1, 1, '/uploads/images/background/20201210/5e11c751c7e662764764e132ab6a8f72.png', '好用高雅', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i3.2ce61010xyKMqs\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105804&amp;type=0&amp;scm=1048.1.1.4\">HERO/英雄</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"HERO/英雄 HS208\">产品名称：HERO/英雄 HS208</li><li id=\"J_attrBrandName\" title=\"&nbsp;HERO/英雄\">品牌:&nbsp;HERO/英雄</li><li title=\"&nbsp;HS208\">型号:&nbsp;HS208</li><li title=\"&nbsp;简约\">风格:&nbsp;简约</li><li title=\"&nbsp;绿色&nbsp;黄色\">颜色分类:&nbsp;绿色&nbsp;黄色</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;官方标配\">套餐类型:&nbsp;官方标配</li><li title=\"&nbsp;礼盒装\">包装方式:&nbsp;礼盒装</li><li title=\"&nbsp;英雄\">生产企业:&nbsp;英雄</li><li title=\"&nbsp;送礼&nbsp;书写\">适用场景:&nbsp;送礼&nbsp;书写</li><li title=\"&nbsp;铱金笔\">钢笔笔尖成分:&nbsp;铱金笔</li><li title=\"&nbsp;中国\">国家/地区:&nbsp;中国</li><li title=\"&nbsp;标准型\">笔尖种类:&nbsp;标准型</li><li title=\"&nbsp;文艺青年\">适用人群:&nbsp;文艺青年</li><li title=\"&nbsp;旋转吸墨\">上墨方式:&nbsp;旋转吸墨</li><li title=\"&nbsp;金属\">笔杆材质:&nbsp;金属</li><li title=\"&nbsp;明尖\">笔尖嵌入方式:&nbsp;明尖</li><li title=\"&nbsp;光面\">笔身纹理:&nbsp;光面</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><div><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i1/914055344/tb2tp9wdxxxxxaoxpxxxxxxxxxx-914055344.png?q=begin_zhuofannuo_500061_a6c6f167d61545739002166d35f7e968_begin\"><table width=\"790\" height=\"762\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"layui-table\"><tbody><tr><td colspan=\"4\"><a href=\"https://detail.tmall.com/item.htm?id=587437149594&amp;sku_properties=5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01MozEFq2BuKk1zvHfX_!!2200667318398.jpg\" width=\"790\" height=\"324\" alt=\"\" class=\"img-ks-lazyload\"></a></td></tr><tr><td colspan=\"2\"><a href=\"https://detail.tmall.com/item.htm?id=587207811184&amp;sku_properties=5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN01ZbcXll2BuKk3CLFM0_!!2200667318398.jpg\" width=\"394\" height=\"215\" alt=\"\" class=\"img-ks-lazyload\"></a></td><td colspan=\"2\"><a href=\"https://detail.tmall.com/item.htm?id=595015052047&amp;sku_properties=2066814:11533309;5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01KrRHyV2BuKk05mv9z_!!2200667318398.jpg\" width=\"396\" height=\"215\" alt=\"\" class=\"img-ks-lazyload\"></a></td></tr><tr><td><a href=\"https://detail.tmall.com/item.htm?id=586874097674&amp;sku_properties=2066814:7373997;5919063:6536025;186838507:201538351\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01wVRbqg2BuKk4kZ9o1_!!2200667318398.jpg\" width=\"263\" height=\"222\" alt=\"\" class=\"img-ks-lazyload\"></a></td><td colspan=\"2\"><a href=\"https://detail.tmall.com/item.htm?id=595462406114\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01xahRnh2BuKk1WXzzX_!!2200667318398.jpg\" width=\"264\" height=\"222\" alt=\"\" class=\"img-ks-lazyload\"></a></td><td><a href=\"https://detail.tmall.com/item.htm?id=588805549965&amp;sku_properties=2066814:11533312;5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01jmjwv62BuKk3xn5HD_!!2200667318398.jpg\" width=\"263\" height=\"222\" alt=\"\" class=\"img-ks-lazyload\"></a></td></tr><tr><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"263\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"131\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"133\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"263\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td></tr></tbody></table><a name=\"zhuofannuo_500061_a6c6f167d61545739002166d35f7e968_end\"></a></div><p><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN01lb1w7T2BuKg83AGzV_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01yDriqN2BuKgGnqzlF_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN0168iyAp2BuKgDNcx2O_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01IrmEI02BuKgGnsCZt_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01NTDVvK2BuKgGnrSqQ_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01bfMvZT2BuKgGG9E5U_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01rqrwNu2BuKgFCbYeI_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN016Z6P1R2BuKgHdh7vk_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/2200667318398/O1CN01PfNEKJ2BuKgDjuJaK_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01vUsRHe2BuKgHdfaJ0_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN01yqJX042BuKgI33UGL_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01sOjXHX2BuKgEs5q9Q_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01vGj3zE2BuKgGG7HYy_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01jfzQQJ2BuKgDjvJws_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><div><a name=\"hlg_list_4_26137242_start\"></a></div><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"layui-table\"><tbody><tr><td><div class=\"hlg_list_26137242\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01mUkVUt2BuKi8hnOc8_!!2200667318398.jpg\" alt=\"刻字\" usemap=\"#hlgCustomMap_2yczj_1565442513824\" class=\"img-ks-lazyload\"><map name=\"hlgCustomMap_2yczj_1565442513824\"></map></div></td></tr></tbody></table><div><a name=\"hlg_list_4_26137242_end\"></a></div><div class=\"hlg_rand_565009896\">1709484353</div></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_ZebraPriceDesc\" class=\"j-mdv\"><img width=\"790\" src=\"https://img.alicdn.com/tfs/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\"></div></div>', 0, 0, 352, 4, 1, 1359.00, 1359.00, 2598.00, 1069, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607584899, 1607586217, 0);
 INSERT INTO `yx_goods` VALUES (9, '日本进口pilot百乐贵客钢笔 硬橡胶生漆18k金笔fkv-88sr莳绘30号金尖限定万年笔商务礼品套装', '65986', 1, 8, 15, 2, 1, 1, '/uploads/images/background/20201210/f245c44d136296f80071a26765e93cdf.png', '好用好看实用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i4.3d655441HlyJte\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\">PILOT/百乐</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"PILOT/百乐 FKV-88SR\">产品名称：PILOT/百乐 FKV-88SR</li><li id=\"J_attrBrandName\" title=\"&nbsp;PILOT/百乐\">品牌:&nbsp;PILOT/百乐</li><li title=\"&nbsp;FKV-88SR\">型号:&nbsp;FKV-88SR</li><li title=\"&nbsp;黑色\">颜色分类:&nbsp;黑色</li><li title=\"&nbsp;FM尖&nbsp;M尖\">书写粗细:&nbsp;FM尖&nbsp;M尖</li><li title=\"&nbsp;官方标配\">套餐类型:&nbsp;官方标配</li><li title=\"&nbsp;礼盒装\">包装方式:&nbsp;礼盒装</li><li title=\"&nbsp;百乐株式会社\">生产企业:&nbsp;百乐株式会社</li><li title=\"&nbsp;FKV-88SR\">货号:&nbsp;FKV-88SR</li><li title=\"&nbsp;送礼&nbsp;书写\">适用场景:&nbsp;送礼&nbsp;书写</li><li title=\"&nbsp;金笔\">钢笔笔尖成分:&nbsp;金笔</li><li title=\"&nbsp;日本\">国家/地区:&nbsp;日本</li><li title=\"&nbsp;标准型\">笔尖种类:&nbsp;标准型</li><li title=\"&nbsp;其他\">上墨方式:&nbsp;其他</li><li title=\"&nbsp;其他\">笔杆材质:&nbsp;其他</li><li title=\"&nbsp;明尖\">笔尖嵌入方式:&nbsp;明尖</li><li title=\"&nbsp;光面\">笔身纹理:&nbsp;光面</li><li title=\"&nbsp;非碳素墨水\">墨水材质:&nbsp;非碳素墨水</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"21934748119\" id=\"shop21934748119\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748119\" microscope-data=\"5003-21934748119\" data-title=\"自定义内容区\"></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\"></p><table align=\"center\" class=\"layui-table\"><tbody><tr><td><div><img usemap=\"#1599037488419\" src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\" class=\"img-ks-lazyload\"></div><map name=\"1599037488419\"><area shape=\"rect\" coords=\"1,3,777.0,357.06845\" href=\"https://market.m.taobao.com/app/sj/member-center-rax/pages/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\"></map></td></tr></tbody></table><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\" usemap=\"#LZLOZ\" class=\"img-ks-lazyload\"><map name=\"LZLOZ\"><area shape=\"rect\" coords=\"0,0,278,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\"><area shape=\"rect\" coords=\"276,0,522,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\"><area shape=\"rect\" coords=\"520,0,790,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\"></map><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\"></p><p><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2YEwLrFGWBuNjy0FbXXb4sXXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i3/3245829746/TB2n9.BrHSYBuNjSspiXXXNzpXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2wsb5jwKTBuNkSne1XXaJoXXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2LqsajDdYBeNkSmLyXXXfnVXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB2uhZ5rHuWBuNjSszgXXb8jVXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2otQArL9TBuNjy0FcXXbeiFXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB2PY0ir1ySBuNjy1zdXXXPxFXa_!!3245829746.png\" class=\"img-ks-lazyload\"></p><p><img src=\"https://img.alicdn.com/imgextra/i3/3245829746/O1CN01hPEMtT2LrigBZIFoO_!!3245829746.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_DcBottomRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"22184000365\" id=\"shop22184000365\" data-componentid=\"5003\" data-spm=\"110.0.5003-22184000365\" microscope-data=\"5003-22184000365\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-hd\"><h3><span>自定义内容区</span></h3></div><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i4/3245829746/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\"></p></div><s class=\"skin-box-bt\"><b></b></s></div></div><div class=\"J_TModule\" data-widgetid=\"21934748137\" id=\"shop21934748137\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748137\" microscope-data=\"5003-21934748137\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i3/3245829746/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\"></p></div></div></div></div></div>', 0, 0, 98, 0, 1, 6860.00, 6860.00, 9800.00, 1260, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607585729, 1607586216, 0);
 INSERT INTO `yx_goods` VALUES (10, '顺丰包邮 12期免息日本PILOT百乐Justus 95钢笔14K金尖FJ-3MR可调书写软硬金笔成人书法练字商务办公送礼盒装', '656251', 1, 8, 15, 2, 1, 1, '/uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png', '好看', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i8.2c834ec6EEH4Z7\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\">PILOT/百乐</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"PILOT/百乐 FJ-3MR\">产品名称：PILOT/百乐 FJ-3MR</li><li id=\"J_attrBrandName\" title=\"&nbsp;PILOT/百乐\">品牌:&nbsp;PILOT/百乐</li><li title=\"&nbsp;FJ-3MR\">型号:&nbsp;FJ-3MR</li><li title=\"&nbsp;条纹黑色&nbsp;网格黑色\">颜色分类:&nbsp;条纹黑色&nbsp;网格黑色</li><li title=\"&nbsp;F尖&nbsp;FM尖&nbsp;M尖\">书写粗细:&nbsp;F尖&nbsp;FM尖&nbsp;M尖</li><li title=\"&nbsp;官方标配\">套餐类型:&nbsp;官方标配</li><li title=\"&nbsp;礼盒装\">包装方式:&nbsp;礼盒装</li><li title=\"&nbsp;百乐株式会社\">生产企业:&nbsp;百乐株式会社</li><li title=\"&nbsp;FJ-3MR\">货号:&nbsp;FJ-3MR</li><li title=\"&nbsp;书写\">适用场景:&nbsp;书写</li><li title=\"&nbsp;金笔\">钢笔笔尖成分:&nbsp;金笔</li><li title=\"&nbsp;日本\">国家/地区:&nbsp;日本</li><li title=\"&nbsp;标准型\">笔尖种类:&nbsp;标准型</li><li title=\"&nbsp;挤捏吸墨\">上墨方式:&nbsp;挤捏吸墨</li><li title=\"&nbsp;树脂\">笔杆材质:&nbsp;树脂</li><li title=\"&nbsp;明尖\">笔尖嵌入方式:&nbsp;明尖</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"21934748119\" id=\"shop21934748119\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748119\" microscope-data=\"5003-21934748119\" data-title=\"自定义内容区\"></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes tm-curTab\"><div class=\"content ke-post\"><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\"></p><table align=\"center\" class=\"layui-table\"><tbody><tr><td><div><img usemap=\"#1599037488419\" src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\" class=\"img-ks-lazyload\"></div><map name=\"1599037488419\"><area shape=\"rect\" coords=\"1,3,777.0,357.06845\" href=\"https://market.m.taobao.com/app/sj/member-center-rax/pages/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\"></map></td></tr></tbody></table><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\" usemap=\"#LZLOZ\" class=\"img-ks-lazyload\"><map name=\"LZLOZ\"><area shape=\"rect\" coords=\"0,0,278,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\"><area shape=\"rect\" coords=\"276,0,522,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\"><area shape=\"rect\" coords=\"520,0,790,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\"></map><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\"></p><p><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2ZFqLwbSYBuNjSspfXXcZCpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/TB2uFyLwbSYBuNjSspfXXcZCpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/TB2.oOmweuSBuNjy1XcXXcYjFXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2tldChGAoBKNjSZSyXXaHAVXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB2Zo.ynLiSBuNkSnhJXXbDcpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/TB24EG2wkSWBuNjSszdXXbeSpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB26I4dn3KTBuNkSne1XXaJoXXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i3/3245829746/TB2TUZ0nRmWBuNkSndVXXcsApXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2ZhN3wXuWBuNjSszbXXcS7FXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2Ytg5nTdYBeNkSmLyXXXfnVXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"></p></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_DcBottomRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"22184000365\" id=\"shop22184000365\" data-componentid=\"5003\" data-spm=\"110.0.5003-22184000365\" microscope-data=\"5003-22184000365\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-hd\"><h3><span>自定义内容区</span></h3></div><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i4/3245829746/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\" class=\"img-ks-lazyload\"></p></div><s class=\"skin-box-bt\"><b></b></s></div></div><div class=\"J_TModule\" data-widgetid=\"21934748137\" id=\"shop21934748137\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748137\" microscope-data=\"5003-21934748137\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i3/3245829746/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\" class=\"img-ks-lazyload\"></p></div></div></div></div></div>', 0, 0, 685, 0, 1, 1680.00, 1680.00, 2400.00, 2369, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607586032, 1607586216, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_brand
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_brand`;
-CREATE TABLE `yx_goods_brand`  (
+CREATE TABLE `yx_goods_brand` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌名称',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌图片',
-  `initial` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌首字母',
-  `is_show` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
-  `sort` int(5) NULL DEFAULT 0 COMMENT '排序',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌描述',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
+  `name` varchar(32) NOT NULL COMMENT '品牌名称',
+  `image` varchar(255) NOT NULL COMMENT '品牌图片',
+  `initial` varchar(8) NOT NULL COMMENT '品牌首字母',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示:1-是.0-否',
+  `sort` int(5) DEFAULT '0' COMMENT '排序',
+  `remark` varchar(255) DEFAULT NULL COMMENT '品牌描述',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品品牌' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品品牌';
 
 -- ----------------------------
 -- Records of yx_goods_brand
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods_brand` VALUES (1, '晨光文具', '/uploads/images/background/20201210/dd2610485ad76c0d24f88f8ce58d3dd5.png', 'C', 1, 0, '文具专卖品牌', 1607569933, 1607570803, 0);
 INSERT INTO `yx_goods_brand` VALUES (2, '百乐', '/uploads/images/background/20201210/2dad83f2345046d47045c160a3db6896.png', 'B', 1, 0, '', 1607570669, NULL, 0);
 INSERT INTO `yx_goods_brand` VALUES (3, '得力', '/uploads/images/background/20201210/10b16861c6eeb1e9a744b86dd69b051f.png', 'D', 1, 0, '', 1607570799, NULL, 0);
 INSERT INTO `yx_goods_brand` VALUES (4, '小米', '/uploads/images/background/20201210/8529fda6cb6c3cf62c084df9c7c911a9.png', 'X', 1, 0, '', 1607570889, NULL, 0);
 INSERT INTO `yx_goods_brand` VALUES (5, '英雄', '/uploads/images/background/20201210/720a002e5c6bdf95a2dd3c31737d0e57.png', 'Y', 1, 0, '', 1607571044, NULL, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_category
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_category`;
-CREATE TABLE `yx_goods_category`  (
+CREATE TABLE `yx_goods_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
+  `name` varchar(90) NOT NULL COMMENT '分类名称',
   `pid` int(11) NOT NULL COMMENT '父级id',
-  `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分类图片',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类描述',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(10) NULL DEFAULT 0 COMMENT '删除标志:1-是；0-否',
+  `level` tinyint(1) DEFAULT NULL COMMENT '等级',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是;0-否',
+  `image` varchar(128) DEFAULT '' COMMENT '分类图片',
+  `remark` varchar(255) DEFAULT NULL COMMENT '分类描述',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(10) DEFAULT '0' COMMENT '删除标志:1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品分类';
 
 -- ----------------------------
 -- Records of yx_goods_category
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods_category` VALUES (1, '文具', 0, 1, 0, 1, '/uploads/images/background/20201210/d74e01d4a8b86f331fcca2f485080353.png', '', 1607570112, 1607570568, 0);
 INSERT INTO `yx_goods_category` VALUES (2, '专场推荐', 0, 1, 0, 1, '/uploads/images/background/20201210/eab147f969fce1475d4892c57256f8ec.png', '', 1607570127, NULL, 0);
 INSERT INTO `yx_goods_category` VALUES (3, '热门分类', 0, 1, 0, 1, '/uploads/images/background/20201210/79ee4347c8066f965c9ce7034f249cea.png', '', 1607570147, NULL, 0);
@@ -5404,67 +5383,105 @@ INSERT INTO `yx_goods_category` VALUES (12, '小米铅笔', 5, 3, 0, 1, '/upload
 INSERT INTO `yx_goods_category` VALUES (13, '得力中性笔', 6, 3, 0, 1, '/uploads/images/background/20201210/d0fd78d3b5de45b870f43b6db3d5a0be.png', '', 1607580133, NULL, 0);
 INSERT INTO `yx_goods_category` VALUES (14, '英雄钢笔', 7, 3, 0, 1, '/uploads/images/background/20201210/5e11c751c7e662764764e132ab6a8f72.png', '', 1607584443, NULL, 0);
 INSERT INTO `yx_goods_category` VALUES (15, '百乐钢笔', 8, 3, 0, 1, '/uploads/images/background/20201210/63d91cdfdb659e57a10a99d1cf44567e.png', '', 1607585040, NULL, 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_goods_click
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_goods_click`;
+CREATE TABLE `yx_goods_click` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `goods_id` int(11) NOT NULL COMMENT '产品id',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_goods_click
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_collect
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_collect`;
-CREATE TABLE `yx_goods_collect`  (
+CREATE TABLE `yx_goods_collect` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `goods_id` int(11) NOT NULL COMMENT '产品id',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_goods_collect
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_comment`;
-CREATE TABLE `yx_goods_comment`  (
+CREATE TABLE `yx_goods_comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品评论id',
-  `goods_id` int(128) NULL DEFAULT NULL COMMENT '商品id',
-  `item_id` int(128) NULL DEFAULT NULL COMMENT '规格id',
+  `goods_id` int(128) DEFAULT NULL COMMENT '商品id',
+  `item_id` int(128) DEFAULT NULL COMMENT '规格id',
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `order_goods_id` int(11) NOT NULL COMMENT '订单商品表id',
-  `goods_comment` tinyint(1) NULL DEFAULT NULL COMMENT '商品评论星级 1 一星 2 二星 3三星 4四星 5五星',
-  `service_comment` tinyint(1) NULL DEFAULT NULL COMMENT '服务评论星级 1 一星 2 二星 3三星 4四星 5五星',
-  `express_comment` tinyint(1) NULL DEFAULT NULL COMMENT '物流评论星级 1 一星 2 二星 3三星 4四星 5五星',
-  `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品评论',
+  `goods_comment` tinyint(1) DEFAULT NULL COMMENT '商品评论星级 1 一星 2 二星 3三星 4四星 5五星',
+  `service_comment` tinyint(1) DEFAULT NULL COMMENT '服务评论星级 1 一星 2 二星 3三星 4四星 5五星',
+  `express_comment` tinyint(1) DEFAULT NULL COMMENT '物流评论星级 1 一星 2 二星 3三星 4四星 5五星',
+  `comment` varchar(255) DEFAULT NULL COMMENT '商品评论',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-删除',
-  `description_comment` tinyint(1) NULL DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
-  `status` tinyint(2) NULL DEFAULT 1 COMMENT '显示状态 0-隐藏 1-显示 ',
-  `reply` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商家回复',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1-删除',
+  `description_comment` tinyint(1) DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
+  `status` tinyint(2) DEFAULT '1' COMMENT '显示状态 0-隐藏 1-显示 ',
+  `reply` varchar(255) DEFAULT NULL COMMENT '商家回复',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品评论表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品评论表';
+
+-- ----------------------------
+-- Records of yx_goods_comment
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_comment_image
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_comment_image`;
-CREATE TABLE `yx_goods_comment_image`  (
+CREATE TABLE `yx_goods_comment_image` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `goods_comment_id` int(10) NOT NULL COMMENT '商品评价id',
-  `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
+  `uri` varchar(128) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_goods_comment_image
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_image
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_image`;
-CREATE TABLE `yx_goods_image`  (
+CREATE TABLE `yx_goods_image` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
-  `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
+  `uri` varchar(128) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品轮播图表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品轮播图表';
 
 -- ----------------------------
 -- Records of yx_goods_image
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods_image` VALUES (4, 1, '/uploads/images/background/20201210/910e9d4fc9f10c7a11825315785c555d.png');
 INSERT INTO `yx_goods_image` VALUES (5, 1, '/uploads/images/background/20201210/45b6bb2224e4051ecf407cabb54cd781.png');
 INSERT INTO `yx_goods_image` VALUES (6, 1, '/uploads/images/background/20201210/dceddf4cb321cf612eee441477d3b93f.png');
@@ -5497,30 +5514,32 @@ INSERT INTO `yx_goods_image` VALUES (42, 9, '/uploads/images/background/20201210
 INSERT INTO `yx_goods_image` VALUES (43, 10, '/uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png');
 INSERT INTO `yx_goods_image` VALUES (44, 10, '/uploads/images/background/20201210/254590f48981940296d63640c64cae83.png');
 INSERT INTO `yx_goods_image` VALUES (45, 10, '/uploads/images/background/20201210/930d0719e718db9bfaf2f3acacc1fbe8.png');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_item
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_item`;
-CREATE TABLE `yx_goods_item`  (
+CREATE TABLE `yx_goods_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图',
+  `image` varchar(128) DEFAULT NULL COMMENT '商品图',
   `goods_id` int(11) NOT NULL COMMENT '商品主表id',
-  `spec_value_ids` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格id，隔开',
-  `spec_value_str` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格名称，隔开',
-  `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
-  `cost_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '成本价',
-  `stock` int(10) NULL DEFAULT NULL COMMENT '库存',
-  `volume` int(10) NULL DEFAULT NULL COMMENT '体积',
-  `weight` int(10) NULL DEFAULT NULL COMMENT '重量',
-  `bar_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '条码',
+  `spec_value_ids` varchar(32) DEFAULT '' COMMENT '多个规格id，隔开',
+  `spec_value_str` varchar(64) DEFAULT '' COMMENT '多个规格名称，隔开',
+  `market_price` decimal(10,2) DEFAULT NULL COMMENT '市场价',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '价格',
+  `cost_price` decimal(10,2) DEFAULT NULL COMMENT '成本价',
+  `stock` int(10) DEFAULT NULL COMMENT '库存',
+  `volume` int(10) DEFAULT NULL COMMENT '体积',
+  `weight` int(10) DEFAULT NULL COMMENT '重量',
+  `bar_code` varchar(32) DEFAULT NULL COMMENT '条码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品的SKU' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品的SKU';
 
 -- ----------------------------
 -- Records of yx_goods_item
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods_item` VALUES (1, '', 1, '1', '默认', 55.00, 44.82, 23.00, 9863, 2, 2, '22353');
 INSERT INTO `yx_goods_item` VALUES (2, '', 2, '2', '默认', 78.00, 43.90, 23.00, 8676, 2, 2, '265368');
 INSERT INTO `yx_goods_item` VALUES (3, '', 3, '3', '默认', 21.00, 13.50, 3.00, 56832, 2, 2, '1535838');
@@ -5531,21 +5550,42 @@ INSERT INTO `yx_goods_item` VALUES (7, '', 7, '7', '默认', 32.80, 32.80, 16.00
 INSERT INTO `yx_goods_item` VALUES (8, '', 8, '8', '默认', 2598.00, 1359.00, 823.00, 1069, 2, 2, '5387398');
 INSERT INTO `yx_goods_item` VALUES (9, '', 9, '9', '默认', 9800.00, 6860.00, 2635.00, 1260, 2, 2, '2266543');
 INSERT INTO `yx_goods_item` VALUES (10, '', 10, '10', '默认', 2400.00, 1680.00, 768.00, 2369, 2, 2, '36555');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_goods_sale
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_goods_sale`;
+CREATE TABLE `yx_goods_sale` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `goods_id` int(11) NOT NULL COMMENT '产品id',
+  `goods_num` int(11) DEFAULT '1' COMMENT '商品购买数量',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_goods_sale
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_spec
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_spec`;
-CREATE TABLE `yx_goods_spec`  (
+CREATE TABLE `yx_goods_spec` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) NOT NULL COMMENT '商品主表id',
-  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格名称',
+  `name` varchar(16) NOT NULL COMMENT '规格名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规格' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品规格';
 
 -- ----------------------------
 -- Records of yx_goods_spec
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods_spec` VALUES (1, 1, '默认');
 INSERT INTO `yx_goods_spec` VALUES (2, 2, '默认');
 INSERT INTO `yx_goods_spec` VALUES (3, 3, '默认');
@@ -5556,22 +5596,24 @@ INSERT INTO `yx_goods_spec` VALUES (7, 7, '默认');
 INSERT INTO `yx_goods_spec` VALUES (8, 8, '默认');
 INSERT INTO `yx_goods_spec` VALUES (9, 9, '默认');
 INSERT INTO `yx_goods_spec` VALUES (10, 10, '默认');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_goods_spec_value
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_goods_spec_value`;
-CREATE TABLE `yx_goods_spec_value`  (
+CREATE TABLE `yx_goods_spec_value` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) NOT NULL COMMENT '商品id',
   `spec_id` int(11) NOT NULL COMMENT '规格id',
-  `value` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格属性值',
+  `value` varchar(32) NOT NULL COMMENT '规格属性值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规格属性值表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品规格属性值表';
 
 -- ----------------------------
 -- Records of yx_goods_spec_value
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_goods_spec_value` VALUES (1, 1, 1, '默认');
 INSERT INTO `yx_goods_spec_value` VALUES (2, 2, 2, '默认');
 INSERT INTO `yx_goods_spec_value` VALUES (3, 3, 3, '默认');
@@ -5582,223 +5624,259 @@ INSERT INTO `yx_goods_spec_value` VALUES (7, 7, 7, '默认');
 INSERT INTO `yx_goods_spec_value` VALUES (8, 8, 8, '默认');
 INSERT INTO `yx_goods_spec_value` VALUES (9, 9, 9, '默认');
 INSERT INTO `yx_goods_spec_value` VALUES (10, 10, 10, '默认');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_help
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_help`;
-CREATE TABLE `yx_help`  (
+CREATE TABLE `yx_help` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助id',
-  `cid` int(11) NULL DEFAULT NULL COMMENT '帮助分类',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助标题',
-  `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助简介',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助封面图',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '帮助内容',
-  `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '帮助状态:1-显示.0-否',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
-  `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
+  `cid` int(11) DEFAULT NULL COMMENT '帮助分类',
+  `title` varchar(255) DEFAULT NULL COMMENT '帮助标题',
+  `synopsis` varchar(255) DEFAULT NULL COMMENT '帮助简介',
+  `image` varchar(128) DEFAULT NULL COMMENT '帮助封面图',
+  `content` text COMMENT '帮助内容',
+  `visit` int(11) DEFAULT '0' COMMENT '浏览人数',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '帮助状态:1-显示.0-否',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1-已删除',
+  `likes` int(11) DEFAULT '0' COMMENT '点赞数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帮助表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帮助表';
 
 -- ----------------------------
 -- Records of yx_help
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_help` VALUES (1, 1, 'LikeShop商城使用手册', '使用手册', '/uploads/images/background/20201210/f7c7bdc7e0b7fc3d7fbd25d67bd6f7d3.png', '<p style=\"text-align: left;\">快速上手指南\nLikeShop使用手册\n1\n好象股份有限公司版权所有\nV 2.33\n快速上手指南\n尊敬的客户：\n欢迎使用LikeShop商城，此文档为快速上手指南，帮助您便捷、高效的完成商品采购。\n2\n目录 Contents\n*采购员进入03页阅读 *审批员进入25页阅读\n1、如何登录LikeShop商城·································P04\n采购员、审批员、管理员登录方式一致\n2、如何查找需要采购的商品····················P05\n多种方式找商品，快速便捷\n3、如何将商品加入购物车··················P06/09\n多种方式找商品，快速便捷\n4、如何结算购物车···································P10\n将购物车中的商品进行结算核对、提交\n5、如何提交采购订单··························P11/14\n采购订单提交给审批人审批\n6、如何查看自己的采购订单···················P15\n查看自己提交过的采购订单\n8、如何取消采购订单································P17\n取消不想要的订单\n10、如何查看订单统计·····························P19\n7、如何查看订单进展以及物流信息········P16\n在线追踪订单审批以及物流配送进度\n9、如何在线确认收货·································P18\n在线签收 部门统计、采购人统计、时间统计\n快速上手指南 3\n11、如何查看订单详情························P20\n部门、个人、商品订单详情\n15、如何修改密码、设置个人信息···P27 16、常见问题与回答··························P28\n修改密码、修改头像、设置信息\n14、如何审批订单························P25/26\n审批人员三种审批方式\n13、如何联系在线客服·······················P24\n在线客服咨询\n12、如何在线申请开票················P21/23\n支持专票、普票、电子发票\n快速上手指南 4\n➢ 如何登录LikeShop商城？\n当您需要登录LikeShop商城进行商品采购时：\n第1步：在浏览器中打开①LikeShop商城。\n第2步：点击页面顶端的②请登录，跳转到登录界面。\n第3步：在登录界面中输入③账号和密码，点击④登录即可。\n1\n2\n3\n4\n登录成功标志\n注意事项：\n如果忘记密码，请联系管\n理员，帮助您重置密码。\n快速上手指南 5\n➢ 如何查找需要采购的商品？\n当您需要查找办公用品时：\n方法一：账号登陆后，在首页①搜索框输入产品名称或型号或编号，再点击②搜索按钮。\n1\n2\n方法二：账号登陆后，鼠标悬停③商品分类中的主分类，再移动到次级分类，再点击④三级分类。\n3\n4\n说明：a、搜索或选择完成后，均直接进入商品列表页面。\nb、直接点击商品分类中的主分类后，跳转至该主分类下所有商品列表页面。\n快速上手指南 6\n方法一：商品列表页单个选购，在商品列表页面，鼠标停在商品图片上时，会浮现出购买商品的黄色\n图标，调整商品数量①调整商品数量，然后点击②加入购物车，此商品就选购完成。\n1 2\n➢ 如何将商品加入购物车\n当您需要将想采购的办公用品加入购物车时：\n快速上手指南 7\n方法二：商品详情页选购，在商品列表页面，直接点击商品后，进入商品详情页。\n在商品详情页面，根据自身需要①选择好商品的各项参数后，点击②加入购物车，完成商品选购。\n说明：当您直接点击“立即购买”时，商城直接跳转到提交订单页面。\n1\n2\n快速上手指南 8\n方法三：商品列表页批量选购，在商品列表页面，鼠标停在商品图片上时，点击①图片左上角的\n勾选框，然后再点击商品列表右上方的②批量加入购物车，在弹出的页面中③调整好商品的数量，\n然后再点击④确认加入购物车。\n1\n2\n3\n4\n这个是弹窗\n快速上手指南 9\n当您需要将想采购的办公用品加入购物车时：\n方法四：快速批量提交，页面顶部点击①快速下单，在跳转后的页面点击②批量快速下单，再点击\n③下载Excel模板。在模板中的最后一列内，④填入需要购买的数量，保存后回到商城页面点击\n⑤上传文件，完成这些后，Excel模板中的填入的商品就会自动加入购物车。\n1\n2\n3\n5\n表格模板下载打开的样例\n4\n快速上手指南 10\n➢ 如何结算购物车\n当您需要将购物车内的商品进行结算时：\n第1步：点击页面①顶部的购物车或者页面①右侧的购物车，进入购物车。\n第2步：②勾选需要的商品，并按需③调整数量。然后点击④去结算，系统将跳转到提交订单页面。\n1\n1\n2 3\n4\n说明：\n点击导出按钮可将购物车\n清单导出为Excel表格\n快速上手指南 11\n➢ 如何提交采购订单\n当您需要将采购订单提交时：\n第1步：商品结算后，自动进入订单提交页面。选择①采购部门，选择完成后自动弹出审批人。\n第2步：点选②收件人，确定收货信息。\n第3步：确定③支付方式，一般不会变化。\n第4步：查看④剩余预算，是否充足。\n注意事项：\n当预算不足时，无法提交订单。您可以选择\n联系管理员增加预算或删减商品，再提交。\n1\n2\n3\n4\n快速上手指南 12\n第5步：⑤核对商品清单列表，商品、数量、规格、颜色等是否有误。\n第6步：确定无误，点击⑥提交订单，完成页面跳转到提交完成的⑦提示页面。\n5\n6\n7 跳转后页面提示\n快速上手指南 13\n选择收货时，也可以实时新增地址：\n① ：在选择部门时，部分客户户只能选择自己，无法查看到其他人。\n② ：在收货地址一栏中，部分客户可点击右侧的新增收货地址来实时新增。\n1\n2\n说明：新增收货地址功能为可选功能。\n快速上手指南 14\n提交订单时，可以添加附件以及备注：\n① 提交订单时，可以对订单进行备注，备注的信息订单处理人员将会关注到。\n② 提交订单时，可以添加审批附件，附件内容支持多种常见的文件形式。\n说明：添加的附件，在审批订单时可以查看到。\n1\n2\n快速上手指南 15\n➢ 如何查看自己的采购订单\n当您需要查看采购订单时：\n第1步：点击页面顶部①我的订单或者商城首页右侧的我的订单，进入订单中心。\n第2步：通过各项筛选功能筛选后，查看自己的订单记录。\n1\n说明：可根据“采购部门”、“订单状态”“下单时间”“订单号”等不同维度进行筛选。\n快速上手指南 16\n➢ 如何查看采购订单进展以及物流信息\n当您需要查看采购订单进度以及物流信息时：\n第1步：进入订单中心后，点击订单栏中的①查看，进入该订单状态页面。\n第2步：进入到订单状态页后，可查看②订单的处理进展，可查看③物流信息，可查看④审\n批状态以及相应审批负责人。\n2\n4\n3\n1\n快速上手指南 17\n➢ 如何取消采购订单\n当您需要将采购订单取消时：\n第1步：进入订单中心。\n第2步：点击订单右侧的①取消，页面弹出确认对话框，点击②确定，接口完成订单取消。\n注意：当订单被审批通过后，就不能被取消了。\n1\n2\n快速上手指南 18\n➢ 如何在线确认收货\n当您需要在线确认收货时：\n第1步：进入订单中心后，通过订单状态中选择①已发货，将订单筛选出来。\n第2步：点击订单右侧的②确认收货，完成在线的签收确认。\n1\n2\n快速上手指南 19\n➢ 如何查看订单统计\n当您需要查看订单统计时：\n第1步：进入订单中心。\n第2步：点击左侧①订单报表，然后选择②筛选条件，再点击③统计，就会展现出统计结果。\n说明：可根据“所属公司”、“订单时间”“统计维度”三个方面进行统计。\n其中，统计维度包含“部门统计”、“员工统计”、“商品统计”等不同角度的统计逻辑。\n2\n3\n1\n快速上手指南 20\n➢ 如何查看订单详情\n当您需要查看订单详情时：\n第1步：进入订单中心。\n第2步：点击左侧①订单明细报表，然后选择②筛选条件，再点击③查询，就会展现出查询结果。\n说明：可根据“订单创建时间”、“订单归属部门”“客户商品分类”、“商品名称”四个方面\n进行筛选查询，亦可到处至表格。\n2\n3\n1\n快速上手指南 21\n➢ 如何在线申请开票\n当您需要在线申请开发票时：\n第1步：在进入个人中心后，点击左侧① 待开票订单申请。\n第2步：在右侧的②筛选项中，筛选出需要开票的订单，然后点击③查询。\n说明：\na、当您需要批量开票时，请勾选订单后，点击批量开票申请按钮。\nb、当您需要导出明细时，点击导出待开票订单明细按钮。\nc、只有当订单状态为已签收时，才可以在线申请开票。\n第3步：点击④开票申请，对单笔订单进行开票。\n2 3\n4\n1\n说明：\n在线申请开票为可选功能，\n可根据需要进行开通\n快速上手指南 22\n在弹出页面填入信息：\n说明：\na、可开增值税专票、普票、电子普票，可开企业、个人类型。\nb、带红色星号的选项为必填项。\n快速上手指南 23\n添加寄送地址与提交申请\n第1步：在开票申请页面，点击左侧① 新增地址。输入信息后点击②保存。\n第2步：确认信息没问题后，点击③提交申请，完成开票申请。\n说明：\na、如果已经有新增过地址，那么可以直接勾选地址。\nb、您可以点击订单中的查看，来确定订单详情是否正确。\n1\n2\n3\n快速上手指南 24\n➢ 如何联系在线客服\n当您需要咨询问题服务时：\n第1步：点击页面左上角的logo进入商城首页，然后右侧的①客服\n说明：\na、提供订单号、下单平台及个人信息，可以让客服更好的为您服务。\n快速上手指南 25\n➢ 如何审批订单\n当您需要审批订单时：\n第1步：审批员登录账号并进入订单中心后，点击①订单审批。\n方式一：批量进行审批，\n第2步：②勾选需要审批的订单，点击右侧的③批量通过或批量拒绝按钮，会弹出对话框。\n第3步：在弹出的对话框中，填入④审批意见，然后点击⑤确定，完成审批。\n1\n2\n3\n4\n5\n快速上手指南 26\n方式二：列表页单个订单审批\n第1步：直接点击待审批订单右侧的①通过。\n第2步：在弹出的对话框中，点击②确定，通过审批。然后在再次点击③确定，完成审批。\n方式三：详情页中单个订单审批\n第1步：点击待审批订单右侧的①查看。\n第2步：在跳转的页面的②审批备注中输入备注，然后③点击通过或拒绝来完成审批。\n1\n3\n2\n1\n2\n3\n快速上手指南 27\n➢ 如何修改密码，设置个人信息\n当您需要修改密码或个人信息设置时：\n第1步：点击页面顶端的①账户昵称，进入个人中心页面，点击左侧菜单栏中的①设置。\n第2步：点击个人资料进入，修改个人资料。\n第3步：点击修改密码，进入修改个人密码页面。\n第4步：点击修改头像，进入修改个人头像页面。\n快速上手指南 28\n常见问题以及解答\n1、怎样快速回到首页？\n答：在任何页面中，点击左上角的企采商城LOGO图标，即可回到首页\n2、密码忘记了怎么办？\n答：请联系您的管理员，为您重置密码。\n3、为什么提交订单按钮点不了？\n答：（1）查看预算是否够，不够请联系管理员增加预算，或删减商品。\n（2）有没有填写部门，如果没有填写部门的话是不能提交订单的。\n（3）若以上都没问题，请将页面截图并反馈给对接人。\n4、审批人员可以采购吗？\n答：可以采购，一个账号可以有多种角色权限。</p>', 0, 0, 1, 1607569138, NULL, 0, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_help_category
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_help_category`;
-CREATE TABLE `yx_help_category`  (
+CREATE TABLE `yx_help_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助分类id',
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
+  `name` varchar(128) DEFAULT NULL COMMENT '分类名称',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示:1-是;0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` int(10) DEFAULT '0' COMMENT '删除标志:0-未删除.1;已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帮助分类表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帮助分类表';
 
 -- ----------------------------
 -- Records of yx_help_category
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_help_category` VALUES (1, '使用手册', 1, 1607568906, NULL, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_menu_decorate
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_menu_decorate`;
-CREATE TABLE `yx_menu_decorate`  (
+CREATE TABLE `yx_menu_decorate` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
-  `client` tinyint(1) NOT NULL DEFAULT 1 COMMENT '终端类型：1-小程序；2-H5；3-APP',
-  `decorate_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '菜单类型：1-首页导航；2-个人中心',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+  `name` varchar(32) NOT NULL COMMENT '菜单名称',
+  `client` tinyint(1) NOT NULL DEFAULT '1' COMMENT '终端类型：1-小程序；2-H5；3-APP',
+  `decorate_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '菜单类型：1-首页导航；2-个人中心',
+  `image` varchar(255) DEFAULT NULL COMMENT '菜单图标',
   `link_type` tinyint(1) NOT NULL COMMENT '链接类型：1-商场模块；2-自定义链接',
-  `link_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接地址',
-  `sort` int(10) NULL DEFAULT 0 COMMENT '菜单排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示；1-是；0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
+  `link_address` varchar(255) NOT NULL COMMENT '链接地址',
+  `sort` int(10) DEFAULT '0' COMMENT '菜单排序',
+  `is_show` tinyint(1) DEFAULT '1' COMMENT '是否显示；1-是；0-否',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除；0-否；1-是',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of yx_menu_decorate
 -- ----------------------------
-INSERT INTO `yx_menu_decorate` VALUES (1, '限时秒杀', 1, 1, '/uploads/images/background/20201210/94a0d54ab18f3d93072c73a1e0dcba17.png', 1, '1', 13, 1, 1607566159, 1607566159, 0);
-INSERT INTO `yx_menu_decorate` VALUES (2, '拼团活动', 1, 1, '/uploads/images/background/20201210/643833719ae963e6a9035e4b98a6279c.png', 1, '5', 12, 1, 1607566214, 1607567774, 0);
-INSERT INTO `yx_menu_decorate` VALUES (3, '热销榜单', 1, 1, '/uploads/images/background/20201210/1668b4385dd0296ae033da6e6ad5f125.png', 1, '3', 11, 1, 1607566237, 1607566329, 0);
-INSERT INTO `yx_menu_decorate` VALUES (4, '领券中心', 1, 1, '/uploads/images/background/20201210/520c72e1a1d48cb088b0f070d77bc031.png', 1, '4', 10, 1, 1607566259, 1607566325, 0);
-INSERT INTO `yx_menu_decorate` VALUES (5, '积分签到', 1, 1, '/uploads/images/background/20201210/0158588a36f9f0ae6a58509f6dd0d80e.png', 1, '5', 9, 1, 1607566280, 1607566320, 0);
-INSERT INTO `yx_menu_decorate` VALUES (6, '会员中心', 1, 1, '/uploads/images/background/20201210/1fbb2fb37597896efd7b95506ed7cdda.png', 1, '1', 8, 1, 1607566297, 1607566559, 0);
-INSERT INTO `yx_menu_decorate` VALUES (7, '我的收藏', 1, 1, '/uploads/images/background/20201210/3a3228fcfdb8fa0808a9e67b6c43df53.png', 1, '7', 7, 1, 1607566577, 1607566577, 0);
-INSERT INTO `yx_menu_decorate` VALUES (8, '商场资讯', 1, 1, '/uploads/images/background/20201210/06332ce973851322e050de07a7b7631f.png', 1, '8', 6, 1, 1607566593, 1607566593, 0);
-INSERT INTO `yx_menu_decorate` VALUES (9, '帮助中心', 1, 1, '/uploads/images/background/20201210/bbd816d5b586cdeca8e87dd7c06e2fcf.png', 1, '1', 4, 1, 1607566638, 1607567281, 0);
-INSERT INTO `yx_menu_decorate` VALUES (10, '我的钱包', 1, 2, '/uploads/images/background/20201210/d650559b128bfca62870205445365ac8.png', 1, '10', 8, 1, 1607567063, 1607567063, 0);
-INSERT INTO `yx_menu_decorate` VALUES (11, '分销推广', 1, 2, '/uploads/images/background/20201210/1226785362c5f02ef2616be8a1a5737a.png', 1, '11', 7, 1, 1607567081, 1607567081, 0);
-INSERT INTO `yx_menu_decorate` VALUES (12, '我的优惠券', 1, 2, '/uploads/images/background/20201210/c03fd3359bcb6a575a479dc41a013fff.png', 1, '12', 6, 1, 1607567120, 1607567120, 0);
-INSERT INTO `yx_menu_decorate` VALUES (13, '等级服务', 1, 2, '/uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1, '13', 5, 1, 1607567139, 1607567139, 0);
-INSERT INTO `yx_menu_decorate` VALUES (14, '我的收藏', 1, 2, '/uploads/images/background/20201210/ad841b1109ad0d5a8f40585d47ecd8f2.png', 1, '16', 4, 1, 1607567162, 1607567162, 0);
-INSERT INTO `yx_menu_decorate` VALUES (15, '收货地址', 1, 2, '/uploads/images/background/20201210/dd7b3e6885221f0c94a7092dc95e1f8f.png', 1, '15', 3, 1, 1607567181, 1607567181, 0);
-INSERT INTO `yx_menu_decorate` VALUES (16, '帮助中心', 1, 2, '/uploads/images/background/20201210/d01e2ab0defbad866f19420e6483f7b2.png', 1, '15', 2, 1, 1607567199, 1607567199, 0);
-INSERT INTO `yx_menu_decorate` VALUES (17, '联系客服', 1, 2, '/uploads/images/background/20201210/f6189105a4bfb39631e193a83047ad7a.png', 1, '17', 1, 1, 1607567217, 1607567217, 0);
-INSERT INTO `yx_menu_decorate` VALUES (18, 'VIP', 1, 1, '/uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1, '1', 5, 1, 1607567271, 1607567286, 0);
-INSERT INTO `yx_menu_decorate` VALUES (19, '限时秒杀', 1, 1, '/uploads/images/background/20201210/94a0d54ab18f3d93072c73a1e0dcba17.png', 1, '1', 13, 1, 1607567332, 1607567332, 0);
-INSERT INTO `yx_menu_decorate` VALUES (20, '拼团活动', 1, 1, '/uploads/images/background/20201210/643833719ae963e6a9035e4b98a6279c.png', 1, '2', 12, 1, 1607567351, 1607567351, 0);
-INSERT INTO `yx_menu_decorate` VALUES (21, '热销榜单', 1, 1, '/uploads/images/background/20201210/1668b4385dd0296ae033da6e6ad5f125.png', 1, '3', 11, 1, 1607567368, 1607568355, 0);
-INSERT INTO `yx_menu_decorate` VALUES (22, '领券中心', 1, 1, '/uploads/images/background/20201210/520c72e1a1d48cb088b0f070d77bc031.png', 1, '5', 10, 1, 1607567397, 1607567621, 0);
-INSERT INTO `yx_menu_decorate` VALUES (23, '积分签到', 1, 1, '/uploads/images/background/20201210/0158588a36f9f0ae6a58509f6dd0d80e.png', 1, '5', 9, 1, 1607567416, 1607567416, 0);
-INSERT INTO `yx_menu_decorate` VALUES (24, '会员中心', 1, 1, '/uploads/images/background/20201210/1fbb2fb37597896efd7b95506ed7cdda.png', 1, '6', 8, 1, 1607567431, 1607567431, 0);
-INSERT INTO `yx_menu_decorate` VALUES (25, '我的收藏', 1, 1, '/uploads/images/background/20201210/3a3228fcfdb8fa0808a9e67b6c43df53.png', 1, '1', 7, 1, 1607567450, 1607567454, 0);
-INSERT INTO `yx_menu_decorate` VALUES (26, '商场资讯', 1, 1, '/uploads/images/background/20201210/06332ce973851322e050de07a7b7631f.png', 1, '8', 6, 1, 1607567485, 1607567485, 0);
-INSERT INTO `yx_menu_decorate` VALUES (27, 'VIP', 1, 1, '/uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1, '1', 5, 1, 1607567501, 1607567501, 0);
-INSERT INTO `yx_menu_decorate` VALUES (28, '帮助中心', 1, 1, '/uploads/images/background/20201210/bbd816d5b586cdeca8e87dd7c06e2fcf.png', 1, '9', 4, 1, 1607567523, 1607567523, 0);
-INSERT INTO `yx_menu_decorate` VALUES (29, '我的钱包', 1, 2, '/uploads/images/background/20201210/d650559b128bfca62870205445365ac8.png', 1, '10', 8, 1, 1607567657, 1607567657, 0);
-INSERT INTO `yx_menu_decorate` VALUES (30, '分销推广', 1, 2, '/uploads/images/background/20201210/1226785362c5f02ef2616be8a1a5737a.png', 1, '11', 7, 1, 1607567673, 1607567723, 0);
-INSERT INTO `yx_menu_decorate` VALUES (31, '我的优惠券', 1, 2, '/uploads/images/background/20201210/c03fd3359bcb6a575a479dc41a013fff.png', 1, '10', 6, 1, 1607567748, 1607567758, 0);
-INSERT INTO `yx_menu_decorate` VALUES (32, '等级服务', 1, 2, '/uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1, '10', 5, 1, 1607567817, 1607567823, 0);
-INSERT INTO `yx_menu_decorate` VALUES (33, '我的收藏', 1, 2, '/uploads/images/background/20201210/ad841b1109ad0d5a8f40585d47ecd8f2.png', 1, '16', 4, 1, 1607567847, 1607567847, 0);
-INSERT INTO `yx_menu_decorate` VALUES (34, '收货地址', 1, 2, '/uploads/images/background/20201210/dd7b3e6885221f0c94a7092dc95e1f8f.png', 1, '15', 3, 1, 1607567865, 1607567865, 0);
-INSERT INTO `yx_menu_decorate` VALUES (35, '帮助中心', 1, 2, '/uploads/images/background/20201210/d01e2ab0defbad866f19420e6483f7b2.png', 1, '14', 2, 1, 1607567884, 1607567884, 0);
-INSERT INTO `yx_menu_decorate` VALUES (36, '联系客服', 1, 2, '/uploads/images/background/20201210/f6189105a4bfb39631e193a83047ad7a.png', 1, '17', 1, 1, 1607567902, 1607567902, 0);
-INSERT INTO `yx_menu_decorate` VALUES (37, '我的钱包', 1, 2, '/uploads/images/background/20201210/d650559b128bfca62870205445365ac8.png', 1, '10', 8, 1, 1607568013, 1607568013, 0);
-INSERT INTO `yx_menu_decorate` VALUES (38, '分销推广', 1, 2, '/uploads/images/background/20201210/1226785362c5f02ef2616be8a1a5737a.png', 1, '11', 7, 1, 1607568029, 1607587498, 0);
-INSERT INTO `yx_menu_decorate` VALUES (39, '我的优惠券', 1, 2, '/uploads/images/background/20201210/c03fd3359bcb6a575a479dc41a013fff.png', 1, '12', 6, 1, 1607568049, 1607568049, 0);
-INSERT INTO `yx_menu_decorate` VALUES (40, '等级服务', 1, 2, '/uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1, '13', 5, 1, 1607568070, 1607568070, 0);
-INSERT INTO `yx_menu_decorate` VALUES (41, '我的收藏', 1, 2, '/uploads/images/background/20201210/ad841b1109ad0d5a8f40585d47ecd8f2.png', 1, '16', 4, 1, 1607568084, 1607568084, 0);
-INSERT INTO `yx_menu_decorate` VALUES (42, '收货地址', 1, 2, '/uploads/images/background/20201210/dd7b3e6885221f0c94a7092dc95e1f8f.png', 1, '15', 3, 1, 1607568100, 1607568100, 0);
-INSERT INTO `yx_menu_decorate` VALUES (43, '帮助中心', 1, 2, '/uploads/images/background/20201210/d01e2ab0defbad866f19420e6483f7b2.png', 1, '16', 2, 1, 1607568115, 1607568115, 0);
-INSERT INTO `yx_menu_decorate` VALUES (44, '联系客服', 1, 2, '/uploads/images/background/20201210/f6189105a4bfb39631e193a83047ad7a.png', 1, '17', 1, 1, 1607568131, 1607568131, 0);
-INSERT INTO `yx_menu_decorate` VALUES (45, '限时秒杀', 1, 1, '/uploads/images/background/20201210/94a0d54ab18f3d93072c73a1e0dcba17.png', 1, '1', 13, 1, 1607568155, 1607568155, 0);
-INSERT INTO `yx_menu_decorate` VALUES (46, '拼团活动', 1, 1, '/uploads/images/background/20201210/643833719ae963e6a9035e4b98a6279c.png', 1, '2', 12, 1, 1607568173, 1607586345, 0);
-INSERT INTO `yx_menu_decorate` VALUES (47, '热销榜单', 1, 1, '/uploads/images/background/20201210/1668b4385dd0296ae033da6e6ad5f125.png', 1, '2', 11, 1, 1607568186, 1607586351, 0);
-INSERT INTO `yx_menu_decorate` VALUES (48, '领券中心', 1, 1, '/uploads/images/background/20201210/520c72e1a1d48cb088b0f070d77bc031.png', 1, '4', 10, 1, 1607568214, 1607568214, 0);
-INSERT INTO `yx_menu_decorate` VALUES (49, '积分签到', 1, 1, '/uploads/images/background/20201210/0158588a36f9f0ae6a58509f6dd0d80e.png', 1, '5', 9, 1, 1607568230, 1607586355, 0);
-INSERT INTO `yx_menu_decorate` VALUES (50, '会员中心', 1, 1, '/uploads/images/background/20201210/1fbb2fb37597896efd7b95506ed7cdda.png', 1, '6', 8, 1, 1607568251, 1607568251, 0);
-INSERT INTO `yx_menu_decorate` VALUES (51, '我的收藏', 1, 1, '/uploads/images/background/20201210/3a3228fcfdb8fa0808a9e67b6c43df53.png', 1, '7', 7, 1, 1607568274, 1607568274, 0);
-INSERT INTO `yx_menu_decorate` VALUES (52, '商城资讯', 1, 1, '/uploads/images/background/20201210/06332ce973851322e050de07a7b7631f.png', 1, '1', 6, 1, 1607568293, 1607568298, 0);
-INSERT INTO `yx_menu_decorate` VALUES (53, 'VIP', 1, 1, '/uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1, '1', 5, 1, 1607568322, 1607568322, 0);
-INSERT INTO `yx_menu_decorate` VALUES (54, '帮助中心', 1, 1, '/uploads/images/background/20201210/bbd816d5b586cdeca8e87dd7c06e2fcf.png', 1, '9', 4, 1, 1607568341, 1607568341, 0);
+BEGIN;
+INSERT INTO `yx_menu_decorate` VALUES (1, '限时秒杀', 2, 1, '/images/menu/goods_seckill.png', 1, '1', 10, 1, 1607567420, 1607567420, 0);
+INSERT INTO `yx_menu_decorate` VALUES (2, '拼团活动', 2, 1, '/images/menu/goods_combination.png', 1, '2', 9, 1, 1607567461, 1607567461, 0);
+INSERT INTO `yx_menu_decorate` VALUES (3, '热销榜单', 2, 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607567497, 1607567497, 0);
+INSERT INTO `yx_menu_decorate` VALUES (4, '领券中心', 2, 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607567532, 1607583577, 0);
+INSERT INTO `yx_menu_decorate` VALUES (5, '积分签到', 2, 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607567561, 1607567561, 0);
+INSERT INTO `yx_menu_decorate` VALUES (6, '会员中心', 2, 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607567590, 1607567590, 0);
+INSERT INTO `yx_menu_decorate` VALUES (7, '我的收藏', 2, 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607567628, 1607567628, 0);
+INSERT INTO `yx_menu_decorate` VALUES (8, '商城资讯', 2, 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607567666, 1607567666, 0);
+INSERT INTO `yx_menu_decorate` VALUES (9, '帮助中心', 2, 1, '/images/menu/news_center1.png', 1, '9', 0, 1, 1607567709, 1607567709, 0);
+INSERT INTO `yx_menu_decorate` VALUES (10, '我的钱包', 2, 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607567843, 1607567843, 0);
+INSERT INTO `yx_menu_decorate` VALUES (11, '分销推广', 2, 2, '/images/menu/centre_user_promote.png', 1, '11', 0, 1, 1607567879, 1607567879, 0);
+INSERT INTO `yx_menu_decorate` VALUES (12, '我的优惠券', 2, 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607567908, 1607583921, 0);
+INSERT INTO `yx_menu_decorate` VALUES (13, '等级服务', 2, 2, '/images/menu/centre_user_vip.png', 1, '13', 6, 1, 1607567939, 1607583947, 0);
+INSERT INTO `yx_menu_decorate` VALUES (14, '我的收藏', 2, 2, '/images/menu/centre_user_collection.png', 1, '16', 5, 1, 1607567969, 1607567973, 0);
+INSERT INTO `yx_menu_decorate` VALUES (15, '收货地址', 2, 2, '/images/menu/centre_user_address.png', 1, '15', 4, 1, 1607568004, 1607568004, 0);
+INSERT INTO `yx_menu_decorate` VALUES (16, '帮助中心', 2, 2, '/images/menu/centre_news_center.png', 1, '14', 3, 1, 1607568054, 1607568054, 0);
+INSERT INTO `yx_menu_decorate` VALUES (17, '联系客服', 2, 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1607568089, 1607568089, 0);
+INSERT INTO `yx_menu_decorate` VALUES (18, '限时秒杀', 1, 1, '/images/menu/goods_seckill.png', 1, '1', 10, 1, 1607568160, 1607568160, 0);
+INSERT INTO `yx_menu_decorate` VALUES (19, '拼团活动', 1, 1, '/images/menu/goods_combination.png', 1, '1', 9, 1, 1607568181, 1607568181, 0);
+INSERT INTO `yx_menu_decorate` VALUES (20, '热销榜单', 1, 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607568204, 1607568204, 0);
+INSERT INTO `yx_menu_decorate` VALUES (21, '领券中心', 1, 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568224, 1607568224, 0);
+INSERT INTO `yx_menu_decorate` VALUES (22, '积分签到', 1, 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607568273, 1607568273, 0);
+INSERT INTO `yx_menu_decorate` VALUES (23, '会员中心', 1, 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607568298, 1607568298, 0);
+INSERT INTO `yx_menu_decorate` VALUES (24, '我的收藏', 1, 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607568323, 1607568323, 0);
+INSERT INTO `yx_menu_decorate` VALUES (25, '商城资讯', 1, 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607568348, 1607568348, 0);
+INSERT INTO `yx_menu_decorate` VALUES (26, '帮助中心', 1, 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607568367, 1607568367, 0);
+INSERT INTO `yx_menu_decorate` VALUES (27, '我的钱包', 1, 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607568422, 1607568422, 0);
+INSERT INTO `yx_menu_decorate` VALUES (28, '分销推广', 1, 2, '/images/menu/centre_user_promote.png', 1, '11', 9, 1, 1607568455, 1607568455, 0);
+INSERT INTO `yx_menu_decorate` VALUES (29, '我的优惠券', 1, 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607568476, 1607568476, 0);
+INSERT INTO `yx_menu_decorate` VALUES (30, '等级服务', 1, 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607568509, 1607568509, 0);
+INSERT INTO `yx_menu_decorate` VALUES (31, '我的收藏', 1, 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607568546, 1607568546, 0);
+INSERT INTO `yx_menu_decorate` VALUES (32, '收货地址', 1, 2, '/images/menu/centre_user_address.png', 1, '15', 5, 1, 1607568575, 1607568575, 0);
+INSERT INTO `yx_menu_decorate` VALUES (34, '帮助中心', 1, 2, '/images/menu/centre_news_center.png', 1, '14', 4, 1, 1607568784, 1607568820, 0);
+INSERT INTO `yx_menu_decorate` VALUES (35, '联系客服', 1, 2, '/images/menu/centre_contact_offical.png', 1, '17', 3, 1, 1607568849, 1607568854, 0);
+INSERT INTO `yx_menu_decorate` VALUES (36, '限时秒杀', 3, 1, '/images/menu/goods_seckill.png', 1, '1', 10, 1, 1607568882, 1609326358, 0);
+INSERT INTO `yx_menu_decorate` VALUES (37, '拼团活动', 3, 1, '/images/menu/goods_combination.png', 1, '2', 9, 1, 1607568908, 1607568908, 0);
+INSERT INTO `yx_menu_decorate` VALUES (38, '热销榜单', 3, 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607568931, 1607584068, 0);
+INSERT INTO `yx_menu_decorate` VALUES (39, '领券中心', 3, 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568962, 1607568973, 0);
+INSERT INTO `yx_menu_decorate` VALUES (40, '积分签到', 3, 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607568997, 1607568997, 0);
+INSERT INTO `yx_menu_decorate` VALUES (41, '会员中心', 3, 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607569016, 1607569016, 0);
+INSERT INTO `yx_menu_decorate` VALUES (42, '我的收藏', 3, 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607569036, 1607569036, 0);
+INSERT INTO `yx_menu_decorate` VALUES (43, '商城资讯', 3, 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607569059, 1607569059, 0);
+INSERT INTO `yx_menu_decorate` VALUES (44, '帮助中心', 3, 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607569092, 1607569092, 0);
+INSERT INTO `yx_menu_decorate` VALUES (45, '我的钱包', 3, 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607569147, 1607569147, 0);
+INSERT INTO `yx_menu_decorate` VALUES (46, '分销推广', 3, 2, '/images/menu/centre_user_promote.png', 1, '11', 9, 1, 1607569190, 1607569190, 0);
+INSERT INTO `yx_menu_decorate` VALUES (47, '我的优惠券', 3, 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607569216, 1607569216, 0);
+INSERT INTO `yx_menu_decorate` VALUES (48, '等级服务', 3, 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607569235, 1607569235, 0);
+INSERT INTO `yx_menu_decorate` VALUES (49, '我的收藏', 3, 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607569253, 1607584928, 0);
+INSERT INTO `yx_menu_decorate` VALUES (50, '收货地址', 3, 2, '/images/menu/centre_user_address.png', 1, '15', 5, 1, 1607569271, 1607569271, 0);
+INSERT INTO `yx_menu_decorate` VALUES (51, '帮助中心', 3, 2, '/images/menu/centre_news_center.png', 1, '14', 3, 1, 1607569293, 1607569293, 0);
+INSERT INTO `yx_menu_decorate` VALUES (52, '联系客服', 3, 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1607569317, 1607569317, 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_notice`;
+CREATE TABLE `yx_notice` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL COMMENT '内容',
+  `type` tinyint(1) unsigned DEFAULT '0' COMMENT '类型,0,系统通知,1,收益通知',
+  `read` tinyint(1) DEFAULT '0' COMMENT '已读状态;0-未读,1-已读',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_notice
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order`;
-CREATE TABLE `yx_order`  (
+CREATE TABLE `yx_order` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '订单id',
-  `order_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单编号',
-  `user_id` int(8) UNSIGNED NULL DEFAULT 0 COMMENT '用户id',
-  `order_type` tinyint(1) NULL DEFAULT 0 COMMENT '订单类型;0-普通订单;1-秒杀订单;2-拼团订单;3-砍价订单',
-  `order_source` tinyint(1) NULL DEFAULT 1 COMMENT '订单来源;1-小程序;2-h5;3-ios;4-安卓',
-  `order_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单状态;0-待付款;1-待发货;2-待收货;3-已完成;4-已关闭',
-  `pay_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付状态;0-待支付;1-已支付;2-已退款;3-拒绝退款',
-  `pay_way` tinyint(2) NULL DEFAULT 1 COMMENT '1-微信支付  2-支付宝支付 3-余额支付',
-  `pay_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '支付时间',
-  `consignee` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '收货人',
-  `province` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '省份',
-  `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
-  `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
-  `mobile` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机',
-  `delivery_type` tinyint(1) NULL DEFAULT 1 COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
-  `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单商品总价',
-  `order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '应付款金额',
-  `discount_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
-  `integral_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣金额',
-  `total_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单总价',
-  `total_num` int(10) NULL DEFAULT 0 COMMENT '订单商品数量',
-  `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态',
-  `shipping_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '运费',
-  `shipping_time` int(11) NULL DEFAULT 0 COMMENT '最后新发货时间',
-  `transaction_id` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-  `user_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户备注',
-  `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
-  `cancel_time` int(10) NULL DEFAULT NULL COMMENT '订单取消时间',
-  `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '退款状态：0-未退款；1-部分退款；2-全部退款',
-  `settle_id` int(11) NULL DEFAULT 0 COMMENT '结算id；0-未结算',
-  `settle_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '结算金额',
-  `use_integral` int(10) NULL DEFAULT 0 COMMENT '使用的积分',
-  `refund_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
-  `platform_commission` decimal(10, 2) NULL DEFAULT NULL COMMENT '平台抽成',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除标识;1-删除;0-未删除',
-  `create_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '下单时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
-  `coupon_list_id` int(10) NULL DEFAULT NULL COMMENT '用户优惠券id',
+  `order_sn` varchar(20) DEFAULT '' COMMENT '订单编号',
+  `user_id` int(8) unsigned DEFAULT '0' COMMENT '用户id',
+  `order_type` tinyint(1) DEFAULT '0' COMMENT '订单类型;0-普通订单;1-秒杀订单;2-拼团订单;3-砍价订单',
+  `order_source` tinyint(1) DEFAULT '1' COMMENT '订单来源;1-小程序;2-h5;3-ios;4-安卓',
+  `order_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '订单状态;0-待付款;1-待发货;2-待收货;3-已完成;4-已关闭',
+  `pay_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '支付状态;0-待支付;1-已支付;2-已退款;3-拒绝退款',
+  `pay_way` tinyint(2) DEFAULT '1' COMMENT '1-微信支付  2-支付宝支付 3-余额支付',
+  `pay_time` int(10) unsigned DEFAULT '0' COMMENT '支付时间',
+  `consignee` varchar(60) DEFAULT '' COMMENT '收货人',
+  `province` int(11) unsigned DEFAULT '0' COMMENT '省份',
+  `city` int(11) unsigned DEFAULT '0' COMMENT '城市',
+  `district` int(11) unsigned DEFAULT '0' COMMENT '县区',
+  `address` varchar(255) DEFAULT '' COMMENT '地址',
+  `mobile` varchar(60) DEFAULT '' COMMENT '手机',
+  `delivery_type` tinyint(1) DEFAULT '1' COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
+  `goods_price` decimal(10,2) DEFAULT '0.00' COMMENT '订单商品总价',
+  `order_amount` decimal(10,2) DEFAULT '0.00' COMMENT '应付款金额',
+  `discount_amount` decimal(10,2) DEFAULT '0.00' COMMENT '优惠金额',
+  `integral_amount` decimal(10,2) DEFAULT '0.00' COMMENT '积分抵扣金额',
+  `total_amount` decimal(10,2) DEFAULT '0.00' COMMENT '订单总价',
+  `total_num` int(10) DEFAULT '0' COMMENT '订单商品数量',
+  `shipping_status` tinyint(1) unsigned DEFAULT '0' COMMENT '发货状态',
+  `shipping_price` decimal(10,2) DEFAULT '0.00' COMMENT '运费',
+  `shipping_time` int(11) DEFAULT '0' COMMENT '最后新发货时间',
+  `transaction_id` varchar(40) DEFAULT NULL COMMENT '第三方平台交易流水号',
+  `user_remark` varchar(255) DEFAULT '' COMMENT '用户备注',
+  `confirm_take_time` int(10) DEFAULT NULL COMMENT '确认收货时间',
+  `cancel_time` int(10) DEFAULT NULL COMMENT '订单取消时间',
+  `refund_status` tinyint(1) DEFAULT '0' COMMENT '退款状态：0-未退款；1-部分退款；2-全部退款',
+  `settle_id` int(11) DEFAULT '0' COMMENT '结算id；0-未结算',
+  `settle_amount` decimal(10,2) DEFAULT NULL COMMENT '结算金额',
+  `use_integral` int(10) DEFAULT '0' COMMENT '使用的积分',
+  `refund_amount` decimal(10,2) DEFAULT NULL COMMENT '退款金额',
+  `del` tinyint(1) DEFAULT '0' COMMENT '删除标识;1-删除;0-未删除',
+  `create_time` int(10) unsigned DEFAULT NULL COMMENT '下单时间',
+  `update_time` int(10) unsigned DEFAULT NULL COMMENT '更新时间',
+  `coupon_list_id` int(10) DEFAULT NULL COMMENT '用户优惠券id',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `order_sn`(`order_sn`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+  UNIQUE KEY `order_sn` (`order_sn`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单表';
+
+-- ----------------------------
+-- Records of yx_order
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order_goods`;
-CREATE TABLE `yx_order_goods`  (
+CREATE TABLE `yx_order_goods` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_id` int(10) NULL DEFAULT 0 COMMENT '订单id',
-  `goods_id` int(10) NULL DEFAULT 0 COMMENT '商品id',
-  `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
-  `goods_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `goods_num` int(10) NULL DEFAULT 0 COMMENT '商品数量',
-  `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品价格',
-  `total_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品总价',
-  `total_pay_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '实际支付商品金额',
-  `discount_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
-  `integral_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣的金额',
-  `spec_value_ids` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品规格id',
-  `delivery_id` int(11) NULL DEFAULT 0 COMMENT '发货单ID',
-  `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
-  `is_comment` tinyint(1) NULL DEFAULT 0 COMMENT '是否已评论；0-否；1-是',
-  `commission_ratio` decimal(10, 0) NULL DEFAULT NULL COMMENT '抽成比例',
-  `is_seckill` tinyint(1) NULL DEFAULT 0 COMMENT '秒杀商品;0-不是;1-是',
-  `create_time` int(10) NULL DEFAULT 0 COMMENT '创建时间',
+  `order_id` int(10) DEFAULT '0' COMMENT '订单id',
+  `goods_id` int(10) DEFAULT '0' COMMENT '商品id',
+  `item_id` int(10) DEFAULT '0' COMMENT '规格id',
+  `goods_name` varchar(64) DEFAULT NULL COMMENT '商品名称',
+  `goods_num` int(10) DEFAULT '0' COMMENT '商品数量',
+  `goods_price` decimal(10,2) DEFAULT '0.00' COMMENT '商品价格',
+  `total_price` decimal(10,2) DEFAULT '0.00' COMMENT '商品总价',
+  `total_pay_price` decimal(10,2) DEFAULT '0.00' COMMENT '实际支付商品金额',
+  `discount_price` decimal(10,2) DEFAULT '0.00' COMMENT '优惠金额',
+  `integral_price` decimal(10,2) DEFAULT '0.00' COMMENT '积分抵扣的金额',
+  `spec_value_ids` varchar(40) DEFAULT NULL COMMENT '商品规格id',
+  `delivery_id` int(11) DEFAULT '0' COMMENT '发货单ID',
+  `refund_status` tinyint(1) DEFAULT '0' COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
+  `is_comment` tinyint(1) DEFAULT '0' COMMENT '是否已评论；0-否；1-是',
+  `is_seckill` tinyint(1) DEFAULT '0' COMMENT '秒杀商品;0-不是;1-是',
+  `create_time` int(10) DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单商品表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单商品表';
+
+-- ----------------------------
+-- Records of yx_order_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order_log`;
-CREATE TABLE `yx_order_log`  (
+CREATE TABLE `yx_order_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
-  `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
-  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-  `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+  `type` tinyint(1) DEFAULT '0' COMMENT '操作类型;0-会员;1-门店',
+  `channel` smallint(5) unsigned DEFAULT '0' COMMENT '渠道编号。变动方式。',
+  `order_id` int(10) DEFAULT NULL COMMENT '订单id',
+  `handle_id` int(10) DEFAULT NULL COMMENT '操作人id',
+  `content` varchar(255) DEFAULT NULL COMMENT '日志内容',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 487 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单日志表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=487 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单日志表';
 
 -- ----------------------------
 -- Records of yx_order_log
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_order_log` VALUES (1, 0, 101, 1, 39, '会员提交订单', 1603437495);
 INSERT INTO `yx_order_log` VALUES (2, 0, 101, 2, 39, '会员提交订单', 1603439570);
 INSERT INTO `yx_order_log` VALUES (3, 0, 101, 3, 39, '会员提交订单', 1603439748);
@@ -6256,2505 +6334,576 @@ INSERT INTO `yx_order_log` VALUES (483, 0, 105, 278, 56, '会员支付订单', 1
 INSERT INTO `yx_order_log` VALUES (484, 0, 102, 278, 56, '会员取消订单', 1607164753);
 INSERT INTO `yx_order_log` VALUES (485, 0, 101, 279, 56, '会员提交订单', 1607164996);
 INSERT INTO `yx_order_log` VALUES (486, 0, 105, 279, 56, '会员支付订单', 1607164996);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_order_refund
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_order_refund`;
-CREATE TABLE `yx_order_refund`  (
-  `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_id` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '订单id',
-  `user_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '下单用户id，冗余字段',
-  `refund_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款单号，一个订单分多次退款则有多个退款单号',
-  `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '订单总的应付款金额，冗余字段',
-  `refund_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '本次退款金额',
-  `transaction_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-  `refund_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款状态，0退款中，1完成退款，2退款失败，3退款异常（人工去后台查询）',
-  `refund_way` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款方式，0原路退',
-  `refund_at` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款时间',
-  `wechat_refund_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信返回退款id',
-  `refund_msg` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '微信返回信息',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+CREATE TABLE `yx_order_refund` (
+  `id` int(6) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `order_id` int(1) unsigned DEFAULT '0' COMMENT '订单id',
+  `user_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '下单用户id，冗余字段',
+  `refund_sn` varchar(32) NOT NULL DEFAULT '' COMMENT '退款单号，一个订单分多次退款则有多个退款单号',
+  `order_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单总的应付款金额，冗余字段',
+  `refund_amount` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '本次退款金额',
+  `transaction_id` varchar(255) DEFAULT NULL COMMENT '第三方平台交易流水号',
+  `refund_status` tinyint(1) unsigned DEFAULT '0' COMMENT '退款状态，0退款中，1完成退款，2退款失败，3退款异常（人工去后台查询）',
+  `refund_way` tinyint(1) unsigned DEFAULT '0' COMMENT '退款方式，0原路退',
+  `refund_at` int(1) unsigned DEFAULT '0' COMMENT '退款时间',
+  `wechat_refund_id` varchar(30) DEFAULT NULL COMMENT '微信返回退款id',
+  `refund_msg` text COMMENT '微信返回信息',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单退款表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单退款表';
 
 -- ----------------------------
--- Table structure for yx_recharge_order
+-- Records of yx_order_refund
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_recharge_order`;
-CREATE TABLE `yx_recharge_order`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单编号',
-  `transaction_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-  `order_source` tinyint(1) NULL DEFAULT 1 COMMENT '订单来源：1-小程序;2-h5;3-ios;4-安卓',
-  `pay_way` tinyint(2) NOT NULL DEFAULT 1 COMMENT '支付方式：1-微信支付  2-支付宝支付 3-余额支付',
-  `pay_status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '支付状态：0-待支付；1-已支付',
-  `pay_time` int(10) NULL DEFAULT NULL COMMENT '支付时间',
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `template_id` int(11) NULL DEFAULT NULL COMMENT '模板id',
-  `order_amount` decimal(10, 2) NOT NULL COMMENT '充值金额',
-  `give_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '赠送金额',
-  `give_integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
-  `give_growth` int(10) NULL DEFAULT NULL COMMENT '赠送成长值',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '充值订单表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for yx_recharge_template
--- ----------------------------
-DROP TABLE IF EXISTS `yx_recharge_template`;
-CREATE TABLE `yx_recharge_template`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `money` decimal(10, 2) NOT NULL COMMENT '充值金额',
-  `give_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '赠送金额',
-  `sort` int(10) NULL DEFAULT NULL COMMENT '排序',
-  `is_recommend` tinyint(1) NULL DEFAULT 0 COMMENT '是否推荐：1-是；0-否',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '充值模板' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_recharge_template
--- ----------------------------
-INSERT INTO `yx_recharge_template` VALUES (1, 50.00, 0.00, 6, 0, 1607589130, 1607589153, 0);
-INSERT INTO `yx_recharge_template` VALUES (2, 150.00, 20.00, 4, 1, 1607589148, 1607589193, 0);
-INSERT INTO `yx_recharge_template` VALUES (3, 100.00, 10.00, 5, 0, 1607589182, 1607589182, 0);
-INSERT INTO `yx_recharge_template` VALUES (4, 200.00, 30.00, 3, 1, 1607589220, 1607589221, 0);
-INSERT INTO `yx_recharge_template` VALUES (5, 300.00, 50.00, 2, 0, 1607589234, 1607589234, 0);
-INSERT INTO `yx_recharge_template` VALUES (6, 648.00, 129.00, 1, 1, 1607589243, 1607589243, 0);
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_role
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_role`;
-CREATE TABLE `yx_role`  (
+CREATE TABLE `yx_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '父级id',
-  `auth_ids` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '权限',
-  `desc` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`, `del`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
+  `name` varchar(8) NOT NULL DEFAULT '0' COMMENT '父级id',
+  `auth_ids` text COMMENT '权限',
+  `desc` varchar(128) DEFAULT '' COMMENT '描述',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`,`del`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色表';
+
+-- ----------------------------
+-- Records of yx_role
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_role_dev_auth_index
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_role_dev_auth_index`;
-CREATE TABLE `yx_role_dev_auth_index`  (
+CREATE TABLE `yx_role_dev_auth_index` (
   `role_id` int(11) NOT NULL,
   `menu_auth_id` int(11) NOT NULL,
-  PRIMARY KEY (`role_id`, `menu_auth_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`role_id`,`menu_auth_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_role_dev_auth_index
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_search_record
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_search_record`;
-CREATE TABLE `yx_search_record`  (
+CREATE TABLE `yx_search_record` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT 0 COMMENT '用户id',
-  `keyword` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '关键字',
-  `update_time` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-  `count` int(11) NULL DEFAULT 1 COMMENT '次数',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否已删除,0-未删除,1-已删除',
+  `user_id` int(11) DEFAULT '0' COMMENT '用户id',
+  `keyword` varchar(64) DEFAULT '' COMMENT '关键字',
+  `update_time` int(11) DEFAULT '0' COMMENT '更新时间',
+  `count` int(11) DEFAULT '1' COMMENT '次数',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否已删除,0-未删除,1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户热门搜索' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户热门搜索';
 
 -- ----------------------------
--- Table structure for yx_seckill_goods
+-- Records of yx_search_record
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_seckill_goods`;
-CREATE TABLE `yx_seckill_goods`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `seckill_id` int(10) NOT NULL COMMENT '秒杀时间id',
-  `goods_id` int(10) NOT NULL COMMENT '参与秒杀商品的id',
-  `item_id` int(11) NULL DEFAULT NULL COMMENT '参与秒杀规格id',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '秒杀活动价',
-  `sales_sum` int(10) NULL DEFAULT 0 COMMENT '销量',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除；1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_seckill_goods
--- ----------------------------
-INSERT INTO `yx_seckill_goods` VALUES (1, 4, 5, 5, 3.00, 0, 1607588970, 1607588970, 0);
-INSERT INTO `yx_seckill_goods` VALUES (2, 1, 1, 1, 33.00, 0, 1607589023, 1607589023, 0);
-INSERT INTO `yx_seckill_goods` VALUES (3, 2, 2, 2, 39.00, 0, 1607589057, 1607589057, 0);
-INSERT INTO `yx_seckill_goods` VALUES (4, 3, 8, 8, 999.00, 0, 1607589070, 1607589070, 0);
-INSERT INTO `yx_seckill_goods` VALUES (5, 3, 1, 1, 40.30, 0, 1607589942, 1607589942, 0);
-INSERT INTO `yx_seckill_goods` VALUES (6, 3, 4, 4, 6.00, 0, 1607589955, 1607589955, 0);
-INSERT INTO `yx_seckill_goods` VALUES (7, 3, 3, 3, 9.90, 0, 1607589973, 1607589973, 0);
-INSERT INTO `yx_seckill_goods` VALUES (8, 5, 10, 10, 999.00, 0, 1607590140, 1607590140, 0);
-INSERT INTO `yx_seckill_goods` VALUES (9, 3, 7, 7, 29.00, 0, 1607590153, 1607590153, 0);
-INSERT INTO `yx_seckill_goods` VALUES (10, 3, 1, 1, 40.00, 0, 1607590164, 1607590164, 0);
-INSERT INTO `yx_seckill_goods` VALUES (11, 3, 3, 3, 9.90, 0, 1607590177, 1607590177, 0);
-INSERT INTO `yx_seckill_goods` VALUES (12, 2, 7, 7, 29.00, 0, 1607590189, 1607590189, 0);
-INSERT INTO `yx_seckill_goods` VALUES (13, 2, 1, 1, 39.00, 0, 1607590198, 1607590198, 0);
-INSERT INTO `yx_seckill_goods` VALUES (14, 2, 3, 3, 9.90, 0, 1607590207, 1607590207, 0);
-INSERT INTO `yx_seckill_goods` VALUES (15, 1, 8, 8, 999.00, 0, 1607590218, 1607590218, 0);
-INSERT INTO `yx_seckill_goods` VALUES (16, 1, 2, 2, 39.00, 0, 1607590245, 1607590245, 0);
-INSERT INTO `yx_seckill_goods` VALUES (17, 1, 9, 9, 4999.00, 0, 1607590259, 1607590259, 0);
-INSERT INTO `yx_seckill_goods` VALUES (18, 4, 6, 6, 29.00, 0, 1607590270, 1607590270, 0);
-INSERT INTO `yx_seckill_goods` VALUES (19, 4, 3, 3, 9.90, 0, 1607590289, 1607590289, 0);
-INSERT INTO `yx_seckill_goods` VALUES (20, 4, 8, 8, 999.00, 0, 1607590299, 1607590299, 0);
-INSERT INTO `yx_seckill_goods` VALUES (21, 5, 6, 6, 26.90, 0, 1607590394, 1607590394, 0);
-INSERT INTO `yx_seckill_goods` VALUES (22, 5, 7, 7, 29.90, 0, 1607590406, 1607590406, 0);
-INSERT INTO `yx_seckill_goods` VALUES (23, 5, 3, 3, 9.90, 0, 1607590418, 1607590418, 0);
-
--- ----------------------------
--- Table structure for yx_seckill_time
--- ----------------------------
-DROP TABLE IF EXISTS `yx_seckill_time`;
-CREATE TABLE `yx_seckill_time`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `start_time` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开始时间',
-  `end_time` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '结束时间',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除时间；1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_seckill_time
--- ----------------------------
-INSERT INTO `yx_seckill_time` VALUES (1, '08:00', '12:28', 1607588823, 1607590054, 0);
-INSERT INTO `yx_seckill_time` VALUES (2, '12:30', '13:57', 1607588851, 1607590085, 0);
-INSERT INTO `yx_seckill_time` VALUES (3, '14:00', '17:00', 1607588879, 1607588879, 0);
-INSERT INTO `yx_seckill_time` VALUES (4, '00:00', '07:58', 1607588904, 1607590036, 0);
-INSERT INTO `yx_seckill_time` VALUES (5, '17:02', '23:55', 1607590112, 1607590112, 0);
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_session
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_session`;
-CREATE TABLE `yx_session`  (
+CREATE TABLE `yx_session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `token` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '令牌',
+  `token` varchar(32) NOT NULL COMMENT '令牌',
   `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
   `update_time` int(10) NOT NULL COMMENT '更新时间',
   `expire_time` int(10) NOT NULL COMMENT '到期时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `user_id_client`(`user_id`, `client`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会话表' ROW_FORMAT = Dynamic;
+  UNIQUE KEY `user_id_client` (`user_id`,`client`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会话表';
 
 -- ----------------------------
 -- Records of yx_session
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_session` VALUES (1, 1, '6d4469078637e7c47f503498a4e631fe', 1, 1607598009, 1612782009);
 INSERT INTO `yx_session` VALUES (2, 2, '8c6e0a2d064fb12b3f85e1db78638a12', 1, 1607654998, 1612838998);
 INSERT INTO `yx_session` VALUES (3, 3, '2ab04328e7691caeed22ce8cd08f9144', 1, 1607655256, 1612839256);
 INSERT INTO `yx_session` VALUES (4, 4, '577ec262e030338f783650fdb5909ac6', 1, 1607654385, 1612838385);
 INSERT INTO `yx_session` VALUES (5, 5, 'ceaff3eab946a9e25debf700c481a18d', 1, 1607655080, 1612839080);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_sign_daily
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_sign_daily`;
-CREATE TABLE `yx_sign_daily`  (
+CREATE TABLE `yx_sign_daily` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
-  `integral_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送积分状态：1-是；0-否；',
-  `growth_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送优惠劵状态：1-是；0-否；',
-  `days` int(24) NULL DEFAULT 1 COMMENT '连续签到天数',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `type` varchar(24) DEFAULT NULL COMMENT '类型',
+  `integral` int(10) DEFAULT NULL COMMENT '赠送积分',
+  `integral_status` tinyint(1) DEFAULT NULL COMMENT '赠送积分状态：1-是；0-否；',
+  `growth_status` tinyint(1) DEFAULT NULL COMMENT '赠送优惠劵状态：1-是；0-否；',
+  `days` int(24) DEFAULT '1' COMMENT '连续签到天数',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
-  `growth` int(16) NULL DEFAULT NULL COMMENT '成长值',
+  `growth` int(16) DEFAULT NULL COMMENT '成长值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_sign_daily
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_sign_daily` VALUES (1, '2', 10, 1, 1, 2, 1607588705, 1607588727, 0, 10);
 INSERT INTO `yx_sign_daily` VALUES (2, '2', 20, 1, 1, 4, 1607588735, NULL, 0, 20);
 INSERT INTO `yx_sign_daily` VALUES (3, '2', 40, 1, 1, 8, 1607588744, NULL, 0, 40);
 INSERT INTO `yx_sign_daily` VALUES (4, '2', 80, 1, 1, 10, 1607588757, NULL, 0, 80);
 INSERT INTO `yx_sign_daily` VALUES (5, '2', 120, 1, 1, 12, 1607588765, NULL, 0, 120);
 INSERT INTO `yx_sign_daily` VALUES (6, '1', 2, 1, 1, 0, 1607588778, NULL, 0, 2);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_sms_config
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_sms_config`;
-CREATE TABLE `yx_sms_config`  (
+CREATE TABLE `yx_sms_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '短信通道',
-  `describe` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `sign` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '签名',
-  `app_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'app_key',
-  `secret_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'secret_key',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
+  `name` varchar(32) NOT NULL COMMENT '短信通道',
+  `describe` varchar(255) DEFAULT NULL COMMENT '描述',
+  `sign` varchar(64) DEFAULT NULL COMMENT '签名',
+  `app_key` varchar(64) DEFAULT NULL COMMENT 'app_key',
+  `secret_key` varchar(64) DEFAULT NULL COMMENT 'secret_key',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态：0-关闭；1-开启',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除；0-否；1-是',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_sms_config
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_sms_config` VALUES (1, '阿里云', '阿里云短信服务（Short Message Service）', '', '', '', 0, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_sms_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_sms_log`;
-CREATE TABLE `yx_sms_log`  (
+CREATE TABLE `yx_sms_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
-  `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号码',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发送内容',
-  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送关键字（注册、找回密码）',
-  `is_verify` tinyint(1) NULL DEFAULT 0 COMMENT '是否已验证；0-否；1-是',
+  `message_key` varchar(32) NOT NULL COMMENT '消息key',
+  `mobile` varchar(11) NOT NULL COMMENT '手机号码',
+  `content` varchar(255) NOT NULL COMMENT '发送内容',
+  `code` varchar(32) DEFAULT NULL COMMENT '发送关键字（注册、找回密码）',
+  `is_verify` tinyint(1) DEFAULT '0' COMMENT '是否已验证；0-否；1-是',
   `send_status` tinyint(1) NOT NULL COMMENT '发送状态：0-发送中；1-发送成功；2-发送失败',
   `send_time` int(10) NOT NULL COMMENT '发送时间',
-  `results` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '短信结果',
+  `results` varchar(255) DEFAULT NULL COMMENT '短信结果',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '短信发送记录表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='短信发送记录表';
+
+-- ----------------------------
+-- Records of yx_sms_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_stat
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_stat`;
-CREATE TABLE `yx_stat`  (
+CREATE TABLE `yx_stat` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `today_user_pv` int(10) NULL DEFAULT 0 COMMENT '今日用户访问量',
-  `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
+  `today_user_pv` int(10) DEFAULT '0' COMMENT '今日用户访问量',
+  `create_time` int(10) unsigned NOT NULL COMMENT '变动时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '统计表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='统计表';
 
 -- ----------------------------
 -- Records of yx_stat
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_stat` VALUES (1, 4, 1607516635);
 INSERT INTO `yx_stat` VALUES (2, 935, 1607565431);
 INSERT INTO `yx_stat` VALUES (3, 425, 1607650296);
+INSERT INTO `yx_stat` VALUES (4, 1, 1609768599);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_supplier
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_supplier`;
-CREATE TABLE `yx_supplier`  (
+CREATE TABLE `yx_supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `del` tinyint(2) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
-  `contact` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备注',
-  `province_id` int(11) NULL DEFAULT NULL COMMENT '省',
-  `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
-  `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
+  `name` varchar(64) NOT NULL COMMENT '名称',
+  `del` tinyint(2) DEFAULT '0' COMMENT '删除,0-未删除,1-已删除',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+  `tel` varchar(255) DEFAULT NULL COMMENT '联系电话',
+  `contact` varchar(255) DEFAULT NULL COMMENT '联系人',
+  `remark` varchar(255) NOT NULL COMMENT '备注',
+  `province_id` int(11) DEFAULT NULL COMMENT '省',
+  `city_id` int(11) DEFAULT NULL COMMENT '市',
+  `district_id` int(11) DEFAULT NULL COMMENT '区',
+  `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供货商表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='供货商表';
 
 -- ----------------------------
 -- Records of yx_supplier
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_supplier` VALUES (1, '文具旗舰店', 0, 1607570262, 1607570274, '13648795627', '晨先生', '文具专卖供货商', NULL, NULL, NULL, '北京朝阳北巷3街道');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_system_log
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_system_log`;
-CREATE TABLE `yx_system_log`  (
+CREATE TABLE `yx_system_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) NOT NULL COMMENT '管理员',
-  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员名称',
-  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员账号',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '访问链接',
-  `type` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '请求方式',
-  `param` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '请求数据',
-  `ip` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'Ip地址',
+  `name` varchar(16) NOT NULL DEFAULT '' COMMENT '管理员名称',
+  `account` varchar(16) NOT NULL DEFAULT '' COMMENT '管理员账号',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `uri` varchar(255) NOT NULL COMMENT '访问链接',
+  `type` varchar(8) NOT NULL COMMENT '请求方式',
+  `param` text COMMENT '请求数据',
+  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'Ip地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1894 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_log
 -- ----------------------------
-INSERT INTO `yx_system_log` VALUES (1, 1, '账号1', 'admin', 1607509914, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (2, 1, '账号1', 'admin', 1607509914, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (3, 1, '账号1', 'admin', 1607509914, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (4, 1, '账号1', 'admin', 1607509917, '/admin/goods_comment/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (5, 1, '账号1', 'admin', 1607509917, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (6, 1, '账号1', 'admin', 1607509919, '/admin/activity/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (7, 1, '账号1', 'admin', 1607509919, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (8, 1, '账号1', 'admin', 1607509979, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (9, 1, '账号1', 'admin', 1607509980, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (10, 1, '账号1', 'admin', 1607509980, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (11, 1, '账号1', 'admin', 1607564506, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (12, 1, '账号1', 'admin', 1607564506, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (13, 1, '账号1', 'admin', 1607564507, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (14, 1, '账号1', 'admin', 1607565259, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (15, 1, '账号1', 'admin', 1607565259, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (16, 1, '账号1', 'admin', 1607565260, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (17, 1, '账号1', 'admin', 1607565269, '/admin/goods/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (18, 1, '账号1', 'admin', 1607565269, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (19, 1, '账号1', 'admin', 1607565277, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (20, 1, '账号1', 'admin', 1607565277, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (21, 1, '账号1', 'admin', 1607565277, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (22, 1, '账号1', 'admin', 1607565287, '/admin/goods/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (23, 1, '账号1', 'admin', 1607565287, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (24, 1, '账号1', 'admin', 1607565309, '/admin/goods/lists.html', 'GET', '{\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (25, 1, '账号1', 'admin', 1607565310, '/admin/goods/lists.html', 'GET', '{\"type\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (26, 1, '账号1', 'admin', 1607565310, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (27, 1, '账号1', 'admin', 1607565310, '/admin/goods/lists.html', 'GET', '{\"type\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (28, 1, '账号1', 'admin', 1607565314, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (29, 1, '账号1', 'admin', 1607565314, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (30, 1, '账号1', 'admin', 1607565315, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (31, 1, '账号1', 'admin', 1607565384, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (32, 1, '账号1', 'admin', 1607565384, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (33, 1, '账号1', 'admin', 1607565385, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (34, 1, '账号1', 'admin', 1607565412, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (35, 1, '账号1', 'admin', 1607565412, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (36, 1, '账号1', 'admin', 1607565412, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (37, 1, '账号1', 'admin', 1607565471, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (38, 1, '账号1', 'admin', 1607565471, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (39, 1, '账号1', 'admin', 1607565474, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (40, 1, '账号1', 'admin', 1607565636, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (41, 1, '账号1', 'admin', 1607565636, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (42, 1, '账号1', 'admin', 1607565638, '/admin/menu_decorate/appcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (43, 1, '账号1', 'admin', 1607565638, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (44, 1, '账号1', 'admin', 1607565639, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (45, 1, '账号1', 'admin', 1607565639, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (46, 1, '账号1', 'admin', 1607565646, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (47, 1, '账号1', 'admin', 1607565656, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (48, 1, '账号1', 'admin', 1607565656, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (49, 1, '账号1', 'admin', 1607565656, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (50, 1, '账号1', 'admin', 1607566128, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (51, 1, '账号1', 'admin', 1607566129, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (52, 1, '账号1', 'admin', 1607566129, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (53, 1, '账号1', 'admin', 1607566134, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (54, 1, '账号1', 'admin', 1607566134, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (55, 1, '账号1', 'admin', 1607566134, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (56, 1, '账号1', 'admin', 1607566134, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (57, 1, '账号1', 'admin', 1607566134, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (58, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (59, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (60, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (61, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (62, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (63, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (64, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (65, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (66, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (67, 1, '账号1', 'admin', 1607566135, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (68, 1, '账号1', 'admin', 1607566138, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (69, 1, '账号1', 'admin', 1607566138, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (70, 1, '账号1', 'admin', 1607566138, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (71, 1, '账号1', 'admin', 1607566159, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"限时秒杀\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/94a0d54ab18f3d93072c73a1e0dcba17.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"13\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (72, 1, '账号1', 'admin', 1607566159, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (73, 1, '账号1', 'admin', 1607566166, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (74, 1, '账号1', 'admin', 1607566186, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (75, 1, '账号1', 'admin', 1607566186, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (76, 1, '账号1', 'admin', 1607566186, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (77, 1, '账号1', 'admin', 1607566214, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"拼团活动\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/643833719ae963e6a9035e4b98a6279c.png\",\"link_type\":\"1\",\"menu\":\"2\",\"url\":\"\",\"sort\":\"12\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (78, 1, '账号1', 'admin', 1607566214, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (79, 1, '账号1', 'admin', 1607566216, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (80, 1, '账号1', 'admin', 1607566227, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (81, 1, '账号1', 'admin', 1607566227, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (82, 1, '账号1', 'admin', 1607566227, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (83, 1, '账号1', 'admin', 1607566237, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"3\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (84, 1, '账号1', 'admin', 1607566237, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (85, 1, '账号1', 'admin', 1607566238, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (86, 1, '账号1', 'admin', 1607566246, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (87, 1, '账号1', 'admin', 1607566246, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (88, 1, '账号1', 'admin', 1607566246, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (89, 1, '账号1', 'admin', 1607566259, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"领券中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/520c72e1a1d48cb088b0f070d77bc031.png\",\"link_type\":\"1\",\"menu\":\"4\",\"url\":\"\",\"sort\":\"10\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (90, 1, '账号1', 'admin', 1607566259, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (91, 1, '账号1', 'admin', 1607566261, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (92, 1, '账号1', 'admin', 1607566267, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (93, 1, '账号1', 'admin', 1607566267, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (94, 1, '账号1', 'admin', 1607566267, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (95, 1, '账号1', 'admin', 1607566280, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"积分签到\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/0158588a36f9f0ae6a58509f6dd0d80e.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (96, 1, '账号1', 'admin', 1607566280, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (97, 1, '账号1', 'admin', 1607566281, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (98, 1, '账号1', 'admin', 1607566291, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (99, 1, '账号1', 'admin', 1607566291, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (100, 1, '账号1', 'admin', 1607566291, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (101, 1, '账号1', 'admin', 1607566297, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (102, 1, '账号1', 'admin', 1607566297, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (103, 1, '账号1', 'admin', 1607566299, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"6\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (104, 1, '账号1', 'admin', 1607566309, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"6\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (105, 1, '账号1', 'admin', 1607566309, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (106, 1, '账号1', 'admin', 1607566310, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"6\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (107, 1, '账号1', 'admin', 1607566315, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"6\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (108, 1, '账号1', 'admin', 1607566315, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (109, 1, '账号1', 'admin', 1607566316, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"5\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (110, 1, '账号1', 'admin', 1607566320, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"5\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"积分签到\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/0158588a36f9f0ae6a58509f6dd0d80e.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (111, 1, '账号1', 'admin', 1607566320, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (112, 1, '账号1', 'admin', 1607566322, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"4\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (113, 1, '账号1', 'admin', 1607566325, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"4\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"领券中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/520c72e1a1d48cb088b0f070d77bc031.png\",\"link_type\":\"1\",\"menu\":\"4\",\"url\":\"\",\"sort\":\"10\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (114, 1, '账号1', 'admin', 1607566325, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (115, 1, '账号1', 'admin', 1607566326, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (116, 1, '账号1', 'admin', 1607566329, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"3\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"3\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (117, 1, '账号1', 'admin', 1607566330, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (118, 1, '账号1', 'admin', 1607566331, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (119, 1, '账号1', 'admin', 1607566343, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"6\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (120, 1, '账号1', 'admin', 1607566370, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"6\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (121, 1, '账号1', 'admin', 1607566370, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (122, 1, '账号1', 'admin', 1607566371, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"6\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (123, 1, '账号1', 'admin', 1607566381, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"6\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (124, 1, '账号1', 'admin', 1607566381, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (125, 1, '账号1', 'admin', 1607566414, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"6\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (126, 1, '账号1', 'admin', 1607566510, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (127, 1, '账号1', 'admin', 1607566543, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"5\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (128, 1, '账号1', 'admin', 1607566552, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (129, 1, '账号1', 'admin', 1607566555, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"6\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (130, 1, '账号1', 'admin', 1607566559, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"6\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (131, 1, '账号1', 'admin', 1607566559, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (132, 1, '账号1', 'admin', 1607566562, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (133, 1, '账号1', 'admin', 1607566570, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (134, 1, '账号1', 'admin', 1607566570, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (135, 1, '账号1', 'admin', 1607566570, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (136, 1, '账号1', 'admin', 1607566577, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/3a3228fcfdb8fa0808a9e67b6c43df53.png\",\"link_type\":\"1\",\"menu\":\"7\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (137, 1, '账号1', 'admin', 1607566577, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (138, 1, '账号1', 'admin', 1607566579, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (139, 1, '账号1', 'admin', 1607566585, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (140, 1, '账号1', 'admin', 1607566585, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (141, 1, '账号1', 'admin', 1607566585, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (142, 1, '账号1', 'admin', 1607566593, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"商场资讯\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/06332ce973851322e050de07a7b7631f.png\",\"link_type\":\"1\",\"menu\":\"8\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (143, 1, '账号1', 'admin', 1607566593, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (144, 1, '账号1', 'admin', 1607566619, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (145, 1, '账号1', 'admin', 1607566623, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (146, 1, '账号1', 'admin', 1607566623, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (147, 1, '账号1', 'admin', 1607566623, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (148, 1, '账号1', 'admin', 1607566638, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/bbd816d5b586cdeca8e87dd7c06e2fcf.png\",\"link_type\":\"1\",\"menu\":\"9\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (149, 1, '账号1', 'admin', 1607566638, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (150, 1, '账号1', 'admin', 1607566684, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (151, 1, '账号1', 'admin', 1607566686, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (152, 1, '账号1', 'admin', 1607566686, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (153, 1, '账号1', 'admin', 1607566686, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (154, 1, '账号1', 'admin', 1607566763, '/admin/menu_decorate/appcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (155, 1, '账号1', 'admin', 1607566764, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (156, 1, '账号1', 'admin', 1607566764, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (157, 1, '账号1', 'admin', 1607566765, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (158, 1, '账号1', 'admin', 1607566768, '/admin/menu_decorate/appcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (159, 1, '账号1', 'admin', 1607566769, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (160, 1, '账号1', 'admin', 1607566770, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (161, 1, '账号1', 'admin', 1607566770, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (162, 1, '账号1', 'admin', 1607566770, '/admin/menu_decorate/appcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (163, 1, '账号1', 'admin', 1607566770, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (164, 1, '账号1', 'admin', 1607566773, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (165, 1, '账号1', 'admin', 1607566773, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (166, 1, '账号1', 'admin', 1607566774, '/admin/menu_decorate/mnpcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (167, 1, '账号1', 'admin', 1607566774, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (168, 1, '账号1', 'admin', 1607566775, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (169, 1, '账号1', 'admin', 1607566775, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (170, 1, '账号1', 'admin', 1607566775, '/admin/menu_decorate/mnpcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (171, 1, '账号1', 'admin', 1607566775, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (172, 1, '账号1', 'admin', 1607566777, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (173, 1, '账号1', 'admin', 1607566777, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (174, 1, '账号1', 'admin', 1607566789, '/admin/menu_decorate/appcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (175, 1, '账号1', 'admin', 1607566789, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (176, 1, '账号1', 'admin', 1607566973, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (177, 1, '账号1', 'admin', 1607566981, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (178, 1, '账号1', 'admin', 1607566982, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (179, 1, '账号1', 'admin', 1607566982, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (180, 1, '账号1', 'admin', 1607567013, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (181, 1, '账号1', 'admin', 1607567016, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (182, 1, '账号1', 'admin', 1607567016, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (183, 1, '账号1', 'admin', 1607567016, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (184, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (185, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (186, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (187, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (188, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (189, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (190, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (191, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (192, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (193, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (194, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (195, 1, '账号1', 'admin', 1607567023, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (196, 1, '账号1', 'admin', 1607567026, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (197, 1, '账号1', 'admin', 1607567026, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (198, 1, '账号1', 'admin', 1607567026, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (199, 1, '账号1', 'admin', 1607567063, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的钱包\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d650559b128bfca62870205445365ac8.png\",\"link_type\":\"1\",\"menu\":\"10\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (200, 1, '账号1', 'admin', 1607567064, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (201, 1, '账号1', 'admin', 1607567065, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (202, 1, '账号1', 'admin', 1607567073, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (203, 1, '账号1', 'admin', 1607567073, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (204, 1, '账号1', 'admin', 1607567073, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (205, 1, '账号1', 'admin', 1607567081, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"分销推广\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1226785362c5f02ef2616be8a1a5737a.png\",\"link_type\":\"1\",\"menu\":\"11\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (206, 1, '账号1', 'admin', 1607567081, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (207, 1, '账号1', 'admin', 1607567085, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"11\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (208, 1, '账号1', 'admin', 1607567087, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (209, 1, '账号1', 'admin', 1607567094, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (210, 1, '账号1', 'admin', 1607567094, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (211, 1, '账号1', 'admin', 1607567094, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (212, 1, '账号1', 'admin', 1607567120, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的优惠券\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/c03fd3359bcb6a575a479dc41a013fff.png\",\"link_type\":\"1\",\"menu\":\"12\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (213, 1, '账号1', 'admin', 1607567121, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (214, 1, '账号1', 'admin', 1607567121, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (215, 1, '账号1', 'admin', 1607567130, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (216, 1, '账号1', 'admin', 1607567130, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (217, 1, '账号1', 'admin', 1607567130, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (218, 1, '账号1', 'admin', 1607567139, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"等级服务\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"13\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (219, 1, '账号1', 'admin', 1607567139, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (220, 1, '账号1', 'admin', 1607567140, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (221, 1, '账号1', 'admin', 1607567150, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (222, 1, '账号1', 'admin', 1607567150, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (223, 1, '账号1', 'admin', 1607567150, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (224, 1, '账号1', 'admin', 1607567162, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/ad841b1109ad0d5a8f40585d47ecd8f2.png\",\"link_type\":\"1\",\"menu\":\"16\",\"url\":\"\",\"sort\":\"4\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (225, 1, '账号1', 'admin', 1607567163, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (226, 1, '账号1', 'admin', 1607567164, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (227, 1, '账号1', 'admin', 1607567171, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (228, 1, '账号1', 'admin', 1607567172, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (229, 1, '账号1', 'admin', 1607567172, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (230, 1, '账号1', 'admin', 1607567181, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"收货地址\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd7b3e6885221f0c94a7092dc95e1f8f.png\",\"link_type\":\"1\",\"menu\":\"15\",\"url\":\"\",\"sort\":\"3\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (231, 1, '账号1', 'admin', 1607567181, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (232, 1, '账号1', 'admin', 1607567183, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (233, 1, '账号1', 'admin', 1607567189, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (234, 1, '账号1', 'admin', 1607567190, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (235, 1, '账号1', 'admin', 1607567190, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (236, 1, '账号1', 'admin', 1607567199, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d01e2ab0defbad866f19420e6483f7b2.png\",\"link_type\":\"1\",\"menu\":\"15\",\"url\":\"\",\"sort\":\"2\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (237, 1, '账号1', 'admin', 1607567199, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (238, 1, '账号1', 'admin', 1607567200, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (239, 1, '账号1', 'admin', 1607567205, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (240, 1, '账号1', 'admin', 1607567205, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (241, 1, '账号1', 'admin', 1607567206, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (242, 1, '账号1', 'admin', 1607567216, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"联系客服\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/f6189105a4bfb39631e193a83047ad7a.png\",\"link_type\":\"1\",\"menu\":\"17\",\"url\":\"\",\"sort\":\"1\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (243, 1, '账号1', 'admin', 1607567217, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (244, 1, '账号1', 'admin', 1607567236, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (245, 1, '账号1', 'admin', 1607567237, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (246, 1, '账号1', 'admin', 1607567255, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (247, 1, '账号1', 'admin', 1607567260, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (248, 1, '账号1', 'admin', 1607567260, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (249, 1, '账号1', 'admin', 1607567260, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (250, 1, '账号1', 'admin', 1607567271, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"VIP\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (251, 1, '账号1', 'admin', 1607567271, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (252, 1, '账号1', 'admin', 1607567275, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"9\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (253, 1, '账号1', 'admin', 1607567281, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"9\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/bbd816d5b586cdeca8e87dd7c06e2fcf.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"4\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (254, 1, '账号1', 'admin', 1607567281, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (255, 1, '账号1', 'admin', 1607567283, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"18\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (256, 1, '账号1', 'admin', 1607567286, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"18\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"VIP\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (257, 1, '账号1', 'admin', 1607567286, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (258, 1, '账号1', 'admin', 1607567290, '/admin/menu_decorate/appcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (259, 1, '账号1', 'admin', 1607567290, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (260, 1, '账号1', 'admin', 1607567291, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (261, 1, '账号1', 'admin', 1607567291, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (262, 1, '账号1', 'admin', 1607567292, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (263, 1, '账号1', 'admin', 1607567292, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (264, 1, '账号1', 'admin', 1607567294, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (265, 1, '账号1', 'admin', 1607567303, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (266, 1, '账号1', 'admin', 1607567303, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (267, 1, '账号1', 'admin', 1607567303, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (268, 1, '账号1', 'admin', 1607567307, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (269, 1, '账号1', 'admin', 1607567309, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (270, 1, '账号1', 'admin', 1607567332, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"限时秒杀\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/94a0d54ab18f3d93072c73a1e0dcba17.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"13\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (271, 1, '账号1', 'admin', 1607567332, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (272, 1, '账号1', 'admin', 1607567333, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (273, 1, '账号1', 'admin', 1607567339, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (274, 1, '账号1', 'admin', 1607567339, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (275, 1, '账号1', 'admin', 1607567339, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (276, 1, '账号1', 'admin', 1607567342, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (277, 1, '账号1', 'admin', 1607567351, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"拼团活动\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/643833719ae963e6a9035e4b98a6279c.png\",\"link_type\":\"1\",\"menu\":\"2\",\"url\":\"\",\"sort\":\"12\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (278, 1, '账号1', 'admin', 1607567351, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (279, 1, '账号1', 'admin', 1607567352, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (280, 1, '账号1', 'admin', 1607567357, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (281, 1, '账号1', 'admin', 1607567357, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (282, 1, '账号1', 'admin', 1607567357, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (283, 1, '账号1', 'admin', 1607567368, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"3\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (284, 1, '账号1', 'admin', 1607567368, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (285, 1, '账号1', 'admin', 1607567372, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (286, 1, '账号1', 'admin', 1607567384, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (287, 1, '账号1', 'admin', 1607567384, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (288, 1, '账号1', 'admin', 1607567384, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (289, 1, '账号1', 'admin', 1607567397, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"领券中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/520c72e1a1d48cb088b0f070d77bc031.png\",\"link_type\":\"1\",\"menu\":\"4\",\"url\":\"\",\"sort\":\"10\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (290, 1, '账号1', 'admin', 1607567397, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (291, 1, '账号1', 'admin', 1607567398, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (292, 1, '账号1', 'admin', 1607567404, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (293, 1, '账号1', 'admin', 1607567404, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (294, 1, '账号1', 'admin', 1607567404, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (295, 1, '账号1', 'admin', 1607567416, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"积分签到\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/0158588a36f9f0ae6a58509f6dd0d80e.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (296, 1, '账号1', 'admin', 1607567416, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (297, 1, '账号1', 'admin', 1607567417, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (298, 1, '账号1', 'admin', 1607567422, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (299, 1, '账号1', 'admin', 1607567422, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (300, 1, '账号1', 'admin', 1607567423, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (301, 1, '账号1', 'admin', 1607567425, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (302, 1, '账号1', 'admin', 1607567431, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (303, 1, '账号1', 'admin', 1607567431, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (304, 1, '账号1', 'admin', 1607567433, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (305, 1, '账号1', 'admin', 1607567440, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (306, 1, '账号1', 'admin', 1607567440, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (307, 1, '账号1', 'admin', 1607567440, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (308, 1, '账号1', 'admin', 1607567443, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (309, 1, '账号1', 'admin', 1607567450, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/3a3228fcfdb8fa0808a9e67b6c43df53.png\",\"link_type\":\"1\",\"menu\":\"7\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (310, 1, '账号1', 'admin', 1607567450, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (311, 1, '账号1', 'admin', 1607567452, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"25\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (312, 1, '账号1', 'admin', 1607567454, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"25\",\"client_type\":\"1\",\"decorate_type\":\"1\",\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/3a3228fcfdb8fa0808a9e67b6c43df53.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (313, 1, '账号1', 'admin', 1607567454, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (314, 1, '账号1', 'admin', 1607567456, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (315, 1, '账号1', 'admin', 1607567466, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (316, 1, '账号1', 'admin', 1607567466, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (317, 1, '账号1', 'admin', 1607567466, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (318, 1, '账号1', 'admin', 1607567485, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"商场资讯\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/06332ce973851322e050de07a7b7631f.png\",\"link_type\":\"1\",\"menu\":\"8\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (319, 1, '账号1', 'admin', 1607567485, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (320, 1, '账号1', 'admin', 1607567487, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (321, 1, '账号1', 'admin', 1607567493, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (322, 1, '账号1', 'admin', 1607567493, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (323, 1, '账号1', 'admin', 1607567493, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (324, 1, '账号1', 'admin', 1607567501, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"VIP\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (325, 1, '账号1', 'admin', 1607567501, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (326, 1, '账号1', 'admin', 1607567504, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (327, 1, '账号1', 'admin', 1607567510, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (328, 1, '账号1', 'admin', 1607567510, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (329, 1, '账号1', 'admin', 1607567510, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (330, 1, '账号1', 'admin', 1607567512, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (331, 1, '账号1', 'admin', 1607567523, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/bbd816d5b586cdeca8e87dd7c06e2fcf.png\",\"link_type\":\"1\",\"menu\":\"9\",\"url\":\"\",\"sort\":\"4\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (332, 1, '账号1', 'admin', 1607567523, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (333, 1, '账号1', 'admin', 1607567525, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (334, 1, '账号1', 'admin', 1607567535, '/admin/recharge/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (335, 1, '账号1', 'admin', 1607567535, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (336, 1, '账号1', 'admin', 1607567536, '/admin/seckill/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (337, 1, '账号1', 'admin', 1607567536, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (338, 1, '账号1', 'admin', 1607567537, '/admin/sign_daily/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (339, 1, '账号1', 'admin', 1607567537, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (340, 1, '账号1', 'admin', 1607567537, '/admin/coupon/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (341, 1, '账号1', 'admin', 1607567538, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (342, 1, '账号1', 'admin', 1607567538, '/admin/marketing_config/integraldeduction.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (343, 1, '账号1', 'admin', 1607567538, '/admin/marketing_config/registerawardconfig.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (344, 1, '账号1', 'admin', 1607567539, '/admin/marketing_config/orderawardconfig.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (345, 1, '账号1', 'admin', 1607567540, '/admin/marketing_config/invitedawardconfig.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (346, 1, '账号1', 'admin', 1607567541, '/admin/activity/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (347, 1, '账号1', 'admin', 1607567541, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (348, 1, '账号1', 'admin', 1607567542, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (349, 1, '账号1', 'admin', 1607567604, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (350, 1, '账号1', 'admin', 1607567604, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (351, 1, '账号1', 'admin', 1607567605, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (352, 1, '账号1', 'admin', 1607567610, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"21\",\"client_type\":\"1\",\"decorate_type\":\"1\",\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"4\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (353, 1, '账号1', 'admin', 1607567610, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (354, 1, '账号1', 'admin', 1607567611, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"22\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (355, 1, '账号1', 'admin', 1607567614, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"22\",\"client_type\":\"1\",\"decorate_type\":\"1\",\"name\":\"领券中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/520c72e1a1d48cb088b0f070d77bc031.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"10\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (356, 1, '账号1', 'admin', 1607567614, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (357, 1, '账号1', 'admin', 1607567616, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"22\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (358, 1, '账号1', 'admin', 1607567621, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"22\",\"client_type\":\"1\",\"decorate_type\":\"1\",\"name\":\"领券中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/520c72e1a1d48cb088b0f070d77bc031.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"10\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (359, 1, '账号1', 'admin', 1607567621, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (360, 1, '账号1', 'admin', 1607567622, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"22\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (361, 1, '账号1', 'admin', 1607567633, '/admin/menu_decorate/mnpcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (362, 1, '账号1', 'admin', 1607567633, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (363, 1, '账号1', 'admin', 1607567640, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (364, 1, '账号1', 'admin', 1607567644, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (365, 1, '账号1', 'admin', 1607567645, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (366, 1, '账号1', 'admin', 1607567645, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (367, 1, '账号1', 'admin', 1607567657, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的钱包\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d650559b128bfca62870205445365ac8.png\",\"link_type\":\"1\",\"menu\":\"10\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (368, 1, '账号1', 'admin', 1607567657, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (369, 1, '账号1', 'admin', 1607567658, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (370, 1, '账号1', 'admin', 1607567665, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (371, 1, '账号1', 'admin', 1607567665, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (372, 1, '账号1', 'admin', 1607567665, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (373, 1, '账号1', 'admin', 1607567673, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"分销推广\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1226785362c5f02ef2616be8a1a5737a.png\",\"link_type\":\"1\",\"menu\":\"11\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (374, 1, '账号1', 'admin', 1607567673, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (375, 1, '账号1', 'admin', 1607567718, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"29\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (376, 1, '账号1', 'admin', 1607567720, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"30\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (377, 1, '账号1', 'admin', 1607567723, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"30\",\"client_type\":\"1\",\"decorate_type\":\"2\",\"name\":\"分销推广\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1226785362c5f02ef2616be8a1a5737a.png\",\"link_type\":\"1\",\"menu\":\"11\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (378, 1, '账号1', 'admin', 1607567723, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (379, 1, '账号1', 'admin', 1607567726, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (380, 1, '账号1', 'admin', 1607567738, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (381, 1, '账号1', 'admin', 1607567738, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (382, 1, '账号1', 'admin', 1607567738, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (383, 1, '账号1', 'admin', 1607567748, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的优惠券\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/c03fd3359bcb6a575a479dc41a013fff.png\",\"link_type\":\"1\",\"menu\":\"10\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (384, 1, '账号1', 'admin', 1607567748, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (385, 1, '账号1', 'admin', 1607567755, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"31\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (386, 1, '账号1', 'admin', 1607567758, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"31\",\"client_type\":\"1\",\"decorate_type\":\"2\",\"name\":\"我的优惠券\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/c03fd3359bcb6a575a479dc41a013fff.png\",\"link_type\":\"1\",\"menu\":\"10\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (387, 1, '账号1', 'admin', 1607567758, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (388, 1, '账号1', 'admin', 1607567760, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (389, 1, '账号1', 'admin', 1607567770, '/admin/menu_decorate/appindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (390, 1, '账号1', 'admin', 1607567770, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (391, 1, '账号1', 'admin', 1607567771, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (392, 1, '账号1', 'admin', 1607567774, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"2\",\"client_type\":\"3\",\"decorate_type\":\"1\",\"name\":\"拼团活动\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/643833719ae963e6a9035e4b98a6279c.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"12\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (393, 1, '账号1', 'admin', 1607567774, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"3\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (394, 1, '账号1', 'admin', 1607567779, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (395, 1, '账号1', 'admin', 1607567783, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (396, 1, '账号1', 'admin', 1607567787, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"3\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (397, 1, '账号1', 'admin', 1607567798, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (398, 1, '账号1', 'admin', 1607567799, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (399, 1, '账号1', 'admin', 1607567799, '/admin/menu_decorate/mnpcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (400, 1, '账号1', 'admin', 1607567800, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (401, 1, '账号1', 'admin', 1607567803, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (402, 1, '账号1', 'admin', 1607567807, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (403, 1, '账号1', 'admin', 1607567807, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (404, 1, '账号1', 'admin', 1607567807, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (405, 1, '账号1', 'admin', 1607567817, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"等级服务\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"13\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (406, 1, '账号1', 'admin', 1607567818, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (407, 1, '账号1', 'admin', 1607567821, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"32\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (408, 1, '账号1', 'admin', 1607567823, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"32\",\"client_type\":\"1\",\"decorate_type\":\"2\",\"name\":\"等级服务\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"10\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (409, 1, '账号1', 'admin', 1607567823, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (410, 1, '账号1', 'admin', 1607567825, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (411, 1, '账号1', 'admin', 1607567835, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (412, 1, '账号1', 'admin', 1607567835, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (413, 1, '账号1', 'admin', 1607567835, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (414, 1, '账号1', 'admin', 1607567847, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/ad841b1109ad0d5a8f40585d47ecd8f2.png\",\"link_type\":\"1\",\"menu\":\"16\",\"url\":\"\",\"sort\":\"4\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (415, 1, '账号1', 'admin', 1607567847, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (416, 1, '账号1', 'admin', 1607567849, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (417, 1, '账号1', 'admin', 1607567856, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (418, 1, '账号1', 'admin', 1607567856, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (419, 1, '账号1', 'admin', 1607567857, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (420, 1, '账号1', 'admin', 1607567865, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"收货地址\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd7b3e6885221f0c94a7092dc95e1f8f.png\",\"link_type\":\"1\",\"menu\":\"15\",\"url\":\"\",\"sort\":\"3\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (421, 1, '账号1', 'admin', 1607567865, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (422, 1, '账号1', 'admin', 1607567866, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (423, 1, '账号1', 'admin', 1607567872, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (424, 1, '账号1', 'admin', 1607567872, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (425, 1, '账号1', 'admin', 1607567872, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (426, 1, '账号1', 'admin', 1607567884, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d01e2ab0defbad866f19420e6483f7b2.png\",\"link_type\":\"1\",\"menu\":\"14\",\"url\":\"\",\"sort\":\"2\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (427, 1, '账号1', 'admin', 1607567884, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (428, 1, '账号1', 'admin', 1607567886, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (429, 1, '账号1', 'admin', 1607567890, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (430, 1, '账号1', 'admin', 1607567896, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (431, 1, '账号1', 'admin', 1607567896, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (432, 1, '账号1', 'admin', 1607567896, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (433, 1, '账号1', 'admin', 1607567902, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"联系客服\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/f6189105a4bfb39631e193a83047ad7a.png\",\"link_type\":\"1\",\"menu\":\"17\",\"url\":\"\",\"sort\":\"1\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (434, 1, '账号1', 'admin', 1607567902, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (435, 1, '账号1', 'admin', 1607567907, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (436, 1, '账号1', 'admin', 1607567907, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (437, 1, '账号1', 'admin', 1607567908, '/admin/menu_decorate/mnpcenterlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (438, 1, '账号1', 'admin', 1607567908, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (439, 1, '账号1', 'admin', 1607567982, '/admin/menu_decorate/h5centerlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (440, 1, '账号1', 'admin', 1607567982, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (441, 1, '账号1', 'admin', 1607567987, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (442, 1, '账号1', 'admin', 1607568003, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (443, 1, '账号1', 'admin', 1607568003, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (444, 1, '账号1', 'admin', 1607568003, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (445, 1, '账号1', 'admin', 1607568013, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的钱包\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d650559b128bfca62870205445365ac8.png\",\"link_type\":\"1\",\"menu\":\"10\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (446, 1, '账号1', 'admin', 1607568013, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (447, 1, '账号1', 'admin', 1607568014, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (448, 1, '账号1', 'admin', 1607568020, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (449, 1, '账号1', 'admin', 1607568020, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (450, 1, '账号1', 'admin', 1607568020, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (451, 1, '账号1', 'admin', 1607568029, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"分销推广\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1226785362c5f02ef2616be8a1a5737a.png\",\"link_type\":\"1\",\"menu\":\"11\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (452, 1, '账号1', 'admin', 1607568029, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (453, 1, '账号1', 'admin', 1607568030, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (454, 1, '账号1', 'admin', 1607568036, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (455, 1, '账号1', 'admin', 1607568036, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (456, 1, '账号1', 'admin', 1607568036, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (457, 1, '账号1', 'admin', 1607568049, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的优惠券\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/c03fd3359bcb6a575a479dc41a013fff.png\",\"link_type\":\"1\",\"menu\":\"12\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (458, 1, '账号1', 'admin', 1607568049, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (459, 1, '账号1', 'admin', 1607568052, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (460, 1, '账号1', 'admin', 1607568058, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (461, 1, '账号1', 'admin', 1607568058, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (462, 1, '账号1', 'admin', 1607568059, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (463, 1, '账号1', 'admin', 1607568064, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的优惠券\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/c03fd3359bcb6a575a479dc41a013fff.png\",\"link_type\":\"1\",\"menu\":\"12\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (464, 1, '账号1', 'admin', 1607568070, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"等级服务\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"13\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (465, 1, '账号1', 'admin', 1607568071, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (466, 1, '账号1', 'admin', 1607568072, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (467, 1, '账号1', 'admin', 1607568077, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (468, 1, '账号1', 'admin', 1607568077, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (469, 1, '账号1', 'admin', 1607568078, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (470, 1, '账号1', 'admin', 1607568084, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/ad841b1109ad0d5a8f40585d47ecd8f2.png\",\"link_type\":\"1\",\"menu\":\"16\",\"url\":\"\",\"sort\":\"4\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (471, 1, '账号1', 'admin', 1607568084, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (472, 1, '账号1', 'admin', 1607568085, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (473, 1, '账号1', 'admin', 1607568091, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (474, 1, '账号1', 'admin', 1607568091, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (475, 1, '账号1', 'admin', 1607568091, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (476, 1, '账号1', 'admin', 1607568100, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"收货地址\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd7b3e6885221f0c94a7092dc95e1f8f.png\",\"link_type\":\"1\",\"menu\":\"15\",\"url\":\"\",\"sort\":\"3\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (477, 1, '账号1', 'admin', 1607568100, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (478, 1, '账号1', 'admin', 1607568101, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (479, 1, '账号1', 'admin', 1607568106, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (480, 1, '账号1', 'admin', 1607568106, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (481, 1, '账号1', 'admin', 1607568106, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (482, 1, '账号1', 'admin', 1607568115, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d01e2ab0defbad866f19420e6483f7b2.png\",\"link_type\":\"1\",\"menu\":\"16\",\"url\":\"\",\"sort\":\"2\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (483, 1, '账号1', 'admin', 1607568115, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (484, 1, '账号1', 'admin', 1607568116, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (485, 1, '账号1', 'admin', 1607568124, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (486, 1, '账号1', 'admin', 1607568124, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (487, 1, '账号1', 'admin', 1607568124, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (488, 1, '账号1', 'admin', 1607568131, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"联系客服\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/f6189105a4bfb39631e193a83047ad7a.png\",\"link_type\":\"1\",\"menu\":\"17\",\"url\":\"\",\"sort\":\"1\",\"is_show\":\"1\",\"decorate_type\":\"2\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (489, 1, '账号1', 'admin', 1607568131, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (490, 1, '账号1', 'admin', 1607568138, '/admin/menu_decorate/h5indexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (491, 1, '账号1', 'admin', 1607568138, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (492, 1, '账号1', 'admin', 1607568141, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (493, 1, '账号1', 'admin', 1607568148, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (494, 1, '账号1', 'admin', 1607568149, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (495, 1, '账号1', 'admin', 1607568149, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (496, 1, '账号1', 'admin', 1607568155, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"限时秒杀\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/94a0d54ab18f3d93072c73a1e0dcba17.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"13\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (497, 1, '账号1', 'admin', 1607568155, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (498, 1, '账号1', 'admin', 1607568156, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (499, 1, '账号1', 'admin', 1607568163, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (500, 1, '账号1', 'admin', 1607568164, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (501, 1, '账号1', 'admin', 1607568164, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (502, 1, '账号1', 'admin', 1607568166, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (503, 1, '账号1', 'admin', 1607568173, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"拼团活动\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/643833719ae963e6a9035e4b98a6279c.png\",\"link_type\":\"1\",\"menu\":\"2\",\"url\":\"\",\"sort\":\"12\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (504, 1, '账号1', 'admin', 1607568173, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (505, 1, '账号1', 'admin', 1607568174, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (506, 1, '账号1', 'admin', 1607568179, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (507, 1, '账号1', 'admin', 1607568180, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (508, 1, '账号1', 'admin', 1607568180, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (509, 1, '账号1', 'admin', 1607568186, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"3\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (510, 1, '账号1', 'admin', 1607568186, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (511, 1, '账号1', 'admin', 1607568187, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (512, 1, '账号1', 'admin', 1607568200, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (513, 1, '账号1', 'admin', 1607568200, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (514, 1, '账号1', 'admin', 1607568200, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (515, 1, '账号1', 'admin', 1607568214, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"领券中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/520c72e1a1d48cb088b0f070d77bc031.png\",\"link_type\":\"1\",\"menu\":\"4\",\"url\":\"\",\"sort\":\"10\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (516, 1, '账号1', 'admin', 1607568214, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (517, 1, '账号1', 'admin', 1607568215, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (518, 1, '账号1', 'admin', 1607568221, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (519, 1, '账号1', 'admin', 1607568221, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (520, 1, '账号1', 'admin', 1607568221, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (521, 1, '账号1', 'admin', 1607568230, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"积分签到\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/0158588a36f9f0ae6a58509f6dd0d80e.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (522, 1, '账号1', 'admin', 1607568230, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (523, 1, '账号1', 'admin', 1607568235, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (524, 1, '账号1', 'admin', 1607568241, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (525, 1, '账号1', 'admin', 1607568241, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (526, 1, '账号1', 'admin', 1607568242, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (527, 1, '账号1', 'admin', 1607568244, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (528, 1, '账号1', 'admin', 1607568251, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"会员中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fbb2fb37597896efd7b95506ed7cdda.png\",\"link_type\":\"1\",\"menu\":\"6\",\"url\":\"\",\"sort\":\"8\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (529, 1, '账号1', 'admin', 1607568252, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (530, 1, '账号1', 'admin', 1607568253, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (531, 1, '账号1', 'admin', 1607568263, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (532, 1, '账号1', 'admin', 1607568263, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (533, 1, '账号1', 'admin', 1607568263, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (534, 1, '账号1', 'admin', 1607568266, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (535, 1, '账号1', 'admin', 1607568274, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"我的收藏\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/3a3228fcfdb8fa0808a9e67b6c43df53.png\",\"link_type\":\"1\",\"menu\":\"7\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (536, 1, '账号1', 'admin', 1607568274, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (537, 1, '账号1', 'admin', 1607568276, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (538, 1, '账号1', 'admin', 1607568284, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (539, 1, '账号1', 'admin', 1607568285, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (540, 1, '账号1', 'admin', 1607568285, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (541, 1, '账号1', 'admin', 1607568293, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"商城资讯\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/06332ce973851322e050de07a7b7631f.png\",\"link_type\":\"1\",\"menu\":\"8\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (542, 1, '账号1', 'admin', 1607568293, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (543, 1, '账号1', 'admin', 1607568294, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"52\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (544, 1, '账号1', 'admin', 1607568298, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"52\",\"client_type\":\"2\",\"decorate_type\":\"1\",\"name\":\"商城资讯\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/06332ce973851322e050de07a7b7631f.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"6\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (545, 1, '账号1', 'admin', 1607568298, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (546, 1, '账号1', 'admin', 1607568300, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (547, 1, '账号1', 'admin', 1607568306, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (548, 1, '账号1', 'admin', 1607568306, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (549, 1, '账号1', 'admin', 1607568306, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (550, 1, '账号1', 'admin', 1607568309, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (551, 1, '账号1', 'admin', 1607568313, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (552, 1, '账号1', 'admin', 1607568322, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"VIP\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/29474ae22229ae68460c51466e47ce56.png\",\"link_type\":\"1\",\"menu\":\"1\",\"url\":\"\",\"sort\":\"5\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (553, 1, '账号1', 'admin', 1607568322, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (554, 1, '账号1', 'admin', 1607568325, '/admin/menu_decorate/add.html', 'GET', '{\"type\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (555, 1, '账号1', 'admin', 1607568331, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (556, 1, '账号1', 'admin', 1607568331, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (557, 1, '账号1', 'admin', 1607568331, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (558, 1, '账号1', 'admin', 1607568333, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (559, 1, '账号1', 'admin', 1607568341, '/admin/menu_decorate/add.html', 'POST', '{\"name\":\"帮助中心\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/bbd816d5b586cdeca8e87dd7c06e2fcf.png\",\"link_type\":\"1\",\"menu\":\"9\",\"url\":\"\",\"sort\":\"4\",\"is_show\":\"1\",\"decorate_type\":\"1\",\"client_type\":\"2\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (560, 1, '账号1', 'admin', 1607568341, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (561, 1, '账号1', 'admin', 1607568348, '/admin/menu_decorate/h5centerlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (562, 1, '账号1', 'admin', 1607568348, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (563, 1, '账号1', 'admin', 1607568349, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (564, 1, '账号1', 'admin', 1607568349, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (565, 1, '账号1', 'admin', 1607568352, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (566, 1, '账号1', 'admin', 1607568355, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"21\",\"client_type\":\"1\",\"decorate_type\":\"1\",\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"3\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (567, 1, '账号1', 'admin', 1607568355, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (568, 1, '账号1', 'admin', 1607568356, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (569, 1, '账号1', 'admin', 1607568359, '/admin/index/index.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (570, 1, '账号1', 'admin', 1607568359, '/admin/index/stat.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (571, 1, '账号1', 'admin', 1607568359, '/admin/index/stat.html', 'POST', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (572, 1, '账号1', 'admin', 1607568363, '/admin/menu_decorate/h5indexlist.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (573, 1, '账号1', 'admin', 1607568364, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (574, 1, '账号1', 'admin', 1607568366, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"46\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (575, 1, '账号1', 'admin', 1607568368, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"46\",\"client_type\":\"2\",\"decorate_type\":\"1\",\"name\":\"拼团活动\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/643833719ae963e6a9035e4b98a6279c.png\",\"link_type\":\"1\",\"menu\":\"2\",\"url\":\"\",\"sort\":\"12\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (576, 1, '账号1', 'admin', 1607568368, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (577, 1, '账号1', 'admin', 1607568370, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"46\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (578, 1, '账号1', 'admin', 1607568386, '/admin/article_category/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (579, 1, '账号1', 'admin', 1607568387, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (580, 1, '账号1', 'admin', 1607568387, '/admin/article_category/add.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (581, 1, '账号1', 'admin', 1607568395, '/admin/article_category/add.html', 'POST', '{\"id\":\"0\",\"name\":\"商城公告\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (582, 1, '账号1', 'admin', 1607568395, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (583, 1, '账号1', 'admin', 1607568396, '/admin/article_category/add.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (584, 1, '账号1', 'admin', 1607568405, '/admin/article_category/add.html', 'POST', '{\"id\":\"0\",\"name\":\"用户公告\",\"is_show\":\"1\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (585, 1, '账号1', 'admin', 1607568405, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (586, 1, '账号1', 'admin', 1607568406, '/admin/article/lists.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (587, 1, '账号1', 'admin', 1607568406, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (588, 1, '账号1', 'admin', 1607568413, '/admin/article/add.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (589, 1, '账号1', 'admin', 1607568445, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (590, 1, '账号1', 'admin', 1607568446, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (591, 1, '账号1', 'admin', 1607568446, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (592, 1, '账号1', 'admin', 1607568456, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (593, 1, '账号1', 'admin', 1607568459, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (594, 1, '账号1', 'admin', 1607568459, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (595, 1, '账号1', 'admin', 1607568459, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (596, 1, '账号1', 'admin', 1607568471, '/admin/article/add.html', 'POST', '{\"id\":\"0\",\"title\":\"电商商城管理规章制度\",\"cid\":\"1\",\"synopsis\":\"电商商城管理规章制度\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/5b82112f4d294b11b80da87edd422772.jpg\",\"is_notice\":\"1\",\"sort\":\"10\",\"is_show\":\"1\",\"content\":\"<p style=\\\"text-align: justify;\\\"><span class=\\\"bjh-p\\\">今年，以直播带货为代表的“内容+电商”成为淘宝、京东等电商平台和以央视为代表的媒体共同探索的变现新渠道。<\\/span><\\/p><p style=\\\"text-align: justify;\\\"><span class=\\\"bjh-p\\\">作为产业门类齐全、产业规模庞大的新型主流媒体及综合文化产业集团，SMG如何利用广电平台多渠道流量矩阵创新全域营销玩法？<\\/span><\\/p><p style=\\\"text-align: justify;\\\"><span class=\\\"bjh-p\\\">一切都在11月27日B+商城举办的“没内容，不电商”发布会上揭晓。从7月初成立至今，B+商城以东方购物视频电商为基础，依托SMG既有的相关服务能力和体系，面向都市成熟人群和家庭需求，正在向“魔都”生活第一入口的方向迈进。它的成长体现了SMG内容和渠道打通、大屏和小屏联动所发挥的巨大效应。<\\/span><\\/p><div><span class=\\\"bjh-p\\\"><br><\\/span><\\/div>\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (597, 1, '账号1', 'admin', 1607568471, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (598, 1, '账号1', 'admin', 1607568637, '/admin/article/add.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (599, 1, '账号1', 'admin', 1607568672, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (600, 1, '账号1', 'admin', 1607568672, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (601, 1, '账号1', 'admin', 1607568672, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (602, 1, '账号1', 'admin', 1607568678, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (603, 1, '账号1', 'admin', 1607568681, '/admin/file/image.html', 'GET', '[]', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (604, 1, '账号1', 'admin', 1607568681, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (605, 1, '账号1', 'admin', 1607568681, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '59.42.110.2');
-INSERT INTO `yx_system_log` VALUES (606, 1, '账号1', 'admin', 1607568834, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (607, 1, '账号1', 'admin', 1607568835, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (608, 1, '账号1', 'admin', 1607568835, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (609, 1, '账号1', 'admin', 1607568839, '/admin/article_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (610, 1, '账号1', 'admin', 1607568839, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (611, 1, '账号1', 'admin', 1607568841, '/admin/article_category/edit.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (612, 1, '账号1', 'admin', 1607568844, '/admin/article/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (613, 1, '账号1', 'admin', 1607568844, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (614, 1, '账号1', 'admin', 1607568845, '/admin/article/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (615, 1, '账号1', 'admin', 1607568864, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (616, 1, '账号1', 'admin', 1607568864, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (617, 1, '账号1', 'admin', 1607568865, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (618, 1, '账号1', 'admin', 1607568878, '/admin/article/add.html', 'POST', '{\"id\":\"0\",\"title\":\"双12活动预告~~~\",\"cid\":\"0\",\"synopsis\":\"双12活动预告~~~\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/a664cf34b0a5f5de424ab24701f41c5a.jpeg\",\"is_notice\":\"1\",\"sort\":\"9\",\"is_show\":\"1\",\"content\":\"<p>LikeShop商城定于2020-12-12日开启限量五折活动，不要错过哦！！！<\\/p><p>届时会有大牌明星在线派送现金礼包！！！<\\/p>\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (619, 1, '账号1', 'admin', 1607568882, '/admin/article/add.html', 'POST', '{\"id\":\"0\",\"title\":\"双12活动预告~~~\",\"cid\":\"1\",\"synopsis\":\"双12活动预告~~~\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/a664cf34b0a5f5de424ab24701f41c5a.jpeg\",\"is_notice\":\"1\",\"sort\":\"9\",\"is_show\":\"1\",\"content\":\"<p>LikeShop商城定于2020-12-12日开启限量五折活动，不要错过哦！！！<\\/p><p>届时会有大牌明星在线派送现金礼包！！！<\\/p>\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (620, 1, '账号1', 'admin', 1607568882, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (621, 1, '账号1', 'admin', 1607568895, '/admin/help_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (622, 1, '账号1', 'admin', 1607568896, '/admin/help_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (623, 1, '账号1', 'admin', 1607568896, '/admin/help_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (624, 1, '账号1', 'admin', 1607568906, '/admin/help_category/add.html', 'POST', '{\"id\":\"0\",\"name\":\"使用手册\",\"is_show\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (625, 1, '账号1', 'admin', 1607568906, '/admin/help_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (626, 1, '账号1', 'admin', 1607568907, '/admin/help/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (627, 1, '账号1', 'admin', 1607568907, '/admin/help/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (628, 1, '账号1', 'admin', 1607568912, '/admin/help/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (629, 1, '账号1', 'admin', 1607568948, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (630, 1, '账号1', 'admin', 1607568948, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (631, 1, '账号1', 'admin', 1607568948, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (632, 1, '账号1', 'admin', 1607568953, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (633, 1, '账号1', 'admin', 1607568958, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (634, 1, '账号1', 'admin', 1607568975, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (635, 1, '账号1', 'admin', 1607568978, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (636, 1, '账号1', 'admin', 1607568978, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (637, 1, '账号1', 'admin', 1607568978, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (638, 1, '账号1', 'admin', 1607569138, '/admin/help/add.html', 'POST', '{\"id\":\"0\",\"title\":\"LikeShop商城使用手册\",\"cid\":\"1\",\"synopsis\":\"使用手册\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/f7c7bdc7e0b7fc3d7fbd25d67bd6f7d3.png\",\"sort\":\"\",\"is_show\":\"1\",\"content\":\"<p style=\\\"text-align: left;\\\">快速上手指南\\nLikeShop使用手册\\n1\\n好象股份有限公司版权所有\\nV 2.33\\n快速上手指南\\n尊敬的客户：\\n欢迎使用LikeShop商城，此文档为快速上手指南，帮助您便捷、高效的完成商品采购。\\n2\\n目录 Contents\\n*采购员进入03页阅读 *审批员进入25页阅读\\n1、如何登录LikeShop商城·································P04\\n采购员、审批员、管理员登录方式一致\\n2、如何查找需要采购的商品····················P05\\n多种方式找商品，快速便捷\\n3、如何将商品加入购物车··················P06\\/09\\n多种方式找商品，快速便捷\\n4、如何结算购物车···································P10\\n将购物车中的商品进行结算核对、提交\\n5、如何提交采购订单··························P11\\/14\\n采购订单提交给审批人审批\\n6、如何查看自己的采购订单···················P15\\n查看自己提交过的采购订单\\n8、如何取消采购订单································P17\\n取消不想要的订单\\n10、如何查看订单统计·····························P19\\n7、如何查看订单进展以及物流信息········P16\\n在线追踪订单审批以及物流配送进度\\n9、如何在线确认收货·································P18\\n在线签收 部门统计、采购人统计、时间统计\\n快速上手指南 3\\n11、如何查看订单详情························P20\\n部门、个人、商品订单详情\\n15、如何修改密码、设置个人信息···P27 16、常见问题与回答··························P28\\n修改密码、修改头像、设置信息\\n14、如何审批订单························P25\\/26\\n审批人员三种审批方式\\n13、如何联系在线客服·······················P24\\n在线客服咨询\\n12、如何在线申请开票················P21\\/23\\n支持专票、普票、电子发票\\n快速上手指南 4\\n➢ 如何登录LikeShop商城？\\n当您需要登录LikeShop商城进行商品采购时：\\n第1步：在浏览器中打开①LikeShop商城。\\n第2步：点击页面顶端的②请登录，跳转到登录界面。\\n第3步：在登录界面中输入③账号和密码，点击④登录即可。\\n1\\n2\\n3\\n4\\n登录成功标志\\n注意事项：\\n如果忘记密码，请联系管\\n理员，帮助您重置密码。\\n快速上手指南 5\\n➢ 如何查找需要采购的商品？\\n当您需要查找办公用品时：\\n方法一：账号登陆后，在首页①搜索框输入产品名称或型号或编号，再点击②搜索按钮。\\n1\\n2\\n方法二：账号登陆后，鼠标悬停③商品分类中的主分类，再移动到次级分类，再点击④三级分类。\\n3\\n4\\n说明：a、搜索或选择完成后，均直接进入商品列表页面。\\nb、直接点击商品分类中的主分类后，跳转至该主分类下所有商品列表页面。\\n快速上手指南 6\\n方法一：商品列表页单个选购，在商品列表页面，鼠标停在商品图片上时，会浮现出购买商品的黄色\\n图标，调整商品数量①调整商品数量，然后点击②加入购物车，此商品就选购完成。\\n1 2\\n➢ 如何将商品加入购物车\\n当您需要将想采购的办公用品加入购物车时：\\n快速上手指南 7\\n方法二：商品详情页选购，在商品列表页面，直接点击商品后，进入商品详情页。\\n在商品详情页面，根据自身需要①选择好商品的各项参数后，点击②加入购物车，完成商品选购。\\n说明：当您直接点击“立即购买”时，商城直接跳转到提交订单页面。\\n1\\n2\\n快速上手指南 8\\n方法三：商品列表页批量选购，在商品列表页面，鼠标停在商品图片上时，点击①图片左上角的\\n勾选框，然后再点击商品列表右上方的②批量加入购物车，在弹出的页面中③调整好商品的数量，\\n然后再点击④确认加入购物车。\\n1\\n2\\n3\\n4\\n这个是弹窗\\n快速上手指南 9\\n当您需要将想采购的办公用品加入购物车时：\\n方法四：快速批量提交，页面顶部点击①快速下单，在跳转后的页面点击②批量快速下单，再点击\\n③下载Excel模板。在模板中的最后一列内，④填入需要购买的数量，保存后回到商城页面点击\\n⑤上传文件，完成这些后，Excel模板中的填入的商品就会自动加入购物车。\\n1\\n2\\n3\\n5\\n表格模板下载打开的样例\\n4\\n快速上手指南 10\\n➢ 如何结算购物车\\n当您需要将购物车内的商品进行结算时：\\n第1步：点击页面①顶部的购物车或者页面①右侧的购物车，进入购物车。\\n第2步：②勾选需要的商品，并按需③调整数量。然后点击④去结算，系统将跳转到提交订单页面。\\n1\\n1\\n2 3\\n4\\n说明：\\n点击导出按钮可将购物车\\n清单导出为Excel表格\\n快速上手指南 11\\n➢ 如何提交采购订单\\n当您需要将采购订单提交时：\\n第1步：商品结算后，自动进入订单提交页面。选择①采购部门，选择完成后自动弹出审批人。\\n第2步：点选②收件人，确定收货信息。\\n第3步：确定③支付方式，一般不会变化。\\n第4步：查看④剩余预算，是否充足。\\n注意事项：\\n当预算不足时，无法提交订单。您可以选择\\n联系管理员增加预算或删减商品，再提交。\\n1\\n2\\n3\\n4\\n快速上手指南 12\\n第5步：⑤核对商品清单列表，商品、数量、规格、颜色等是否有误。\\n第6步：确定无误，点击⑥提交订单，完成页面跳转到提交完成的⑦提示页面。\\n5\\n6\\n7 跳转后页面提示\\n快速上手指南 13\\n选择收货时，也可以实时新增地址：\\n① ：在选择部门时，部分客户户只能选择自己，无法查看到其他人。\\n② ：在收货地址一栏中，部分客户可点击右侧的新增收货地址来实时新增。\\n1\\n2\\n说明：新增收货地址功能为可选功能。\\n快速上手指南 14\\n提交订单时，可以添加附件以及备注：\\n① 提交订单时，可以对订单进行备注，备注的信息订单处理人员将会关注到。\\n② 提交订单时，可以添加审批附件，附件内容支持多种常见的文件形式。\\n说明：添加的附件，在审批订单时可以查看到。\\n1\\n2\\n快速上手指南 15\\n➢ 如何查看自己的采购订单\\n当您需要查看采购订单时：\\n第1步：点击页面顶部①我的订单或者商城首页右侧的我的订单，进入订单中心。\\n第2步：通过各项筛选功能筛选后，查看自己的订单记录。\\n1\\n说明：可根据“采购部门”、“订单状态”“下单时间”“订单号”等不同维度进行筛选。\\n快速上手指南 16\\n➢ 如何查看采购订单进展以及物流信息\\n当您需要查看采购订单进度以及物流信息时：\\n第1步：进入订单中心后，点击订单栏中的①查看，进入该订单状态页面。\\n第2步：进入到订单状态页后，可查看②订单的处理进展，可查看③物流信息，可查看④审\\n批状态以及相应审批负责人。\\n2\\n4\\n3\\n1\\n快速上手指南 17\\n➢ 如何取消采购订单\\n当您需要将采购订单取消时：\\n第1步：进入订单中心。\\n第2步：点击订单右侧的①取消，页面弹出确认对话框，点击②确定，接口完成订单取消。\\n注意：当订单被审批通过后，就不能被取消了。\\n1\\n2\\n快速上手指南 18\\n➢ 如何在线确认收货\\n当您需要在线确认收货时：\\n第1步：进入订单中心后，通过订单状态中选择①已发货，将订单筛选出来。\\n第2步：点击订单右侧的②确认收货，完成在线的签收确认。\\n1\\n2\\n快速上手指南 19\\n➢ 如何查看订单统计\\n当您需要查看订单统计时：\\n第1步：进入订单中心。\\n第2步：点击左侧①订单报表，然后选择②筛选条件，再点击③统计，就会展现出统计结果。\\n说明：可根据“所属公司”、“订单时间”“统计维度”三个方面进行统计。\\n其中，统计维度包含“部门统计”、“员工统计”、“商品统计”等不同角度的统计逻辑。\\n2\\n3\\n1\\n快速上手指南 20\\n➢ 如何查看订单详情\\n当您需要查看订单详情时：\\n第1步：进入订单中心。\\n第2步：点击左侧①订单明细报表，然后选择②筛选条件，再点击③查询，就会展现出查询结果。\\n说明：可根据“订单创建时间”、“订单归属部门”“客户商品分类”、“商品名称”四个方面\\n进行筛选查询，亦可到处至表格。\\n2\\n3\\n1\\n快速上手指南 21\\n➢ 如何在线申请开票\\n当您需要在线申请开发票时：\\n第1步：在进入个人中心后，点击左侧① 待开票订单申请。\\n第2步：在右侧的②筛选项中，筛选出需要开票的订单，然后点击③查询。\\n说明：\\na、当您需要批量开票时，请勾选订单后，点击批量开票申请按钮。\\nb、当您需要导出明细时，点击导出待开票订单明细按钮。\\nc、只有当订单状态为已签收时，才可以在线申请开票。\\n第3步：点击④开票申请，对单笔订单进行开票。\\n2 3\\n4\\n1\\n说明：\\n在线申请开票为可选功能，\\n可根据需要进行开通\\n快速上手指南 22\\n在弹出页面填入信息：\\n说明：\\na、可开增值税专票、普票、电子普票，可开企业、个人类型。\\nb、带红色星号的选项为必填项。\\n快速上手指南 23\\n添加寄送地址与提交申请\\n第1步：在开票申请页面，点击左侧① 新增地址。输入信息后点击②保存。\\n第2步：确认信息没问题后，点击③提交申请，完成开票申请。\\n说明：\\na、如果已经有新增过地址，那么可以直接勾选地址。\\nb、您可以点击订单中的查看，来确定订单详情是否正确。\\n1\\n2\\n3\\n快速上手指南 24\\n➢ 如何联系在线客服\\n当您需要咨询问题服务时：\\n第1步：点击页面左上角的logo进入商城首页，然后右侧的①客服\\n说明：\\na、提供订单号、下单平台及个人信息，可以让客服更好的为您服务。\\n快速上手指南 25\\n➢ 如何审批订单\\n当您需要审批订单时：\\n第1步：审批员登录账号并进入订单中心后，点击①订单审批。\\n方式一：批量进行审批，\\n第2步：②勾选需要审批的订单，点击右侧的③批量通过或批量拒绝按钮，会弹出对话框。\\n第3步：在弹出的对话框中，填入④审批意见，然后点击⑤确定，完成审批。\\n1\\n2\\n3\\n4\\n5\\n快速上手指南 26\\n方式二：列表页单个订单审批\\n第1步：直接点击待审批订单右侧的①通过。\\n第2步：在弹出的对话框中，点击②确定，通过审批。然后在再次点击③确定，完成审批。\\n方式三：详情页中单个订单审批\\n第1步：点击待审批订单右侧的①查看。\\n第2步：在跳转的页面的②审批备注中输入备注，然后③点击通过或拒绝来完成审批。\\n1\\n3\\n2\\n1\\n2\\n3\\n快速上手指南 27\\n➢ 如何修改密码，设置个人信息\\n当您需要修改密码或个人信息设置时：\\n第1步：点击页面顶端的①账户昵称，进入个人中心页面，点击左侧菜单栏中的①设置。\\n第2步：点击个人资料进入，修改个人资料。\\n第3步：点击修改密码，进入修改个人密码页面。\\n第4步：点击修改头像，进入修改个人头像页面。\\n快速上手指南 28\\n常见问题以及解答\\n1、怎样快速回到首页？\\n答：在任何页面中，点击左上角的企采商城LOGO图标，即可回到首页\\n2、密码忘记了怎么办？\\n答：请联系您的管理员，为您重置密码。\\n3、为什么提交订单按钮点不了？\\n答：（1）查看预算是否够，不够请联系管理员增加预算，或删减商品。\\n（2）有没有填写部门，如果没有填写部门的话是不能提交订单的。\\n（3）若以上都没问题，请将页面截图并反馈给对接人。\\n4、审批人员可以采购吗？\\n答：可以采购，一个账号可以有多种角色权限。<\\/p>\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (639, 1, '账号1', 'admin', 1607569138, '/admin/help/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (640, 1, '账号1', 'admin', 1607569155, '/admin/ad_position/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (641, 1, '账号1', 'admin', 1607569155, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (642, 1, '账号1', 'admin', 1607569155, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (643, 1, '账号1', 'admin', 1607569155, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (644, 1, '账号1', 'admin', 1607569158, '/admin/ad/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (645, 1, '账号1', 'admin', 1607569158, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (646, 1, '账号1', 'admin', 1607569170, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (647, 1, '账号1', 'admin', 1607569170, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (648, 1, '账号1', 'admin', 1607569171, '/admin/goods_comment/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (649, 1, '账号1', 'admin', 1607569171, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (650, 1, '账号1', 'admin', 1607569172, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (651, 1, '账号1', 'admin', 1607569172, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (652, 1, '账号1', 'admin', 1607569191, '/admin/ad_position/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (653, 1, '账号1', 'admin', 1607569191, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (654, 1, '账号1', 'admin', 1607569191, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (655, 1, '账号1', 'admin', 1607569191, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (656, 1, '账号1', 'admin', 1607569191, '/admin/ad/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (657, 1, '账号1', 'admin', 1607569192, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (658, 1, '账号1', 'admin', 1607569206, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (659, 1, '账号1', 'admin', 1607569206, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (660, 1, '账号1', 'admin', 1607569207, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (661, 1, '账号1', 'admin', 1607569207, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (662, 1, '账号1', 'admin', 1607569208, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (663, 1, '账号1', 'admin', 1607569208, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (664, 1, '账号1', 'admin', 1607569218, '/admin/user_privilege/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (665, 1, '账号1', 'admin', 1607569226, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (666, 1, '账号1', 'admin', 1607569226, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (667, 1, '账号1', 'admin', 1607569226, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (668, 1, '账号1', 'admin', 1607569321, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (669, 1, '账号1', 'admin', 1607569321, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (670, 1, '账号1', 'admin', 1607569321, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (671, 1, '账号1', 'admin', 1607569362, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (672, 1, '账号1', 'admin', 1607569362, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (673, 1, '账号1', 'admin', 1607569362, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (674, 1, '账号1', 'admin', 1607569362, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (675, 1, '账号1', 'admin', 1607569365, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (676, 1, '账号1', 'admin', 1607569365, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (677, 1, '账号1', 'admin', 1607569365, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (678, 1, '账号1', 'admin', 1607569381, '/admin/user_privilege/add.html', 'POST', '{\"name\":\"购物折扣\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/35e522faf28bee80048703f4a9f97f99.png\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (679, 1, '账号1', 'admin', 1607569381, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (680, 1, '账号1', 'admin', 1607569385, '/admin/user_privilege/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (681, 1, '账号1', 'admin', 1607569400, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (682, 1, '账号1', 'admin', 1607569400, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (683, 1, '账号1', 'admin', 1607569400, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (684, 1, '账号1', 'admin', 1607569404, '/admin/user_privilege/add.html', 'POST', '{\"name\":\"全场免邮费\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/001258dae3fb475ceecb294dfb0314fd.png\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (685, 1, '账号1', 'admin', 1607569404, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (686, 1, '账号1', 'admin', 1607569405, '/admin/user_privilege/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (687, 1, '账号1', 'admin', 1607569414, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (688, 1, '账号1', 'admin', 1607569414, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (689, 1, '账号1', 'admin', 1607569414, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (690, 1, '账号1', 'admin', 1607569417, '/admin/user_privilege/add.html', 'POST', '{\"name\":\"会员优惠券\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/a98c5a589526627f9458bdf4ed640bd9.png\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (691, 1, '账号1', 'admin', 1607569417, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (692, 1, '账号1', 'admin', 1607569418, '/admin/user_privilege/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (693, 1, '账号1', 'admin', 1607569424, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (694, 1, '账号1', 'admin', 1607569424, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (695, 1, '账号1', 'admin', 1607569424, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (696, 1, '账号1', 'admin', 1607569427, '/admin/user_privilege/add.html', 'POST', '{\"name\":\"专属客服\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/b993e87092f20dbc7b32536d6a867ccb.png\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (697, 1, '账号1', 'admin', 1607569427, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (698, 1, '账号1', 'admin', 1607569428, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (699, 1, '账号1', 'admin', 1607569428, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (700, 1, '账号1', 'admin', 1607569440, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (701, 1, '账号1', 'admin', 1607569440, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (702, 1, '账号1', 'admin', 1607569444, '/admin/user_level/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (703, 1, '账号1', 'admin', 1607569445, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (704, 1, '账号1', 'admin', 1607569655, '/admin/user_level/edit.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (705, 1, '账号1', 'admin', 1607569657, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (706, 1, '账号1', 'admin', 1607569658, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (707, 1, '账号1', 'admin', 1607569658, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (708, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (709, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (710, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (711, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (712, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (713, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (714, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (715, 1, '账号1', 'admin', 1607569662, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (716, 1, '账号1', 'admin', 1607569665, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (717, 1, '账号1', 'admin', 1607569665, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (718, 1, '账号1', 'admin', 1607569665, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (719, 1, '账号1', 'admin', 1607569674, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (720, 1, '账号1', 'admin', 1607569674, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (721, 1, '账号1', 'admin', 1607569674, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (722, 1, '账号1', 'admin', 1607569701, '/admin/user_level/edit.html', 'POST', '{\"id\":\"2\",\"name\":\"普通会员\",\"growth_value\":\"100\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d74e01d4a8b86f331fcca2f485080353.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/e00c91e6d52bcf8fc117bf9d4cc8213d.png\",\"privilege\":\"\",\"remark\":\"普通会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (723, 1, '账号1', 'admin', 1607569701, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (724, 1, '账号1', 'admin', 1607569703, '/admin/user_level/edit.html', 'GET', '{\"id\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (725, 1, '账号1', 'admin', 1607569704, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (726, 1, '账号1', 'admin', 1607569704, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (727, 1, '账号1', 'admin', 1607569704, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (728, 1, '账号1', 'admin', 1607569708, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (729, 1, '账号1', 'admin', 1607569708, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (730, 1, '账号1', 'admin', 1607569708, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (731, 1, '账号1', 'admin', 1607569716, '/admin/user_level/edit.html', 'POST', '{\"id\":\"3\",\"name\":\"黄金会员\",\"growth_value\":\"2000\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/eab147f969fce1475d4892c57256f8ec.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/263af68dbb3a7beb43d13273abddef59.png\",\"privilege\":\"1\",\"remark\":\"黄金会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (732, 1, '账号1', 'admin', 1607569718, '/admin/user_level/edit.html', 'POST', '{\"id\":\"3\",\"name\":\"黄金会员\",\"growth_value\":\"2000\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/eab147f969fce1475d4892c57256f8ec.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/263af68dbb3a7beb43d13273abddef59.png\",\"privilege\":\"1\",\"remark\":\"黄金会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (733, 1, '账号1', 'admin', 1607569720, '/admin/user_level/edit.html', 'POST', '{\"id\":\"3\",\"name\":\"黄金会员\",\"growth_value\":\"2000\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/eab147f969fce1475d4892c57256f8ec.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/263af68dbb3a7beb43d13273abddef59.png\",\"privilege\":\"\",\"remark\":\"黄金会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (734, 1, '账号1', 'admin', 1607569720, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (735, 1, '账号1', 'admin', 1607569722, '/admin/user_level/edit.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (736, 1, '账号1', 'admin', 1607569724, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (737, 1, '账号1', 'admin', 1607569724, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (738, 1, '账号1', 'admin', 1607569724, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (739, 1, '账号1', 'admin', 1607569729, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (740, 1, '账号1', 'admin', 1607569729, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (741, 1, '账号1', 'admin', 1607569729, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (742, 1, '账号1', 'admin', 1607569736, '/admin/user_level/edit.html', 'POST', '{\"id\":\"4\",\"name\":\"铂金会员\",\"growth_value\":\"3000\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/79ee4347c8066f965c9ce7034f249cea.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/2bb17478228b324a613ffa3565a48737.png\",\"privilege\":\"4\",\"remark\":\"铂金会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (743, 1, '账号1', 'admin', 1607569740, '/admin/user_level/edit.html', 'POST', '{\"id\":\"4\",\"name\":\"铂金会员\",\"growth_value\":\"3000\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/79ee4347c8066f965c9ce7034f249cea.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/2bb17478228b324a613ffa3565a48737.png\",\"privilege\":\"\",\"remark\":\"铂金会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (744, 1, '账号1', 'admin', 1607569740, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (745, 1, '账号1', 'admin', 1607569741, '/admin/user_level/edit.html', 'GET', '{\"id\":\"5\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (746, 1, '账号1', 'admin', 1607569742, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (747, 1, '账号1', 'admin', 1607569742, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (748, 1, '账号1', 'admin', 1607569742, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (749, 1, '账号1', 'admin', 1607569747, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (750, 1, '账号1', 'admin', 1607569747, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (751, 1, '账号1', 'admin', 1607569747, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (752, 1, '账号1', 'admin', 1607569752, '/admin/user_level/edit.html', 'POST', '{\"id\":\"5\",\"name\":\"钻石会员\",\"growth_value\":\"5000\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1bf35b2f5eacab8ac547b64218a6fdc9.png\",\"background_image\":\"\\/uploads\\/images\\/background\\/20201210\\/b3ea3f1db613eecfe7ae8e0cf2c155b3.png\",\"privilege\":\"\",\"remark\":\"钻石会员\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (753, 1, '账号1', 'admin', 1607569752, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (754, 1, '账号1', 'admin', 1607569755, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (755, 1, '账号1', 'admin', 1607569755, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (756, 1, '账号1', 'admin', 1607569756, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (757, 1, '账号1', 'admin', 1607569756, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (758, 1, '账号1', 'admin', 1607569757, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (759, 1, '账号1', 'admin', 1607569757, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (760, 1, '账号1', 'admin', 1607569772, '/admin/goods_brand/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (761, 1, '账号1', 'admin', 1607569773, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (762, 1, '账号1', 'admin', 1607569888, '/admin/goods_brand/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (763, 1, '账号1', 'admin', 1607569906, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (764, 1, '账号1', 'admin', 1607569906, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (765, 1, '账号1', 'admin', 1607569906, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (766, 1, '账号1', 'admin', 1607569907, '/admin/file_cate/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (767, 1, '账号1', 'admin', 1607569911, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (768, 1, '账号1', 'admin', 1607569914, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (769, 1, '账号1', 'admin', 1607569914, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (770, 1, '账号1', 'admin', 1607569914, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (771, 1, '账号1', 'admin', 1607569933, '/admin/goods_brand/add.html', 'POST', '{\"name\":\"晨光文具\",\"initial\":\"C\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd2610485ad76c0d24f88f8ce58d3dd5.png\",\"sort\":\"\",\"is_show\":\"1\",\"remark\":\"文具专卖品牌\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (772, 1, '账号1', 'admin', 1607569933, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (773, 1, '账号1', 'admin', 1607569942, '/admin/goods_brand/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (774, 1, '账号1', 'admin', 1607570073, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (775, 1, '账号1', 'admin', 1607570075, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (776, 1, '账号1', 'admin', 1607570095, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (777, 1, '账号1', 'admin', 1607570096, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (778, 1, '账号1', 'admin', 1607570096, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (779, 1, '账号1', 'admin', 1607570112, '/admin/goods_category/add.html', 'POST', '{\"name\":\"常用分类\",\"pid\":\"0\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d74e01d4a8b86f331fcca2f485080353.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (780, 1, '账号1', 'admin', 1607570112, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (781, 1, '账号1', 'admin', 1607570114, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (782, 1, '账号1', 'admin', 1607570122, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (783, 1, '账号1', 'admin', 1607570122, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (784, 1, '账号1', 'admin', 1607570122, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (785, 1, '账号1', 'admin', 1607570127, '/admin/goods_category/add.html', 'POST', '{\"name\":\"专场推荐\",\"pid\":\"0\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/eab147f969fce1475d4892c57256f8ec.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (786, 1, '账号1', 'admin', 1607570127, '/admin/goods_category/add.html', 'POST', '{\"name\":\"专场推荐\",\"pid\":\"0\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/eab147f969fce1475d4892c57256f8ec.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (787, 1, '账号1', 'admin', 1607570127, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (788, 1, '账号1', 'admin', 1607570128, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (789, 1, '账号1', 'admin', 1607570144, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (790, 1, '账号1', 'admin', 1607570144, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (791, 1, '账号1', 'admin', 1607570144, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (792, 1, '账号1', 'admin', 1607570147, '/admin/goods_category/add.html', 'POST', '{\"name\":\"热门分类\",\"pid\":\"0\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/79ee4347c8066f965c9ce7034f249cea.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (793, 1, '账号1', 'admin', 1607570147, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (794, 1, '账号1', 'admin', 1607570201, '/admin/supplier/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (795, 1, '账号1', 'admin', 1607570201, '/admin/supplier/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (796, 1, '账号1', 'admin', 1607570202, '/admin/supplier/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (797, 1, '账号1', 'admin', 1607570262, '/admin/supplier/add.html', 'POST', '{\"name\":\"晨光文具旗舰店\",\"contact\":\"晨先生\",\"tel\":\"13648795627\",\"address\":\"北京朝阳北巷3街道\",\"remark\":\"文具专卖供货商\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (798, 1, '账号1', 'admin', 1607570262, '/admin/supplier/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (799, 1, '账号1', 'admin', 1607570269, '/admin/supplier/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (800, 1, '账号1', 'admin', 1607570274, '/admin/supplier/edit.html', 'POST', '{\"id\":\"1\",\"name\":\"文具旗舰店\",\"contact\":\"晨先生\",\"tel\":\"13648795627\",\"address\":\"北京朝阳北巷3街道\",\"remark\":\"文具专卖供货商\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (801, 1, '账号1', 'admin', 1607570274, '/admin/supplier/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (802, 1, '账号1', 'admin', 1607570275, '/admin/goods_comment/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (803, 1, '账号1', 'admin', 1607570275, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (804, 1, '账号1', 'admin', 1607570284, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (805, 1, '账号1', 'admin', 1607570292, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (806, 1, '账号1', 'admin', 1607570293, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (807, 1, '账号1', 'admin', 1607570303, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (808, 1, '账号1', 'admin', 1607570311, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (809, 1, '账号1', 'admin', 1607570323, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (810, 1, '账号1', 'admin', 1607570323, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (811, 1, '账号1', 'admin', 1607570323, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (812, 1, '账号1', 'admin', 1607570328, '/admin/goods_category/add.html', 'POST', '{\"name\":\"笔类\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d74e01d4a8b86f331fcca2f485080353.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (813, 1, '账号1', 'admin', 1607570328, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (814, 1, '账号1', 'admin', 1607570341, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (815, 1, '账号1', 'admin', 1607570484, '/admin/goods_category/add.html', 'POST', '{\"name\":\"钢笔\",\"pid\":\"4\",\"image\":\"\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (816, 1, '账号1', 'admin', 1607570563, '/admin/goods_category/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (817, 1, '账号1', 'admin', 1607570568, '/admin/goods_category/edit.html', 'POST', '{\"id\":\"1\",\"name\":\"文具\",\"pid\":\"0\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d74e01d4a8b86f331fcca2f485080353.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (818, 1, '账号1', 'admin', 1607570569, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (819, 1, '账号1', 'admin', 1607570592, '/admin/goods_category/edit.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (820, 1, '账号1', 'admin', 1607570600, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (821, 1, '账号1', 'admin', 1607570600, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (822, 1, '账号1', 'admin', 1607570600, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (823, 1, '账号1', 'admin', 1607570603, '/admin/goods_category/edit.html', 'POST', '{\"id\":\"4\",\"name\":\"晨光\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd2610485ad76c0d24f88f8ce58d3dd5.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (824, 1, '账号1', 'admin', 1607570603, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (825, 1, '账号1', 'admin', 1607570644, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (826, 1, '账号1', 'admin', 1607570645, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (827, 1, '账号1', 'admin', 1607570645, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (828, 1, '账号1', 'admin', 1607570648, '/admin/goods_brand/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (829, 1, '账号1', 'admin', 1607570648, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (830, 1, '账号1', 'admin', 1607570649, '/admin/goods_brand/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (831, 1, '账号1', 'admin', 1607570657, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (832, 1, '账号1', 'admin', 1607570657, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (833, 1, '账号1', 'admin', 1607570657, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (834, 1, '账号1', 'admin', 1607570661, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (835, 1, '账号1', 'admin', 1607570664, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (836, 1, '账号1', 'admin', 1607570664, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (837, 1, '账号1', 'admin', 1607570664, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (838, 1, '账号1', 'admin', 1607570669, '/admin/goods_brand/add.html', 'POST', '{\"name\":\"百乐\",\"initial\":\"B\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/2dad83f2345046d47045c160a3db6896.png\",\"sort\":\"\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (839, 1, '账号1', 'admin', 1607570669, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (840, 1, '账号1', 'admin', 1607570784, '/admin/goods_brand/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (841, 1, '账号1', 'admin', 1607570789, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (842, 1, '账号1', 'admin', 1607570789, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (843, 1, '账号1', 'admin', 1607570789, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (844, 1, '账号1', 'admin', 1607570792, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (845, 1, '账号1', 'admin', 1607570795, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (846, 1, '账号1', 'admin', 1607570795, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (847, 1, '账号1', 'admin', 1607570795, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (848, 1, '账号1', 'admin', 1607570799, '/admin/goods_brand/add.html', 'POST', '{\"name\":\"得力\",\"initial\":\"D\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/10b16861c6eeb1e9a744b86dd69b051f.png\",\"sort\":\"\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (849, 1, '账号1', 'admin', 1607570799, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (850, 1, '账号1', 'admin', 1607570801, '/admin/goods_brand/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (851, 1, '账号1', 'admin', 1607570803, '/admin/goods_brand/edit.html', 'POST', '{\"id\":\"1\",\"name\":\"晨光文具\",\"initial\":\"C\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd2610485ad76c0d24f88f8ce58d3dd5.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"文具专卖品牌\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (852, 1, '账号1', 'admin', 1607570803, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (853, 1, '账号1', 'admin', 1607570803, '/admin/goods_brand/edit.html', 'POST', '{\"id\":\"1\",\"name\":\"晨光文具\",\"initial\":\"C\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dd2610485ad76c0d24f88f8ce58d3dd5.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"文具专卖品牌\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (854, 1, '账号1', 'admin', 1607570803, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (855, 1, '账号1', 'admin', 1607570853, '/admin/goods_brand/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (856, 1, '账号1', 'admin', 1607570861, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (857, 1, '账号1', 'admin', 1607570861, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (858, 1, '账号1', 'admin', 1607570861, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (859, 1, '账号1', 'admin', 1607570882, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (860, 1, '账号1', 'admin', 1607570885, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (861, 1, '账号1', 'admin', 1607570885, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (862, 1, '账号1', 'admin', 1607570885, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (863, 1, '账号1', 'admin', 1607570889, '/admin/goods_brand/add.html', 'POST', '{\"name\":\"小米\",\"initial\":\"X\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/8529fda6cb6c3cf62c084df9c7c911a9.png\",\"sort\":\"\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (864, 1, '账号1', 'admin', 1607570890, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (865, 1, '账号1', 'admin', 1607571008, '/admin/goods_brand/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (866, 1, '账号1', 'admin', 1607571033, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (867, 1, '账号1', 'admin', 1607571034, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (868, 1, '账号1', 'admin', 1607571034, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (869, 1, '账号1', 'admin', 1607571037, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (870, 1, '账号1', 'admin', 1607571040, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (871, 1, '账号1', 'admin', 1607571040, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (872, 1, '账号1', 'admin', 1607571040, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (873, 1, '账号1', 'admin', 1607571044, '/admin/goods_brand/add.html', 'POST', '{\"name\":\"英雄\",\"initial\":\"Y\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/720a002e5c6bdf95a2dd3c31737d0e57.png\",\"sort\":\"\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (874, 1, '账号1', 'admin', 1607571045, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (875, 1, '账号1', 'admin', 1607571065, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (876, 1, '账号1', 'admin', 1607571128, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (877, 1, '账号1', 'admin', 1607571139, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (878, 1, '账号1', 'admin', 1607571140, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (879, 1, '账号1', 'admin', 1607571140, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (880, 1, '账号1', 'admin', 1607571143, '/admin/goods_category/add.html', 'POST', '{\"name\":\"小米\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/8529fda6cb6c3cf62c084df9c7c911a9.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (881, 1, '账号1', 'admin', 1607571143, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (882, 1, '账号1', 'admin', 1607571146, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (883, 1, '账号1', 'admin', 1607571155, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (884, 1, '账号1', 'admin', 1607571155, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (885, 1, '账号1', 'admin', 1607571155, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (886, 1, '账号1', 'admin', 1607571159, '/admin/goods_category/add.html', 'POST', '{\"name\":\"得力\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/10b16861c6eeb1e9a744b86dd69b051f.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (887, 1, '账号1', 'admin', 1607571159, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (888, 1, '账号1', 'admin', 1607571160, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (889, 1, '账号1', 'admin', 1607571175, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (890, 1, '账号1', 'admin', 1607571175, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (891, 1, '账号1', 'admin', 1607571175, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (892, 1, '账号1', 'admin', 1607571180, '/admin/goods_category/add.html', 'POST', '{\"name\":\"英雄\",\"pid\":\"1\",\"image\":\"\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (893, 1, '账号1', 'admin', 1607571182, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (894, 1, '账号1', 'admin', 1607571183, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (895, 1, '账号1', 'admin', 1607571183, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (896, 1, '账号1', 'admin', 1607571185, '/admin/goods_category/add.html', 'POST', '{\"name\":\"英雄\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/720a002e5c6bdf95a2dd3c31737d0e57.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (897, 1, '账号1', 'admin', 1607571185, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (898, 1, '账号1', 'admin', 1607571191, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (899, 1, '账号1', 'admin', 1607571202, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (900, 1, '账号1', 'admin', 1607571203, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (901, 1, '账号1', 'admin', 1607571203, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (902, 1, '账号1', 'admin', 1607571205, '/admin/goods_category/add.html', 'POST', '{\"name\":\"百乐\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/2dad83f2345046d47045c160a3db6896.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (903, 1, '账号1', 'admin', 1607571206, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (904, 1, '账号1', 'admin', 1607571338, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (905, 1, '账号1', 'admin', 1607571349, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (906, 1, '账号1', 'admin', 1607571349, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (907, 1, '账号1', 'admin', 1607571350, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (908, 1, '账号1', 'admin', 1607571355, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (909, 1, '账号1', 'admin', 1607571358, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (910, 1, '账号1', 'admin', 1607571358, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (911, 1, '账号1', 'admin', 1607571358, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (912, 1, '账号1', 'admin', 1607571364, '/admin/goods_category/add.html', 'POST', '{\"name\":\"中性笔\",\"pid\":\"4\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/dceddf4cb321cf612eee441477d3b93f.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (913, 1, '账号1', 'admin', 1607571364, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (914, 1, '账号1', 'admin', 1607571544, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (915, 1, '账号1', 'admin', 1607571552, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (916, 1, '账号1', 'admin', 1607571552, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (917, 1, '账号1', 'admin', 1607571552, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (918, 1, '账号1', 'admin', 1607571557, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (919, 1, '账号1', 'admin', 1607571559, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (920, 1, '账号1', 'admin', 1607571560, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (921, 1, '账号1', 'admin', 1607571560, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (922, 1, '账号1', 'admin', 1607571564, '/admin/goods_category/add.html', 'POST', '{\"name\":\"铅笔\",\"pid\":\"4\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/47829c77b7b5135de799182d1c197746.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (923, 1, '账号1', 'admin', 1607571564, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (924, 1, '账号1', 'admin', 1607571674, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (925, 1, '账号1', 'admin', 1607571674, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (926, 1, '账号1', 'admin', 1607571675, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (927, 1, '账号1', 'admin', 1607571702, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (928, 1, '账号1', 'admin', 1607571702, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (929, 1, '账号1', 'admin', 1607571702, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (930, 1, '账号1', 'admin', 1607571735, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (931, 1, '账号1', 'admin', 1607571735, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (932, 1, '账号1', 'admin', 1607571738, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (933, 1, '账号1', 'admin', 1607571738, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (934, 1, '账号1', 'admin', 1607571738, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (935, 1, '账号1', 'admin', 1607571741, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (936, 1, '账号1', 'admin', 1607571741, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (937, 1, '账号1', 'admin', 1607571741, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (938, 1, '账号1', 'admin', 1607571827, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"晨光中性笔笔芯黑0.5mm黑色碳素签字笔GP-1008按动式水笔学生考试用蓝黑医生处方笔教师专用红笔圆珠笔文具\",\"code\":\"2646541621\",\"first_category_id\":\"1\",\"second_category_id\":\"4\",\"third_category_id\":\"9\",\"remark\":\"耐用好书写\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/45b6bb2224e4051ecf407cabb54cd781.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/910e9d4fc9f10c7a11825315785c555d.png\",\"\\/uploads\\/images\\/background\\/20201210\\/45b6bb2224e4051ecf407cabb54cd781.png\",\"\\/uploads\\/images\\/background\\/20201210\\/dceddf4cb321cf612eee441477d3b93f.png\"],\"brand_id\":\"1\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"55\",\"one_price\":\"44.82\",\"one_cost_price\":\"23\",\"one_stock\":\"9863\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"22353\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.440377deK9wjsl\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.440377deK9wjsl\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;GP1008\\\">型号:&nbsp;GP1008<\\/li><li title=\\\"&nbsp;办公\\\">功能:&nbsp;办公<\\/li><li title=\\\"&nbsp;按动\\\">闭合方式:&nbsp;按动<\\/li><li title=\\\"&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装\\\">颜色分类:&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;盒装\\\">包装方式:&nbsp;盒装<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;晨光文具<\\/li><li title=\\\"&nbsp;AGP02301\\\">货号:&nbsp;AGP02301<\\/li><li title=\\\"&nbsp;日常书写&nbsp;备考\\\">适用场景:&nbsp;日常书写&nbsp;备考<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;小学生&nbsp;中学生\\\">适用人群:&nbsp;小学生&nbsp;中学生<\\/li><li title=\\\"&nbsp;塑料\\\">笔杆材质:&nbsp;塑料<\\/li><li title=\\\"&nbsp;子弹头型\\\">笔头类型:&nbsp;子弹头型<\\/li><li title=\\\"&nbsp;水性墨水\\\">适用墨水类型:&nbsp;水性墨水<\\/li><li title=\\\"&nbsp;否\\\">墨水是否速干:&nbsp;否<\\/li><li title=\\\"&nbsp;滚珠式\\\">出墨方式:&nbsp;滚珠式<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><a name=\\\"hnhb_35262147071570768519_start\\\"><\\/a><div class=\\\"J_TWidget maGong\\\" data-title=\\\"\\\"><div class=\\\"J_TWidget abs_father\\\"><div class=\\\"abs_father abs sn-simple-logo\\\"><div class=\\\"abs sn-simple-logo\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3526214707\\/O1CN01bqIvqE1kdqodqmbyw_!!3526214707.jpg\\\" usemap=\\\"#GGQDK\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"GGQDK\\\"><area shape=\\\"rect\\\" coords=\\\"6,1459,395,1954\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.54.35b02c1di2LqW3&amp;id=562104876494&amp;rn=f5f37d71881463703d64fdf111995028&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"400,1463,790,1954\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.47.2f502c1drqo8QB&amp;id=579893286030&amp;rn=5c00e93c8f01c53c34458de734c14417&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"0,1979,395,2488\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"397,1975,785,2490\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"2,958,397,1458\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.270.62452c1d9xKvsz&amp;id=566618504016&amp;rn=ae469d5cacdaaba31b309ebe684e36f8&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"398,955,787,1455\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.55.516f2c1dA6r4oP&amp;id=562043025193&amp;rn=e47834e9c60d4db10f1a5ee7d9e3484e&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"8,121,199,377\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=24b977154bbe433fa8e79788b1d00e08\\\"><area shape=\\\"rect\\\" coords=\\\"205,121,391,381\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=1d1c066bb7794ed8a88f359a564ea55d\\\"><area shape=\\\"rect\\\" coords=\\\"397,124,587,382\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=5f5f49e8899946f6bae8cd360ce335b5\\\"><area shape=\\\"rect\\\" coords=\\\"590,119,779,383\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=14feb924955941cfa151092b4529de61\\\"><\\/map><\\/div><\\/div><ul><li><\\/li><\\/ul><\\/div><\\/div><a name=\\\"hnhb_35262147071570768519_end\\\"><\\/a><a name=\\\"hnhb_35262147071585543173_start\\\"><\\/a><div class=\\\"J_TWidget maGong\\\" data-title=\\\"\\\"><div class=\\\"J_TWidget abs_father\\\"><div class=\\\"abs_father abs sn-simple-logo\\\"><div class=\\\"abs sn-simple-logo\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN010nnE8U1kdqsAvdQ2l_!!3526214707.jpg\\\" usemap=\\\"#UHATE\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"UHATE\\\"><area shape=\\\"rect\\\" coords=\\\"5,1459,394,1954\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.37.2dde2c1dAkoMdP&amp;id=562239844865&amp;rn=16d62b1b41445d6797bf0629d67bfd86&amp;abbucket=9\\\"><area shape=\\\"rect\\\" coords=\\\"399,1464,789,1955\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.59.4d722c1dphoapI&amp;id=562043025193&amp;rn=75c2c3736cf3e6a3d863436e17bc7e66&amp;abbucket=9\\\"><area shape=\\\"rect\\\" coords=\\\"0,1979,395,2488\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"397,1975,785,2490\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"1,125,790,915\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.89.5eaf2c1df2itrv&amp;id=562976052813&amp;rn=7af77012f8e4cd76454bb83058579bca&amp;abbucket=9\\\"><area shape=\\\"rect\\\" coords=\\\"4,957,395,1450\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.283.5eaf2c1df2itrv&amp;id=562164922383&amp;rn=7af77012f8e4cd76454bb83058579bca\\\"><area shape=\\\"rect\\\" coords=\\\"401,958,785,1443\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.279.5eaf2c1df2itrv&amp;id=563519378087&amp;rn=7af77012f8e4cd76454bb83058579bca\\\"><\\/map><\\/div><\\/div><ul><li><\\/li><\\/ul><\\/div><\\/div><a name=\\\"hnhb_35262147071585543173_end\\\"><\\/a><div><div><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN011kdqkKOiKQZjEV6_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN011kdqkEFE7PehA5E_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN019FRnnd1kdqsx0xA5F_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN011kdqkKgwkZ00RV9_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3526214707\\/O1CN011kdqkJsJeoDb6zd_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3526214707\\/O1CN011kdqkLfoilfGe0C_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN011kdqkM3UUHnW9SE_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3526214707\\/O1CN011kdqkEFCqUqV98K_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3526214707\\/O1CN011kdqkL1EEg3jfbW_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3526214707\\/O1CN011kdqkL9uvcY7OZL_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN011kdqkJPHqM3TyeD_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN01rQyABc1kdql6sjmxP_!!3526214707.jpg\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN01a4NMGi1kdql7sytmi_!!3526214707.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/div><\\/div><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_ZebraPriceDesc\\\" class=\\\"j-mdv\\\"><img width=\\\"790\\\" src=\\\"https:\\/\\/img.alicdn.com\\/tfs\\/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\\\"><\\/div><\\/div><div id=\\\"J_Detail\\\"><div id=\\\"J_Reviews\\\" class=\\\"J_DetailSection\\\"><\\/div><\\/div>\",\"virtual_sales_sum\":\"\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"0\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (939, 1, '账号1', 'admin', 1607571829, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (940, 1, '账号1', 'admin', 1607571829, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (941, 1, '账号1', 'admin', 1607571831, '/admin/goods/lists.html', 'GET', '{\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (942, 1, '账号1', 'admin', 1607571833, '/admin/goods/changefields.html', 'GET', '{\"id\":\"1\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (943, 1, '账号1', 'admin', 1607571834, '/admin/goods/changefields.html', 'GET', '{\"id\":\"1\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (944, 1, '账号1', 'admin', 1607571834, '/admin/goods/changefields.html', 'GET', '{\"id\":\"1\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (945, 1, '账号1', 'admin', 1607571836, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (946, 1, '账号1', 'admin', 1607571853, '/admin/goods/edit.html', 'POST', '{\"goods_id\":\"1\",\"name\":\"晨光中性笔笔芯黑0.5mm黑色碳素签字笔GP-1008按动式水笔学生考试用蓝黑医生处方笔教师专用红笔圆珠笔文具\",\"code\":\"2646541621\",\"first_category_id\":\"1\",\"second_category_id\":\"4\",\"third_category_id\":\"9\",\"remark\":\"耐用好书写\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/45b6bb2224e4051ecf407cabb54cd781.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/910e9d4fc9f10c7a11825315785c555d.png\",\"\\/uploads\\/images\\/background\\/20201210\\/45b6bb2224e4051ecf407cabb54cd781.png\",\"\\/uploads\\/images\\/background\\/20201210\\/dceddf4cb321cf612eee441477d3b93f.png\"],\"brand_id\":\"1\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"55.00\",\"one_price\":\"44.82\",\"one_cost_price\":\"23.00\",\"one_stock\":\"9863\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"22353\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.440377deK9wjsl\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.440377deK9wjsl\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;GP1008\\\">型号:&nbsp;GP1008<\\/li><li title=\\\"&nbsp;办公\\\">功能:&nbsp;办公<\\/li><li title=\\\"&nbsp;按动\\\">闭合方式:&nbsp;按动<\\/li><li title=\\\"&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装\\\">颜色分类:&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;盒装\\\">包装方式:&nbsp;盒装<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;晨光文具<\\/li><li title=\\\"&nbsp;AGP02301\\\">货号:&nbsp;AGP02301<\\/li><li title=\\\"&nbsp;日常书写&nbsp;备考\\\">适用场景:&nbsp;日常书写&nbsp;备考<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;小学生&nbsp;中学生\\\">适用人群:&nbsp;小学生&nbsp;中学生<\\/li><li title=\\\"&nbsp;塑料\\\">笔杆材质:&nbsp;塑料<\\/li><li title=\\\"&nbsp;子弹头型\\\">笔头类型:&nbsp;子弹头型<\\/li><li title=\\\"&nbsp;水性墨水\\\">适用墨水类型:&nbsp;水性墨水<\\/li><li title=\\\"&nbsp;否\\\">墨水是否速干:&nbsp;否<\\/li><li title=\\\"&nbsp;滚珠式\\\">出墨方式:&nbsp;滚珠式<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><a name=\\\"hnhb_35262147071570768519_start\\\"><\\/a><div class=\\\"J_TWidget maGong\\\" data-title=\\\"\\\"><div class=\\\"J_TWidget abs_father\\\"><div class=\\\"abs_father abs sn-simple-logo\\\"><div class=\\\"abs sn-simple-logo\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3526214707\\/O1CN01bqIvqE1kdqodqmbyw_!!3526214707.jpg\\\" usemap=\\\"#GGQDK\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"GGQDK\\\"><area shape=\\\"rect\\\" coords=\\\"6,1459,395,1954\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.54.35b02c1di2LqW3&amp;id=562104876494&amp;rn=f5f37d71881463703d64fdf111995028&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"400,1463,790,1954\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.47.2f502c1drqo8QB&amp;id=579893286030&amp;rn=5c00e93c8f01c53c34458de734c14417&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"0,1979,395,2488\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"397,1975,785,2490\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"2,958,397,1458\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.270.62452c1d9xKvsz&amp;id=566618504016&amp;rn=ae469d5cacdaaba31b309ebe684e36f8&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"398,955,787,1455\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.55.516f2c1dA6r4oP&amp;id=562043025193&amp;rn=e47834e9c60d4db10f1a5ee7d9e3484e&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"8,121,199,377\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=24b977154bbe433fa8e79788b1d00e08\\\"><area shape=\\\"rect\\\" coords=\\\"205,121,391,381\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=1d1c066bb7794ed8a88f359a564ea55d\\\"><area shape=\\\"rect\\\" coords=\\\"397,124,587,382\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=5f5f49e8899946f6bae8cd360ce335b5\\\"><area shape=\\\"rect\\\" coords=\\\"590,119,779,383\\\" href=\\\"https:\\/\\/taoquan.taobao.com\\/coupon\\/unify_apply.htm?sellerId=3526214707&amp;activityId=14feb924955941cfa151092b4529de61\\\"><\\/map><\\/div><\\/div><ul><li><\\/li><\\/ul><\\/div><\\/div><a name=\\\"hnhb_35262147071570768519_end\\\"><\\/a><a name=\\\"hnhb_35262147071585543173_start\\\"><\\/a><div class=\\\"J_TWidget maGong\\\" data-title=\\\"\\\"><div class=\\\"J_TWidget abs_father\\\"><div class=\\\"abs_father abs sn-simple-logo\\\"><div class=\\\"abs sn-simple-logo\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN010nnE8U1kdqsAvdQ2l_!!3526214707.jpg\\\" usemap=\\\"#UHATE\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"UHATE\\\"><area shape=\\\"rect\\\" coords=\\\"5,1459,394,1954\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.37.2dde2c1dAkoMdP&amp;id=562239844865&amp;rn=16d62b1b41445d6797bf0629d67bfd86&amp;abbucket=9\\\"><area shape=\\\"rect\\\" coords=\\\"399,1464,789,1955\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.59.4d722c1dphoapI&amp;id=562043025193&amp;rn=75c2c3736cf3e6a3d863436e17bc7e66&amp;abbucket=9\\\"><area shape=\\\"rect\\\" coords=\\\"0,1979,395,2488\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"397,1975,785,2490\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\\\"><area shape=\\\"rect\\\" coords=\\\"1,125,790,915\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.89.5eaf2c1df2itrv&amp;id=562976052813&amp;rn=7af77012f8e4cd76454bb83058579bca&amp;abbucket=9\\\"><area shape=\\\"rect\\\" coords=\\\"4,957,395,1450\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.283.5eaf2c1df2itrv&amp;id=562164922383&amp;rn=7af77012f8e4cd76454bb83058579bca\\\"><area shape=\\\"rect\\\" coords=\\\"401,958,785,1443\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a1z10.3-b-s.w4011-18816637352.279.5eaf2c1df2itrv&amp;id=563519378087&amp;rn=7af77012f8e4cd76454bb83058579bca\\\"><\\/map><\\/div><\\/div><ul><li><\\/li><\\/ul><\\/div><\\/div><a name=\\\"hnhb_35262147071585543173_end\\\"><\\/a><div><div><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN011kdqkKOiKQZjEV6_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN011kdqkEFE7PehA5E_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN019FRnnd1kdqsx0xA5F_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN011kdqkKgwkZ00RV9_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3526214707\\/O1CN011kdqkJsJeoDb6zd_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3526214707\\/O1CN011kdqkLfoilfGe0C_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN011kdqkM3UUHnW9SE_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3526214707\\/O1CN011kdqkEFCqUqV98K_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3526214707\\/O1CN011kdqkL1EEg3jfbW_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3526214707\\/O1CN011kdqkL9uvcY7OZL_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN011kdqkJPHqM3TyeD_!!3526214707.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3526214707\\/O1CN01rQyABc1kdql6sjmxP_!!3526214707.jpg\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3526214707\\/O1CN01a4NMGi1kdql7sytmi_!!3526214707.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/div><\\/div><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_ZebraPriceDesc\\\" class=\\\"j-mdv\\\"><img width=\\\"790\\\" src=\\\"https:\\/\\/img.alicdn.com\\/tfs\\/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\\\"><\\/div><\\/div><div id=\\\"J_Detail\\\"><div id=\\\"J_Reviews\\\" class=\\\"J_DetailSection\\\"><\\/div><\\/div>\",\"virtual_sales_sum\":\"6873\",\"stock_warn\":\"0\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"0.00\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (947, 1, '账号1', 'admin', 1607571855, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (948, 1, '账号1', 'admin', 1607571855, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (949, 1, '账号1', 'admin', 1607572006, '/admin/goods_comment/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (950, 1, '账号1', 'admin', 1607572006, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (951, 1, '账号1', 'admin', 1607572019, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (952, 1, '账号1', 'admin', 1607572019, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (953, 1, '账号1', 'admin', 1607572020, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (954, 1, '账号1', 'admin', 1607572036, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (955, 1, '账号1', 'admin', 1607572036, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (956, 1, '账号1', 'admin', 1607572037, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (957, 1, '账号1', 'admin', 1607572040, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (958, 1, '账号1', 'admin', 1607572040, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (959, 1, '账号1', 'admin', 1607572040, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (960, 1, '账号1', 'admin', 1607572040, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (961, 1, '账号1', 'admin', 1607572043, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (962, 1, '账号1', 'admin', 1607572043, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (963, 1, '账号1', 'admin', 1607572043, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (964, 1, '账号1', 'admin', 1607572048, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (965, 1, '账号1', 'admin', 1607572048, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (966, 1, '账号1', 'admin', 1607572048, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (967, 1, '账号1', 'admin', 1607572120, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"晨光文具速干中性笔直液式签字笔学生考试大容量全针管子弹头水笔直液式笔黑色0.5\\/0.38\",\"code\":\"75687\",\"first_category_id\":\"1\",\"second_category_id\":\"4\",\"third_category_id\":\"9\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/5a23d75c44ef8c293aa2a1bed1f10e41.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/3261d7a8935ca47e0f19b354a36bab79.png\",\"\\/uploads\\/images\\/background\\/20201210\\/e645ff4cbef1fae6a6169624029eb214.png\",\"\\/uploads\\/images\\/background\\/20201210\\/c55d952325ac38959c57e127d97c5592.png\",\"\\/uploads\\/images\\/background\\/20201210\\/5a23d75c44ef8c293aa2a1bed1f10e41.png\"],\"brand_id\":\"1\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"78\",\"one_price\":\"43.9\",\"one_cost_price\":\"23\",\"one_stock\":\"8676\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"265368\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i2.4a277eb8mClAGN\\\"><div class=\\\"name\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;ARP57501A\\\">型号:&nbsp;ARP57501A<\\/li><li title=\\\"&nbsp;速干\\\">功能:&nbsp;速干<\\/li><li title=\\\"&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装\\\">颜色分类:&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;晨光文具<\\/li><li title=\\\"&nbsp;ARP57501\\\">货号:&nbsp;ARP57501<\\/li><li title=\\\"&nbsp;日常书写&nbsp;备考\\\">适用场景:&nbsp;日常书写&nbsp;备考<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;大学生&nbsp;商务办公人士\\\">适用人群:&nbsp;大学生&nbsp;商务办公人士<\\/li><li title=\\\"&nbsp;是\\\">墨水是否速干:&nbsp;是<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01PQkKHu1jhgaxfBt9y_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><a href=\\\"http:\\/\\/detail.tmall.com\\/item.htm?id=565519962541\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01xMiOTk1jhgazbwagf_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/a><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01gBVSbQ1jhgaorKXoa_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01oXbdqx1jhgav0RNCP_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN017Nr4IO1jhgb1qSV0N_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01EetLax1jhgatXxojO_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01omJeFd1jhgazbx3nx_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01hSmDW31jhgb29dBRi_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01h463731jhgaxfEyPY_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01y6ctID1jhgaorJKy5_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01WbNw7Q1jhgb1qSleG_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN0105duS21jhgax0kT5z_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01Aaf51O1jhgaxVpmEC_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><p data-spm-anchor-id=\\\"a220o.1000855.0.i3.4a277eb8mClAGN\\\">温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><div><a name=\\\"maijsoft_s1_191268_end\\\"><\\/a><\\/div><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"0\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (968, 1, '账号1', 'admin', 1607572121, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (969, 1, '账号1', 'admin', 1607572121, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (970, 1, '账号1', 'admin', 1607572122, '/admin/goods/lists.html', 'GET', '{\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (971, 1, '账号1', 'admin', 1607572122, '/admin/goods/lists.html', 'GET', '{\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (972, 1, '账号1', 'admin', 1607572124, '/admin/goods/changefields.html', 'GET', '{\"id\":\"2\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (973, 1, '账号1', 'admin', 1607572124, '/admin/goods/changefields.html', 'GET', '{\"id\":\"2\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (974, 1, '账号1', 'admin', 1607572125, '/admin/goods/changefields.html', 'GET', '{\"id\":\"2\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (975, 1, '账号1', 'admin', 1607572128, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (976, 1, '账号1', 'admin', 1607572135, '/admin/goods/edit.html', 'POST', '{\"goods_id\":\"2\",\"name\":\"晨光文具速干中性笔直液式签字笔学生考试大容量全针管子弹头水笔直液式笔黑色0.5\\/0.38\",\"code\":\"75687\",\"first_category_id\":\"1\",\"second_category_id\":\"4\",\"third_category_id\":\"9\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/5a23d75c44ef8c293aa2a1bed1f10e41.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/3261d7a8935ca47e0f19b354a36bab79.png\",\"\\/uploads\\/images\\/background\\/20201210\\/e645ff4cbef1fae6a6169624029eb214.png\",\"\\/uploads\\/images\\/background\\/20201210\\/c55d952325ac38959c57e127d97c5592.png\",\"\\/uploads\\/images\\/background\\/20201210\\/5a23d75c44ef8c293aa2a1bed1f10e41.png\"],\"brand_id\":\"1\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"78.00\",\"one_price\":\"43.90\",\"one_cost_price\":\"23.00\",\"one_stock\":\"8676\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"265368\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i2.4a277eb8mClAGN\\\"><div class=\\\"name\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;ARP57501A\\\">型号:&nbsp;ARP57501A<\\/li><li title=\\\"&nbsp;速干\\\">功能:&nbsp;速干<\\/li><li title=\\\"&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装\\\">颜色分类:&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;晨光文具<\\/li><li title=\\\"&nbsp;ARP57501\\\">货号:&nbsp;ARP57501<\\/li><li title=\\\"&nbsp;日常书写&nbsp;备考\\\">适用场景:&nbsp;日常书写&nbsp;备考<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;大学生&nbsp;商务办公人士\\\">适用人群:&nbsp;大学生&nbsp;商务办公人士<\\/li><li title=\\\"&nbsp;是\\\">墨水是否速干:&nbsp;是<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01PQkKHu1jhgaxfBt9y_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><a href=\\\"http:\\/\\/detail.tmall.com\\/item.htm?id=565519962541\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01xMiOTk1jhgazbwagf_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/a><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01gBVSbQ1jhgaorKXoa_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01oXbdqx1jhgav0RNCP_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN017Nr4IO1jhgb1qSV0N_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01EetLax1jhgatXxojO_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01omJeFd1jhgazbx3nx_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01hSmDW31jhgb29dBRi_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01h463731jhgaxfEyPY_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01y6ctID1jhgaorJKy5_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01WbNw7Q1jhgb1qSleG_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN0105duS21jhgax0kT5z_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01Aaf51O1jhgaxVpmEC_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><p data-spm-anchor-id=\\\"a220o.1000855.0.i3.4a277eb8mClAGN\\\">温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><div><a name=\\\"maijsoft_s1_191268_end\\\"><\\/a><\\/div><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"6863\",\"stock_warn\":\"0\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"0.00\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (977, 1, '账号1', 'admin', 1607572137, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (978, 1, '账号1', 'admin', 1607572137, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (979, 1, '账号1', 'admin', 1607572142, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (980, 1, '账号1', 'admin', 1607572151, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (981, 1, '账号1', 'admin', 1607572151, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (982, 1, '账号1', 'admin', 1607572152, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (983, 1, '账号1', 'admin', 1607572234, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (984, 1, '账号1', 'admin', 1607572235, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (985, 1, '账号1', 'admin', 1607572235, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (986, 1, '账号1', 'admin', 1607572240, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (987, 1, '账号1', 'admin', 1607572240, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (988, 1, '账号1', 'admin', 1607572240, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (989, 1, '账号1', 'admin', 1607572243, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (990, 1, '账号1', 'admin', 1607572243, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (991, 1, '账号1', 'admin', 1607572243, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (992, 1, '账号1', 'admin', 1607572249, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (993, 1, '账号1', 'admin', 1607572249, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (994, 1, '账号1', 'admin', 1607572249, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (995, 1, '账号1', 'admin', 1607572251, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (996, 1, '账号1', 'admin', 1607572251, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (997, 1, '账号1', 'admin', 1607572251, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (998, 1, '账号1', 'admin', 1607572312, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"晨光文具经典六角木杆铅笔中小学生考试绘图铅笔 2B铅笔练字笔20支 AWP35715\",\"code\":\"654161\",\"first_category_id\":\"1\",\"second_category_id\":\"4\",\"third_category_id\":\"10\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/2d62627fef767a38034162c066f9c253.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/6515fd4b2e7a1932f76ec5232fe22fdf.png\",\"\\/uploads\\/images\\/background\\/20201210\\/a3bf099101793a2e0bfe087b92e51403.png\",\"\\/uploads\\/images\\/background\\/20201210\\/2d62627fef767a38034162c066f9c253.png\"],\"brand_id\":\"1\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"21\",\"one_price\":\"13.5\",\"one_cost_price\":\"3\",\"one_stock\":\"56832\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"1535838\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i2.99cd68a70vn9mz\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.99cd68a70vn9mz\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"M＆G\\/晨光 AWP35715\\\">产品名称：M＆G\\/晨光 AWP35715<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;AWP35715\\\">晨光型号:&nbsp;AWP35715<\\/li><li title=\\\"&nbsp;其他\\\">包装种类:&nbsp;其他<\\/li><li title=\\\"&nbsp;六角杆  2B  2包（20支）&nbsp;六角杆 2B 30支装\\\">颜色分类:&nbsp;六角杆 2B 2包（20支）&nbsp;六角杆 2B 30支装<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;晨光文具<\\/li><li title=\\\"&nbsp;2B\\\">笔芯硬度:&nbsp;2B<\\/li><li title=\\\"&nbsp;书写&nbsp;考试专用\\\">适用场景:&nbsp;书写&nbsp;考试专用<\\/li><li title=\\\"&nbsp;10支\\\">支数:&nbsp;10支<\\/li><li title=\\\"&nbsp;单色\\\">颜色数:&nbsp;单色<\\/li><li title=\\\"&nbsp;gb国标标准\\\">安全标准:&nbsp;gb国标标准<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01UZMdzf1jhgXJJMNic_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.99cd68a70vn9mz\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01xseJHg1jhgXOdNiME_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01Ny1E3X1jhgXDmsuri_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN018JKuJ71jhgXOARXnX_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01ipHvdk1jhgXLMwMWL_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01rAj6AB1jhgXL5VEwy_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01wT3uFw1jhgXJV8bqe_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01Nye0M91jhgXOATgoY_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"35368\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (999, 1, '账号1', 'admin', 1607572314, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1000, 1, '账号1', 'admin', 1607572314, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1001, 1, '账号1', 'admin', 1607572385, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1002, 1, '账号1', 'admin', 1607572402, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1003, 1, '账号1', 'admin', 1607572403, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1004, 1, '账号1', 'admin', 1607572403, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1005, 1, '账号1', 'admin', 1607572407, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1006, 1, '账号1', 'admin', 1607572407, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1007, 1, '账号1', 'admin', 1607572407, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1008, 1, '账号1', 'admin', 1607572410, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1009, 1, '账号1', 'admin', 1607572410, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1010, 1, '账号1', 'admin', 1607572410, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1011, 1, '账号1', 'admin', 1607572414, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1012, 1, '账号1', 'admin', 1607572415, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1013, 1, '账号1', 'admin', 1607572415, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1014, 1, '账号1', 'admin', 1607572484, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"晨光文具可削铅笔 六角2B 红黑抽条 木杆铅笔 儿童铅笔 AWP30804\",\"code\":\"62649526\",\"first_category_id\":\"1\",\"second_category_id\":\"4\",\"third_category_id\":\"10\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/4b06036c7e6c8f653a51fd94d4cb5bc5.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/4b06036c7e6c8f653a51fd94d4cb5bc5.png\",\"\\/uploads\\/images\\/background\\/20201210\\/d97a7d56854eb8cd5afa228b1d9608c3.png\",\"\\/uploads\\/images\\/background\\/20201210\\/956e95bc35d0a8005255889036e9aae5.png\"],\"brand_id\":\"1\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"8\",\"one_price\":\"7\",\"one_cost_price\":\"2\",\"one_stock\":\"66533\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"6368369\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.26c46d7d371Jfl\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"M＆G\\/晨光 AWP30804\\\">产品名称：M＆G\\/晨光 AWP30804<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;AWP30804\\\">晨光型号:&nbsp;AWP30804<\\/li><li title=\\\"&nbsp;2B 六角 10支装\\\">颜色分类:&nbsp;2B 六角 10支装<\\/li><li title=\\\"&nbsp;石墨\\/普通铅笔\\\">笔类型:&nbsp;石墨\\/普通铅笔<\\/li><li title=\\\"&nbsp;上海晨光文具股份有限公司\\\">生产企业:&nbsp;上海晨光文具股份有限公司<\\/li><li title=\\\"&nbsp;2B\\\">笔芯硬度:&nbsp;2B<\\/li><li title=\\\"&nbsp;书写\\\">适用场景:&nbsp;书写<\\/li><li title=\\\"&nbsp;10支\\\">支数:&nbsp;10支<\\/li><li title=\\\"&nbsp;单色\\\">颜色数:&nbsp;单色<\\/li><li title=\\\"&nbsp;棕榈树\\\">笔杆材质:&nbsp;棕榈树<\\/li><li title=\\\"&nbsp;gb国标标准\\\">安全标准:&nbsp;gb国标标准<\\/li><li title=\\\"&nbsp;是\\\">是否带橡皮头:&nbsp;是<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2ceIhcW8lpuFjy0FpXXaGrpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2m0QbcYtlpuFjSspoXXbcDpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/TB2M.v5c4XlpuFjSsphXXbJOXXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB22C7fc80kpuFjSsppXXcGTXXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/TB2oq.fcYVkpuFjSspcXXbSMVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2K6z6c4XkpuFjy0FiXXbUfFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB2OGIcc90jpuFjy0FlXXc0bpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/TB29Sn3cYBkpuFjy1zkXXbSpFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/TB2dOQpc9FjpuFjSszhXXaBuVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB2FkYVc3JkpuFjSszcXXXfsFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB221ZkcYFkpuFjy1XcXXclapXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2pO_7cY0kpuFjy0FjXXcBbVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"maijsoft_s1_191268_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><div><a name=\\\"maijsoft_s1_191268_end\\\"><\\/a><\\/div><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"43675\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1015, 1, '账号1', 'admin', 1607572485, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1016, 1, '账号1', 'admin', 1607572485, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1017, 1, '账号1', 'admin', 1607572490, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1018, 1, '账号1', 'admin', 1607572500, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1019, 1, '账号1', 'admin', 1607572509, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1020, 1, '账号1', 'admin', 1607572509, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1021, 1, '账号1', 'admin', 1607572509, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1022, 1, '账号1', 'admin', 1607572524, '/admin/goods_category/add.html', 'POST', '{\"name\":\"中性笔\",\"pid\":\"5\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/3261d7a8935ca47e0f19b354a36bab79.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1023, 1, '账号1', 'admin', 1607572533, '/admin/goods_category/add.html', 'POST', '{\"name\":\"小米中性笔\",\"pid\":\"5\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/3261d7a8935ca47e0f19b354a36bab79.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1024, 1, '账号1', 'admin', 1607572533, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1025, 1, '账号1', 'admin', 1607572545, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1026, 1, '账号1', 'admin', 1607572554, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1027, 1, '账号1', 'admin', 1607572554, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1028, 1, '账号1', 'admin', 1607572554, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1029, 1, '账号1', 'admin', 1607572560, '/admin/goods_category/add.html', 'POST', '{\"name\":\"小米铅笔\",\"pid\":\"5\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d97a7d56854eb8cd5afa228b1d9608c3.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1030, 1, '账号1', 'admin', 1607572560, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1031, 1, '账号1', 'admin', 1607572562, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1032, 1, '账号1', 'admin', 1607572563, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1033, 1, '账号1', 'admin', 1607572577, '/admin/goods/changefields.html', 'GET', '{\"id\":\"3\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1034, 1, '账号1', 'admin', 1607572578, '/admin/goods/changefields.html', 'GET', '{\"id\":\"3\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1035, 1, '账号1', 'admin', 1607572578, '/admin/goods/changefields.html', 'GET', '{\"id\":\"4\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1036, 1, '账号1', 'admin', 1607572579, '/admin/goods/changefields.html', 'GET', '{\"id\":\"4\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1037, 1, '账号1', 'admin', 1607572580, '/admin/goods/changefields.html', 'GET', '{\"id\":\"3\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1038, 1, '账号1', 'admin', 1607572580, '/admin/goods/changefields.html', 'GET', '{\"id\":\"4\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1039, 1, '账号1', 'admin', 1607572593, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1040, 1, '账号1', 'admin', 1607572613, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1041, 1, '账号1', 'admin', 1607572613, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1042, 1, '账号1', 'admin', 1607572614, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1043, 1, '账号1', 'admin', 1607572623, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1044, 1, '账号1', 'admin', 1607572623, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1045, 1, '账号1', 'admin', 1607572623, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1046, 1, '账号1', 'admin', 1607572626, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1047, 1, '账号1', 'admin', 1607572626, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1048, 1, '账号1', 'admin', 1607572626, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1049, 1, '账号1', 'admin', 1607572668, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"小米文具可削铅笔 六角2B 红黑抽条 木杆铅笔 儿童铅笔 AWP30804\",\"code\":\"57687878\",\"first_category_id\":\"1\",\"second_category_id\":\"5\",\"third_category_id\":\"12\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/956e95bc35d0a8005255889036e9aae5.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/4b06036c7e6c8f653a51fd94d4cb5bc5.png\",\"\\/uploads\\/images\\/background\\/20201210\\/d97a7d56854eb8cd5afa228b1d9608c3.png\",\"\\/uploads\\/images\\/background\\/20201210\\/956e95bc35d0a8005255889036e9aae5.png\"],\"brand_id\":\"4\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"7\",\"one_price\":\"6\",\"one_cost_price\":\"2\",\"one_stock\":\"9999\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"635636\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.26c46d7d371Jfl\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.26c46d7d371Jfl\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">M＆G\\/晨光<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"M＆G\\/晨光 AWP30804\\\">产品名称：M＆G\\/晨光 AWP30804<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;AWP30804\\\">晨光型号:&nbsp;AWP30804<\\/li><li title=\\\"&nbsp;2B 六角 10支装\\\">颜色分类:&nbsp;2B 六角 10支装<\\/li><li title=\\\"&nbsp;石墨\\/普通铅笔\\\">笔类型:&nbsp;石墨\\/普通铅笔<\\/li><li title=\\\"&nbsp;上海晨光文具股份有限公司\\\">生产企业:&nbsp;上海晨光文具股份有限公司<\\/li><li title=\\\"&nbsp;2B\\\">笔芯硬度:&nbsp;2B<\\/li><li title=\\\"&nbsp;书写\\\">适用场景:&nbsp;书写<\\/li><li title=\\\"&nbsp;10支\\\">支数:&nbsp;10支<\\/li><li title=\\\"&nbsp;单色\\\">颜色数:&nbsp;单色<\\/li><li title=\\\"&nbsp;棕榈树\\\">笔杆材质:&nbsp;棕榈树<\\/li><li title=\\\"&nbsp;gb国标标准\\\">安全标准:&nbsp;gb国标标准<\\/li><li title=\\\"&nbsp;是\\\">是否带橡皮头:&nbsp;是<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2ceIhcW8lpuFjy0FpXXaGrpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2m0QbcYtlpuFjSspoXXbcDpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/TB2M.v5c4XlpuFjSsphXXbJOXXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB22C7fc80kpuFjSsppXXcGTXXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/TB2oq.fcYVkpuFjSspcXXbSMVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2K6z6c4XkpuFjy0FiXXbUfFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB2OGIcc90jpuFjy0FlXXc0bpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/TB29Sn3cYBkpuFjy1zkXXbSpFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/TB2dOQpc9FjpuFjSszhXXaBuVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB2FkYVc3JkpuFjSszcXXXfsFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB221ZkcYFkpuFjy1XcXXclapXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2pO_7cY0kpuFjy0FjXXcBbVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"maijsoft_s1_191268_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><div><a name=\\\"maijsoft_s1_191268_end\\\"><\\/a><\\/div><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"3263\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1050, 1, '账号1', 'admin', 1607572670, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1051, 1, '账号1', 'admin', 1607572670, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1052, 1, '账号1', 'admin', 1607572679, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1053, 1, '账号1', 'admin', 1607572715, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1054, 1, '账号1', 'admin', 1607572798, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1055, 1, '账号1', 'admin', 1607572799, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1056, 1, '账号1', 'admin', 1607572799, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1057, 1, '账号1', 'admin', 1607572820, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1058, 1, '账号1', 'admin', 1607572820, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1059, 1, '账号1', 'admin', 1607572820, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1060, 1, '账号1', 'admin', 1607572887, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1061, 1, '账号1', 'admin', 1607572887, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1062, 1, '账号1', 'admin', 1607572887, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1063, 1, '账号1', 'admin', 1607572890, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1064, 1, '账号1', 'admin', 1607572890, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1065, 1, '账号1', 'admin', 1607572890, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1066, 1, '账号1', 'admin', 1607572895, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1067, 1, '账号1', 'admin', 1607572895, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1068, 1, '账号1', 'admin', 1607572895, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1069, 1, '账号1', 'admin', 1607572969, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"小米大容量一体式全针管中性笔办公签字笔5倍书写长度学生考试刷题作业神器水笔1支顶5支\",\"code\":\"65682\",\"first_category_id\":\"1\",\"second_category_id\":\"5\",\"third_category_id\":\"11\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/551c831039db5df10f16bbd40ba0ebc0.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/532a61a9cb3294ea13015c11e51d243f.png\",\"\\/uploads\\/images\\/background\\/20201210\\/551c831039db5df10f16bbd40ba0ebc0.png\",\"\\/uploads\\/images\\/background\\/20201210\\/2ff3147b913abbcbb39646de816eb5d2.png\"],\"brand_id\":\"4\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"69\",\"one_price\":\"29\",\"one_cost_price\":\"5\",\"one_stock\":\"36589\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"36838\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i2.4d5f7e4bNnGkrj\\\"><div class=\\\"name\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">小米<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;M＆G\\/晨光<\\/li><li title=\\\"&nbsp;AGPV3401\\\">型号:&nbsp;AGPV3401<\\/li><li title=\\\"&nbsp;盖帽\\\">闭合方式:&nbsp;盖帽<\\/li><li title=\\\"&nbsp;蓝色30支盒装 8401&nbsp;红色30支盒装 8401&nbsp;黑色30支盒装 8401&nbsp;黑色12支 3401&nbsp;红色12支 3401&nbsp;蓝色12支 3401&nbsp;5501黑色12支盒装&nbsp;5501蓝色12支盒装&nbsp;5501红色12支盒装&nbsp;8401（黑色20支+蓝色5支+红色5支）\\\">颜色分类:&nbsp;蓝色30支盒装 8401&nbsp;红色30支盒装 8401&nbsp;黑色30支盒装 8401&nbsp;黑色12支 3401&nbsp;红色12支 3401&nbsp;蓝色12支 3401&nbsp;5501黑色12支盒装&nbsp;5501蓝色12支盒装&nbsp;5501红色12支盒装&nbsp;8401（黑色20支+蓝色5支+红色5支）<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;盒装\\\">包装方式:&nbsp;盒装<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;小米文具<\\/li><li title=\\\"&nbsp;AGPV3401\\\">货号:&nbsp;AGPV3401<\\/li><li title=\\\"&nbsp;日常书写&nbsp;办公\\\">适用场景:&nbsp;日常书写&nbsp;办公<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;中学生&nbsp;大学生\\\">适用人群:&nbsp;中学生&nbsp;大学生<\\/li><li title=\\\"&nbsp;2019-09-30\\\">上市时间:&nbsp;2019-09-30<\\/li><li title=\\\"&nbsp;塑料\\\">笔杆材质:&nbsp;塑料<\\/li><li title=\\\"&nbsp;针管型\\\">笔头类型:&nbsp;针管型<\\/li><li title=\\\"&nbsp;油性墨水\\\">适用墨水类型:&nbsp;油性墨水<\\/li><li title=\\\"&nbsp;否\\\">墨水是否速干:&nbsp;否<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01Z6hivY1jhgYeCmfEy_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01Mgx6Ss1jhgYm1kQ80_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01SsEm2K1jhgYmLAHby_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01c8RxMr1jhgYnxYKY4_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN011MPBps1jhgZ6EWN50_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01mABsp71jhgZmTTYv1_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01wwtqgr1jhgYjpGj0q_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01FdZ0xc1jhgYnAnKQ5_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"12352\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1070, 1, '账号1', 'admin', 1607572970, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1071, 1, '账号1', 'admin', 1607572970, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1072, 1, '账号1', 'admin', 1607572972, '/admin/goods/changefields.html', 'GET', '{\"id\":\"5\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1073, 1, '账号1', 'admin', 1607572973, '/admin/goods/changefields.html', 'GET', '{\"id\":\"5\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1074, 1, '账号1', 'admin', 1607572973, '/admin/goods/changefields.html', 'GET', '{\"id\":\"5\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1075, 1, '账号1', 'admin', 1607572974, '/admin/goods/changefields.html', 'GET', '{\"id\":\"6\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1076, 1, '账号1', 'admin', 1607572975, '/admin/goods/changefields.html', 'GET', '{\"id\":\"6\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1077, 1, '账号1', 'admin', 1607572978, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"5\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1078, 1, '账号1', 'admin', 1607573007, '/admin/goods/edit.html', 'POST', '{\"goods_id\":\"5\",\"name\":\"小米文具可削铅笔 六角2B 红黑抽条 木杆铅笔 儿童铅笔 AWP30804\",\"code\":\"57687878\",\"first_category_id\":\"1\",\"second_category_id\":\"5\",\"third_category_id\":\"12\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/956e95bc35d0a8005255889036e9aae5.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/4b06036c7e6c8f653a51fd94d4cb5bc5.png\",\"\\/uploads\\/images\\/background\\/20201210\\/d97a7d56854eb8cd5afa228b1d9608c3.png\",\"\\/uploads\\/images\\/background\\/20201210\\/956e95bc35d0a8005255889036e9aae5.png\"],\"brand_id\":\"4\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"7.00\",\"one_price\":\"6.00\",\"one_cost_price\":\"2.00\",\"one_stock\":\"9999\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"635636\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.26c46d7d371Jfl\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.26c46d7d371Jfl\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">小米<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"M＆G\\/晨光 AWP30804\\\">产品名称：小米&nbsp;AWP30804<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌:&nbsp;小米<\\/li><li title=\\\"&nbsp;AWP30804\\\">晨光型号:&nbsp;AWP30804<\\/li><li title=\\\"&nbsp;2B 六角 10支装\\\">颜色分类:&nbsp;2B 六角 10支装<\\/li><li title=\\\"&nbsp;石墨\\/普通铅笔\\\">笔类型:&nbsp;石墨\\/普通铅笔<\\/li><li title=\\\"&nbsp;上海晨光文具股份有限公司\\\">生产企业:&nbsp;上海小米文具股份有限公司<\\/li><li title=\\\"&nbsp;2B\\\">笔芯硬度:&nbsp;2B<\\/li><li title=\\\"&nbsp;书写\\\">适用场景:&nbsp;书写<\\/li><li title=\\\"&nbsp;10支\\\">支数:&nbsp;10支<\\/li><li title=\\\"&nbsp;单色\\\">颜色数:&nbsp;单色<\\/li><li title=\\\"&nbsp;棕榈树\\\">笔杆材质:&nbsp;棕榈树<\\/li><li title=\\\"&nbsp;gb国标标准\\\">安全标准:&nbsp;gb国标标准<\\/li><li title=\\\"&nbsp;是\\\">是否带橡皮头:&nbsp;是<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2ceIhcW8lpuFjy0FpXXaGrpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2m0QbcYtlpuFjSspoXXbcDpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/TB2M.v5c4XlpuFjSsphXXbJOXXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB22C7fc80kpuFjSsppXXcGTXXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/TB2oq.fcYVkpuFjSspcXXbSMVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2K6z6c4XkpuFjy0FiXXbUfFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB2OGIcc90jpuFjy0FlXXc0bpXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/TB29Sn3cYBkpuFjy1zkXXbSpFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/TB2dOQpc9FjpuFjSszhXXaBuVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB2FkYVc3JkpuFjSszcXXXfsFXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/TB221ZkcYFkpuFjy1XcXXclapXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><img align=\\\"absmiddle\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/TB2pO_7cY0kpuFjy0FjXXcBbVXa_!!682114580.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"maijsoft_s1_191268_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><div><a name=\\\"maijsoft_s1_191268_end\\\"><\\/a><\\/div><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"3263\",\"stock_warn\":\"0\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"0.00\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1079, 1, '账号1', 'admin', 1607573008, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1080, 1, '账号1', 'admin', 1607573009, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1081, 1, '账号1', 'admin', 1607573013, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"6\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1082, 1, '账号1', 'admin', 1607573028, '/admin/goods/edit.html', 'POST', '{\"goods_id\":\"6\",\"name\":\"小米大容量一体式全针管中性笔办公签字笔5倍书写长度学生考试刷题作业神器水笔1支顶5支\",\"code\":\"65682\",\"first_category_id\":\"1\",\"second_category_id\":\"5\",\"third_category_id\":\"11\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/551c831039db5df10f16bbd40ba0ebc0.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/532a61a9cb3294ea13015c11e51d243f.png\",\"\\/uploads\\/images\\/background\\/20201210\\/551c831039db5df10f16bbd40ba0ebc0.png\",\"\\/uploads\\/images\\/background\\/20201210\\/2ff3147b913abbcbb39646de816eb5d2.png\"],\"brand_id\":\"4\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"69.00\",\"one_price\":\"29.00\",\"one_cost_price\":\"5.00\",\"one_stock\":\"36589\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"36838\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i2.4d5f7e4bNnGkrj\\\"><div class=\\\"name\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\\\">小米<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;M＆G\\/晨光\\\">品牌: 小米<\\/li><li title=\\\"&nbsp;AGPV3401\\\">型号:&nbsp;AGPV3401<\\/li><li title=\\\"&nbsp;盖帽\\\">闭合方式:&nbsp;盖帽<\\/li><li title=\\\"&nbsp;蓝色30支盒装 8401&nbsp;红色30支盒装 8401&nbsp;黑色30支盒装 8401&nbsp;黑色12支 3401&nbsp;红色12支 3401&nbsp;蓝色12支 3401&nbsp;5501黑色12支盒装&nbsp;5501蓝色12支盒装&nbsp;5501红色12支盒装&nbsp;8401（黑色20支+蓝色5支+红色5支）\\\">颜色分类:&nbsp;蓝色30支盒装 8401&nbsp;红色30支盒装 8401&nbsp;黑色30支盒装 8401&nbsp;黑色12支 3401&nbsp;红色12支 3401&nbsp;蓝色12支 3401&nbsp;5501黑色12支盒装&nbsp;5501蓝色12支盒装&nbsp;5501红色12支盒装&nbsp;8401（黑色20支+蓝色5支+红色5支）<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;盒装\\\">包装方式:&nbsp;盒装<\\/li><li title=\\\"&nbsp;晨光文具\\\">生产企业:&nbsp;小米文具<\\/li><li title=\\\"&nbsp;AGPV3401\\\">货号:&nbsp;AGPV3401<\\/li><li title=\\\"&nbsp;日常书写&nbsp;办公\\\">适用场景:&nbsp;日常书写&nbsp;办公<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;中学生&nbsp;大学生\\\">适用人群:&nbsp;中学生&nbsp;大学生<\\/li><li title=\\\"&nbsp;2019-09-30\\\">上市时间:&nbsp;2019-09-30<\\/li><li title=\\\"&nbsp;塑料\\\">笔杆材质:&nbsp;塑料<\\/li><li title=\\\"&nbsp;针管型\\\">笔头类型:&nbsp;针管型<\\/li><li title=\\\"&nbsp;油性墨水\\\">适用墨水类型:&nbsp;油性墨水<\\/li><li title=\\\"&nbsp;否\\\">墨水是否速干:&nbsp;否<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"23276204330\\\" id=\\\"shop23276204330\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-23276204330\\\" microscope-data=\\\"5003-23276204330\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><div class=\\\"rel\\\" data-title=\\\"power by junezx 3.0\\\" data-rn=\\\"alnjH\\\"><a class=\\\"jsib abs a0Auo-VfMx\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-VfMx\\\"><\\/a><a class=\\\"jdb abs a0Auo-weZe\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=627740950878&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-weZe\\\"><\\/a><a class=\\\"jdb abs a0Auo-d9p7\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=631257030944&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-d9p7\\\"><\\/a><a class=\\\"jdb abs a0Auo-95xd\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=600754691350&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-95xd\\\"><\\/a><a class=\\\"jdb abs a0Auo-rTvT\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=591204959642&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-rTvT\\\"><\\/a><a class=\\\"jdb abs a0Auo-Suog\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=611893635921&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-Suog\\\"><\\/a><a class=\\\"jdb abs a0Auo-nrwW\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=571300231971&amp;scene=taobao_shop\\\" target=\\\"_blank\\\" data-linkmode=\\\"ptlink\\\" data-appid=\\\"a0Auo-nrwW\\\"><\\/a><\\/div><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/682114580\\/O1CN01Z6hivY1jhgYeCmfEy_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01Mgx6Ss1jhgYm1kQ80_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01SsEm2K1jhgYmLAHby_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01c8RxMr1jhgYnxYKY4_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN011MPBps1jhgZ6EWN50_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/682114580\\/O1CN01mABsp71jhgZmTTYv1_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/682114580\\/O1CN01wwtqgr1jhgYjpGj0q_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/682114580\\/O1CN01FdZ0xc1jhgYnAnKQ5_!!682114580.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"maijsoft_s1_201186_start\\\"><\\/a><\\/div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！<\\/p><\\/div><\\/div>\",\"virtual_sales_sum\":\"12352\",\"stock_warn\":\"0\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"0.00\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1083, 1, '账号1', 'admin', 1607573029, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1084, 1, '账号1', 'admin', 1607573029, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1085, 1, '账号1', 'admin', 1607573031, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1086, 1, '账号1', 'admin', 1607579702, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1087, 1, '账号1', 'admin', 1607579702, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1088, 1, '账号1', 'admin', 1607579727, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1089, 1, '账号1', 'admin', 1607579747, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1090, 1, '账号1', 'admin', 1607580117, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1091, 1, '账号1', 'admin', 1607580118, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1092, 1, '账号1', 'admin', 1607580118, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1093, 1, '账号1', 'admin', 1607580122, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1094, 1, '账号1', 'admin', 1607580122, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1095, 1, '账号1', 'admin', 1607580122, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1096, 1, '账号1', 'admin', 1607580125, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1097, 1, '账号1', 'admin', 1607580125, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1098, 1, '账号1', 'admin', 1607580125, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1099, 1, '账号1', 'admin', 1607580133, '/admin/goods_category/add.html', 'POST', '{\"name\":\"得力中性笔\",\"pid\":\"6\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d0fd78d3b5de45b870f43b6db3d5a0be.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1100, 1, '账号1', 'admin', 1607580133, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1101, 1, '账号1', 'admin', 1607580138, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1102, 1, '账号1', 'admin', 1607580139, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1103, 1, '账号1', 'admin', 1607580140, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1104, 1, '账号1', 'admin', 1607583140, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1105, 1, '账号1', 'admin', 1607583141, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1106, 1, '账号1', 'admin', 1607583141, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1107, 1, '账号1', 'admin', 1607583145, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1108, 1, '账号1', 'admin', 1607583146, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1109, 1, '账号1', 'admin', 1607583146, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1110, 1, '账号1', 'admin', 1607583199, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"得力直液式走珠笔0.5mm红色黑色中性笔学生用子弹头碳素笔全针管签字笔黑红笔水笔考试专用笔批发直液水性笔\",\"code\":\"2354385\",\"first_category_id\":\"1\",\"second_category_id\":\"6\",\"third_category_id\":\"13\",\"remark\":\"好用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/d0fd78d3b5de45b870f43b6db3d5a0be.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/6c7921165fab863c86018878e839bc60.png\",\"\\/uploads\\/images\\/background\\/20201210\\/ccd5fe4fe21804ee7e33174cf347bbb2.png\",\"\\/uploads\\/images\\/background\\/20201210\\/d0fd78d3b5de45b870f43b6db3d5a0be.png\"],\"brand_id\":\"3\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"32.8\",\"one_price\":\"32.8\",\"one_cost_price\":\"16\",\"one_stock\":\"3556\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"5554554\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i2.4b5f5db9iBE0Mg\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=10446017&amp;type=0&amp;scm=1048.1.1.4\\\">Deli\\/得力<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;Deli\\/得力\\\">品牌:&nbsp;Deli\\/得力<\\/li><li title=\\\"&nbsp;S656\\\">型号:&nbsp;S656<\\/li><li title=\\\"&nbsp;盖帽\\\">闭合方式:&nbsp;盖帽<\\/li><li title=\\\"&nbsp;子弹头（6支黑色）S656&nbsp;子弹头（6支蓝色）S656&nbsp;子弹头（6支红色）S656&nbsp;子弹头（12支黑色）S656&nbsp;子弹头（12支蓝色）S656&nbsp;子弹头（12支红色）S656&nbsp;子弹头（24支黑色）S656送笔筒1个&nbsp;子弹头（24支蓝色）S656送笔筒1个&nbsp;子弹头（24支红色）S656送笔筒1个&nbsp;全针管（6支黑色）S657&nbsp;全针管（6支蓝色）S657&nbsp;全针管（6支红色）S657&nbsp;全针管（12支黑色）S657&nbsp;全针管（12支蓝色）S657&nbsp;全针管（12支红色）S657&nbsp;全针管（24支黑色）S657送笔筒1个&nbsp;全针管（24支蓝色）S657送笔筒1个&nbsp;全针管（24支红色）S657送笔筒1个&nbsp;子弹头（3支黑色）S656&nbsp;子弹头（3支蓝色）S656&nbsp;子弹头（3支红色）S656&nbsp;全针管（3支黑色）S657&nbsp;全针管（3支蓝色）S657&nbsp;全针管（3支红色）S657\\\">颜色分类:&nbsp;子弹头（6支黑色）S656&nbsp;子弹头（6支蓝色）S656&nbsp;子弹头（6支红色）S656&nbsp;子弹头（12支黑色）S656&nbsp;子弹头（12支蓝色）S656&nbsp;子弹头（12支红色）S656&nbsp;子弹头（24支黑色）S656送笔筒1个&nbsp;子弹头（24支蓝色）S656送笔筒1个&nbsp;子弹头（24支红色）S656送笔筒1个&nbsp;全针管（6支黑色）S657&nbsp;全针管（6支蓝色）S657&nbsp;全针管（6支红色）S657&nbsp;全针管（12支黑色）S657&nbsp;全针管（12支蓝色）S657&nbsp;全针管（12支红色）S657&nbsp;全针管（24支黑色）S657送笔筒1个&nbsp;全针管（24支蓝色）S657送笔筒1个&nbsp;全针管（24支红色）S657送笔筒1个&nbsp;子弹头（3支黑色）S656&nbsp;子弹头（3支蓝色）S656&nbsp;子弹头（3支红色）S656&nbsp;全针管（3支黑色）S657&nbsp;全针管（3支蓝色）S657&nbsp;全针管（3支红色）S657<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\\\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色<\\/li><li title=\\\"&nbsp;否\\\">是否可擦:&nbsp;否<\\/li><li title=\\\"&nbsp;盒装\\\">包装方式:&nbsp;盒装<\\/li><li title=\\\"&nbsp;得力集团有限公司\\\">生产企业:&nbsp;得力集团有限公司<\\/li><li title=\\\"&nbsp;S656\\\">货号:&nbsp;S656<\\/li><li title=\\\"&nbsp;日常书写\\\">适用场景:&nbsp;日常书写<\\/li><li title=\\\"&nbsp;12支\\\">支数:&nbsp;12支<\\/li><li title=\\\"&nbsp;商务办公人士\\\">适用人群:&nbsp;商务办公人士<\\/li><li title=\\\"&nbsp;塑料\\\">笔杆材质:&nbsp;塑料<\\/li><li title=\\\"&nbsp;子弹头型\\\">笔头类型:&nbsp;子弹头型<\\/li><li title=\\\"&nbsp;水性墨水\\\">适用墨水类型:&nbsp;水性墨水<\\/li><li title=\\\"&nbsp;否\\\">墨水是否速干:&nbsp;否<\\/li><li title=\\\"&nbsp;1300-1700m\\\">书写长度:&nbsp;1300-1700m<\\/li><li title=\\\"&nbsp;直液式\\\">出墨方式:&nbsp;直液式<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2206354081846\\/O1CN01kTNKy21PVVhL7zWUm_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2206354081846\\/O1CN01DQQeLU1PVVhFf65ul_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/2206354081846\\/O1CN01ExUMI71PVVhLYp7Ne_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2206354081846\\/O1CN01zPZ2i41PVVhKe85eb_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/2206354081846\\/O1CN01P3Wyem1PVVhA6zetB_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/2206354081846\\/O1CN018eaHgz1PVVhIe1CLa_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2206354081846\\/O1CN01c77WCR1PVVhJMkjDw_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/2206354081846\\/O1CN0198Xv6s1PVVhLYndv3_!!2206354081846.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_DcBottomRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"22398215158\\\" id=\\\"shop22398215158\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-22398215158\\\" microscope-data=\\\"5003-22398215158\\\" data-title=\\\"自定义内容区\\\"><\\/div><\\/div><div id=\\\"J_ZebraPriceDesc\\\" class=\\\"j-mdv\\\"><img width=\\\"790\\\" src=\\\"https:\\/\\/img.alicdn.com\\/tfs\\/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\\\"><\\/div><\\/div>\",\"virtual_sales_sum\":\"1365\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1111, 1, '账号1', 'admin', 1607583200, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1112, 1, '账号1', 'admin', 1607583201, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1113, 1, '账号1', 'admin', 1607584200, '/admin/goods/changefields.html', 'GET', '{\"id\":\"7\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1114, 1, '账号1', 'admin', 1607584201, '/admin/goods/changefields.html', 'GET', '{\"id\":\"7\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1115, 1, '账号1', 'admin', 1607584255, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1116, 1, '账号1', 'admin', 1607584255, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1117, 1, '账号1', 'admin', 1607584256, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1118, 1, '账号1', 'admin', 1607584258, '/admin/order/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1119, 1, '账号1', 'admin', 1607584258, '/admin/order/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1120, 1, '账号1', 'admin', 1607584302, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"7\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1121, 1, '账号1', 'admin', 1607584308, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1122, 1, '账号1', 'admin', 1607584352, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1123, 1, '账号1', 'admin', 1607584362, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1124, 1, '账号1', 'admin', 1607584362, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1125, 1, '账号1', 'admin', 1607584362, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1126, 1, '账号1', 'admin', 1607584432, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1127, 1, '账号1', 'admin', 1607584432, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1128, 1, '账号1', 'admin', 1607584433, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1129, 1, '账号1', 'admin', 1607584436, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1130, 1, '账号1', 'admin', 1607584439, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1131, 1, '账号1', 'admin', 1607584439, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1132, 1, '账号1', 'admin', 1607584439, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1133, 1, '账号1', 'admin', 1607584443, '/admin/goods_category/add.html', 'POST', '{\"name\":\"英雄钢笔\",\"pid\":\"7\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/5e11c751c7e662764764e132ab6a8f72.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1134, 1, '账号1', 'admin', 1607584443, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1135, 1, '账号1', 'admin', 1607584452, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1136, 1, '账号1', 'admin', 1607584452, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1137, 1, '账号1', 'admin', 1607584649, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1138, 1, '账号1', 'admin', 1607584674, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1139, 1, '账号1', 'admin', 1607584674, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1140, 1, '账号1', 'admin', 1607584674, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1141, 1, '账号1', 'admin', 1607584686, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1142, 1, '账号1', 'admin', 1607584686, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1143, 1, '账号1', 'admin', 1607584689, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1144, 1, '账号1', 'admin', 1607584689, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1145, 1, '账号1', 'admin', 1607584689, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1146, 1, '账号1', 'admin', 1607584693, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1147, 1, '账号1', 'admin', 1607584693, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1148, 1, '账号1', 'admin', 1607584693, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1149, 1, '账号1', 'admin', 1607584899, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"HERO\\/英雄钢笔HS208女神钢笔成人女士商务高档礼盒装办公时尚练字女生专用精致送礼官方正品代写贺卡\",\"code\":\"356161\",\"first_category_id\":\"1\",\"second_category_id\":\"7\",\"third_category_id\":\"14\",\"remark\":\"好用高雅\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/5e11c751c7e662764764e132ab6a8f72.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/3f25d88bc10820af2fb3583484de06c8.png\",\"\\/uploads\\/images\\/background\\/20201210\\/4985ef90fea9fc132e37af97a1f0597f.png\",\"\\/uploads\\/images\\/background\\/20201210\\/5e11c751c7e662764764e132ab6a8f72.png\"],\"brand_id\":\"5\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"2598\",\"one_price\":\"1359\",\"one_cost_price\":\"823\",\"one_stock\":\"1069\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"5387398\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i3.2ce61010xyKMqs\\\"><div class=\\\"name\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105804&amp;type=0&amp;scm=1048.1.1.4\\\">HERO\\/英雄<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"HERO\\/英雄 HS208\\\">产品名称：HERO\\/英雄 HS208<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;HERO\\/英雄\\\">品牌:&nbsp;HERO\\/英雄<\\/li><li title=\\\"&nbsp;HS208\\\">型号:&nbsp;HS208<\\/li><li title=\\\"&nbsp;简约\\\">风格:&nbsp;简约<\\/li><li title=\\\"&nbsp;绿色&nbsp;黄色\\\">颜色分类:&nbsp;绿色&nbsp;黄色<\\/li><li title=\\\"&nbsp;0.5mm\\\">书写粗细:&nbsp;0.5mm<\\/li><li title=\\\"&nbsp;官方标配\\\">套餐类型:&nbsp;官方标配<\\/li><li title=\\\"&nbsp;礼盒装\\\">包装方式:&nbsp;礼盒装<\\/li><li title=\\\"&nbsp;英雄\\\">生产企业:&nbsp;英雄<\\/li><li title=\\\"&nbsp;送礼&nbsp;书写\\\">适用场景:&nbsp;送礼&nbsp;书写<\\/li><li title=\\\"&nbsp;铱金笔\\\">钢笔笔尖成分:&nbsp;铱金笔<\\/li><li title=\\\"&nbsp;中国\\\">国家\\/地区:&nbsp;中国<\\/li><li title=\\\"&nbsp;标准型\\\">笔尖种类:&nbsp;标准型<\\/li><li title=\\\"&nbsp;文艺青年\\\">适用人群:&nbsp;文艺青年<\\/li><li title=\\\"&nbsp;旋转吸墨\\\">上墨方式:&nbsp;旋转吸墨<\\/li><li title=\\\"&nbsp;金属\\\">笔杆材质:&nbsp;金属<\\/li><li title=\\\"&nbsp;明尖\\\">笔尖嵌入方式:&nbsp;明尖<\\/li><li title=\\\"&nbsp;光面\\\">笔身纹理:&nbsp;光面<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><div><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/914055344\\/tb2tp9wdxxxxxaoxpxxxxxxxxxx-914055344.png?q=begin_zhuofannuo_500061_a6c6f167d61545739002166d35f7e968_begin\\\"><table width=\\\"790\\\" height=\\\"762\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"layui-table\\\"><tbody><tr><td colspan=\\\"4\\\"><a href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=587437149594&amp;sku_properties=5919063:6536025;186838507:129889364\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2200667318398\\/O1CN01MozEFq2BuKk1zvHfX_!!2200667318398.jpg\\\" width=\\\"790\\\" height=\\\"324\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/a><\\/td><\\/tr><tr><td colspan=\\\"2\\\"><a href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=587207811184&amp;sku_properties=5919063:6536025;186838507:129889364\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2200667318398\\/O1CN01ZbcXll2BuKk3CLFM0_!!2200667318398.jpg\\\" width=\\\"394\\\" height=\\\"215\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/a><\\/td><td colspan=\\\"2\\\"><a href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=595015052047&amp;sku_properties=2066814:11533309;5919063:6536025;186838507:129889364\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01KrRHyV2BuKk05mv9z_!!2200667318398.jpg\\\" width=\\\"396\\\" height=\\\"215\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/a><\\/td><\\/tr><tr><td><a href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=586874097674&amp;sku_properties=2066814:7373997;5919063:6536025;186838507:201538351\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2200667318398\\/O1CN01wVRbqg2BuKk4kZ9o1_!!2200667318398.jpg\\\" width=\\\"263\\\" height=\\\"222\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/a><\\/td><td colspan=\\\"2\\\"><a href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=595462406114\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2200667318398\\/O1CN01xahRnh2BuKk1WXzzX_!!2200667318398.jpg\\\" width=\\\"264\\\" height=\\\"222\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/a><\\/td><td><a href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?id=588805549965&amp;sku_properties=2066814:11533312;5919063:6536025;186838507:129889364\\\" target=\\\"_blank\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01jmjwv62BuKk3xn5HD_!!2200667318398.jpg\\\" width=\\\"263\\\" height=\\\"222\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/a><\\/td><\\/tr><tr><td><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\\\" width=\\\"263\\\" height=\\\"1\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/td><td><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\\\" width=\\\"131\\\" height=\\\"1\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/td><td><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\\\" width=\\\"133\\\" height=\\\"1\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/td><td><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\\\" width=\\\"263\\\" height=\\\"1\\\" alt=\\\"\\\" class=\\\"img-ks-lazyload\\\"><\\/td><\\/tr><\\/tbody><\\/table><a name=\\\"zhuofannuo_500061_a6c6f167d61545739002166d35f7e968_end\\\"><\\/a><\\/div><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2200667318398\\/O1CN01lb1w7T2BuKg83AGzV_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01yDriqN2BuKgGnqzlF_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2200667318398\\/O1CN0168iyAp2BuKgDNcx2O_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2200667318398\\/O1CN01IrmEI02BuKgGnsCZt_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01NTDVvK2BuKgGnrSqQ_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01bfMvZT2BuKgGG9E5U_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2200667318398\\/O1CN01rqrwNu2BuKgFCbYeI_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN016Z6P1R2BuKgHdh7vk_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/2200667318398\\/O1CN01PfNEKJ2BuKgDjuJaK_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01vUsRHe2BuKgHdfaJ0_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/2200667318398\\/O1CN01yqJX042BuKgI33UGL_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01sOjXHX2BuKgEs5q9Q_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01vGj3zE2BuKgGG7HYy_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/2200667318398\\/O1CN01jfzQQJ2BuKgDjvJws_!!2200667318398.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><div><a name=\\\"hlg_list_4_26137242_start\\\"><\\/a><\\/div><table border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"layui-table\\\"><tbody><tr><td><div class=\\\"hlg_list_26137242\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/2200667318398\\/O1CN01mUkVUt2BuKi8hnOc8_!!2200667318398.jpg\\\" alt=\\\"刻字\\\" usemap=\\\"#hlgCustomMap_2yczj_1565442513824\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"hlgCustomMap_2yczj_1565442513824\\\"><\\/map><\\/div><\\/td><\\/tr><\\/tbody><\\/table><div><a name=\\\"hlg_list_4_26137242_end\\\"><\\/a><\\/div><div class=\\\"hlg_rand_565009896\\\">1709484353<\\/div><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_ZebraPriceDesc\\\" class=\\\"j-mdv\\\"><img width=\\\"790\\\" src=\\\"https:\\/\\/img.alicdn.com\\/tfs\\/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\\\"><\\/div><\\/div>\",\"virtual_sales_sum\":\"352\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1150, 1, '账号1', 'admin', 1607584900, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1151, 1, '账号1', 'admin', 1607584901, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1152, 1, '账号1', 'admin', 1607584912, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1153, 1, '账号1', 'admin', 1607584920, '/admin/goods_category/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1154, 1, '账号1', 'admin', 1607585022, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1155, 1, '账号1', 'admin', 1607585022, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1156, 1, '账号1', 'admin', 1607585022, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1157, 1, '账号1', 'admin', 1607585026, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1158, 1, '账号1', 'admin', 1607585029, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1159, 1, '账号1', 'admin', 1607585029, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1160, 1, '账号1', 'admin', 1607585029, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1161, 1, '账号1', 'admin', 1607585040, '/admin/goods_category/add.html', 'POST', '{\"name\":\"百乐钢笔\",\"pid\":\"8\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/63d91cdfdb659e57a10a99d1cf44567e.png\",\"sort\":\"0\",\"is_show\":\"1\",\"remark\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1162, 1, '账号1', 'admin', 1607585040, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1163, 1, '账号1', 'admin', 1607585046, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1164, 1, '账号1', 'admin', 1607585047, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1165, 1, '账号1', 'admin', 1607585047, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1166, 1, '账号1', 'admin', 1607585079, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1167, 1, '账号1', 'admin', 1607585079, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1168, 1, '账号1', 'admin', 1607585079, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1169, 1, '账号1', 'admin', 1607585546, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1170, 1, '账号1', 'admin', 1607585547, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1171, 1, '账号1', 'admin', 1607585547, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1172, 1, '账号1', 'admin', 1607585551, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1173, 1, '账号1', 'admin', 1607585551, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1174, 1, '账号1', 'admin', 1607585551, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1175, 1, '账号1', 'admin', 1607585554, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1176, 1, '账号1', 'admin', 1607585554, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1177, 1, '账号1', 'admin', 1607585554, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1178, 1, '账号1', 'admin', 1607585557, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1179, 1, '账号1', 'admin', 1607585557, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1180, 1, '账号1', 'admin', 1607585557, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1181, 1, '账号1', 'admin', 1607585722, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"日本进口pilot百乐贵客钢笔custom urushi 硬橡胶生漆18k金笔fkv-88sr莳绘30号金尖限定万年笔商务礼品套装\",\"code\":\"65986\",\"first_category_id\":\"1\",\"second_category_id\":\"8\",\"third_category_id\":\"15\",\"remark\":\"好用好看实用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/f245c44d136296f80071a26765e93cdf.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/989bbc585e0eaa435d1c0486008ad52a.png\",\"\\/uploads\\/images\\/background\\/20201210\\/63d91cdfdb659e57a10a99d1cf44567e.png\",\"\\/uploads\\/images\\/background\\/20201210\\/1860d0763b8703121d93cf0b8a3e1e1e.png\",\"\\/uploads\\/images\\/background\\/20201210\\/f245c44d136296f80071a26765e93cdf.png\"],\"brand_id\":\"2\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"9800\",\"one_price\":\"6860\",\"one_cost_price\":\"2635\",\"one_stock\":\"1260\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"2266543\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.3d655441HlyJte\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\\\">PILOT\\/百乐<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"PILOT\\/百乐 FKV-88SR\\\">产品名称：PILOT\\/百乐 FKV-88SR<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;PILOT\\/百乐\\\">品牌:&nbsp;PILOT\\/百乐<\\/li><li title=\\\"&nbsp;FKV-88SR\\\">型号:&nbsp;FKV-88SR<\\/li><li title=\\\"&nbsp;黑色\\\">颜色分类:&nbsp;黑色<\\/li><li title=\\\"&nbsp;FM尖&nbsp;M尖\\\">书写粗细:&nbsp;FM尖&nbsp;M尖<\\/li><li title=\\\"&nbsp;官方标配\\\">套餐类型:&nbsp;官方标配<\\/li><li title=\\\"&nbsp;礼盒装\\\">包装方式:&nbsp;礼盒装<\\/li><li title=\\\"&nbsp;百乐株式会社\\\">生产企业:&nbsp;百乐株式会社<\\/li><li title=\\\"&nbsp;FKV-88SR\\\">货号:&nbsp;FKV-88SR<\\/li><li title=\\\"&nbsp;送礼&nbsp;书写\\\">适用场景:&nbsp;送礼&nbsp;书写<\\/li><li title=\\\"&nbsp;金笔\\\">钢笔笔尖成分:&nbsp;金笔<\\/li><li title=\\\"&nbsp;日本\\\">国家\\/地区:&nbsp;日本<\\/li><li title=\\\"&nbsp;标准型\\\">笔尖种类:&nbsp;标准型<\\/li><li title=\\\"&nbsp;其他\\\">上墨方式:&nbsp;其他<\\/li><li title=\\\"&nbsp;其他\\\">笔杆材质:&nbsp;其他<\\/li><li title=\\\"&nbsp;明尖\\\">笔尖嵌入方式:&nbsp;明尖<\\/li><li title=\\\"&nbsp;光面\\\">笔身纹理:&nbsp;光面<\\/li><li title=\\\"&nbsp;非碳素墨水\\\">墨水材质:&nbsp;非碳素墨水<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"21934748119\\\" id=\\\"shop21934748119\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-21934748119\\\" microscope-data=\\\"5003-21934748119\\\" data-title=\\\"自定义内容区\\\"><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\\\"><\\/p><table align=\\\"center\\\" class=\\\"layui-table\\\"><tbody><tr><td><div><img usemap=\\\"#1599037488419\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\\\" class=\\\"img-ks-lazyload\\\"><\\/div><map name=\\\"1599037488419\\\"><area shape=\\\"rect\\\" coords=\\\"1,3,777.0,357.06845\\\" href=\\\"https:\\/\\/market.m.taobao.com\\/app\\/sj\\/member-center-rax\\/pages\\/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\\\"><\\/map><\\/td><\\/tr><\\/tbody><\\/table><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\\\" usemap=\\\"#LZLOZ\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"LZLOZ\\\"><area shape=\\\"rect\\\" coords=\\\"0,0,278,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\\\"><area shape=\\\"rect\\\" coords=\\\"276,0,522,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\\\"><area shape=\\\"rect\\\" coords=\\\"520,0,790,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\\\"><\\/map><p><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\\\"><\\/p><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2YEwLrFGWBuNjy0FbXXb4sXXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3245829746\\/TB2n9.BrHSYBuNjSspiXXXNzpXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2wsb5jwKTBuNkSne1XXaJoXXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2LqsajDdYBeNkSmLyXXXfnVXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3245829746\\/TB2uhZ5rHuWBuNjSszgXXb8jVXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2otQArL9TBuNjy0FcXXbeiFXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3245829746\\/TB2PY0ir1ySBuNjy1zdXXXPxFXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><\\/p><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3245829746\\/O1CN01hPEMtT2LrigBZIFoO_!!3245829746.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_DcBottomRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"22184000365\\\" id=\\\"shop22184000365\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-22184000365\\\" microscope-data=\\\"5003-22184000365\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-hd\\\"><h3><span>自定义内容区<\\/span><\\/h3><\\/div><div class=\\\"skin-box-bd clear-fix\\\"><p><img src=\\\"https:\\/\\/gdp.alicdn.com\\/imgextra\\/i4\\/3245829746\\/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\\\"><\\/p><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><div class=\\\"J_TModule\\\" data-widgetid=\\\"21934748137\\\" id=\\\"shop21934748137\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-21934748137\\\" microscope-data=\\\"5003-21934748137\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><p><img src=\\\"https:\\/\\/gdp.alicdn.com\\/imgextra\\/i3\\/3245829746\\/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\\\"><\\/p><\\/div><\\/div><\\/div><\\/div><\\/div>\",\"virtual_sales_sum\":\"98\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1182, 1, '账号1', 'admin', 1607585729, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"日本进口pilot百乐贵客钢笔 硬橡胶生漆18k金笔fkv-88sr莳绘30号金尖限定万年笔商务礼品套装\",\"code\":\"65986\",\"first_category_id\":\"1\",\"second_category_id\":\"8\",\"third_category_id\":\"15\",\"remark\":\"好用好看实用\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/f245c44d136296f80071a26765e93cdf.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/989bbc585e0eaa435d1c0486008ad52a.png\",\"\\/uploads\\/images\\/background\\/20201210\\/63d91cdfdb659e57a10a99d1cf44567e.png\",\"\\/uploads\\/images\\/background\\/20201210\\/1860d0763b8703121d93cf0b8a3e1e1e.png\",\"\\/uploads\\/images\\/background\\/20201210\\/f245c44d136296f80071a26765e93cdf.png\"],\"brand_id\":\"2\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"9800\",\"one_price\":\"6860\",\"one_cost_price\":\"2635\",\"one_stock\":\"1260\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"2266543\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\"><div class=\\\"name\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i4.3d655441HlyJte\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\\\">PILOT\\/百乐<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"PILOT\\/百乐 FKV-88SR\\\">产品名称：PILOT\\/百乐 FKV-88SR<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;PILOT\\/百乐\\\">品牌:&nbsp;PILOT\\/百乐<\\/li><li title=\\\"&nbsp;FKV-88SR\\\">型号:&nbsp;FKV-88SR<\\/li><li title=\\\"&nbsp;黑色\\\">颜色分类:&nbsp;黑色<\\/li><li title=\\\"&nbsp;FM尖&nbsp;M尖\\\">书写粗细:&nbsp;FM尖&nbsp;M尖<\\/li><li title=\\\"&nbsp;官方标配\\\">套餐类型:&nbsp;官方标配<\\/li><li title=\\\"&nbsp;礼盒装\\\">包装方式:&nbsp;礼盒装<\\/li><li title=\\\"&nbsp;百乐株式会社\\\">生产企业:&nbsp;百乐株式会社<\\/li><li title=\\\"&nbsp;FKV-88SR\\\">货号:&nbsp;FKV-88SR<\\/li><li title=\\\"&nbsp;送礼&nbsp;书写\\\">适用场景:&nbsp;送礼&nbsp;书写<\\/li><li title=\\\"&nbsp;金笔\\\">钢笔笔尖成分:&nbsp;金笔<\\/li><li title=\\\"&nbsp;日本\\\">国家\\/地区:&nbsp;日本<\\/li><li title=\\\"&nbsp;标准型\\\">笔尖种类:&nbsp;标准型<\\/li><li title=\\\"&nbsp;其他\\\">上墨方式:&nbsp;其他<\\/li><li title=\\\"&nbsp;其他\\\">笔杆材质:&nbsp;其他<\\/li><li title=\\\"&nbsp;明尖\\\">笔尖嵌入方式:&nbsp;明尖<\\/li><li title=\\\"&nbsp;光面\\\">笔身纹理:&nbsp;光面<\\/li><li title=\\\"&nbsp;非碳素墨水\\\">墨水材质:&nbsp;非碳素墨水<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"21934748119\\\" id=\\\"shop21934748119\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-21934748119\\\" microscope-data=\\\"5003-21934748119\\\" data-title=\\\"自定义内容区\\\"><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\\\"><\\/p><table align=\\\"center\\\" class=\\\"layui-table\\\"><tbody><tr><td><div><img usemap=\\\"#1599037488419\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\\\" class=\\\"img-ks-lazyload\\\"><\\/div><map name=\\\"1599037488419\\\"><area shape=\\\"rect\\\" coords=\\\"1,3,777.0,357.06845\\\" href=\\\"https:\\/\\/market.m.taobao.com\\/app\\/sj\\/member-center-rax\\/pages\\/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\\\"><\\/map><\\/td><\\/tr><\\/tbody><\\/table><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\\\" usemap=\\\"#LZLOZ\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"LZLOZ\\\"><area shape=\\\"rect\\\" coords=\\\"0,0,278,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\\\"><area shape=\\\"rect\\\" coords=\\\"276,0,522,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\\\"><area shape=\\\"rect\\\" coords=\\\"520,0,790,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\\\"><\\/map><p><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\\\"><\\/p><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2YEwLrFGWBuNjy0FbXXb4sXXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3245829746\\/TB2n9.BrHSYBuNjSspiXXXNzpXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2wsb5jwKTBuNkSne1XXaJoXXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2LqsajDdYBeNkSmLyXXXfnVXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3245829746\\/TB2uhZ5rHuWBuNjSszgXXb8jVXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2otQArL9TBuNjy0FcXXbeiFXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3245829746\\/TB2PY0ir1ySBuNjy1zdXXXPxFXa_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><\\/p><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3245829746\\/O1CN01hPEMtT2LrigBZIFoO_!!3245829746.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><\\/p><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_DcBottomRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"22184000365\\\" id=\\\"shop22184000365\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-22184000365\\\" microscope-data=\\\"5003-22184000365\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-hd\\\"><h3><span>自定义内容区<\\/span><\\/h3><\\/div><div class=\\\"skin-box-bd clear-fix\\\"><p><img src=\\\"https:\\/\\/gdp.alicdn.com\\/imgextra\\/i4\\/3245829746\\/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\\\"><\\/p><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><div class=\\\"J_TModule\\\" data-widgetid=\\\"21934748137\\\" id=\\\"shop21934748137\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-21934748137\\\" microscope-data=\\\"5003-21934748137\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><p><img src=\\\"https:\\/\\/gdp.alicdn.com\\/imgextra\\/i3\\/3245829746\\/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\\\"><\\/p><\\/div><\\/div><\\/div><\\/div><\\/div>\",\"virtual_sales_sum\":\"98\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1183, 1, '账号1', 'admin', 1607585730, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1184, 1, '账号1', 'admin', 1607585731, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1185, 1, '账号1', 'admin', 1607585736, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1186, 1, '账号1', 'admin', 1607585742, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1187, 1, '账号1', 'admin', 1607585743, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1188, 1, '账号1', 'admin', 1607585877, '/admin/goods/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1189, 1, '账号1', 'admin', 1607585901, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1190, 1, '账号1', 'admin', 1607585901, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1191, 1, '账号1', 'admin', 1607585901, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1192, 1, '账号1', 'admin', 1607585908, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1193, 1, '账号1', 'admin', 1607585908, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1194, 1, '账号1', 'admin', 1607585908, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1195, 1, '账号1', 'admin', 1607585911, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1196, 1, '账号1', 'admin', 1607585911, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1197, 1, '账号1', 'admin', 1607585911, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1198, 1, '账号1', 'admin', 1607585917, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1199, 1, '账号1', 'admin', 1607585917, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1200, 1, '账号1', 'admin', 1607585917, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1201, 1, '账号1', 'admin', 1607586032, '/admin/goods/add.html', 'POST', '{\"goods_id\":\"\",\"name\":\"顺丰包邮 12期免息日本PILOT百乐Justus 95钢笔14K金尖FJ-3MR可调书写软硬金笔成人书法练字商务办公送礼盒装\",\"code\":\"656251\",\"first_category_id\":\"1\",\"second_category_id\":\"8\",\"third_category_id\":\"15\",\"remark\":\"好看\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/6768915899c1f445e43c886ad5e8668a.png\",\"goods_image\":[\"\\/uploads\\/images\\/background\\/20201210\\/6768915899c1f445e43c886ad5e8668a.png\",\"\\/uploads\\/images\\/background\\/20201210\\/254590f48981940296d63640c64cae83.png\",\"\\/uploads\\/images\\/background\\/20201210\\/930d0719e718db9bfaf2f3acacc1fbe8.png\"],\"brand_id\":\"2\",\"supplier_id\":\"1\",\"spec_type\":\"1\",\"one_spec_image\":\"\",\"one_market_price\":\"2400\",\"one_price\":\"1680\",\"one_cost_price\":\"768\",\"one_stock\":\"2369\",\"one_volume\":\"2\",\"one_weight\":\"2\",\"one_bar_code\":\"36555\",\"content\":\"<div id=\\\"attributes\\\" class=\\\"attributes\\\"><div class=\\\"attributes-list\\\" id=\\\"J_AttrList\\\"><div class=\\\"tm-clear tb-hidden tm_brandAttr\\\" id=\\\"J_BrandAttr\\\" data-spm-anchor-id=\\\"a220o.1000855.0.i8.2c834ec6EEH4Z7\\\"><div class=\\\"name\\\">品牌名称：<span class=\\\"J_EbrandLogo\\\" target=\\\"_blank\\\" href=\\\"\\/\\/brand.tmall.com\\/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\\\">PILOT\\/百乐<\\/span><\\/div><\\/div><p class=\\\"attr-list-hd tm-clear\\\"><span>产品参数：<\\/span><\\/p><ul id=\\\"J_AttrUL\\\"><li title=\\\"PILOT\\/百乐 FJ-3MR\\\">产品名称：PILOT\\/百乐 FJ-3MR<\\/li><li id=\\\"J_attrBrandName\\\" title=\\\"&nbsp;PILOT\\/百乐\\\">品牌:&nbsp;PILOT\\/百乐<\\/li><li title=\\\"&nbsp;FJ-3MR\\\">型号:&nbsp;FJ-3MR<\\/li><li title=\\\"&nbsp;条纹黑色&nbsp;网格黑色\\\">颜色分类:&nbsp;条纹黑色&nbsp;网格黑色<\\/li><li title=\\\"&nbsp;F尖&nbsp;FM尖&nbsp;M尖\\\">书写粗细:&nbsp;F尖&nbsp;FM尖&nbsp;M尖<\\/li><li title=\\\"&nbsp;官方标配\\\">套餐类型:&nbsp;官方标配<\\/li><li title=\\\"&nbsp;礼盒装\\\">包装方式:&nbsp;礼盒装<\\/li><li title=\\\"&nbsp;百乐株式会社\\\">生产企业:&nbsp;百乐株式会社<\\/li><li title=\\\"&nbsp;FJ-3MR\\\">货号:&nbsp;FJ-3MR<\\/li><li title=\\\"&nbsp;书写\\\">适用场景:&nbsp;书写<\\/li><li title=\\\"&nbsp;金笔\\\">钢笔笔尖成分:&nbsp;金笔<\\/li><li title=\\\"&nbsp;日本\\\">国家\\/地区:&nbsp;日本<\\/li><li title=\\\"&nbsp;标准型\\\">笔尖种类:&nbsp;标准型<\\/li><li title=\\\"&nbsp;挤捏吸墨\\\">上墨方式:&nbsp;挤捏吸墨<\\/li><li title=\\\"&nbsp;树脂\\\">笔杆材质:&nbsp;树脂<\\/li><li title=\\\"&nbsp;明尖\\\">笔尖嵌入方式:&nbsp;明尖<\\/li><\\/ul><\\/div><\\/div><div id=\\\"mall-banner\\\"><div data-spm=\\\"1998132255\\\"><\\/div><div id=\\\"J_DescTMS1\\\"><\\/div><\\/div><div id=\\\"J_TmpActBanner\\\"><\\/div><div id=\\\"J_DcTopRightWrap\\\"><div id=\\\"J_DcTopRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"21934748119\\\" id=\\\"shop21934748119\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-21934748119\\\" microscope-data=\\\"5003-21934748119\\\" data-title=\\\"自定义内容区\\\"><\\/div><\\/div><\\/div><div id=\\\"description\\\" class=\\\"J_DetailSection tshop-psm tshop-psm-bdetaildes tm-curTab\\\"><div class=\\\"content ke-post\\\"><p><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\\\"><\\/p><table align=\\\"center\\\" class=\\\"layui-table\\\"><tbody><tr><td><div><img usemap=\\\"#1599037488419\\\" src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\\\" class=\\\"img-ks-lazyload\\\"><\\/div><map name=\\\"1599037488419\\\"><area shape=\\\"rect\\\" coords=\\\"1,3,777.0,357.06845\\\" href=\\\"https:\\/\\/market.m.taobao.com\\/app\\/sj\\/member-center-rax\\/pages\\/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\\\"><\\/map><\\/td><\\/tr><\\/tbody><\\/table><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\\\" usemap=\\\"#LZLOZ\\\" class=\\\"img-ks-lazyload\\\"><map name=\\\"LZLOZ\\\"><area shape=\\\"rect\\\" coords=\\\"0,0,278,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\\\"><area shape=\\\"rect\\\" coords=\\\"276,0,522,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\\\"><area shape=\\\"rect\\\" coords=\\\"520,0,790,590\\\" href=\\\"https:\\/\\/detail.tmall.com\\/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\\\"><\\/map><p><img src=\\\"https:\\/\\/img-tmdetail.alicdn.com\\/tps\\/i3\\/T1BYd_XwFcXXb9RTPq-90-90.png\\\" data-ks-lazyload=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\\\"><\\/p><p><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\\\" align=\\\"absmiddle\\\" class=\\\"img-ks-lazyload\\\"><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2ZFqLwbSYBuNjSspfXXcZCpXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/TB2uFyLwbSYBuNjSspfXXcZCpXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/TB2.oOmweuSBuNjy1XcXXcYjFXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2tldChGAoBKNjSZSyXXaHAVXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3245829746\\/TB2Zo.ynLiSBuNkSnhJXXbDcpXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i2\\/3245829746\\/TB24EG2wkSWBuNjSszdXXbeSpXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i1\\/3245829746\\/TB26I4dn3KTBuNkSne1XXaJoXXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i3\\/3245829746\\/TB2TUZ0nRmWBuNkSndVXXcsApXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2ZhN3wXuWBuNjSszbXXcS7FXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><br><img src=\\\"https:\\/\\/img.alicdn.com\\/imgextra\\/i4\\/3245829746\\/TB2Ytg5nTdYBeNkSmLyXXXfnVXa_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/p><\\/div><\\/div><div id=\\\"J_DcBottomRightWrap\\\"><div id=\\\"J_DcBottomRight\\\" class=\\\"J_DcAsyn tb-shop\\\"><div class=\\\"J_TModule\\\" data-widgetid=\\\"22184000365\\\" id=\\\"shop22184000365\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-22184000365\\\" microscope-data=\\\"5003-22184000365\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-hd\\\"><h3><span>自定义内容区<\\/span><\\/h3><\\/div><div class=\\\"skin-box-bd clear-fix\\\"><p><img src=\\\"https:\\/\\/gdp.alicdn.com\\/imgextra\\/i4\\/3245829746\\/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\\\" class=\\\"img-ks-lazyload\\\"><\\/p><\\/div><s class=\\\"skin-box-bt\\\"><b><\\/b><\\/s><\\/div><\\/div><div class=\\\"J_TModule\\\" data-widgetid=\\\"21934748137\\\" id=\\\"shop21934748137\\\" data-componentid=\\\"5003\\\" data-spm=\\\"110.0.5003-21934748137\\\" microscope-data=\\\"5003-21934748137\\\" data-title=\\\"自定义内容区\\\"><div class=\\\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\\\"><s class=\\\"skin-box-tp\\\"><b><\\/b><\\/s><div class=\\\"skin-box-bd clear-fix\\\"><p><img src=\\\"https:\\/\\/gdp.alicdn.com\\/imgextra\\/i3\\/3245829746\\/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\\\" class=\\\"img-ks-lazyload\\\"><\\/p><\\/div><\\/div><\\/div><\\/div><\\/div>\",\"virtual_sales_sum\":\"685\",\"stock_warn\":\"\",\"is_show_stock\":\"1\",\"free_shipping_type\":\"1\",\"free_shipping\":\"\",\"free_shipping_template_id\":\"\",\"status\":\"1\",\"is_commission\":\"1\",\"first_ratio\":\"\",\"second_ratio\":\"\",\"three_ratio\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1202, 1, '账号1', 'admin', 1607586034, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1203, 1, '账号1', 'admin', 1607586034, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1204, 1, '账号1', 'admin', 1607586119, '/admin/goods_comment/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1205, 1, '账号1', 'admin', 1607586119, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1206, 1, '账号1', 'admin', 1607586120, '/admin/supplier/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1207, 1, '账号1', 'admin', 1607586120, '/admin/supplier/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1208, 1, '账号1', 'admin', 1607586126, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1209, 1, '账号1', 'admin', 1607586137, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1210, 1, '账号1', 'admin', 1607586137, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1211, 1, '账号1', 'admin', 1607586147, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1212, 1, '账号1', 'admin', 1607586148, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1213, 1, '账号1', 'admin', 1607586148, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1214, 1, '账号1', 'admin', 1607586148, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1215, 1, '账号1', 'admin', 1607586149, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1216, 1, '账号1', 'admin', 1607586149, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1217, 1, '账号1', 'admin', 1607586149, '/admin/user_level/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1218, 1, '账号1', 'admin', 1607586150, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1219, 1, '账号1', 'admin', 1607586150, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1220, 1, '账号1', 'admin', 1607586151, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1221, 1, '账号1', 'admin', 1607586151, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1222, 1, '账号1', 'admin', 1607586151, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1223, 1, '账号1', 'admin', 1607586152, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1224, 1, '账号1', 'admin', 1607586152, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1225, 1, '账号1', 'admin', 1607586209, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1226, 1, '账号1', 'admin', 1607586209, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1227, 1, '账号1', 'admin', 1607586212, '/admin/goods/changefields.html', 'GET', '{\"id\":\"10\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1228, 1, '账号1', 'admin', 1607586213, '/admin/goods/changefields.html', 'GET', '{\"id\":\"9\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1229, 1, '账号1', 'admin', 1607586213, '/admin/goods/changefields.html', 'GET', '{\"id\":\"8\",\"field\":\"is_best\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1230, 1, '账号1', 'admin', 1607586214, '/admin/goods/changefields.html', 'GET', '{\"id\":\"8\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1231, 1, '账号1', 'admin', 1607586214, '/admin/goods/changefields.html', 'GET', '{\"id\":\"9\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1232, 1, '账号1', 'admin', 1607586215, '/admin/goods/changefields.html', 'GET', '{\"id\":\"10\",\"field\":\"is_like\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1233, 1, '账号1', 'admin', 1607586216, '/admin/goods/changefields.html', 'GET', '{\"id\":\"10\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1234, 1, '账号1', 'admin', 1607586216, '/admin/goods/changefields.html', 'GET', '{\"id\":\"9\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1235, 1, '账号1', 'admin', 1607586217, '/admin/goods/changefields.html', 'GET', '{\"id\":\"8\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1236, 1, '账号1', 'admin', 1607586217, '/admin/goods/changefields.html', 'GET', '{\"id\":\"7\",\"field\":\"is_new\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1237, 1, '账号1', 'admin', 1607586221, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1238, 1, '账号1', 'admin', 1607586238, '/admin/goods/edit.html', 'GET', '{\"goods_id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1239, 1, '账号1', 'admin', 1607586322, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1240, 1, '账号1', 'admin', 1607586322, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1241, 1, '账号1', 'admin', 1607586338, '/admin/menu_decorate/h5indexlist.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1242, 1, '账号1', 'admin', 1607586338, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1243, 1, '账号1', 'admin', 1607586339, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"45\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1244, 1, '账号1', 'admin', 1607586342, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"46\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1245, 1, '账号1', 'admin', 1607586345, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"46\",\"client_type\":\"2\",\"decorate_type\":\"1\",\"name\":\"拼团活动\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/643833719ae963e6a9035e4b98a6279c.png\",\"link_type\":\"1\",\"menu\":\"2\",\"url\":\"\",\"sort\":\"12\",\"is_show\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1246, 1, '账号1', 'admin', 1607586345, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1247, 1, '账号1', 'admin', 1607586346, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"46\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1248, 1, '账号1', 'admin', 1607586348, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"47\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1249, 1, '账号1', 'admin', 1607586351, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"47\",\"client_type\":\"2\",\"decorate_type\":\"1\",\"name\":\"热销榜单\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1668b4385dd0296ae033da6e6ad5f125.png\",\"link_type\":\"1\",\"menu\":\"2\",\"url\":\"\",\"sort\":\"11\",\"is_show\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1250, 1, '账号1', 'admin', 1607586351, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1251, 1, '账号1', 'admin', 1607586352, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"49\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1252, 1, '账号1', 'admin', 1607586355, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"49\",\"client_type\":\"2\",\"decorate_type\":\"1\",\"name\":\"积分签到\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/0158588a36f9f0ae6a58509f6dd0d80e.png\",\"link_type\":\"1\",\"menu\":\"5\",\"url\":\"\",\"sort\":\"9\",\"is_show\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1253, 1, '账号1', 'admin', 1607586355, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1254, 1, '账号1', 'admin', 1607586356, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"46\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1255, 1, '账号1', 'admin', 1607587491, '/admin/menu_decorate/h5indexlist.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1256, 1, '账号1', 'admin', 1607587491, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1257, 1, '账号1', 'admin', 1607587492, '/admin/menu_decorate/h5centerlist.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1258, 1, '账号1', 'admin', 1607587492, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1259, 1, '账号1', 'admin', 1607587494, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"38\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1260, 1, '账号1', 'admin', 1607587498, '/admin/menu_decorate/edit.html', 'POST', '{\"id\":\"38\",\"client_type\":\"2\",\"decorate_type\":\"2\",\"name\":\"分销推广\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1226785362c5f02ef2616be8a1a5737a.png\",\"link_type\":\"1\",\"menu\":\"11\",\"url\":\"\",\"sort\":\"7\",\"is_show\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1261, 1, '账号1', 'admin', 1607587498, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"2\",\"type\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1262, 1, '账号1', 'admin', 1607587500, '/admin/menu_decorate/edit.html', 'GET', '{\"id\":\"38\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1263, 1, '账号1', 'admin', 1607587502, '/admin/menu_decorate/mnpindexlist.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1264, 1, '账号1', 'admin', 1607587503, '/admin/menu_decorate/lists.html', 'GET', '{\"client\":\"1\",\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1265, 1, '账号1', 'admin', 1607587505, '/admin/distribution_member/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1266, 1, '账号1', 'admin', 1607587505, '/admin/distribution_member/index.html', 'GET', '{\"type\":\"member\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1267, 1, '账号1', 'admin', 1607587505, '/admin/distribution/setting.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1268, 1, '账号1', 'admin', 1607587513, '/admin/sms/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1269, 1, '账号1', 'admin', 1607587514, '/admin/sms/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1270, 1, '账号1', 'admin', 1607587514, '/admin/message/config.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1271, 1, '账号1', 'admin', 1607587515, '/admin/sms/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1272, 1, '账号1', 'admin', 1607587515, '/admin/sms/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1273, 1, '账号1', 'admin', 1607587519, '/admin/after_sale/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1274, 1, '账号1', 'admin', 1607587519, '/admin/after_sale/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1275, 1, '账号1', 'admin', 1607587519, '/admin/order/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1276, 1, '账号1', 'admin', 1607587519, '/admin/order/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1277, 1, '账号1', 'admin', 1607587520, '/admin/goods_comment/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1278, 1, '账号1', 'admin', 1607587521, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1279, 1, '账号1', 'admin', 1607587524, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1280, 1, '账号1', 'admin', 1607587524, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1281, 1, '账号1', 'admin', 1607587525, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1282, 1, '账号1', 'admin', 1607587525, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1283, 1, '账号1', 'admin', 1607587526, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1284, 1, '账号1', 'admin', 1607587526, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1285, 1, '账号1', 'admin', 1607587527, '/admin/user_level/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1286, 1, '账号1', 'admin', 1607587527, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1287, 1, '账号1', 'admin', 1607587572, '/admin/activity/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1288, 1, '账号1', 'admin', 1607587572, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1289, 1, '账号1', 'admin', 1607587574, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1290, 1, '账号1', 'admin', 1607587574, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1291, 1, '账号1', 'admin', 1607587737, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1292, 1, '账号1', 'admin', 1607587739, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1293, 1, '账号1', 'admin', 1607587739, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1294, 1, '账号1', 'admin', 1607587743, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1295, 1, '账号1', 'admin', 1607587744, '/admin/activity/addactivity.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1296, 1, '账号1', 'admin', 1607587767, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1297, 1, '账号1', 'admin', 1607587767, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1298, 1, '账号1', 'admin', 1607587767, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1299, 1, '账号1', 'admin', 1607587777, '/admin/activity/addactivity.html', 'POST', '{\"name\":\"热销榜单\",\"title\":\"开学季必备\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/6768915899c1f445e43c886ad5e8668a.png\",\"status\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1300, 1, '账号1', 'admin', 1607587777, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1301, 1, '账号1', 'admin', 1607587971, '/admin/activity/addactivity.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1302, 1, '账号1', 'admin', 1607588031, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1303, 1, '账号1', 'admin', 1607588050, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1304, 1, '账号1', 'admin', 1607588050, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1305, 1, '账号1', 'admin', 1607588059, '/admin/activity/addactivity.html', 'POST', '{\"name\":\"品牌闪购\",\"title\":\"享惊喜折扣\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/6768915899c1f445e43c886ad5e8668a.png\",\"status\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1306, 1, '账号1', 'admin', 1607588059, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1307, 1, '账号1', 'admin', 1607588060, '/admin/activity/editactivity.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1308, 1, '账号1', 'admin', 1607588064, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1309, 1, '账号1', 'admin', 1607588064, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1310, 1, '账号1', 'admin', 1607588064, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1311, 1, '账号1', 'admin', 1607588071, '/admin/activity/editactivity.html', 'POST', '{\"id\":\"1\",\"name\":\"热销榜单\",\"title\":\"开学季必备\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/a3bf099101793a2e0bfe087b92e51403.png\",\"status\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1312, 1, '账号1', 'admin', 1607588071, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1313, 1, '账号1', 'admin', 1607588072, '/admin/activity/addactivity.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1314, 1, '账号1', 'admin', 1607588092, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1315, 1, '账号1', 'admin', 1607588093, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1316, 1, '账号1', 'admin', 1607588093, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1317, 1, '账号1', 'admin', 1607588096, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1318, 1, '账号1', 'admin', 1607588130, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1319, 1, '账号1', 'admin', 1607588130, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1320, 1, '账号1', 'admin', 1607588130, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1321, 1, '账号1', 'admin', 1607588142, '/admin/activity/addactivity.html', 'POST', '{\"name\":\"新品首发\",\"title\":\"抢惊喜福利\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/4b06036c7e6c8f653a51fd94d4cb5bc5.png\",\"status\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1322, 1, '账号1', 'admin', 1607588142, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1323, 1, '账号1', 'admin', 1607588145, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1324, 1, '账号1', 'admin', 1607588166, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1325, 1, '账号1', 'admin', 1607588168, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1326, 1, '账号1', 'admin', 1607588168, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1327, 1, '账号1', 'admin', 1607588179, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1328, 1, '账号1', 'admin', 1607588180, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1329, 1, '账号1', 'admin', 1607588188, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1330, 1, '账号1', 'admin', 1607588188, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1331, 1, '账号1', 'admin', 1607588194, '/admin/activity/addgoods.html', 'POST', '{\"activity_id\":\"1\",\"goods_id\":[\"1\"],\"item_id\":[\"1\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1332, 1, '账号1', 'admin', 1607588194, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1333, 1, '账号1', 'admin', 1607588197, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1334, 1, '账号1', 'admin', 1607588199, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1335, 1, '账号1', 'admin', 1607588199, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1336, 1, '账号1', 'admin', 1607588206, '/admin/activity/addgoods.html', 'POST', '{\"activity_id\":\"2\",\"goods_id\":[\"9\"],\"item_id\":[\"9\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1337, 1, '账号1', 'admin', 1607588206, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1338, 1, '账号1', 'admin', 1607588207, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1339, 1, '账号1', 'admin', 1607588209, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1340, 1, '账号1', 'admin', 1607588209, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1341, 1, '账号1', 'admin', 1607588218, '/admin/activity/addgoods.html', 'POST', '{\"activity_id\":\"3\",\"goods_id\":[\"10\"],\"item_id\":[\"10\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1342, 1, '账号1', 'admin', 1607588218, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1343, 1, '账号1', 'admin', 1607588223, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1344, 1, '账号1', 'admin', 1607588226, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1345, 1, '账号1', 'admin', 1607588226, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1346, 1, '账号1', 'admin', 1607588231, '/admin/activity/addgoods.html', 'POST', '{\"activity_id\":\"1\",\"goods_id\":[\"8\"],\"item_id\":[\"8\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1347, 1, '账号1', 'admin', 1607588231, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1348, 1, '账号1', 'admin', 1607588233, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1349, 1, '账号1', 'admin', 1607588236, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1350, 1, '账号1', 'admin', 1607588236, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1351, 1, '账号1', 'admin', 1607588241, '/admin/activity/addgoods.html', 'POST', '{\"activity_id\":\"2\",\"goods_id\":[\"3\"],\"item_id\":[\"3\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1352, 1, '账号1', 'admin', 1607588241, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1353, 1, '账号1', 'admin', 1607588242, '/admin/activity/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1354, 1, '账号1', 'admin', 1607588245, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1355, 1, '账号1', 'admin', 1607588245, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1356, 1, '账号1', 'admin', 1607588250, '/admin/activity/addgoods.html', 'POST', '{\"activity_id\":\"3\",\"goods_id\":[\"7\"],\"item_id\":[\"7\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1357, 1, '账号1', 'admin', 1607588250, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1358, 1, '账号1', 'admin', 1607588252, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1359, 1, '账号1', 'admin', 1607588252, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1360, 1, '账号1', 'admin', 1607588256, '/admin/marketing_config/invitedawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1361, 1, '账号1', 'admin', 1607588262, '/admin/marketing_config/orderawardconfig.html', 'POST', '{\"invited_award_integral\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1362, 1, '账号1', 'admin', 1607588264, '/admin/marketing_config/orderawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1363, 1, '账号1', 'admin', 1607588269, '/admin/marketing_config/orderawardconfig.html', 'POST', '{\"order_award_integral\":\"20\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1364, 1, '账号1', 'admin', 1607588270, '/admin/marketing_config/registerawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1365, 1, '账号1', 'admin', 1607588282, '/admin/marketing_config/orderawardconfig.html', 'POST', '{\"register_award_integral_status\":\"1\",\"register_award_integral\":\"20\",\"register_award_coupon_status\":\"1\",\"register_award_coupon\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1366, 1, '账号1', 'admin', 1607588284, '/admin/marketing_config/integraldeduction.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1367, 1, '账号1', 'admin', 1607588291, '/admin/marketing_config/integraldeduction.html', 'POST', '{\"integral_deduction_status\":\"1\",\"integral_deduction_money\":\"0.01\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1368, 1, '账号1', 'admin', 1607588293, '/admin/marketing_config/integraldeduction.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1369, 1, '账号1', 'admin', 1607588293, '/admin/coupon/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1370, 1, '账号1', 'admin', 1607588293, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1371, 1, '账号1', 'admin', 1607588299, '/admin/coupon/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1372, 1, '账号1', 'admin', 1607588370, '/admin/coupon/add.html', 'POST', '{\"name\":\"满500可用\",\"send_time_start\":\"2020-12-10 16:18:27\",\"send_time_end\":\"2021-12-10 00:00:00\",\"money\":\"500\",\"send_total_type\":\"1\",\"send_total\":\"999\",\"condition_type\":\"2\",\"condition_money\":\"500\",\"use_time_type\":\"1\",\"use_time_start\":\"2020-12-10 16:18:45\",\"use_time_end\":\"2021-12-10 00:00:00\",\"use_time\":\"\",\"tomorrow_use_time\":\"\",\"get_type\":\"1\",\"get_num_type\":\"1\",\"get_num\":\"\",\"day_get_num\":\"\",\"use_goods_type\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1373, 1, '账号1', 'admin', 1607588370, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1374, 1, '账号1', 'admin', 1607588372, '/admin/coupon/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1375, 1, '账号1', 'admin', 1607588445, '/admin/coupon/add.html', 'POST', '{\"name\":\"满50可用\",\"send_time_start\":\"2020-12-10 16:19:38\",\"send_time_end\":\"2021-06-18 00:00:00\",\"money\":\"5\",\"send_total_type\":\"2\",\"send_total\":\"2000\",\"condition_type\":\"2\",\"condition_money\":\"50\",\"use_time_start\":\"\",\"use_time_end\":\"\",\"use_time_type\":\"2\",\"use_time\":\"10\",\"tomorrow_use_time\":\"\",\"get_type\":\"1\",\"get_num_type\":\"2\",\"get_num\":\"10\",\"day_get_num\":\"\",\"use_goods_type\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1376, 1, '账号1', 'admin', 1607588445, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1377, 1, '账号1', 'admin', 1607588446, '/admin/coupon/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1378, 1, '账号1', 'admin', 1607588498, '/admin/coupon/add.html', 'POST', '{\"name\":\"新人专享\",\"send_time_start\":\"2020-12-10 16:20:57\",\"send_time_end\":\"2022-12-23 16:21:01\",\"money\":\"10\",\"send_total_type\":\"1\",\"send_total\":\"\",\"condition_type\":\"2\",\"condition_money\":\"10\",\"use_time_start\":\"\",\"use_time_end\":\"\",\"use_time_type\":\"2\",\"use_time\":\"10\",\"tomorrow_use_time\":\"\",\"get_type\":\"1\",\"get_num_type\":\"2\",\"get_num\":\"1\",\"day_get_num\":\"\",\"use_goods_type\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1379, 1, '账号1', 'admin', 1607588498, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1380, 1, '账号1', 'admin', 1607588499, '/admin/coupon/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1381, 1, '账号1', 'admin', 1607588582, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1382, 1, '账号1', 'admin', 1607588582, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1383, 1, '账号1', 'admin', 1607588599, '/admin/coupon/add.html', 'POST', '{\"name\":\"大牌商品专享\",\"send_time_start\":\"2020-12-10 16:22:09\",\"send_time_end\":\"2021-04-23 00:00:00\",\"money\":\"500\",\"send_total_type\":\"2\",\"send_total\":\"600\",\"condition_type\":\"2\",\"condition_money\":\"5000\",\"use_time_start\":\"\",\"use_time_end\":\"\",\"use_time_type\":\"2\",\"use_time\":\"10\",\"tomorrow_use_time\":\"\",\"get_type\":\"1\",\"get_num\":\"\",\"get_num_type\":\"3\",\"day_get_num\":\"1\",\"use_goods_type\":\"2\",\"goods_ids\":[\"9\"]}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1384, 1, '账号1', 'admin', 1607588599, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1385, 1, '账号1', 'admin', 1607588601, '/admin/coupon/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1386, 1, '账号1', 'admin', 1607588676, '/admin/coupon/add.html', 'POST', '{\"name\":\"后台赠送\",\"send_time_start\":\"2020-12-10 16:23:33\",\"send_time_end\":\"2021-12-25 00:00:00\",\"money\":\"500\",\"send_total_type\":\"1\",\"send_total\":\"\",\"condition_type\":\"1\",\"condition_money\":\"\",\"use_time_start\":\"\",\"use_time_end\":\"\",\"use_time_type\":\"2\",\"use_time\":\"10\",\"tomorrow_use_time\":\"\",\"get_type\":\"2\",\"get_num_type\":\"1\",\"get_num\":\"\",\"day_get_num\":\"\",\"use_goods_type\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1387, 1, '账号1', 'admin', 1607588677, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1388, 1, '账号1', 'admin', 1607588680, '/admin/coupon/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1389, 1, '账号1', 'admin', 1607588682, '/admin/coupon/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1390, 1, '账号1', 'admin', 1607588683, '/admin/sign_daily/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1391, 1, '账号1', 'admin', 1607588683, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1392, 1, '账号1', 'admin', 1607588694, '/admin/sign_daily/add.html', 'GET', '{\"type\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1393, 1, '账号1', 'admin', 1607588705, '/admin/sign_daily/add.html', 'POST', '{\"days\":\"2\",\"integral_status\":\"on\",\"integral\":\"10\",\"growth_status\":\"on\",\"growth\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1394, 1, '账号1', 'admin', 1607588705, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1395, 1, '账号1', 'admin', 1607588708, '/admin/sign_daily/add.html', 'GET', '{\"type\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1396, 1, '账号1', 'admin', 1607588724, '/admin/sign_daily/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1397, 1, '账号1', 'admin', 1607588727, '/admin/sign_daily/edit.html', 'POST', '{\"id\":\"1\",\"days\":\"2\",\"integral_status\":\"on\",\"integral\":\"10\",\"growth_status\":\"on\",\"growth\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1398, 1, '账号1', 'admin', 1607588727, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1399, 1, '账号1', 'admin', 1607588728, '/admin/sign_daily/add.html', 'GET', '{\"type\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1400, 1, '账号1', 'admin', 1607588735, '/admin/sign_daily/add.html', 'POST', '{\"days\":\"4\",\"integral_status\":\"on\",\"integral\":\"20\",\"growth_status\":\"on\",\"growth\":\"20\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1401, 1, '账号1', 'admin', 1607588735, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1402, 1, '账号1', 'admin', 1607588736, '/admin/sign_daily/add.html', 'GET', '{\"type\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1403, 1, '账号1', 'admin', 1607588744, '/admin/sign_daily/add.html', 'POST', '{\"days\":\"8\",\"integral_status\":\"on\",\"integral\":\"40\",\"growth_status\":\"on\",\"growth\":\"40\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1404, 1, '账号1', 'admin', 1607588744, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1405, 1, '账号1', 'admin', 1607588745, '/admin/sign_daily/add.html', 'GET', '{\"type\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1406, 1, '账号1', 'admin', 1607588757, '/admin/sign_daily/add.html', 'POST', '{\"days\":\"10\",\"integral_status\":\"on\",\"integral\":\"80\",\"growth_status\":\"on\",\"growth\":\"80\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1407, 1, '账号1', 'admin', 1607588757, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1408, 1, '账号1', 'admin', 1607588758, '/admin/sign_daily/add.html', 'GET', '{\"type\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1409, 1, '账号1', 'admin', 1607588765, '/admin/sign_daily/add.html', 'POST', '{\"days\":\"12\",\"integral_status\":\"on\",\"integral\":\"120\",\"growth_status\":\"on\",\"growth\":\"120\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1410, 1, '账号1', 'admin', 1607588765, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1411, 1, '账号1', 'admin', 1607588778, '/admin/sign_daily/signrule.html', 'POST', '{\"type\":\"\",\"keyword\":\"\",\"integral_status\":\"on\",\"integral\":\"2\",\"growth_status\":\"on\",\"growth\":\"2\",\"instructions\":\"1.每天签到可以获得每天签到奖励；\\n2.每日最多可签到1次，断签则会重新计算连签天数，达到连续天数后即可获得连续奖励；\\n3.活动以及奖励最终解释权归商家所有。\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1412, 1, '账号1', 'admin', 1607588780, '/admin/sign_daily/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1413, 1, '账号1', 'admin', 1607588780, '/admin/sign_daily/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1414, 1, '账号1', 'admin', 1607588781, '/admin/sign_daily/record.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1415, 1, '账号1', 'admin', 1607588796, '/admin/seckill/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1416, 1, '账号1', 'admin', 1607588797, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1417, 1, '账号1', 'admin', 1607588799, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1418, 1, '账号1', 'admin', 1607588804, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1419, 1, '账号1', 'admin', 1607588807, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1420, 1, '账号1', 'admin', 1607588823, '/admin/seckill/addtime.html', 'POST', '{\"start_time\":\"08:00\",\"end_time\":\"11:00\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1421, 1, '账号1', 'admin', 1607588823, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1422, 1, '账号1', 'admin', 1607588825, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1423, 1, '账号1', 'admin', 1607588851, '/admin/seckill/addtime.html', 'POST', '{\"start_time\":\"12:30\",\"end_time\":\"13:30\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1424, 1, '账号1', 'admin', 1607588851, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1425, 1, '账号1', 'admin', 1607588853, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1426, 1, '账号1', 'admin', 1607588863, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1427, 1, '账号1', 'admin', 1607588879, '/admin/seckill/addtime.html', 'POST', '{\"start_time\":\"14:00\",\"end_time\":\"17:00\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1428, 1, '账号1', 'admin', 1607588879, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1429, 1, '账号1', 'admin', 1607588884, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1430, 1, '账号1', 'admin', 1607588904, '/admin/seckill/addtime.html', 'POST', '{\"start_time\":\"19:00\",\"end_time\":\"23:00\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1431, 1, '账号1', 'admin', 1607588904, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1432, 1, '账号1', 'admin', 1607588912, '/admin/seckill/edittime.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1433, 1, '账号1', 'admin', 1607588924, '/admin/seckill/edittime.html', 'POST', '{\"id\":\"4\",\"start_time\":\"00:00\",\"end_time\":\"01:00\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1434, 1, '账号1', 'admin', 1607588924, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1435, 1, '账号1', 'admin', 1607588927, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1436, 1, '账号1', 'admin', 1607588927, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1437, 1, '账号1', 'admin', 1607588928, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1438, 1, '账号1', 'admin', 1607588928, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1439, 1, '账号1', 'admin', 1607588932, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1440, 1, '账号1', 'admin', 1607588932, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1441, 1, '账号1', 'admin', 1607588947, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1442, 1, '账号1', 'admin', 1607588947, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1443, 1, '账号1', 'admin', 1607588953, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1444, 1, '账号1', 'admin', 1607588954, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1445, 1, '账号1', 'admin', 1607588957, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1446, 1, '账号1', 'admin', 1607588958, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1447, 1, '账号1', 'admin', 1607588970, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"4\",\"item\":{\"5\":{\"5\":\"3\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1448, 1, '账号1', 'admin', 1607588970, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1449, 1, '账号1', 'admin', 1607588975, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1450, 1, '账号1', 'admin', 1607588978, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1451, 1, '账号1', 'admin', 1607588978, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1452, 1, '账号1', 'admin', 1607588986, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1453, 1, '账号1', 'admin', 1607588986, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1454, 1, '账号1', 'admin', 1607588990, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1455, 1, '账号1', 'admin', 1607588990, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1456, 1, '账号1', 'admin', 1607589023, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"1\",\"item\":{\"1\":{\"1\":\"33\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1457, 1, '账号1', 'admin', 1607589023, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1458, 1, '账号1', 'admin', 1607589028, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1459, 1, '账号1', 'admin', 1607589031, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1460, 1, '账号1', 'admin', 1607589031, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1461, 1, '账号1', 'admin', 1607589038, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"20\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1462, 1, '账号1', 'admin', 1607589047, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1463, 1, '账号1', 'admin', 1607589047, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1464, 1, '账号1', 'admin', 1607589057, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"2\",\"item\":{\"2\":{\"2\":\"39\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1465, 1, '账号1', 'admin', 1607589057, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1466, 1, '账号1', 'admin', 1607589058, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1467, 1, '账号1', 'admin', 1607589060, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1468, 1, '账号1', 'admin', 1607589060, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1469, 1, '账号1', 'admin', 1607589069, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"8\":{\"8\":\"999\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1470, 1, '账号1', 'admin', 1607589070, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1471, 1, '账号1', 'admin', 1607589117, '/admin/recharge/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1472, 1, '账号1', 'admin', 1607589118, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1473, 1, '账号1', 'admin', 1607589121, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1474, 1, '账号1', 'admin', 1607589130, '/admin/recharge/add.html', 'POST', '{\"money\":\"50\",\"give_money\":\"0\",\"sort\":\"\",\"is_recommend\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1475, 1, '账号1', 'admin', 1607589130, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1476, 1, '账号1', 'admin', 1607589131, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1477, 1, '账号1', 'admin', 1607589148, '/admin/recharge/add.html', 'POST', '{\"money\":\"150\",\"give_money\":\"20\",\"sort\":\"5\",\"is_recommend\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1478, 1, '账号1', 'admin', 1607589148, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1479, 1, '账号1', 'admin', 1607589149, '/admin/recharge/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1480, 1, '账号1', 'admin', 1607589153, '/admin/recharge/edit.html', 'POST', '{\"id\":\"1\",\"money\":\"50.00\",\"give_money\":\"0.00\",\"sort\":\"6\",\"is_recommend\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1481, 1, '账号1', 'admin', 1607589153, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1482, 1, '账号1', 'admin', 1607589154, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1483, 1, '账号1', 'admin', 1607589166, '/admin/recharge/edit.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1484, 1, '账号1', 'admin', 1607589168, '/admin/recharge/edit.html', 'POST', '{\"id\":\"2\",\"money\":\"150.00\",\"give_money\":\"20.00\",\"sort\":\"3\",\"is_recommend\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1485, 1, '账号1', 'admin', 1607589168, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1486, 1, '账号1', 'admin', 1607589169, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1487, 1, '账号1', 'admin', 1607589182, '/admin/recharge/add.html', 'POST', '{\"money\":\"100\",\"give_money\":\"10\",\"sort\":\"5\",\"is_recommend\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1488, 1, '账号1', 'admin', 1607589182, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1489, 1, '账号1', 'admin', 1607589190, '/admin/recharge/edit.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1490, 1, '账号1', 'admin', 1607589193, '/admin/recharge/edit.html', 'POST', '{\"id\":\"2\",\"money\":\"150.00\",\"give_money\":\"20.00\",\"sort\":\"4\",\"is_recommend\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1491, 1, '账号1', 'admin', 1607589193, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1492, 1, '账号1', 'admin', 1607589206, '/admin/recharge/del.html', 'POST', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1493, 1, '账号1', 'admin', 1607589211, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1494, 1, '账号1', 'admin', 1607589220, '/admin/recharge/add.html', 'POST', '{\"money\":\"200\",\"give_money\":\"30\",\"sort\":\"3\",\"is_recommend\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1495, 1, '账号1', 'admin', 1607589220, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1496, 1, '账号1', 'admin', 1607589221, '/admin/recharge/changefields.html', 'GET', '{\"id\":\"4\",\"field\":\"is_recommend\",\"value\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1497, 1, '账号1', 'admin', 1607589226, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1498, 1, '账号1', 'admin', 1607589234, '/admin/recharge/add.html', 'POST', '{\"money\":\"300\",\"give_money\":\"50\",\"sort\":\"2\",\"is_recommend\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1499, 1, '账号1', 'admin', 1607589234, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1500, 1, '账号1', 'admin', 1607589234, '/admin/recharge/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1501, 1, '账号1', 'admin', 1607589243, '/admin/recharge/add.html', 'POST', '{\"money\":\"648\",\"give_money\":\"129\",\"sort\":\"1\",\"is_recommend\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1502, 1, '账号1', 'admin', 1607589243, '/admin/recharge/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1503, 1, '账号1', 'admin', 1607589299, '/admin/article_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1504, 1, '账号1', 'admin', 1607589299, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1505, 1, '账号1', 'admin', 1607589300, '/admin/article/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1506, 1, '账号1', 'admin', 1607589300, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1507, 1, '账号1', 'admin', 1607589303, '/admin/help_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1508, 1, '账号1', 'admin', 1607589303, '/admin/help_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1509, 1, '账号1', 'admin', 1607589305, '/admin/help/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1510, 1, '账号1', 'admin', 1607589305, '/admin/help/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1511, 1, '账号1', 'admin', 1607589306, '/admin/ad_position/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1512, 1, '账号1', 'admin', 1607589307, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1513, 1, '账号1', 'admin', 1607589307, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1514, 1, '账号1', 'admin', 1607589307, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1515, 1, '账号1', 'admin', 1607589308, '/admin/ad/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1516, 1, '账号1', 'admin', 1607589308, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1517, 1, '账号1', 'admin', 1607589313, '/admin/ad_position/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1518, 1, '账号1', 'admin', 1607589313, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1519, 1, '账号1', 'admin', 1607589313, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1520, 1, '账号1', 'admin', 1607589313, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1521, 1, '账号1', 'admin', 1607589314, '/admin/ad/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1522, 1, '账号1', 'admin', 1607589314, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1523, 1, '账号1', 'admin', 1607589327, '/admin/ad/edit.html', 'GET', '{\"id\":\"16\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1524, 1, '账号1', 'admin', 1607589329, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1525, 1, '账号1', 'admin', 1607589330, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1526, 1, '账号1', 'admin', 1607589330, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1527, 1, '账号1', 'admin', 1607589332, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"3\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1528, 1, '账号1', 'admin', 1607589334, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"4\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1529, 1, '账号1', 'admin', 1607589334, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"3\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1530, 1, '账号1', 'admin', 1607589335, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1531, 1, '账号1', 'admin', 1607589338, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1532, 1, '账号1', 'admin', 1607589339, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1533, 1, '账号1', 'admin', 1607589340, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"3\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1534, 1, '账号1', 'admin', 1607589340, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"2\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1535, 1, '账号1', 'admin', 1607589341, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1536, 1, '账号1', 'admin', 1607589348, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1537, 1, '账号1', 'admin', 1607589351, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1538, 1, '账号1', 'admin', 1607589351, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1539, 1, '账号1', 'admin', 1607589351, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1540, 1, '账号1', 'admin', 1607589404, '/admin/ad/edit.html', 'POST', '{\"id\":\"16\",\"name\":\"活动开启\",\"pid\":\"4\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1541, 1, '账号1', 'admin', 1607589404, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1542, 1, '账号1', 'admin', 1607589412, '/admin/ad/edit.html', 'GET', '{\"id\":\"15\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1543, 1, '账号1', 'admin', 1607589414, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1544, 1, '账号1', 'admin', 1607589415, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1545, 1, '账号1', 'admin', 1607589415, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1546, 1, '账号1', 'admin', 1607589423, '/admin/ad/edit.html', 'POST', '{\"id\":\"15\",\"name\":\"秒杀广告2\",\"pid\":\"14\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1547, 1, '账号1', 'admin', 1607589423, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1548, 1, '账号1', 'admin', 1607589425, '/admin/ad/edit.html', 'GET', '{\"id\":\"14\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1549, 1, '账号1', 'admin', 1607589426, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1550, 1, '账号1', 'admin', 1607589427, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1551, 1, '账号1', 'admin', 1607589427, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1552, 1, '账号1', 'admin', 1607589429, '/admin/file_cate/add.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1553, 1, '账号1', 'admin', 1607589434, '/admin/file/image.html', 'POST', '{\"cate\":\"0\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1554, 1, '账号1', 'admin', 1607589437, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1555, 1, '账号1', 'admin', 1607589437, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"3\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1556, 1, '账号1', 'admin', 1607589437, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1557, 1, '账号1', 'admin', 1607589437, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1558, 1, '账号1', 'admin', 1607589439, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"3\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1559, 1, '账号1', 'admin', 1607589445, '/admin/ad/edit.html', 'POST', '{\"id\":\"14\",\"name\":\"秒杀广告位\",\"pid\":\"14\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/a664cf34b0a5f5de424ab24701f41c5a.jpeg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1560, 1, '账号1', 'admin', 1607589445, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1561, 1, '账号1', 'admin', 1607589447, '/admin/ad/edit.html', 'GET', '{\"id\":\"12\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1562, 1, '账号1', 'admin', 1607589453, '/admin/ad/edit.html', 'GET', '{\"id\":\"12\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1563, 1, '账号1', 'admin', 1607589455, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1564, 1, '账号1', 'admin', 1607589455, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1565, 1, '账号1', 'admin', 1607589455, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1566, 1, '账号1', 'admin', 1607589463, '/admin/ad/edit.html', 'POST', '{\"id\":\"12\",\"name\":\"测试\",\"pid\":\"4\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"http:\\/\\/www.baidu.com\",\"status\":\"1\",\"client\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1567, 1, '账号1', 'admin', 1607589463, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1568, 1, '账号1', 'admin', 1607589466, '/admin/ad/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1569, 1, '账号1', 'admin', 1607589468, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1570, 1, '账号1', 'admin', 1607589468, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1571, 1, '账号1', 'admin', 1607589468, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1572, 1, '账号1', 'admin', 1607589473, '/admin/ad/edit.html', 'POST', '{\"id\":\"1\",\"name\":\"妥妥的\",\"pid\":\"1\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1573, 1, '账号1', 'admin', 1607589473, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1574, 1, '账号1', 'admin', 1607589475, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1575, 1, '账号1', 'admin', 1607589475, '/admin/ad/getposition.html', 'GET', '{\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1576, 1, '账号1', 'admin', 1607589483, '/admin/ad/edit.html', 'GET', '{\"id\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1577, 1, '账号1', 'admin', 1607589485, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1578, 1, '账号1', 'admin', 1607589485, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1579, 1, '账号1', 'admin', 1607589485, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1580, 1, '账号1', 'admin', 1607589488, '/admin/ad/edit.html', 'POST', '{\"id\":\"3\",\"name\":\"广告广告\",\"pid\":\"2\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1581, 1, '账号1', 'admin', 1607589488, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1582, 1, '账号1', 'admin', 1607589490, '/admin/ad/edit.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1583, 1, '账号1', 'admin', 1607589493, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1584, 1, '账号1', 'admin', 1607589494, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1585, 1, '账号1', 'admin', 1607589494, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1586, 1, '账号1', 'admin', 1607589504, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1587, 1, '账号1', 'admin', 1607589504, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1588, 1, '账号1', 'admin', 1607589511, '/admin/ad/edit.html', 'POST', '{\"id\":\"4\",\"name\":\"新品上市\",\"pid\":\"5\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/6768915899c1f445e43c886ad5e8668a.png\",\"link_type\":\"2\",\"goods_id\":\"10\",\"url\":\"\",\"status\":\"0\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1589, 1, '账号1', 'admin', 1607589511, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1590, 1, '账号1', 'admin', 1607589513, '/admin/ad/edit.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1591, 1, '账号1', 'admin', 1607589516, '/admin/ad/edit.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1592, 1, '账号1', 'admin', 1607589523, '/admin/ad/switchstatus.html', 'GET', '{\"id\":\"4\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1593, 1, '账号1', 'admin', 1607589524, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1594, 1, '账号1', 'admin', 1607589619, '/admin/ad/edit.html', 'GET', '{\"id\":\"5\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1595, 1, '账号1', 'admin', 1607589621, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1596, 1, '账号1', 'admin', 1607589621, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1597, 1, '账号1', 'admin', 1607589621, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1598, 1, '账号1', 'admin', 1607589627, '/admin/ad/edit.html', 'POST', '{\"id\":\"5\",\"name\":\"likeshop\",\"pid\":\"11\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"3\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1599, 1, '账号1', 'admin', 1607589627, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1600, 1, '账号1', 'admin', 1607589629, '/admin/ad/edit.html', 'GET', '{\"id\":\"6\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1601, 1, '账号1', 'admin', 1607589635, '/admin/ad/edit.html', 'GET', '{\"id\":\"7\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1602, 1, '账号1', 'admin', 1607589638, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1603, 1, '账号1', 'admin', 1607589638, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1604, 1, '账号1', 'admin', 1607589638, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1605, 1, '账号1', 'admin', 1607589640, '/admin/ad/edit.html', 'POST', '{\"id\":\"7\",\"name\":\"秒杀广告\",\"pid\":\"16\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1606, 1, '账号1', 'admin', 1607589640, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1607, 1, '账号1', 'admin', 1607589642, '/admin/ad/edit.html', 'GET', '{\"id\":\"8\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1608, 1, '账号1', 'admin', 1607589644, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1609, 1, '账号1', 'admin', 1607589644, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1610, 1, '账号1', 'admin', 1607589644, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1611, 1, '账号1', 'admin', 1607589647, '/admin/ad/edit.html', 'POST', '{\"id\":\"8\",\"name\":\"热销榜单\",\"pid\":\"17\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1612, 1, '账号1', 'admin', 1607589647, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1613, 1, '账号1', 'admin', 1607589647, '/admin/ad/edit.html', 'GET', '{\"id\":\"13\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1614, 1, '账号1', 'admin', 1607589649, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1615, 1, '账号1', 'admin', 1607589649, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1616, 1, '账号1', 'admin', 1607589649, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"21\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1617, 1, '账号1', 'admin', 1607589651, '/admin/ad/edit.html', 'POST', '{\"id\":\"13\",\"name\":\"智能\",\"pid\":\"16\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1618, 1, '账号1', 'admin', 1607589651, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1619, 1, '账号1', 'admin', 1607589653, '/admin/ad/edit.html', 'GET', '{\"id\":\"6\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1620, 1, '账号1', 'admin', 1607589658, '/admin/ad/lists.html', 'GET', '{\"client\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1621, 1, '账号1', 'admin', 1607589658, '/admin/ad/getposition.html', 'GET', '{\"client\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1622, 1, '账号1', 'admin', 1607589662, '/admin/ad/edit.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1623, 1, '账号1', 'admin', 1607589664, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1624, 1, '账号1', 'admin', 1607589664, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1625, 1, '账号1', 'admin', 1607589665, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1626, 1, '账号1', 'admin', 1607589667, '/admin/ad/edit.html', 'POST', '{\"id\":\"2\",\"name\":\"分销会员\",\"pid\":\"3\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1627, 1, '账号1', 'admin', 1607589667, '/admin/ad/lists.html', 'GET', '{\"client\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1628, 1, '账号1', 'admin', 1607589668, '/admin/ad/edit.html', 'GET', '{\"id\":\"9\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1629, 1, '账号1', 'admin', 1607589670, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1630, 1, '账号1', 'admin', 1607589670, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1631, 1, '账号1', 'admin', 1607589670, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1632, 1, '账号1', 'admin', 1607589673, '/admin/ad/edit.html', 'POST', '{\"id\":\"9\",\"name\":\"分类\",\"pid\":\"6\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"link_type\":\"1\",\"page\":\"1\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1633, 1, '账号1', 'admin', 1607589673, '/admin/ad/lists.html', 'GET', '{\"client\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1634, 1, '账号1', 'admin', 1607589674, '/admin/ad/edit.html', 'GET', '{\"id\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1635, 1, '账号1', 'admin', 1607589677, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1636, 1, '账号1', 'admin', 1607589677, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1637, 1, '账号1', 'admin', 1607589677, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1638, 1, '账号1', 'admin', 1607589679, '/admin/ad/edit.html', 'POST', '{\"id\":\"10\",\"name\":\"秒杀\",\"pid\":\"18\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1639, 1, '账号1', 'admin', 1607589679, '/admin/ad/lists.html', 'GET', '{\"client\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1640, 1, '账号1', 'admin', 1607589681, '/admin/ad/edit.html', 'GET', '{\"id\":\"11\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1641, 1, '账号1', 'admin', 1607589682, '/admin/file/image.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1642, 1, '账号1', 'admin', 1607589682, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1643, 1, '账号1', 'admin', 1607589682, '/admin/file/lists.html', 'GET', '{\"cate\":\"undefined\",\"type\":\"1\",\"page_no\":\"1\",\"page_size\":\"24\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1644, 1, '账号1', 'admin', 1607589688, '/admin/ad/edit.html', 'POST', '{\"id\":\"11\",\"name\":\"味儿\",\"pid\":\"18\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1645, 1, '账号1', 'admin', 1607589688, '/admin/ad/lists.html', 'GET', '{\"client\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1646, 1, '账号1', 'admin', 1607589689, '/admin/ad/edit.html', 'GET', '{\"id\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1647, 1, '账号1', 'admin', 1607589692, '/admin/ad/edit.html', 'POST', '{\"id\":\"10\",\"name\":\"秒杀\",\"pid\":\"18\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1648, 1, '账号1', 'admin', 1607589692, '/admin/ad/lists.html', 'GET', '{\"client\":\"3\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1649, 1, '账号1', 'admin', 1607589694, '/admin/ad/getposition.html', 'GET', '{\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1650, 1, '账号1', 'admin', 1607589694, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1651, 1, '账号1', 'admin', 1607589696, '/admin/ad/edit.html', 'GET', '{\"id\":\"13\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1652, 1, '账号1', 'admin', 1607589699, '/admin/ad/edit.html', 'POST', '{\"id\":\"13\",\"name\":\"智能\",\"pid\":\"16\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1653, 1, '账号1', 'admin', 1607589699, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1654, 1, '账号1', 'admin', 1607589700, '/admin/ad/edit.html', 'GET', '{\"id\":\"8\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1655, 1, '账号1', 'admin', 1607589703, '/admin/ad/edit.html', 'POST', '{\"id\":\"8\",\"name\":\"热销榜单\",\"pid\":\"17\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/386e909e5887dcaffe99a6200d591394.jpg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1656, 1, '账号1', 'admin', 1607589703, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1657, 1, '账号1', 'admin', 1607589704, '/admin/ad/edit.html', 'GET', '{\"id\":\"7\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1658, 1, '账号1', 'admin', 1607589707, '/admin/ad/edit.html', 'POST', '{\"id\":\"7\",\"name\":\"秒杀广告\",\"pid\":\"16\",\"image\":\"\\/uploads\\/images\\/background\\/20201210\\/1fd2fe53cd9953f78dc312165713dd2d.jpeg\",\"link_type\":\"1\",\"page\":\"0\",\"goods_id\":\"\",\"url\":\"\",\"status\":\"1\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1659, 1, '账号1', 'admin', 1607589707, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1660, 1, '账号1', 'admin', 1607589709, '/admin/ad/switchstatus.html', 'GET', '{\"id\":\"6\",\"status\":\"0\",\"client\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1661, 1, '账号1', 'admin', 1607589709, '/admin/ad/lists.html', 'GET', '{\"client\":\"2\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1662, 1, '账号1', 'admin', 1607589712, '/admin/ad/getposition.html', 'GET', '{\"client\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1663, 1, '账号1', 'admin', 1607589712, '/admin/ad/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1664, 1, '账号1', 'admin', 1607589768, '/admin/activity/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1665, 1, '账号1', 'admin', 1607589768, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1666, 1, '账号1', 'admin', 1607589768, '/admin/marketing_config/invitedawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1667, 1, '账号1', 'admin', 1607589769, '/admin/activity/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1668, 1, '账号1', 'admin', 1607589769, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1669, 1, '账号1', 'admin', 1607589771, '/admin/activity/arealists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1670, 1, '账号1', 'admin', 1607589774, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1671, 1, '账号1', 'admin', 1607589775, '/admin/seckill/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1672, 1, '账号1', 'admin', 1607589775, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1673, 1, '账号1', 'admin', 1607589865, '/admin/seckill/editgoods.html', 'GET', '{\"id\":\"8\",\"seckill_id\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1674, 1, '账号1', 'admin', 1607589879, '/admin/seckill/editgoods.html', 'GET', '{\"id\":\"8\",\"seckill_id\":\"3\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1675, 1, '账号1', 'admin', 1607589885, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1676, 1, '账号1', 'admin', 1607589887, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1677, 1, '账号1', 'admin', 1607589888, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1678, 1, '账号1', 'admin', 1607589930, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1679, 1, '账号1', 'admin', 1607589935, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1680, 1, '账号1', 'admin', 1607589935, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1681, 1, '账号1', 'admin', 1607589942, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"1\":{\"1\":\"40.3\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1682, 1, '账号1', 'admin', 1607589942, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1683, 1, '账号1', 'admin', 1607589945, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1684, 1, '账号1', 'admin', 1607589948, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1685, 1, '账号1', 'admin', 1607589948, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1686, 1, '账号1', 'admin', 1607589955, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"4\":{\"4\":\"6\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1687, 1, '账号1', 'admin', 1607589955, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1688, 1, '账号1', 'admin', 1607589962, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1689, 1, '账号1', 'admin', 1607589965, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1690, 1, '账号1', 'admin', 1607589965, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1691, 1, '账号1', 'admin', 1607589973, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"3\":{\"3\":\"9.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1692, 1, '账号1', 'admin', 1607589973, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1693, 1, '账号1', 'admin', 1607589987, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1694, 1, '账号1', 'admin', 1607589991, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1695, 1, '账号1', 'admin', 1607589993, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1696, 1, '账号1', 'admin', 1607590018, '/admin/seckill/edittime.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1697, 1, '账号1', 'admin', 1607590027, '/admin/seckill/edittime.html', 'GET', '{\"id\":\"4\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1698, 1, '账号1', 'admin', 1607590036, '/admin/seckill/edittime.html', 'POST', '{\"id\":\"4\",\"start_time\":\"00:00\",\"end_time\":\"07:58\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1699, 1, '账号1', 'admin', 1607590036, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1700, 1, '账号1', 'admin', 1607590041, '/admin/seckill/edittime.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1701, 1, '账号1', 'admin', 1607590048, '/admin/seckill/edittime.html', 'POST', '{\"id\":\"1\",\"start_time\":\"08:00\",\"end_time\":\"12:41\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1702, 1, '账号1', 'admin', 1607590054, '/admin/seckill/edittime.html', 'POST', '{\"id\":\"1\",\"start_time\":\"08:00\",\"end_time\":\"12:28\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1703, 1, '账号1', 'admin', 1607590054, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1704, 1, '账号1', 'admin', 1607590058, '/admin/seckill/edittime.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1705, 1, '账号1', 'admin', 1607590079, '/admin/seckill/edittime.html', 'GET', '{\"id\":\"2\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1706, 1, '账号1', 'admin', 1607590085, '/admin/seckill/edittime.html', 'POST', '{\"id\":\"2\",\"start_time\":\"12:30\",\"end_time\":\"13:57\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1707, 1, '账号1', 'admin', 1607590085, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1708, 1, '账号1', 'admin', 1607590089, '/admin/seckill/addtime.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1709, 1, '账号1', 'admin', 1607590112, '/admin/seckill/addtime.html', 'POST', '{\"start_time\":\"17:02\",\"end_time\":\"23:55\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1710, 1, '账号1', 'admin', 1607590112, '/admin/seckill/timelists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1711, 1, '账号1', 'admin', 1607590115, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1712, 1, '账号1', 'admin', 1607590119, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1713, 1, '账号1', 'admin', 1607590119, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1714, 1, '账号1', 'admin', 1607590119, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1715, 1, '账号1', 'admin', 1607590121, '/admin/seckill/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1716, 1, '账号1', 'admin', 1607590121, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1717, 1, '账号1', 'admin', 1607590129, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1718, 1, '账号1', 'admin', 1607590131, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1719, 1, '账号1', 'admin', 1607590132, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1720, 1, '账号1', 'admin', 1607590140, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"5\",\"item\":{\"10\":{\"10\":\"999\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1721, 1, '账号1', 'admin', 1607590140, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1722, 1, '账号1', 'admin', 1607590144, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1723, 1, '账号1', 'admin', 1607590146, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1724, 1, '账号1', 'admin', 1607590146, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1725, 1, '账号1', 'admin', 1607590153, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"7\":{\"7\":\"29\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1726, 1, '账号1', 'admin', 1607590154, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1727, 1, '账号1', 'admin', 1607590155, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1728, 1, '账号1', 'admin', 1607590157, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1729, 1, '账号1', 'admin', 1607590157, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1730, 1, '账号1', 'admin', 1607590164, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"1\":{\"1\":\"40\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1731, 1, '账号1', 'admin', 1607590164, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1732, 1, '账号1', 'admin', 1607590165, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1733, 1, '账号1', 'admin', 1607590171, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1734, 1, '账号1', 'admin', 1607590171, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1735, 1, '账号1', 'admin', 1607590177, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"3\",\"item\":{\"3\":{\"3\":\"9.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1736, 1, '账号1', 'admin', 1607590177, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1737, 1, '账号1', 'admin', 1607590178, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1738, 1, '账号1', 'admin', 1607590182, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1739, 1, '账号1', 'admin', 1607590182, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1740, 1, '账号1', 'admin', 1607590189, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"2\",\"item\":{\"7\":{\"7\":\"29\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1741, 1, '账号1', 'admin', 1607590189, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1742, 1, '账号1', 'admin', 1607590190, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1743, 1, '账号1', 'admin', 1607590192, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1744, 1, '账号1', 'admin', 1607590192, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1745, 1, '账号1', 'admin', 1607590198, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"2\",\"item\":{\"1\":{\"1\":\"39\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1746, 1, '账号1', 'admin', 1607590198, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1747, 1, '账号1', 'admin', 1607590199, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1748, 1, '账号1', 'admin', 1607590202, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1749, 1, '账号1', 'admin', 1607590202, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1750, 1, '账号1', 'admin', 1607590207, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"2\",\"item\":{\"3\":{\"3\":\"9.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1751, 1, '账号1', 'admin', 1607590207, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1752, 1, '账号1', 'admin', 1607590208, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1753, 1, '账号1', 'admin', 1607590210, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1754, 1, '账号1', 'admin', 1607590211, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1755, 1, '账号1', 'admin', 1607590218, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"1\",\"item\":{\"8\":{\"8\":\"999\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1756, 1, '账号1', 'admin', 1607590218, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1757, 1, '账号1', 'admin', 1607590219, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1758, 1, '账号1', 'admin', 1607590221, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1759, 1, '账号1', 'admin', 1607590221, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1760, 1, '账号1', 'admin', 1607590245, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"1\",\"item\":{\"2\":{\"2\":\"39\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1761, 1, '账号1', 'admin', 1607590246, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1762, 1, '账号1', 'admin', 1607590248, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1763, 1, '账号1', 'admin', 1607590251, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1764, 1, '账号1', 'admin', 1607590251, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1765, 1, '账号1', 'admin', 1607590259, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"1\",\"item\":{\"9\":{\"9\":\"4999\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1766, 1, '账号1', 'admin', 1607590259, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1767, 1, '账号1', 'admin', 1607590260, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1768, 1, '账号1', 'admin', 1607590262, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1769, 1, '账号1', 'admin', 1607590262, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1770, 1, '账号1', 'admin', 1607590270, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"4\",\"item\":{\"6\":{\"6\":\"29\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1771, 1, '账号1', 'admin', 1607590270, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1772, 1, '账号1', 'admin', 1607590272, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1773, 1, '账号1', 'admin', 1607590274, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1774, 1, '账号1', 'admin', 1607590274, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1775, 1, '账号1', 'admin', 1607590280, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"4\",\"item\":{\"4\":{\"4\":\"6\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1776, 1, '账号1', 'admin', 1607590283, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1777, 1, '账号1', 'admin', 1607590284, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1778, 1, '账号1', 'admin', 1607590289, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"4\",\"item\":{\"3\":{\"3\":\"9.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1779, 1, '账号1', 'admin', 1607590289, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1780, 1, '账号1', 'admin', 1607590291, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1781, 1, '账号1', 'admin', 1607590293, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1782, 1, '账号1', 'admin', 1607590293, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1783, 1, '账号1', 'admin', 1607590299, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"4\",\"item\":{\"8\":{\"8\":\"999\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1784, 1, '账号1', 'admin', 1607590299, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1785, 1, '账号1', 'admin', 1607590331, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1786, 1, '账号1', 'admin', 1607590331, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1787, 1, '账号1', 'admin', 1607590331, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1788, 1, '账号1', 'admin', 1607590333, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1789, 1, '账号1', 'admin', 1607590333, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1790, 1, '账号1', 'admin', 1607590338, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"2\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1791, 1, '账号1', 'admin', 1607590345, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1792, 1, '账号1', 'admin', 1607590349, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1793, 1, '账号1', 'admin', 1607590355, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"2\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1794, 1, '账号1', 'admin', 1607590357, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1795, 1, '账号1', 'admin', 1607590383, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1796, 1, '账号1', 'admin', 1607590385, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1797, 1, '账号1', 'admin', 1607590386, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1798, 1, '账号1', 'admin', 1607590394, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"5\",\"item\":{\"6\":{\"6\":\"26.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1799, 1, '账号1', 'admin', 1607590394, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1800, 1, '账号1', 'admin', 1607590395, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1801, 1, '账号1', 'admin', 1607590397, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1802, 1, '账号1', 'admin', 1607590397, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1803, 1, '账号1', 'admin', 1607590406, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"5\",\"item\":{\"7\":{\"7\":\"29.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1804, 1, '账号1', 'admin', 1607590406, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1805, 1, '账号1', 'admin', 1607590407, '/admin/seckill/addgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1806, 1, '账号1', 'admin', 1607590410, '/admin/common/selectgoods.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1807, 1, '账号1', 'admin', 1607590410, '/admin/common/selectgoods.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1808, 1, '账号1', 'admin', 1607590418, '/admin/seckill/addgoods.html', 'POST', '{\"seckill_id\":\"5\",\"item\":{\"3\":{\"3\":\"9.9\"}}}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1809, 1, '账号1', 'admin', 1607590418, '/admin/seckill/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1810, 1, '账号1', 'admin', 1607590540, '/admin/pay_config/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1811, 1, '账号1', 'admin', 1607590541, '/admin/pay_config/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1812, 1, '账号1', 'admin', 1607590541, '/admin/basic/website.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1813, 1, '账号1', 'admin', 1607590546, '/admin/basic/copyright.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1814, 1, '账号1', 'admin', 1607590555, '/admin/admin/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1815, 1, '账号1', 'admin', 1607590555, '/admin/admin/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1816, 1, '账号1', 'admin', 1607590568, '/admin/auth/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1817, 1, '账号1', 'admin', 1607590613, '/admin/mnp_message/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1818, 1, '账号1', 'admin', 1607590613, '/admin/mnp_message/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1819, 1, '账号1', 'admin', 1607590614, '/admin/mnp/setmnp.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1820, 1, '账号1', 'admin', 1607590619, '/admin/oa_message/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1821, 1, '账号1', 'admin', 1607590619, '/admin/oa_message/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1822, 1, '账号1', 'admin', 1607590621, '/admin/oa/oamenu.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1823, 1, '账号1', 'admin', 1607590622, '/admin/oa/setoa.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1824, 1, '账号1', 'admin', 1607590633, '/admin/distribution/setting.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1825, 1, '账号1', 'admin', 1607590661, '/admin/marketing_config/integraldeduction.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1826, 1, '账号1', 'admin', 1607590662, '/admin/marketing_config/registerawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1827, 1, '账号1', 'admin', 1607590663, '/admin/marketing_config/orderawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1828, 1, '账号1', 'admin', 1607590664, '/admin/marketing_config/invitedawardconfig.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1829, 1, '账号1', 'admin', 1607590664, '/admin/activity/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1830, 1, '账号1', 'admin', 1607590664, '/admin/activity/goodslists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1831, 1, '账号1', 'admin', 1607590670, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1832, 1, '账号1', 'admin', 1607590670, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1833, 1, '账号1', 'admin', 1607590671, '/admin/user/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1834, 1, '账号1', 'admin', 1607590671, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1835, 1, '账号1', 'admin', 1607590672, '/admin/user_group/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1836, 1, '账号1', 'admin', 1607590672, '/admin/user_group/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1837, 1, '账号1', 'admin', 1607590673, '/admin/user_level/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1838, 1, '账号1', 'admin', 1607590673, '/admin/user_level/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1839, 1, '账号1', 'admin', 1607590676, '/admin/goods/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1840, 1, '账号1', 'admin', 1607590676, '/admin/goods/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1841, 1, '账号1', 'admin', 1607590677, '/admin/goods_comment/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1842, 1, '账号1', 'admin', 1607590677, '/admin/goods_comment/lists.html', 'GET', '{\"type\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1843, 1, '账号1', 'admin', 1607590678, '/admin/supplier/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1844, 1, '账号1', 'admin', 1607590678, '/admin/supplier/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1845, 1, '账号1', 'admin', 1607590679, '/admin/goods_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1846, 1, '账号1', 'admin', 1607590680, '/admin/goods_brand/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1847, 1, '账号1', 'admin', 1607590680, '/admin/goods_brand/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1848, 1, '账号1', 'admin', 1607590682, '/admin/after_sale/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1849, 1, '账号1', 'admin', 1607590682, '/admin/after_sale/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1850, 1, '账号1', 'admin', 1607590683, '/admin/order/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1851, 1, '账号1', 'admin', 1607590683, '/admin/order/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1852, 1, '账号1', 'admin', 1607590685, '/admin/my/password.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1853, 1, '账号1', 'admin', 1607590686, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1854, 1, '账号1', 'admin', 1607590686, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1855, 1, '账号1', 'admin', 1607590687, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1856, 1, '账号1', 'admin', 1607590805, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1857, 1, '账号1', 'admin', 1607590806, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1858, 1, '账号1', 'admin', 1607590807, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1859, 1, '账号1', 'admin', 1607590807, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1860, 1, '账号1', 'admin', 1607590821, '/admin/article/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1861, 1, '账号1', 'admin', 1607590821, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1862, 1, '账号1', 'admin', 1607590824, '/admin/user_privilege/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1863, 1, '账号1', 'admin', 1607590825, '/admin/user_privilege/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1864, 1, '账号1', 'admin', 1607592506, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1865, 1, '账号1', 'admin', 1607592506, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1866, 1, '账号1', 'admin', 1607592506, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1867, 1, '账号1', 'admin', 1607592520, '/admin/basic/website.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1868, 1, '账号1', 'admin', 1607592545, '/admin/basic/app.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1869, 1, '账号1', 'admin', 1607592576, '/admin/mnp/setmnp.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1870, 1, '账号1', 'admin', 1607596426, '/admin/article_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1871, 1, '账号1', 'admin', 1607596426, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1872, 1, '账号1', 'admin', 1607596426, '/admin/article/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1873, 1, '账号1', 'admin', 1607596427, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1874, 1, '账号1', 'admin', 1607596427, '/admin/help_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1875, 1, '账号1', 'admin', 1607596428, '/admin/help_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1876, 1, '账号1', 'admin', 1607596428, '/admin/help/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1877, 1, '账号1', 'admin', 1607596428, '/admin/help/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1878, 1, '账号1', 'admin', 1607596429, '/admin/ad_position/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1879, 1, '账号1', 'admin', 1607596429, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1880, 1, '账号1', 'admin', 1607596429, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1881, 1, '账号1', 'admin', 1607596429, '/admin/ad_position/lists.html', 'GET', '{\"client\":\"1\",\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1882, 1, '账号1', 'admin', 1607596430, '/admin/article_category/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1883, 1, '账号1', 'admin', 1607596430, '/admin/article_category/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1884, 1, '账号1', 'admin', 1607596441, '/admin/article/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1885, 1, '账号1', 'admin', 1607596441, '/admin/article/lists.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1886, 1, '账号1', 'admin', 1607596441, '/admin/article/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1887, 1, '账号1', 'admin', 1607596444, '/admin/article/edit.html', 'GET', '{\"id\":\"1\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1888, 1, '账号1', 'admin', 1607597603, '/admin/index/index.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1889, 1, '账号1', 'admin', 1607597603, '/admin/index/stat.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1890, 1, '账号1', 'admin', 1607597603, '/admin/index/stat.html', 'POST', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1891, 1, '账号1', 'admin', 1607597620, '/admin/mnp/setmnp.html', 'GET', '[]', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1892, 1, '账号1', 'admin', 1607597656, '/admin/mnp/setmnp.html', 'POST', '{\"name\":\"\",\"original_id\":\"\",\"qr_code\":\"\",\"app_id\":\"wx75faf8824586138a\",\"app_secret\":\"456a462d9d14e1b5693610733035c45c\",\"request_domain\":\"\",\"socket_domain\":\"\",\"uploadfile_domain\":\"\",\"downloadfile_domain\":\"\",\"udp_domain\":\"\",\"business_domain\":\"\",\"url\":\"\",\"token\":\"\",\"encoding_ses_key\":\"\"}', '58.62.167.1');
-INSERT INTO `yx_system_log` VALUES (1893, 1, '账号1', 'admin', 1607597762, '/admin/marketing_config/integraldeduction.html', 'GET', '[]', '58.62.167.1');
+BEGIN;
+INSERT INTO `yx_system_log` VALUES (5, 1, 'admin', 'admin', 1610000837, '/admin/index/index.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (6, 1, 'admin', 'admin', 1610000838, '/admin/index/stat.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (7, 1, 'admin', 'admin', 1610000838, '/admin/index/stat.html', 'POST', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (8, 1, 'admin', 'admin', 1610000848, '/admin/user/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (9, 1, 'admin', 'admin', 1610000848, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (10, 1, 'admin', 'admin', 1610000849, '/admin/order/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (11, 1, 'admin', 'admin', 1610000850, '/admin/order/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (12, 1, 'admin', 'admin', 1610000850, '/admin/after_sale/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (13, 1, 'admin', 'admin', 1610000851, '/admin/after_sale/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (14, 1, 'admin', 'admin', 1610000862, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (15, 1, 'admin', 'admin', 1610000930, '/admin/auth/del.html', 'POST', '{\"ids\":[\"55\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (16, 1, 'admin', 'admin', 1610000931, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (17, 1, 'admin', 'admin', 1610000944, '/admin/auth/del.html', 'POST', '{\"ids\":[\"72\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (18, 1, 'admin', 'admin', 1610000945, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (19, 1, 'admin', 'admin', 1610000950, '/admin/auth/del.html', 'POST', '{\"ids\":[\"89\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (20, 1, 'admin', 'admin', 1610000951, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (21, 1, 'admin', 'admin', 1610000956, '/admin/auth/del.html', 'POST', '{\"ids\":[\"112\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (22, 1, 'admin', 'admin', 1610000957, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (23, 1, 'admin', 'admin', 1610000968, '/admin/auth/del.html', 'POST', '{\"ids\":[\"113\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (24, 1, 'admin', 'admin', 1610000969, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (25, 1, 'admin', 'admin', 1610000973, '/admin/auth/del.html', 'POST', '{\"ids\":[\"114\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (26, 1, 'admin', 'admin', 1610000975, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (27, 1, 'admin', 'admin', 1610000979, '/admin/auth/del.html', 'POST', '{\"ids\":[\"117\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (28, 1, 'admin', 'admin', 1610000980, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (29, 1, 'admin', 'admin', 1610000985, '/admin/auth/del.html', 'POST', '{\"ids\":[\"118\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (30, 1, 'admin', 'admin', 1610000987, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (31, 1, 'admin', 'admin', 1610001012, '/admin/auth/del.html', 'POST', '{\"ids\":[\"85\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (32, 1, 'admin', 'admin', 1610001014, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (33, 1, 'admin', 'admin', 1610001049, '/admin/auth/del.html', 'POST', '{\"ids\":[\"91\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (34, 1, 'admin', 'admin', 1610001050, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (35, 1, 'admin', 'admin', 1610001065, '/admin/auth/del.html', 'POST', '{\"ids\":[\"84\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (36, 1, 'admin', 'admin', 1610001066, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (37, 1, 'admin', 'admin', 1610001073, '/admin/auth/del.html', 'POST', '{\"ids\":[\"82\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (38, 1, 'admin', 'admin', 1610001075, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (39, 1, 'admin', 'admin', 1610001089, '/admin/finance/lists.html', 'GET', '[]', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (40, 1, 'admin', 'admin', 1610001098, '/admin/auth/del.html', 'POST', '{\"ids\":[\"106\"]}', '172.19.0.1');
+INSERT INTO `yx_system_log` VALUES (41, 1, 'admin', 'admin', 1610001100, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_temp
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_temp`;
-CREATE TABLE `yx_temp`  (
+CREATE TABLE `yx_temp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_temp
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user`;
-CREATE TABLE `yx_user`  (
+CREATE TABLE `yx_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会员码',
-  `root` tinyint(255) NULL DEFAULT 0 COMMENT '是否为超级管理：0-否；1-是；',
-  `nickname` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户昵称',
-  `avatar` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
-  `mobile` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
-  `level` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '等级',
-  `group_id` int(11) NULL DEFAULT NULL COMMENT '所属分组id',
-  `sex` tinyint(1) NULL DEFAULT 0 COMMENT '性别:0-未知；1-男；2-女',
-  `birthday` int(11) NULL DEFAULT NULL COMMENT '生日',
-  `user_money` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '用户余额',
-  `user_integral` int(10) NULL DEFAULT 0 COMMENT '用户积分',
-  `total_order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '消费累计额度',
-  `total_recharge_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '累计充值金额',
-  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
-  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `pay_password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付密码',
-  `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-  `first_leader` int(11) NULL DEFAULT 0 COMMENT '第一个上级',
-  `second_leader` int(11) NULL DEFAULT 0 COMMENT '第二个上级',
-  `third_leader` int(11) NULL DEFAULT 0 COMMENT '第三个上级',
-  `ancestor_relation` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '所有的上级关系链',
-  `is_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '是否分销会员：1-是；0-否；',
-  `freeze_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '冻结分销资格: 1-冻结; 0-正常',
-  `distribution_h5_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销h5二维码\n',
-  `distribution_mnp_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销小程序二维码\n',
-  `distribution_app_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销app二维码\n',
-  `distribution_code` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分销码',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-  `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-  `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-  `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  `user_growth` int(128) NULL DEFAULT 0 COMMENT '用户成长值',
-  `earnings` float(10, 2) NULL DEFAULT 0.00 COMMENT '佣金收益',
+  `sn` varchar(32) DEFAULT NULL COMMENT '会员码',
+  `root` tinyint(255) DEFAULT '0' COMMENT '是否为超级管理：0-否；1-是；',
+  `nickname` varchar(16) CHARACTER SET utf8mb4 NOT NULL COMMENT '用户昵称',
+  `avatar` varchar(256) NOT NULL COMMENT '用户头像',
+  `mobile` varchar(15) DEFAULT '' COMMENT '手机号码',
+  `level` tinyint(1) unsigned DEFAULT '0' COMMENT '等级',
+  `group_id` int(11) DEFAULT NULL COMMENT '所属分组id',
+  `sex` tinyint(1) DEFAULT '0' COMMENT '性别:0-未知；1-男；2-女',
+  `birthday` int(11) DEFAULT NULL COMMENT '生日',
+  `user_money` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '用户余额',
+  `user_integral` int(10) unsigned DEFAULT '0' COMMENT '用户积分',
+  `total_order_amount` decimal(10,2) DEFAULT '0.00' COMMENT '消费累计额度',
+  `total_recharge_amount` decimal(10,2) DEFAULT '0.00' COMMENT '累计充值金额',
+  `account` varchar(16) DEFAULT '' COMMENT '账号',
+  `password` varchar(32) DEFAULT NULL COMMENT '密码',
+  `pay_password` varchar(32) DEFAULT NULL COMMENT '支付密码',
+  `salt` varchar(4) NOT NULL DEFAULT '' COMMENT '密码盐',
+  `first_leader` int(11) DEFAULT '0' COMMENT '第一个上级',
+  `second_leader` int(11) DEFAULT '0' COMMENT '第二个上级',
+  `third_leader` int(11) DEFAULT '0' COMMENT '第三个上级',
+  `ancestor_relation` text COMMENT '所有的上级关系链',
+  `is_distribution` tinyint(1) DEFAULT '0' COMMENT '是否分销会员：1-是；0-否；',
+  `freeze_distribution` tinyint(1) DEFAULT '0' COMMENT '冻结分销资格: 1-冻结; 0-正常',
+  `distribution_h5_qr_code` varchar(255) DEFAULT '' COMMENT '分销h5二维码\n',
+  `distribution_mnp_qr_code` varchar(255) DEFAULT '' COMMENT '分销小程序二维码\n',
+  `distribution_app_qr_code` varchar(255) DEFAULT '' COMMENT '分销app二维码\n',
+  `distribution_code` varchar(12) DEFAULT NULL COMMENT '分销码',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `login_time` int(10) DEFAULT NULL COMMENT '最后登录时间',
+  `login_ip` varchar(15) DEFAULT '' COMMENT '最后登录ip',
+  `disable` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用：0-否；1-是；',
+  `del` tinyint(10) NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  `user_growth` int(128) DEFAULT '0' COMMENT '用户成长值',
+  `earnings` float(10,2) DEFAULT '0.00' COMMENT '佣金收益',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `distribution_code`(`distribution_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+  UNIQUE KEY `distribution_code` (`distribution_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of yx_user
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_user` VALUES (1, '72826148', 0, 'mofung1', 'uploads/user/avatar/9731aaeaca7ff6f1905b16d872c154a2.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', '5WSP2Q', 1607597684, NULL, 1607597684, '58.62.167.117', 0, 0, 0, 0.00);
 INSERT INTO `yx_user` VALUES (2, '49350578', 0, 'Jason', 'uploads/user/avatar/03f1dece077e0dd9d4053fb6029912a0.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', 'Y9KFU8', 1607597860, NULL, 1607597860, '58.62.167.117', 0, 0, 0, 0.00);
 INSERT INTO `yx_user` VALUES (3, '01336963', 0, '上 心', 'uploads/user/avatar/612b86b42b081f9ace2dcff6eb73bb9a.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', '694762', 1607650297, NULL, 1607650297, '58.62.167.117', 0, 0, 0, 0.00);
 INSERT INTO `yx_user` VALUES (4, '28293528', 0, '小心立早鱼', 'uploads/user/avatar/5c34b7288665351b19d773257e5f0732.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', 'P39YQ8', 1607654071, NULL, 1607654072, '58.62.167.117', 0, 0, 0, 0.00);
 INSERT INTO `yx_user` VALUES (5, '24349278', 0, 'momo', 'uploads/user/avatar/259dd42fa8f6b7f34669f51d803c83eb.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', 'KFU5RX', 1607655080, NULL, 1607655080, '58.62.167.117', 0, 0, 0, 0.00);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_address
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_address`;
-CREATE TABLE `yx_user_address`  (
+CREATE TABLE `yx_user_address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户id',
-  `contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货人',
-  `telephone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '联系方式',
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+  `contact` varchar(20) NOT NULL COMMENT '收货人',
+  `telephone` varchar(16) NOT NULL COMMENT '联系方式',
   `province_id` int(11) NOT NULL COMMENT '省',
-  `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
-  `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
-  `address` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
-  `post_code` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '邮编',
-  `longitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '经度',
-  `latitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '纬度',
-  `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否默认(1为默认)',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
+  `city_id` int(11) DEFAULT NULL COMMENT '市',
+  `district_id` int(11) DEFAULT NULL COMMENT '区',
+  `address` varchar(64) DEFAULT NULL COMMENT '详细地址',
+  `post_code` int(10) unsigned DEFAULT NULL COMMENT '邮编',
+  `longitude` varchar(16) DEFAULT '0' COMMENT '经度',
+  `latitude` varchar(16) DEFAULT '0' COMMENT '纬度',
+  `is_default` tinyint(1) unsigned DEFAULT '0' COMMENT '是否默认(1为默认)',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) DEFAULT NULL COMMENT '修改时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '删除,0-未删除,1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户地址表';
+
+-- ----------------------------
+-- Records of yx_user_address
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_auth`;
-CREATE TABLE `yx_user_auth`  (
+CREATE TABLE `yx_user_auth` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `openid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '微信openid',
-  `unionid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '微信unionid',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `openid` varchar(32) NOT NULL COMMENT '微信openid',
+  `unionid` varchar(32) DEFAULT '' COMMENT '微信unionid',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `openid`(`openid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户授权表' ROW_FORMAT = Dynamic;
+  UNIQUE KEY `openid` (`openid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户授权表';
 
 -- ----------------------------
 -- Records of yx_user_auth
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_user_auth` VALUES (1, 1, 'omBUr43sSxWd-GkrNwfrJ38ZpviQ', '', 1607597684, NULL, 1);
 INSERT INTO `yx_user_auth` VALUES (2, 2, 'omBUr4xgS9v94mJeHEKLjs2risBo', '', 1607597860, NULL, 1);
 INSERT INTO `yx_user_auth` VALUES (3, 3, 'omBUr44GnU4alc2S467k_jmGSGkU', '', 1607650297, NULL, 1);
 INSERT INTO `yx_user_auth` VALUES (4, 4, 'omBUr409Re9h3VpPYDGEInDEXoFk', '', 1607654071, NULL, 1);
 INSERT INTO `yx_user_auth` VALUES (5, 5, 'omBUr42OKmg7XHqXz5a-D4KHoQys', '', 1607655080, NULL, 1);
-
--- ----------------------------
--- Table structure for yx_user_distribution
--- ----------------------------
-DROP TABLE IF EXISTS `yx_user_distribution`;
-CREATE TABLE `yx_user_distribution`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NULL DEFAULT NULL COMMENT '会员id',
-  `distribution_order_num` int(10) NULL DEFAULT 0 COMMENT '分销订单数量',
-  `distribution_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '分销金额',
-  `fans` int(10) NULL DEFAULT 0 COMMENT '粉丝数量',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户分销信息表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_user_distribution
--- ----------------------------
-INSERT INTO `yx_user_distribution` VALUES (1, 1, 0, 0.00, 0, 1607597684, NULL);
-INSERT INTO `yx_user_distribution` VALUES (2, 2, 0, 0.00, 0, 1607597860, NULL);
-INSERT INTO `yx_user_distribution` VALUES (3, 3, 0, 0.00, 0, 1607650297, NULL);
-INSERT INTO `yx_user_distribution` VALUES (4, 4, 0, 0.00, 0, 1607654072, NULL);
-INSERT INTO `yx_user_distribution` VALUES (5, 5, 0, 0.00, 0, 1607655080, NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_file
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_file`;
-CREATE TABLE `yx_user_file`  (
+CREATE TABLE `yx_user_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
+  `name` varchar(64) NOT NULL COMMENT '文件名',
   `type` tinyint(1) NOT NULL COMMENT '类型',
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
+  `uri` varchar(255) NOT NULL COMMENT '文件相对路径',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  `user_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文件表';
+
+-- ----------------------------
+-- Records of yx_user_file
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_group
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_group`;
-CREATE TABLE `yx_user_group`  (
+CREATE TABLE `yx_user_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `remark` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
+  `name` varchar(16) DEFAULT NULL COMMENT '名称',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) DEFAULT '0' COMMENT '是否删除；1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员分组表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员分组表';
+
+-- ----------------------------
+-- Records of yx_user_group
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_level
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_level`;
-CREATE TABLE `yx_user_level`  (
+CREATE TABLE `yx_user_level` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `growth_value` int(11) NOT NULL DEFAULT 0 COMMENT '成长值',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级备注',
-  `background_image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景图片',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级图标',
-  `privilege` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '等级权益',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(10) NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
+  `name` varchar(128) DEFAULT NULL COMMENT '名称',
+  `growth_value` int(11) NOT NULL DEFAULT '0' COMMENT '成长值',
+  `remark` varchar(255) DEFAULT NULL COMMENT '等级备注',
+  `background_image` varchar(128) DEFAULT NULL COMMENT '背景图片',
+  `image` varchar(128) DEFAULT NULL COMMENT '等级图标',
+  `privilege` text COMMENT '等级权益',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(10) DEFAULT '0' COMMENT '是否删除;1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员等级表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员等级表';
 
 -- ----------------------------
 -- Records of yx_user_level
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_user_level` VALUES (2, '普通会员', 100, '普通会员', '/uploads/images/background/20201210/e00c91e6d52bcf8fc117bf9d4cc8213d.png', '/uploads/images/background/20201210/d74e01d4a8b86f331fcca2f485080353.png', '', 1606285025, 1607569701, 0);
 INSERT INTO `yx_user_level` VALUES (3, '黄金会员', 2000, '黄金会员', '/uploads/images/background/20201210/263af68dbb3a7beb43d13273abddef59.png', '/uploads/images/background/20201210/eab147f969fce1475d4892c57256f8ec.png', '', 1606285088, 1607569720, 0);
 INSERT INTO `yx_user_level` VALUES (4, '铂金会员', 3000, '铂金会员', '/uploads/images/background/20201210/2bb17478228b324a613ffa3565a48737.png', '/uploads/images/background/20201210/79ee4347c8066f965c9ce7034f249cea.png', '', 1606285126, 1607569740, 0);
 INSERT INTO `yx_user_level` VALUES (5, '钻石会员', 5000, '钻石会员', '/uploads/images/background/20201210/b3ea3f1db613eecfe7ae8e0cf2c155b3.png', '/uploads/images/background/20201210/1bf35b2f5eacab8ac547b64218a6fdc9.png', '', 1606285250, 1607569752, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_privilege
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_privilege`;
-CREATE TABLE `yx_user_privilege`  (
+CREATE TABLE `yx_user_privilege` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益名称',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益图标',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权益说明',
+  `name` varchar(32) NOT NULL COMMENT '权益名称',
+  `image` varchar(128) NOT NULL COMMENT '权益图标',
+  `remark` varchar(255) DEFAULT NULL COMMENT '权益说明',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员权益' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员权益';
 
 -- ----------------------------
 -- Records of yx_user_privilege
 -- ----------------------------
+BEGIN;
 INSERT INTO `yx_user_privilege` VALUES (1, '购物折扣', '/uploads/images/background/20201210/35e522faf28bee80048703f4a9f97f99.png', '', 1607569381, NULL, 0);
 INSERT INTO `yx_user_privilege` VALUES (2, '全场免邮费', '/uploads/images/background/20201210/001258dae3fb475ceecb294dfb0314fd.png', '', 1607569404, NULL, 0);
 INSERT INTO `yx_user_privilege` VALUES (3, '会员优惠券', '/uploads/images/background/20201210/a98c5a589526627f9458bdf4ed640bd9.png', '', 1607569417, NULL, 0);
 INSERT INTO `yx_user_privilege` VALUES (4, '专属客服', '/uploads/images/background/20201210/b993e87092f20dbc7b32536d6a867ccb.png', '', 1607569427, NULL, 0);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_user_sign
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_user_sign`;
-CREATE TABLE `yx_user_sign`  (
+CREATE TABLE `yx_user_sign` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `days` int(11) NULL DEFAULT 0 COMMENT '连续签到天数',
-  `integral` int(11) NULL DEFAULT 0 COMMENT '签到奖励积分',
-  `continuous_integral` int(11) NULL DEFAULT 0 COMMENT '连续奖励积分',
-  `sign_time` int(10) NULL DEFAULT NULL COMMENT '签到时间',
-  `user_id` int(10) NULL DEFAULT NULL COMMENT '用户id',
-  `growth` int(11) NULL DEFAULT 0 COMMENT '签到奖励成长值',
-  `continuous_growth` int(11) NULL DEFAULT 0 COMMENT '连续签到奖励成长值',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
+  `days` int(11) DEFAULT '0' COMMENT '连续签到天数',
+  `integral` int(11) DEFAULT '0' COMMENT '签到奖励积分',
+  `continuous_integral` int(11) DEFAULT '0' COMMENT '连续奖励积分',
+  `sign_time` int(10) DEFAULT NULL COMMENT '签到时间',
+  `user_id` int(10) DEFAULT NULL COMMENT '用户id',
+  `growth` int(11) DEFAULT '0' COMMENT '签到奖励成长值',
+  `continuous_growth` int(11) DEFAULT '0' COMMENT '连续签到奖励成长值',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_user_sign
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yx_wechat_reply
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_wechat_reply`;
-CREATE TABLE `yx_wechat_reply`  (
+CREATE TABLE `yx_wechat_reply` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则名称',
-  `keyword` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关键词',
-  `reply_type` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复类型',
-  `matching_type` tinyint(1) NULL DEFAULT NULL COMMENT '匹配方式：null-不设置；1-全匹配；2-模糊匹配',
-  `content_type` tinyint(1) NULL DEFAULT NULL COMMENT '内容类型：null-不设置；1-文本；',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复内容',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '启动状态：1-启动；0-关闭',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+  `name` varchar(32) NOT NULL COMMENT '规则名称',
+  `keyword` varchar(16) DEFAULT NULL COMMENT '关键词',
+  `reply_type` varchar(16) NOT NULL COMMENT '回复类型',
+  `matching_type` tinyint(1) DEFAULT NULL COMMENT '匹配方式：null-不设置；1-全匹配；2-模糊匹配',
+  `content_type` tinyint(1) DEFAULT NULL COMMENT '内容类型：null-不设置；1-文本；',
+  `content` text NOT NULL COMMENT '回复内容',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '启动状态：1-启动；0-关闭',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+  `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信公众号回复' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信公众号回复';
 
 -- ----------------------------
--- Table structure for yx_withdraw_apply
+-- Records of yx_wechat_reply
 -- ----------------------------
-DROP TABLE IF EXISTS `yx_withdraw_apply`;
-CREATE TABLE `yx_withdraw_apply`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `sn` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '提现单号',
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `real_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
-  `account` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
-  `type` tinyint(1) NOT NULL COMMENT '类型：1-提现到余额；2-提现到微信；3-提现到支付宝',
-  `money` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '提现金额',
-  `left_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '用户可得的金额(扣除手续费后)',
-  `money_qr_code` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '收款二维码',
-  `poundage` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '手续费',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '提现申请记录表' ROW_FORMAT = Dynamic;
+BEGIN;
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

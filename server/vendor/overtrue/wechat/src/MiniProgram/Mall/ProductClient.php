@@ -27,9 +27,6 @@ class ProductClient extends BaseClient
      * @param bool  $isTest
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function import($params, $isTest = false)
     {
@@ -42,9 +39,6 @@ class ProductClient extends BaseClient
      * @param array $params
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function query($params)
     {
@@ -57,9 +51,6 @@ class ProductClient extends BaseClient
      * @param bool $value
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setSearchable($value)
     {

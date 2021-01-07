@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "van-image": "/components/weapp/image/index",
+    "swipers": "/components/swipers/swipers"
+  },
+  "navigationBarTitleText": "分类"
+}

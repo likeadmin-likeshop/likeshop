@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -11,79 +9,55 @@ declare(strict_types=1);
 
 namespace Endroid\QrCode\Writer;
 
-use Endroid\QrCode\Exception\GenerateImageException;
-use Endroid\QrCode\Exception\InvalidLogoException;
-use Endroid\QrCode\Exception\MissingExtensionException;
 use Endroid\QrCode\QrCodeInterface;
+use ReflectionClass;
 
 abstract class AbstractWriter implements WriterInterface
 {
-    protected function getMimeType(string $path): string
-    {
-        if (false !== filter_var($path, FILTER_VALIDATE_URL)) {
-            return $this->getMimeTypeFromUrl($path);
-        }
-
-        return $this->getMimeTypeFromPath($path);
-    }
-
-    private function getMimeTypeFromUrl(string $url): string
-    {
-        $headers = get_headers($url, 1);
-
-        if (!is_array($headers) || !isset($headers['Content-Type'])) {
-            throw new InvalidLogoException(sprintf('Content type could not be determined for logo URL "%s"', $url));
-        }
-
-        return $headers['Content-Type'];
-    }
-
-    private function getMimeTypeFromPath(string $path): string
-    {
-        if (!function_exists('mime_content_type')) {
-            throw new MissingExtensionException('You need the ext-fileinfo extension to determine logo mime type');
-        }
-
-        $mimeType = mime_content_type($path);
-
-        if (!is_string($mimeType)) {
-            throw new InvalidLogoException('Could not determine mime type');
-        }
-
-        if (!preg_match('#^image/#', $mimeType)) {
-            throw new GenerateImageException('Logo path is not an image');
-        }
-
-        // Passing mime type image/svg results in invisible images
-        if ('image/svg' === $mimeType) {
-            return 'image/svg+xml';
-        }
-
-        return $mimeType;
-    }
-
-    public function writeDataUri(QrCodeInterface $qrCode): string
+    /**
+     * {@inheritdoc}
+     */
+    public function writeDataUri(QrCodeInterface $qrCode)
     {
         $dataUri = 'data:'.$this->getContentType().';base64,'.base64_encode($this->writeString($qrCode));
 
         return $dataUri;
     }
 
-    public function writeFile(QrCodeInterface $qrCode, string $path): void
+    /**
+     * {@inheritdoc}
+     */
+    public function writeFile(QrCodeInterface $qrCode, $path)
     {
         $string = $this->writeString($qrCode);
         file_put_contents($path, $string);
     }
 
-    public static function supportsExtension(string $extension): bool
+    /**
+     * {@inheritdoc}
+     */
+    public static function supportsExtension($extension)
     {
         return in_array($extension, static::getSupportedExtensions());
     }
 
-    public static function getSupportedExtensions(): array
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSupportedExtensions()
     {
         return [];
     }
 
-    abstract public function getName(): string;
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        $reflectionClass = new ReflectionClass($this);
+        $className = $reflectionClass->getShortName();
+        $name = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', str_replace('Writer', '', $className)));
+
+        return $name;
+    }
 }

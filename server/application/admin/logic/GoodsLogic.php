@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -197,13 +200,6 @@ class GoodsLogic
                 'free_shipping_type'        => $post['free_shipping_type'],
                 'free_shipping'             => $free_shipping,
                 'free_shipping_template_id' => $free_shipping_template_id,
-                'is_commission'             => $post['is_commission'],
-                'first_ratio'               => $post['first_ratio'],
-                'second_ratio'              => $post['second_ratio'],
-                'three_ratio'               => $post['three_ratio'],
-//                'is_share_bouns'            => $post['is_share_bouns'],
-//                'region_ratio'              => $post['region_ratio'],
-//                'shareholder_ratio'         => $post['shareholder_ratio'],
                 'spec_type'                 => $post['spec_type'],
                 'create_time'               => $time
             ];
@@ -225,13 +221,13 @@ class GoodsLogic
                 //单规格写入
                 $goods_spec_id = Db::name('goods_spec')
                     ->insertGetId(['goods_id' => $goods_id, 'name' => '默认']);
-                Db::name('goods_spec_value')
-                    ->insert(['spec_id' => $goods_spec_id, 'goods_id' => $goods_id, 'value' => '默认']);
+                $goods_spec_value_id = Db::name('goods_spec_value')
+                    ->insertGetId(['spec_id' => $goods_spec_id, 'goods_id' => $goods_id, 'value' => '默认']);
 
                 $data = [
                     'image'             => $post['one_spec_image'],
                     'goods_id'          => $goods_id,
-                    'spec_value_ids'    => $goods_spec_id,
+                    'spec_value_ids'    => $goods_spec_value_id,
                     'spec_value_str'    => '默认',
                     'market_price'      => $post['one_market_price'],
                     'price'             => $post['one_price'],
@@ -356,13 +352,6 @@ class GoodsLogic
                 'free_shipping_type'        => $post['free_shipping_type'],
                 'free_shipping'             => $free_shipping,
                 'free_shipping_template_id' => $free_shipping_template_id,
-                'is_commission'             => $post['is_commission'],
-                'first_ratio'               => $post['first_ratio'],
-                'second_ratio'              => $post['second_ratio'],
-                'three_ratio'               => $post['three_ratio'],
-//                'is_share_bouns'            => $post['is_share_bouns'],
-//                'region_ratio'              => $post['region_ratio'],
-//                'shareholder_ratio'         => $post['shareholder_ratio'],
                 'spec_type'                 => $post['spec_type'],
                 'create_time'               => $time
             ];
@@ -417,12 +406,12 @@ class GoodsLogic
                         ->delete();
                     $goods_spec_id = Db::name('goods_spec')
                         ->insertGetId(['goods_id' => $post['goods_id'], 'name' => '默认']);
-                    Db::name('goods_spec_value')
-                        ->insert(['spec_id' => $goods_spec_id, 'goods_id' => $post['goods_id'], 'value' => '默认']);
+                    $goods_spec_value_id = Db::name('goods_spec_value')
+                        ->insertGetId(['spec_id' => $goods_spec_id, 'goods_id' => $post['goods_id'], 'value' => '默认']);
                     $data = [
                         'image'             => $post['one_spec_image'],
                         'goods_id'          => $post['goods_id'],
-                        'spec_value_ids'    => $goods_spec_id,
+                        'spec_value_ids'    => $goods_spec_value_id,
                         'spec_value_str'    => '默认',
                         'market_price'      => $post['one_market_price'],
                         'price'             => $post['one_price'],

@@ -66,7 +66,6 @@ class BaseClient extends PaymentBaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\InvalidSignException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function httpUpload(string $url, array $files = [], array $form = [], array $query = [], $returnResponse = false)
     {
@@ -130,7 +129,6 @@ class BaseClient extends PaymentBaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\InvalidSignException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function request(string $endpoint, array $params = [], $method = 'post', array $options = [], $returnResponse = false)
     {
@@ -248,8 +246,13 @@ class BaseClient extends PaymentBaseClient
         $params = array_filter($params);
 
         $key = $this->app->getKey();
-
-        $encryptMethod = Support\get_encrypt_method(Support\Arr::get($params, 'sign_type', 'MD5'), $key);
+        if ('HMAC-SHA256' === ($params['sign_type'] ?? 'MD5')) {
+            $encryptMethod = function ($str) use ($key) {
+                return hash_hmac('sha256', $str, $key);
+            };
+        } else {
+            $encryptMethod = 'md5';
+        }
 
         return Support\generate_sign($params, $key, $encryptMethod);
     }

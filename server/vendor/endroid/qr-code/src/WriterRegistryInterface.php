@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -15,13 +13,22 @@ use Endroid\QrCode\Writer\WriterInterface;
 
 interface WriterRegistryInterface
 {
-    public function addWriters(iterable $writers): void;
+    /**
+     * @param WriterInterface $writer
+     *
+     * @return $this
+     */
+    public function addWriter(WriterInterface $writer);
 
-    public function addWriter(WriterInterface $writer): void;
+    /**
+     * @param $name
+     *
+     * @return WriterInterface
+     */
+    public function getWriter($name);
 
-    public function getWriter(string $name): WriterInterface;
-
-    public function getDefaultWriter(): WriterInterface;
-
-    public function getWriters(): array;
+    /**
+     * @return WriterInterface[]
+     */
+    public function getWriters();
 }

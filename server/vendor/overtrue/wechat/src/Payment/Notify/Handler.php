@@ -101,8 +101,6 @@ abstract class Handler
      * Build xml and return the response to WeChat.
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function toResponse(): Response
     {
@@ -167,11 +165,7 @@ abstract class Handler
         }
 
         return Support\AES::decrypt(
-            base64_decode($message[$key], true),
-            md5($this->app['config']->key),
-            '',
-            OPENSSL_RAW_DATA,
-            'AES-256-ECB'
+            base64_decode($message[$key], true), md5($this->app['config']->key), '', OPENSSL_RAW_DATA, 'AES-256-ECB'
         );
     }
 

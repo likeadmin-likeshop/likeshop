@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="register-container">
         <div class="input-container">
@@ -36,7 +54,7 @@
         <van-checkbox v-model="isAgree" icon-size="15px" :checked-color="primaryColor">
             <div class="xs">已阅读并同意《隐私协议》《会员章程》</div>
         </van-checkbox>
-        <div class="btn white bg-primary br60" @click="$register">
+        <div class="btn white bg-primary br60 row-center" @click="$register">
             立即注册
         </div>
     </div>
@@ -164,7 +182,8 @@ export default {
         }
         .btn {
             margin-top: 36px;
-            padding: 10px 135.5px;
+            padding: 10px 0px;
+            width: 100%;
         }
     }
 </style>

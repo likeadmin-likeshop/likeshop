@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
@@ -23,7 +26,7 @@ class WechatReply extends AdminBase{
         if($this->request->isAjax()){
             $get = $this->request->get();
             $list = WechatReplyLogic::lists($get);
-            $this->success('',$list);
+            $this->_success('',$list);
 
         }
         $type_list= Wechat::getCustomReply();
@@ -37,9 +40,9 @@ class WechatReply extends AdminBase{
 
             if ($result === true){
                  WechatReplyLogic::add($post);
-                $this->success('添加超过',[]);
+                $this->_success('添加超过',[]);
             }
-            $this->error($result);
+            $this->_error($result);
 
         }
         $type = $this->request->get('type');
@@ -54,9 +57,9 @@ class WechatReply extends AdminBase{
 
             if ($result === true){
                 WechatReplyLogic::edit($post);
-                $this->success('添加超过',[]);
+                $this->_success('添加超过',[]);
             }
-            $this->error($result);
+            $this->_error($result);
 
         }
         $detail = WechatReplyLogic::getReply($id);
@@ -69,9 +72,9 @@ class WechatReply extends AdminBase{
         $result = $this->validate(['id'=>$id],'app\admin\validate\WeChatReply.del');
         if ($result === true) {
             WechatReplyLogic::del($id);
-            $this->success('删除成功');
+            $this->_success('删除成功');
         }
-        $this->error($result);
+        $this->_error($result);
 
     }
 
@@ -85,8 +88,8 @@ class WechatReply extends AdminBase{
         $reply_type = $this->request->post('reply_type');
         $result = WechatReplyLogic::changeFields($pk_value, $field, $field_value,$reply_type);
         if ($result) {
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
-        $this->error('修改失败');
+        $this->_error('修改失败');
     }
 }

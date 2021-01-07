@@ -69,8 +69,14 @@ export default {
 // .price-slice .second {
 //     font-size: 14px;
 // }
+.couponSize {
+    font-size: 30px;
+}
 .walletSize {
     font-size: 38px;
+}
+.home-coupon-size {
+    font-size: 25px;
 }
 .order-price-size {
     font-size: 21px;
@@ -83,5 +89,8 @@ export default {
 .width-draw-result {
     font-size: 23px;
     line-height: 38px;
+}
+.coupon-pop-size {
+    font-size: 28px;
 }
 </style>

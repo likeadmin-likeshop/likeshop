@@ -23,9 +23,7 @@ class Client extends BaseClient
     /**
      * @return mixed
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getPublicKey()
     {

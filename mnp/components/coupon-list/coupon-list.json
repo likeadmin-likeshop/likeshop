@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "price-slice": "/components/price-slice/price-slice",
+    "van-icon": "/components/weapp/icon/index"
+  }
+}

@@ -104,9 +104,7 @@ class Application extends ServiceContainer
     public function setSubMchId(string $subMchId, string $appId = '')
     {
         $this['config']->set('sub_mch_id', $subMchId);
-        if ($appId) {
-            $this['config']->set('appid', $appId);
-        }
+        $this['config']->set('appid', $appId);
 
         return $this;
     }
@@ -146,12 +144,17 @@ class Application extends ServiceContainer
         }
 
         $sign = $data['sign'];
+        strlen($sign) > 32 && $signType = 'HMAC-SHA256';
         unset($data['sign']);
-
-        $signType = strlen($sign) > 32 ? 'HMAC-SHA256' : 'MD5';
         $secretKey = $this->getKey();
 
-        $encryptMethod = Support\get_encrypt_method($signType, $secretKey);
+        if ('HMAC-SHA256' === ($signType ?? 'MD5')) {
+            $encryptMethod = function ($str) use ($secretKey) {
+                return hash_hmac('sha256', $str, $secretKey);
+            };
+        } else {
+            $encryptMethod = 'md5';
+        }
 
         if (Support\generate_sign($data, $secretKey, $encryptMethod) === $sign) {
             return true;

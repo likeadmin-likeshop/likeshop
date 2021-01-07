@@ -1,0 +1,126 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+import {getSignList, userSign, getSignRule} from "../../api/app"
+
+Page({
+
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    // 成长值
+    growth: 0,
+    // 积分
+    integral: 0,
+    avator: "",
+    signList: [],
+    showPop: false,
+    canSign: 0,
+
+    addIntegral: 0,
+    addGrowth: 0,
+    signDays: 0,
+    makeInegral: []
+  },
+
+  onClose() {
+    this.setData({ showPop: false });
+  },
+
+  $getSignList() {
+    getSignList().then(res => {
+      if(res.code == 1) {
+        let {sign_list} = res.data;
+        this.setData({
+          signList: sign_list,
+          integral: res.data.user.user_integral,
+          canSign: res.data.user.today_sign,
+          signDays: res.data.user.days,
+          makeInegral: res.data.make_inegral
+        })
+        console.log(this.data.canSign)
+      }
+    })
+  },
+  
+  $userSign() {
+    if(this.data.canSign == 1) { return ;}
+    userSign().then(res => {
+      if(res.code == 1) {
+        let {days, growth, integral} = res.data
+        this.setData({
+          showPop: true,
+          addGrowth: growth,
+          addIntegral: integral,
+          signDays: days
+        })
+        this.$getSignList();
+      }
+    })
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    this.setData({
+      avator: wx.getStorageSync('avatar')
+    })
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    this.$getSignList();
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+
+  },
+})

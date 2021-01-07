@@ -23,7 +23,7 @@ interface SessionInterface
     /**
      * Starts the session storage.
      *
-     * @return bool
+     * @return bool True if session started
      *
      * @throws \RuntimeException if session fails to start
      */
@@ -32,7 +32,7 @@ interface SessionInterface
     /**
      * Returns the session ID.
      *
-     * @return string
+     * @return string The session ID
      */
     public function getId();
 
@@ -46,7 +46,7 @@ interface SessionInterface
     /**
      * Returns the session name.
      *
-     * @return string
+     * @return mixed The session name
      */
     public function getName();
 
@@ -68,7 +68,7 @@ interface SessionInterface
      *                      to expire with browser session. Time is in seconds, and is
      *                      not a Unix timestamp.
      *
-     * @return bool
+     * @return bool True if session invalidated, false if error
      */
     public function invalidate($lifetime = null);
 
@@ -82,7 +82,7 @@ interface SessionInterface
      *                       to expire with browser session. Time is in seconds, and is
      *                       not a Unix timestamp.
      *
-     * @return bool
+     * @return bool True if session migrated, false if error
      */
     public function migrate($destroy = false, $lifetime = null);
 
@@ -100,7 +100,7 @@ interface SessionInterface
      *
      * @param string $name The attribute name
      *
-     * @return bool
+     * @return bool true if the attribute is defined, false otherwise
      */
     public function has($name);
 
@@ -125,12 +125,14 @@ interface SessionInterface
     /**
      * Returns attributes.
      *
-     * @return array
+     * @return array Attributes
      */
     public function all();
 
     /**
      * Sets attributes.
+     *
+     * @param array $attributes Attributes
      */
     public function replace(array $attributes);
 

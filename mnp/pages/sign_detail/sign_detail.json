@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "loading-footer": "/components/loading-footer/loading-footer"
+  },
+  "navigationBarTitleText": "积分明细"
+}

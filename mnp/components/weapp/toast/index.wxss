@@ -1,0 +1,76 @@
+@import '../common/index.wxss';
+
+.van-toast {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  box-sizing: initial;
+  color: #fff;
+  color: var(--toast-text-color,#fff);
+  font-size: 28rpx;
+  font-size: var(--toast-font-size,28rpx);
+  line-height: 40rpx;
+  line-height: var(--toast-line-height,40rpx);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: rgba(50,50,51,.88);
+  background-color: var(--toast-background-color,rgba(50,50,51,.88));
+  border-radius: 8rpx;
+  border-radius: var(--toast-border-radius,8rpx);
+}
+
+.van-toast__container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: -webkit-fit-content;
+  width: fit-content;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  max-width: 70%;
+  max-width: var(--toast-max-width,70%);
+}
+
+.van-toast--text {
+  min-width: 192rpx;
+  min-width: var(--toast-text-min-width,192rpx);
+  padding: 16rpx 24rpx;
+  padding: var(--toast-text-padding,16rpx 24rpx);
+}
+
+.van-toast--icon {
+  width: 180rpx;
+  width: var(--toast-default-width,180rpx);
+  min-height: 180rpx;
+  min-height: var(--toast-default-min-height,180rpx);
+  padding: 32rpx;
+  padding: var(--toast-default-padding,32rpx);
+}
+
+.van-toast--icon .van-toast__icon {
+  font-size: 96rpx;
+  font-size: var(--toast-icon-size,96rpx);
+}
+
+.van-toast--icon .van-toast__text {
+  padding-top: 16rpx;
+}
+
+.van-toast__loading {
+  margin: 20rpx 0;
+}
+
+.van-toast--top {
+  -webkit-transform: translateY(-30vh);
+  transform: translateY(-30vh);
+}
+
+.van-toast--bottom {
+  -webkit-transform: translateY(30vh);
+  transform: translateY(30vh);
+}

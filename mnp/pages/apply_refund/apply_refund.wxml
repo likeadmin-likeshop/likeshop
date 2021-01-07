@@ -1,0 +1,82 @@
+<!-- pages/apply_refund/apply_refund.wxml -->
+<view class="apply-refund">
+    <view class="goods">
+        <view class="row">
+            <van-image width="160rpx" height="160rpx" radius="6rpx" lazy-load src="{{goods.image}}" />
+            <view class="goods-info">
+                <view class="nr line2">{{goods.goods_name}}</view>
+                <view class="xs muted mt10">{{goods.spec_value}}</view>
+            </view>
+        </view>
+    </view>
+    <view class="opt-box mt20" hidden="{{hiddenOpt}}">
+        <view class="opt-item row-between border-line" bindtap="onlyRefund">
+            <view>
+                <view class="lg normal">仅退款</view>
+                <view class="muted xs mt10">未收到货，与卖家协商同意无需退货只需退款</view>
+            </view>
+            <image style="width: 28rpx; height: 28rpx;" src="/images/arrow_right.png"></image>
+        </view>
+        <view class="opt-item row-between" bindtap="allRefunds">
+            <view>
+                <view class="lg normal">退货退款</view>
+                <view class="muted xs mt10">已收到货，需退还收到的实物</view>
+            </view>
+            <image style="width: 28rpx; height: 28rpx;" src="/images/arrow_right.png"></image>
+        </view>
+    </view>
+    <view hidden="{{!hiddenOpt}}">
+        <view class="refund-info row-between mt20">
+            <view class="lable">数量</view>
+            <view>{{goods.goods_num}}</view>
+        </view>
+        <view class="refund-info row-between">
+            <view class="lable">退款金额</view>
+            <price-slice color="#FF2C3C" price="{{goods.goods_price}}" showSubscript="{{true}}" subscriptSize="{{28}}" firstSize="{{28}}" secondSize="{{28}}" />
+        </view>
+        <view class="refund-info row-between" bindtap="showPopup">
+            <view class="lable">退款原因</view>
+            <view class="row">
+                <text class="nr {{reasonIndex == -1 ? 'muted' : 'normal'}}">{{reasonIndex == -1 ? '请选择' : reason[reasonIndex] }}</text>
+                <image class="icon-sm ml20" src="/images/arrow_right.png" />
+            </view>
+        </view>
+        <view class="refund-info row">
+            <view class="label">备注说明</view>
+            <textarea hidden="{{showPop}}" class="bg-body" placeholder="请描述申请售后的具体原因，100字以内" value="{{remark}}" name="textarea" bindinput="onInput"></textarea> 
+        </view>
+        <view class="upload bg-white">
+            <view class="title row-between">
+                <view>上传凭证</view>
+                <view class="muted">（选填，最多可上传1张）</view>
+            </view>
+            <van-uploader deletable="{{ true }}" preview-size="160rpx"  max-count="1" file-list="{{ fileList }}" bind:after-read="afterRead" bind:delete="deleteImage" image-fit="aspectFill" ></van-uploader>
+        </view>
+        <button class="btn br60" type="primary" size="lg" bindtap="onSubmit">申请退款</button>
+    </view>
+</view>
+
+<van-popup
+  show="{{ showPop }}"
+  round
+  closeable
+  position="bottom"
+  custom-style="height: 70%"
+  bind:close="hidePopup"
+> 
+    <view class="pop-container">
+        <view class="pop-header row-center md normal">
+            退款原因
+        </view>
+        <view class="reason-box mt20">
+            <radio-group bindchange="radioChange">
+                <label class="reason-item row-between" wx:for="{{reason}}" wx:key="index" bindtap="hidePopup">
+                    <view class="reason-desc nr">
+                        {{item}}
+                    </view>
+                    <radio value="{{index}}" ></radio>
+                </label>
+            </radio-group>
+        </view>
+    </view>
+</van-popup>

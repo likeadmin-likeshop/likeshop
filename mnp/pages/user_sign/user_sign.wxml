@@ -1,0 +1,75 @@
+<!-- pages/user_sgin/user_sgin.wxml -->
+<view class="user-sgin">
+    <view class="header">
+        <view class="row">
+            <image class="avatar" src="{{avator == '' ? '/images/default_avatar.png' : avator}}" />
+            <view class="white ml20 row-between" style="flex: 1">
+                <view>
+                    <view style="font-size: 56rpx">{{integral}}</view>
+                    <view class="row">
+                        <navigator class="sm row" hover-class="none" url="/pages/sign_rule/sign_rule">
+                            我的积分
+                            <image src="/images/jifen_icon_help.png" class="icon-sm ml10" />
+                        </navigator>
+                    </view>
+                </view>
+                <navigator class="score-detail-entry row" url="/pages/sign_detail/sign_detail" hover-class="none">
+                    <image style="width: 26rpx;height: 26rpx;flex: none; margin-right: 7rpx" src="/images/jifen_icon_data.png" />
+                    <text class="sm white">积分明细</text>
+                </navigator>
+            </view>
+        </view>
+    </view>
+    <view class="main">
+        <view class="contain bg-white">
+            <view class="title">已连续签到 {{signDays}}天</view>
+            <view class="day-list row wrap">
+                <view class="item column-center" wx:for="{{signList}}" wx:key="item.days">
+                        <view class="num xs" wx:if="{{item.status != 1}}">+{{item.integral}}</view>
+                        <image class="num" src="/images/jifen_icon_select.png" wx:if="{{item.status == 1}}" ></image>
+                    <view class="day mt10 lighter xxs">{{item.days}}天</view>
+                </view>
+            </view>
+            <view class="right-sgin">
+                <button class="white br60 {{canSign == 1 ? 'gray' : 'primary-button'}}" bindtap="$userSign" size="md">{{canSign == 1 ? '已签到' : '立即签到' }}</button>
+            </view>
+        </view>
+        <view class="contain bg-white mt20" wx:if="{{makeInegral.length > 0}}">
+            <view class="title row">
+                <view class="line br60 mr20"></view>
+                <view class="bold  xl">赚积分</view>
+            </view>
+            <view class="task">
+                <view class="item row" wx:for="{{makeInegral}}" wx:key="index">
+                    <image class="img mr20" src="{{item.type == 1 ? '/images/icon_jifen_qiandao.png' : item.type == 2 ? '/images/icon_jifen_pay.png' : '/images/icon_jifen_invite.png'}}" />
+                    <view class="con">
+                        <view class="md">{{item.name}}</view>
+                        <view class="xs">
+                            <text class="num mb20">+{{item.integral}}</text>
+                            <text>积分</text>
+                        </view>
+                    </view>
+                    <button class="btn br60 {{item.status ? 'primary' : 'muted'}}" style="border-color: {{item.status ? '#F95F2F' : '#999999'}};" size="xs">{{item.status ? '已完成' : '未完成'}}</button>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<van-popup show="{{ showPop }}" catchtouchmove bind:close="onClose">
+    <view class="pop-container">
+        <view class="header-score row-center mt20">+{{addIntegral}}</view>
+        <view class="box column-center">
+            <view class="desc row mt20 sm">
+                <image style="width: 28rpx; height: 30rpx;margin-right: 8rpx" src="/images/icon_jifen.png"></image>
+                {{addIntegral}}积分 + {{addGrowth}}成长值
+            </view>
+            <view class="bottom-box">
+                <view class="md" style="line-height: 36rpx">
+                    您已连续签到 <text class="primary" style="font-size: 42rpx">{{signDays}}</text>天
+                </view>
+            </view>
+            <view class="bg-primary white br60 primary-btn" style="margin-top: 26rpx" bindtap="onClose">确定</view>
+        </view>
+    </view>
+</van-popup>

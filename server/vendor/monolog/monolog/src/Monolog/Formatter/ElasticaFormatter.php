@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -34,7 +34,7 @@ class ElasticaFormatter extends NormalizerFormatter
      * @param string $index Elastic Search index name
      * @param string $type  Elastic Search document type
      */
-    public function __construct(string $index, string $type)
+    public function __construct($index, $type)
     {
         // elasticsearch requires a ISO 8601 format date with optional millisecond precision.
         parent::__construct('Y-m-d\TH:i:s.uP');
@@ -53,22 +53,31 @@ class ElasticaFormatter extends NormalizerFormatter
         return $this->getDocument($record);
     }
 
-    public function getIndex(): string
+    /**
+     * Getter index
+     * @return string
+     */
+    public function getIndex()
     {
         return $this->index;
     }
 
-    public function getType(): string
+    /**
+     * Getter type
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }
 
     /**
      * Convert a log message into an Elastica Document
-     * @param  array    $record
+     *
+     * @param  array    $record Log message
      * @return Document
      */
-    protected function getDocument(array $record): Document
+    protected function getDocument($record)
     {
         $document = new Document();
         $document->setData($record);

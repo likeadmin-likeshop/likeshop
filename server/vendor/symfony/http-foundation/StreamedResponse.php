@@ -35,7 +35,7 @@ class StreamedResponse extends Response
      * @param int           $status   The response status code
      * @param array         $headers  An array of response headers
      */
-    public function __construct(callable $callback = null, int $status = 200, array $headers = [])
+    public function __construct(callable $callback = null, $status = 200, $headers = [])
     {
         parent::__construct(null, $status, $headers);
 
@@ -62,6 +62,8 @@ class StreamedResponse extends Response
 
     /**
      * Sets the PHP callback associated with this Response.
+     *
+     * @param callable $callback A valid PHP callback
      *
      * @return $this
      */
@@ -109,7 +111,7 @@ class StreamedResponse extends Response
             throw new \LogicException('The Response callback must not be null.');
         }
 
-        ($this->callback)();
+        \call_user_func($this->callback);
 
         return $this;
     }

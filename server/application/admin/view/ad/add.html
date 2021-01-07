@@ -121,7 +121,6 @@
                 </colgroup>
                 <thead>
                 <tr style="background-color: #f3f5f9">
-                    <th style="width: 120px;text-align: center">店铺名称</th>
                     <th style="width: 120px;text-align: center">商品信息</th>
                     <th style="width: 60px;text-align: center">商品价格</th>
                 </tr>
@@ -255,7 +254,6 @@
                         $('#goods_list tbody').remove();
                         var goods = data[0];
                         var goods_html = '<tr>\n' +
-                            '                    <td style="text-align: center">'+goods.shop_name+'</td>\n' +
                             '                    <td style="text-align: center"><img class="image-show" width="80px" height="80px" src="'+goods.image +'">'+goods.name+'</td>\n' +
                             '                    <td style="text-align: center">'+goods.price+'</td>\n' +
                             '                </tr>';

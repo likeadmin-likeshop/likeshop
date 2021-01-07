@@ -81,7 +81,6 @@ class Client extends BaseClient
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setSession(string $preAuthCode, array $sessionInfo)
     {
@@ -101,7 +100,6 @@ class Client extends BaseClient
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getPermanentByCode(string $authCode)
     {
@@ -121,7 +119,6 @@ class Client extends BaseClient
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAuthorization(string $authCorpId, string $permanentCode)
     {
@@ -142,7 +139,6 @@ class Client extends BaseClient
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getManagers(string $authCorpId, string $agentId)
     {
@@ -151,7 +147,7 @@ class Client extends BaseClient
             'agentid' => $agentId,
         ];
 
-        return $this->httpPostJson('cgi-bin/service/get_admin_list', $params);
+        return $this->httpPostJson('cgi-bin/service/get_admin_lis', $params);
     }
 
     /**
@@ -204,7 +200,6 @@ class Client extends BaseClient
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUserByTicket(string $userTicket)
     {

@@ -11,16 +11,9 @@
 
 namespace Symfony\Component\HttpFoundation\File;
 
-use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
-use Symfony\Component\HttpFoundation\File\Exception\ExtensionFileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
-use Symfony\Component\HttpFoundation\File\Exception\IniSizeFileException;
-use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
-use Symfony\Component\HttpFoundation\File\Exception\NoTmpDirFileException;
-use Symfony\Component\HttpFoundation\File\Exception\PartialFileException;
-use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 /**
  * A file uploaded through a form.
@@ -34,6 +27,7 @@ class UploadedFile extends File
     private $test;
     private $originalName;
     private $mimeType;
+    private $size;
     private $error;
 
     /**
@@ -53,6 +47,7 @@ class UploadedFile extends File
      * @param string      $path         The full temporary path to the file
      * @param string      $originalName The original file name of the uploaded file
      * @param string|null $mimeType     The type of the file as provided by PHP; null defaults to application/octet-stream
+     * @param int|null    $size         The file size provided by the uploader
      * @param int|null    $error        The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants); null defaults to UPLOAD_ERR_OK
      * @param bool        $test         Whether the test mode is active
      *                                  Local files are used in test mode hence the code should not enforce HTTP uploads
@@ -60,21 +55,15 @@ class UploadedFile extends File
      * @throws FileException         If file_uploads is disabled
      * @throws FileNotFoundException If the file does not exist
      */
-    public function __construct(string $path, string $originalName, string $mimeType = null, int $error = null, $test = false)
+    public function __construct($path, $originalName, $mimeType = null, $size = null, $error = null, $test = false)
     {
         $this->originalName = $this->getName($originalName);
         $this->mimeType = $mimeType ?: 'application/octet-stream';
+        $this->size = $size;
+        $this->error = $error ?: \UPLOAD_ERR_OK;
+        $this->test = (bool) $test;
 
-        if (4 < \func_num_args() ? !\is_bool($test) : null !== $error && @filesize($path) === $error) {
-            @trigger_error(sprintf('Passing a size as 4th argument to the constructor of "%s" is deprecated since Symfony 4.1.', __CLASS__), E_USER_DEPRECATED);
-            $error = $test;
-            $test = 5 < \func_num_args() ? func_get_arg(5) : false;
-        }
-
-        $this->error = $error ?: UPLOAD_ERR_OK;
-        $this->test = $test;
-
-        parent::__construct($path, UPLOAD_ERR_OK === $this->error);
+        parent::__construct($path, \UPLOAD_ERR_OK === $this->error);
     }
 
     /**
@@ -100,7 +89,7 @@ class UploadedFile extends File
      */
     public function getClientOriginalExtension()
     {
-        return pathinfo($this->originalName, PATHINFO_EXTENSION);
+        return pathinfo($this->originalName, \PATHINFO_EXTENSION);
     }
 
     /**
@@ -140,7 +129,10 @@ class UploadedFile extends File
      */
     public function guessClientExtension()
     {
-        return MimeTypes::getDefault()->getExtensions($this->getClientMimeType())[0] ?? null;
+        $type = $this->getClientMimeType();
+        $guesser = ExtensionGuesser::getInstance();
+
+        return $guesser->guess($type);
     }
 
     /**
@@ -149,15 +141,11 @@ class UploadedFile extends File
      * It is extracted from the request from which the file has been uploaded.
      * Then it should not be considered as a safe value.
      *
-     * @deprecated since Symfony 4.1, use getSize() instead.
-     *
-     * @return int|null The file sizes
+     * @return int|null The file size
      */
     public function getClientSize()
     {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1. Use getSize() instead.', __METHOD__), E_USER_DEPRECATED);
-
-        return $this->getSize();
+        return $this->size;
     }
 
     /**
@@ -180,7 +168,7 @@ class UploadedFile extends File
      */
     public function isValid()
     {
-        $isOk = UPLOAD_ERR_OK === $this->error;
+        $isOk = \UPLOAD_ERR_OK === $this->error;
 
         return $this->test ? $isOk : $isOk && is_uploaded_file($this->getPathname());
     }
@@ -216,23 +204,6 @@ class UploadedFile extends File
             return $target;
         }
 
-        switch ($this->error) {
-            case UPLOAD_ERR_INI_SIZE:
-                throw new IniSizeFileException($this->getErrorMessage());
-            case UPLOAD_ERR_FORM_SIZE:
-                throw new FormSizeFileException($this->getErrorMessage());
-            case UPLOAD_ERR_PARTIAL:
-                throw new PartialFileException($this->getErrorMessage());
-            case UPLOAD_ERR_NO_FILE:
-                throw new NoFileException($this->getErrorMessage());
-            case UPLOAD_ERR_CANT_WRITE:
-                throw new CannotWriteFileException($this->getErrorMessage());
-            case UPLOAD_ERR_NO_TMP_DIR:
-                throw new NoTmpDirFileException($this->getErrorMessage());
-            case UPLOAD_ERR_EXTENSION:
-                throw new ExtensionFileException($this->getErrorMessage());
-        }
-
         throw new FileException($this->getErrorMessage());
     }
 
@@ -246,13 +217,15 @@ class UploadedFile extends File
         $sizePostMax = self::parseFilesize(ini_get('post_max_size'));
         $sizeUploadMax = self::parseFilesize(ini_get('upload_max_filesize'));
 
-        return min($sizePostMax ?: PHP_INT_MAX, $sizeUploadMax ?: PHP_INT_MAX);
+        return min($sizePostMax ?: \PHP_INT_MAX, $sizeUploadMax ?: \PHP_INT_MAX);
     }
 
     /**
      * Returns the given size from an ini value in bytes.
+     *
+     * @return int The given size in bytes
      */
-    private static function parseFilesize($size): int
+    private static function parseFilesize($size)
     {
         if ('' === $size) {
             return 0;
@@ -290,17 +263,17 @@ class UploadedFile extends File
     public function getErrorMessage()
     {
         static $errors = [
-            UPLOAD_ERR_INI_SIZE => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d KiB).',
-            UPLOAD_ERR_FORM_SIZE => 'The file "%s" exceeds the upload limit defined in your form.',
-            UPLOAD_ERR_PARTIAL => 'The file "%s" was only partially uploaded.',
-            UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
-            UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
-            UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
-            UPLOAD_ERR_EXTENSION => 'File upload was stopped by a PHP extension.',
+            \UPLOAD_ERR_INI_SIZE => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d KiB).',
+            \UPLOAD_ERR_FORM_SIZE => 'The file "%s" exceeds the upload limit defined in your form.',
+            \UPLOAD_ERR_PARTIAL => 'The file "%s" was only partially uploaded.',
+            \UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
+            \UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
+            \UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
+            \UPLOAD_ERR_EXTENSION => 'File upload was stopped by a PHP extension.',
         ];
 
         $errorCode = $this->error;
-        $maxFilesize = UPLOAD_ERR_INI_SIZE === $errorCode ? self::getMaxFilesize() / 1024 : 0;
+        $maxFilesize = \UPLOAD_ERR_INI_SIZE === $errorCode ? self::getMaxFilesize() / 1024 : 0;
         $message = isset($errors[$errorCode]) ? $errors[$errorCode] : 'The file "%s" was not uploaded due to an unknown error.';
 
         return sprintf($message, $this->getClientOriginalName(), $maxFilesize);

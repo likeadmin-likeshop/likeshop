@@ -1,12 +1,10 @@
 /.idea
 /.vscode
-/server/config/install.lock
 
-/sever/runtime/cache
-/sever/runtime/log
-/sever/runtime/temp
-/sever/uploads/images
-/sever/uploads/user
-/sever/uploads/qr_code
-/sever/uploads/other
+
+/server/config/install.lock
+/server/public/uploads/*
+!/server/public/uploads/index.html
+/server/runtime/*
+!/server/runtime/index.html
 /server/.env

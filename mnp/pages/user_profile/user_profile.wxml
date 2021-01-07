@@ -1,0 +1,52 @@
+<!-- pages/user_profile/user_profile.wxml -->
+<view class="user-profile-container mt20">
+    <view class="user-profile">
+        <view class="user-avatar-box row-center">
+            <image class="user-avatar" src="{{userInfo.avatar ? userInfo.avatar : '/images/default_avatar.png'}}" />
+        </view>
+        <view class="row-info row bdb-line">
+            <view class="label md">昵称</view>
+            <text class="md">{{userInfo.nickname}}</text>
+        </view>
+        <picker mode='selector' range="{{sexList}}" bindchange="bindSexChange">
+            <view class="row-info row bdb-line">
+                <view class="label md">性别</view>
+                <text class="md {{userInfo.sex == 0 ? 'muted' : ''}}" style="flex: 1;">{{userInfo.sex == 0 ? '未设置' : userInfo.sex == 1 ? '男' : '女'}}
+                </text>
+                <image src="/images/arrow_right.png" style="width: 28rpx;height: 28rpx;" />
+            </view>
+        </picker>
+        <view class="row-info row bdb-line">
+            <view class="label md">手机号</view>
+            <text class="md {{userInfo.mobile == '' ? 'muted' : ''}}" style="flex: 1;">{{userInfo.mobile}}
+            </text>
+            <button class="bd-btn br60" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">
+                {{userInfo.mobile ? '更换手机号' : '绑定手机号'}}
+            </button>
+        </view>
+        <!-- <view class="row-info row">
+            <view class="label md">注册时间</view>
+            <text class="md">2019-10-12</text>
+        </view> -->
+        <!-- <picker mode="date" value="userDate" bindchange="bindDateChange" end="{{endTime}}">
+      <view class="row-info row">
+        <view class="label md">生日</view>
+        <view class="{{userDate == ''? 'muted' : ''}} md">{{userDate == '' ? '请选择' : userDate}}</view>
+      </view>
+    </picker> -->
+        <navigator class="row-info row-between bdb-line mt20" url="/pages/server_explan/server_explan?type=0">
+            <view class="label md">服务协议</view>
+            <image src="/images/arrow_right.png" style="width: 28rpx;height: 28rpx;" />
+        </navigator>
+        <navigator class="row-info row-between bdb-line" url="/pages/server_explan/server_explan?type=1">
+            <view class="label md">隐私政策</view>
+            <image src="/images/arrow_right.png" style="width: 28rpx;height: 28rpx;" />
+        </navigator>
+        <view class="row-info row-between">
+            <view class="label md">关于我们</view>
+            <!-- <text>v{{myVersion}}</text> -->
+            <text>v2.0.1.20210106</text>
+        </view>
+        <!-- <view class="bg-primary white save-btn row-center lg" bindtap="storageUserInfo">退出登录</view> -->
+    </view>
+</view>

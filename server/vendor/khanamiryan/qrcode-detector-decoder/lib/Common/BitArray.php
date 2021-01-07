@@ -30,42 +30,54 @@ namespace Zxing\Common;
  * @author Sean Owen
  */
 
-final class BitArray
-{
+final class BitArray  {
 
     private $bits;
     private $size;
 
 
-    public function __construct($bits = [], $size = 0)
-    {
 
-        if (!$bits && !$size) {
+    public function __construct($bits=array(),$size=0) {
+
+        if(!$bits&&!$size){
             $this->$size = 0;
-            $this->bits  = [];
-        } elseif ($bits && !$size) {
+            $this->bits = array();
+        }elseif($bits&&!$size){
             $this->size = $bits;
             $this->bits = $this->makeArray($bits);
-        } else {
+        }else{
             $this->bits = $bits;
             $this->size = $size;
         }
 
     }
 
-    private static function makeArray($size)
-    {
-        return [];
-    }
 
-    public function getSize()
-    {
+
+
+    public function getSize() {
         return $this->size;
     }
 
-    public function getSizeInBytes()
-    {
+    public function getSizeInBytes() {
         return ($this->size + 7) / 8;
+    }
+
+    private function ensureCapacity($size) {
+        if ($size > count($this->bits) * 32) {
+            $newBits = $this->makeArray($size);
+            $newBits = arraycopy($this->bits, 0, $newBits, 0, count($this->bits));
+            $this->bits = $newBits;
+        }
+    }
+
+    /**
+     * @param $i; bit to get
+     * @return true iff bit i is set
+     */
+    public function get($i) {
+        $key = intval($i / 32);
+        return intval32bits($this->bits[$key] & (1 << ($i & 0x1F))) != 0;
     }
 
     /**
@@ -73,10 +85,9 @@ final class BitArray
      *
      * @param i bit to set
      */
-    public function set($i)
-    {
-        $this->bits[(int)($i / 32)] |= 1 << ($i & 0x1F);
-        $this->bits[(int)($i / 32)] = ($this->bits[(int)($i / 32)]);
+    public function set($i) {
+        $this->bits[intval($i / 32)] |= 1 << ($i & 0x1F);
+        $this->bits[intval($i / 32)] = overflow($this->bits[intval($i / 32)]);
     }
 
     /**
@@ -84,25 +95,22 @@ final class BitArray
      *
      * @param i bit to set
      */
-    public function flip($i)
-    {
-        $this->bits[(int)($i / 32)] ^= 1 << ($i & 0x1F);
-        $this->bits[(int)($i / 32)] = ($this->bits[(int)($i / 32)]);
+    public function flip($i) {
+        $this->bits[intval($i / 32)] ^= 1 << ($i & 0x1F);
+        $this->bits[intval($i / 32)] = overflow32($this->bits[intval($i / 32)]);
     }
 
     /**
      * @param from first bit to check
-     *
      * @return index of first bit that is set, starting from the given index, or size if none are set
      *  at or beyond this given index
      * @see #getNextUnset(int)
      */
-    public function getNextSet($from)
-    {
+    public function getNextSet($from) {
         if ($from >= $this->size) {
             return $this->size;
         }
-        $bitsOffset  = (int)($from / 32);
+        $bitsOffset = intval($from / 32);
         $currentBits = (int)$this->bits[$bitsOffset];
         // mask off lesser bits first
         $currentBits &= ~((1 << ($from & 0x1F)) - 1);
@@ -113,22 +121,19 @@ final class BitArray
             $currentBits = $this->bits[$bitsOffset];
         }
         $result = ($bitsOffset * 32) + numberOfTrailingZeros($currentBits); //numberOfTrailingZeros
-
         return $result > $this->size ? $this->size : $result;
     }
 
     /**
      * @param from index to start looking for unset bit
-     *
      * @return index of next unset bit, or {@code size} if none are unset until the end
      * @see #getNextSet(int)
      */
-    public function getNextUnset($from)
-    {
+    public function getNextUnset($from) {
         if ($from >= $this->size) {
             return $this->size;
         }
-        $bitsOffset  = (int)($from / 32);
+        $bitsOffset = intval($from / 32);
         $currentBits = ~$this->bits[$bitsOffset];
         // mask off lesser bits first
         $currentBits &= ~((1 << ($from & 0x1F)) - 1);
@@ -136,33 +141,30 @@ final class BitArray
             if (++$bitsOffset == count($this->bits)) {
                 return $this->size;
             }
-            $currentBits = (~$this->bits[$bitsOffset]);
+            $currentBits = overflow32(~$this->bits[$bitsOffset]);
         }
         $result = ($bitsOffset * 32) + numberOfTrailingZeros($currentBits);
-
         return $result > $this->size ? $this->size : $result;
     }
 
     /**
      * Sets a block of 32 bits, starting at bit i.
      *
-     * @param i       first bit to set
+     * @param i first bit to set
      * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
-     *                corresponds to bit i, the next-least-significant to i+1, and so on.
+     * corresponds to bit i, the next-least-significant to i+1, and so on.
      */
-    public function setBulk($i, $newBits)
-    {
-        $this->bits[(int)($i / 32)] = $newBits;
+    public function setBulk($i, $newBits) {
+        $this->bits[intval($i / 32)] = $newBits;
     }
 
     /**
      * Sets a range of bits.
      *
      * @param start start of range, inclusive.
-     * @param end   end of range, exclusive
+     * @param end end of range, exclusive
      */
-    public function setRange($start, $end)
-    {
+    public function setRange($start, $end) {
         if ($end < $start) {
             throw new \InvalidArgumentException();
         }
@@ -170,12 +172,12 @@ final class BitArray
             return;
         }
         $end--; // will be easier to treat this as the last actually set bit -- inclusive
-        $firstInt = (int)($start / 32);
-        $lastInt  = (int)($end / 32);
+        $firstInt = intval($start / 32);
+        $lastInt = intval($end / 32);
         for ($i = $firstInt; $i <= $lastInt; $i++) {
             $firstBit = $i > $firstInt ? 0 : $start & 0x1F;
-            $lastBit  = $i < $lastInt ? 31 : $end & 0x1F;
-            $mask     = 0;
+            $lastBit = $i < $lastInt ? 31 : $end & 0x1F;
+            $mask = 0;
             if ($firstBit == 0 && $lastBit == 31) {
                 $mask = -1;
             } else {
@@ -184,15 +186,14 @@ final class BitArray
                     $mask |= 1 << $j;
                 }
             }
-            $this->bits[$i] = ($this->bits[$i] | $mask);
+            $this->bits[$i] = overflow32($this->bits[$i]|$mask);
         }
     }
 
     /**
      * Clears all bits (sets to false).
      */
-    public function clear()
-    {
+    public function clear() {
         $max = count($this->bits);
         for ($i = 0; $i < $max; $i++) {
             $this->bits[$i] = 0;
@@ -203,14 +204,12 @@ final class BitArray
      * Efficient method to check if a range of bits is set, or not set.
      *
      * @param start start of range, inclusive.
-     * @param end   end of range, exclusive
+     * @param end end of range, exclusive
      * @param value if true, checks that bits in range are set, otherwise checks that they are not set
-     *
      * @return true iff all bits are set or not set in range, according to value argument
      * @throws InvalidArgumentException if end is less than or equal to start
      */
-    public function isRange($start, $end, $value)
-    {
+    public function isRange($start, $end, $value) {
         if ($end < $start) {
             throw new \InvalidArgumentException();
         }
@@ -218,18 +217,18 @@ final class BitArray
             return true; // empty range matches
         }
         $end--; // will be easier to treat this as the last actually set bit -- inclusive
-        $firstInt = (int)($start / 32);
-        $lastInt  = (int)($end / 32);
+        $firstInt = intval($start / 32);
+        $lastInt = intval($end / 32);
         for ($i = $firstInt; $i <= $lastInt; $i++) {
             $firstBit = $i > $firstInt ? 0 : $start & 0x1F;
-            $lastBit  = $i < $lastInt ? 31 : $end & 0x1F;
-            $mask     = 0;
+            $lastBit = $i < $lastInt ? 31 :$end & 0x1F;
+            $mask = 0;
             if ($firstBit == 0 && $lastBit == 31) {
                 $mask = -1;
             } else {
                 $mask = 0;
                 for ($j = $firstBit; $j <= $lastBit; $j++) {
-                    $mask = ($mask | (1 << $j));
+                    $mask = overflow32($mask|(1 << $j));
                 }
             }
 
@@ -239,8 +238,15 @@ final class BitArray
                 return false;
             }
         }
-
         return true;
+    }
+
+    public function appendBit($bit) {
+        $this->ensureCapacity($this->size + 1);
+        if ($bit) {
+            $this->bits[intval($this->size / 32)] |= 1 << ($this->size & 0x1F);
+        }
+        $this->size++;
     }
 
     /**
@@ -248,11 +254,10 @@ final class BitArray
      * least-significant. For example, appending 6 bits from 0x000001E will append the bits
      * 0, 1, 1, 1, 1, 0 in that order.
      *
-     * @param value   {@code int} containing bits to append
+     * @param value {@code int} containing bits to append
      * @param numBits bits from value to append
      */
-    public function appendBits($value, $numBits)
-    {
+    public function appendBits($value, $numBits) {
         if ($numBits < 0 || $numBits > 32) {
             throw new \InvalidArgumentException("Num bits must be between 0 and 32");
         }
@@ -262,26 +267,7 @@ final class BitArray
         }
     }
 
-    private function ensureCapacity($size)
-    {
-        if ($size > count($this->bits) * 32) {
-            $newBits    = $this->makeArray($size);
-            $newBits    = arraycopy($this->bits, 0, $newBits, 0, count($this->bits));
-            $this->bits = $newBits;
-        }
-    }
-
-    public function appendBit($bit)
-    {
-        $this->ensureCapacity($this->size + 1);
-        if ($bit) {
-            $this->bits[(int)($this->size / 32)] |= 1 << ($this->size & 0x1F);
-        }
-        $this->size++;
-    }
-
-    public function appendBitArray($other)
-    {
+    public function appendBitArray($other) {
         $otherSize = $other->size;
         $this->ensureCapacity($this->size + $otherSize);
         for ($i = 0; $i < $otherSize; $i++) {
@@ -289,13 +275,11 @@ final class BitArray
         }
     }
 
-    public function _xor($other)
-    {
-        if (count($this->bits) !== count($other->bits)) {
+    public function _xor($other) {
+        if (count($this->bits) != count($other->bits)) {
             throw new \InvalidArgumentException("Sizes don't match");
         }
-        $count = count($this->bits);
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < count($this->bits); $i++) {
             // The last byte could be incomplete (i.e. not have 8 bits in
             // it) but there is no problem since 0 XOR 0 == 0.
             $this->bits[$i] ^= $other->bits[$i];
@@ -305,13 +289,12 @@ final class BitArray
     /**
      *
      * @param bitOffset first bit to start writing
-     * @param array     array to write into. Bytes are written most-significant byte first. This is the opposite
-     *                  of the internal representation, which is exposed by {@link #getBitArray()}
-     * @param offset    position in array to start writing
-     * @param numBytes  how many bytes to write
+     * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
+     *  of the internal representation, which is exposed by {@link #getBitArray()}
+     * @param offset position in array to start writing
+     * @param numBytes how many bytes to write
      */
-    public function toBytes($bitOffset, &$array, $offset, $numBytes)
-    {
+    public function toBytes($bitOffset, &$array, $offset, $numBytes) {
         for ($i = 0; $i < $numBytes; $i++) {
             $theByte = 0;
             for ($j = 0; $j < 8; $j++) {
@@ -320,103 +303,92 @@ final class BitArray
                 }
                 $bitOffset++;
             }
-            $array[(int)($offset + $i)] = $theByte;
+            $array[(int)($offset + $i)] =  $theByte;
         }
     }
 
     /**
-     * @param $i ; bit to get
-     *
-     * @return true iff bit i is set
-     */
-    public function get($i)
-    {
-        $key = (int)($i / 32);
-
-        return ($this->bits[$key] & (1 << ($i & 0x1F))) != 0;
-    }
-
-    /**
-     * @return array underlying array of ints. The first element holds the first 32 bits, and the least
+     * @return underlying array of ints. The first element holds the first 32 bits, and the least
      *         significant bit is bit 0.
      */
-    public function getBitArray()
-    {
+    public  function getBitArray() {
         return $this->bits;
     }
 
     /**
      * Reverses all bits in the array.
      */
-    public function reverse()
-    {
-        $newBits = [];
+    public function reverse() {
+        $newBits = array();
         // reverse all int's first
-        $len        = (($this->size - 1) / 32);
+        $len = (($this->size-1) / 32);
         $oldBitsLen = $len + 1;
         for ($i = 0; $i < $oldBitsLen; $i++) {
             $x = $this->bits[$i];/*
-             $x = (($x >>  1) & 0x55555555L) | (($x & 0x55555555L) <<  1);
-                  $x = (($x >>  2) & 0x33333333L) | (($x & 0x33333333L) <<  2);
-                  $x = (($x >>  4) & 0x0f0f0f0fL) | (($x & 0x0f0f0f0fL) <<  4);
-                  $x = (($x >>  8) & 0x00ff00ffL) | (($x & 0x00ff00ffL) <<  8);
-                  $x = (($x >> 16) & 0x0000ffffL) | (($x & 0x0000ffffL) << 16);*/
-            $x                       = (($x >> 1) & 0x55555555) | (($x & 0x55555555) << 1);
-            $x                       = (($x >> 2) & 0x33333333) | (($x & 0x33333333) << 2);
-            $x                       = (($x >> 4) & 0x0f0f0f0f) | (($x & 0x0f0f0f0f) << 4);
-            $x                       = (($x >> 8) & 0x00ff00ff) | (($x & 0x00ff00ff) << 8);
-            $x                       = (($x >> 16) & 0x0000ffff) | (($x & 0x0000ffff) << 16);
-            $newBits[(int)$len - $i] = (int)$x;
+ $x = (($x >>  1) & 0x55555555L) | (($x & 0x55555555L) <<  1);
+      $x = (($x >>  2) & 0x33333333L) | (($x & 0x33333333L) <<  2);
+      $x = (($x >>  4) & 0x0f0f0f0fL) | (($x & 0x0f0f0f0fL) <<  4);
+      $x = (($x >>  8) & 0x00ff00ffL) | (($x & 0x00ff00ffL) <<  8);
+      $x = (($x >> 16) & 0x0000ffffL) | (($x & 0x0000ffffL) << 16);*/
+            $x = (($x >>  1) & 0x55555555) | (($x & 0x55555555) <<  1);
+            $x = (($x >>  2) & 0x33333333) | (($x & 0x33333333) <<  2);
+            $x = (($x >>  4) & 0x0f0f0f0f) | (($x & 0x0f0f0f0f) <<  4);
+            $x = (($x >>  8) & 0x00ff00ff) | (($x & 0x00ff00ff) <<  8);
+            $x = (($x >> 16) & 0x0000ffff) | (($x & 0x0000ffff) << 16);
+            $newBits[(int)$len - $i] = (int) $x;
         }
         // now correct the int's if the bit size isn't a multiple of 32
         if ($this->size != $oldBitsLen * 32) {
             $leftOffset = $oldBitsLen * 32 - $this->size;
-            $mask       = 1;
+            $mask = 1;
             for ($i = 0; $i < 31 - $leftOffset; $i++) {
                 $mask = ($mask << 1) | 1;
             }
             $currentInt = ($newBits[0] >> $leftOffset) & $mask;
             for ($i = 1; $i < $oldBitsLen; $i++) {
-                $nextInt                = $newBits[$i];
-                $currentInt             |= $nextInt << (32 - $leftOffset);
-                $newBits[(int)($i) - 1] = $currentInt;
-                $currentInt             = ($nextInt >> $leftOffset) & $mask;
+                $nextInt = $newBits[$i];
+                $currentInt |= $nextInt << (32 - $leftOffset);
+                $newBits[intval($i) - 1] = $currentInt;
+                $currentInt = ($nextInt >> $leftOffset) & $mask;
             }
-            $newBits[(int)($oldBitsLen) - 1] = $currentInt;
+            $newBits[intval($oldBitsLen) - 1] = $currentInt;
         }
-//        $bits = $newBits;
+        $bits = $newBits;
     }
 
-    public function equals($o)
-    {
+    private static function makeArray($size) {
+        return array();
+    }
+
+    // @Override
+    public function equals($o) {
         if (!($o instanceof BitArray)) {
             return false;
         }
         $other = $o;
-
-        return $this->size == $other->size && $this->bits === $other->bits;
+        return $this->size == $other->size && $this->bits===$other->bits;
     }
 
-    public function hashCode()
-    {
-        return 31 * $this->size + hashCode($this->bits);
+    //@Override
+    public function hashCode() {
+        return 31 * $this->size +hashCode($this->bits);
     }
 
-    public function toString()
-    {
+    // @Override
+    public function toString() {
         $result = '';
         for ($i = 0; $i < $this->size; $i++) {
             if (($i & 0x07) == 0) {
-                $result .= ' ';
+                $result.=' ';
             }
-            $result .= ($this->get($i) ? 'X' : '.');
+            $result.= ($this->get($i) ? 'X' : '.');
         }
-
-        return (string)$result;
+        return (string) $result;
     }
 
-    public function _clone()
-    {
+    // @Override
+    public function _clone() {
         return new BitArray($this->bits, $this->size);
     }
+
 }

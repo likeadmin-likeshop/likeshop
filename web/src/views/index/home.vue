@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="home-container">
         <div class="header">
@@ -20,7 +38,7 @@
         <div class="main">
             <div class="banner">
                 <!-- <img src="@A/images/banner.png" /> -->
-                <ad-swiper :id="1" height="142px" padding="0 10px 10px 10px" radius="6px"></ad-swiper>
+                <ad-swiper :id="1" height="4.02667rem" padding="0 10px 10px 10px" radius="6px"></ad-swiper>
             </div>
             <van-swipe v-if="navList.length" class="nav-box bg-white" :loop="false" :indicator-color="primaryColor" :show-indicators="true">
                 <van-swipe-item class="row wrap mb10" v-for="(items, index) in navList" :key="index">
@@ -44,7 +62,7 @@
                         :show-indicators="false"
                         :vertical="true"
                         :touchable="false"
-                        height="25"
+                        height="0.66667rem"
                     >
                         <van-swipe-item
                             v-for="(item, index) in news"
@@ -69,59 +87,6 @@
                     </van-swipe>
                 </div>
                 <img class="icon-sm ml10" src="@A/images/arrow_right.png" />
-            </div>
-            <div class="activity-container">
-                <!-- 活动区域 -->
-                <div class="special-area row-between" v-if="activityArea.length">
-                    <router-link :to="{name: 'activityDetail', query: {
-                        id: item.id,
-                        title: item.name,
-                        name: item.title
-                    }}" class="area-item column-center" v-for="(item, index) in activityArea" :key="item.id">
-                        <div class="mb5">
-                            <div class="bold lg normal">{{item.name}}</div>
-                            <div :style="{color: colors[index%colors.length]}" class="mt10 xs desc two-txt-cut">{{item.title}}</div>
-                        </div>
-                        <van-image style="flex: none;" width="1.73rem" height="1.73rem" :src="item.image" />
-                    </router-link>
-                </div>
-                <!-- end -->
-                <div class="hot" v-if="hotGoodsObj.length">
-                    <active-area
-                        extClass="hot"
-                        class="mt10"
-                        :lists="hotGoodsObj"
-                        progressBarColor="#9912FE"
-                    >
-                        <div
-                            slot="header"
-                            hover-class="none"
-                            class="row hot-header white"
-                            open-type="navigate"
-                            @click="goPage('hotList')"
-                        >
-                            <div class="title lg bold">
-                                <img
-                                    src="@A/images/home_hot_title.png"
-                                    alt=""
-                                />
-                            </div>
-                            <div
-                                class="white xs ml5 one-txt-cut"
-                                style="flex: 1; text-align: left"
-                            >
-                                根据销量、搜索、好评等综合得出
-                            </div>
-                            <div class="row xs">
-                                更多
-                                <img
-                                    class="icon-sm"
-                                    src="@A/images/arrow_right_w.png"
-                                />
-                            </div>
-                        </div>
-                    </active-area>
-                </div>
             </div>
             <div class="new-goods-container" v-if="newGoodsObj.length">
                 <div class="new-goods-header row-center">
@@ -205,15 +170,41 @@
                     <goods-list :lists="goodsList" ></goods-list>    
                 </van-list>
             </div>
+            <van-popup class="column-center" v-model="showCoupop" round transition="fade">
+                <div class="coupon-popup">
+                    <div class="coupon-container">
+                        <div class="coupon-wrapper">
+                            <div class="coupon-item row" v-for="item in couponPopList" :key="item.id">
+                                <div class="lg primary money">
+                                    <price-slice
+                                        :price="item.money"
+                                        :showSubscript="true"
+                                        subScriptClass="lg"
+                                        firstClass="coupon-pop-size"
+                                        secondClass="lg"
+                                    />
+                                </div>
+                                <div class="column coupon-desc">
+                                    <div class="bold md">{{item.name}}</div>
+                                    <div class="xs muted mt5" style="line-height: 15px;">{{item.use_goods_type}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="get-coupon-btn lg white bg-primary mt10 br60 column-center" @click="showCoupop = false">
+                    立即领取
+                </div>
+            </van-popup>
         </div>
     </div>
 </template>
 
 <script>
-import ActiveArea from "@C/ActiveArea";
 import Recommend from "@C/Recommend";
 import { getHome, getBestList } from "@API/store";
-import {getMenu} from '@API/app'
+import {getMenu, getCouponPopList} from '@API/app'
+import {getCoupon} from "@API/user"
 import GoodsList from "@C/GoodsList";
 import AdSwiper from '../../components/AdSwiper/AdSwiper.vue';
 import PriceSlice from '../../components/PriceSlice/PriceSlice.vue';
@@ -222,7 +213,6 @@ import { mapState } from "vuex";
 export default {
     name: "home",
     components: {
-        ActiveArea,
         Recommend,
         GoodsList,
         AdSwiper,
@@ -235,13 +225,13 @@ export default {
             showHotRank: true,
             showHotShop: true,
             headerLogo: "",
-            hotShopObj: [],
-            hotGoodsObj: [
-            ],
+            remainTime: 0,
+            couponList: [],
             newGoodsObj: [],
             news: [],
             activityArea: [],
             navList: [],
+            couponPopList: [],
             // 好物优选
             loading: true,
             finished: false,
@@ -249,24 +239,32 @@ export default {
             page: 1,
             goodsList: [],
             // end
+            isDischarge: true
         };
     },
     methods: {
-        handleArray(data, array = [], optNum = 10) {
-            if(data.length <= optNum ) {
-                data.length > 0 && array.push(data)
-                return array;
-            }
-            array.push(data.splice(0,optNum))
-            return this.handleArray(data, array,optNum)
+        userGetCoupon(id) {
+            getCoupon({id: id}).then(res => {
+                if(res.code == 1) {
+                    this.$toast(res.msg)
+                    this.$getHome()
+                }
+            })
         },
+        handleArray(data, array = [], optNum = 10) {
+        if(data.length <= optNum ) {
+            data.length > 0 && array.push(data)
+            return array;
+        }
+        array.push(data.splice(0,optNum))
+        return this.handleArray(data, array,optNum)
+    },
         $getMenu() {
             getMenu({type: 1, client: 2}).then(res => {
                 if(res.code == 1) {
                     let data =  JSON.parse(JSON.stringify(res.data)) 
                     const arr = this.handleArray(res.data);
                     this.navList = arr;
-                    console.log(this.navList)
                 }
             })
         },
@@ -293,14 +291,29 @@ export default {
         $getHome() {
             getHome().then((res) => {
                 if (res.code == 1) {
-                    let {new_goods, host_goods, shop_logo, news, activity_area } = res.data;
+                    let { coupon, new_goods, shop_logo, news, activity_area } = res.data;
+                    let currentTime = Date.parse(new Date()) / 1000;
+                    this.couponList = coupon;
                     this.newGoodsObj = new_goods;
-                    this.hotGoodsObj = host_goods;
                     this.headerLogo = shop_logo;
                     this.news = news;
                     this.activityArea = activity_area
                 }
             });
+        },
+
+        $getCouponPopList() {
+            if(!this.token) {
+                return;
+            }
+            getCouponPopList().then(res => {
+                if(res.code == 1) {
+                    this.couponPopList = res.data;
+                    if(res.data.length > 0) {
+                        this.showCoupop = true
+                    }
+                }
+            })
         },
 
         // 时间改变
@@ -339,9 +352,16 @@ export default {
         this.$getMenu();
         this.$getHome();
         this.$getBestList()
+        this.$getCouponPopList();
+    },
+    mounted() {
+        this.isDischarge = false;
     },
     computed: {
         ...mapState(['token'])
+    },
+    destroyed() {
+        this.isDischarge = true;
     }
 };
 </script>
@@ -407,39 +427,6 @@ export default {
                 flex: none;
             }
         }
-        .activity-container {
-            .special-area {
-                margin: 10px 10px 0;
-	            flex-wrap: wrap;
-                .area-item {
-                    justify-content: stretch;
-                    text-align: center;
-                    width: 117px;
-                    padding: 10px 10px 5px;
-                    box-sizing: border-box;
-                    background-color: #fff;
-                    border-radius: 5px;
-                    margin-bottom: 2px;
-                    &:not(:nth-of-type(3n)) {
-                        margin-right: 2px;
-                    }
-                }
-            }
-            .hot {
-                padding: 0 10px 5px;
-                .hot-header {
-                    padding: 10px 9px;
-                    .title {
-                        width: 86px;
-                        height: 19px;
-                        img {
-                            width: 100%;
-                            height: 100%;
-                        }
-                    }
-                }
-            }
-        }
         .new-goods-container {
             .new-goods-header {
                 padding: 12.5px;
@@ -498,6 +485,48 @@ export default {
                     line-height: 25px;
                 }
             }
+        }
+        .coupon-popup {
+            overflow: hidden;
+            background-image: url(../../assets/images/popCoupon.png);
+            height: 400px;
+            width: 319px;
+            background-size: 100% 100%;
+            .coupon-container {
+                overflow-y: hidden;
+                height: 220px;
+                padding-top: 160px;
+                .coupon-wrapper {
+                    overflow-y: auto;
+                    height: 100%;
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .coupon-item {
+                        background-image: url(../../assets/images/pop_bg_coupon.png);
+                        height: 55px;
+                        background-size: 100% 100%;
+                        margin: 0 37px 10px;
+                        padding: 10px 0;
+                        .money {
+                            width: 80px;
+                            text-align: center;
+                            border-right: 1px dashed $--color-primary;
+                            line-height: 39px;
+                        }
+                        .coupon-desc {
+                            line-height: 21px;
+                            margin-left: 15px;
+                        }
+                    }
+                }
+            }
+        }
+        .get-coupon-btn {
+            height: 42px;
+            border: 1px solid #F8D07C;
+            font-weight: 500;
+            width: 239px;
         }
     }
    

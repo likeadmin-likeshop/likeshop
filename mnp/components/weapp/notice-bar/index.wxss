@@ -1,0 +1,80 @@
+@import '../common/index.wxss';
+
+.van-notice-bar {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 15rpx 24rpx;
+  padding: var(--notice-bar-padding,15rpx 24rpx);
+  font-size: 26rpx;
+  color: #ed6a0c;
+  color: var(--notice-bar-text-color,#ed6a0c);
+  line-height: 34rpx;
+  background-color: #fffbe8;
+  background-color: var(--notice-bar-background-color,#fffbe8);
+}
+
+/* .van-notice-bar--withicon {
+  position: relative;
+  padding-right: 80rpx;
+} */
+
+.van-notice-bar--wrapable {
+  height: auto;
+  padding: 16rpx 24rpx;
+  padding: var(--notice-bar-wrapable-padding,16rpx 24rpx);
+}
+
+.van-notice-bar--wrapable .van-notice-bar__wrap {
+  height: auto;
+}
+
+.van-notice-bar--wrapable .van-notice-bar__content {
+  position: relative;
+  white-space: normal;
+}
+
+.van-notice-bar__left-icon {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  margin-right: 8rpx;
+  vertical-align: middle;
+}
+
+.van-notice-bar__left-icon,
+.van-notice-bar__right-icon {
+  font-size: 32rpx;
+  font-size: var(--notice-bar-icon-size,32rpx);
+  min-width: 44rpx;
+  min-width: var(--notice-bar-icon-min-width,44rpx);
+}
+
+/* .van-notice-bar__right-icon {
+  position: absolute;
+  top: 20rpx;
+  right: 30rpx;
+} */
+.van-notice-bar__link {
+  display: flex;
+  align-items: center;
+}
+.van-notice-bar__wrap {
+  position: relative;
+  -webkit-flex: 1;
+  flex: 1;
+  overflow: hidden;
+  height: 34rpx;
+  height: var(--notice-bar-line-height,34rpx);
+}
+
+.van-notice-bar__content {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.van-notice-bar__content.van-ellipsis {
+  max-width: 100%;
+}

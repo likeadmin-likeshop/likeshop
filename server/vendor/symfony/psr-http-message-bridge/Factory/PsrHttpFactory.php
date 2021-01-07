@@ -48,12 +48,9 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
      */
     public function createRequest(Request $symfonyRequest)
     {
-        $uri = $symfonyRequest->server->get('QUERY_STRING', '');
-        $uri = $symfonyRequest->getSchemeAndHttpHost().$symfonyRequest->getBaseUrl().$symfonyRequest->getPathInfo().('' !== $uri ? '?'.$uri : '');
-
         $request = $this->serverRequestFactory->createServerRequest(
             $symfonyRequest->getMethod(),
-            $uri,
+            $symfonyRequest->getSchemeAndHttpHost().$symfonyRequest->getRequestUri(),
             $symfonyRequest->server->all()
         );
 
@@ -61,7 +58,12 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
             $request = $request->withHeader($name, $value);
         }
 
-        $body = $this->streamFactory->createStreamFromResource($symfonyRequest->getContent(true));
+        if (PHP_VERSION_ID < 50600) {
+            $body = $this->streamFactory->createStreamFromFile('php://temp', 'wb+');
+            $body->write($symfonyRequest->getContent());
+        } else {
+            $body = $this->streamFactory->createStreamFromResource($symfonyRequest->getContent(true));
+        }
 
         $request = $request
             ->withBody($body)
@@ -81,11 +83,13 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
     /**
      * Converts Symfony uploaded files array to the PSR one.
      *
+     * @param array $uploadedFiles
+     *
      * @return array
      */
     private function getFiles(array $uploadedFiles)
     {
-        $files = [];
+        $files = array();
 
         foreach ($uploadedFiles as $key => $value) {
             if (null === $value) {
@@ -104,6 +108,8 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
 
     /**
      * Creates a PSR-7 UploadedFile instance from a Symfony one.
+     *
+     * @param UploadedFile $symfonyUploadedFile
      *
      * @return UploadedFileInterface
      */
@@ -125,7 +131,7 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
      */
     public function createResponse(Response $symfonyResponse)
     {
-        $response = $this->responseFactory->createResponse($symfonyResponse->getStatusCode(), Response::$statusTexts[$symfonyResponse->getStatusCode()] ?? '');
+        $response = $this->responseFactory->createResponse($symfonyResponse->getStatusCode());
 
         if ($symfonyResponse instanceof BinaryFileResponse) {
             $stream = $this->streamFactory->createStreamFromFile(
@@ -152,7 +158,7 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
         $headers = $symfonyResponse->headers->all();
         $cookies = $symfonyResponse->headers->getCookies();
         if (!empty($cookies)) {
-            $headers['Set-Cookie'] = [];
+            $headers['Set-Cookie'] = array();
 
             foreach ($cookies as $cookie) {
                 $headers['Set-Cookie'][] = $cookie->__toString();

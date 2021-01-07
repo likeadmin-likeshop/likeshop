@@ -11,35 +11,31 @@
 
 namespace Symfony\Component\Cache\Simple;
 
-use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\Cache\Exception\CacheException;
 use Symfony\Component\Cache\PruneableInterface;
 use Symfony\Component\Cache\Traits\PhpFilesTrait;
-use Symfony\Contracts\Cache\CacheInterface;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.3, use "%s" and type-hint for "%s" instead.', PhpFilesCache::class, PhpFilesAdapter::class, CacheInterface::class), E_USER_DEPRECATED);
-
-/**
- * @deprecated since Symfony 4.3, use PhpFilesAdapter and type-hint for CacheInterface instead.
- */
 class PhpFilesCache extends AbstractCache implements PruneableInterface
 {
     use PhpFilesTrait;
 
     /**
-     * @param $appendOnly Set to `true` to gain extra performance when the items stored in this pool never expire.
-     *                    Doing so is encouraged because it fits perfectly OPcache's memory model.
+     * @param string      $namespace
+     * @param int         $defaultLifetime
+     * @param string|null $directory
      *
      * @throws CacheException if OPcache is not enabled
      */
-    public function __construct(string $namespace = '', int $defaultLifetime = 0, string $directory = null, bool $appendOnly = false)
+    public function __construct($namespace = '', $defaultLifetime = 0, $directory = null)
     {
-        $this->appendOnly = $appendOnly;
-        self::$startTime = self::$startTime ?? $_SERVER['REQUEST_TIME'] ?? time();
+        if (!static::isSupported()) {
+            throw new CacheException('OPcache is not enabled.');
+        }
         parent::__construct('', $defaultLifetime);
         $this->init($namespace, $directory);
-        $this->includeHandler = static function ($type, $msg, $file, $line) {
-            throw new \ErrorException($msg, 0, $type, $file, $line);
-        };
+
+        $e = new \Exception();
+        $this->includeHandler = function () use ($e) { throw $e; };
+        $this->zendDetectUnicode = filter_var(ini_get('zend.detect_unicode'), \FILTER_VALIDATE_BOOLEAN);
     }
 }

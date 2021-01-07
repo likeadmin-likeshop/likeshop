@@ -1,0 +1,36 @@
+
+.bargain-code-list .bargain-code-item {
+    margin-top: 20rpx;
+}
+
+.bargain-code-list .bargain-code-item .header {
+    padding: 20rpx 24rpx;
+    border-bottom: var(--border);
+}
+
+.bargain-code-list .bargain-code-item .goods-container {
+    padding: 30rpx 24rpx;
+    border-bottom: var(--border);
+}
+
+.bargain-code-list .bargain-code-item .goods-container .goods-image {
+    width: 160rpx;
+    height: 160rpx;
+}
+
+.bargain-code-list .bargain-code-item .goods-container .goods-info {
+    margin-left: 24rpx;
+}
+
+.bargain-code-list .bargain-code-item .goods-container .goods-info .bargain-to-money {
+    line-height: 48rpx;
+}
+
+.bargain-code-list .bargain-code-item .footer {
+    padding: 20rpx 24rpx;
+}
+
+.bargain-code-list .bargain-code-item .footer .bargain-btn {
+    height: 62rpx;
+    width: 244rpx;
+}

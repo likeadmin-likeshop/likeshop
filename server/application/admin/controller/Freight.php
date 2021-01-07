@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -33,7 +36,7 @@ class Freight extends AdminBase
             $post = $this->request->post();
             $post['type'] = isset($post['type']) && $post['type'] == 'on' ? 1 : 0;
             ConfigServer::set('express', 'is_express', $post['type']);
-            $this->success('操作成功');
+            $this->_success('操作成功');
         }
         $type = ConfigServer::get('express', 'is_express');
         $this->assign('type', $type);
@@ -48,7 +51,7 @@ class Freight extends AdminBase
     {
         if ($this->request->isAjax()) {
             $get = $this->request->get();
-            $this->success('获取成功', FreightLogic::lists($get));//运费模板页
+            $this->_success('获取成功', FreightLogic::lists($get));//运费模板页
         }
         $this->assign('charge_way_lists', FreightModel::getChargeWay(true));
         $this->assign('config', ExpressLogic::getExpress());
@@ -66,9 +69,9 @@ class Freight extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\Freight.add');
             if ($result === true) {
                 FreightLogic::add($post);
-                $this->success('添加成功！');
+                $this->_success('添加成功！');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         return $this->fetch();
     }
@@ -84,9 +87,9 @@ class Freight extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\Freight.del');
             if ($result === true) {
                 FreightLogic::del($post);
-                $this->success('删除成功！');
+                $this->_success('删除成功！');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         return $this->fetch();
     }
@@ -114,10 +117,10 @@ class Freight extends AdminBase
             $post = $this->request->post();
             $result = $this->validate($post, 'app\admin\validate\Freight.edit');
             if ($result !== true) {
-                $this->error($result);
+                $this->_error($result);
             }
             FreightLogic::edit($post);
-            $this->success('编辑成功！');
+            $this->_success('编辑成功！');
         }
         $id = $this->request->get('id');
         $detail = FreightLogic::detail($id);

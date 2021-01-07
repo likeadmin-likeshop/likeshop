@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="goods-details" v-if="!isFirstLoading">
         <div class="app-load row-between bg-white" v-if="isFromApp">
@@ -15,7 +33,29 @@
         </div>
         <product-swiper :imgList="swiperList"></product-swiper>
         <div class="goods-info bg-white">
-            <div class="info-header row">
+            <div class="count-down row-between" v-if="activity.type == 1">
+                <div class="price white row">
+                    <div class="mr10">
+                        <price-slice
+                            :showSubscript="true"
+                            :price="checkedGoods.price || goodsDetail.price"
+                            :weight="700"
+                            first-class="first-price"
+                            second-class="xxl"
+                        ></price-slice>
+                    </div>
+                    <div class="line-through white md">
+                        <price-slice
+                            :showSubscript="true"
+                            :price="
+                                checkedGoods.market_price ||
+                                goodsDetail.market_price
+                            "
+                        ></price-slice>
+                    </div>
+                </div>
+            </div>
+            <div class="info-header row" v-else>
                 <div class="price row" style="flex: 1">
                     <div class="primary mr10">
                         <price-slice
@@ -41,16 +81,47 @@
                 <div class="goods-name lg bold" style="flex: 1">
                     {{ goodsDetail.name }}
                 </div>
+                <img
+                    v-if="activity.type == 1"
+                    class="icon-share"
+                    @click="showShare = true"
+                    src="@A/images/icon_share.png"
+                />
             </div>
             <div class="row-between xs lighter" style="padding: 0 0.32rem 10px">
                 <span v-if="goodsDetail.stock !== true"
                     >库存: {{ checkedGoods.stock || goodsDetail.stock }}件</span
                 >
                 <span>销量: {{ goodsDetail.sales_sum }}件</span>
-                <span>浏览量: {{ goodsDetail.click_count }}件</span>
+                <span>浏览量: {{ goodsDetail.click_count }}次</span>
             </div>
         </div>
-        <div class="evaluation bg-white mt10" v-if="comment.goods_rate">
+        <div
+            class="coupons row mt10 bg-white"
+            style="align-items: flex-start"
+            @click="showCoupons = true"
+             v-if="couponLists.length"
+        >
+            <div class="text muted">优惠</div>
+            <div class="con" style="flex: 1">
+                <div class="row" style="flex: 1">
+                    <van-tag plain :color="primaryColor">领券</van-tag>
+                    <div class="row ml10" style="flex: 1">
+                        <div
+                            class="coupons-item primary mr10"
+                            v-for="(item, index) in couponLists"
+                            :key="item.id"
+                        >
+                            <div v-if="index < 2" class="row xs">
+                                {{ item.use_condition }}
+                            </div>
+                        </div>
+                    </div>
+                    <img class="icon-sm" src="@A/images/arrow_right.png" />
+                </div>
+            </div>
+        </div>
+        <div class="evaluation bg-white mt10" >
             <div
                 class="title row-between"
                 @click="goPage('userEvaluate', { id: goodsDetail.id })"
@@ -58,7 +129,7 @@
                 <div>
                     <span class="balck md mr10">用户评价</span>
                     <span class="primary sm"
-                        >好评率{{ comment.goods_rate }}</span
+                        >好评率{{ comment.goods_rate  || "0%"}}</span
                     >
                 </div>
                 <div class="row">
@@ -66,8 +137,8 @@
                     <img class="icon-sm" src="@A/images/arrow_right.png" />
                 </div>
             </div>
-            <div class="con">
-                <div class="user-info row">
+            <div class="con" v-if="comment.goods_rate">
+                <div class="user-info row" >
                     <img class="avatar mr10" :src="comment.avatar" />
                     <div class="user-name md mr10">{{ comment.nickname }}</div>
                 </div>
@@ -78,6 +149,9 @@
                     {{ comment.comment }}
                 </div>
             </div>
+             <div class="con muted row-center" v-else>
+                 暂无评价
+             </div>
         </div>
         <goods-like class="mt10" v-if="goodsLike.length" :lists="goodsLike" />
         <div class="details mt10 bg-white">
@@ -117,6 +191,7 @@
                 </div>
             </div>
             <div
+                v-if="!activity.type == 1"
                 class="addcart br60 white mr10 md ml10"
                 @click="onShowSpec(1)"
             >
@@ -142,15 +217,34 @@
             </div>
         </transition>
         <van-popup
-            class="guidespopup"
-            v-model="guidespopup"
-            lazy-render
-            position="top"
+            class="coupons-popup"
+            v-model="showCoupons"
+            position="bottom"
+            round
+            closeable
+            @close="showCoupons = false"
         >
-            <img src="@A/images/shring_arrow.png" alt="箭头" />
-            <div>
-                <p class="bold lg">立即分享给好友吧</p>
-                <p class="sm mt10">点击屏幕右上角将本页面分享给好友</p>
+            <div class="title md bold">领券</div>
+            <div class="content bg-gray">
+                <coupon-list
+                    :coupon-list="couponLists"
+                    :is-coupon-center="true"
+                    @receive="userReceiveCoupon"
+                ></coupon-list>
+            </div>
+        </van-popup>
+        <van-popup
+            v-model="posterpopup"
+            position="center"
+            closeable
+            class="code-popup"
+            transition="fade"
+        >
+            <div class="content mb10">
+                <img :src="shareImg" alt class="share-img" />
+            </div>
+            <div class="bg-primary row-center white save-btn">
+                长按保存图片到相册
             </div>
         </van-popup>
     </div>
@@ -161,12 +255,15 @@ import Vue from "vue";
 import ProductSwiper from "@C/ProductSwiper";
 import PriceSlice from "@C/PriceSlice";
 import GoodsSpec from "@C/GoodsSpec";
+import CouponList from "@C/CouponList";
 import GoodsLike from "@C/GoodsLike";
 import {
     getGoodsDetail,
-    addCart
+    getGoodsCoupon,
+    addCart,
+    getPoster,
 } from "@/api/store";
-import { handleCollectGoods } from "@API/user";
+import { handleCollectGoods, getCoupon } from "@API/user";
 import { getAppDownload } from "@API/app";
 import { appSource } from "@U/utils";
 import { mapState, mapActions } from "vuex";
@@ -180,22 +277,26 @@ export default {
         ProductSwiper,
         PriceSlice,
         GoodsSpec,
+        CouponList,
         GoodsLike,
     },
     data() {
         return {
-            guidespopup: false,
-            showShare: false,
+            posterpopup: false,
+            shareImg: "",
             timeData: {},
             swiperList: [],
             goodsDetail: {},
             checkedGoods: {},
+            couponLists: [],
             goodsLike: [],
             isFirstLoading: true,
             showSpec: false,
             popupType: "",
             countTime: 0,
+            activity: {},
             comment: {},
+            showCoupons: false,
             isFromApp: this.$route.query.isapp,
             showAnim: false,
             iconShaking: false,
@@ -205,6 +306,7 @@ export default {
     async created() {
         this.id = this.$route.query.id;
         this.$getGoodsDetail();
+        this.$getCoupons();
         this.getCartNum()
     },
     mounted() {},
@@ -222,15 +324,7 @@ export default {
                     }
                 }
             );
-        },
-        onChangeDate(e) {
-            let timeData = {};
-            for (let prop in e) {
-                if (prop !== "milliseconds")
-                    timeData[prop] = ("0" + e[prop]).slice(-2);
-            }
-            this.timeData = timeData;
-        },
+        }, 
         goPage(name, query) {
             this.$router.push({
                 name,
@@ -248,16 +342,55 @@ export default {
                         content,
                         comment,
                         like,
+                        activity,
                     } = res.data;
                     this.goodsDetail = res.data;
                     this.swiperList = goods_image;
                     this.goodsLike = like;
+                    this.countTime = activity.info
+                        ? activity.info.end_time * 1000 - Date.now()
+                        : 0;
+                    this.activity = activity;
                     this.comment = comment;
                     this.isFirstLoading = false;
                 } else {
                     setTimeout(() => {
                         this.$router.go(-1);
                     }, 500);
+                }
+            });
+        },
+        $getPoster() {
+            this.$toast({
+                type: "loading",
+                message: "正在生成中...",
+                duration: 0,
+            });
+            getPoster({
+                id: this.id,
+                url: `/mobile/common/goodsdetail?id=${this.id}`,
+            }).then((res) => {
+                this.$toast.clear();
+                if (res.code == 1) {
+                    this.shareImg = res.data;
+                    this.posterpopup = true;
+                }
+            });
+        },
+        $getCoupons() {
+            getGoodsCoupon({
+                id: this.id,
+            }).then((res) => {
+                if (res.code == 1) {
+                    this.couponLists = res.data;
+                }
+            });
+        },
+        userReceiveCoupon(id) {
+            getCoupon({ id: id }).then((res) => {
+                if (res.code == 1) {
+                    this.$toast({ message: res.msg });
+                    this.$getCoupons();
                 }
             });
         },
@@ -271,6 +404,11 @@ export default {
             handleCollectGoods({ is_collect: is_collect, goods_id: id }).then(
                 (res) => {
                     if (res.code == 1) {
+                          if(is_collect == 1) {
+                             this.$toast({ message: "收藏成功"});
+                        }else {
+                              this.$toast({ message: "取消收藏" });
+                        }
                         this.$getGoodsDetail();
                     }
                 }
@@ -367,12 +505,6 @@ export default {
                 background-size: 100%;
                 padding-left: 12px;
             }
-            .down .item {
-                text-align: center;
-                width: 18px;
-                line-height: 18px;
-                border-radius: 2px;
-            }
         }
         .info-header {
             padding: 10px 0 0 12px;
@@ -386,6 +518,43 @@ export default {
         }
         .goods-name {
             padding: 10px 12px;
+        }
+    }
+    .coupons {
+        padding: 14px 12px;
+
+        .text {
+            width: 50px;
+        }
+        .coupons-item {
+            overflow: hidden;
+            > div {
+                position: relative;
+                height: 20px;
+                line-height: 20px;
+                padding: 0 9px;
+                border-radius: 3px;
+                box-sizing: border-box;
+                color: #fff;
+                background: $--color-primary;
+                &::after,
+                &::before {
+                    content: "";
+                    display: block;
+                    width: 10px;
+                    height: 10px;
+                    position: absolute;
+                    left: -6px;
+                    background-color: #fff;
+                    border-radius: 50%;
+                    border: 1px solid currentColor;
+                    box-sizing: border-box;
+                }
+                &::after {
+                    right: -7px;
+                    left: auto;
+                }
+            }
         }
     }
     .evaluation {
@@ -462,6 +631,13 @@ export default {
             background-color: $--color-primary;
         }
     }
+    .coupons-popup .title {
+        padding: 15px;
+    }
+    .coupons-popup .content {
+        height: 350px;
+        overflow-x: auto;
+    }
     .share-popup {
         .title {
             height: 50px;
@@ -472,20 +648,6 @@ export default {
         }
         .share-tab {
             margin: 20px 0 70px;
-        }
-    }
-    .guidespopup {
-        background-color: rgba(0, 0, 0, 0);
-        img {
-            width: 70px;
-            height: 125px;
-            float: right;
-            margin: 15px 31px 0 0;
-        }
-        div {
-            color: #fff;
-            text-align: center;
-            margin-top: 140px;
         }
     }
     .code-popup {

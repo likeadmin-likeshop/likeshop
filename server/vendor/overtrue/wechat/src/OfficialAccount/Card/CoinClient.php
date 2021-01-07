@@ -22,8 +22,6 @@ class CoinClient extends BaseClient
 {
     /**
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function activate()
     {
@@ -35,9 +33,6 @@ class CoinClient extends BaseClient
      * @param int    $quantity
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getPrice(string $cardId, int $quantity)
     {
@@ -49,8 +44,6 @@ class CoinClient extends BaseClient
 
     /**
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function summary()
     {
@@ -61,9 +54,6 @@ class CoinClient extends BaseClient
      * @param int $count
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function recharge(int $count)
     {
@@ -76,9 +66,6 @@ class CoinClient extends BaseClient
      * @param string $orderId
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function order(string $orderId)
     {
@@ -89,9 +76,6 @@ class CoinClient extends BaseClient
      * @param array $filters
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function orders(array $filters)
     {
@@ -104,9 +88,6 @@ class CoinClient extends BaseClient
      * @param int    $quantity
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function confirm(string $cardId, string $orderId, int $quantity)
     {

@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -34,7 +37,7 @@ class Admin extends AdminBase
     {
         if ($this->request->isAjax()) {
             $get = $this->request->get();
-            $this->success('',  AdminLogic::lists($get));
+            $this->_success('',  AdminLogic::lists($get));
         }
 
         $this->assign('role_lists', AdminLogic::roleLists());
@@ -56,9 +59,9 @@ class Admin extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\Admin.add');
             if ($result === true) {
                 AdminLogic::addAdmin($post);
-                $this->success('修改成功');
+                $this->_success('修改成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         $this->assign('role_lists', AdminLogic::roleLists());
         return $this->fetch();
@@ -81,9 +84,9 @@ class Admin extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\Admin.edit');
             if ($result === true) {
                 AdminLogic::editAdmin($post);
-                $this->success('修改成功');
+                $this->_success('修改成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
 
         $this->assign('info', AdminLogic::info($admin_id));
@@ -102,9 +105,9 @@ class Admin extends AdminBase
         if ($this->request->isAjax()) {
             $result = AdminLogic::delAdmin($admin_id);
             if ($result) {
-                $this->success('删除成功');
+                $this->_success('删除成功');
             }
-            $this->error('删除失败');
+            $this->_error('删除失败');
         }
     }
 

@@ -6,7 +6,6 @@
         <li class="goods-tab" style="color: #6a6f6c">价格库存</li>
         <li class="goods-tab" style="color: #6a6f6c">商品详情</li>
         <li class="goods-tab" style="color: #6a6f6c">销售设置</li>
-        <li class="goods-tab" style="color: #6a6f6c">分销设置</li>
     </ul>
     <div class="layui-tab-content layui-form">
         <div class="layui-tab-item goods-content layui-show">
@@ -202,7 +201,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">商品详情</label>
                 <div class="layui-input-block">
-                    <textarea name="content" id="content" lay-verify="content" class="field-content"></textarea>
+                    <textarea name="content" id="content" lay-verify="content" ></textarea>
                 </div>
             </div>
         </div>
@@ -264,57 +263,6 @@
                     <input type="radio" name="status" value="0" title="放入仓库" verify-msg="选择销售状态" lay-verify="status" checked>
                 </div>
             </div>
-        </div>
-        <div class="layui-tab-item">
-            <div class="layui-form-item">
-                <label class="layui-form-label">分销佣金：</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="is_commission" value="1" title="开启" checked>
-                    <input type="radio" name="is_commission" value="0" title="不开启" >
-                </div>
-            </div>
-            <div class="layui-form-item"><label class="layui-form-label"></label><span
-                    style="color: #a3a3a3;font-size: 9px">开启后商品可以参与分销佣金</span></div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">一级分销比例：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="first_ratio"  autocomplete="off" class="layui-input first_ratio">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">二级分销比例：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="second_ratio" autocomplete="off" class="layui-input second_ratio">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">三级分销比例：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="three_ratio"  lay-verify="distribution" autocomplete="off" class="layui-input three_ratio">
-                </div>
-            </div>
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">区域股东分红：</label>-->
-<!--                <div class="layui-input-block">-->
-<!--                    <input type="radio" name="is_share_bouns" value="1" title="开启" checked>-->
-<!--                    <input type="radio" name="is_share_bouns" value="0" title="不开启" >-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="layui-form-item"><label class="layui-form-label"></label><span-->
-<!--                    style="color: #a3a3a3;font-size: 9px">开启后商品可以参与区域及股东分红</span></div>-->
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">区域分红比例：</label>-->
-<!--                <div class="layui-input-inline">-->
-<!--                    <input type="text" name="region_ratio" autocomplete="off" class="layui-input">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">股东分红比例：</label>-->
-<!--                <div class="layui-input-inline">-->
-<!--                    <input type="text" name="shareholder_ratio"  autocomplete="off" class="layui-input">-->
-<!--                </div>-->
-<!--            </div>-->
-
         </div>
         <div class="layui-form-item layui-hide">
             <input type="button" lay-submit lay-filter="goods-submit" id="goods-submit" value="确认">

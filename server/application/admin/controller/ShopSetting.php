@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -60,7 +63,7 @@ class ShopSetting extends AdminBase
             ConfigServer::set('shop', 'address', $post['address']);//店铺详细地址
             ConfigServer::set('order_message', 'order_contact', $post['order_contact']);//订单管理联系人
             ConfigServer::set('order_message', 'order_contact_mobile', $post['order_contact_mobile']);//订单管理联系人手机
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
     }
 
@@ -86,33 +89,8 @@ class ShopSetting extends AdminBase
             ConfigServer::set('policy', 'service', $post['service']);
             ConfigServer::set('policy', 'privacy', $post['privacy']);
             ConfigServer::set('policy', 'after_sale', $post['after_sale']);
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
     }
 
-    /**
-     * 会员提现设置
-     */
-    public function withdraw()
-    {
-        $config = [
-            'min_withdraw' => ConfigServer::get('withdraw', 'min_withdraw'),
-            'max_withdraw' => ConfigServer::get('withdraw', 'max_withdraw'),
-            'poundage' => ConfigServer::get('withdraw', 'poundage'),
-        ];
-        $this->assign('config', $config);
-        return $this->fetch();
-    }
-
-
-    public function setWithdraw()
-    {
-        $post = $this->request->post();
-        if ($post) {
-            ConfigServer::set('withdraw', 'min_withdraw', $post['min_withdraw']);//最低提现
-            ConfigServer::set('withdraw', 'max_withdraw', $post['max_withdraw']);//最高提现
-            ConfigServer::set('withdraw', 'poundage', $post['poundage']);//提现手续费
-            $this->success('操作成功');
-        }
-    }
 }

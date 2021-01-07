@@ -1,0 +1,45 @@
+<!-- pages/address_edit/address_edit.wxml -->
+<view class="address-edit">
+    <form bindsubmit="formSubmit" report-submit='true'>
+        <view class="form bg-white">
+            <view class="form-item row">
+                <view class="label">收货人</view>
+                <input class="ml10" name="contact" value="{{addressObj.contact}}" type="text" placeholder="请填写收货人姓名" />
+            </view>
+            <view class="form-item row">
+                <view class="label">联系方式</view>
+                <input class="ml10" name="telephone" value="{{addressObj.telephone}}" type="number" placeholder="请填写手机号码" />
+            </view>
+            <picker mode="region" bindchange="regionChange">
+                <view class="form-item row">
+                    <view class="label">所在地区</view>
+                    <input class="ml10" name="region" value="{{region}}" disabled type="text" placeholder="请选择省、市、区" />
+                    <image class="icon-sm ml10" src="/images/arrow_right.png" />
+                </view>
+            </picker>
+            <view style="height:200rpx">
+                <van-field
+                    name="address"
+                    label="详细地址"
+                    value="{{addressObj.address}}"
+                    type="textarea"
+                    fixed="{{true}}"
+                    placeholder="请填写小区、街道、门牌号等信息"
+                    border="{{false}}"
+                    title-width="150rpx"
+                    bind:change="textareaChange"
+                >
+                </van-field>
+            </view>
+        </view>
+        <view class="mt10 mb10 bg-white check-wrap">
+            <checkbox-group class="row" bindchange='ChangeIsDefault'>
+                <checkbox id="checkbox" checked="{{addressObj.is_default ? true : false }}" />
+                <label for="checkbox">
+                    <text>设置为默认</text>
+                </label>
+            </checkbox-group>
+        </view>
+        <button class="btn bg-primary white br60" formType="submit">完成</button>
+    </form>
+</view>

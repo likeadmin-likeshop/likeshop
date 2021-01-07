@@ -1,0 +1,3 @@
+/**app.wxss**/
+@import "./styles/base.wxss";
+@import "./styles/global.wxss";

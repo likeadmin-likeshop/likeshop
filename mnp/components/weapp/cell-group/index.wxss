@@ -1,0 +1,12 @@
+@import '../common/index.wxss';
+
+.van-cell-group__title {
+  padding: 32rpx 32rpx 16rpx;
+  padding: var(--cell-group-title-padding,32rpx 32rpx 16rpx);
+  font-size: 28rpx;
+  font-size: var(--cell-group-title-font-size,28rpx);
+  line-height: 32rpx;
+  line-height: var(--cell-group-title-line-height,32rpx);
+  color: #969799;
+  color: var(--cell-group-title-color,#969799);
+}

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -12,9 +12,7 @@
 namespace Monolog\Handler;
 
 use Monolog\Logger;
-use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LogglyFormatter;
-use function array_key_exists;
 
 /**
  * Sends errors to Loggly.
@@ -25,32 +23,18 @@ use function array_key_exists;
  */
 class LogglyHandler extends AbstractProcessingHandler
 {
-    protected const HOST = 'logs-01.loggly.com';
-    protected const ENDPOINT_SINGLE = 'inputs';
-    protected const ENDPOINT_BATCH = 'bulk';
-
-    /**
-     * Caches the curl handlers for every given endpoint.
-     *
-     * @var array
-     */
-    protected $curlHandlers = [];
+    const HOST = 'logs-01.loggly.com';
+    const ENDPOINT_SINGLE = 'inputs';
+    const ENDPOINT_BATCH = 'bulk';
 
     protected $token;
 
-    protected $tag = [];
+    protected $tag = array();
 
-    /**
-     * @param string     $token  API token supplied by Loggly
-     * @param string|int $level  The minimum logging level to trigger this handler
-     * @param bool       $bubble Whether or not messages that are handled should bubble up the stack.
-     *
-     * @throws MissingExtensionException If the curl extension is missing
-     */
-    public function __construct(string $token, $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct($token, $level = Logger::DEBUG, $bubble = true)
     {
         if (!extension_loaded('curl')) {
-            throw new MissingExtensionException('The curl extension is needed to use the LogglyHandler');
+            throw new \LogicException('The curl extension is needed to use the LogglyHandler');
         }
 
         $this->token = $token;
@@ -58,72 +42,26 @@ class LogglyHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    /**
-     * Loads and returns the shared curl handler for the given endpoint.
-     *
-     * @param string $endpoint
-     *
-     * @return resource
-     */
-    protected function getCurlHandler(string $endpoint)
+    public function setTag($tag)
     {
-        if (!array_key_exists($endpoint, $this->curlHandlers)) {
-            $this->curlHandlers[$endpoint] = $this->loadCurlHandler($endpoint);
-        }
-
-        return $this->curlHandlers[$endpoint];
+        $tag = !empty($tag) ? $tag : array();
+        $this->tag = is_array($tag) ? $tag : array($tag);
     }
 
-    /**
-     * Starts a fresh curl session for the given endpoint and returns its handler.
-     *
-     * @param string $endpoint
-     *
-     * @return resource
-     */
-    private function loadCurlHandler(string $endpoint)
-    {
-        $url = sprintf("https://%s/%s/%s/", static::HOST, $endpoint, $this->token);
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        return $ch;
-    }
-
-    /**
-     * @param string[]|string $tag
-     */
-    public function setTag($tag): self
-    {
-        $tag = !empty($tag) ? $tag : [];
-        $this->tag = is_array($tag) ? $tag : [$tag];
-
-        return $this;
-    }
-
-    /**
-     * @param string[]|string $tag
-     */
-    public function addTag($tag): self
+    public function addTag($tag)
     {
         if (!empty($tag)) {
-            $tag = is_array($tag) ? $tag : [$tag];
+            $tag = is_array($tag) ? $tag : array($tag);
             $this->tag = array_unique(array_merge($this->tag, $tag));
         }
-
-        return $this;
     }
 
-    protected function write(array $record): void
+    protected function write(array $record)
     {
-        $this->send($record["formatted"], static::ENDPOINT_SINGLE);
+        $this->send($record["formatted"], self::ENDPOINT_SINGLE);
     }
 
-    public function handleBatch(array $records): void
+    public function handleBatch(array $records)
     {
         $level = $this->level;
 
@@ -132,27 +70,32 @@ class LogglyHandler extends AbstractProcessingHandler
         });
 
         if ($records) {
-            $this->send($this->getFormatter()->formatBatch($records), static::ENDPOINT_BATCH);
+            $this->send($this->getFormatter()->formatBatch($records), self::ENDPOINT_BATCH);
         }
     }
 
-    protected function send(string $data, string $endpoint): void
+    protected function send($data, $endpoint)
     {
-        $ch = $this->getCurlHandler($endpoint);
+        $url = sprintf("https://%s/%s/%s/", self::HOST, $endpoint, $this->token);
 
-        $headers = ['Content-Type: application/json'];
+        $headers = array('Content-Type: application/json');
 
         if (!empty($this->tag)) {
             $headers[] = 'X-LOGGLY-TAG: '.implode(',', $this->tag);
         }
 
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        Curl\Util::execute($ch, 5, false);
+        Curl\Util::execute($ch);
     }
 
-    protected function getDefaultFormatter(): FormatterInterface
+    protected function getDefaultFormatter()
     {
         return new LogglyFormatter();
     }

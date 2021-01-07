@@ -1,26 +1,26 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
 namespace app\common\logic;
 
-use app\api\logic\GoodsLogic;
-use app\api\logic\OrderLogic;
-use app\common\model\{AccountLog, Footprint, MessageScene_, OrderLog, User, Pay, Order, OrderTrade};
+use app\common\model\{AccountLog, MessageScene_, OrderLog, User, Pay, Order};
 use app\common\server\ConfigServer;
-use app\common\server\DistributionServer;
 use think\Db;
 use think\Exception;
 use think\facade\Hook;
@@ -46,7 +46,6 @@ class PayNotifyLogic
                 __CLASS__, __FUNCTION__, $e->getFile(), $e->getLine(), $e->getMessage()
             ];
             Log::record(implode('-', $record));
-            dd($e->getMessage());
             return $e->getMessage();
         }
     }
@@ -65,19 +64,6 @@ class PayNotifyLogic
         //增加会员消费累计额度
         $user = User::get($order['user_id']);
         $user->total_order_amount = ['inc', $order['order_amount']];
-        //余额支付,扣除余额
-        if ($order['pay_way'] == Pay::BALANCE_PAY){
-            $user->user_money = ['dec', $order['order_amount']];
-            AccountLogLogic::AccountRecord(
-                $order['user_id'],
-                $order['order_amount'],
-                2,
-                AccountLog::balance_pay_order,
-                '',
-                $order['id'],
-                $order_sn
-            );
-        }
         $user->save();
 
         $order->pay_status = Pay::ISPAID;
@@ -88,7 +74,6 @@ class PayNotifyLogic
         }
         $order->save();
 
-        DistributionServer::commission($order['id']);
         //短信通知
         Hook::listen('sms_send', [
             'key'       => 'DDZFTZ',
@@ -112,7 +97,6 @@ class PayNotifyLogic
             ]);
         }
 
-
         //订单日志
         OrderLogLogic::record(
             OrderLog::TYPE_USER,
@@ -129,22 +113,11 @@ class PayNotifyLogic
             OrderGoodsLogic::decStock($order['order_goods']);
         }
 
-        //下单奖励积分
-        OrderLogic::rewardIntegral($user['id'], $order['id'], $order_sn);
-
         // 钩子-发送消息模板通知
         Hook::listen('wx_message_send', [
             'user_id'  => $user['id'],
             'scene'    => MessageScene_::BUY_SUCCESS,
             'order_id' => $order['id']
-        ]);
-
-        // 钩子-记录足迹(下单结算)
-        Hook::listen('footprint', [
-            'type'       => Footprint::place_order,
-            'user_id'    => $user['id'],
-            'foreign_id' => $order['id'], //订单ID
-            'total_money' => $order['order_amount'] //订单应付金额
         ]);
     }
     /**

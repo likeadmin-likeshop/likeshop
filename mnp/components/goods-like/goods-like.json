@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-image": "/components/weapp/image/index",
+    "price-slice": "/components/price-slice/price-slice",
+    "progress": "/components/progress/progress"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "loading-footer": "/components/loading-footer/loading-footer"
+  },
+  "navigationBarTitleText": "成长值"
+}

@@ -1,0 +1,72 @@
+<!-- pages/goods_search/goods_search.wxml -->
+<view class="goods-search">
+    
+        <view class="header-wrap">
+            <van-search value="{{ keyword }}" left-icon="/images/icon_search.png" placeholder="请输入搜索关键词"
+                bind:clear="onClear" shape="round" bind:search="onSearch" bind:focus="onFocus" bind:change="onChange">
+            </van-search>
+
+            <van-sticky offset-top="0">
+            <view hidden="{{showHistory}}" class="header row bg-white">
+                <view class="tag row-center {{comprehensive ? 'primary' : ''}}" bindtap="onNormal">综合</view>
+                <view class="tag row-center" data-type="priceSort" bindtap="onPriceSort">
+                    <text class="{{priceSort ? 'primary' : ''}}">价格</text>
+                    <view>
+                        <trigonometry direction="up" size="small" color="{{priceSort == 'desc' ? '#FF5058' : '#333'}}">
+                        </trigonometry>
+                        <trigonometry size="small" color="{{priceSort == 'asc' ? '#FF5058' : '#333'}}"></trigonometry>
+                    </view>
+                </view>
+                <view class="tag row-center" data-type="saleSort" bindtap="onSaleSort">
+                    <text class="{{saleSort ? 'primary' : ''}}">销量</text>
+                    <view>
+                        <trigonometry direction="up" size="small" color="{{saleSort == 'desc' ? '#FF5058' : '#333'}}">
+                        </trigonometry>
+                        <trigonometry size="small" color="{{saleSort == 'asc' ? '#FF5058' : '#333'}}"></trigonometry>
+                    </view>
+                </view>
+                <!-- <view class="tag row-center">新品</view> -->
+                <view class="tag row-center" bindtap="changeType">
+                    <image class="icon-sm"
+                        src="{{  type === '1' ? '/images/icon_double.png' : '/images/icon_one.png'}}" />
+                </view>
+            </view>
+
+        </van-sticky>
+        </view>
+    <view hidden="{{!showHistory}}" class="content bg-white">
+        <view wx:if="{{hotList.length}}" class="search-words">
+            <view class="title">热门搜索</view>
+            <view class="words row wrap">
+                <view class="item br60 bg-gray mr20 mb20 lighter sm line1" wx:for="{{hotList}}" data-keyword="{{item}}"
+                    wx:key="index" bindtap="onChangeKeyword">{{item}}</view>
+            </view>
+        </view>
+        <view class="search-words">
+            <view class="title row-between">
+                <view>历史搜索</view>
+                <view class="xs muted mr20" style="padding: 10rpx 20rpx" bindtap="$clearSearch">清空</view>
+            </view>
+            <view class="words row wrap">
+                <view class="item br60 bg-gray mr20 mb20 lighter sm line1" wx:for="{{historyList}}"
+                    data-keyword="{{item}}" wx:key="index" bindtap="onChangeKeyword">{{item}}</view>
+            </view>
+        </view>
+    </view>
+    <view hidden="{{showHistory}}" class="content">
+        <view slot="content" class="goods-list">
+            <view hidden="{{ type !== '2' }}" class="double">
+                <goods-list type="double" list="{{goodsList}}" />
+            </view>
+            <view hidden="{{ type !== '1' }}" class="one">
+                <goods-list list="{{goodsList}}" type="one" />
+            </view>
+        </view>
+        <loading-footer status="{{status}}" slot-footer="{{true}}" bindrefresh="reload">
+            <view slot="footer" class="~column-center" style="padding-top: 200rpx">
+                <image class="~img-null" src="/images/goods_null.png" />
+                <text class="~lighter">暂无商品</text>
+            </view>
+        </loading-footer>
+    </view>
+</view>

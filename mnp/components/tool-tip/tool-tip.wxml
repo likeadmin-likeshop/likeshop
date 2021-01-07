@@ -1,0 +1,6 @@
+<view class="tool-tip-container {{direction}}">
+  <view class="tool-tip-arrow"></view>
+  <view class="tool-tip-inner">
+    {{content}}
+  </view>
+</view>

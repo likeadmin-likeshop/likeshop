@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -13,7 +13,6 @@ namespace Monolog\Handler;
 
 use Aws\Sdk;
 use Aws\DynamoDb\DynamoDbClient;
-use Monolog\Formatter\FormatterInterface;
 use Aws\DynamoDb\Marshaler;
 use Monolog\Formatter\ScalarFormatter;
 use Monolog\Logger;
@@ -26,7 +25,7 @@ use Monolog\Logger;
  */
 class DynamoDbHandler extends AbstractProcessingHandler
 {
-    public const DATE_FORMAT = 'Y-m-d\TH:i:s.uO';
+    const DATE_FORMAT = 'Y-m-d\TH:i:s.uO';
 
     /**
      * @var DynamoDbClient
@@ -49,9 +48,12 @@ class DynamoDbHandler extends AbstractProcessingHandler
     protected $marshaler;
 
     /**
-     * @param int|string $level
+     * @param DynamoDbClient $client
+     * @param string         $table
+     * @param int            $level
+     * @param bool           $bubble
      */
-    public function __construct(DynamoDbClient $client, string $table, $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct(DynamoDbClient $client, $table, $level = Logger::DEBUG, $bubble = true)
     {
         if (defined('Aws\Sdk::VERSION') && version_compare(Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
@@ -69,22 +71,27 @@ class DynamoDbHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record): void
+    protected function write(array $record)
     {
         $filtered = $this->filterEmptyFields($record['formatted']);
         if ($this->version === 3) {
             $formatted = $this->marshaler->marshalItem($filtered);
         } else {
+            /** @phpstan-ignore-next-line */
             $formatted = $this->client->formatAttributes($filtered);
         }
 
-        $this->client->putItem([
+        $this->client->putItem(array(
             'TableName' => $this->table,
             'Item' => $formatted,
-        ]);
+        ));
     }
 
-    protected function filterEmptyFields(array $record): array
+    /**
+     * @param  array $record
+     * @return array
+     */
+    protected function filterEmptyFields(array $record)
     {
         return array_filter($record, function ($value) {
             return !empty($value) || false === $value || 0 === $value;
@@ -94,7 +101,7 @@ class DynamoDbHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultFormatter(): FormatterInterface
+    protected function getDefaultFormatter()
     {
         return new ScalarFormatter(self::DATE_FORMAT);
     }

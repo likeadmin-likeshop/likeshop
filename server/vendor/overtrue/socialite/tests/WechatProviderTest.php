@@ -17,7 +17,11 @@ class WechatProviderTest extends TestCase
 {
     public function testWeChatProviderHasCorrectlyRedirectResponse()
     {
-        $response = (new WeChatProvider(Request::create('foo'), 'client_id', 'client_secret', 'http://localhost/socialite/callback.php'))->redirect();
+        $response = (new WeChatProvider(Request::create('foo'), [
+            'client_id' => 'client_id',
+            'client_secret' => 'client_secret',
+            'redirect' => 'http://localhost/socialite/callback.php',
+        ]))->redirect();
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertStringStartsWith('https://open.weixin.qq.com/connect/qrconnect', $response->getTargetUrl());
@@ -26,7 +30,11 @@ class WechatProviderTest extends TestCase
 
     public function testWeChatProviderTokenUrlAndRequestFields()
     {
-        $provider = new WeChatProvider(Request::create('foo'), 'client_id', 'client_secret', 'http://localhost/socialite/callback.php');
+        $provider = new WeChatProvider(Request::create('foo'), [
+            'client_id' => 'client_id',
+            'client_secret' => 'client_secret',
+            'redirect' => 'http://localhost/socialite/callback.php',
+        ]);
 
         $this->assertSame('https://api.weixin.qq.com/sns/oauth2/access_token', $provider->tokenUrl());
         $this->assertSame([
@@ -48,7 +56,11 @@ class WechatProviderTest extends TestCase
 
     public function testOpenPlatformComponent()
     {
-        $provider = new WeChatProvider(Request::create('foo'), 'client_id', null, 'redirect-url');
+        $provider = new WeChatProvider(Request::create('foo'), [
+            'client_id' => 'client_id',
+            'client_secret' => null,
+            'redirect' => 'redirect-url',
+        ]);
         $provider->component(new WeChatComponent());
         $this->assertSame([
             'appid' => 'client_id',
@@ -73,7 +85,11 @@ class WechatProviderTest extends TestCase
 
     public function testOpenPlatformComponentWithCustomParameters()
     {
-        $provider = new WeChatProvider(Request::create('foo'), 'client_id', null, 'redirect-url');
+        $provider = new WeChatProvider(Request::create('foo'), [
+            'client_id' => 'client_id',
+            'client_secret' => null,
+            'redirect' => 'redirect-url',
+        ]);
         $provider->component(new WeChatComponent());
         $provider->with(['foo' => 'bar']);
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -15,33 +13,40 @@ use Endroid\QrCode\QrCodeInterface;
 
 class BinaryWriter extends AbstractWriter
 {
-    public function writeString(QrCodeInterface $qrCode): string
+    /**
+     * {@inheritdoc}
+     */
+    public function writeString(QrCodeInterface $qrCode)
     {
-        $rows = [];
-        $data = $qrCode->getData();
-        foreach ($data['matrix'] as $row) {
-            $values = '';
-            foreach ($row as $value) {
-                $values .= $value;
-            }
-            $rows[] = $values;
-        }
+        $string = '
+            0001010101
+            0001010101
+            1000101010
+            0001010101
+            0101010101
+            0001010101
+            0001010101
+            0001010101
+            0001010101
+            1000101010
+        ';
 
-        return implode("\n", $rows);
+        return $string;
     }
 
-    public static function getContentType(): string
+    /**
+     * {@inheritdoc}
+     */
+    public static function getContentType()
     {
         return 'text/plain';
     }
 
-    public static function getSupportedExtensions(): array
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSupportedExtensions()
     {
         return ['bin', 'txt'];
-    }
-
-    public function getName(): string
-    {
-        return 'binary';
     }
 }

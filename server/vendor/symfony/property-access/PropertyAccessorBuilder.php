@@ -11,8 +11,6 @@
 
 namespace Symfony\Component\PropertyAccess;
 
-use Psr\Cache\CacheItemPoolInterface;
-
 /**
  * A configurable builder to create a PropertyAccessor.
  *
@@ -22,12 +20,6 @@ class PropertyAccessorBuilder
 {
     private $magicCall = false;
     private $throwExceptionOnInvalidIndex = false;
-    private $throwExceptionOnInvalidPropertyPath = true;
-
-    /**
-     * @var CacheItemPoolInterface|null
-     */
-    private $cacheItemPool;
 
     /**
      * Enables the use of "__call" by the PropertyAccessor.
@@ -99,71 +91,12 @@ class PropertyAccessorBuilder
     }
 
     /**
-     * Enables exceptions when reading a non-existing property.
-     *
-     * This has no influence on writing non-existing indices with PropertyAccessorInterface::setValue()
-     * which are always created on-the-fly.
-     *
-     * @return $this
-     */
-    public function enableExceptionOnInvalidPropertyPath()
-    {
-        $this->throwExceptionOnInvalidPropertyPath = true;
-
-        return $this;
-    }
-
-    /**
-     * Disables exceptions when reading a non-existing index.
-     *
-     * Instead, null is returned when calling PropertyAccessorInterface::getValue() on a non-existing index.
-     *
-     * @return $this
-     */
-    public function disableExceptionOnInvalidPropertyPath()
-    {
-        $this->throwExceptionOnInvalidPropertyPath = false;
-
-        return $this;
-    }
-
-    /**
-     * @return bool whether an exception is thrown or null is returned when reading a non-existing property
-     */
-    public function isExceptionOnInvalidPropertyPath()
-    {
-        return $this->throwExceptionOnInvalidPropertyPath;
-    }
-
-    /**
-     * Sets a cache system.
-     *
-     * @return PropertyAccessorBuilder The builder object
-     */
-    public function setCacheItemPool(CacheItemPoolInterface $cacheItemPool = null)
-    {
-        $this->cacheItemPool = $cacheItemPool;
-
-        return $this;
-    }
-
-    /**
-     * Gets the used cache system.
-     *
-     * @return CacheItemPoolInterface|null
-     */
-    public function getCacheItemPool()
-    {
-        return $this->cacheItemPool;
-    }
-
-    /**
      * Builds and returns a new PropertyAccessor object.
      *
      * @return PropertyAccessorInterface The built PropertyAccessor
      */
     public function getPropertyAccessor()
     {
-        return new PropertyAccessor($this->magicCall, $this->throwExceptionOnInvalidIndex, $this->cacheItemPool, $this->throwExceptionOnInvalidPropertyPath);
+        return new PropertyAccessor($this->magicCall, $this->throwExceptionOnInvalidIndex);
     }
 }

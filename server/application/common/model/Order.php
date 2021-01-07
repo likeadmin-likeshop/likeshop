@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -36,6 +39,10 @@ class Order extends Model
     const STATUS_FINISH = 3;         //已完成
     const STATUS_CLOSE = 4;          //已关闭
 
+    //配送方式
+    const DELIVERY_STATUS_EXPRESS = 1;//快递配送
+    const DELIVERY_STATUS_SELF = 2;//上门自提
+    const DELIVERY_STATUS_CITY = 3;//同城配送
 
     //订单状态
     public static function getOrderStatus($status = true)
@@ -62,6 +69,21 @@ class Order extends Model
             self::SECKILL_ORDER => '秒杀订单',
             self::TEAM_ORDER => '拼团订单',
             self::BARGAIN_ORDER => '砍价订单',
+        ];
+
+        if ($type === true){
+            return $desc;
+        }
+        return $desc[$type] ?? '未知';
+    }
+
+    //配送方式
+    public static function getDeliveryType($type)
+    {
+        $desc = [
+            self::DELIVERY_STATUS_EXPRESS => '快递发货',
+            self::DELIVERY_STATUS_SELF => '上门自提',
+            self::DELIVERY_STATUS_CITY => '同城配送',
         ];
 
         if ($type === true){
@@ -155,7 +177,7 @@ class Order extends Model
     public function user()
     {
         return $this->hasOne('user', 'id', 'user_id')
-            ->field('id,sn,nickname,avatar,mobile,sex,create_time');
+            ->field('id,sn,nickname,avatar,level,mobile,sex,create_time');
     }
 
     //收货地址

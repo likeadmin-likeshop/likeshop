@@ -20,6 +20,12 @@ module.exports = {
       .set("@STYLES", resolve("src/styles"))
       .set("@API", resolve("src/api"))
       .set("@U", resolve("src/utils"))
+    config
+      .plugin('html')
+      .tap(args => {
+        args[0].title = 'likeShop'
+        return args
+      })
   },
   css: {
     loaderOptions: {

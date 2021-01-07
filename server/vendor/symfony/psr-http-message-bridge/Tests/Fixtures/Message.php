@@ -22,10 +22,10 @@ use Psr\Http\Message\StreamInterface;
 class Message implements MessageInterface
 {
     private $version = '1.1';
-    private $headers = [];
+    private $headers = array();
     private $body;
 
-    public function __construct($version = '1.1', array $headers = [], StreamInterface $body = null)
+    public function __construct($version = '1.1', array $headers = array(), StreamInterface $body = null)
     {
         $this->version = $version;
         $this->headers = $headers;
@@ -54,7 +54,7 @@ class Message implements MessageInterface
 
     public function getHeader($name)
     {
-        return $this->hasHeader($name) ? $this->headers[$name] : [];
+        return $this->hasHeader($name) ? $this->headers[$name] : array();
     }
 
     public function getHeaderLine($name)

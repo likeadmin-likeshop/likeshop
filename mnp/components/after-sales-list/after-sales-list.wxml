@@ -1,0 +1,106 @@
+<view>
+	<view class="sale-list" wx:if="{{type == 'normal'}}">
+		<view class="sale-item ~bg-white ~mt20" wx:for="{{lists}}" wx:key="order_id" wx:for-item="items">
+			<view class="sale-header ~row">
+				<view class="store-name ~nr ~ml10 ~normal" >成交时间: {{items.time}}</view>
+			</view>
+			<view class="goods-item" wx:for="{{items.order_goods}}" wx:key="goods_id">
+				<view class="sale-goods-show ~row">
+					<view class="goods-img">
+						<van-image width="100%" height="100%" radius="6rpx" lazy-load src="{{item.image}}"></van-image>
+					</view>
+					<view class="goods-desc">
+						<view class="goods-name ~line2 ~nr">{{item.goods_name}}</view>
+						<view class="~row-between ~mt20">
+							<price-slice class="~sm" firstSize="{{30}}" secondSize="{{30}}" showSubscript="{{true}}" subscriptSize="{{26}}" price="{{item.goods_price}}"></price-slice>
+							<view class="~nr">x{{item.goods_num}}</view>
+						</view>
+					</view>
+				</view>
+				<view class="sale-footer ~row-end {{items.after_sale.able_apply == 1 ? '' : 'bottom-opacity'}}">
+					<view class="btn ~row-center ~bd-primary ~primary ~br60" bindtap="{{items.after_sale.able_apply == 1 ? 'goPage' : ''}}" data-url="/pages/apply_refund/apply_refund" data-order_id="{{items.order_id}}" data-item_id="{{item.item_id}}">申请售后</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="sale-list" wx:elif="{{type == 'apply'}}">
+		<view class="sale-item ~bg-white ~mt20" wx:for="{{lists}}" wx:key="index" wx:for-item="items">
+			<view class="sale-header ~row-between">
+				<view class="~row">
+					<view class="store-name ~nr ~ml10 ~mr10">申请时间: {{items.time}}</view>
+				</view>
+				<view class="~primary ~nr">{{items.after_sale.type_text}}</view>
+			</view>
+			<navigator hover-class="none" class="sale-goods-show" wx:for="{{items.order_goods}}" wx:key="goods_id" url="/pages/after_sales_detail/after_sales_detail?afterSaleId={{items.after_sale.after_sale_id}}&order_id={{items.order_id}}">
+				<view class="~row">
+					<view class="goods-img">
+						<van-image width="100%" height="100%" radius="6rpx" lazy-load src="{{item.image}}"></van-image>
+					</view>
+					<view class="goods-desc">
+						<view class="goods-name ~line2 ~nr">{{item.goods_name}}</view>
+						<view class="~row-between ~mt20">
+							<view>
+								<price-slice firstSize="{{26}}" price="{{item.goods_price}}" weight="600" showSubscript="{{true}}"></price-slice>
+							</view>
+							<view class="~nr">x{{item.goods_num}}</view>
+						</view>
+					</view>
+				</view>
+				<view class="sale-status ~mt20 ~row">
+					<view class="~nr" style="font-weight: bold;">{{items.after_sale.status_text}}</view>
+					<view class="~nr ~ml20">{{items.after_sale.desc}}</view>
+				</view>
+			</navigator>
+			<view class="sale-footer ~row-end">
+				<view class="~row-center ~normal ~br60 ~mr20 grey-btn ~nr" bindtap="showDialog" data-id="{{items.after_sale.after_sale_id}}">撤销申请</view>
+				<navigator hover-class="none" url="/pages/input_express_info/input_express_info?id={{items.after_sale.after_sale_id}}" class="~row-center ~normal ~br60 grey-btn ~nr" hidden="{{items.after_sale.status!=2}}">填写快递单号</navigator>
+			</view>
+		</view>
+	</view>
+	<view class="sale-list" wx:else >
+		<navigator hover-class="none" class="sale-item ~bg-white ~mt20" wx:for="{{lists}}" wx:key="order_id" wx:for-item="items" url="/pages/after_sales_detail/after_sales_detail?afterSaleId={{items.after_sale.after_sale_id}}" >
+			<view class="sale-header ~row-between">
+				<view class="~row">
+					<!-- <image style="width: 40rpx;height: 40rpx" src="/images/icon_shop.png"></image> -->
+					<view class="store-name ~nr ~ml10 ~mr10">{{items.time}}</view>
+				</view>
+				<view class="~primary ~nr">{{items.after_sale.type_text}}</view>
+			</view>
+			<view class="sale-goods-show" wx:for="{{items.order_goods}}" wx:key="goods_id" >
+				<view class="~row">
+					<view class="goods-img">
+						<van-image lazy-load width="100%" height="100%" radius="6rpx" lazy-load src="{{item.image}}" />
+					</view>
+					<view class="goods-desc">
+						<view class="goods-name ~line2 ~nr">{{item.goods_name}}</view>
+						<view class="row-between ~mt20 ~row-between">
+							<price-slice firstSize="{{26}}" price="{{item.goods_price}}" weight="600" showSubscript="{{true}}"></price-slice>
+							<view class="~nr">x{{item.goods_num}}</view>
+						</view>
+					</view>
+				</view>
+				<view class="sale-status ~mt20 ~row">
+					<view class="~nr" style="font-weight: bold;">{{items.after_sale.status_text}}</view>
+					<view class="~nr ~ml20">{{items.after_sale.desc}}</view>
+				</view>
+			</view>
+		</navigator>
+	</view>
+  <loading-footer status="{{loadingStatus}}" slotFooter>
+		<view class="data-null ~column-center">
+			<image class="~img-null" src="/images/order_null.png"></image>
+			<text class="~nr ~muted">暂无售后数据～</text>
+		</view>
+	</loading-footer>
+</view>
+
+<van-dialog
+  title="提示"
+  show="{{ confirmDialog }}"
+  show-cancel-button
+	message="是否要撤销申请？"
+	confirm-button-color="#FF2C3C"
+  bind:confirm="$cancelApply"
+  bind:close="hideDialog"
+>
+</van-dialog>

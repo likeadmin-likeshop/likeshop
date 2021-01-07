@@ -25,11 +25,6 @@ class OrderClient extends BaseClient
      *
      * @param array $params
      * @param bool  $isHistory
-     *
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function add($params, $isHistory = false)
     {
@@ -43,9 +38,6 @@ class OrderClient extends BaseClient
      * @param bool  $isHistory
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update($params, $isHistory = false)
     {
@@ -59,9 +51,6 @@ class OrderClient extends BaseClient
      * @param string $orderId
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete($openid, $orderId)
     {

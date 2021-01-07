@@ -47,6 +47,26 @@ class AccessToken implements AccessTokenInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Return the refresh token string.
+     *
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->getAttribute('refresh_token');
+    }
+
+    /**
+     * Set refresh token into this object.
+     *
+     * @param string $token
+     */
+    public function setRefreshToken($token)
+    {
+        $this->setAttribute('refresh_token', $token);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString()

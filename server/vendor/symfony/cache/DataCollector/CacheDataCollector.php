@@ -21,8 +21,6 @@ use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- *
- * @final since Symfony 4.4
  */
 class CacheDataCollector extends DataCollector implements LateDataCollectorInterface
 {
@@ -41,10 +39,8 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Throwable|null $exception
      */
-    public function collect(Request $request, Response $response/*, \Throwable $exception = null*/)
+    public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $empty = ['calls' => [], 'config' => [], 'options' => [], 'statistics' => []];
         $this->data = ['instances' => $empty, 'total' => $empty];
@@ -66,7 +62,7 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
 
     public function lateCollect()
     {
-        $this->data['instances']['calls'] = $this->cloneVar($this->data['instances']['calls']);
+        $this->data = $this->cloneVar($this->data);
     }
 
     /**
@@ -107,7 +103,10 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
         return $this->data['instances']['calls'];
     }
 
-    private function calculateStatistics(): array
+    /**
+     * @return array
+     */
+    private function calculateStatistics()
     {
         $statistics = [];
         foreach ($this->data['instances']['calls'] as $name => $calls) {
@@ -124,15 +123,7 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
             foreach ($calls as $call) {
                 ++$statistics[$name]['calls'];
                 $statistics[$name]['time'] += $call->end - $call->start;
-                if ('get' === $call->name) {
-                    ++$statistics[$name]['reads'];
-                    if ($call->hits) {
-                        ++$statistics[$name]['hits'];
-                    } else {
-                        ++$statistics[$name]['misses'];
-                        ++$statistics[$name]['writes'];
-                    }
-                } elseif ('getItem' === $call->name) {
+                if ('getItem' === $call->name) {
                     ++$statistics[$name]['reads'];
                     if ($call->hits) {
                         ++$statistics[$name]['hits'];
@@ -166,7 +157,10 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
         return $statistics;
     }
 
-    private function calculateTotalStatistics(): array
+    /**
+     * @return array
+     */
+    private function calculateTotalStatistics()
     {
         $statistics = $this->getStatistics();
         $totals = [

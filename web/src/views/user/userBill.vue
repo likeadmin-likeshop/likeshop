@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="user-bill">
         <van-tabs 
@@ -31,28 +49,6 @@
                 </van-list>
             </van-tab>
             <van-tab title="消费">
-                <van-list 
-                class="list"
-                v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                v-show="!isEmpty"
-                @load="$getAccountLog(0)"
-                >
-                    <div class="item" v-for="(items) in lists" :key="items.id">
-                        <div class="bill-list bg-white">
-                            <div class="bill-item row-between">
-                                <div>
-                                    <div class="black mb10">{{items.source_type}}</div>
-                                    <div class="xs muted">{{items.create_time}}</div>
-                                </div>
-                                <div class="lg" :class="{income: items.change_type}">{{items.change_amount}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </van-list>
-            </van-tab>
-            <van-tab title="充值">
                 <van-list 
                 class="list"
                 v-model="loading"
@@ -113,8 +109,8 @@ export default {
 
         $getAccountLog(type) {
             var changeType = 0;
-            type == 0 ? this.emptyText = '暂无记录～' : type == 1 ? this.emptyText = '暂无消费记录～' : this.emptyText = '暂无充值记录';
-            type == 0 ? changeType = 0 : type == 1 ? changeType = 2 : changeType = 1
+            type == 0 ? this.emptyText = '暂无记录～' : this.emptyText = '暂无消费记录～';
+            type == 0 ? changeType = 0 :  changeType = 2
             this.loading = true;
 
             if(this.finished == true) {

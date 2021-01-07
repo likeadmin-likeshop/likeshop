@@ -1,3 +1,22 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
+
 <template>
     <div class="contact-offical">
         <div class="header">
@@ -5,36 +24,54 @@
         </div>
         <div class="content column-center">
             <div class="content-view column-center bg-white">
-                <img class="content-img" src="@A/images/customer_code.png" />
-                <div class="primary wechat-num lg">客服微信号：LingQZhong</div>
-                <div class="row-center copy-btn xxl white" @click="onCopy('LingQZhong')">
+                <img class="content-img" :src="server.image" />
+                <div class="primary wechat-num lg">客服微信</div>
+                <div class="row-center copy-btn xxl white" @click="onCopy(server.wechat)">
                     <img class="mr5" style="width: 32px;height: 25px;" src="@A/images/wechat-btn-icon.png" />
-                    复制去微信添加
+                    微信扫码添加
                 </div>
-                <div class="mt20 normal xs" style="line-height: 45px">服务时间：周一至周六9:00-19:00</div>
-                <div class="md bold" style="line-height: 50px" @click="tipsShow()">在线客服</div>
+                <div class="mt20 normal xs" style="line-height: 35px">{{server.time}}</div>
+                <div class="sm row" @click="tipsShow()">
+                    <span style="line-height: 50px;">在线客服</span>
+                </div>
             </div>
             <div class="xs white" style="margin-top: 40px;line-height: 49px;">
                 无法添加或疑难问题请联系工作人员
             </div>
             <div class="row white">
-                <div class="xs" style="line-height: 49px;">400-8489-315</div>
-                <a class="ml10 phone-btn xs row-center white" href="tel:400-8489-315">拨打</a>
-                <div class="ml5 copy-phone-btn xs row-center" @click="onCopy('400-8489-315')">复制</div>
+                <div class="xs" style="line-height: 49px;">{{server.phone}}</div>
+                <a class="ml10 phone-btn xs row-center white" :href="'tel:' + server.phone">拨打</a>
+                <div class="ml5 copy-phone-btn xs row-center" @click="onCopy(server.phone)">复制</div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import {getService} from "@/api/app"
 export default {
     name: 'contactOffical',
+    data() {
+        return {
+            server: {} 
+        }
+    },
+    created() {
+        this.$getService()
+    },
     methods: {
+        $getService() {
+            getService().then(res => {
+                if(res.code == 1) {
+                    this.server = res.data
+                }
+            })
+        },
         tipsShow() {
             this.$toast("该功能暂未开放")
         },
         onCopy(str) {
-            var aux = document.createElement("input");
+            let aux = document.createElement("input");
             aux.setAttribute("value", str);
             document.body.appendChild(aux);
             aux.select();
@@ -45,6 +82,7 @@ export default {
                 message: "复制成功",
             });
         },
+
     }
 }
 </script>

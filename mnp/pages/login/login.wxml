@@ -1,0 +1,15 @@
+<!-- pages/login/login.wxml -->
+<view class="login column-center">
+    <view class='avatar'>
+        <open-data type='userAvatarUrl'></open-data>
+    </view>
+    <view class='user-name mt20'>
+        <open-data type='userNickName'></open-data>
+    </view>
+    <view class="title xxl mb20 bold">微信授权登录</view>
+    <button size="lg" class="white br60 row-center btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+        <image class="mr10" src="/images/icon_wechat.png" />
+        <text>微信一键授权</text>
+    </button>
+    <view class="muted mt20">微信授权登录后才可操作哦</view>
+</view>

@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
@@ -85,7 +88,7 @@ class MenuDecorate extends AdminBase{
         $client = $this->request->get('client');
         $type = $this->request->get('type');
         if($this->request->isAjax()){
-            $this->success('', MenuDecorateLogic::lists($client,$type));
+            $this->_success('', MenuDecorateLogic::lists($client,$type));
         }
     }
     /**
@@ -100,9 +103,9 @@ class MenuDecorate extends AdminBase{
             $result = $this->validate($post_data, 'app\admin\validate\MenuDecorate.add');
             if($result === true){
                 MenuDecorateLogic::add($post_data); //逻辑层处理添加数据
-                $this->success('修改成功');
+                $this->_success('修改成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         $type = $this->request->param('type',1);
         $menu_list = Menu_::getMenuContent($type,true);
@@ -121,9 +124,9 @@ class MenuDecorate extends AdminBase{
             $result = $this->validate($post_data, 'app\admin\validate\MenuDecorate.edit');
             if($result === true){
                 MenuDecorateLogic::edit($post_data); //逻辑层处理添加数据
-                $this->success('修改成功');
+                $this->_success('修改成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         $id = $this->request->get('id');
         $decorate = MenuDecorateLogic::getMenuDecorate($id);
@@ -142,9 +145,9 @@ class MenuDecorate extends AdminBase{
             $result = $this->validate(['id' => $id], 'app\admin\validate\MenuDecorate.del');
             if ($result === true) {
                 MenuDecorateLogic::del($id);
-                $this->success('删除成功');
+                $this->_success('删除成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
     }
     /*
@@ -156,9 +159,9 @@ class MenuDecorate extends AdminBase{
             $result = $this->validate(['id' => $ids], 'app\admin\validate\MenuDecorate.del');
             if ($result === true) {
                 MenuDecorateLogic::batchDelMenuDecorate($ids);
-                $this->success('删除成功');
+                $this->_success('删除成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
     }
 
@@ -188,9 +191,9 @@ class MenuDecorate extends AdminBase{
         $field_value = $this->request->post('value');
         $result = CommonLogic::changeTableValue($table, $pk_name, $pk_value, $field, $field_value);
         if ($result) {
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
-        $this->error('修改失败');
+        $this->_error('修改失败');
     }
 
 }

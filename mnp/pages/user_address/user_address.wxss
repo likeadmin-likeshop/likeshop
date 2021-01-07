@@ -1,0 +1,42 @@
+/* pages/user_address/user_address.wxss */
+.user-address {
+    padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+}
+.user-address .no-address {
+    padding-top: 300rpx;
+    text-align: center;
+}
+.user-address .address-list {
+    padding: 10rpx 0;
+}
+.user-address .address-list .item {
+    padding: 0 30rpx;
+}
+.user-address .address-list .item .address {
+    padding: 20rpx 0;
+    border-bottom: var(--border);
+}
+.user-address .address-list .item .operation {
+    height: 80rpx;
+}
+.user-address .footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 118rpx;
+    padding: 0 30rpx;
+}
+.user-address .footer .btn {
+    width: 336rpx;
+    height: 80rpx;
+}
+
+.tips-dialog {
+    height: 230rpx;
+    width: 100%;
+}
+
+van-dialog van-button button {
+    width: 100% !important;
+}

@@ -36,57 +36,71 @@ use Zxing\Qrcode\Decoder\Version;
  *
  * @author Sean Owen
  */
-class Detector
-{
+?>
+<?php
+class Detector {
 
     private $image;
     private $resultPointCallback;
 
-    public function __construct($image)
-    {
+    public function __construct($image) {
         $this->image = $image;
+    }
+
+    protected final function getImage() {
+        return $this->image;
+    }
+
+    protected final function  getResultPointCallback() {
+        return $this->resultPointCallback;
     }
 
     /**
      * <p>Detects a QR Code in an image.</p>
      *
-     * @param hints optional hints to detector
-     *
      * @return {@link DetectorResult} encapsulating results of detecting a QR Code
      * @throws NotFoundException if QR Code cannot be found
      * @throws FormatException if a QR Code cannot be decoded
      */
-    public final function detect($hints = null)
-    {/*Map<DecodeHintType,?>*/
+
+
+    /**
+     * <p>Detects a QR Code in an image.</p>
+     *
+     * @param hints optional hints to detector
+     * @return {@link DetectorResult} encapsulating results of detecting a QR Code
+     * @throws NotFoundException if QR Code cannot be found
+     * @throws FormatException if a QR Code cannot be decoded
+     */
+    public final function detect($hints=null){/*Map<DecodeHintType,?>*/
 
         $resultPointCallback = $hints == null ? null :
             $hints->get('NEED_RESULT_POINT_CALLBACK');
         /* resultPointCallback = hints == null ? null :
                 (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);*/
         $finder = new FinderPatternFinder($this->image, $resultPointCallback);
-        $info   = $finder->find($hints);
+        $info = $finder->find($hints);
 
         return $this->processFinderPatternInfo($info);
     }
 
-    protected final function processFinderPatternInfo($info)
-    {
+    protected final function processFinderPatternInfo($info){
 
-        $topLeft    = $info->getTopLeft();
-        $topRight   = $info->getTopRight();
+        $topLeft = $info->getTopLeft();
+        $topRight = $info->getTopRight();
         $bottomLeft = $info->getBottomLeft();
 
-        $moduleSize = (float)$this->calculateModuleSize($topLeft, $topRight, $bottomLeft);
+         $moduleSize = (float) $this->calculateModuleSize($topLeft, $topRight, $bottomLeft);
         if ($moduleSize < 1.0) {
             throw NotFoundException::getNotFoundInstance();
         }
-        $dimension               = (int)self::computeDimension($topLeft, $topRight, $bottomLeft, $moduleSize);
-        $provisionalVersion      = \Zxing\Qrcode\Decoder\Version::getProvisionalVersionForDimension($dimension);
+         $dimension =(int) $this->computeDimension($topLeft, $topRight, $bottomLeft, $moduleSize);
+        $provisionalVersion = Version::getProvisionalVersionForDimension($dimension);
         $modulesBetweenFPCenters = $provisionalVersion->getDimensionForVersion() - 7;
 
         $alignmentPattern = null;
 // Anything above version 1 has an alignment pattern
-        if (count($provisionalVersion->getAlignmentPatternCenters()) > 0) {
+        if (count($provisionalVersion->getAlignmentPatternCenters())> 0) {
 
 // Guess where a "bottom right" finder pattern would have been
             $bottomRightX = $topRight->getX() - $topLeft->getX() + $bottomLeft->getX();
@@ -94,19 +108,17 @@ class Detector
 
 // Estimate that alignment pattern is closer by 3 modules
 // from "bottom right" to known top left location
-            $correctionToTopLeft = 1.0 - 3.0 / (float)$modulesBetweenFPCenters;
-            $estAlignmentX       = (int)($topLeft->getX() + $correctionToTopLeft * ($bottomRightX - $topLeft->getX()));
-            $estAlignmentY       = (int)($topLeft->getY() + $correctionToTopLeft * ($bottomRightY - $topLeft->getY()));
+            $correctionToTopLeft = 1.0 - 3.0 / (float) $modulesBetweenFPCenters;
+            $estAlignmentX = (int) ($topLeft->getX() + $correctionToTopLeft * ($bottomRightX - $topLeft->getX()));
+            $estAlignmentY = (int) ($topLeft->getY() + $correctionToTopLeft * ($bottomRightY - $topLeft->getY()));
 
 // Kind of arbitrary -- expand search radius before giving up
             for ($i = 4; $i <= 16; $i <<= 1) {//??????????
                 try {
-                    $alignmentPattern = $this->findAlignmentInRegion(
-                        $moduleSize,
+                    $alignmentPattern = $this->findAlignmentInRegion($moduleSize,
                         $estAlignmentX,
                         $estAlignmentY,
-                        (float)$i
-                    );
+                        (float) $i);
                     break;
                 } catch (NotFoundException $re) {
 // try next round
@@ -115,44 +127,110 @@ class Detector
 // If we didn't find alignment pattern... well try anyway without it
         }
 
-        $transform = self::createTransform($topLeft, $topRight, $bottomLeft, $alignmentPattern, $dimension);
+        $transform =
+            $this->createTransform($topLeft, $topRight, $bottomLeft, $alignmentPattern, $dimension);
 
-        $bits = self::sampleGrid($this->image, $transform, $dimension);
+        $bits = $this->sampleGrid($this->image, $transform, $dimension);
 
-        $points = [];
+        $points = array();
         if ($alignmentPattern == null) {
-            $points = [$bottomLeft, $topLeft, $topRight];
+            $points = array($bottomLeft, $topLeft, $topRight);
         } else {
-            // die('$points = new ResultPoint[]{bottomLeft, topLeft, topRight, alignmentPattern};');
-            $points = [$bottomLeft, $topLeft, $topRight, $alignmentPattern];
+           // die('$points = new ResultPoint[]{bottomLeft, topLeft, topRight, alignmentPattern};');
+$points =  array($bottomLeft, $topLeft, $topRight, $alignmentPattern);
         }
-
         return new DetectorResult($bits, $points);
     }
 
+    private static function createTransform($topLeft,
+                                            $topRight,
+                                            $bottomLeft,
+                                            $alignmentPattern,
+                                            $dimension) {
+        $dimMinusThree = (float) $dimension - 3.5;
+        $bottomRightX = 0.0;
+        $bottomRightY = 0.0;
+        $sourceBottomRightX = 0.0;
+        $sourceBottomRightY = 0.0;
+        if ($alignmentPattern != null) {
+            $bottomRightX = $alignmentPattern->getX();
+            $bottomRightY = $alignmentPattern->getY();
+            $sourceBottomRightX = $dimMinusThree - 3.0;
+            $sourceBottomRightY = $sourceBottomRightX;
+        } else {
+// Don't have an alignment pattern, just make up the bottom-right point
+            $bottomRightX = ($topRight->getX() - $topLeft->getX()) + $bottomLeft->getX();
+            $bottomRightY = ($topRight->getY() - $topLeft->getY()) + $bottomLeft->getY();
+            $sourceBottomRightX = $dimMinusThree;
+            $sourceBottomRightY = $dimMinusThree;
+        }
+
+        return PerspectiveTransform::quadrilateralToQuadrilateral(
+            3.5,
+            3.5,
+            $dimMinusThree,
+            3.5,
+            $sourceBottomRightX,
+            $sourceBottomRightY,
+            3.5,
+            $dimMinusThree,
+            $topLeft->getX(),
+            $topLeft->getY(),
+            $topRight->getX(),
+            $topRight->getY(),
+            $bottomRightX,
+            $bottomRightY,
+            $bottomLeft->getX(),
+            $bottomLeft->getY());
+    }
+
+    private static function sampleGrid($image, $transform,
+                                       $dimension) {
+
+        $sampler = GridSampler::getInstance();
+        return $sampler->sampleGrid_($image, $dimension, $dimension, $transform);
+    }
+
     /**
-     * <p>Detects a QR Code in an image.</p>
-     *
-     * @return {@link DetectorResult} encapsulating results of detecting a QR Code
-     * @throws NotFoundException if QR Code cannot be found
-     * @throws FormatException if a QR Code cannot be decoded
+     * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
+     * of the finder patterns and estimated module size.</p>
      */
+    private static function computeDimension($topLeft,
+                                             $topRight,
+                                             $bottomLeft,
+                                             $moduleSize)  {
+        $tltrCentersDimension = MathUtils::round(ResultPoint::distance($topLeft, $topRight) / $moduleSize);
+        $tlblCentersDimension = MathUtils::round(ResultPoint::distance($topLeft, $bottomLeft) / $moduleSize);
+        $dimension = (($tltrCentersDimension + $tlblCentersDimension) / 2) + 7;
+        switch ($dimension & 0x03) { // mod 4
+            case 0:
+                $dimension++;
+                break;
+// 1? do nothing
+            case 2:
+                $dimension--;
+                break;
+            case 3:
+                throw NotFoundException::getNotFoundInstance();
+        }
+        return $dimension;
+    }
 
     /**
      * <p>Computes an average estimated module size based on estimated derived from the positions
      * of the three finder patterns.</p>
      *
-     * @param topLeft    detected top-left finder pattern center
-     * @param topRight   detected top-right finder pattern center
+     * @param topLeft detected top-left finder pattern center
+     * @param topRight detected top-right finder pattern center
      * @param bottomLeft detected bottom-left finder pattern center
-     *
      * @return estimated module size
      */
-    protected final function calculateModuleSize($topLeft, $topRight, $bottomLeft)
-    {
+    protected final function calculateModuleSize($topLeft,
+                                                 $topRight,
+                                                 $bottomLeft) {
 // Take the average
         return ($this->calculateModuleSizeOneWay($topLeft, $topRight) +
-                $this->calculateModuleSizeOneWay($topLeft, $bottomLeft)) / 2.0;
+            $this->calculateModuleSizeOneWay($topLeft, $bottomLeft)) / 2.0;
     }
 
     /**
@@ -160,16 +238,15 @@ class Detector
      * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
      * width of each, measuring along the axis between their centers.</p>
      */
-    private function calculateModuleSizeOneWay($pattern, $otherPattern)
-    {
+    private function calculateModuleSizeOneWay($pattern, $otherPattern) {
         $moduleSizeEst1 = $this->sizeOfBlackWhiteBlackRunBothWays($pattern->getX(),
-            (int)$pattern->getY(),
-            (int)$otherPattern->getX(),
-            (int)$otherPattern->getY());
-        $moduleSizeEst2 = $this->sizeOfBlackWhiteBlackRunBothWays((int)$otherPattern->getX(),
-            (int)$otherPattern->getY(),
-            (int)$pattern->getX(),
-            (int)$pattern->getY());
+            (int) $pattern->getY(),
+            (int) $otherPattern->getX(),
+            (int) $otherPattern->getY());
+        $moduleSizeEst2 = $this->sizeOfBlackWhiteBlackRunBothWays((int) $otherPattern->getX(),
+            (int) $otherPattern->getY(),
+            (int) $pattern->getX(),
+            (int) $pattern->getY());
         if (is_nan($moduleSizeEst1)) {
             return $moduleSizeEst2 / 7.0;
         }
@@ -186,32 +263,31 @@ class Detector
      * a finder pattern by looking for a black-white-black run from the center in the direction
      * of another po$(another finder pattern center), and in the opposite direction too.</p>
      */
-    private function sizeOfBlackWhiteBlackRunBothWays($fromX, $fromY, $toX, $toY)
-    {
+    private function sizeOfBlackWhiteBlackRunBothWays($fromX, $fromY, $toX, $toY) {
 
         $result = $this->sizeOfBlackWhiteBlackRun($fromX, $fromY, $toX, $toY);
 
 // Now count other way -- don't run off image though of course
-        $scale    = 1.0;
+        $scale = 1.0;
         $otherToX = $fromX - ($toX - $fromX);
         if ($otherToX < 0) {
-            $scale    = (float)$fromX / (float)($fromX - $otherToX);
+            $scale = (float) $fromX / (float) ($fromX - $otherToX);
             $otherToX = 0;
         } else if ($otherToX >= $this->image->getWidth()) {
-            $scale    = (float)($this->image->getWidth() - 1 - $fromX) / (float)($otherToX - $fromX);
+            $scale = (float) ($this->image->getWidth() - 1 - $fromX) / (float) ($otherToX - $fromX);
             $otherToX = $this->image->getWidth() - 1;
         }
-        $otherToY = (int)($fromY - ($toY - $fromY) * $scale);
+        $otherToY = (int) ($fromY - ($toY - $fromY) * $scale);
 
         $scale = 1.0;
         if ($otherToY < 0) {
-            $scale    = (float)$fromY / (float)($fromY - $otherToY);
+            $scale = (float) $fromY / (float) ($fromY - $otherToY);
             $otherToY = 0;
         } else if ($otherToY >= $this->image->getHeight()) {
-            $scale    = (float)($this->image->getHeight() - 1 - $fromY) / (float)($otherToY - $fromY);
+            $scale = (float) ($this->image->getHeight() - 1 - $fromY) / (float) ($otherToY - $fromY);
             $otherToY = $this->image->getHeight() - 1;
         }
-        $otherToX = (int)($fromX + ($otherToX - $fromX) * $scale);
+        $otherToX = (int) ($fromX + ($otherToX - $fromX) * $scale);
 
         $result += $this->sizeOfBlackWhiteBlackRun($fromX, $fromY, $otherToX, $otherToY);
 
@@ -227,22 +303,21 @@ class Detector
      * <p>This is used when figuring out how wide a finder pattern is, when the finder pattern
      * may be skewed or rotated.</p>
      */
-    private function sizeOfBlackWhiteBlackRun($fromX, $fromY, $toX, $toY)
-    {
+    private function sizeOfBlackWhiteBlackRun($fromX, $fromY, $toX, $toY) {
 // Mild variant of Bresenham's algorithm;
 // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
         $steep = abs($toY - $fromY) > abs($toX - $fromX);
         if ($steep) {
-            $temp  = $fromX;
+            $temp = $fromX;
             $fromX = $fromY;
             $fromY = $temp;
-            $temp  = $toX;
-            $toX   = $toY;
-            $toY   = $temp;
+            $temp = $toX;
+            $toX = $toY;
+            $toY = $temp;
         }
 
-        $dx    = abs($toX - $fromX);
-        $dy    = abs($toY - $fromY);
+        $dx = abs($toX - $fromX);
+        $dy = abs($toY - $fromY);
         $error = -$dx / 2;
         $xstep = $fromX < $toX ? 1 : -1;
         $ystep = $fromY < $toY ? 1 : -1;
@@ -270,7 +345,7 @@ class Detector
                 if ($y == $toY) {
                     break;
                 }
-                $y     += $ystep;
+                $y += $ystep;
                 $error -= $dx;
             }
         }
@@ -280,36 +355,8 @@ class Detector
         if ($state == 2) {
             return MathUtils::distance($toX + $xstep, $toY, $fromX, $fromY);
         }
-
 // else we didn't find even black-white-black; no estimate is really possible
         return NAN;
-    }
-
-    /**
-     * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
-     * of the finder patterns and estimated module size.</p>
-     */
-    private static function computeDimension($topLeft,
-                                             $topRight,
-                                             $bottomLeft,
-                                             $moduleSize)
-    {
-        $tltrCentersDimension = MathUtils::round(ResultPoint::distance($topLeft, $topRight) / $moduleSize);
-        $tlblCentersDimension = MathUtils::round(ResultPoint::distance($topLeft, $bottomLeft) / $moduleSize);
-        $dimension            = (($tltrCentersDimension + $tlblCentersDimension) / 2) + 7;
-        switch ($dimension & 0x03) { // mod 4
-            case 0:
-                $dimension++;
-                break;
-// 1? do nothing
-            case 2:
-                $dimension--;
-                break;
-            case 3:
-                throw NotFoundException::getNotFoundInstance();
-        }
-
-        return $dimension;
     }
 
     /**
@@ -317,10 +364,9 @@ class Detector
      * guessed to contain it. This method uses {@link AlignmentPattern}.</p>
      *
      * @param overallEstModuleSize estimated module size so far
-     * @param estAlignmentX        x coordinate of center of area probably containing alignment pattern
-     * @param estAlignmentY        y coordinate of above
-     * @param allowanceFactor      number of pixels in all directions to search from the center
-     *
+     * @param estAlignmentX x coordinate of center of area probably containing alignment pattern
+     * @param estAlignmentY y coordinate of above
+     * @param allowanceFactor number of pixels in all directions to search from the center
      * @return {@link AlignmentPattern} if found, or null otherwise
      * @throws NotFoundException if an unexpected error occurs during detection
      */
@@ -331,14 +377,14 @@ class Detector
     {
 // Look for an alignment pattern (3 modules in size) around where it
 // should be
-        $allowance           = (int)($allowanceFactor * $overallEstModuleSize);
-        $alignmentAreaLeftX  = max(0, $estAlignmentX - $allowance);
+        $allowance = (int) ($allowanceFactor * $overallEstModuleSize);
+        $alignmentAreaLeftX = max(0, $estAlignmentX - $allowance);
         $alignmentAreaRightX = min($this->image->getWidth() - 1, $estAlignmentX + $allowance);
         if ($alignmentAreaRightX - $alignmentAreaLeftX < $overallEstModuleSize * 3) {
             throw NotFoundException::getNotFoundInstance();
         }
 
-        $alignmentAreaTopY    = max(0, $estAlignmentY - $allowance);
+        $alignmentAreaTopY = max(0, $estAlignmentY - $allowance);
         $alignmentAreaBottomY = min($this->image->getHeight() - 1, $estAlignmentY + $allowance);
         if ($alignmentAreaBottomY - $alignmentAreaTopY < $overallEstModuleSize * 3) {
             throw NotFoundException::getNotFoundInstance();
@@ -353,68 +399,7 @@ class Detector
                 $alignmentAreaBottomY - $alignmentAreaTopY,
                 $overallEstModuleSize,
                 $this->resultPointCallback);
-
         return $alignmentFinder->find();
     }
 
-    private static function createTransform($topLeft,
-                                            $topRight,
-                                            $bottomLeft,
-                                            $alignmentPattern,
-                                            $dimension)
-    {
-        $dimMinusThree      = (float)$dimension - 3.5;
-        $bottomRightX       = 0.0;
-        $bottomRightY       = 0.0;
-        $sourceBottomRightX = 0.0;
-        $sourceBottomRightY = 0.0;
-        if ($alignmentPattern != null) {
-            $bottomRightX       = $alignmentPattern->getX();
-            $bottomRightY       = $alignmentPattern->getY();
-            $sourceBottomRightX = $dimMinusThree - 3.0;
-            $sourceBottomRightY = $sourceBottomRightX;
-        } else {
-// Don't have an alignment pattern, just make up the bottom-right point
-            $bottomRightX       = ($topRight->getX() - $topLeft->getX()) + $bottomLeft->getX();
-            $bottomRightY       = ($topRight->getY() - $topLeft->getY()) + $bottomLeft->getY();
-            $sourceBottomRightX = $dimMinusThree;
-            $sourceBottomRightY = $dimMinusThree;
-        }
-
-        return PerspectiveTransform::quadrilateralToQuadrilateral(
-            3.5,
-            3.5,
-            $dimMinusThree,
-            3.5,
-            $sourceBottomRightX,
-            $sourceBottomRightY,
-            3.5,
-            $dimMinusThree,
-            $topLeft->getX(),
-            $topLeft->getY(),
-            $topRight->getX(),
-            $topRight->getY(),
-            $bottomRightX,
-            $bottomRightY,
-            $bottomLeft->getX(),
-            $bottomLeft->getY());
-    }
-
-    private static function sampleGrid($image, $transform,
-                                       $dimension)
-    {
-        $sampler = GridSampler::getInstance();
-
-        return $sampler->sampleGrid_($image, $dimension, $dimension, $transform);
-    }
-
-    protected final function getImage()
-    {
-        return $this->image;
-    }
-
-    protected final function getResultPointCallback()
-    {
-        return $this->resultPointCallback;
-    }
 }

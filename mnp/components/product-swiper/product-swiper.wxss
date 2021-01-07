@@ -1,0 +1,26 @@
+/* components/product-swiper/product-swiper.wxss */
+.swiper-wrap {
+    width: 100%;
+    height: 750rpx;
+    position: relative;
+}
+
+.swiper-wrap .swiper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.swiper-wrap .swiper .slide-image {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-wrap .dots {
+    position: absolute;
+    right: 24rpx;
+    bottom: 24rpx;
+    display: flex;
+    height: 34rpx;
+    padding: 0 15rpx;
+}

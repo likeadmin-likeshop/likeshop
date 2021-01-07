@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam-段誉
 // +----------------------------------------------------------------------
 
@@ -62,9 +65,6 @@ class OrderLogic extends LogicBase
             $discount_amount = 0;//优惠金额
             $order_type = \app\common\model\Order::NORMAL_ORDER;//普通订单
 
-            //当前时段秒杀商品
-            $seckill = SeckillLogic::getSeckillGoods();
-            $seckill_goods = $seckill['seckill_goods'];
 
             foreach ($goods as $good) {
                 if (isset($infos[$good['item_id']])) {
@@ -73,17 +73,8 @@ class OrderLogic extends LogicBase
                     $goods_info['goods_num'] = $good['num'];
                     $goods_info['image_str'] = empty($goods_info['spec_image']) ? UrlServer::getFileUrl($goods_info['image']) : UrlServer::getFileUrl($goods_info['spec_image']);
 
-                    $goods_info['is_seckill'] = 0;
-                    //当前商品规格是否为秒杀商品
-                    if (isset($seckill_goods[$good['item_id']])){
-                        $goods_info['goods_price'] = $seckill_goods[$good['item_id']]['price'];
-                        $goods_info['is_seckill'] = 1;
-                        $order_type = \app\common\model\Order::SECKILL_ORDER;//秒杀订单
-                    }
-
                     unset($goods_info['id'], $goods_info['image'], $goods_info['spec_image']);
                     $goods_info['discount_price'] = 0;
-                    $goods_info['integral_price'] = 0;
                     $goods_lists[] = $goods_info;
 
                     //订单汇总信息
@@ -111,22 +102,6 @@ class OrderLogic extends LogicBase
                 $order_amount = $order_amount - $discount_amount;
             }
 
-            //积分抵扣是否打开
-            $integral_switch = ConfigServer::get('marketing', 'integral_deduction_status', 0);
-            $integral_config = ConfigServer::get('marketing', 'integral_deduction_money', 0);
-
-            //使用积分抵扣
-            $integral_amount = 0;
-            $user_use_integral = 0;
-            $use_integral = $post['use_integral'] ?? 0;//是否使用积分
-            if ($use_integral == 1 && $order_amount > 0){
-                $integral_data = self::integralDeductionMoney($goods_lists, $user_id, $integral_switch, $integral_config);
-                $integral_amount = $integral_data['integral_money'];
-                $goods_lists = $integral_data['goods'];
-                $order_amount = $order_amount - $integral_amount;
-                $user_use_integral = $integral_data['user_use_integral'];
-            }
-
             if ($order_amount <= 0){
                 $order_amount = 0;
             }
@@ -141,73 +116,16 @@ class OrderLogic extends LogicBase
                 'order_amount' => round($order_amount, 2),//订单应付价格
                 'address' => $user_address,
                 'discount_amount' => $discount_amount,//优惠券抵扣金额
-                'integral_amount' => $integral_amount,//积分抵扣金额
                 'shipping_price' => round($total_shipping_price, 2),//运费
                 'remark' => $post['remark'] ?? '',
-                'pay_way' => $post['pay_way'] ?? Client_::mnp,
+                'pay_way' => $post['pay_way'] ?? Pay::WECHAT_PAY,
                 'user_money' => $user['user_money'],//用户余额
-                'user_use_integral' => $user_use_integral,//用户使用积分
-                'user_integral' => $user['user_integral'],//用户拥有积分
-                'integral_limit' => 1000,//todo 满多少积分可用
-                'integral_switch' => $integral_switch,//积分抵扣开关
-                'integral_config' => $integral_config,//积分抵扣配置
             ];
 
             return self::dataSuccess('', $result);
         } catch (Exception $e){
             return self::dataError($e->getMessage());
         }
-    }
-
-
-    //积分抵扣
-    public static function integralDeductionMoney($goods_lists, $user_id, $switch, $money)
-    {
-        $data = [
-            'goods' => $goods_lists,
-            'integral_money' => 0,
-            'user_use_integral' => 0
-        ];
-
-        if ($switch == 0 || $money == 0){
-            return $data;
-        }
-
-        $user = Db::name('user')->where(['id' => $user_id])->find();
-        $user_integral = round($user['user_integral'] * $money, 2);//用户可抵扣积分金额
-
-        //暂时满1000积分才可以使用
-        if ($user['user_integral'] < 1000){
-            return $data;
-        }
-
-        //扣除优惠券后的商品总金额
-        $total_price = 0;
-        foreach ($goods_lists as $item){
-            $total_price += $item['goods_price'] * $item['goods_num'] - $item['discount_price'];
-        }
-
-        $total_integral_money = 0;
-        foreach ($goods_lists as &$good){
-            $good_price = $good['goods_price'] * $good['goods_num'] - $good['discount_price'];
-            $discount = $good_price / $total_price * $user_integral;
-            $good['integral_price'] = round($discount, 2);
-            $total_integral_money += $discount;
-        }
-
-        //用户积分可抵扣金额大于订单应付金额时
-        $user_use_integral = $user['user_integral'];
-        $integral_money = $user_integral;
-        if ($user_integral >= $total_price){
-            $user_use_integral = $total_price / $money;
-            $integral_money = $total_price;
-        }
-
-        return [
-            'goods' => $goods_lists,
-            'integral_money' => $integral_money,
-            'user_use_integral' => $user_use_integral
-        ];
     }
 
 
@@ -325,20 +243,6 @@ class OrderLogic extends LogicBase
             }
 
             $user = User::get($user_id);
-            //余额支付,是否满足支付金额
-            if ($data['pay_way'] == Pay::BALANCE_PAY){
-                $user_money = $user['user_money'];
-                if($user_money < $data['order_amount']){
-                    throw new  Exception('账户余额不足');
-                }
-            }
-
-            //积分是否足够
-            if ($data['user_use_integral'] > 0){
-                if ($user['user_integral'] < $data['user_use_integral']){
-                    throw new Exception('积分不足');
-                }
-            }
 
             $goods_lists = $data['goods_lists'];
             $user_address = $data['address'];
@@ -364,8 +268,6 @@ class OrderLogic extends LogicBase
                 'create_time' => $time,
                 'discount_amount' => $data['discount_amount'],//优惠券优惠金额
                 'pay_way' => $data['pay_way'],
-                'integral_amount' => $data['integral_amount'],
-                'use_integral' => $data['user_use_integral'],
             ];
 
             //有使用优惠券,把优惠券id保存到订单表中
@@ -397,9 +299,7 @@ class OrderLogic extends LogicBase
                     'total_pay_price' => ($good['goods_price'] * $good['goods_num']) - $good['discount_price'],//实际支付商品金额(扣除优惠金额)
                     'spec_value_ids' => $good['spec_value_ids'],
                     'discount_price' => $good['discount_price'],
-                    'is_seckill' => $good['is_seckill'],
                     'create_time' => $time,
-                    'integral_price' => $good['integral_price'],
                 ];
 
                 $cart_items[] = $good['item_id'];//购物车提交商品规格id
@@ -419,8 +319,7 @@ class OrderLogic extends LogicBase
                 ],
             ]);
 
-            //支付方式为余额支付,扣除余额,更新订单状态,支付状态
-            if ($data['pay_way'] == Pay::BALANCE_PAY || $data['order_amount'] == 0){
+            if ($data['order_amount'] == 0){
                 PayNotifyLogic::handle('order', $order_data['order_sn'], []);
             }
 
@@ -451,11 +350,6 @@ class OrderLogic extends LogicBase
                 ['selected', '=', 1],
                 ['item_id', 'in', $cart_items],
             ])->delete();
-        }
-
-        //是否有使用积分抵扣金额
-        if ($data['user_use_integral'] > 0){
-            IntegralLogic::useIntegralByOrder($user_id,$order_id, $data['user_use_integral']);
         }
 
         //有使用优惠券时更新coupon_list
@@ -655,22 +549,8 @@ class OrderLogic extends LogicBase
             OrderLog::USER_CANCEL_ORDER
         );
 
-        //订单取消后更新分销订单为已失效状态
-        Db::name('distribution_order_goods d')
-            ->join('order_goods og', 'og.id = d.order_goods_id')
-            ->join('order o', 'o.id = og.order_id')
-            ->where('o.id', $order_id)
-            ->update([
-                'd.status' => DistributionOrder::STATUS_ERROR,
-                'd.update_time' => time(),
-            ]);
-
         if ($order['coupon_list_id'] > 0){
             \app\common\logic\CouponLogic::rollBackCouponByOrder($order['coupon_list_id']);
-        }
-
-        if ($order['use_integral'] > 0){
-            IntegralLogic::rollbackIntegralByOrder($user_id, $order_id, $order['use_integral']);
         }
     }
 
@@ -767,9 +647,13 @@ class OrderLogic extends LogicBase
             ->join('order_goods og', 'o.id = og.order_id')
             ->join('goods g','g.id = og.goods_id')
             ->where(['o.id' => $id, 'user_id' => $user_id, 'pay_status' => \app\common\model\Order::STATUS_WAIT_DELIVERY, 'o.del' => 0])
-            ->field('o.id,order_status,total_num,image,consignee,mobile,province,city,district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time')
+            ->field('o.id,order_status,total_num,image,consignee,mobile,province,city,district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time,delivery_id')
             ->append(['delivery_address'])
             ->find();
+
+        if(!self::checkDelivery($order['delivery_id'])){
+            return false;
+        }
 
         //初始化数据
         $order_tips = '已下单';
@@ -864,6 +748,21 @@ class OrderLogic extends LogicBase
         return $order_traces;
 
     }
+
+
+    //配送方式无需快递的
+    public static function checkDelivery($delivery_id)
+    {
+        $delivery = Db::name('delivery')
+            ->where(['id' => $delivery_id])
+            ->find();
+
+        if ($delivery['send_type'] == 2){
+            return false;
+        }
+        return true;
+    }
+
 
     //退款
     public static function refund($order)

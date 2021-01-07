@@ -1,0 +1,94 @@
+/* 单选 */
+radio .wx-radio-input {
+    border-radius: 50%;
+    width: 34rpx;
+    height: 34rpx;
+}
+
+radio .wx-radio-input.wx-radio-input-checked {
+    border: 1px solid var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+}
+
+/* 多选 */
+checkbox .wx-checkbox-input {
+    border-radius: 50%;
+    width: 34rpx;
+    height: 34rpx;
+}
+
+checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+    border: 1px solid var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+    font-size: 35rpx;
+}
+
+/* 初始化按钮 */
+page button {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    font-weight: normal;
+    font-size: 28rpx;
+    overflow: unset;
+}
+
+page button:not([size='mini']) {
+    width: auto;
+    margin: 0;
+}
+page .van-button.van-button--large {
+    width: 100%
+}
+page button::after {
+    border: 0;
+}
+page button[type="primary"] {
+    background-color: var(--primary-color);
+}
+page button[type="primary"].button-hover {
+    background-color: var(--primary-color);
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+
+
+page .van-tabs .van-tabs__wrap,
+page .van-tabs .van-tab {
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 28rpx;
+}
+
+page .van-tabs .van-tab--active {
+    color: var(--primary-color);
+}
+
+.van-tabs .van-hairline--top-bottom:after {
+    border-width: 0;
+}
+page .van-tabs__line {
+    background-color: var(--primary-color);
+    height: 4rpx;
+}
+page .van-info {
+    font-size: 20rpx;
+    right: 10rpx;
+    position: absolute !important;
+    top: 5rpx !important;
+    background-color: var(--primary-color);
+}
+
+page .van-dropdown-menu {
+    height: 80rpx;
+}
+

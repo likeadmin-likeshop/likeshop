@@ -57,7 +57,8 @@ class OutlookProvider extends AbstractProvider implements ProviderInterface
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer '.$token->getToken(),
             ],
-            ]);
+            ]
+        );
 
         return json_decode($response->getBody()->getContents(), true);
     }

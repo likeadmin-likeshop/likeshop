@@ -1,0 +1,42 @@
+<!-- pages/news_list/news_list.wxml -->
+<view class="news_list" >
+    <view class="contain">
+        <view class="banner">
+            <!-- 存在就是10 不存在为7 -->
+            <swipers pid="{{type ? 11 : 8}}" height="300rpx" radius="0rpx" />
+        </view>
+        <van-tabs active="{{ active }}" bind:change="changeActive" line-width="{{40}}">
+            <van-tab title="全部" name="{{0}}"></van-tab>
+            <van-tab title="{{ item.name }}" name="{{item.id}}" wx:for="{{categoryList}}" wx:key="id"></van-tab>
+        </van-tabs>
+        <view class="mian">
+            <view class="article-list">
+                <view data-id="{{item.id}}" class="article-item bg-white" wx:for="{{newsList}}" wx:key="id" bindtap="goPage">
+                    <view class="row">
+                        <view class="info">
+                            <view class="title lg line2 mb20">{{ item.title }}</view>
+                            <view class="row lighter line2">
+                                <view>{{ item.synopsis }}</view>
+                            </view>
+                        </view>
+                        <van-image width="240rpx" height="180rpx" lazy-load class="img ml20" src="{{ item.image }}" />
+                    </view>
+                    <view class="row-between mt20">
+                        <view class="xs muted">发布时间: {{item.create_time}}</view>
+                        <view class="row">
+                            <image class="icon-sm" src="/images/icon_see.png" />
+                            <view class="ml10 xs muted">{{ item.visit }}人浏览</view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <loading-footer status="{{status}}" slot-footer="{{true}}">
+                <view class="column-center" style="padding-top: 200rpx">
+                    <image class="img-null" src="/images/null_news.png"></image>
+                    <text class="nr muted">暂无数据～</text>
+                </view>
+            </loading-footer>
+        </view>
+    </view>
+</view>
+<loading-view wx:if="{{ showLoading }}" />

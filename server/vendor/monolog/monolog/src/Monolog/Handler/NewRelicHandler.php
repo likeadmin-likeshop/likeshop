@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -14,7 +14,6 @@ namespace Monolog\Handler;
 use Monolog\Logger;
 use Monolog\Utils;
 use Monolog\Formatter\NormalizerFormatter;
-use Monolog\Formatter\FormatterInterface;
 
 /**
  * Class to record a log on a NewRelic application.
@@ -30,14 +29,14 @@ class NewRelicHandler extends AbstractProcessingHandler
     /**
      * Name of the New Relic application that will receive logs from this handler.
      *
-     * @var string|null
+     * @var string
      */
     protected $appName;
 
     /**
      * Name of the current transaction
      *
-     * @var string|null
+     * @var string
      */
     protected $transactionName;
 
@@ -52,18 +51,16 @@ class NewRelicHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      *
-     * @param string|int  $level           The minimum logging level at which this handler will be triggered.
-     * @param bool        $bubble          Whether the messages that are handled can bubble up the stack or not.
-     * @param string|null $appName
-     * @param bool        $explodeArrays
-     * @param string|null $transactionName
+     * @param string $appName
+     * @param bool   $explodeArrays
+     * @param string $transactionName
      */
     public function __construct(
         $level = Logger::ERROR,
-        bool $bubble = true,
-        ?string $appName = null,
-        bool $explodeArrays = false,
-        ?string $transactionName = null
+        $bubble = true,
+        $appName = null,
+        $explodeArrays = false,
+        $transactionName = null
     ) {
         parent::__construct($level, $bubble);
 
@@ -75,7 +72,7 @@ class NewRelicHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record): void
+    protected function write(array $record)
     {
         if (!$this->isNewRelicEnabled()) {
             throw new MissingExtensionException('The newrelic PHP extension is required to use the NewRelicHandler');
@@ -90,7 +87,7 @@ class NewRelicHandler extends AbstractProcessingHandler
             unset($record['formatted']['context']['transaction_name']);
         }
 
-        if (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Throwable) {
+        if (isset($record['context']['exception']) && ($record['context']['exception'] instanceof \Exception || (PHP_VERSION_ID >= 70000 && $record['context']['exception'] instanceof \Throwable))) {
             newrelic_notice_error($record['message'], $record['context']['exception']);
             unset($record['formatted']['context']['exception']);
         } else {
@@ -127,7 +124,7 @@ class NewRelicHandler extends AbstractProcessingHandler
      *
      * @return bool
      */
-    protected function isNewRelicEnabled(): bool
+    protected function isNewRelicEnabled()
     {
         return extension_loaded('newrelic');
     }
@@ -135,8 +132,11 @@ class NewRelicHandler extends AbstractProcessingHandler
     /**
      * Returns the appname where this log should be sent. Each log can override the default appname, set in this
      * handler's constructor, by providing the appname in it's context.
+     *
+     * @param  array       $context
+     * @return null|string
      */
-    protected function getAppName(array $context): ?string
+    protected function getAppName(array $context)
     {
         if (isset($context['appname'])) {
             return $context['appname'];
@@ -148,8 +148,12 @@ class NewRelicHandler extends AbstractProcessingHandler
     /**
      * Returns the name of the current transaction. Each log can override the default transaction name, set in this
      * handler's constructor, by providing the transaction_name in it's context
+     *
+     * @param array $context
+     *
+     * @return null|string
      */
-    protected function getTransactionName(array $context): ?string
+    protected function getTransactionName(array $context)
     {
         if (isset($context['transaction_name'])) {
             return $context['transaction_name'];
@@ -160,16 +164,20 @@ class NewRelicHandler extends AbstractProcessingHandler
 
     /**
      * Sets the NewRelic application that should receive this log.
+     *
+     * @param string $appName
      */
-    protected function setNewRelicAppName(string $appName): void
+    protected function setNewRelicAppName($appName)
     {
         newrelic_set_appname($appName);
     }
 
     /**
      * Overwrites the name of the current transaction
+     *
+     * @param string $transactionName
      */
-    protected function setNewRelicTransactionName(string $transactionName): void
+    protected function setNewRelicTransactionName($transactionName)
     {
         newrelic_name_transaction($transactionName);
     }
@@ -178,7 +186,7 @@ class NewRelicHandler extends AbstractProcessingHandler
      * @param string $key
      * @param mixed  $value
      */
-    protected function setNewRelicParameter(string $key, $value): void
+    protected function setNewRelicParameter($key, $value)
     {
         if (null === $value || is_scalar($value)) {
             newrelic_add_custom_parameter($key, $value);
@@ -190,7 +198,7 @@ class NewRelicHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter(): FormatterInterface
+    protected function getDefaultFormatter()
     {
         return new NormalizerFormatter();
     }

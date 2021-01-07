@@ -1,0 +1,4 @@
+<!--pages/sign_rule/sign_rule.wxml-->
+<view style="padding: 30rpx">
+  <text class="nr" style="line-height: 36rpx">{{rule}}</text>
+</view>

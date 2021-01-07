@@ -1,0 +1,94 @@
+<!-- components/order-list/order-list.wxml -->
+<wxs module="orderUtil">
+var getOrderStatus = function(type) {
+    var text = ''
+    switch (type) {
+        case 0:
+            text = '待支付';
+            break;
+        case 1:
+            text = '待发货';
+            break;
+        case 2:
+            text = '待收货';
+            break;
+        case 3:
+            text = '已完成';
+             break;
+        case 4:
+            text = '订单已关闭';
+            break;
+    }
+    return text
+};
+var getTime = function(time) {
+    var nowTime = time*1000 - getDate().getTime()
+    return nowTime > 0 ? nowTime  : 0
+}
+
+module.exports = {
+    getTime: getTime,
+    getOrderStatus: getOrderStatus
+};
+</wxs>
+<view class="order-list">
+    <view class="item ~bg-white ~mt20" wx:for="{{orderList}}" wx:key="id" data-url="/pages/order_details/order_details?id={{item.id}}" bindtap="goPage">
+    <view class="header ~row-between">
+        <view class="~row"><view wx:if="{{item.order_type == 1}}" class="~mr10"><van-tag color="#FF2C3C" plain>秒杀</van-tag></view>订单编号：{{item.order_sn}}</view>
+        <view class="{{item.order_status == 4 ? '~muted' : '~primary' }}">{{orderUtil.getOrderStatus(item.order_status)}}</view>
+    </view>
+        <view class="con">
+            <order-goods list="{{item.order_goods}}"></order-goods>
+            <view class="all-price ~row-end">
+                <text class="~muted ~xs">共{{item.goods_count}}件商品，总金额：</text>
+                <view class="~md">￥<price-slice first-size="{{30}}" second-size="{{30}}" price="{{item.order_amount}}" /></view>
+            </view>
+        </view>
+        <view class="footer ~row" wx:if="{{item.cancel_btn || item.delivery_btn || item.take_btn || item.del_btn || item.pay_btn || item.comment_btn}}">
+            <view style="flex: 1">
+                <view class="~row" wx:if="{{orderUtil.getTime(item.order_cancel_time)}}">
+                     <van-count-down class="count-down" bind:finish="reflesh"  time="{{orderUtil.getTime(item.order_cancel_time)}}" format="mm分钟"/> 
+                     <text class="~primary ~sm">后订单自动关闭</text>
+                </view>
+            </view>
+            <view wx:if="{{item.cancel_btn}}">
+                <button size="sm" class="plain ~br60 ~lighter" hover-class="none" data-id="{{item.id}}" catchtap="cancelOrder">
+                    取消订单
+                </button>
+            </view>
+            <view data-url="/pages/goods_logistics/goods_logistics?id={{item.id}}" wx:if="{{item.delivery_btn}}" catch:tap="goPage">
+                <button size="sm" class="btn plain ~br60 ~lighter" hover-class="none" >查看物流</button>
+            </view>
+            <view wx:if="{{item.del_btn}}">
+                <button size="sm" class="btn plain ~br60 ~lighter" hover-class="none"  data-id="{{item.id}}" catchtap="delOrder">删除订单</button>
+            </view>
+            <view wx:if="{{item.pay_btn}}" class="~ml20">
+                <button size="sm" class="btn ~bg-primary ~br60 ~white" data-id="{{item.id}}" catchtap="payNow">
+                    立即付款
+                </button>
+            </view>
+            <view wx:if="{{item.comment_btn}}" class="~ml20">
+                <button size="sm" hover-class="none" class="btn plain btn ~br60 ~primary red" >
+                    去评价
+                </button>
+            </view>
+            <view wx:if="{{item.take_btn}}" class="~ml20">
+                <button size="sm" class="btn plain ~br60 ~primary red" hover-class="none" data-id="{{item.id}}"  catch:tap="comfirmOrder">确认收货</button>
+            </view>
+        </view>
+    </view>
+    <loading-footer status="{{status}}" slot-footer="{{true}}" bindrefresh="reload">
+        <view slot="footer" class="~column-center" style="padding-top: 200rpx">
+            <image class="~img-null" src="/images/goods_null.png" />
+            <text class="~lighter">暂无订单</text>
+        </view>
+    </loading-footer>
+</view>
+<van-dialog use-slot id="delete-dialog" show="{{showCancel}}" showCancelButton="{{true}}" confirmButtonText="{{type == 0 || type == 2 ? '确定' : '删除'}}" confirm-button-color="#FF2C3C" bind:confirm="onConfirm" bind:cancel="onShowDialog">
+    <view class="~column-center tips-dialog">
+        <image class="~icon-lg" src="/images/icon_warning.png"></image>
+        <view style="margin-top:30rpx" wx:if="{{type == 0}}">确认取消该订单吗？</view>
+         <view style="margin-top:30rpx" wx:if="{{type == 1}}">确认删除该订单吗？</view>
+         <view style="margin-top:30rpx" wx:if="{{type == 2}}">确认收货吗？</view>
+    </view>
+</van-dialog>

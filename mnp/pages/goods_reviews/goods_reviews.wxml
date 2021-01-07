@@ -1,0 +1,34 @@
+<!-- pages/goods_reviews/goods_reviews.wxml -->
+<view class="goods-reviews">
+    <order-goods list="{{goods}}"></order-goods>
+    <view class="goods-evaluate row">
+        <view class="lable">商品评价</view>
+        <van-rate name="goodsRate" color="#FF2C3C" value="{{ goodsRate }}" bind:change="goodsRateChange" />
+        <view class="desc {{(goodsRate<=2)? 'muted': 'primary'}} " hidden="{{goodsRate == 0}}">
+            {{goodsRateDesc}}
+        </view>
+    </view>
+        <view class="rate bg-white">
+            <view class="item nr lighter mb20">{{goods[0].name}}</view>
+            <view class="item row mb20">
+                <view class="lable">描述相符</view>
+                <van-rate name="descRate" color="#FF2C3C" data-type="descRate" value="{{ descRate }}" bind:change="onChange" />
+            </view>
+            <view class="item row mb20">
+                <view class="lable">服务态度</view>
+                <van-rate name="serverRate" color="#FF2C3C" data-type="serverRate" value="{{ serverRate }}" bind:change="onChange" />
+            </view>
+            <view class="item row">
+                <view class="lable">配送服务</view>
+                <van-rate name="deliveryRate" color="#FF2C3C" data-type="deliveryRate" value="{{ deliveryRate }}" bind:change="onChange" />
+            </view>
+        </view>
+        <view class="goods-dec bg-white mt20">
+            <view class="title mb20 md bold">商品描述</view>
+            <view class="textarea bg-gray mb20">
+                <textarea name="comment" placeholder="宝贝收到还满意吗，说说你的使用心得。分享给想买的他们吧！！" value="{{comment}}" bindinput="onInput"></textarea>
+            </view>
+            <van-uploader preview-size="180rpx" image-fit="aspectFill" multiple="{{true}}"  max-count="5" file-list="{{ fileList }}" bind:after-read="afterRead" bind:delete="onDelete" />
+        </view>
+        <button form-type="submit" class="btn br60" type="primary" size="lg" bindtap="onSubmit">立即评价</button>
+</view>

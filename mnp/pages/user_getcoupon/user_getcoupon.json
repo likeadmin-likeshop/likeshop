@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "coupon-list": "/components/coupon-list/coupon-list"
+  },
+  "navigationBarTitleText": "领券中心"
+}

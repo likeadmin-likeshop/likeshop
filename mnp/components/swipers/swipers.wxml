@@ -1,0 +1,14 @@
+<view class='swiper' style="height: {{height}};padding: {{padding}}" wx:if="{{lists.length}}">
+    <swiper autoplay="{{autoplay}}" circular="{{circular}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperChange">
+        <block wx:for="{{lists}}" wx:key="index">
+            <swiper-item>
+                <view data-item="{{item}}" style='width:100%;height:100%;' bindtap="goPage">
+                    <van-image radius="{{radius}}"  fit="cover" src="{{item.image}}" class="slide-image" />
+                </view>
+            </swiper-item>
+        </block>
+    </swiper>
+    <view class="dots" wx:if="{{lists.length > 1}}">
+        <view class="dot {{index == currentSwiper ? 'active' : ''}}" wx:for="{{lists}}" wx:key="index"></view>
+    </view>
+</view>

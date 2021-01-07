@@ -1,0 +1,14 @@
+<!--pages/growth_value/growth_value.wxml-->
+<view class="growth-value">
+  <view class="md white row">当前成长值：<text class="bold" style="font-size: 56rpx">{{growth}}</text></view>
+  <view class="growth-list bg-white">
+    <view class="list-item" wx:for="{{growthList}}" wx:key="index">
+      <view class="row-between">
+        <view class="lg normal">{{item.source_type}}</view>
+        <view class="primary lg bold mt10">{{item.change_amount}}</view>
+      </view>
+      <view class="time row muted">{{item.create_time}}</view>
+    </view>
+  </view>
+  <loading-footer status="{{status}}"></loading-footer>
+</view>

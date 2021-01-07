@@ -17,75 +17,43 @@
 
 namespace Zxing\Qrcode;
 
+use Zxing\BarcodeFormat;
 use Zxing\BinaryBitmap;
 use Zxing\ChecksumException;
+use Zxing\DecodeHintType;
 use Zxing\FormatException;
 use Zxing\NotFoundException;
 use Zxing\Reader;
 use Zxing\Result;
+use Zxing\ResultMetadataType;
+use Zxing\ResultPoint;
 use Zxing\Common\BitMatrix;
+use Zxing\Common\DecoderResult;
+use Zxing\Common\DetectorResult;
 use Zxing\Qrcode\Decoder\Decoder;
+use Zxing\Qrcode\Decoder\QRCodeDecoderMetaData;
 use Zxing\Qrcode\Detector\Detector;
+
+
 
 /**
  * This implementation can detect and decode QR Codes in an image.
  *
  * @author Sean Owen
  */
-class QRCodeReader implements Reader
-{
-    private static $NO_POINTS = [];
+class QRCodeReader implements Reader {
+
+
+    private static $NO_POINTS = array();
     private $decoder;
 
-    public function __construct()
-    {
-        $this->decoder = new Decoder();
+    function __construct(){
+        $this->decoder =  new Decoder();
+
     }
 
-    /**
-     * @param BinaryBitmap $image
-     * @param null         $hints
-     *
-     * @return Result
-     * @throws \Zxing\FormatException
-     * @throws \Zxing\NotFoundException
-     */
-    public function decode(BinaryBitmap $image, $hints = null)
-    {
-        $decoderResult = null;
-        if ($hints !== null && $hints['PURE_BARCODE']) {
-            $bits          = self::extractPureBits($image->getBlackMatrix());
-            $decoderResult = $this->decoder->decode($bits, $hints);
-            $points        = self::$NO_POINTS;
-        } else {
-            $detector       = new Detector($image->getBlackMatrix());
-            $detectorResult = $detector->detect($hints);
-
-            $decoderResult = $this->decoder->decode($detectorResult->getBits(), $hints);
-            $points        = $detectorResult->getPoints();
-        }
-        $result = new Result($decoderResult->getText(), $decoderResult->getRawBytes(), $points, 'QR_CODE');//BarcodeFormat.QR_CODE
-
-        $byteSegments = $decoderResult->getByteSegments();
-        if ($byteSegments !== null) {
-            $result->putMetadata('BYTE_SEGMENTS', $byteSegments);//ResultMetadataType.BYTE_SEGMENTS
-        }
-        $ecLevel = $decoderResult->getECLevel();
-        if ($ecLevel !== null) {
-            $result->putMetadata('ERROR_CORRECTION_LEVEL', $ecLevel);//ResultMetadataType.ERROR_CORRECTION_LEVEL
-        }
-        if ($decoderResult->hasStructuredAppend()) {
-            $result->putMetadata(
-                'STRUCTURED_APPEND_SEQUENCE',//ResultMetadataType.STRUCTURED_APPEND_SEQUENCE
-                $decoderResult->getStructuredAppendSequenceNumber()
-            );
-            $result->putMetadata(
-                'STRUCTURED_APPEND_PARITY',//ResultMetadataType.STRUCTURED_APPEND_PARITY
-                $decoderResult->getStructuredAppendParity()
-            );
-        }
-
-        return $result;
+    protected final function  getDecoder() {
+        return $this->decoder;
     }
 
     /**
@@ -96,6 +64,52 @@ class QRCodeReader implements Reader
      * @throws FormatException if a QR code cannot be decoded
      * @throws ChecksumException if error correction fails
      */
+    //@Override
+
+
+    // @Override
+    public function decode($image, $hints=null){/* Map<DecodeHintType,?> hints*/
+        $decoderResult = null;
+        $points = array();
+        if ($hints != null && $hints['PURE_BARCODE']) {//hints.containsKey(DecodeHintType.PURE_BARCODE)) {
+            $bits = $this->extractPureBits($image->getBlackMatrix());
+            $decoderResult = $this->decoder->decode($bits, $hints);
+            $points = self::$NO_POINTS;
+        } else {
+            $detector = new Detector($image->getBlackMatrix());
+            $detectorResult = $detector->detect($hints);
+
+            $decoderResult = $this->decoder->decode($detectorResult->getBits(), $hints);
+            $points = $detectorResult->getPoints();
+        }
+
+        // If the code was mirrored: swap the bottom-left and the top-right points.
+        if ($decoderResult->getOther() instanceof QRCodeDecoderMetaData) {
+            $decoderResult->getOther()->applyMirroredCorrection($points);
+        }
+
+        $result = new Result($decoderResult->getText(), $decoderResult->getRawBytes(), $points, 'QR_CODE');//BarcodeFormat.QR_CODE
+        $byteSegments = $decoderResult->getByteSegments();
+        if ($byteSegments != null) {
+            $result->putMetadata('BYTE_SEGMENTS', $byteSegments);//ResultMetadataType.BYTE_SEGMENTS
+        }
+        $ecLevel = $decoderResult->getECLevel();
+        if ($ecLevel != null) {
+            $result->putMetadata('ERROR_CORRECTION_LEVEL', $ecLevel);//ResultMetadataType.ERROR_CORRECTION_LEVEL
+        }
+        if ($decoderResult->hasStructuredAppend()) {
+            $result->putMetadata('STRUCTURED_APPEND_SEQUENCE',//ResultMetadataType.STRUCTURED_APPEND_SEQUENCE
+                $decoderResult->getStructuredAppendSequenceNumber());
+            $result->putMetadata('STRUCTURED_APPEND_PARITY',//ResultMetadataType.STRUCTURED_APPEND_PARITY
+                $decoderResult->getStructuredAppendParity());
+        }
+        return $result;
+    }
+
+    //@Override
+    public function reset() {
+        // do nothing
+    }
 
     /**
      * This method detects a code in a "pure" image -- that is, pure monochrome image
@@ -105,20 +119,20 @@ class QRCodeReader implements Reader
      *
      * @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
      */
-    private static function extractPureBits(BitMatrix $image)
-    {
-        $leftTopBlack     = $image->getTopLeftOnBit();
+    private static function extractPureBits($image) {
+
+        $leftTopBlack = $image->getTopLeftOnBit();
         $rightBottomBlack = $image->getBottomRightOnBit();
-        if ($leftTopBlack === null || $rightBottomBlack == null) {
+        if ($leftTopBlack == null || $rightBottomBlack == null) {
             throw NotFoundException::getNotFoundInstance();
         }
 
         $moduleSize = self::moduleSize($leftTopBlack, $image);
 
-        $top    = $leftTopBlack[1];
+        $top = $leftTopBlack[1];
         $bottom = $rightBottomBlack[1];
-        $left   = $leftTopBlack[0];
-        $right  = $rightBottomBlack[0];
+        $left = $leftTopBlack[0];
+        $right = $rightBottomBlack[0];
 
         // Sanity check!
         if ($left >= $right || $top >= $bottom) {
@@ -131,7 +145,7 @@ class QRCodeReader implements Reader
             $right = $left + ($bottom - $top);
         }
 
-        $matrixWidth  = round(($right - $left + 1) / $moduleSize);
+        $matrixWidth = round(($right - $left + 1) / $moduleSize);
         $matrixHeight = round(($bottom - $top + 1) / $moduleSize);
         if ($matrixWidth <= 0 || $matrixHeight <= 0) {
             throw NotFoundException::getNotFoundInstance();
@@ -144,14 +158,14 @@ class QRCodeReader implements Reader
         // Push in the "border" by half the module width so that we start
         // sampling in the middle of the module. Just in case the image is a
         // little off, this will help recover.
-        $nudge = (int)($moduleSize / 2.0);// $nudge = (int) ($moduleSize / 2.0f);
-        $top   += $nudge;
-        $left  += $nudge;
+        $nudge = (int) ($moduleSize / 2.0);// $nudge = (int) ($moduleSize / 2.0f);
+        $top += $nudge;
+        $left += $nudge;
 
         // But careful that this does not sample off the edge
         // "right" is the farthest-right valid pixel location -- right+1 is not necessarily
         // This is positive by how much the inner x loop below would be too large
-        $nudgedTooFarRight = $left + (int)(($matrixWidth - 1) * $moduleSize) - $right;
+        $nudgedTooFarRight = $left + (int) (($matrixWidth - 1) * $moduleSize) - $right;
         if ($nudgedTooFarRight > 0) {
             if ($nudgedTooFarRight > $nudge) {
                 // Neither way fits; abort
@@ -160,7 +174,7 @@ class QRCodeReader implements Reader
             $left -= $nudgedTooFarRight;
         }
         // See logic above
-        $nudgedTooFarDown = $top + (int)(($matrixHeight - 1) * $moduleSize) - $bottom;
+        $nudgedTooFarDown = $top + (int) (($matrixHeight - 1) * $moduleSize) - $bottom;
         if ($nudgedTooFarDown > 0) {
             if ($nudgedTooFarDown > $nudge) {
                 // Neither way fits; abort
@@ -172,26 +186,22 @@ class QRCodeReader implements Reader
         // Now just read off the bits
         $bits = new BitMatrix($matrixWidth, $matrixHeight);
         for ($y = 0; $y < $matrixHeight; $y++) {
-            $iOffset = $top + (int)($y * $moduleSize);
+            $iOffset = $top + (int) ($y * $moduleSize);
             for ($x = 0; $x < $matrixWidth; $x++) {
-                if ($image->get($left + (int)($x * $moduleSize), $iOffset)) {
+                if ($image->get($left + (int) ($x * $moduleSize), $iOffset)) {
                     $bits->set($x, $y);
                 }
             }
         }
-
         return $bits;
     }
 
-    private static function moduleSize($leftTopBlack, BitMatrix $image)
-    {
+    private static function moduleSize($leftTopBlack,  $image) {
         $height = $image->getHeight();
-        $width  = $image->getWidth();
-        $x           = $leftTopBlack[0];
-        $y           = $leftTopBlack[1];
-        /*$x           = $leftTopBlack[0];
-        $y           = $leftTopBlack[1];*/
-        $inBlack     = true;
+        $width = $image->getWidth();
+        $x = $leftTopBlack[0];
+        $y = $leftTopBlack[1];
+        $inBlack = true;
         $transitions = 0;
         while ($x < $width && $y < $height) {
             if ($inBlack != $image->get($x, $y)) {
@@ -206,17 +216,7 @@ class QRCodeReader implements Reader
         if ($x == $width || $y == $height) {
             throw NotFoundException::getNotFoundInstance();
         }
-
         return ($x - $leftTopBlack[0]) / 7.0; //return ($x - $leftTopBlack[0]) / 7.0f;
     }
 
-    public function reset()
-    {
-        // do nothing
-    }
-
-    protected final function getDecoder()
-    {
-        return $this->decoder;
-    }
 }

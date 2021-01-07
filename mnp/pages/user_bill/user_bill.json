@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "van-tab": "/components/weapp/tab/index",
+    "van-tabs": "/components/weapp/tabs/index",
+    "loading-footer": "/components/loading-footer/loading-footer"
+  },
+  "navigationBarTitleText": "账户明细"
+}

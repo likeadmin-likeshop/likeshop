@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "mp-navigation-bar": "/components/navigation-bar/navigation-bar",
+    "recommend": "/components/recommend/recommend",
+    "van-icon": "/components/weapp/icon/index",
+    "price-slice": "/components/price-slice/price-slice"
+  },
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

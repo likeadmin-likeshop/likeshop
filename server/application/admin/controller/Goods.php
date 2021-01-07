@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -36,7 +39,7 @@ class Goods extends AdminBase
 
         if ($this->request->isAjax()) {
             $get = $this->request->get();
-            $this->success('', GoodsLogic::lists($get));
+            $this->_success('', GoodsLogic::lists($get));
         }
         $this->assign('statistics',GoodsLogic::statistics());
         $this->assign('category_list', GoodsCategoryLogic::categoryTreeeTree());
@@ -61,14 +64,14 @@ class Goods extends AdminBase
             //主表验证
             $result = $this->validate($post, 'app\admin\validate\Goods.add');
             if ($result !== true) {
-                $this->error($result);
+                $this->_error($result);
             }
 
             //单规格验证
             if ($post['spec_type'] == 1) {
                 $result = $this->validate($post, 'app\admin\validate\GoodsOneSpec');
                 if ($result !== true) {
-                    $this->error($result);
+                    $this->_error($result);
                 }
             }
 
@@ -85,18 +88,18 @@ class Goods extends AdminBase
 
                 //规格验证
                 if (empty($spec_lists)) {
-                    $this->error('至少添加一个规格');
+                    $this->_error('至少添加一个规格');
                 }
                 $result = $this->validate($post, 'app\admin\validate\GoodsMoreSpec');
                 if ($result !== true) {
-                    $this->error($result);
+                    $this->_error($result);
                 }
 
                 //规格商品列表验证
                 foreach ($spec_lists as $v) {
                     $result = $this->validate($v, 'app\admin\validate\GoodsMoreSpecLists');
                     if ($result !== true) {
-                        $this->error($result);
+                        $this->_error($result);
                     }
                 }
             }
@@ -104,9 +107,9 @@ class Goods extends AdminBase
             //添加商品
             $result = GoodsLogic::add($post, $spec_lists);
             if ($result !== true) {
-                $this->error('添加失败:' . $result);
+                $this->_error('添加失败:' . $result);
             }
-            $this->success('添加成功');
+            $this->_success('添加成功');
         }
         $this->assign('category_lists', json_encode(GoodsCategoryLogic::getAllTree(), JSON_UNESCAPED_UNICODE));
         $this->assign('brand_lists',json_encode(GoodsBrandLogic::getGoodsBrandList(),JSON_UNESCAPED_UNICODE));
@@ -130,14 +133,14 @@ class Goods extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\Goods');
             
             if ($result !== true) {
-                $this->error($result);
+                $this->_error($result);
             }
 
             //单规格验证
             if ($post['spec_type'] == 1) {
                 $result = $this->validate($post, 'app\admin\validate\GoodsOneSpec');
                 if ($result !== true) {
-                    $this->error($result);
+                    $this->_error($result);
                 }
             }
 
@@ -154,18 +157,18 @@ class Goods extends AdminBase
 
                 //规格验证
                 if (empty($spec_lists)) {
-                    $this->error('至少添加一个规格');
+                    $this->_error('至少添加一个规格');
                 }
                 $result = $this->validate($post, 'app\admin\validate\GoodsMoreSpec');
                 if ($result !== true) {
-                    $this->error($result);
+                    $this->_error($result);
                 }
 
                 //规格商品列表验证
                 foreach ($spec_lists as $v) {
                     $result = $this->validate($v, 'app\admin\validate\GoodsMoreSpecLists');
                     if ($result !== true) {
-                        $this->error($result);
+                        $this->_error($result);
                     }
                 }
             }
@@ -173,9 +176,9 @@ class Goods extends AdminBase
             //添加商品
             $result = GoodsLogic::edit($post, $spec_lists);
             if ($result !== true) {
-                $this->error('添加失败:' . $result);
+                $this->_error('添加失败:' . $result);
             }
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
 
         $this->assign('category_lists', json_encode(GoodsCategoryLogic::getAllTree(), JSON_UNESCAPED_UNICODE));
@@ -192,9 +195,9 @@ class Goods extends AdminBase
             //todo 商品删除验证
             $result = GoodsLogic::del($id); //逻辑层处理删除信息
             if ($result) {
-                $this->success('删除成功');
+                $this->_success('删除成功');
             }
-            $this->error('删除失败');
+            $this->_error('删除失败');
         }
     }
 
@@ -208,9 +211,9 @@ class Goods extends AdminBase
         $field_value = $this->request->get('value');
         $result = CommonLogic::changeTableValue($table,$pk_name,$pk_value,$field,$field_value);
         if($result){
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
-        $this->error('修改失败');
+        $this->_error('修改失败');
     }
 
 

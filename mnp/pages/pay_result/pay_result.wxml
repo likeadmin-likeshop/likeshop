@@ -1,0 +1,45 @@
+<!--pages/pay_result/pay_result.wxml-->
+<view class="pay-result">
+  <view class="contain bg-white">
+    <view class="header  column-center">
+      <view>
+        <image class="tips-icon" src="/images/icon_paySuccess.png"></image>
+      </view>
+      <view class="xl mt20">订单支付成功</view>
+    </view>
+    <view style="height:181rpx"></view>
+    <view class="info">
+      <view class="order-num row-between mt20">
+        <view class="ml20">订单编号</view>
+        <view class="mr20">
+         {{payInfo.order_sn}}
+        </view>
+      </view>
+      <view wx:if="{{payInfo.pay_time}}" class="order-time row-between mt20">
+        <view class="ml20">付款时间</view>
+        <view class="mr20">{{payInfo.pay_time}}</view>
+      </view>
+      <view class="order-pay-type row-between mt20">
+        <view class="ml20">支付方式</view>
+        <view class="mr20">{{payInfo.pay_way_text}}</view>
+      </view>
+      <view class="order-pay-money row-between mt20">
+        <view class="ml20">支付金额</view>
+        <view class="mr20">
+          ¥ <price-slice price="{{payInfo.order_amount}}" />
+        </view>
+      </view>
+    </view>
+    <view class="line ml20"></view>
+    <view class="opt-btn-contain row-center wrap">
+      <navigator hover-class="none" class="check-order-btn row-center bg-primary br60 mt20" open-type="redirect"
+        url="/pages/user_order/user_order">
+        <view class="white bg-primary lg">查看订单</view>
+      </navigator>
+      <navigator hover-class="none" class="go-back-btn row-center br60 mt20" open-type="switchTab"
+        url="/pages/index/index">
+        <view class="primary br60 lg">返回首页</view>
+      </navigator>
+    </view>
+  </view>
+</view>

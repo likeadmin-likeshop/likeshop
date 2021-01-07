@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -13,51 +11,85 @@ namespace Endroid\QrCode;
 
 interface QrCodeInterface
 {
-    public function getText(): string;
+    /**
+     * @return string
+     */
+    public function getText();
 
-    public function getSize(): int;
+    /**
+     * @return int
+     */
+    public function getSize();
 
-    public function getMargin(): int;
+    /**
+     * @return int
+     */
+    public function getMargin();
 
-    public function getForegroundColor(): array;
+    /**
+     * @return int[]
+     */
+    public function getForegroundColor();
 
-    public function getBackgroundColor(): array;
+    /**
+     * @return int[]
+     */
+    public function getBackgroundColor();
 
-    public function getEncoding(): string;
+    /**
+     * @return string
+     */
+    public function getEncoding();
 
-    public function getRoundBlockSize(): bool;
+    /**
+     * @return string
+     */
+    public function getErrorCorrectionLevel();
 
-    public function getErrorCorrectionLevel(): ErrorCorrectionLevel;
+    /**
+     * @return string
+     */
+    public function getLogoPath();
 
-    public function getLogoPath(): ?string;
+    /**
+     * @return int
+     */
+    public function getLogoWidth();
 
-    public function getLogoWidth(): ?int;
+    /**
+     * @return string
+     */
+    public function getLabel();
 
-    public function getLogoHeight(): ?int;
+    /**
+     * @return string
+     */
+    public function getLabelFontPath();
 
-    public function getLabel(): ?string;
+    /**
+     * @return int
+     */
+    public function getLabelFontSize();
 
-    public function getLabelFontPath(): string;
+    /**
+     * @return string
+     */
+    public function getLabelAlignment();
 
-    public function getLabelFontSize(): int;
+    /**
+     * @return int[]
+     */
+    public function getLabelMargin();
 
-    public function getLabelAlignment(): string;
+    /**
+     * @return bool
+     */
+    public function getValidateResult();
 
-    public function getLabelMargin(): array;
-
-    public function getValidateResult(): bool;
-
-    public function getWriterOptions(): array;
-
-    public function getContentType(): string;
-
-    public function setWriterRegistry(WriterRegistryInterface $writerRegistry): void;
-
-    public function writeString(): string;
-
-    public function writeDataUri(): string;
-
-    public function writeFile(string $path): void;
-
-    public function getData(): array;
+    /**
+     * @param WriterRegistryInterface $writerRegistry
+     *
+     * @return mixed
+     */
+    public function setWriterRegistry(WriterRegistryInterface $writerRegistry);
 }

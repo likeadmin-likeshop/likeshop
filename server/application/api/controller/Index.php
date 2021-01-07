@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -28,7 +31,7 @@ class Index extends ApiBase
      */
    public function lists(){
         $lists = IndexLogic::lists($this->user_id);
-        return $this->success('',$lists);
+        return $this->_success('',$lists);
    }
 
     /**
@@ -39,12 +42,12 @@ class Index extends ApiBase
         $get = $this->request->get();
         $check = $this->validate($get, 'app\api\validate\App');
         if (true !== $check) {
-            $this->error($check);
+            $this->_error($check);
         }
         if(isset($get['client']) && $get['client'] == Client_::ios){
-            $this->success('', ['line' => ConfigServer::get('app', 'line_ios', '')]);
+            $this->_success('', ['line' => ConfigServer::get('app', 'line_ios', '')]);
         }else{
-            $this->success('', ['line' => ConfigServer::get('app', 'line_android', '')]);
+            $this->_success('', ['line' => ConfigServer::get('app', 'line_android', '')]);
         }
     }
     /**
@@ -58,6 +61,6 @@ class Index extends ApiBase
             //弹出协议
             'agreement' => ConfigServer::get('app', 'agreement', '',1)
         ];
-        $this->success('', $data);
+        $this->_success('', $data);
     }
 }

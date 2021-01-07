@@ -1,0 +1,45 @@
+@import '../common/index.wxss';
+
+.van-info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-align: center;
+  -webkit-transform: translate(50%,-50%);
+  transform: translate(50%,-50%);
+  -webkit-transform-origin: 100%;
+  transform-origin: 100%;
+  min-width: 32rpx;
+  min-width: var(--info-size,32rpx);
+  padding: 0 6rpx;
+  padding: var(--info-padding,0 6rpx);
+  color: #fff;
+  color: var(--info-color,#fff);
+  font-weight: 500;
+  font-weight: var(--info-font-weight,500);
+  font-size: 24rpx;
+  font-size: var(--info-font-size,24rpx);
+  font-family: PingFang SC,Helvetica Neue,Arial,sans-serif;
+  font-family: var(--info-font-family,PingFang SC,Helvetica Neue,Arial,sans-serif);
+  line-height: 28rpx;
+  line-height: calc(var(--info-size, 32rpx) - var(--info-border-width, 2rpx)*2);
+  background-color: #ee0a24;
+  background-color: var(--info-background-color,#ee0a24);
+  border: 2rpx solid #fff;
+  border: var(--info-border-width,2rpx) solid var(--white,#fff);
+  border-radius: 32rpx;
+  border-radius: var(--info-size,32rpx);
+}
+
+.van-info--dot {
+  min-width: 0;
+  border-radius: 100%;
+  width: 16rpx;
+  width: var(--info-dot-size,16rpx);
+  height: 16rpx;
+  height: var(--info-dot-size,16rpx);
+  background-color: #ee0a24;
+  background-color: var(--info-dot-color,#ee0a24);
+}

@@ -22,22 +22,20 @@ use Zxing\NotFoundException;
 /**
  * @author Sean Owen
  */
-final class DefaultGridSampler extends GridSampler
-{
+final class DefaultGridSampler extends GridSampler {
+
 //@Override
-    public function sampleGrid(
-        $image,
-        $dimensionX,
-        $dimensionY,
-        $p1ToX, $p1ToY,
-        $p2ToX, $p2ToY,
-        $p3ToX, $p3ToY,
-        $p4ToX, $p4ToY,
-        $p1FromX, $p1FromY,
-        $p2FromX, $p2FromY,
-        $p3FromX, $p3FromY,
-        $p4FromX, $p4FromY
-    ) {
+    public function sampleGrid($image,
+                               $dimensionX,
+                               $dimensionY,
+                               $p1ToX, $p1ToY,
+                               $p2ToX, $p2ToY,
+                               $p3ToX, $p3ToY,
+                               $p4ToX, $p4ToY,
+                               $p1FromX, $p1FromY,
+                               $p2FromX, $p2FromY,
+                               $p3FromX, $p3FromY,
+                               $p4FromX, $p4FromY)  {
 
         $transform = PerspectiveTransform::quadrilateralToQuadrilateral(
             $p1ToX, $p1ToY, $p2ToX, $p2ToY, $p3ToX, $p3ToY, $p4ToX, $p4ToY,
@@ -47,22 +45,20 @@ final class DefaultGridSampler extends GridSampler
     }
 
 //@Override
-    public function sampleGrid_(
-        $image,
-        $dimensionX,
-        $dimensionY,
-        $transform
-    ) {
+    public function sampleGrid_($image,
+                                $dimensionX,
+                                $dimensionY,
+                                $transform) {
         if ($dimensionX <= 0 || $dimensionY <= 0) {
             throw NotFoundException::getNotFoundInstance();
         }
-        $bits   = new BitMatrix($dimensionX, $dimensionY);
-        $points = fill_array(0, 2 * $dimensionX, 0.0);
+        $bits = new BitMatrix($dimensionX, $dimensionY);
+        $points = fill_array(0,2 * $dimensionX,0.0);
         for ($y = 0; $y < $dimensionY; $y++) {
-            $max    = count($points);
-            $iValue = (float)$y + 0.5;
+            $max = count($points);
+            $iValue = (float) $y + 0.5;
             for ($x = 0; $x < $max; $x += 2) {
-                $points[$x]     = (float)($x / 2) + 0.5;
+                $points[$x] = (float) ($x / 2) + 0.5;
                 $points[$x + 1] = $iValue;
             }
             $transform->transformPoints($points);
@@ -71,7 +67,7 @@ final class DefaultGridSampler extends GridSampler
             $this->checkAndNudgePoints($image, $points);
             try {
                 for ($x = 0; $x < $max; $x += 2) {
-                    if ($image->get((int)$points[$x], (int)$points[$x + 1])) {
+                    if ($image->get((int) $points[$x], (int) $points[$x + 1])) {
 // Black(-ish) pixel
                         $bits->set($x / 2, $y);
                     }
@@ -87,7 +83,7 @@ final class DefaultGridSampler extends GridSampler
                 throw NotFoundException::getNotFoundInstance();
             }
         }
-
         return $bits;
     }
+
 }

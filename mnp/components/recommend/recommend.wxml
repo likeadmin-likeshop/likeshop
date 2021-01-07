@@ -1,0 +1,15 @@
+<!--components/recommend/recommend.wxml-->
+<view class="recommend" wx:if="{{goodsList.length}}">
+    <!-- <view class="header ~row-center">
+        <image class="title" src="/images/recommend_title.png" />
+    </view> -->
+    <view class="goods-title ~row-center">
+        <text class="line"></text>
+        <view class="~row">
+            <image class="~mr10" src="/images/icon_like.png" />
+            <text class="~bold ~xxl">好物优选</text>
+        </view>
+        <text class="line"></text>
+    </view>
+    <goods-list list="{{goodsList}}"></goods-list>
+</view>

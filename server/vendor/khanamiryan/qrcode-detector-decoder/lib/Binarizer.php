@@ -15,7 +15,8 @@
 * limitations under the License.
 */
 
-namespace Zxing;
+
+namespace  Zxing;
 
 use Zxing\Common\BitArray;
 use Zxing\Common\BitMatrix;
@@ -28,20 +29,15 @@ use Zxing\Common\BitMatrix;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-abstract class Binarizer
-{
+abstract class Binarizer {
+
     private $source;
 
-    protected function __construct($source)
-    {
+    protected function __construct($source) {
         $this->source = $source;
     }
 
-    /**
-     * @return LuminanceSource
-     */
-    public final function getLuminanceSource()
-    {
+    public final function getLuminanceSource() {
         return $this->source;
     }
 
@@ -53,11 +49,10 @@ abstract class Binarizer
      * and passed in with each call for performance. However it is legal to keep more than one row
      * at a time if needed.
      *
-     * @param y   The row to fetch, which must be in [0, bitmap height)
+     * @param y The row to fetch, which must be in [0, bitmap height)
      * @param row An optional preallocated array. If null or too small, it will be ignored.
      *            If used, the Binarizer will call BitArray.clear(). Always use the returned object.
-     *
-     * @return array The array of bits for this row (true means black).
+     * @return The array of bits for this row (true means black).
      * @throws NotFoundException if row can't be binarized
      */
     public abstract function getBlackRow($y, $row);
@@ -68,7 +63,7 @@ abstract class Binarizer
      * may not apply sharpening. Therefore, a row from this matrix may not be identical to one
      * fetched using getBlackRow(), so don't mix and match between them.
      *
-     * @return BitMatrix The 2D array of bits for the image (true means black).
+     * @return The 2D array of bits for the image (true means black).
      * @throws NotFoundException if image can't be binarized to make a matrix
      */
     public abstract function getBlackMatrix();
@@ -79,18 +74,16 @@ abstract class Binarizer
      * of 1 bit data. See Effective Java for why we can't use Java's clone() method.
      *
      * @param source The LuminanceSource this Binarizer will operate on.
-     *
-     * @return Binarizer A new concrete Binarizer implementation object.
+     * @return A new concrete Binarizer implementation object.
      */
     public abstract function createBinarizer($source);
 
-    public final function getWidth()
-    {
+    public final function getWidth() {
         return $this->source->getWidth();
     }
 
-    public final function getHeight()
-    {
+    public final function getHeight() {
         return $this->source->getHeight();
     }
+
 }

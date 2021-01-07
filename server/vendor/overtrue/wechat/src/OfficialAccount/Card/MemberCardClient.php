@@ -24,9 +24,6 @@ class MemberCardClient extends Client
      * @param array $info
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function activate(array $info = [])
     {
@@ -40,9 +37,6 @@ class MemberCardClient extends Client
      * @param array  $settings
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setActivationForm(string $cardId, array $settings)
     {
@@ -58,9 +52,6 @@ class MemberCardClient extends Client
      * @param string $code
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUser(string $cardId, string $code)
     {
@@ -78,9 +69,6 @@ class MemberCardClient extends Client
      * @param array $params
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function updateUser(array $params = [])
     {
@@ -93,9 +81,6 @@ class MemberCardClient extends Client
      * @param string $activateTicket
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getActivationForm($activateTicket)
     {
@@ -114,7 +99,6 @@ class MemberCardClient extends Client
      * @return string 开卡组件链接
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getActivateUrl(array $params = [])
     {

@@ -3,13 +3,10 @@
 [![Build Status](https://travis-ci.org/myclabs/php-enum.png?branch=master)](https://travis-ci.org/myclabs/php-enum)
 [![Latest Stable Version](https://poser.pugx.org/myclabs/php-enum/version.png)](https://packagist.org/packages/myclabs/php-enum)
 [![Total Downloads](https://poser.pugx.org/myclabs/php-enum/downloads.png)](https://packagist.org/packages/myclabs/php-enum)
-[![psalm](https://shepherd.dev/github/myclabs/php-enum/coverage.svg)](https://shepherd.dev/github/myclabs/php-enum)
-
-Maintenance for this project is [supported via Tidelift](https://tidelift.com/subscription/pkg/packagist-myclabs-php-enum?utm_source=packagist-myclabs-php-enum&utm_medium=referral&utm_campaign=readme).
 
 ## Why?
 
-First, and mainly, `SplEnum` is not integrated to PHP, you have to install the extension separately.
+First, and mainly, `SplEnum` is not integrated to PHP, you have to install it separately.
 
 Using an enum instead of class constants provides the following advantages:
 
@@ -41,15 +38,15 @@ class Action extends Enum
 }
 ```
 
+Note the `private` keyword requires PHP > 7.1, you can omit it on PHP 7.0.
+
 ## Usage
 
 ```php
-$action = Action::VIEW();
+$action = new Action(Action::VIEW);
 
-// or with a dynamic key:
-$action = Action::$key();
-// or with a dynamic value:
-$action = new Action($value);
+// or
+$action = Action::VIEW();
 ```
 
 As you can see, static methods are automatically implemented to provide quick access to an enum value.
@@ -128,5 +125,4 @@ class Action extends Enum
 ## Related projects
 
 - [Doctrine enum mapping](https://github.com/acelaya/doctrine-enum-type)
-- [Symfony ParamConverter integration](https://github.com/Ex3v/MyCLabsEnumParamConverter)
-- [PHPStan integration](https://github.com/timeweb/phpstan-enum)
+- [Symfony 2/3 ParamConverter integration](https://github.com/Ex3v/MyCLabsEnumParamConverter)

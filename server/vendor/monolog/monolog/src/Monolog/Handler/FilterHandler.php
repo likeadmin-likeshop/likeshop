@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -12,7 +12,6 @@
 namespace Monolog\Handler;
 
 use Monolog\Logger;
-use Monolog\ResettableInterface;
 use Monolog\Formatter\FormatterInterface;
 
 /**
@@ -23,10 +22,8 @@ use Monolog\Formatter\FormatterInterface;
  * @author Hennadiy Verkh
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class FilterHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
+class FilterHandler extends AbstractHandler
 {
-    use ProcessableHandlerTrait;
-
     /**
      * Handler or factory callable($record, $this)
      *
@@ -51,10 +48,10 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
     /**
      * @param callable|HandlerInterface $handler        Handler or factory callable($record|null, $filterHandler).
      * @param int|array                 $minLevelOrList A list of levels to accept or a minimum level if maxLevel is provided
-     * @param int|string                $maxLevel       Maximum level to accept, only used if $minLevelOrList is not an array
+     * @param int                       $maxLevel       Maximum level to accept, only used if $minLevelOrList is not an array
      * @param bool                      $bubble         Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($handler, $minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY, bool $bubble = true)
+    public function __construct($handler, $minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY, $bubble = true)
     {
         $this->handler  = $handler;
         $this->bubble   = $bubble;
@@ -65,7 +62,10 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         }
     }
 
-    public function getAcceptedLevels(): array
+    /**
+     * @return array
+     */
+    public function getAcceptedLevels()
     {
         return array_flip($this->acceptedLevels);
     }
@@ -74,7 +74,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
      * @param int|string|array $minLevelOrList A list of levels to accept or a minimum level or level name if maxLevel is provided
      * @param int|string       $maxLevel       Maximum level or level name to accept, only used if $minLevelOrList is not an array
      */
-    public function setAcceptedLevels($minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY): self
+    public function setAcceptedLevels($minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY)
     {
         if (is_array($minLevelOrList)) {
             $acceptedLevels = array_map('Monolog\Logger::toMonologLevel', $minLevelOrList);
@@ -86,14 +86,12 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
             }));
         }
         $this->acceptedLevels = array_flip($acceptedLevels);
-
-        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record): bool
+    public function isHandling(array $record)
     {
         return isset($this->acceptedLevels[$record['level']]);
     }
@@ -101,14 +99,16 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record): bool
+    public function handle(array $record)
     {
         if (!$this->isHandling($record)) {
             return false;
         }
 
         if ($this->processors) {
-            $record = $this->processRecord($record);
+            foreach ($this->processors as $processor) {
+                $record = call_user_func($processor, $record);
+            }
         }
 
         $this->getHandler($record)->handle($record);
@@ -119,9 +119,9 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
     /**
      * {@inheritdoc}
      */
-    public function handleBatch(array $records): void
+    public function handleBatch(array $records)
     {
-        $filtered = [];
+        $filtered = array();
         foreach ($records as $record) {
             if ($this->isHandling($record)) {
                 $filtered[] = $record;
@@ -155,7 +155,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(FormatterInterface $formatter): HandlerInterface
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->getHandler()->setFormatter($formatter);
 
@@ -165,13 +165,8 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
     /**
      * {@inheritdoc}
      */
-    public function getFormatter(): FormatterInterface
+    public function getFormatter()
     {
         return $this->getHandler()->getFormatter();
-    }
-
-    public function reset()
-    {
-        $this->resetProcessors();
     }
 }

@@ -28,7 +28,6 @@ class Client extends BaseClient
      * @return array
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function registerMiniProgram(array $params)
     {
@@ -45,7 +44,6 @@ class Client extends BaseClient
      * @return array
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getRegistrationStatus(string $companyName, string $legalPersonaWechat, string $legalPersonaName)
     {

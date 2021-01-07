@@ -94,7 +94,7 @@ class WeWorkProvider extends AbstractProvider implements ProviderInterface
     protected function getOAuthUrl($state)
     {
         $queries = [
-            'appid' => $this->clientId,
+            'appid' => $this->getConfig()->get('client_id'),
             'redirect_uri' => $this->redirectUrl,
             'response_type' => 'code',
             'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
@@ -115,7 +115,7 @@ class WeWorkProvider extends AbstractProvider implements ProviderInterface
     protected function getQrConnectUrl($state)
     {
         $queries = [
-            'appid' => $this->clientId,
+            'appid' => $this->getConfig()->get('client_id'),
             'agentid' => $this->agentId,
             'redirect_uri' => $this->redirectUrl,
             'state' => $state,

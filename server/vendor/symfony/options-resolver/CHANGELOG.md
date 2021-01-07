@@ -1,23 +1,6 @@
 CHANGELOG
 =========
 
-4.3.0
------
-
- * added `OptionsResolver::addNormalizer` method
-
-4.2.0
------
-
- * added support for nested options definition
- * added `setDeprecated` and `isDeprecated` methods
-
-3.4.0
------
-
- * added `OptionsResolverIntrospector` to inspect options definitions inside an `OptionsResolver` instance
- * added array of types support in allowed types (e.g int[])
-
 2.6.0
 -----
 

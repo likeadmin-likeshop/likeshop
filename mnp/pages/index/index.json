@@ -1,0 +1,16 @@
+{
+  "usingComponents": {
+    "van-sticky": "/components/weapp/sticky/index",
+    "van-search": "/components/weapp/search/index",
+    "swipers": "/components/swipers/swipers",
+    "goods-list": "/components/goods-list/goods-list",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-count-down": "/components/weapp/count-down/index",
+    "loading-footer": "/components/loading-footer/loading-footer",
+    "van-popup": "/components/weapp/popup/index",
+    "van-image": "/components/weapp/image/index"
+  },
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

@@ -29,9 +29,7 @@ class MaterialClient extends BaseClient
      *
      * @return string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidArgumentException
      */
     public function uploadImage(string $path, string $type = 'icon')
     {

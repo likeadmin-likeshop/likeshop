@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -24,37 +24,30 @@ use Monolog\Formatter\FormatterInterface;
  * Only requests which actually trigger an error (or whatever your actionLevel is) will be
  * in the logs, but they will contain all records, not only those above the level threshold.
  *
- * You can then have a passthruLevel as well which means that at the end of the request,
- * even if it did not get activated, it will still send through log records of e.g. at least a
- * warning level.
- *
  * You can find the various activation strategies in the
  * Monolog\Handler\FingersCrossed\ namespace.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class FingersCrossedHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
+class FingersCrossedHandler extends AbstractHandler
 {
-    use ProcessableHandlerTrait;
-
     protected $handler;
     protected $activationStrategy;
     protected $buffering = true;
     protected $bufferSize;
-    protected $buffer = [];
+    protected $buffer = array();
     protected $stopBuffering;
     protected $passthruLevel;
-    protected $bubble;
 
     /**
-     * @param callable|HandlerInterface              $handler            Handler or factory callable($record|null, $fingersCrossedHandler).
-     * @param int|string|ActivationStrategyInterface $activationStrategy Strategy which determines when this handler takes action, or a level name/value at which the handler is activated
-     * @param int                                    $bufferSize         How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
-     * @param bool                                   $bubble             Whether the messages that are handled can bubble up the stack or not
-     * @param bool                                   $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
-     * @param int|string                             $passthruLevel      Minimum level to always flush to handler on close, even if strategy not triggered
+     * @param callable|HandlerInterface       $handler            Handler or factory callable($record|null, $fingersCrossedHandler).
+     * @param int|ActivationStrategyInterface $activationStrategy Strategy which determines when this handler takes action
+     * @param int                             $bufferSize         How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
+     * @param bool                            $bubble             Whether the messages that are handled can bubble up the stack or not
+     * @param bool                            $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
+     * @param int                             $passthruLevel      Minimum level to always flush to handler on close, even if strategy not triggered
      */
-    public function __construct($handler, $activationStrategy = null, int $bufferSize = 0, bool $bubble = true, bool $stopBuffering = true, $passthruLevel = null)
+    public function __construct($handler, $activationStrategy = null, $bufferSize = 0, $bubble = true, $stopBuffering = true, $passthruLevel = null)
     {
         if (null === $activationStrategy) {
             $activationStrategy = new ErrorLevelActivationStrategy(Logger::WARNING);
@@ -83,7 +76,7 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record): bool
+    public function isHandling(array $record)
     {
         return true;
     }
@@ -91,23 +84,24 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
     /**
      * Manually activate this logger regardless of the activation strategy
      */
-    public function activate(): void
+    public function activate()
     {
         if ($this->stopBuffering) {
             $this->buffering = false;
         }
-
         $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
-        $this->buffer = [];
+        $this->buffer = array();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(array $record): bool
+    public function handle(array $record)
     {
         if ($this->processors) {
-            $record = $this->processRecord($record);
+            foreach ($this->processors as $processor) {
+                $record = call_user_func($processor, $record);
+            }
         }
 
         if ($this->buffering) {
@@ -128,18 +122,16 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
     /**
      * {@inheritdoc}
      */
-    public function close(): void
+    public function close()
     {
         $this->flushBuffer();
-
-        $this->handler->close();
     }
 
     public function reset()
     {
         $this->flushBuffer();
 
-        $this->resetProcessors();
+        parent::reset();
 
         if ($this->getHandler() instanceof ResettableInterface) {
             $this->getHandler()->reset();
@@ -151,16 +143,16 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
      *
      * It also resets the handler to its initial buffering state.
      */
-    public function clear(): void
+    public function clear()
     {
-        $this->buffer = [];
+        $this->buffer = array();
         $this->reset();
     }
 
     /**
      * Resets the state of the handler. Stops forwarding records to the wrapped handler.
      */
-    private function flushBuffer(): void
+    private function flushBuffer()
     {
         if (null !== $this->passthruLevel) {
             $level = $this->passthruLevel;
@@ -172,7 +164,7 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
             }
         }
 
-        $this->buffer = [];
+        $this->buffer = array();
         $this->buffering = true;
     }
 
@@ -198,7 +190,7 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(FormatterInterface $formatter): HandlerInterface
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->getHandler()->setFormatter($formatter);
 
@@ -208,7 +200,7 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
     /**
      * {@inheritdoc}
      */
-    public function getFormatter(): FormatterInterface
+    public function getFormatter()
     {
         return $this->getHandler()->getFormatter();
     }

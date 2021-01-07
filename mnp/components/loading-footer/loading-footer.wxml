@@ -1,0 +1,12 @@
+<!-- components/loading-footer/loading-footer.wxml -->
+<view class="loading-footer ~row-center">
+    <view wx:if="{{ status === 'loading'  }}" class="loading">
+        <van-loading type="spinner" size="40rpx">{{loadingText}}</van-loading>
+    </view>
+    <view wx-if="{{ status === 'finished' }}" class="finished">{{ finishedText }}</view>
+    <view wx:if="{{ status === 'error' }}" bindtap="onRefresh">{{ errorText }}</view>
+    <view wx:if="{{ status === 'empty' }}" class="empty">
+        <text wx:if="{{!slotFooter}}">暂无数据</text>
+        <slot wx:else></slot>
+    </view>
+</view>

@@ -1,0 +1,26 @@
+@import '../common/index.wxss';
+
+.van-goods-action-icon {
+  border: none!important;
+  width: 100rpx!important;
+  width: var(--goods-action-icon-height,100rpx)!important;
+}
+
+.van-goods-action-icon__content {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+  height: 100%;
+  line-height: 1;
+  font-size: 20rpx;
+  font-size: var(--goods-action-icon-font-size,20rpx);
+  color: #646566;
+  color: var(--goods-action-icon-text-color,#646566);
+}
+
+.van-goods-action-icon__icon {
+  margin-bottom: 8rpx;
+}

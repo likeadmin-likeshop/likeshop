@@ -101,6 +101,11 @@ class User implements ArrayAccess, UserInterface, JsonSerializable, \Serializabl
     public function setToken(AccessTokenInterface $token)
     {
         $this->setAttribute('token', $token->getToken());
+        $this->setAttribute('access_token', $token->getToken());
+
+        if (\is_callable([$token, 'getRefreshToken'])) {
+            $this->setAttribute('refresh_token', $token->getRefreshToken());
+        }
 
         return $this;
     }
@@ -132,17 +137,30 @@ class User implements ArrayAccess, UserInterface, JsonSerializable, \Serializabl
      */
     public function getToken()
     {
-        return new AccessToken(['access_token' => $this->getAttribute('token')]);
+        return new AccessToken([
+            'access_token' => $this->getAccessToken(),
+            'refresh_token' => $this->getAttribute('refresh_token')
+        ]);
     }
 
     /**
-     * Alias of getToken().
+     * Get user access token.
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return string
      */
     public function getAccessToken()
     {
-        return $this->getToken();
+        return $this->getAttribute('token') ?: $this->getAttribute('access_token');
+    }
+
+    /**
+     * Get user refresh token.
+     *
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->getAttribute('refresh_token');
     }
 
     /**
@@ -181,6 +199,6 @@ class User implements ArrayAccess, UserInterface, JsonSerializable, \Serializabl
      */
     public function unserialize($serialized)
     {
-        $this->attributes = \unserialize($serialized) ?? [];
+        $this->attributes = unserialize($serialized) ?: [];
     }
 }

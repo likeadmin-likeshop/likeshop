@@ -1,0 +1,18 @@
+/* pages/sign_detail/sign_detail.wxss */
+
+.sign-detail-container {
+  margin-top: 20rpx;
+}
+
+.sign-detail-container .sign-item {
+  padding: 18rpx 30rpx;
+  background-color: #fff;
+}
+
+.sign-type {
+  line-height: 40rpx;
+}
+
+.data-null {
+  padding-top: 100rpx;
+}

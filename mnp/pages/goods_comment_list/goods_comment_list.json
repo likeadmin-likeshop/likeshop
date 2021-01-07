@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "comment-list": "/components/comment-list/comment-list",
+    "van-tab": "/components/weapp/tab/index",
+    "van-tabs": "/components/weapp/tabs/index",
+    "van-rate": "/components/weapp/rate/index"
+  },
+  "navigationBarTitleText": "商品评价列表"
+}

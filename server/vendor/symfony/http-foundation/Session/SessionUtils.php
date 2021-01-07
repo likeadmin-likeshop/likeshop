@@ -22,10 +22,10 @@ namespace Symfony\Component\HttpFoundation\Session;
 final class SessionUtils
 {
     /**
-     * Finds the session header amongst the headers that are to be sent, removes it, and returns
+     * Find the session header amongst the headers that are to be sent, remove it, and return
      * it so the caller can process it further.
      */
-    public static function popSessionCookie(string $sessionName, string $sessionId): ?string
+    public static function popSessionCookie($sessionName, $sessionId)
     {
         $sessionCookie = null;
         $sessionCookiePrefix = sprintf(' %s=', urlencode($sessionName));

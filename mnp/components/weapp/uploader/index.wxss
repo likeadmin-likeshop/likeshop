@@ -1,0 +1,149 @@
+@import '../common/index.wxss';
+
+.van-uploader {
+  position: relative;
+  display: inline-block;
+}
+
+.van-uploader__wrapper {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.van-uploader__slot:empty {
+  display: none;
+}
+
+.van-uploader__slot:not(:empty)+.van-uploader__upload {
+  display: none!important;
+}
+
+.van-uploader__upload {
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 160rpx;
+  height: 160rpx;
+  margin: 0 16rpx 16rpx 0;
+  background-color: #f7f8fa;
+  border-radius: 16rpx;
+}
+
+.van-uploader__upload:active {
+  background-color: #f2f3f5;
+}
+
+.van-uploader__upload-icon {
+  color: #dcdee0;
+  font-size: 48rpx;
+}
+
+.van-uploader__upload-text {
+  margin-top: 16rpx;
+  color: #969799;
+  font-size: 24rpx;
+}
+
+.van-uploader__upload--disabled {
+  opacity: .5;
+  opacity: var(--uploader-disabled-opacity,.5);
+}
+
+.van-uploader__preview {
+  position: relative;
+  margin: 0 16rpx 16rpx 0;
+  cursor: pointer;
+}
+
+.van-uploader__preview-image {
+  display: block;
+  width: 160rpx;
+  height: 160rpx;
+  overflow: hidden;
+  border-radius: 16rpx;
+}
+
+.van-uploader__preview-delete {
+  position: absolute;
+  top: -16rpx;
+  right: -16rpx;
+  color: #969799;
+  font-size: 36rpx;
+  background-color: #fff;
+  border-radius: 100%;
+}
+
+.van-uploader__file {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #f7f8fa;
+  border-radius: 16rpx;
+}
+
+.van-uploader__file-icon {
+  color: #646566;
+  font-size: 40rpx;
+}
+
+.van-uploader__file-name {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 16rpx;
+  padding: 0 8rpx;
+  color: #646566;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+.van-uploader__mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  color: #fff;
+  background-color: rgba(50,50,51,.88);
+  border-radius: 16rpx;
+}
+
+.van-uploader__mask-icon {
+  font-size: 44rpx;
+}
+
+.van-uploader__mask-message {
+  margin-top: 12rpx;
+  padding: 0 8rpx;
+  font-size: 24rpx;
+  line-height: 28rpx;
+}
+
+.van-uploader__loading {
+  width: 44rpx;
+  height: 44rpx;
+  color: #fff;
+}

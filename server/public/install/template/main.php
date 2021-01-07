@@ -31,26 +31,26 @@
                     <?php if ($step == '1') { ?>
                         <div class="mounted-content-item show">
                             <div class="content-header">
-                                Like系列开源软件产品授权协议
+                                LikeShop100%开源免费商用电商系统授权协议
                             </div>
                             <div class="content">
-                                <h2>版权所有(c)2020，Like开源团队保留所有权利。</h2>
+                                <h2>版权所有(c)2021，LikeShop团队保留所有权利。</h2>
                                 <p class="mt16">
-                                    感谢你信任并选择Like系列开源软件产品，Like系列开源软件产品由广州好象科技有限公司（www.likemarket.net）原创研发并取得软件著作权，Like系列产品全部开放源码，无加密，自主可控，方便二次开发。</p>
+                                    感谢你信任并选择LikeShop100%开源免费商用电商系统，LikeShop100%开源免费商用电商系统由广州好象科技有限公司（www.likemarket.net）原创研发并取得软件著作权，100%开放源码，无加密，自主可控，方便二次开发。</p>
                                 <p class="mt6">为了正确并合法的使用本软件，请你在使用前务必阅读清楚下面的协议条款：</p>
-                                <h3 class="mt16">一、本授权协议适用且仅适用于Like系列开源软件产品(以下简称Like)任何版本，Like官方拥有本授权协议的最终解释权。</h3>
+                                <h3 class="mt16">一、本授权协议适用且仅适用于LikeShop系列开源软件产品(以下简称LikeShop)任何版本，广州好象科技有限公司拥有本授权协议的最终解释权。</h3>
                                 <h3 class="mt16">二、协议许可的权利</h3>
                                 <p class="mt6">
-                                    1．未取得商业授权用户禁止商用，只能用于学习，研究。严禁去除Like相关的版权信息。
+                                    1．开源版本可以任意免费商用，可去除界面版权logo，不能去除代码版权。付费版本需要取得商业授权方可使用，否则会被视为盗版行为并承担相应法律责任。
                                 </p>
                                 <p class="mt6">
-                                    2．请尊重Like开源团队劳动成果，严禁使用本系统转卖、销售或二次开发后转卖、销售等商业行为。
+                                    2．请尊重LikeShop开源团队劳动成果，严禁使用本系统转手、转卖、倒卖或二次开发后转手、转卖、倒卖等商业行为。
                                 </p>
                                 <p class="mt6">
-                                    3．任何企业和个人不允许对程序代码以任何形式任何目的再发布。
+                                    3．任何企业和个人不允许对LikeShop程序代码以任何形式任何目的再发布。
                                 </p>
                                 <p class="mt6">
-                                    4．你可以在协议规定的约束和限制范围内修改Like系列开源软件产品或界面风格以适应你的网站要求。
+                                    4．你可以在协议规定的约束和限制范围内修改LikeShop系列开源软件产品或界面风格以适应你的网站要求。
                                 </p>
                                 <p class="mt6">
                                     5．你拥有使用本软件构建的系统全部内容所有权，并独立承担与这些内容的相关法律义务。
@@ -60,13 +60,13 @@
                                 </p>
                                 <h3 class="mt6">三、协议规定的约束和限制</h3>
                                 <p class="mt6">
-                                    1．未获商业授权之前，禁止将Like应用于商业用途，严禁去除Like任何相关的版权信息。
+                                    1．开源版本可以任意免费商用，可去除界面版权logo，不能去除代码版权。付费版本需要取得商业授权方可使用，否则会被视为盗版行为并承担相应法律责任。
                                 </p>
                                 <p class="mt6">
                                     2．未经官方许可，不得对本软件或与之关联的商业授权进行出租、出售、抵押或发放子许可证。
                                 </p>
                                 <p class="mt6">
-                                    3．未经官方许可，禁止在Like开源商城的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。
+                                    3．未经官方许可，禁止在LikeShop开源商城的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。
                                 </p>
                                 <p class="mt6">
                                     4．如果你未能遵守本协议的条款，你的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。
@@ -86,10 +86,13 @@
                                 </p>
                                 <br><br>
                                 <p class="mt6">
-                                    Like官方网站：http://www.likemarket.net
+                                    LikeShop开源地址：https://gitee.com/likemarket/likeshopv2
                                 </p>
                                 <p class="mt6">
-                                    Like社区论坛：http://bbs.likemarket.net
+                                    LikeShop官方网站：https://www.likemarket.net
+                                </p>
+                                <p class="mt6">
+                                    LikeShop知识社区：https://home.likemarket.net
                                 </p>
                                 <p class="mt6">
                                     -----------------------------------------------------
@@ -403,7 +406,7 @@
                                             <img src="./images/icon_mountSuccess.png"/>
                                         </div>
                                         <div class="mt16 result">安装完成，进入管理后台</div>
-                                        <div style="margin-top: 5px;font-size:14px;">版本号：2.0.1.20201226</div>
+                                        <div style="margin-top: 5px;font-size:14px;">版本号：2.0.3.20210105</div>
                                         <div class="tips">
                                             为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹删除，或者config/install.lock/目录下创建install.lock文件防止重复安装。
                                         </div>

@@ -1,0 +1,11 @@
+<!-- components/product-swiper/product-swiper.wxml -->
+<view class='swiper-wrap'>
+    <swiper class="swiper" autoplay="{{autoplay}}" circular="{{circular}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperChange">
+        <block wx:for="{{imgUrls}}" wx:key="index">
+            <swiper-item data-current="{{item.uri}}" bind:tap="previewImage">
+                 <van-image width="750rpx" height="750rpx" src="{{item.uri}}" />
+            </swiper-item>
+        </block>
+    </swiper>
+    <view class="dots ~black ~sm ~bg-white ~br60">{{currentSwiper + 1}}/{{imgUrls.length}}</view>
+</view>

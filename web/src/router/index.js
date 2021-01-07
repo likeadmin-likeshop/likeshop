@@ -1,3 +1,22 @@
+
+// +----------------------------------------------------------------------
+// | LikeShop有特色的全开源社交分销电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | 微信公众号：好象科技
+// | 访问官网：http://www.likemarket.net
+// | 访问社区：http://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+ 
+
+
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import IndexLayout from '@/layout/IndexLayout'
@@ -63,53 +82,14 @@ const routes = [
         meta: {
             keepAlive: true
         },
-        children: [{
-            path: "hotList",
-            name: "hotList",
-            component: () => import("@V/home/hotList"),
+        children: [ {
+            path: "couponCenter",
+            name: "couponCenter",
+            component: () => import("@V/home/couponCenter"),
             meta: {
-                auth: false,
+                auth: true,
                 keepAlive: false,
-                title: "热销榜单"
-            }
-        }, {
-            path: "goodsBargain",
-            name: "goodsBargain",
-            component: () => import("@V/home/goodsBargain"),
-            meta: {
-                keepAlive: false,
-                title: "砍价活动"
-            }
-        }, {
-            path: "launchBargain",
-            name: "launchBargain",
-            component: () => import("@V/home/launchBargain"),
-            meta: {
-                keepAlive: true,
-                title: "发起砍价"
-            }
-        }, {
-            path: "bargainProcess",
-            name: "bargainProcess",
-            component: () => import("@V/home/bargainProcess"),
-            meta: {
-                keepAlive: true,
-                title: "砍价进度"
-            }
-        }, {
-            path: "bargainCode",
-            name: "bargainCode",
-            component: () => import("@V/home/bargainCode"),
-            meta: {
-                keepAlive: true,
-                title: "砍价记录"
-            }
-        }, {
-            path: "activityDetail",
-            name: "activityDetail",
-            component: () => import("@V/home/activityDetail"),
-            meta: {
-                title: '热销榜单'
+                title: "领券中心"
             }
         }]
     },
@@ -147,6 +127,33 @@ const routes = [
                 title: "编辑地址"
             }
         }, {
+            path: "afterSalesDetail",
+            name: "afterSalesDetail",
+            component: () => import("@V/user/afterSalesDetail"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "售后详情"
+            }
+        }, {
+            path: "postSale",
+            name: "postSale",
+            component: () => import("@V/user/postSale"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "退款/售后"
+            }
+        }, {
+            path: "applyAfterSales",
+            name: "applyAfterSales",
+            component: () => import("@V/user/applyAfterSales"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "申请售后"
+            }
+        }, {
             path: "goodsEvaluate",
             name: "goodsEvaluate",
             component: () => import("@V/user/goodsEvaluate"),
@@ -165,6 +172,33 @@ const routes = [
                 title: "商品评价"
             }
         }, {
+            path: "userBill",
+            name: "userBill",
+            component: () => import("@V/user/userBill"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "账户明细"
+            }
+        }, {
+            path: "userWallet",
+            name: "userWallet",
+            component: () => import("@V/user/userWallet"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "我的钱包"
+            }
+        }, {
+            path: "userPayment",
+            name: "userPayment",
+            component: () => import("@V/user/userPayment"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "余额充值"
+            }
+        }, {
             path: "userEvaluate",
             name: "userEvaluate",
             component: () => import("@V/user/userEvaluate"),
@@ -181,6 +215,15 @@ const routes = [
                 auth: true,
                 keepAlive: false,
                 title: "订单详情"
+            }
+        }, {
+            path: "userCoupon",
+            name: "userCoupon",
+            component: () => import("@V/user/userCoupon"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "我的优惠券"
             }
         }, {
             path: "goodsLogistics",
@@ -236,24 +279,6 @@ const routes = [
                 keepAlive: false,
                 title: "成长值"
             }
-        }, {
-            path: "userWithdraw",
-            name: "userWithdraw",
-            component: () => import("@V/user/userWithdraw"),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: "佣金提现"
-            }
-        }, {
-            path: "userWithdrawCode",
-            name: "userWithdrawCode",
-            component: () => import("@V/user/userWithdrawCode"),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: "提现记录"
-            }
         }]
     },
     {
@@ -263,6 +288,15 @@ const routes = [
             keepAlive: true
         },
         children: [{
+            path: "signUp",
+            name: "signUp",
+            component: () => import("@V/common/signUp"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: '积分签到'
+            }
+        }, {
             path: "newsCenter",
             name: "newsCenter",
             component: () => import("@V/common/newsCenter"),
@@ -279,6 +313,24 @@ const routes = [
                 auth: true,
                 keepAlive: false,
                 title: "咨询详情"
+            }
+        }, {
+            path: "signRule",
+            name: "signRule",
+            component: () => import("@V/common/signRule"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "签到规则"
+            }
+        }, {
+            path: "signDetail",
+            name: "signDetail",
+            component: () => import("@V/common/signDetail"),
+            meta: {
+                auth: true,
+                keepAlive: false,
+                title: "积分明细"
             }
         }, {
             path: "goodsDetail",

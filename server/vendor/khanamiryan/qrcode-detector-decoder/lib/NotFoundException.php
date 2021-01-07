@@ -18,21 +18,21 @@
 namespace Zxing;
 
 /**
- * Thrown when a barcode was not found in the image. It might have been
- * partially detected but could not be confirmed.
- *
- * @author Sean Owen
- */
-final class NotFoundException extends ReaderException
-{
-    private static $instance;
+* Thrown when a barcode was not found in the image. It might have been
+* partially detected but could not be confirmed.
+*
+* @author Sean Owen
+*/
+final class NotFoundException extends ReaderException {
 
-    public static function getNotFoundInstance()
-    {
-        if (!self::$instance) {
-            self::$instance = new NotFoundException();
-        }
+private static $instance;
 
-        return self::$instance;
+
+public static function getNotFoundInstance() {
+    if(!self::$instance ){
+        self::$instance =  new NotFoundException();
     }
+    return self::$instance;
+}
+
 }

@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1.3"
+        "php": ">=5.3.9"
     },
     "autoload": {
         "psr-4": { "Symfony\\Component\\OptionsResolver\\": "" },
@@ -24,5 +24,10 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.8-dev"
+        }
+    }
 }

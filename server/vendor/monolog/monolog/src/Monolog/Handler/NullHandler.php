@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -21,34 +21,25 @@ use Monolog\Logger;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class NullHandler extends Handler
+class NullHandler extends AbstractHandler
 {
     /**
-     * @var int
-     */
-    private $level;
-
-    /**
-     * @param string|int $level The minimum logging level at which this handler will be triggered
+     * @param int $level The minimum logging level at which this handler will be triggered
      */
     public function __construct($level = Logger::DEBUG)
     {
-        $this->level = Logger::toMonologLevel($level);
+        parent::__construct($level, false);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isHandling(array $record): bool
+    public function handle(array $record)
     {
-        return $record['level'] >= $this->level;
-    }
+        if ($record['level'] < $this->level) {
+            return false;
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(array $record): bool
-    {
-        return $record['level'] >= $this->level;
+        return true;
     }
 }

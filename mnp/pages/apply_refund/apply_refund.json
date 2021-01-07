@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "order-goods": "/components/order-goods/order-goods",
+    "van-uploader": "/components/weapp/uploader/index",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-popup": "/components/weapp/popup/index",
+    "van-checkbox": "/components/weapp/checkbox/index",
+    "van-checkbox-group": "/components/weapp/checkbox-group/index",
+    "van-image": "/components/weapp/image/index"
+  },
+  "navigationBarTitleText": "申请售后"
+}

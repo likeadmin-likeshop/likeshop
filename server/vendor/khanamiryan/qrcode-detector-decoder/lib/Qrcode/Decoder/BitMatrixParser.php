@@ -23,8 +23,7 @@ use Zxing\Common\BitMatrix;
 /**
  * @author Sean Owen
  */
-final class BitMatrixParser
-{
+final class BitMatrixParser {
 
     private $bitMatrix;
     private $parsedVersion;
@@ -33,16 +32,115 @@ final class BitMatrixParser
 
     /**
      * @param bitMatrix {@link BitMatrix} to parse
-     *
      * @throws FormatException if dimension is not >= 21 and 1 mod 4
      */
-    public function __construct($bitMatrix)
-    {
+    function __construct($bitMatrix) {
         $dimension = $bitMatrix->getHeight();
         if ($dimension < 21 || ($dimension & 0x03) != 1) {
             throw FormatException::getFormatInstance();
         }
         $this->bitMatrix = $bitMatrix;
+    }
+
+    /**
+     * <p>Reads format information from one of its two locations within the QR Code.</p>
+     *
+     * @return {@link FormatInformation} encapsulating the QR Code's format info
+     * @throws FormatException if both format information locations cannot be parsed as
+     * the valid encoding of format information
+     */
+    function readFormatInformation() {
+
+        if ($this->parsedFormatInfo != null) {
+            return $this->parsedFormatInfo;
+        }
+
+        // Read top-left format info bits
+        $formatInfoBits1 = 0;
+        for ($i = 0; $i < 6; $i++) {
+            $formatInfoBits1 = $this->copyBit($i, 8, $formatInfoBits1);
+        }
+        // .. and skip a bit in the timing pattern ...
+        $formatInfoBits1 = $this->copyBit(7, 8, $formatInfoBits1);
+        $formatInfoBits1 = $this->copyBit(8, 8, $formatInfoBits1);
+        $formatInfoBits1 = $this->copyBit(8, 7, $formatInfoBits1);
+        // .. and skip a bit in the timing pattern ...
+        for ($j = 5; $j >= 0; $j--) {
+            $formatInfoBits1 = $this->copyBit(8, $j, $formatInfoBits1);
+        }
+
+        // Read the top-right/bottom-left pattern too
+        $dimension = $this->bitMatrix->getHeight();
+        $formatInfoBits2 = 0;
+        $jMin = $dimension - 7;
+        for ($j = $dimension - 1; $j >= $jMin; $j--) {
+            $formatInfoBits2 = $this->copyBit(8, $j, $formatInfoBits2);
+        }
+        for ($i = $dimension - 8; $i < $dimension; $i++) {
+            $formatInfoBits2 = $this->copyBit($i, 8, $formatInfoBits2);
+        }
+
+        $parsedFormatInfo = FormatInformation::decodeFormatInformation($formatInfoBits1, $formatInfoBits2);
+        if ($parsedFormatInfo != null) {
+            return $parsedFormatInfo;
+        }
+        throw FormatException::getFormatInstance();
+    }
+
+    /**
+     * <p>Reads version information from one of its two locations within the QR Code.</p>
+     *
+     * @return {@link Version} encapsulating the QR Code's version
+     * @throws FormatException if both version information locations cannot be parsed as
+     * the valid encoding of version information
+     */
+    function readVersion(){
+
+        if ($this->parsedVersion != null) {
+            return $this->parsedVersion;
+        }
+
+        $dimension = $this->bitMatrix->getHeight();
+
+        $provisionalVersion = ($dimension - 17) / 4;
+        if ($provisionalVersion <= 6) {
+            return Version::getVersionForNumber($provisionalVersion);
+        }
+
+        // Read top-right version info: 3 wide by 6 tall
+        $versionBits = 0;
+        $ijMin = $dimension - 11;
+        for ($j = 5; $j >= 0; $j--) {
+            for ($i = $dimension - 9; $i >= $ijMin; $i--) {
+                $versionBits = $this->copyBit($i, $j, $versionBits);
+            }
+        }
+
+        $theParsedVersion = Version::decodeVersionInformation($versionBits);
+        if ($theParsedVersion != null && $theParsedVersion->getDimensionForVersion() == $dimension) {
+            $this->parsedVersion = $theParsedVersion;
+            return $theParsedVersion;
+        }
+
+        // Hmm, failed. Try bottom left: 6 wide by 3 tall
+        $versionBits = 0;
+        for ($i = 5; $i >= 0; $i--) {
+            for ($j = $dimension - 9; $j >=$ijMin; $j--) {
+                $versionBits = $this->copyBit($i, $j, $versionBits);
+            }
+        }
+
+        $theParsedVersion = Version::decodeVersionInformation($versionBits);
+        if ($theParsedVersion != null && $theParsedVersion->getDimensionForVersion() == $dimension) {
+            $this->parsedVersion = $theParsedVersion;
+            return $theParsedVersion;
+        }
+        throw FormatException::getFormatInstance();
+    }
+
+    private function copyBit($i, $j, $versionBits) {
+        $bit = $this->mirror ? $this->bitMatrix->get($j, $i) : $this->bitMatrix->get($i, $j);
+        return $bit ? ($versionBits << 1) | 0x1 : $versionBits << 1;
     }
 
     /**
@@ -53,29 +151,28 @@ final class BitMatrixParser
      * @return bytes encoded within the QR Code
      * @throws FormatException if the exact number of bytes expected is not read
      */
-    public function readCodewords()
-    {
+    function readCodewords(){
 
         $formatInfo = $this->readFormatInformation();
-        $version    = $this->readVersion();
+        $version = $this->readVersion();
 
         // Get the data mask for the format used in this QR Code. This will exclude
         // some bits from reading as we wind through the bit matrix.
-        $dataMask  = DataMask::forReference($formatInfo->getDataMask());
+        $dataMask = DataMask::forReference($formatInfo->getDataMask());
         $dimension = $this->bitMatrix->getHeight();
         $dataMask->unmaskBitMatrix($this->bitMatrix, $dimension);
 
         $functionPattern = $version->buildFunctionPattern();
 
         $readingUp = true;
-        if ($version->getTotalCodewords()) {
+        if($version->getTotalCodewords()) {
             $result = fill_array(0, $version->getTotalCodewords(), 0);
-        } else {
-            $result = [];
+        }else{
+            $result = array();
         }
         $resultOffset = 0;
-        $currentByte  = 0;
-        $bitsRead     = 0;
+        $currentByte = 0;
+        $bitsRead = 0;
         // Read columns in pairs, from right to left
         for ($j = $dimension - 1; $j > 0; $j -= 2) {
             if ($j == 6) {
@@ -97,9 +194,9 @@ final class BitMatrixParser
                         }
                         // If we've made a whole byte, save it off
                         if ($bitsRead == 8) {
-                            $result[$resultOffset++] = $currentByte; //(byte)
-                            $bitsRead                = 0;
-                            $currentByte             = 0;
+                            $result[$resultOffset++] =  $currentByte; //(byte)
+                            $bitsRead = 0;
+                            $currentByte = 0;
                         }
                     }
                 }
@@ -109,126 +206,17 @@ final class BitMatrixParser
         if ($resultOffset != $version->getTotalCodewords()) {
             throw FormatException::getFormatInstance();
         }
-
         return $result;
-    }
-
-    /**
-     * <p>Reads format information from one of its two locations within the QR Code.</p>
-     *
-     * @return {@link FormatInformation} encapsulating the QR Code's format info
-     * @throws FormatException if both format information locations cannot be parsed as
-     * the valid encoding of format information
-     */
-    public function readFormatInformation()
-    {
-
-        if ($this->parsedFormatInfo != null) {
-            return $this->parsedFormatInfo;
-        }
-
-        // Read top-left format info bits
-        $formatInfoBits1 = 0;
-        for ($i = 0; $i < 6; $i++) {
-            $formatInfoBits1 = $this->copyBit($i, 8, $formatInfoBits1);
-        }
-        // .. and skip a bit in the timing pattern ...
-        $formatInfoBits1 = $this->copyBit(7, 8, $formatInfoBits1);
-        $formatInfoBits1 = $this->copyBit(8, 8, $formatInfoBits1);
-        $formatInfoBits1 = $this->copyBit(8, 7, $formatInfoBits1);
-        // .. and skip a bit in the timing pattern ...
-        for ($j = 5; $j >= 0; $j--) {
-            $formatInfoBits1 = $this->copyBit(8, $j, $formatInfoBits1);
-        }
-
-        // Read the top-right/bottom-left pattern too
-        $dimension       = $this->bitMatrix->getHeight();
-        $formatInfoBits2 = 0;
-        $jMin            = $dimension - 7;
-        for ($j = $dimension - 1; $j >= $jMin; $j--) {
-            $formatInfoBits2 = $this->copyBit(8, $j, $formatInfoBits2);
-        }
-        for ($i = $dimension - 8; $i < $dimension; $i++) {
-            $formatInfoBits2 = $this->copyBit($i, 8, $formatInfoBits2);
-        }
-
-        $parsedFormatInfo = FormatInformation::decodeFormatInformation($formatInfoBits1, $formatInfoBits2);
-        if ($parsedFormatInfo != null) {
-            return $parsedFormatInfo;
-        }
-        throw FormatException::getFormatInstance();
-    }
-
-    private function copyBit($i, $j, $versionBits)
-    {
-        $bit = $this->mirror ? $this->bitMatrix->get($j, $i) : $this->bitMatrix->get($i, $j);
-
-        return $bit ? ($versionBits << 1) | 0x1 : $versionBits << 1;
-    }
-
-    /**
-     * <p>Reads version information from one of its two locations within the QR Code.</p>
-     *
-     * @return {@link Version} encapsulating the QR Code's version
-     * @throws FormatException if both version information locations cannot be parsed as
-     * the valid encoding of version information
-     */
-    public function readVersion()
-    {
-
-        if ($this->parsedVersion != null) {
-            return $this->parsedVersion;
-        }
-
-        $dimension = $this->bitMatrix->getHeight();
-
-        $provisionalVersion = ($dimension - 17) / 4;
-        if ($provisionalVersion <= 6) {
-            return Version::getVersionForNumber($provisionalVersion);
-        }
-
-        // Read top-right version info: 3 wide by 6 tall
-        $versionBits = 0;
-        $ijMin       = $dimension - 11;
-        for ($j = 5; $j >= 0; $j--) {
-            for ($i = $dimension - 9; $i >= $ijMin; $i--) {
-                $versionBits = $this->copyBit($i, $j, $versionBits);
-            }
-        }
-
-        $theParsedVersion = Version::decodeVersionInformation($versionBits);
-        if ($theParsedVersion != null && $theParsedVersion->getDimensionForVersion() == $dimension) {
-            $this->parsedVersion = $theParsedVersion;
-
-            return $theParsedVersion;
-        }
-
-        // Hmm, failed. Try bottom left: 6 wide by 3 tall
-        $versionBits = 0;
-        for ($i = 5; $i >= 0; $i--) {
-            for ($j = $dimension - 9; $j >= $ijMin; $j--) {
-                $versionBits = $this->copyBit($i, $j, $versionBits);
-            }
-        }
-
-        $theParsedVersion = Version::decodeVersionInformation($versionBits);
-        if ($theParsedVersion != null && $theParsedVersion->getDimensionForVersion() == $dimension) {
-            $this->parsedVersion = $theParsedVersion;
-
-            return $theParsedVersion;
-        }
-        throw FormatException::getFormatInstance();
     }
 
     /**
      * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
      */
-    public function remask()
-    {
+    function remask() {
         if ($this->parsedFormatInfo == null) {
             return; // We have no format information, and have no data mask
         }
-        $dataMask  = DataMask::forReference($this->parsedFormatInfo->getDataMask());
+        $dataMask = DataMask::forReference($this->parsedFormatInfo->getDataMask());
         $dimension = $this->bitMatrix->getHeight();
         $dataMask->unmaskBitMatrix($this->bitMatrix, $dimension);
     }
@@ -241,16 +229,14 @@ final class BitMatrixParser
      *
      * @param mirror Whether to read version and format information mirrored.
      */
-    public function setMirror($mirror)
-    {
-        $parsedVersion    = null;
+    function setMirror($mirror) {
+        $parsedVersion = null;
         $parsedFormatInfo = null;
-        $this->mirror     = $mirror;
+        $this->mirror = $mirror;
     }
 
     /** Mirror the bit matrix in order to attempt a second reading. */
-    public function mirror()
-    {
+    function mirror() {
         for ($x = 0; $x < $this->bitMatrix->getWidth(); $x++) {
             for ($y = $x + 1; $y < $this->bitMatrix->getHeight(); $y++) {
                 if ($this->bitMatrix->get($x, $y) != $this->bitMatrix->get($y, $x)) {
@@ -260,4 +246,5 @@ final class BitMatrixParser
             }
         }
     }
+
 }

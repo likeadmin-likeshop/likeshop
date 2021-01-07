@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\validate;
@@ -20,7 +23,7 @@ use think\Validate;
 class Goods extends Validate
 {
     protected $rule = [
-        'goods_id'                  => 'require',
+        'goods_id'                  => 'require|checkGoods',
         'name'                      => 'require|min:3|max:64|unique:Goods,name^del',
         'first_category_id'         => 'require',
         'second_category_id'        => 'require',
@@ -69,6 +72,16 @@ class Goods extends Validate
         'shareholder_ratio.lt'                  => '股东分红比例不能超过100',
     ];
 
+    //活动商品不可编辑
+    protected function checkGoods($value,$rule,$data){
+        $seckill_goods = Db::name('seckill_goods')
+            ->where(['goods_id'=>$value,'del'=>0])
+            ->find();
+        if($seckill_goods){
+            return '商品正在参与秒杀活动，无法修改';
+        }
+        return true;
+    }
     /**
      * 编辑
      */

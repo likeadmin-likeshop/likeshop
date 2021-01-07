@@ -1,0 +1,5 @@
+/* pages/user_order/user_order.wxss */
+.user-order .van-count-down {
+    color: var(--primary-color);
+    font-size: 26rpx;
+}

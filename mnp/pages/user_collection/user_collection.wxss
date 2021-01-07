@@ -1,0 +1,72 @@
+/* pages/user_collection/user_collection.wxss */
+
+.user-collection .goods-list {
+    overflow: hidden;
+}
+
+.user-collection .collection-item {
+    padding: 20rpx;
+}
+.user-collection .collection-item:not(:last-of-type) {
+    border-bottom: var(--border);
+}
+.user-collection .collection-item .info {
+    flex: 1;
+}
+
+.user-collection .collection-item .goods-img {
+    width: 160rpx;
+    height: 160rpx;
+    flex: none;
+}
+.user-collection .collection-item .btn {
+    width: 148rpx;
+    height: 52rpx;
+    right: 20rpx;
+    border: 1px solid var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-collection .del-btn {
+    height: 100%;
+    width: 65px;
+}
+
+.user-collection .store-list {
+    height:  calc(100vh - 100rpx);
+    overflow: hidden;
+}
+
+.user-collection .store-item {
+    height: 140rpx;
+    border-bottom: 1rpx solid #E5E5E5;
+}
+
+.user-collection .store-item .store-img {
+    height: 80rpx;
+    width: 80rpx;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+
+image {
+    height: 100%;
+    width: 100%;
+}
+
+
+.tips-dialog {
+    height: 230rpx;
+    width: 100%;
+}
+
+van-dialog van-button button {
+    width: 100% !important;
+}
+
+.data-null {
+    padding-top: 100%;
+}

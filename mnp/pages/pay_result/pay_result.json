@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "price-slice": "/components/price-slice/price-slice"
+  },
+  "navigationBarTitleText": "支付成功"
+}

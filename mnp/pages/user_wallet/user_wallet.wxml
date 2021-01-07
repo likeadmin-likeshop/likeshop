@@ -1,0 +1,43 @@
+<!--pages/user_wallet/user_wallet.wxml-->
+<view class="user-wallet">
+    <view class="contain bg-white mb20">
+        <view class="header">
+            <view class="white mb20">
+                <view class="xs">总资产（元）</view>
+                <view style="font-size: 76rpx">{{wallet.user_money}}</view>
+            </view>
+            <view class="money white row">
+              
+                <view class="item">
+                    <view class="xs">累计消费(元)</view>
+                     <view style="font-size: 38rpx">{{wallet.total_order_amount || 0}}</view>
+                </view>
+            </view>
+        </view>
+        <view class="nav row">
+            <view class="nav-item column-center" data-url="/pages/user_bill/user_bill?type=0" bindtap="goPage">
+                <image src="/images/icon_account.png" />
+                <view class="mt10">账户明细</view>
+            </view>
+            <view class="nav-item column-center" data-url="/pages/user_bill/user_bill?type=1" bindtap="goPage">
+                <image src="/images/icon_consume.png" />
+                <view class="mt10">消费记录</view>
+            </view>
+        </view>
+        <view class="activity">
+            <view class="activity-title xl">
+                热门活动
+            </view>
+            <view class="activity-header row">
+                <navigator hover-class="none" url="/pages/user_sign/user_sign" class="activity-header-left">
+                    <view class="lg" style="font-weight: bold;">签到领积分</view>
+                    <view class="xs">赚积分抵现金</view>
+                </navigator>
+                <navigator hover-class="none" url="/pages/user_getcoupon/user_getcoupon" class="activity-header-right ml20">
+                    <view class="lg" style="font-weight:bold;">领取优惠券</view>
+                    <view class="xs">满减享优惠</view>
+                </navigator>
+            </view>
+        </view>
+    </view>
+</view>

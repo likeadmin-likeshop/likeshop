@@ -1,0 +1,12 @@
+<!-- components/pullloading/pullloading.wxml -->
+<scroll-view class="scroll-wrap" scroll-y="true" lower-threshold="50" style="height: {{ height }}" scroll-with-animation="true" bindscrolltolower="toLower">
+    <view class="header">
+        <slot name="header"></slot>
+    </view>
+    <view class="content">
+        <slot name="content"></slot>
+    </view>
+    <loading-footer status="{{status}}" slot-footer="{{slotFooter}}" finished-text="{{finishedText}}" errorText="{{errorText}}"  bind:refresh="toLower">
+        <slot name="footer"></slot>
+    </loading-footer>
+</scroll-view>

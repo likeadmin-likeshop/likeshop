@@ -22,8 +22,8 @@ class HotSearch extends AdminBase
 
         $result = HotSearchLogic::set($post);
         if($result == true){
-            $this->success('操作成功');
+            $this->_success('操作成功');
         }
-        $this->error('操作失败');
+        $this->_error('操作失败');
     }
 }

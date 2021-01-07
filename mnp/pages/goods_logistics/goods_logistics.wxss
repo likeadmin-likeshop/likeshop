@@ -1,0 +1,73 @@
+/* pages/goods_logistics/goods_logistics.wxss */
+.goods-logistics {
+    padding-top: 20rpx;
+}
+
+.goods-logistics .header {
+    padding: 20rpx;
+}
+
+.goods-logistics .header .goods-img {
+    width: 160rpx;
+    height: 160rpx;
+    flex: none;
+    border-radius: 10rpx;
+}
+.goods {
+    position: relative;
+} 
+.goods .count {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.6);
+    padding: 4rpx 0;
+}
+.express{
+    width: 700rpx;
+    padding-top: 30rpx;
+    padding-bottom: 100rpx;
+    margin: 0 auto;
+    border-radius: 10rpx;
+}
+.express-address,
+.express-item  {
+    align-items: flex-start;
+    position: relative;
+    padding: 20rpx 0;
+}
+.express-left {
+    margin-top: 10rpx;
+    margin-right: 24rpx;
+    height: 100%;
+    position: absolute;
+    width: 40rpx;
+    flex: none;
+}
+.express-left .express-icon {
+    width: 40rpx;
+    height: 40rpx;
+}
+ 
+.express-line {
+    flex: 1;
+    border-left: 1px dotted #E5E5E5;
+}
+
+.express-left .express-doted {
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 50%;
+    background-color: #E5E5E5;
+}
+.express-right {
+    padding-left: 60rpx;
+}
+.express-right .title,
+.express-right .dec {
+    margin-bottom: 5rpx;
+}
+.express-item:last-of-type .express-left .express-line{
+    border: none;
+}

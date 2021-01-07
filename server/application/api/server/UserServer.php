@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -64,15 +67,15 @@ class UserServer
             $avatar = download_file($avatar_url, 'uploads/user/avatar/', $file_name);
             $data = [
                 'nickname' => $nickname,
-                'sn'       => create_user_sn(),
-                'avatar' => '/'.$avatar,
+                'sn' => create_user_sn(),
+                'avatar' => '/' . $avatar,
                 'create_time' => $time,
                 'distribution_code' => generate_invite_code(),//分销邀请码
             ];
 
             //分销会员申请--1,申请分销; 2-全员分销; 3-后台指定
-            $distribution = ConfigServer::get('distribution','member_apply',1);
-            if ($distribution == 2){
+            $distribution = ConfigServer::get('distribution', 'member_apply', 1);
+            if ($distribution == 2) {
                 $data['is_distribution'] = 1;
             }
 
@@ -93,8 +96,8 @@ class UserServer
             DistributionLogic::createUserDistribution($user_id);
             //消息通知
             Hook::listen('notice', [
-                'user_id'  => $user_id,
-                'scene'    => Notice_::SYSTEM_REGISTER_SUCCESS,
+                'user_id' => $user_id,
+                'scene' => Notice_::SYSTEM_REGISTER_SUCCESS,
             ]);
 
             Db::commit();
@@ -126,7 +129,6 @@ class UserServer
      */
     public static function updateUser($response, $client, $user_id)
     {
-        $user_info = [];
         $time = time();
         try {
 
@@ -181,7 +183,7 @@ class UserServer
             //无头像需要更新头像
             if (empty($user_info['avatar'])) {
                 $file_name = md5($openid . $time) . '.jpeg';
-                $data['avatar'] = '/'.download_file($avatar_url, 'uploads/user/avatar/', $file_name);
+                $data['avatar'] = '/' . download_file($avatar_url, 'uploads/user/avatar/', $file_name);
                 $data['update_time'] = $time;
                 $data['nickname'] = $nickname;
                 Db::name('user')

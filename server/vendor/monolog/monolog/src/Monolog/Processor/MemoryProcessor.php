@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -32,20 +32,22 @@ abstract class MemoryProcessor implements ProcessorInterface
      * @param bool $realUsage     Set this to true to get the real size of memory allocated from system.
      * @param bool $useFormatting If true, then format memory size to human readable string (MB, KB, B depending on size)
      */
-    public function __construct(bool $realUsage = true, bool $useFormatting = true)
+    public function __construct($realUsage = true, $useFormatting = true)
     {
-        $this->realUsage = $realUsage;
-        $this->useFormatting = $useFormatting;
+        $this->realUsage = (bool) $realUsage;
+        $this->useFormatting = (bool) $useFormatting;
     }
 
     /**
      * Formats bytes into a human readable string if $this->useFormatting is true, otherwise return $bytes as is
      *
      * @param  int        $bytes
-     * @return string|int Formatted string if $this->useFormatting is true, otherwise return $bytes as int
+     * @return string|int Formatted string if $this->useFormatting is true, otherwise return $bytes as is
      */
-    protected function formatBytes(int $bytes)
+    protected function formatBytes($bytes)
     {
+        $bytes = (int) $bytes;
+
         if (!$this->useFormatting) {
             return $bytes;
         }

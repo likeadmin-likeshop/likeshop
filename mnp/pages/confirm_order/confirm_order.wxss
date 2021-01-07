@@ -1,0 +1,103 @@
+/* pages/confirm_order/confirm_order.wxss */
+.confirm-order .confirm-con {
+    overflow: hidden;
+    padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+.confirm-order .contain {
+    border-radius: 14rpx;
+    margin: 20rpx 20rpx 0;
+    background-color: #fff;
+    overflow: hidden;
+}
+.confirm-order .img-line {
+    height: 1.5px;
+    width: 100%;
+    display: block;
+}
+.confirm-order .address-wrap {
+    height: 164rpx;
+    padding: 0 24rpx;
+}
+.confirm-order .address-wrap .address {
+    flex: 1;
+}
+.confirm-order .coupons {
+    height: 100rpx;
+    padding: 0 24rpx;
+}
+.goods .title{
+    padding:22rpx 24rpx;
+    border-bottom: 1px solid #F6F6F6;
+}
+
+.goods .all-num{
+    padding:22rpx 24rpx;
+    border-bottom: 1px dotted #F6F6F6;
+}
+
+.confirm-order .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100rpx;
+    padding: 0 30rpx;
+}
+.confirm-order .footer .van-button {
+    padding: 17rpx 60rpx;
+    background:linear-gradient(90deg,rgba(249,95,47,1) 0%,rgba(255,44,60,1) 100%);
+    height: auto;
+    border-radius: 60rpx;
+    color: #fff;
+}
+.my-tag {
+    width: 66rpx;
+    height: 34rpx;
+    font-size: 22rpx !important;
+    background: linear-gradient(270deg,rgba(255,80,88,1) 0%,rgba(255,166,48,1) 100%);
+    padding: 0 !important;
+    justify-content: center;
+}
+.confirm-order .pay-way .title{
+    padding: 20rpx 24rpx;
+}
+
+.confirm-order .pay-way .radio-group .item {
+    height: 120rpx;
+    padding: 0 24rpx;
+}
+
+.confirm-order .price {
+    padding: 28rpx 20rpx;
+}
+.confirm-order .price .item:not(:last-of-type) {
+    margin-bottom: 20rpx;
+}
+.confirm-order .goods .item, .confirm-order .benefit .item{
+    padding: 0 24rpx;
+    height: 80rpx;
+}
+.confirm-order .btn {
+    background:linear-gradient(90deg,rgba(249,95,47,1) 0%,rgba(255,44,60,1) 100%);
+    padding: 0 50rpx;
+}
+
+.confirm-order .van-cell:after {
+    border: none;
+}
+.goods .shop-icon {
+    width: 40rpx;
+    height: 40rpx;
+}
+
+.pop-title {
+    height: 100rpx;
+    border-bottom: 1rpx solid #F2F2F2;
+}
+
+.pop-title .title {
+    margin-left: 30rpx;
+    font-size: 34rpx;
+    font-weight: bold;
+    line-height: 36rpx;
+}

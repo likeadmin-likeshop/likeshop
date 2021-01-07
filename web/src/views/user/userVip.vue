@@ -1,3 +1,22 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
+
 <template>
     <div class="user-vip-container bg-white" v-if="userInfo.nickname">
         <div class="header">
@@ -52,7 +71,7 @@
                                 class="row"
                             >
                                 <div class="sm white" style="line-height: 18px">
-                                    当前成长值 <span class="bold">{{userInfo.user_growth}}/ {{item.growth_value}}</span>
+                                    当前成长值 <span class="bold">{{userInfo.user_growth}}</span>
                                 </div>
                                 <van-icon
                                     color="white"
@@ -60,6 +79,7 @@
                                     size="14"
                                 />
                             </router-link>
+                            <div class="white">{{item.tips}}</div>
                         </div>
                     </swiper-slide>
                 </swiper>
@@ -70,8 +90,7 @@
                     <div class="xl ml10 bold">成长值规则</div>
                 </div>
                 <div class="rule-content column mt10">
-                    <div class="lighter">
-                        {{growthRule}}
+                    <div class="lighter" style="white-space:pre" v-html="growthRule">
                     </div>
                 </div>
             </div>
@@ -87,7 +106,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <recommend /> -->
         </div>
     </div>
 </template>
@@ -132,7 +150,7 @@ export default {
                     this.growthRule=growth_rule
                     this.levelList=level_list
                     setTimeout(()=> {
-                        this.$refs.vipSwiper.$swiper.slideTo(3, 0, false)
+                        this.$refs.vipSwiper.$swiper.slideTo(index, 0, false)
                         this.privilegeList = level_list[index].privilege_list
                     })
             })

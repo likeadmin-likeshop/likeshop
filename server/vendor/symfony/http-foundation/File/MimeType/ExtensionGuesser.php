@@ -11,10 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\File\MimeType;
 
-use Symfony\Component\Mime\MimeTypes;
-
-@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.3, use "%s" instead.', ExtensionGuesser::class, MimeTypes::class), E_USER_DEPRECATED);
-
 /**
  * A singleton mime type to file extension guesser.
  *
@@ -26,8 +22,6 @@ use Symfony\Component\Mime\MimeTypes;
  *     $guesser->register(new MyCustomExtensionGuesser());
  *
  * The last registered guesser is preferred over previously registered ones.
- *
- * @deprecated since Symfony 4.3, use {@link MimeTypes} instead
  */
 class ExtensionGuesser implements ExtensionGuesserInterface
 {

@@ -62,7 +62,7 @@ class BaiduProvider extends AbstractProvider implements ProviderInterface
     {
         return array_merge([
             'response_type' => 'code',
-            'client_id' => $this->clientId,
+            'client_id' => $this->getConfig()->get('client_id'),
             'redirect_uri' => $this->redirectUrl,
             'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
             'display' => $this->display,

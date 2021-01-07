@@ -375,8 +375,8 @@ class installModel
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->exec("SET NAMES {$this->encoding}");
             $dbh->exec("SET NAMES {$this->encoding}");
-            $dbh->exec("SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';");
-            if (isset($this->strictMode) and $this->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
+            $dbh->exec("SET GLOBAL sql_mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';");
+            //$dbh->exec("SET @@sql_mode= ''");
             return $dbh;
         } catch (PDOException $exception) {
             return $exception->getMessage();

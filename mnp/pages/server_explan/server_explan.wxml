@@ -1,0 +1,6 @@
+<!--pages/server_explan/server_explan.wxml-->
+<view class="main">
+  <template is="wxParse" data="{{wxParseData:content.nodes}}" />
+</view>
+
+<import src="/wxParse/wxParse.wxml" />

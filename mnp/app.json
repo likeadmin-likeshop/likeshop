@@ -1,0 +1,82 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/sort/sort",
+    "pages/shop_cart/shop_cart",
+    "pages/user/user",
+    "pages/login/login",
+    "pages/news_list/news_list",
+    "pages/goods_search/goods_search",
+    "pages/confirm_order/confirm_order",
+    "pages/news_details/news_details",
+    "pages/goods_details/goods_details",
+    "pages/user_getcoupon/user_getcoupon",
+    "pages/all_comments/all_comments",
+    "pages/goods_comment/goods_comment",
+    "pages/goods_comment_list/goods_comment_list",
+    "pages/user_order/user_order",
+    "pages/order_details/order_details",
+    "pages/user_address/user_address",
+    "pages/address_edit/address_edit",
+    "pages/user_coupon/user_coupon",
+    "pages/user_vip/user_vip",
+    "pages/user_wallet/user_wallet",
+    "pages/user_collection/user_collection",
+    "pages/user_sign/user_sign",
+    "pages/sign_rule/sign_rule",
+    "pages/sign_detail/sign_detail",
+    "pages/user_payment/user_payment",
+    "pages/pay_result/pay_result",
+    "pages/after_sales_detail/after_sales_detail",
+    "pages/post_sale/post_sale",
+    "pages/apply_refund/apply_refund",
+    "pages/input_express_info/input_express_info",
+    "pages/user_bill/user_bill",
+    "pages/goods_reviews/goods_reviews",
+    "pages/goods_logistics/goods_logistics",
+    "pages/user_profile/user_profile",
+    "pages/server_explan/server_explan",
+    "pages/growth_value/growth_value"
+  ],
+  "usingComponents": {
+    "van-toast": "/components/weapp/toast/index"
+  },
+  "window":{
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#666",
+    "selectedColor": "#FF2C3C",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_s.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/sort/sort",
+        "iconPath": "images/tab_sort.png",
+        "selectedIconPath": "images/tab_sort_s.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/shop_cart/shop_cart",
+        "iconPath": "images/tab_cart.png",
+        "selectedIconPath": "images/tab_cart_s.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "iconPath": "images/tab_user.png",
+        "selectedIconPath": "images/tab_user_s.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

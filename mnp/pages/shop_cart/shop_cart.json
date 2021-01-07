@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "van-stepper": "/components/weapp/stepper/index",
+    "van-dialog": "/components/weapp/dialog/index",
+    "recommend": "/components/recommend/recommend",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-image": "/components/weapp/image/index"
+  },
+  "navigationBarTitleText": "购物车",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

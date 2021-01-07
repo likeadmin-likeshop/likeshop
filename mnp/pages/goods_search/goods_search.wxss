@@ -1,0 +1,44 @@
+/* pages/goods_search/goods_search.wxss */
+/* .goods-search {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+} */
+.goods-search  .van-search {
+    box-shadow:0px 3px 6px rgba(0,0,0,0.03);
+    position: relative;
+    z-index: 1;
+}
+.goods-search .content {
+    min-height: 500rpx;
+}
+.goods-search .header {
+    height: 80rpx;
+}
+
+.weui-navigation-bar__inner .weui-navigation-bar__left {
+    width: auto !important;
+}
+.goods-search .weui-navigation-bar__inner .weui-navigation-bar__center {
+    justify-content: flex-start;
+}
+.goods-search .header .tag {
+    height: 100%;
+    flex: 1;
+}
+.goods-search  .goods-list {
+    overflow: hidden;
+}
+.goods-search .search-words  {
+    padding-left: 24rpx;
+}
+.goods-search .search-words .title{
+    padding: 26rpx 0;
+}
+.goods-search .search-words .words .item{
+    line-height: 52rpx;
+    height: 52rpx;
+    padding: 0 24rpx;
+}
+

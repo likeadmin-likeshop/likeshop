@@ -1,0 +1,50 @@
+<!-- pages/user_payment/user_payment.wxml -->
+<view class="user-payment">
+    <form bindsubmit="submitSub" report-submit='true'>
+        <view class="payment bg-white">
+            <view class="nav row">
+                <view class="item xl column {{active===index?'bold':''}} row-center" wx:key data-id="{{index}}" wx:for='{{navRecharge}}' bindtap="changeActive">
+                    {{item}}
+                    <view class="line mt10  {{active===index?'bg-primary':'bg-white'}}"></view>
+                </view>
+            </view>
+            <view class='input row'>
+                <text style="font-size: 46rpx">￥</text>
+                <input placeholder='{{placeholder}}' type="digit" bindfocus='setPlaceholder' bindblur="setPlaceholderStatus" value='{{number}}' bindinput="onInput"></input>
+            </view>
+            <view class='tip muted mt20 row' wx:if='{{!active}}'>
+                提示：当前余额为
+                <text class='primary'>￥{{userInfo.user_money || 0}}</text>
+            </view>
+            <view class="tip muted mt20 row" wx:else>
+                提示：当前佣金为
+                <text class='primary'>￥{{userInfo.extractPrice || 0}}</text>
+            </view>
+        </view>
+        <button size="lg" class='btn white br60' bindtap="rechargeRights">
+            {{active ? '立即转入': '立即充值' }}
+        </button>
+    </form>
+    <view class="fast-payment-container">
+        <view class="title bold normal row">推荐充值</view>
+        <view class="fast-pay row wrap">
+            <view class="fast-pay-item bg-white column-center" wx:for="{{rechargeObj}}" wx:key="id" bind:tap="temRecharge" data-id="{{item.id}}">
+                <view class="hot-recharge white" wx:if="{{item.is_recommend}}">热门充值</view>
+                <view class="price bold">
+                    <price-slice weight="bold" firstSize="42" price="{{item.money}}"></price-slice>
+                    <text class="xxl" style="font-weight: 400">元</text>
+                </view>
+                <view class="preferential primary xs">{{item.tips}}</view>
+            </view>
+        </view>
+    </view>
+</view>
+<van-popup class="pay-popup" catchtouchmove show="{{ showPopup }}" closeable round bind:close="onShowPopup">
+    <view class="content">
+        <image class="img-icon" src="/images/recharge_success.png" />
+        <view class="xxl bold mt10">充值成功</view>
+        <view wx:if="{{rechargeInfo.give_integral || rechargeInfo.give_growth}}" class="lg" style="margin-top: 50rpx">恭喜您获得 <text><text class="primary" wx:if="{{rechargeInfo.give_integral}}">{{rechargeInfo.give_integral}}</text> 积分</text> <text wx:if="{{rechargeInfo.give_growth}}">+ <text class="primary">{{rechargeInfo.give_growth}}</text>成长值</text></view>
+        <button class="br60 btn" type="primary" size="md" bindtap="onShowPopup">好的，谢谢</button>
+    </view>
+</van-popup>
+<van-toast id="van-toast"/>

@@ -1,3 +1,20 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
 <template>
     <div class="login-container">
         <div class="login-logo row-center">
@@ -63,7 +80,7 @@
         </div>
         <div class="row-center">
             <div class="server-explain row-center">
-                登录即代表您已同意likeMall<span class="primary" @click="goPage('serverExplain', 0)">服务协议</span>和<span class="primary" @click="goPage('serverExplain', 1)">隐私协议</span>
+                登录即代表您已同意likeShop<span class="primary" @click="goPage('serverExplain', 0)">服务协议</span>和<span class="primary" @click="goPage('serverExplain', 1)">隐私协议</span>
             </div>
         </div>
     </div>
@@ -146,7 +163,6 @@ export default {
                     this.$ls.remove("back_path");
                     this.$toast({message: "登录成功"});
                     this.$router.replace({ path: backPath });
-                    inputInviteCode({code: this.$ls.get("INVITE_CODE")})
                 }
             })
         },
@@ -166,7 +182,6 @@ export default {
                     const backPath =  this.$ls.get("back_path") || "/";
                     this.$ls.remove("back_path");
                     this.$router.replace({ path: backPath });
-                    inputInviteCode({code: this.$ls.get("INVITE_CODE")})
                 }
             })
         },
@@ -255,7 +270,8 @@ img {
     .primary-btn {
         background-color: $--color-text-primary;
         color: white;
-        padding: 10px 149px;
+        width: 100%;
+        padding: 10px 0;
     }
     .other-way-contain {
         margin-top: 93px;

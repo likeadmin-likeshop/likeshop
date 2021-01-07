@@ -1,0 +1,35 @@
+/* pages/input_express_info/input_express_info.wxss */
+.input-express-info {
+
+}
+
+.input-contain {
+  background-color: white;
+}
+
+.input-contain .input-item {
+  padding: 24rpx;
+}
+
+.input-item .label{
+  width: 152rpx;
+}
+
+.input-item .input {
+  flex: 1;
+}
+
+.upload-contain {
+  background-color: white;
+  padding: 24rpx 20rpx 44rpx;
+}
+
+.upload-contain .header {
+  margin-bottom: 30rpx;
+}
+
+.submit-btn {
+  margin-top: 50rpx;
+  margin-left: 26rpx;
+  margin-right: 26rpx;
+}

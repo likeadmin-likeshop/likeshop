@@ -5,7 +5,7 @@ layui.define(["layer", "form"], function (t) {
             t.index = 0, t.config = {
                 tool: ["strong", "italic", "underline", "del", "|", "left", "center", "right", "|", "link", "unlink", "face", "image"],
                 hideTool: [],
-                height: 280
+                height: 500
             }
         };
     c.prototype.set = function (t) {

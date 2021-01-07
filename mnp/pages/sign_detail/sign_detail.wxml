@@ -1,0 +1,21 @@
+<!--pages/sign_detail/sign_detail.wxml-->
+
+<view class="sign-detail-container">
+  <view wx:for="{{detailList}}" wx:key="id">
+    <view class="sign-item row-between">
+      <view>
+        <view class="nr sign-type">{{item.source_type}}</view>
+        <view class="muted xs mt10" style="line-height: 33rpx">{{item.create_time}}</view>
+      </view>
+      <view>
+        <text class="primary lg" style="line-height: 45rpx">{{item.change_amount}}</text>
+      </view>
+    </view>
+  </view>
+  <loading-footer status="{{loadingStatus}}" slotFooter>
+    <view class="data-null column-center">
+      <image src="/images/order_null.png" class="img-null" />
+      <view class="muted sm">暂无其他记录～</view>
+    </view>
+  </loading-footer>
+</view>

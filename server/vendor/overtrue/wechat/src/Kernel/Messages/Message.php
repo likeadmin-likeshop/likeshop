@@ -12,9 +12,9 @@
 namespace EasyWeChat\Kernel\Messages;
 
 use EasyWeChat\Kernel\Contracts\MessageInterface;
-use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use EasyWeChat\Kernel\Support\XML;
 use EasyWeChat\Kernel\Traits\HasAttributes;
+use Mockery\Exception\BadMethodCallException;
 
 /**
  * Class Messages.
@@ -148,8 +148,6 @@ abstract class Message implements MessageInterface
      * @param bool  $withType
      *
      * @return array
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function transformForJsonRequest(array $appends = [], $withType = true): array
     {
@@ -203,6 +201,6 @@ abstract class Message implements MessageInterface
 
     public function toXmlArray()
     {
-        throw new RuntimeException(sprintf('Class "%s" cannot support transform to XML message.', __CLASS__));
+        throw new BadMethodCallException(sprintf('Class "%s" cannot support transform to XML message.', __CLASS__));
     }
 }

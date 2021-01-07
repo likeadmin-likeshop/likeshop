@@ -1,0 +1,41 @@
+<!-- components/spec-popup/spec-popup.wxml -->
+<van-popup show="{{ show }}" catchtouchmove closeable round position="bottom" bind:close="onClose">
+    <view class="header ~row">
+        <image class="goods-img ~mr20" data-current="{{checkedGoods.image}}" bindtap="previewImage" src="{{checkedGoods.image}}" />
+        <view class="goods-info">
+            <view class="~primary ~xxl">
+                <text class="lg">￥</text>
+                 <price-slice first-size="{{46}}" second-size="{{32}}" price="{{checkedGoods.price}}" weight="{{700}}"></price-slice>
+            </view>
+            <view class="~sm">
+             库存：{{checkedGoods.stock}}件
+            </view>
+            <view class="~sm">
+                <text>已选择：{{checkedGoods.spec_value_str}}，{{goodsNum}}件</text>
+            </view>
+        </view>
+    </view>
+    <view class="main">
+        <scroll-view style="max-height: 500rpx;" scroll-y="{{true}}">
+            <view class="spec-list">
+                <view class="spec" wx:for="{{ specList }}" wx:key="id">
+                    <view class="name ~mb20">{{ item.name }}</view>
+                    <view class="~row ~wrap">
+                        <view class="spec-item ~sm {{ specitem.checked ? 'checked' : '' }}" wx:for="{{ item.spec_value }}" wx:for-item="specitem" wx:key="id" data-id="{{ item.id }}" data-specid="{{ specitem.id }}" bindtap="choseSpecItem">
+                            {{ specitem.value }}
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </scroll-view>
+        <view class="good-num ~row-between ~ml20 ~mr20">
+            <view class="label">数量</view>
+            <van-stepper value="{{ goodsNum }}"  min="{{1}}" max="{{checkedGoods.stock}}" input-class="input" plus-class="plus" input-width="90rpx" button-size="58rpx" minus-class="minus" bind:change="onChange" />
+        </view>
+    </view>
+    <view class="footer ~row-between ~bg-white">
+        <button wx:if="{{showAdd}}" class="add-cart ~br60 ~white btn" size="lg" data-type="addcart" bindtap="onClick">加入购物车</button>
+        <button wx:if="{{showBuy}}"  class="~bg-primary ~br60 ~white btn" size="lg" data-type="buynow" bindtap="onClick">立即购买</button>
+        <button wx:if="{{showBargain}}"  class="~bg-primary ~br60 ~white btn" size="lg" data-type="confirm" bindtap="onClick">确定</button>
+    </view>
+</van-popup>

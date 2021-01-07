@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "pullloading": "/components/pullloading/pullloading",
+    "van-image": "/components/weapp/image/index",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-rate": "/components/weapp/rate/index"
+  }
+}

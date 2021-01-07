@@ -17,9 +17,7 @@ use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
 use Symfony\Component\Cache\PruneableInterface;
 use Symfony\Component\Cache\ResettableInterface;
-use Symfony\Component\Cache\Traits\ContractsTrait;
 use Symfony\Component\Cache\Traits\PhpArrayTrait;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Caches items at warm up time using a PHP array that is stored in shared memory by OPCache since PHP 7.0.
@@ -28,10 +26,9 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @author Titouan Galopin <galopintitouan@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInterface, ResettableInterface
+class PhpArrayAdapter implements AdapterInterface, PruneableInterface, ResettableInterface
 {
     use PhpArrayTrait;
-    use ContractsTrait;
 
     private $createCacheItem;
 
@@ -39,10 +36,11 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
      * @param string           $file         The PHP file were values are cached
      * @param AdapterInterface $fallbackPool A pool to fallback on when an item is not hit
      */
-    public function __construct(string $file, AdapterInterface $fallbackPool)
+    public function __construct($file, AdapterInterface $fallbackPool)
     {
         $this->file = $file;
         $this->pool = $fallbackPool;
+        $this->zendDetectUnicode = filter_var(ini_get('zend.detect_unicode'), \FILTER_VALIDATE_BOOLEAN);
         $this->createCacheItem = \Closure::bind(
             static function ($key, $value, $isHit) {
                 $item = new CacheItem();
@@ -58,7 +56,9 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
     }
 
     /**
-     * This adapter takes advantage of how PHP stores arrays in its latest versions.
+     * This adapter should only be used on PHP 7.0+ to take advantage of how PHP
+     * stores arrays in its latest versions. This factory method decorates the given
+     * fallback pool with this adapter only if the current PHP version is supported.
      *
      * @param string                 $file         The PHP file were values are cached
      * @param CacheItemPoolInterface $fallbackPool A pool to fallback on when an item is not hit
@@ -67,44 +67,15 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
      */
     public static function create($file, CacheItemPoolInterface $fallbackPool)
     {
-        if (!$fallbackPool instanceof AdapterInterface) {
-            $fallbackPool = new ProxyAdapter($fallbackPool);
-        }
-
-        return new static($file, $fallbackPool);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null)
-    {
-        if (null === $this->values) {
-            $this->initialize();
-        }
-        if (!isset($this->keys[$key])) {
-            get_from_pool:
-            if ($this->pool instanceof CacheInterface) {
-                return $this->pool->get($key, $callback, $beta, $metadata);
+        if (\PHP_VERSION_ID >= 70000) {
+            if (!$fallbackPool instanceof AdapterInterface) {
+                $fallbackPool = new ProxyAdapter($fallbackPool);
             }
 
-            return $this->doGet($this->pool, $key, $callback, $beta, $metadata);
-        }
-        $value = $this->values[$this->keys[$key]];
-
-        if ('N;' === $value) {
-            return null;
-        }
-        try {
-            if ($value instanceof \Closure) {
-                return $value();
-            }
-        } catch (\Throwable $e) {
-            unset($this->keys[$key]);
-            goto get_from_pool;
+            return new static($file, $fallbackPool);
         }
 
-        return $value;
+        return $fallbackPool;
     }
 
     /**
@@ -118,19 +89,23 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
         if (null === $this->values) {
             $this->initialize();
         }
-        if (!isset($this->keys[$key])) {
+        if (!isset($this->values[$key])) {
             return $this->pool->getItem($key);
         }
 
-        $value = $this->values[$this->keys[$key]];
+        $value = $this->values[$key];
         $isHit = true;
 
         if ('N;' === $value) {
             $value = null;
-        } elseif ($value instanceof \Closure) {
+        } elseif (\is_string($value) && isset($value[2]) && ':' === $value[1]) {
             try {
-                $value = $value();
-            } catch (\Throwable $e) {
+                $e = null;
+                $value = unserialize($value);
+            } catch (\Error $e) {
+            } catch (\Exception $e) {
+            }
+            if (null !== $e) {
                 $value = null;
                 $isHit = false;
             }
@@ -160,8 +135,6 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function hasItem($key)
     {
@@ -172,13 +145,11 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
             $this->initialize();
         }
 
-        return isset($this->keys[$key]) || $this->pool->hasItem($key);
+        return isset($this->values[$key]) || $this->pool->hasItem($key);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function deleteItem($key)
     {
@@ -189,13 +160,11 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
             $this->initialize();
         }
 
-        return !isset($this->keys[$key]) && $this->pool->deleteItem($key);
+        return !isset($this->values[$key]) && $this->pool->deleteItem($key);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function deleteItems(array $keys)
     {
@@ -207,7 +176,7 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
                 throw new InvalidArgumentException(sprintf('Cache key must be string, "%s" given.', \is_object($key) ? \get_class($key) : \gettype($key)));
             }
 
-            if (isset($this->keys[$key])) {
+            if (isset($this->values[$key])) {
                 $deleted = false;
             } else {
                 $fallbackKeys[] = $key;
@@ -226,8 +195,6 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function save(CacheItemInterface $item)
     {
@@ -235,13 +202,11 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
             $this->initialize();
         }
 
-        return !isset($this->keys[$item->getKey()]) && $this->pool->save($item);
+        return !isset($this->values[$item->getKey()]) && $this->pool->save($item);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function saveDeferred(CacheItemInterface $item)
     {
@@ -249,34 +214,37 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
             $this->initialize();
         }
 
-        return !isset($this->keys[$item->getKey()]) && $this->pool->saveDeferred($item);
+        return !isset($this->values[$item->getKey()]) && $this->pool->saveDeferred($item);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function commit()
     {
         return $this->pool->commit();
     }
 
-    private function generateItems(array $keys): \Generator
+    /**
+     * @return \Generator
+     */
+    private function generateItems(array $keys)
     {
         $f = $this->createCacheItem;
         $fallbackKeys = [];
 
         foreach ($keys as $key) {
-            if (isset($this->keys[$key])) {
-                $value = $this->values[$this->keys[$key]];
+            if (isset($this->values[$key])) {
+                $value = $this->values[$key];
 
                 if ('N;' === $value) {
                     yield $key => $f($key, null, true);
-                } elseif ($value instanceof \Closure) {
+                } elseif (\is_string($value) && isset($value[2]) && ':' === $value[1]) {
                     try {
-                        yield $key => $f($key, $value(), true);
-                    } catch (\Throwable $e) {
+                        yield $key => $f($key, unserialize($value), true);
+                    } catch (\Error $e) {
+                        yield $key => $f($key, null, false);
+                    } catch (\Exception $e) {
                         yield $key => $f($key, null, false);
                     }
                 } else {
@@ -288,7 +256,9 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
         }
 
         if ($fallbackKeys) {
-            yield from $this->pool->getItems($fallbackKeys);
+            foreach ($this->pool->getItems($fallbackKeys) as $key => $item) {
+                yield $key => $item;
+            }
         }
     }
 
@@ -305,10 +275,17 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
             'function' => 'spl_autoload_call',
             'args' => [$class],
         ];
-        $i = 1 + array_search($autoloadFrame, $trace, true);
 
-        if (isset($trace[$i]['function']) && !isset($trace[$i]['class'])) {
-            switch ($trace[$i]['function']) {
+        if (\PHP_VERSION_ID >= 80000 && isset($trace[1])) {
+            $callerFrame = $trace[1];
+        } elseif (false !== $i = array_search($autoloadFrame, $trace, true)) {
+            $callerFrame = $trace[++$i];
+        } else {
+            throw $e;
+        }
+
+        if (isset($callerFrame['function']) && !isset($callerFrame['class'])) {
+            switch ($callerFrame['function']) {
                 case 'get_class_methods':
                 case 'get_class_vars':
                 case 'get_parent_class':

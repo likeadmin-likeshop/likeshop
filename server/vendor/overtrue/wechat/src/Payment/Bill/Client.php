@@ -21,13 +21,10 @@ class Client extends BaseClient
      *
      * @param string $date
      * @param string $type
-     * @param array  $optional
      *
      * @return \EasyWeChat\Kernel\Http\StreamResponse|\Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(string $date, string $type = 'ALL', array $optional = [])
     {

@@ -11,16 +11,12 @@
 
 namespace Symfony\Component\Cache\Simple;
 
-use Psr\SimpleCache\CacheInterface as Psr16CacheInterface;
-use Symfony\Component\Cache\Adapter\NullAdapter;
-use Symfony\Contracts\Cache\CacheInterface;
-
-@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.3, use "%s" and type-hint for "%s" instead.', NullCache::class, NullAdapter::class, CacheInterface::class), E_USER_DEPRECATED);
+use Psr\SimpleCache\CacheInterface;
 
 /**
- * @deprecated since Symfony 4.3, use NullAdapter and type-hint for CacheInterface instead.
+ * @author Nicolas Grekas <p@tchwork.com>
  */
-class NullCache implements Psr16CacheInterface
+class NullCache implements CacheInterface
 {
     /**
      * {@inheritdoc}
@@ -32,8 +28,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return iterable
      */
     public function getMultiple($keys, $default = null)
     {
@@ -44,8 +38,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function has($key)
     {
@@ -54,8 +46,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function clear()
     {
@@ -64,8 +54,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function delete($key)
     {
@@ -74,8 +62,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function deleteMultiple($keys)
     {
@@ -84,8 +70,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function set($key, $value, $ttl = null)
     {
@@ -94,8 +78,6 @@ class NullCache implements Psr16CacheInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function setMultiple($values, $ttl = null)
     {

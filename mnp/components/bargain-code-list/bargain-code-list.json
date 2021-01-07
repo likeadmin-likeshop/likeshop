@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "loading-footer": "/components/loading-footer/loading-footer",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-image": "/components/weapp/image/index",
+    "van-dialog": "/components/weapp/dialog/index"
+  }
+}

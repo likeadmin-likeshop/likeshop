@@ -1,0 +1,48 @@
+<!--pages/all_comments/all_comments.wxml-->
+<pullloading height="100vh" status="{{status}}" slot-footer="{{true}}" bindscrolltobottom="$getCommentList">
+    <view slot="header" class="all_comments" >
+        <view class="header bg-white" wx:if="{{!isEmpty}}">
+            <view class="title xs">
+                <text class="lighter mr10">商品好评率</text>
+                <text class="primary">{{percent}}</text>
+            </view>
+            <view class="tab row">
+                <block wx:for="{{categoryList}}">
+                    <view class="tab-item xs mr10  br60 mb20 {{type == item.id ?  'bg-primary white' : 'bg-gray' }}" wx:key="index" data-id="{{item.id}}" bind:tap="onChangType" wx:if="{{item.count}}">
+                        {{item.name}}({{item.count}})
+                    </view>
+                </block>
+            </view>
+        </view>
+        <view slot="content" class="main bg-white">
+            <view class="evaluation-list">
+                <view class="evaluation-item" wx:for="{{commentList}}" wx:key="index">
+                    <view class="user-info row">
+                        <image class="avatar mr20" src="{{item.avatar}}" />
+                        <view class="user-name md mr10">{{item.nickname}}</view>
+                        <van-rate readonly size="26rpx" color="#FF2C3C" value="{{ item.goods_comment }}" />
+                    </view>
+                    <view class="muted xs mt10">
+                        <text class="mr20">{{item.create_time}}</text>
+                        <text>{{item.spec_value_str}}</text>
+                    </view>
+                    <view wx:if="{{item.comment}}" class="dec mt20">{{item.comment}}</view>
+                    <view class="img mt20 row" style="flex-wrap: wrap;" wx:if="{{item.image.length}}">
+                        <view class="img-item mr20 mb20" wx:for="{{item.image}}" wx:for-index="imgindex" wx:for-item="imgitem" wx:key="imgindex" data-current="{{imgitem}}" data-uri="{{item.image}}" bindtap="previewImage">
+                            <van-image width="160rpx" fit="cover" height="160rpx" radius="6rpx"  lazy-load class="goods-img" src="{{imgitem}}" />
+                        </view>
+                    </view>
+                    <view class="seller-recall-container bg-gray mt10" wx:if="{{item.reply}}">
+                        <view class="lighter nr" style="word-wrap:break-word;">
+                            商家回复：<span class="normal two-txt-cut">{{item.reply}}</span>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view slot="footer" class="column-center" style="padding-top: 200rpx">
+        <image class="img-null" src="/images/goods_null.png" />
+        <text class="lighter">暂无评价</text>
+    </view>
+</pullloading>

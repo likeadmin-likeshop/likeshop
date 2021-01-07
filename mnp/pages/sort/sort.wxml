@@ -1,0 +1,46 @@
+<!-- pages/sort/sort.wxml -->
+<view class="sort">
+    <view class="header row">
+        <navigator hover-class="none" class="search bg-gray row br60" url="/pages/goods_search/goods_search">
+            <image class="icon ml20 mr20" src="/images/icon_search.png" />
+            <input disabled="{{true}}" type="text" placeholder="请输入搜索的商品" />
+        </navigator>
+    </view>
+    <view class="content row">
+        <view class="aside">
+            <scroll-view style="height: 100%" scroll-y="true" scroll-top="{{ asideScroll }}" scroll-with-animation='true'>
+                <block wx:for="{{sortList}}" wx:for-item="item" wx:key="id">
+                    <view class="one-item sm {{'item' + item.id == navActive ? 'active' : ''}}" data-index="{{index}}" data-id="item{{item.id}}" bindtap="changeActive">
+                        <text class="name">{{ item.name }}</text>
+                        <view wx:if="{{ 'item' + item.id == navActive }}" class="active-line bg-primary"></view>
+                    </view>
+                </block>
+            </scroll-view>
+        </view>
+        <view class="main bg-body">
+            <scroll-view style="height: 100%" scroll-y="true" scroll-into-view="{{toView}}" bindscroll="onScroll" scroll-with-animation='true'>
+                <view class="main-wrap">
+                    <view class="mb20" style="border-radius: 10rpx" >
+                        <swipers pid="{{5}}" height="160rpx" padding="20rpx 0 0" radius="5rpx" />
+                    </view>
+                    <view class="one-item-wrap" id="{{'item' + item.id}}" wx:for="{{sortList}}" wx:for-item="item" wx:key="id">
+                        <view class="two-item bg-white mb20" wx:for="{{item.sons}}" wx:for-item="sitem" wx:key="id">
+                            <view class="title row-center">
+                                <text class="line mr20"></text>
+                                <text class="name bold sm">{{sitem.name}}</text>
+                                <text class="line ml20"></text>
+                            </view>
+                            <view class="three-list row wrap">
+                                <view class="three-item column-center mb20" wx:for="{{sitem.sons}}" wx:for-item="titem" wx:key="id" data-url="/pages/goods_search/goods_search" data-item="{{titem}}" bindtap="goPage">
+                                   <van-image fit="contain" width="140rpx" height="140rpx" lazy-load src="{{titem.image}}" />
+                                    <view class="text mt20 xs">{{ titem.name }}</view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view  style='height:{{ height + 20 }}px;'></view>
+            </scroll-view>
+        </view>
+    </view>
+</view>

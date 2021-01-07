@@ -136,7 +136,7 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
         }
 
         return array_merge([
-            'appid' => $this->clientId,
+            'appid' => $this->getConfig()->get('client_id'),
             'redirect_uri' => $this->redirectUrl,
             'response_type' => 'code',
             'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
@@ -205,8 +205,8 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
     protected function getTokenFields($code)
     {
         return array_filter([
-            'appid' => $this->clientId,
-            'secret' => $this->clientSecret,
+            'appid' => $this->getConfig()->get('client_id'),
+            'secret' => $this->getConfig()->get('client_secret'),
             'component_appid' => $this->component ? $this->component->getAppId() : null,
             'component_access_token' => $this->component ? $this->component->getToken() : null,
             'code' => $code,

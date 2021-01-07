@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -11,35 +11,26 @@
 
 namespace Monolog;
 
-final class Utils
+class Utils
 {
-    const DEFAULT_JSON_FLAGS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_INVALID_UTF8_SUBSTITUTE;
-
     /**
      * @internal
      */
-    public static function getClass($object): string
+    public static function getClass($object)
     {
         $class = \get_class($object);
 
         return 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
     }
 
-    public static function substr(string $string, int $start, ?int $length = null)
-    {
-        if (extension_loaded('mbstring')) {
-            return mb_strcut($string, $start, $length);
-        }
-
-        return substr($string, $start, $length);
-    }
-
     /**
      * Makes sure if a relative path is passed in it is turned into an absolute path
      *
      * @param string $streamUrl stream URL or path without protocol
+     *
+     * @return string
      */
-    public static function canonicalizePath(string $streamUrl): string
+    public static function canonicalizePath($streamUrl)
     {
         $prefix = '';
         if ('file://' === substr($streamUrl, 0, 7)) {
@@ -66,15 +57,15 @@ final class Utils
      * Return the JSON representation of a value
      *
      * @param  mixed             $data
-     * @param  int               $encodeFlags  flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+     * @param  int               $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
      * @param  bool              $ignoreErrors whether to ignore encoding errors or to throw on error, when ignored and the encoding fails, "null" is returned which is valid json for null
      * @throws \RuntimeException if encoding fails and errors are not ignored
-     * @return string            when errors are ignored and the encoding fails, "null" is returned which is valid json for null
+     * @return string
      */
-    public static function jsonEncode($data, ?int $encodeFlags = null, bool $ignoreErrors = false): string
+    public static function jsonEncode($data, $encodeFlags = null, $ignoreErrors = false)
     {
-        if (null === $encodeFlags) {
-            $encodeFlags = self::DEFAULT_JSON_FLAGS;
+        if (null === $encodeFlags && version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            $encodeFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
         }
 
         if ($ignoreErrors) {
@@ -99,16 +90,16 @@ final class Utils
      *
      * If the failure is due to invalid string encoding, try to clean the
      * input and encode again. If the second encoding attempt fails, the
-     * initial error is not encoding related or the input can't be cleaned then
+     * inital error is not encoding related or the input can't be cleaned then
      * raise a descriptive exception.
      *
-     * @param  int               $code        return code of json_last_error function
-     * @param  mixed             $data        data that was meant to be encoded
-     * @param  int               $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION
+     * @param  int               $code return code of json_last_error function
+     * @param  mixed             $data data that was meant to be encoded
+     * @param  int               $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
      * @throws \RuntimeException if failure can't be corrected
      * @return string            JSON encoded data after error correction
      */
-    public static function handleJsonError(int $code, $data, ?int $encodeFlags = null): string
+    public static function handleJsonError($code, $data, $encodeFlags = null)
     {
         if ($code !== JSON_ERROR_UTF8) {
             self::throwEncodeError($code, $data);
@@ -122,8 +113,8 @@ final class Utils
             self::throwEncodeError($code, $data);
         }
 
-        if (null === $encodeFlags) {
-            $encodeFlags = self::DEFAULT_JSON_FLAGS;
+        if (null === $encodeFlags && version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            $encodeFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
         }
 
         $json = json_encode($data, $encodeFlags);
@@ -142,7 +133,7 @@ final class Utils
      * @param  mixed             $data data that was meant to be encoded
      * @throws \RuntimeException
      */
-    private static function throwEncodeError(int $code, $data)
+    private static function throwEncodeError($code, $data)
     {
         switch ($code) {
             case JSON_ERROR_DEPTH:
@@ -177,21 +168,20 @@ final class Utils
      * Function converts the input in place in the passed variable so that it
      * can be used as a callback for array_walk_recursive.
      *
-     * @param mixed &$data Input to check and convert if needed
+     * @param mixed $data Input to check and convert if needed, passed by ref
+     * @private
      */
-    private static function detectAndCleanUtf8(&$data)
+    public static function detectAndCleanUtf8(&$data)
     {
         if (is_string($data) && !preg_match('//u', $data)) {
             $data = preg_replace_callback(
                 '/[\x80-\xFF]+/',
-                function ($m) {
-                    return utf8_encode($m[0]);
-                },
+                function ($m) { return utf8_encode($m[0]); },
                 $data
             );
             $data = str_replace(
-                ['¤', '¦', '¨', '´', '¸', '¼', '½', '¾'],
-                ['€', 'Š', 'š', 'Ž', 'ž', 'Œ', 'œ', 'Ÿ'],
+                array('¤', '¦', '¨', '´', '¸', '¼', '½', '¾'),
+                array('€', 'Š', 'š', 'Ž', 'ž', 'Œ', 'œ', 'Ÿ'),
                 $data
             );
         }

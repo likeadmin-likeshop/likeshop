@@ -17,11 +17,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandle
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
-// Help opcache.preload discover always-needed symbols
-class_exists(MetadataBag::class);
-class_exists(StrictSessionHandler::class);
-class_exists(SessionHandlerProxy::class);
-
 /**
  * This provides a base class for session attribute storage.
  *
@@ -79,9 +74,13 @@ class NativeSessionStorage implements SessionStorageInterface
      * cookie_path, "/"
      * cookie_secure, ""
      * cookie_samesite, null
+     * entropy_file, ""
+     * entropy_length, "0"
      * gc_divisor, "100"
      * gc_maxlifetime, "1440"
      * gc_probability, "1"
+     * hash_bits_per_character, "4"
+     * hash_function, "0"
      * lazy_write, "1"
      * name, "PHPSESSID"
      * referer_check, ""
@@ -115,7 +114,6 @@ class NativeSessionStorage implements SessionStorageInterface
             'cache_expire' => 0,
             'use_cookies' => 1,
             'lazy_write' => 1,
-            'use_strict_mode' => 1,
         ];
 
         session_register_shutdown();
@@ -144,11 +142,11 @@ class NativeSessionStorage implements SessionStorageInterface
             return true;
         }
 
-        if (PHP_SESSION_ACTIVE === session_status()) {
+        if (\PHP_SESSION_ACTIVE === session_status()) {
             throw new \RuntimeException('Failed to start the session: already started by PHP.');
         }
 
-        if (filter_var(ini_get('session.use_cookies'), FILTER_VALIDATE_BOOLEAN) && headers_sent($file, $line)) {
+        if (filter_var(ini_get('session.use_cookies'), \FILTER_VALIDATE_BOOLEAN) && headers_sent($file, $line)) {
             throw new \RuntimeException(sprintf('Failed to start the session because headers have already been sent by "%s" at line %d.', $file, $line));
         }
 
@@ -207,7 +205,7 @@ class NativeSessionStorage implements SessionStorageInterface
     public function regenerate($destroy = false, $lifetime = null)
     {
         // Cannot regenerate the session ID for non-active sessions.
-        if (PHP_SESSION_ACTIVE !== session_status()) {
+        if (\PHP_SESSION_ACTIVE !== session_status()) {
             return false;
         }
 
@@ -256,7 +254,7 @@ class NativeSessionStorage implements SessionStorageInterface
 
         // Register error handler to add information about the current save handler
         $previousHandler = set_error_handler(function ($type, $msg, $file, $line) use (&$previousHandler) {
-            if (E_WARNING === $type && 0 === strpos($msg, 'session_write_close():')) {
+            if (\E_WARNING === $type && 0 === strpos($msg, 'session_write_close():')) {
                 $handler = $this->saveHandler instanceof SessionHandlerProxy ? $this->saveHandler->getHandler() : $this->saveHandler;
                 $msg = sprintf('session_write_close(): Failed to write session data with "%s" handler', \get_class($handler));
             }
@@ -365,15 +363,16 @@ class NativeSessionStorage implements SessionStorageInterface
      */
     public function setOptions(array $options)
     {
-        if (headers_sent() || PHP_SESSION_ACTIVE === session_status()) {
+        if (headers_sent() || \PHP_SESSION_ACTIVE === session_status()) {
             return;
         }
 
         $validOptions = array_flip([
             'cache_expire', 'cache_limiter', 'cookie_domain', 'cookie_httponly',
             'cookie_lifetime', 'cookie_path', 'cookie_secure', 'cookie_samesite',
-            'gc_divisor', 'gc_maxlifetime', 'gc_probability',
-            'lazy_write', 'name', 'referer_check',
+            'entropy_file', 'entropy_length', 'gc_divisor',
+            'gc_maxlifetime', 'gc_probability', 'hash_bits_per_character',
+            'hash_function', 'lazy_write', 'name', 'referer_check',
             'serialize_handler', 'use_strict_mode', 'use_cookies',
             'use_only_cookies', 'use_trans_sid', 'upload_progress.enabled',
             'upload_progress.cleanup', 'upload_progress.prefix', 'upload_progress.name',
@@ -430,7 +429,7 @@ class NativeSessionStorage implements SessionStorageInterface
         }
         $this->saveHandler = $saveHandler;
 
-        if (headers_sent() || PHP_SESSION_ACTIVE === session_status()) {
+        if (headers_sent() || \PHP_SESSION_ACTIVE === session_status()) {
             return;
         }
 

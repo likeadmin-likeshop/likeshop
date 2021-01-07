@@ -25,15 +25,47 @@ use Zxing\Common\Detector\MathUtils;
  *
  * @author Sean Owen
  */
-class ResultPoint
-{
+class ResultPoint {
+
     private $x;
     private $y;
 
-    public function __construct($x, $y)
-    {
+    public function __construct($x, $y) {
         $this->x = (float)($x);
         $this->y = (float)($y);
+    }
+
+    public final function getX() {
+        return (float)($this->x);
+    }
+
+    public final function getY() {
+        return (float)($this->y);
+    }
+
+//@Override
+    public final function equals($other) {
+        if ($other instanceof ResultPoint) {
+            $otherPoint =  $other;
+            return $this->x == $otherPoint->x && $this->y == $otherPoint->y;
+        }
+        return false;
+    }
+
+//@Override
+    public final function hashCode() {
+        return 31 * floatToIntBits($this->x) + floatToIntBits($this->y);
+    }
+
+//@Override
+    public final function toString() {
+        $result = '';
+        $result.= ('(');
+        $result.=($this->x);
+        $result.=(',');
+        $result.=($this->y);
+        $result.=(')');
+        return $result;
     }
 
     /**
@@ -42,17 +74,16 @@ class ResultPoint
      *
      * @param patterns array of three {@code ResultPoint} to order
      */
-    public static function orderBestPatterns($patterns)
-    {
+    public static function orderBestPatterns($patterns) {
 
 // Find distances between pattern centers
         $zeroOneDistance = self::distance($patterns[0], $patterns[1]);
-        $oneTwoDistance  = self::distance($patterns[1], $patterns[2]);
+        $oneTwoDistance = self::distance($patterns[1], $patterns[2]);
         $zeroTwoDistance = self::distance($patterns[0], $patterns[2]);
 
-        $pointA = '';
-        $pointB = '';
-        $pointC = '';
+        $pointA='';
+        $pointB='';
+        $pointC='';
 // Assume one closest to other two is B; A and C will just be guesses at first
         if ($oneTwoDistance >= $zeroOneDistance && $oneTwoDistance >= $zeroTwoDistance) {
             $pointB = $patterns[0];
@@ -73,7 +104,7 @@ class ResultPoint
 // we want for A, B, C. If it's negative, then we've got it flipped around and
 // should swap A and C.
         if (self::crossProductZ($pointA, $pointB, $pointC) < 0.0) {
-            $temp   = $pointA;
+            $temp = $pointA;
             $pointA = $pointC;
             $pointC = $temp;
         }
@@ -81,75 +112,29 @@ class ResultPoint
         $patterns[0] = $pointA;
         $patterns[1] = $pointB;
         $patterns[2] = $pointC;
-
         return $patterns;
     }
+
 
     /**
      * @param pattern1 first pattern
      * @param pattern2 second pattern
-     *
      * @return distance between two points
      */
-    public static function distance($pattern1, $pattern2)
-    {
+    public static function distance($pattern1, $pattern2) {
         return MathUtils::distance($pattern1->x, $pattern1->y, $pattern2->x, $pattern2->y);
     }
-
-//@Override
 
     /**
      * Returns the z component of the cross product between vectors BC and BA.
      */
     private static function crossProductZ($pointA,
                                           $pointB,
-                                          $pointC)
-    {
+                                          $pointC) {
         $bX = $pointB->x;
         $bY = $pointB->y;
-
         return (($pointC->x - $bX) * ($pointA->y - $bY)) - (($pointC->y - $bY) * ($pointA->x - $bX));
     }
 
-//@Override
 
-    public final function getX()
-    {
-        return (float)($this->x);
-    }
-
-//@Override
-
-    public final function getY()
-    {
-        return (float)($this->y);
-    }
-
-    public final function equals($other)
-    {
-        if ($other instanceof ResultPoint) {
-            $otherPoint = $other;
-
-            return $this->x == $otherPoint->x && $this->y == $otherPoint->y;
-        }
-
-        return false;
-    }
-
-    public final function hashCode()
-    {
-        return 31 * floatToIntBits($this->x) + floatToIntBits($this->y);
-    }
-
-    public final function toString()
-    {
-        $result = '';
-        $result .= ('(');
-        $result .= ($this->x);
-        $result .= (',');
-        $result .= ($this->y);
-        $result .= (')');
-
-        return $result;
-    }
 }

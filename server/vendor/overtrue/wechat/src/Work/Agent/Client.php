@@ -47,7 +47,6 @@ class Client extends BaseClient
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function set(int $agentId, array $attributes)
     {

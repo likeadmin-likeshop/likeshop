@@ -1,0 +1,8 @@
+<!-- pages/user_coupon/user_coupon.wxml -->
+<view class="user-coupon">
+    <van-tabs active="{{ active }}" sticky line-width="40" bind:change="onChange">
+        <van-tab title="{{item.title + '(' + item.num + ')'}}" wx:for="{{coupons}}" wx:key="index">
+            <my-coupons type="{{item.type}}" data-index="{{index}}" bind:getnum="onChangeNum"></my-coupons>
+        </van-tab>
+    </van-tabs>
+</view>

@@ -159,7 +159,7 @@ class QQProvider extends AbstractProvider implements ProviderInterface
         $queries = [
             'access_token' => $token->getToken(),
             'openid' => $this->openId,
-            'oauth_consumer_key' => $this->clientId,
+            'oauth_consumer_key' => $this->getConfig()->get('client_id'),
         ];
 
         $response = $this->getHttpClient()->get($this->baseUrl.'/user/get_user_info?'.http_build_query($queries));

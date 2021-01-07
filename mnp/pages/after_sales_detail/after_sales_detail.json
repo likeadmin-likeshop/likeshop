@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "price-slice": "/components/price-slice/price-slice",
+    "van-image": "/components/weapp/image/index",
+    "van-dialog": "/components/weapp/dialog/index"
+  },
+  "navigationBarTitleText": "售后详情"
+}

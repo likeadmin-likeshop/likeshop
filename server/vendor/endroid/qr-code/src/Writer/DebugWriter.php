@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -12,20 +10,22 @@ declare(strict_types=1);
 namespace Endroid\QrCode\Writer;
 
 use Endroid\QrCode\QrCodeInterface;
-use Exception;
 use ReflectionClass;
+use Exception;
 
 class DebugWriter extends AbstractWriter
 {
-    public function writeString(QrCodeInterface $qrCode): string
+    /**
+     * {@inheritdoc}
+     */
+    public function writeString(QrCodeInterface $qrCode)
     {
         $data = [];
-        $skip = ['getData'];
 
         $reflectionClass = new ReflectionClass($qrCode);
         foreach ($reflectionClass->getMethods() as $method) {
             $methodName = $method->getShortName();
-            if (0 === strpos($methodName, 'get') && 0 == $method->getNumberOfParameters() && !in_array($methodName, $skip)) {
+            if (0 === strpos($methodName, 'get') && 0 == $method->getNumberOfParameters()) {
                 $value = $qrCode->{$methodName}();
                 if (is_array($value) && !is_object(current($value))) {
                     $value = '['.implode(', ', $value).']';
@@ -48,13 +48,11 @@ class DebugWriter extends AbstractWriter
         return $string;
     }
 
-    public static function getContentType(): string
+    /**
+     * {@inheritdoc}
+     */
+    public static function getContentType()
     {
         return 'text/plain';
-    }
-
-    public function getName(): string
-    {
-        return 'debug';
     }
 }

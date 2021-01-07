@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -179,7 +182,6 @@ class AdLogic
             'update_time' => $time,
 
         ];
-
         return $ad->allowField(true)->save($data, ['id' => $post['id']]);
     }
 
@@ -207,15 +209,13 @@ class AdLogic
      */
     public static function info($id)
     {
-
         $ad = new Ad();
         $info = $ad::get(['id' => $id]);
         $info['goods'] = '';
         if ($info['link_type'] == 2) {
             $goods = Db::name('goods g')
-                ->join('shop s', 'g.shop_id = s.id')
                 ->where(['g.id' => $info['link']])
-                ->field('g.name,g.image,s.name as shop_name,min_price,max_price')
+                ->field('g.name, g.image, min_price, max_price')
                 ->find();
             $price = '￥' . $goods['max_price'];
             if ($goods['max_price'] !== $goods['min_price']) {
@@ -224,7 +224,6 @@ class AdLogic
             $goods['price'] = $price;
             $info['goods'] = $goods;
         }
-
         return $info;
     }
 

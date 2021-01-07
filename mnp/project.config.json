@@ -1,0 +1,273 @@
+{
+  "description": "项目配置文件",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": true,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": false,
+    "useApiHook": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "enableEngineNative": false,
+    "bundle": false,
+    "useIsolateContext": true,
+    "useCompilerModule": false,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.13.1",
+  "appid": "11111111",
+  "projectname": "miniprogram-1",
+  "cloudfunctionTemplateRoot": "",
+  "watchOptions": {
+    "ignore": []
+  },
+  "debugOptions": {
+    "hidedInDevtools": []
+  },
+  "scripts": {},
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/user_spread/user_spread",
+          "pathName": "pages/user_spread/user_spread",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_withdraw_code/user_withdraw_code",
+          "pathName": "pages/user_withdraw_code/user_withdraw_code",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/address_edit/address_edit",
+          "pathName": "pages/address_edit/address_edit",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/goods_details/goods_details",
+          "pathName": "pages/goods_details/goods_details",
+          "query": "id=17",
+          "scene": null
+        },
+        {
+          "name": "pages/confirm_order/confirm_order",
+          "pathName": "pages/confirm_order/confirm_order",
+          "query": "goods=[{\"item_id\":13,\"num\":1}]",
+          "scene": null
+        },
+        {
+          "name": "pages/shop_cart/shop_cart",
+          "pathName": "pages/shop_cart/shop_cart",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/order_details/order_details",
+          "pathName": "pages/order_details/order_details",
+          "query": "id=17",
+          "scene": null
+        },
+        {
+          "name": "pages/user_payment/user_payment",
+          "pathName": "pages/user_payment/user_payment",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/pay_result/pay_result",
+          "pathName": "pages/pay_result/pay_result",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/post_sale/post_sale",
+          "pathName": "pages/post_sale/post_sale",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_bill/user_bill",
+          "pathName": "pages/user_bill/user_bill",
+          "query": "type=0",
+          "scene": null
+        },
+        {
+          "name": "pages/user_vip/user_vip",
+          "pathName": "pages/user_vip/user_vip",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/goods_bargain/goods_bargain",
+          "pathName": "pages/goods_bargain/goods_bargain",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/bargain_process/bargain_process",
+          "pathName": "pages/bargain_process/bargain_process",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/bargain_code/bargain_code",
+          "pathName": "pages/bargain_code/bargain_code",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/goods_comment_list/goods_comment_list",
+          "pathName": "pages/goods_comment_list/goods_comment_list",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_order/user_order",
+          "pathName": "pages/user_order/user_order",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_spread_order/user_spread_order",
+          "pathName": "pages/user_spread_order/user_spread_order",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_vip/user_vip",
+          "pathName": "pages/user_vip/user_vip",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/activity_detail/activity_detail",
+          "pathName": "pages/activity_detail/activity_detail",
+          "query": "id=2&title=新品榜单",
+          "scene": null
+        },
+        {
+          "name": "pages/user_withdraw/user_withdraw",
+          "pathName": "pages/user_withdraw/user_withdraw",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/widthdraw_result/widthdraw_result",
+          "pathName": "pages/widthdraw_result/widthdraw_result",
+          "query": "id=7",
+          "scene": null
+        },
+        {
+          "name": "pages/user_spread_month_bill/user_spread_month_bill",
+          "pathName": "pages/user_spread_month_bill/user_spread_month_bill",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_spread_month_bill_detail/user_spread_month_bill_detail",
+          "pathName": "pages/user_spread_month_bill_detail/user_spread_month_bill_detail",
+          "query": "year=2017&month=09",
+          "scene": null
+        },
+        {
+          "name": "pages/user/user",
+          "pathName": "pages/user/user",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/goods_bargain/goods_bargain",
+          "pathName": "pages/goods_bargain/goods_bargain",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/user_sign/user_sign",
+          "pathName": "pages/user_sign/user_sign",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/invite_fans/invite_fans",
+          "pathName": "pages/invite_fans/invite_fans",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/news_list/news_list",
+          "pathName": "pages/news_list/news_list",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/message_center/message_center",
+          "pathName": "pages/message_center/message_center",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/message_center/message_center",
+          "pathName": "pages/message_center/message_center",
+          "query": "type=system",
+          "scene": null
+        },
+        {
+          "name": "pages/notice/notice",
+          "pathName": "pages/notice/notice",
+          "query": "type=system",
+          "scene": null
+        },
+        {
+          "name": "pages/order_details/order_details",
+          "pathName": "pages/order_details/order_details",
+          "query": "id=365",
+          "scene": null
+        },
+        {
+          "name": "pages/goods_combination/goods_combination",
+          "pathName": "pages/goods_combination/goods_combination",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

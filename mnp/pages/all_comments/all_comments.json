@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "van-rate": "/components/weapp/rate/index",
+    "pullloading": "/components/pullloading/pullloading",
+    "van-image": "/components/weapp/image/index"
+  },
+  "navigationBarTitleText": "全部评价"
+}

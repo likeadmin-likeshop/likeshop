@@ -1,30 +1,6 @@
 CHANGELOG
 =========
 
-4.4.0
------
-
- * deprecated passing `null` as `$defaultLifetime` 2nd argument of `PropertyAccessor::createCache()` method,
-   pass `0` instead
-
-4.3.0
------
-
-* added a `$throwExceptionOnInvalidPropertyPath` argument to the PropertyAccessor constructor.
-* added `enableExceptionOnInvalidPropertyPath()`, `disableExceptionOnInvalidPropertyPath()` and
-  `isExceptionOnInvalidPropertyPath()` methods to `PropertyAccessorBuilder`
-
-4.0.0
------
-
- * removed the `StringUtil` class, use `Symfony\Component\Inflector\Inflector`
-
-3.1.0
------
-
- * deprecated the `StringUtil` class, use `Symfony\Component\Inflector\Inflector`
-   instead
-
 2.7.0
 ------
 

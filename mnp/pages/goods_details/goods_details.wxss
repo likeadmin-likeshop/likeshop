@@ -1,0 +1,173 @@
+/* pages/goods_details/goods_details.wxss */
+.goods-details  {
+    padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.goods-details .goods-info {
+    position: relative;
+}
+
+
+.goods-details .goods-info .info-header {
+    padding: 20rpx 0 0 24rpx;
+    
+}
+.goods-details .goods-info .goods-name {
+    padding: 20rpx 24rpx;
+    flex:1;
+}
+
+
+
+.goods-details .goods-info .other-info {
+    height: 84rpx;
+}
+.details .title{
+    line-height: 88rpx;
+    text-align: center;
+}
+
+.details>.content {
+    padding: 0 10px;
+}
+.details .content image {
+    width: 100%;
+}
+.goods-details .coupons,
+.goods-details .spec {
+    padding: 24rpx 24rpx;
+}
+.coupons .coupons-item {
+    overflow: hidden;
+}
+.coupons .coupons-item > view {
+    position: relative;
+    height: 40rpx;
+    line-height: 40rpx;
+    padding: 0 18rpx;
+    border-radius: 6rpx;
+    box-sizing: border-box;
+    background-color: var(--primary-color);
+    color: #fff;
+}
+.coupons .coupons-item > view::after,
+.coupons .coupons-item > view::before {
+    content: '';
+    display: block;
+    width: 20rpx;
+    height: 20rpx;
+    position: absolute;
+    left: -14rpx;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    box-sizing: border-box;
+}
+.coupons .coupons-item > view::after {
+    right: -14rpx;
+    left: auto;
+}
+.goods-details .coupons>view:nth-of-type(2),
+.goods-details .spec>view:nth-of-type(2) {
+    flex: 1;
+}
+
+.goods-details .coupons>view:nth-of-type(1),
+.goods-details .spec>view:nth-of-type(1) {
+    width: 100rpx;
+}
+
+.goods-details .evaluation .title {
+    height: 100rpx;
+    border-bottom: var(--border);
+    padding: 0 24rpx;
+}
+.goods-details .evaluation .con{
+    padding: 30rpx 24rpx;
+}
+.goods-details .evaluation .user-info .avatar {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+}
+
+
+
+.goods-details .footer {
+    height: 100rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.goods-details .footer .btn {
+    width: 100rpx;
+    height: 100rpx;
+    position: relative;
+}
+
+.goods-details .footer .addcart,
+.goods-details .footer .right-buy {
+    flex: 1;
+    text-align: center;
+    padding: 16rpx 0;
+}
+
+.goods-details .footer .addcart {
+    background-color: #FFA630;
+}
+
+.goods-details .footer .right-buy {
+    background-color: var(--primary-color);
+}
+
+.coupons-popup .title {
+    padding: 29rpx 30rpx;
+}
+.coupons-popup .content {
+    height: 700rpx;
+}
+
+
+
+.cancel {
+    height: 98rpx;
+}
+
+
+
+/* 动画样式 */
+#goods-ball {
+    position: fixed;
+    top: 2%;
+    left: 50%;
+    opacity: 0;
+    width: 300rpx;
+    height: 300rpx;
+    background-color: red;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+#goods-ball image{
+    width: 100%;
+    height: 100%;
+    flex: none;
+}
+
+/* #goods-ball #inner-ball {
+    position: absolute;
+    
+} */
+
+.cart-num {
+    background-color: var(--primary-color);
+    min-width: 30rpx;
+    height: 30rpx;
+    position: absolute;
+    left: 60rpx;
+    top: 6rpx;
+    border-radius: 60rpx;
+}

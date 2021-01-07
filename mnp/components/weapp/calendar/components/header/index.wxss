@@ -1,0 +1,43 @@
+@import '../../../common/index.wxss';
+
+.van-calendar__header {
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 20rpx rgba(125,126,128,.16);
+  box-shadow: var(--calendar-header-box-shadow,0 4rpx 20rpx rgba(125,126,128,.16));
+}
+
+.van-calendar__header-subtitle,
+.van-calendar__header-title {
+  text-align: center;
+  height: 88rpx;
+  height: var(--calendar-header-title-height,88rpx);
+  font-weight: 500;
+  font-weight: var(--font-weight-bold,500);
+  line-height: 88rpx;
+  line-height: var(--calendar-header-title-height,88rpx);
+}
+
+.van-calendar__header-title+.van-calendar__header-title,
+.van-calendar__header-title:empty {
+  display: none;
+}
+
+.van-calendar__header-title:empty+.van-calendar__header-title {
+  display: block!important;
+}
+
+.van-calendar__weekdays {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.van-calendar__weekday {
+  -webkit-flex: 1;
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  font-size: var(--calendar-weekdays-font-size,24rpx);
+  line-height: 60rpx;
+  line-height: var(--calendar-weekdays-height,60rpx);
+}

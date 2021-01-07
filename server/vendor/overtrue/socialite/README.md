@@ -16,7 +16,7 @@
 # Requirement
 
 ```
-PHP >= 7.0
+PHP >= 5.6
 ```
 # Installation
 
@@ -82,7 +82,7 @@ $user->getProviderName(); // GitHub
 
 Now we support the following sites:
 
-`facebook`, `github`, `google`, `linkedin`, `outlook`, `weibo`, `taobao`, `qq`, `wechat`, `douyin`, and `douban`.
+`facebook`, `github`, `google`, `linkedin`, `outlook`, `weibo`, `taobao`, `qq`, `wechat`, `douyin`, `baidu`, `feishu`, and `douban`.
 
 Each driver uses the same configuration keys: `client_id`, `client_secret`, `redirect`.
 
@@ -254,6 +254,7 @@ Enjoy it! :heart:
 - [微信开放平台 - 代公众号发起网页授权](https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419318590&token=&lang=zh_CN)
 - [豆瓣 - OAuth 2.0 授权机制说明](http://developers.douban.com/wiki/?title=oauth2)
 - [抖音 - 网站应用开发指南](http://open.douyin.com/platform/doc)
+- [飞书 - 授权说明](https://open.feishu.cn/document/ukTMukTMukTM/uMTNz4yM1MjLzUzM)
 
 ## PHP 扩展包开发
 

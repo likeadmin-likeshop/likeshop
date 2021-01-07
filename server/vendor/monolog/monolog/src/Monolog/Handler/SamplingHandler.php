@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -27,10 +27,8 @@ use Monolog\Formatter\FormatterInterface;
  * @author Bryan Davis <bd808@wikimedia.org>
  * @author Kunal Mehta <legoktm@gmail.com>
  */
-class SamplingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
+class SamplingHandler extends AbstractHandler
 {
-    use ProcessableHandlerTrait;
-
     /**
      * @var callable|HandlerInterface $handler
      */
@@ -43,9 +41,9 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
 
     /**
      * @param callable|HandlerInterface $handler Handler or factory callable($record|null, $samplingHandler).
-     * @param int                       $factor  Sample factor (e.g. 10 means every ~10th record is sampled)
+     * @param int                       $factor  Sample factor
      */
-    public function __construct($handler, int $factor)
+    public function __construct($handler, $factor)
     {
         parent::__construct();
         $this->handler = $handler;
@@ -56,16 +54,18 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
         }
     }
 
-    public function isHandling(array $record): bool
+    public function isHandling(array $record)
     {
         return $this->getHandler($record)->isHandling($record);
     }
 
-    public function handle(array $record): bool
+    public function handle(array $record)
     {
         if ($this->isHandling($record) && mt_rand(1, $this->factor) === 1) {
             if ($this->processors) {
-                $record = $this->processRecord($record);
+                foreach ($this->processors as $processor) {
+                    $record = call_user_func($processor, $record);
+                }
             }
 
             $this->getHandler($record)->handle($record);
@@ -96,7 +96,7 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(FormatterInterface $formatter): HandlerInterface
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->getHandler()->setFormatter($formatter);
 
@@ -106,7 +106,7 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
     /**
      * {@inheritdoc}
      */
-    public function getFormatter(): FormatterInterface
+    public function getFormatter()
     {
         return $this->getHandler()->getFormatter();
     }

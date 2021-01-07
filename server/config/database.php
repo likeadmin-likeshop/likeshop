@@ -17,7 +17,7 @@ return [
     // 服务器地址
     'hostname'        => Env::get('database.hostname','like-mysql'),
     // 数据库名
-    'database'        => Env::get('database.database','localhost_likeshop'),
+    'database'        => Env::get('database.database','localhost_likeshopv2'),
     // 用户名
     'username'        => Env::get('database.username','root'),
     // 密码

@@ -52,7 +52,8 @@ class GitHubProvider extends AbstractProvider implements ProviderInterface
         $userUrl = 'https://api.github.com/user';
 
         $response = $this->getHttpClient()->get(
-            $userUrl, $this->createAuthorizationHeaders($token)
+            $userUrl,
+            $this->createAuthorizationHeaders($token)
         );
 
         $user = json_decode($response->getBody(), true);
@@ -77,7 +78,8 @@ class GitHubProvider extends AbstractProvider implements ProviderInterface
 
         try {
             $response = $this->getHttpClient()->get(
-                $emailsUrl, $this->createAuthorizationHeaders($token)
+                $emailsUrl,
+                $this->createAuthorizationHeaders($token)
             );
         } catch (Exception $e) {
             return;

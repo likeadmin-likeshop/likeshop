@@ -89,7 +89,7 @@ class TaobaoProvider extends AbstractProvider implements ProviderInterface
     public function getCodeFields($state = null)
     {
         $fields = [
-            'client_id' => $this->clientId,
+            'client_id' => $this->getConfig()->get('client_id'),
             'redirect_uri' => $this->redirectUrl,
             'view' => $this->view,
             'response_type' => 'code',
@@ -192,7 +192,7 @@ class TaobaoProvider extends AbstractProvider implements ProviderInterface
     {
         ksort($params);
 
-        $stringToBeSigned = $this->clientSecret;
+        $stringToBeSigned = $this->getConfig()->get('client_secret');
 
         foreach ($params as $k => $v) {
             if (!is_array($v) && '@' != substr($v, 0, 1)) {
@@ -200,7 +200,7 @@ class TaobaoProvider extends AbstractProvider implements ProviderInterface
             }
         }
 
-        $stringToBeSigned .= $this->clientSecret;
+        $stringToBeSigned .= $this->getConfig()->get('client_secret');
 
         return strtoupper(md5($stringToBeSigned));
     }
@@ -214,7 +214,7 @@ class TaobaoProvider extends AbstractProvider implements ProviderInterface
     protected function getPublicFields(AccessTokenInterface $token, array $apiFields = [])
     {
         $fields = [
-            'app_key' => $this->clientId,
+            'app_key' => $this->getConfig()->get('client_id'),
             'sign_method' => $this->signMethod,
             'session' => $token->getToken(),
             'timestamp' => date('Y-m-d H:i:s'),

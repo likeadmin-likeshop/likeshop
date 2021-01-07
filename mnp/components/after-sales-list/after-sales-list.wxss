@@ -1,0 +1,65 @@
+image {
+  width: 100%;
+  height: 100%;
+}
+
+
+.sale-list {
+  /* padding: 20rpx 0; */
+}
+
+.sale-list .sale-item {
+  
+}
+
+.sale-list .sale-item .sale-header {
+  padding: 20rpx 24rpx;
+}
+
+.sale-list .sale-item .sale-header .store-name {
+  font-family:PingFang SC;
+  line-height: 40rpx;
+}
+
+.sale-list .sale-item .sale-goods-show {
+  padding: 20rpx 24rpx;
+}
+
+.sale-goods-show .goods-img {
+  height: 160rpx;
+  width: 160rpx;
+}
+
+.sale-goods-show .goods-desc {
+  margin-left: 24rpx;
+  flex: 1;
+}
+
+.sale-goods-show .sale-status {
+  padding: 20rpx 40rpx;
+  background-color: #F6F6F6;
+  border-radius: 6rpx;
+}
+
+.sale-list .sale-item .sale-footer {
+  padding: 0 24rpx 22rpx;
+}
+
+.sale-list .sale-item .sale-footer .btn {
+  padding: 9rpx 34rpx;
+  font-family: PingFang SC;
+}
+
+.sale-list .sale-item .sale-footer .grey-btn {
+  border: 1rpx solid #CCCCCC;
+  padding: 9rpx 34rpx;
+  font-family: PingFang SC;
+}
+
+.bottom-opacity {
+  opacity: 0.5;
+}
+
+.data-null {
+  padding-top: 150rpx;
+}

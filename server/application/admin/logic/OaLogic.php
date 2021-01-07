@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\logic;
@@ -22,6 +25,7 @@ use EasyWeChat\Kernel\Exceptions\Exception;
 
 class OaLogic  extends LogicBase{
     public static function getOa(){
+        $domain_name = ConfigServer::get('website', 'domain_name', $_SERVER['SERVER_NAME']);
         $config = [
             'name' => ConfigServer::get('oa', 'name', ''),
             'original_id' => ConfigServer::get('oa', 'original_id', ''),
@@ -29,12 +33,12 @@ class OaLogic  extends LogicBase{
             'app_id' => ConfigServer::get('oa', 'app_id', ''),
             'app_secret' => ConfigServer::get('oa', 'secret', ''),
             'url' => ConfigServer::get('oa', 'url', ''),
-            'token' => ConfigServer::get('oa', 'token', ''),
+            'token' => ConfigServer::get('oa', 'token', 'LikeShop'),
             'encoding_ses_key' => ConfigServer::get('oa', 'encoding_ses_key', ''),
             'encryption_type' => ConfigServer::get('oa', 'encryption_type', ''),
-            'business_domain' => ConfigServer::get('oa', 'business_domain', ''),
-            'safety_domain' => ConfigServer::get('oa', 'safety_domain', ''),
-            'auth_domain' => ConfigServer::get('oa', 'auth_domain', ''),
+            'business_domain' => $domain_name,
+            'safety_domain' => $domain_name,
+            'auth_domain' => $domain_name,
             ];
         return $config;
     }
@@ -52,9 +56,6 @@ class OaLogic  extends LogicBase{
             ConfigServer::set('oa','token',$post['token']);
             ConfigServer::set('oa','encoding_ses_key',$post['encoding_ses_key']);
             ConfigServer::set('oa','encryption_type',$post['encryption_type']);
-            ConfigServer::set('oa','business_domain',$post['business_domain']);
-            ConfigServer::set('oa','safety_domain',$post['safety_domain']);
-            ConfigServer::set('oa','auth_domain',$post['auth_domain']);
         }
         return true;
     }

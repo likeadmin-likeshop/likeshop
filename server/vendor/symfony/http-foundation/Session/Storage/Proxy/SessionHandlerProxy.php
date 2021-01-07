@@ -36,7 +36,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     // \SessionHandlerInterface
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function open($savePath, $sessionName)
     {
@@ -44,7 +44,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -52,7 +52,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function read($sessionId)
     {
@@ -60,7 +60,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function write($sessionId, $data)
     {
@@ -68,7 +68,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function destroy($sessionId)
     {
@@ -84,7 +84,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function validateId($sessionId)
     {
@@ -92,7 +92,7 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function updateTimestamp($sessionId, $data)
     {

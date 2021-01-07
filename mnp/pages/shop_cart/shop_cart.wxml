@@ -1,0 +1,63 @@
+<!-- pages/shop_cart/shop_cart.wxml -->
+<view class="shop-cart">
+    <view class="main " style="padding-bottom: {{cartType ==1 ?  '100rpx' : 0}}">
+        <view class="cart-list mb20" hidden="{{cartType!=1}}" wx:for="{{cartLists}}" wx:key="index">
+            <view class="cart-item bg-white">
+                <view class="row-between select">
+                    <checkbox value="{{item.cart_id}}" checked="{{item.selected == 1}}" data-cartid="{{item.cart_id}}" data-select="{{item.selected}}" bindtap="changOneSelect">选择</checkbox>
+                    <view data-cartid="{{item.cart_id}}" bindtap="changeDelPopup">
+                        <image class="icon-xl" src="/images/icon_del.png"></image>
+                    </view>
+                </view>
+                <view class="row" style="padding: 20rpx" bind:tap="goPage" data-url="/pages/goods_details/goods_details?id={{item.goods_id}}">
+                    <van-image width="180rpx" height="180rpx" radius="10rpx" class="goods-img mr20" lazy-load src="{{item.img}}" />
+                    <view class="info" style="flex: 1">
+                        <view class="line2 nr">{{item.name}}</view>
+                        <view class="muted xs line1 mt10">
+                            {{item.spec_value_str}}
+                        </view>
+                        <view class="row-between mt20">
+                            <view class="price row primary">
+                                <price-slice price="{{item.price}}" firstSize="{{32}}" secondSize="{{32}}" showSubscript="{{true}}" subscriptSize="{{32}}"></price-slice>
+                            </view>
+                            <view class="cartNum" catch:tap="true">
+                                <van-stepper value="{{ item.goods_num }}" integer data-cartid="{{item.cart_id}}" bind:change="countChange" async-change />
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="cart-null column-center bg-white mb20" style="padding: 80rpx 0 50rpx" hidden="{{cartType!=2}}">
+            <image class="img-null" src="/images/cart_null.png"></image>
+            <view class="muted mb20">购物车暂无任何商品~</view>
+            <navigator open-type="switchTab" url="/pages/index/index" hover-class="none" class="primary br60 btn row-center">去逛逛</navigator>
+        </view>
+        <view wx:if="{{!$state.isAuth && !$state.isLogin }}" class="login column-center">
+            <image class="img-null" src="/images/cart_null.png"></image>
+            <view class="muted mt20">微信授权登录后才能查看购物车哦</view>
+            <navigator class="white br60 row-center btn" url="/pages/login/login">
+                <image class="mr10" src="/images/icon_wechat.png" />
+                <text>去登录</text>
+            </navigator>
+        </view>
+        <recommend  wx:if="{{isShow}}"></recommend>
+    </view>
+    <view class="footer row bg-white" hidden="{{cartType != 1}}">
+        <checkbox-group class="row" bindchange="changeAllSelect">
+            <checkbox id="checkAll" value="all" checked="{{isSelectedAll}}" />
+            <label for="checkAll" class='ml10'>全选</label>
+        </checkbox-group>
+        <view class="all-price lg mr20 row-end">
+            <view>合计：</view>
+            <view class="primary">￥{{totalPrice}}</view>
+        </view>
+        <view class="right-btn br60 white"  style=" {{nullSelect ? 'background: #d7d7d7' : ''}}" bind:tap="goToConfirm">去结算</view>
+    </view>
+</view>
+<van-dialog use-slot close-on-click-overlay="{{true}}" id="delete-dialog" show="{{delPopup}}" showCancelButton="{{true}}" confirmButtonText="狠心删除" confirm-button-color="#FF2C3C" bind:confirm="goodsDelete" bind:cancel="changeDelPopup">
+    <view class="column-center tips-dialog" style="padding-top: 40rpx">
+        <image class="icon-lg" src="/images/icon_warning.png"></image>
+        <view style="margin:30rpx 0;">确认删除该商品吗？</view>
+    </view>
+</van-dialog>

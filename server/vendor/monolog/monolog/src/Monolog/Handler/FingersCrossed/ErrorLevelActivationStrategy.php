@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -20,20 +20,14 @@ use Monolog\Logger;
  */
 class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
-    /**
-     * @var int
-     */
     private $actionLevel;
 
-    /**
-     * @param int|string $actionLevel Level or name or value
-     */
     public function __construct($actionLevel)
     {
         $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
 
-    public function isHandlerActivated(array $record): bool
+    public function isHandlerActivated(array $record)
     {
         return $record['level'] >= $this->actionLevel;
     }

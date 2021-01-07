@@ -13,7 +13,7 @@ class Statistics extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $this->success('', StatisticsLogic::member($post));
+            $this->_success('', StatisticsLogic::member($post));
         }
         $this->assign('res', StatisticsLogic::default());
         return $this->fetch();
@@ -26,7 +26,7 @@ class Statistics extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $this->success('', StatisticsLogic::goods($post));
+            $this->_success('', StatisticsLogic::goods($post));
         }
         $this->assign('res', StatisticsLogic::default());
         return $this->fetch();
@@ -39,7 +39,7 @@ class Statistics extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $this->success('', StatisticsLogic::visit($post));
+            $this->_success('', StatisticsLogic::visit($post));
         }
         $this->assign('res', StatisticsLogic::default());
         return $this->fetch();
@@ -52,7 +52,7 @@ class Statistics extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $this->success('', StatisticsLogic::deal($post));
+            $this->_success('', StatisticsLogic::deal($post));
         }
         $this->assign('res', StatisticsLogic::default());
         return $this->fetch();
@@ -64,7 +64,7 @@ class Statistics extends AdminBase
      */
     public function default()
     {
-        $this->success('', StatisticsLogic::default());
+        $this->_success('', StatisticsLogic::default());
         return $this->fetch();
     }
 }

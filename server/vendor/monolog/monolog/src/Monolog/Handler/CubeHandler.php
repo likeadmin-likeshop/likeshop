@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -27,7 +27,7 @@ class CubeHandler extends AbstractProcessingHandler
     private $scheme;
     private $host;
     private $port;
-    private $acceptedSchemes = ['http', 'udp'];
+    private $acceptedSchemes = array('http', 'udp');
 
     /**
      * Create a Cube handler
@@ -36,7 +36,7 @@ class CubeHandler extends AbstractProcessingHandler
      *                                   A valid url must consist of three parts : protocol://host:port
      *                                   Only valid protocols used by Cube are http and udp
      */
-    public function __construct(string $url, $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct($url, $level = Logger::DEBUG, $bubble = true)
     {
         $urlInfo = parse_url($url);
 
@@ -47,8 +47,7 @@ class CubeHandler extends AbstractProcessingHandler
         if (!in_array($urlInfo['scheme'], $this->acceptedSchemes)) {
             throw new \UnexpectedValueException(
                 'Invalid protocol (' . $urlInfo['scheme']  . ').'
-                . ' Valid options are ' . implode(', ', $this->acceptedSchemes)
-            );
+                . ' Valid options are ' . implode(', ', $this->acceptedSchemes));
         }
 
         $this->scheme = $urlInfo['scheme'];
@@ -64,7 +63,7 @@ class CubeHandler extends AbstractProcessingHandler
      * @throws \LogicException           when unable to connect to the socket
      * @throws MissingExtensionException when there is no socket extension
      */
-    protected function connectUdp(): void
+    protected function connectUdp()
     {
         if (!extension_loaded('sockets')) {
             throw new MissingExtensionException('The sockets extension is required to use udp URLs with the CubeHandler');
@@ -81,15 +80,13 @@ class CubeHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Establish a connection to an http server
-     *
-     * @throws \LogicException           when unable to connect to the socket
-     * @throws MissingExtensionException when no curl extension
+     * Establish a connection to a http server
+     * @throws \LogicException when no curl extension
      */
-    protected function connectHttp(): void
+    protected function connectHttp()
     {
         if (!extension_loaded('curl')) {
-            throw new MissingExtensionException('The curl extension is required to use http URLs with the CubeHandler');
+            throw new \LogicException('The curl extension is needed to use http URLs with the CubeHandler');
         }
 
         $this->httpConnection = curl_init('http://'.$this->host.':'.$this->port.'/1.0/event/put');
@@ -105,11 +102,11 @@ class CubeHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record): void
+    protected function write(array $record)
     {
         $date = $record['datetime'];
 
-        $data = ['time' => $date->format('Y-m-d\TH:i:s.uO')];
+        $data = array('time' => $date->format('Y-m-d\TH:i:s.uO'));
         unset($record['datetime']);
 
         if (isset($record['context']['type'])) {
@@ -129,7 +126,7 @@ class CubeHandler extends AbstractProcessingHandler
         }
     }
 
-    private function writeUdp(string $data): void
+    private function writeUdp($data)
     {
         if (!$this->udpConnection) {
             $this->connectUdp();
@@ -138,17 +135,17 @@ class CubeHandler extends AbstractProcessingHandler
         socket_send($this->udpConnection, $data, strlen($data), 0);
     }
 
-    private function writeHttp(string $data): void
+    private function writeHttp($data)
     {
         if (!$this->httpConnection) {
             $this->connectHttp();
         }
 
         curl_setopt($this->httpConnection, CURLOPT_POSTFIELDS, '['.$data.']');
-        curl_setopt($this->httpConnection, CURLOPT_HTTPHEADER, [
+        curl_setopt($this->httpConnection, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
             'Content-Length: ' . strlen('['.$data.']'),
-        ]);
+        ));
 
         Curl\Util::execute($this->httpConnection, 5, false);
     }

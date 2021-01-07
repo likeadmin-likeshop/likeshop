@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "van-popup": "/components/weapp/popup/index"
+  },
+  "navigationBarTitleText": "个人设置"
+}

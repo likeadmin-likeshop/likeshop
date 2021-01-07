@@ -1,0 +1,30 @@
+@import '../common/index.wxss';
+
+.van-rate {
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.van-rate__item {
+  position: relative;
+  padding: 0 4rpx;
+  padding: 0 var(--rate-horizontal-padding,4rpx);
+}
+
+.van-rate__icon {
+  display: block;
+  height: 1em;
+  font-size: 40rpx;
+  font-size: var(--rate-icon-size,40rpx);
+}
+
+.van-rate__icon--half {
+  position: absolute;
+  top: 0;
+  width: .5em;
+  overflow: hidden;
+  left: 4rpx;
+  left: var(--rate-horizontal-padding,4rpx);
+}

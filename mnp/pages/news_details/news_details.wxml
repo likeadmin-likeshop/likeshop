@@ -1,0 +1,18 @@
+<!-- pages/news_details/news_details.wxml -->
+<view class="news-details">
+    <view class="header">
+        <view class="title xxl mb20">{{ articleDetail.title }}</view>
+        <view class="row-between">
+            <view class="xs lighter">发布时间：{{ articleDetail.create_time }}</view>
+            <view class="row">
+                <image class="icon-sm" src="/images/icon_see.png" />
+                <view class="ml10 xs muted">{{ articleDetail.visit }}人浏览</view>
+            </view>
+        </view>
+    </view>
+    <view class='main'>
+        <template is="wxParse" data="{{wxParseData:content.nodes}}" />
+    </view>
+</view>
+<loading-view wx:if="{{ showLoading }}" />
+<import src="/wxParse/wxParse.wxml" />

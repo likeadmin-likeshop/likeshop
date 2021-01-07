@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -27,8 +27,5 @@ namespace Monolog;
  */
 interface ResettableInterface
 {
-    /**
-     * @return void
-     */
     public function reset();
 }

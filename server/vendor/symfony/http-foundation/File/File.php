@@ -13,7 +13,8 @@ namespace Symfony\Component\HttpFoundation\File;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 /**
  * A file in the file system.
@@ -30,7 +31,7 @@ class File extends \SplFileInfo
      *
      * @throws FileNotFoundException If the given path is not a file
      */
-    public function __construct(string $path, bool $checkPath = true)
+    public function __construct($path, $checkPath = true)
     {
         if ($checkPath && !is_file($path)) {
             throw new FileNotFoundException($path);
@@ -49,28 +50,33 @@ class File extends \SplFileInfo
      *
      * @return string|null The guessed extension or null if it cannot be guessed
      *
-     * @see MimeTypes
+     * @see ExtensionGuesser
      * @see getMimeType()
      */
     public function guessExtension()
     {
-        return MimeTypes::getDefault()->getExtensions($this->getMimeType())[0] ?? null;
+        $type = $this->getMimeType();
+        $guesser = ExtensionGuesser::getInstance();
+
+        return $guesser->guess($type);
     }
 
     /**
      * Returns the mime type of the file.
      *
-     * The mime type is guessed using a MimeTypeGuesserInterface instance,
-     * which uses finfo_file() then the "file" system binary,
-     * depending on which of those are available.
+     * The mime type is guessed using a MimeTypeGuesser instance, which uses finfo(),
+     * mime_content_type() and the system binary "file" (in this order), depending on
+     * which of those are available.
      *
      * @return string|null The guessed mime type (e.g. "application/pdf")
      *
-     * @see MimeTypes
+     * @see MimeTypeGuesser
      */
     public function getMimeType()
     {
-        return MimeTypes::getDefault()->guessMimeType($this->getPathname());
+        $guesser = MimeTypeGuesser::getInstance();
+
+        return $guesser->guess($this->getPathname());
     }
 
     /**
@@ -99,9 +105,6 @@ class File extends \SplFileInfo
         return $target;
     }
 
-    /**
-     * @return self
-     */
     protected function getTargetFile($directory, $name = null)
     {
         if (!is_dir($directory)) {
@@ -122,7 +125,7 @@ class File extends \SplFileInfo
      *
      * @param string $name The new file name
      *
-     * @return string
+     * @return string containing
      */
     protected function getName($name)
     {

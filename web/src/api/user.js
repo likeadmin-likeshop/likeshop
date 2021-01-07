@@ -1,3 +1,20 @@
+// +----------------------------------------------------------------------
+// | LikeShop有特色的全开源社交分销电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | 微信公众号：好象科技
+// | 访问官网：http://www.likemarket.net
+// | 访问社区：http://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
+
 import request from '@/utils/request'
 
 
@@ -5,6 +22,7 @@ import request from '@/utils/request'
 export function getUser() {
     return request.get('user/center')
 }
+
 
 // 获取商品的收藏列表
 export function getCollectGoods(data) {
@@ -66,6 +84,16 @@ export function convertRegionCode(data) {
     return request.post('user_address/handleRegion',  data)
 }
 
+//我的优惠券
+export function getMyCoupon(params) {
+    return request.get('coupon/myCoupon', {params})
+}
+
+//用户领取优惠券
+export function getCoupon(data) {
+    return request.post('coupon/getCoupon', data)
+}
+
 //订单列表
 export function getOrderList(params) {
     return request.get('order/lists', {params})
@@ -111,9 +139,39 @@ export function getCommentInfo(params) {
     return request.get("goods_comment/getGoods", {params});
 }
 
+// 获取售后列表
+export function getAfterSaleList(params) {
+    return request.get("after_sale/lists", {params});
+}
+
+// 申请售后
+export function applyAfterSale(data) {
+    return request.post("after_sale/add", data)
+}
+
 // 获取商品信息
 export function getGoodsInfo(params) {
     return request.get("after_sale/goodsInfo", {params})
+}
+
+// 填写快递信息
+export function inputExpressInfo(data) {
+    return request.post("after_sale/express", data)
+}
+
+// 撤销申请
+export function cancelApply(data) {
+    return request.post("after_sale/cancel", data)
+}
+
+// 售后详情
+export function afterSaleDetail(params) {
+    return request.get("after_sale/detail", {params})
+}
+
+// 重新申请
+export function applyAgain(data) {
+    return request.post("after_sale/again", data)
 }
 
 // 退出登录
@@ -139,56 +197,6 @@ export function changeUserMobile(data) {
 // 账户明细 积分明细
 export function getAccountLog(params) {
     return request.get("user/accountLog", {params})
-}
-
-// 填写邀请码
-export function inputInviteCode(data) {
-    return request.post("distribution/code", data)
-}
-
-// 分销会员申请
-export function applyVip(data) {
-    return request.post("distribution/apple", data)
-}
-
-// 最新分销会员申请详情
-export function applyVipDetail() {
-    return request.post("distribution/appledetail")
-}
-
-// 邀请人信息
-export function getInviteInfo() {
-    return request.get("distribution/myleader")
-}
-
-// 分销主页
-export function getPromoteHome() {
-    return request.get("distribution/index")
-}
-
-// 分销订单列表
-export function getPromoteOrder(params) {
-    return request.get("distribution/order", {params})
-}
-
-// 佣金提现
-export function applyWithdraw(data) {
-    return request.post("withdraw/apply", data);
-}
-
-// 提现记录列表
-export function getWithdrawRecords(params) {
-    return request.get("withdraw/records", {params})
-}
-
-// 提现详情
-export function getWithdrawDetail(params) {
-    return request.get("withdraw/info", {params})
-}
-
-// 提现页信息
-export function getWithdrawConfig() {
-    return request.get("withdraw/config")
 }
 
 //会员中心

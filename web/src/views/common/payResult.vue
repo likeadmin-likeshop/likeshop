@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="pay-result">
         <div class="commit-order-box bg-white" v-show="isShow">
@@ -11,9 +29,7 @@
             <div class="info mt10">
                 <div class="row-between info-item">
                     <div>订单编号</div>
-                    <div>
-                        <div class="mb5" v-for="(item, index) in payInfo.order_sn" :key="index">{{item}}</div>
-                    </div>
+                    <div>{{payInfo.order_sn}}</div>
                 </div>
                 <div class="row-between info-item">
                     <div>付款时间</div>
@@ -21,7 +37,7 @@
                 </div>
                 <div class="row-between info-item">
                     <div>支付方式</div>
-                    <div>{{payInfo.pay_way}}</div>
+                    <div>{{payInfo.pay_way_text}}</div>
                 </div>
                 <div class="row-between info-item">
                     <div>支付金额</div>
@@ -37,7 +53,7 @@
 </template>
 
 <script>
-// import { getOrderResult } from "@/api/store";
+import { getOrderDetail } from "@/api/user";
 export default {
     name: "payResult",
     data() {
@@ -48,21 +64,16 @@ export default {
         };
     },
     created() {
-        let { id, type } = this.$route.query;
+        let { id } = this.$route.query;
         this.id = id;
-        this.type = type;
         // this.$getOrderResult();
     },
     methods: {
         $getOrderResult() {
-            getOrderResult({
-                id: this.id,
-                type: this.type,
-            }).then((res) => {
+            getOrderDetail( this.id).then((res) => {
                 if (res.code == 1) {
                     this.isShow = true;
                     this.payInfo = res.data;
-                    this.payStatus = res.data.pay_status;
                 }
             });
         },

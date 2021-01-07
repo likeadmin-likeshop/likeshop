@@ -46,8 +46,6 @@ class Client extends BaseClient
      * 获取卡券颜色.
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function colors()
     {
@@ -58,8 +56,6 @@ class Client extends BaseClient
      * 卡券开放类目查询接口.
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function categories()
     {
@@ -73,9 +69,6 @@ class Client extends BaseClient
      * @param array  $attributes
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create($cardType = 'member_card', array $attributes)
     {
@@ -95,9 +88,6 @@ class Client extends BaseClient
      * @param string $cardId
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get($cardId)
     {
@@ -116,9 +106,6 @@ class Client extends BaseClient
      * @param string $statusList
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function list($offset = 0, $count = 10, $statusList = 'CARD_STATUS_VERIFY_OK')
     {
@@ -139,9 +126,6 @@ class Client extends BaseClient
      * @param array  $attributes
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update($cardId, $type, array $attributes = [])
     {
@@ -158,9 +142,6 @@ class Client extends BaseClient
      * @param string $cardId
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete($cardId)
     {
@@ -177,9 +158,6 @@ class Client extends BaseClient
      * @param array $cards
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function createQrCode(array $cards)
     {
@@ -192,9 +170,6 @@ class Client extends BaseClient
      * @param string $ticket
      *
      * @return array
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getQrCode($ticket)
     {
@@ -237,9 +212,6 @@ class Client extends BaseClient
      * @param array  $cardList
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function createLandingPage($banner, $pageTitle, $canShare, $scene, $cardList)
     {
@@ -260,9 +232,6 @@ class Client extends BaseClient
      * @param string $cardId
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getHtml($cardId)
     {
@@ -279,9 +248,6 @@ class Client extends BaseClient
      * @param array $openids
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setTestWhitelist($openids)
     {
@@ -298,9 +264,6 @@ class Client extends BaseClient
      * @param array $usernames
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setTestWhitelistByName(array $usernames)
     {
@@ -318,9 +281,6 @@ class Client extends BaseClient
      * @param string $cardId
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUserCards($openid, $cardId = '')
     {
@@ -340,9 +300,6 @@ class Client extends BaseClient
      * @param bool   $isOpen
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setPayCell($cardId, $isOpen = true)
     {
@@ -352,29 +309,6 @@ class Client extends BaseClient
         ];
 
         return $this->httpPostJson('card/paycell/set', $params);
-    }
-
-    /**
-     * 设置自助核销接口
-     * 设置买单的 card_id 必须已经配置了门店，否则会报错.
-     *
-     * @param string $cardId
-     * @param bool   $isOpen
-     * @param bool   $verifyCod
-     * @param bool   $remarkAmount
-     *
-     * @return mixed
-     */
-    public function setPayConsumeCell($cardId, $isOpen = true, $verifyCod = false, $remarkAmount = false)
-    {
-        $params = [
-            'card_id' => $cardId,
-            'is_open' => $isOpen,
-            'need_verify_cod' => $verifyCod,
-            'need_remark_amount' => $remarkAmount,
-        ];
-
-        return $this->httpPostJson('card/selfconsumecell/set', $params);
     }
 
     /**
@@ -411,9 +345,6 @@ class Client extends BaseClient
      * @param string $action
      *
      * @return mixed
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function updateStock($cardId, $amount, $action = 'increase')
     {

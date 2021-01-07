@@ -50,7 +50,7 @@ class DouYinProvider extends AbstractProvider implements ProviderInterface
     public function getCodeFields($state = null)
     {
         $fields = [
-            'client_key' => $this->clientId,
+            'client_key' => $this->getConfig()->get('client_id'),
             'redirect_uri' => $this->redirectUrl,
             'scope' => $this->formatScopes($this->scopes, $this->scopeSeparator),
             'response_type' => 'code',
@@ -99,8 +99,8 @@ class DouYinProvider extends AbstractProvider implements ProviderInterface
     protected function getTokenFields($code)
     {
         return [
-            'client_key' => $this->clientId,
-            'client_secret' => $this->clientSecret,
+            'client_key' => $this->getConfig()->get('client_id'),
+            'client_secret' => $this->getConfig()->get('client_secret'),
             'code' => $code,
             'grant_type' => 'authorization_code',
         ];
@@ -138,7 +138,8 @@ class DouYinProvider extends AbstractProvider implements ProviderInterface
         $userUrl = $this->baseUrl.'/oauth/userinfo/';
 
         $response = $this->getHttpClient()->get(
-            $userUrl, [
+            $userUrl,
+            [
                 'query' => [
                     'access_token' => $token->getToken(),
                     'open_id' => $token['open_id'],

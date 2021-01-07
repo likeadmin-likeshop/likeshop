@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="user-profile-container mt10">
         <div class="user-profile">
@@ -18,21 +36,11 @@
             </div>
             <div class="row-info row bdb-line">
                 <div class="label md">手机号</div>
-                <div class="md row" style="flex: 1;">{{userInfo.mobile}}</div>
+                <div class="md row" :class="{'muted': userInfo.mobile}" style="flex: 1;">{{userInfo.mobile ? userInfo.mobile : "未绑定"}}</div>
                 <div class="bd-btn br60" @click="showModifyMobile">
-                    更换手机号
+                    {{userInfo.mobile ? '更换手机号' : '绑定手机号'}}
                 </div>
             </div>
-            <div class="row-info row bdb-line">
-                <div class="label md">注册时间</div>
-                <div class="md row">2019-10-12</div>
-            </div>
-            <!-- <picker mode="date" value="userDate" bindchange="bindDateChange" end="{{endTime}}">
-            <div class="row-info row">
-                <div class="label md">生日</div>
-                <div class="{{userDate == ''? 'muted' : ''}} md">{{userDate == '' ? '请选择' : userDate}}</div>
-            </div>
-            </picker> -->
             <div class="row-info row-between" @click="showPwdPop" v-if="!isWechat">
                 <div class="label md">登录密码</div>
                 <div class="row">
@@ -51,14 +59,14 @@
             </div>
             <div class="row-info row-between">
                 <div class="label md">关于我们</div>
-                <div>v0.1.0</div>
+                <div>v2.0.1.20210106</div>
             </div>
-            <div class="bg-primary white save-btn row-center lg" @click="logout">退出登录</div>
+            <div class="bg-primary white save-btn row-center lg" @click="logout" v-show="!isWechat">退出登录</div>
         </div>
         <van-popup v-model="showMobile" :closeable="canSendSms" round transition="fade">
             <div class="modify-container column-center" v-show="showMobile">
-                <div class="title xl">更换手机号</div>
-                <div class="modify-row row">
+                <div class="title xl">{{userInfo.mobile ? '更换手机号' : '绑定手机号'}}</div>
+                <div class="modify-row row" v-if="userInfo.mobile">
                     <div style="width: 56px;border-right: 1px solid #E5E5E5">+86</div>
                     <div style="margin-left: 15px">{{userInfo.mobile}}</div>
                 </div>
@@ -79,10 +87,10 @@
                         </van-count-down>
                 </div>
                 <div class="modify-row row">
-                    <div style="width: 71px;">新手机号</div>
-                    <input v-model="new_mobile" placeholder="请输入新的手机号码" />
+                    <div style="width: 71px;">{{userInfo.mobile ? '新手机号' : '手机号'}}</div>
+                    <input v-model="new_mobile" :placeholder="userInfo.mobile ? '请输入新的手机号码' : '请输入绑定手机号'" />
                 </div>
-                <div class="primary mt10">更改手机号码成功后，您的账号将会变更为该设置号码</div>
+                <div class="primary mt10">{{userInfo.mobile ? '更改' : '绑定'}}手机号码成功后，您的账号将会变更为该设置号码</div>
                 <div class="btn bg-primary white row-center" @click="$changeUserMobile">确定</div>
             </div>
         </van-popup>
@@ -188,8 +196,9 @@ export default {
                 fileList.push(...res);
                 this.$toast().clear();
                 this.fileList = fileList;
-                this.fieldType = FieldType.AVATAR
-                this.$setUserInfo(this.fileList[0].url)
+                this.fieldType = FieldType.AVATAR;
+                console.log(this.fieldType, this.fileList)
+                this.$setUserInfo(this.fileList[0].base_url)
             });
         },
         uploadFile(file) {
@@ -422,9 +431,10 @@ export default {
                 width: 100%;
                 border-bottom: 1px solid #E5E5E5;
                 .send-code-btn {
-                    border: 1px solid #9E9E9E;
+                    border: 1px solid $--color-primary;
                     width: 92px;
                     height: 31px;
+                    color: $--color-primary;
                 }
             }
             .btn {

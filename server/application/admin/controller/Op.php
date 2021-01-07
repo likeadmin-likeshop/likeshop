@@ -7,7 +7,7 @@ class Op extends Admin{
         if($this->request->isAjax()){
             $post = $this->request->post();
             OpLogic::setConfig($post);
-            $this->success('设置成功',[]);
+            $this->_success('设置成功',[]);
         }
         $this->assign('config',OpLogic::getConfig(['app_id','secret']));
         return $this->fetch();

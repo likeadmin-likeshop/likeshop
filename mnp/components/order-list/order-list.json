@@ -1,0 +1,12 @@
+{
+  "component": true,
+  "usingComponents": {
+    "order-goods": "/components/order-goods/order-goods",
+    "loading-footer": "/components/loading-footer/loading-footer",
+    "van-dialog": "/components/weapp/dialog/index",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-count-down": "/components/weapp/count-down/index",
+    "van-toast": "/components/weapp/toast/index",
+    "van-tag": "/components/weapp/tag/index"
+  }
+}

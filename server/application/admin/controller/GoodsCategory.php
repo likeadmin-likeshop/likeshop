@@ -1,16 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
 // | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
 // | 好象科技开发团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
+
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
@@ -50,9 +53,9 @@ class GoodsCategory extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\GoodsCategory.add');
             if ($result === true) {
                 GoodsCategoryLogic::add($post);
-                $this->success('添加成功！');
+                $this->_success('添加成功！');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         $category_list = GoodsCategoryLogic::categoryTwoTree();
         $this->assign('category_list', $category_list);
@@ -74,9 +77,9 @@ class GoodsCategory extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\GoodsCategory.edit');
             if ($result === true) {
                 GoodsCategoryLogic::edit($post);
-                $this->success('修改成功');
+                $this->_success('修改成功');
             }
-            $this->error($result);
+            $this->_error($result);
         }
         $category_info = GoodsCategoryLogic::getCategory($id);
         $category_list = GoodsCategoryLogic::categoryTwoTree();
@@ -97,9 +100,9 @@ class GoodsCategory extends AdminBase
         $result = $this->validate(['id'=>[$id]], 'app\admin\validate\GoodsCategory.del');
         if ($result === true) {
             GoodsCategoryLogic::del($id);
-            $this->success('删除成功！');
+            $this->_success('删除成功！');
         }
-        $this->error($result);
+        $this->_error($result);
     }
     /**
      * note 修改品牌的显示状态
@@ -108,8 +111,8 @@ class GoodsCategory extends AdminBase
         $get = $this->request->get();
         $result =GoodsCategoryLogic::switchStatus($get);
         if ($result) {
-            $this->success('修改成功');
+            $this->_success('修改成功');
         }
-        $this->success('修改失败');
+        $this->_success('修改失败');
     }
 }

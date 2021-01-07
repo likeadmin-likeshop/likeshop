@@ -16,30 +16,31 @@ use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Cache\ResettableInterface;
 use Symfony\Component\Cache\Traits\ArrayTrait;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInterface, ResettableInterface
+class ArrayAdapter implements AdapterInterface, LoggerAwareInterface, ResettableInterface
 {
     use ArrayTrait;
 
     private $createCacheItem;
+    private $defaultLifetime;
 
     /**
+     * @param int  $defaultLifetime
      * @param bool $storeSerialized Disabling serialization can lead to cache corruptions when storing mutable values but increases performance otherwise
      */
-    public function __construct(int $defaultLifetime = 0, bool $storeSerialized = true)
+    public function __construct($defaultLifetime = 0, $storeSerialized = true)
     {
+        $this->defaultLifetime = $defaultLifetime;
         $this->storeSerialized = $storeSerialized;
         $this->createCacheItem = \Closure::bind(
-            static function ($key, $value, $isHit) use ($defaultLifetime) {
+            static function ($key, $value, $isHit) {
                 $item = new CacheItem();
                 $item->key = $key;
                 $item->value = $value;
                 $item->isHit = $isHit;
-                $item->defaultLifetime = $defaultLifetime;
 
                 return $item;
             },
@@ -51,29 +52,24 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
     /**
      * {@inheritdoc}
      */
-    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null)
-    {
-        $item = $this->getItem($key);
-        $metadata = $item->getMetadata();
-
-        // ArrayAdapter works in memory, we don't care about stampede protection
-        if (INF === $beta || !$item->isHit()) {
-            $save = true;
-            $this->save($item->set($callback($item, $save)));
-        }
-
-        return $item->get();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getItem($key)
     {
-        if (!$isHit = $this->hasItem($key)) {
+        $isHit = $this->hasItem($key);
+        try {
+            if (!$isHit) {
+                $this->values[$key] = $value = null;
+            } elseif (!$this->storeSerialized) {
+                $value = $this->values[$key];
+            } elseif ('b:0;' === $value = $this->values[$key]) {
+                $value = false;
+            } elseif (false === $value = unserialize($value)) {
+                $this->values[$key] = $value = null;
+                $isHit = false;
+            }
+        } catch (\Exception $e) {
+            CacheItem::log($this->logger, 'Failed to unserialize key "{key}"', ['key' => $key, 'exception' => $e]);
             $this->values[$key] = $value = null;
-        } else {
-            $value = $this->storeSerialized ? $this->unfreeze($key, $isHit) : $this->values[$key];
+            $isHit = false;
         }
         $f = $this->createCacheItem;
 
@@ -86,18 +82,14 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
     public function getItems(array $keys = [])
     {
         foreach ($keys as $key) {
-            if (!\is_string($key) || !isset($this->expiries[$key])) {
-                CacheItem::validateKey($key);
-            }
+            CacheItem::validateKey($key);
         }
 
-        return $this->generateItems($keys, microtime(true), $this->createCacheItem);
+        return $this->generateItems($keys, time(), $this->createCacheItem);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function deleteItems(array $keys)
     {
@@ -110,8 +102,6 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function save(CacheItemInterface $item)
     {
@@ -123,28 +113,37 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
         $value = $item["\0*\0value"];
         $expiry = $item["\0*\0expiry"];
 
-        if (null !== $expiry && $expiry <= microtime(true)) {
+        if (0 === $expiry) {
+            $expiry = \PHP_INT_MAX;
+        }
+
+        if (null !== $expiry && $expiry <= time()) {
             $this->deleteItem($key);
 
             return true;
         }
-        if ($this->storeSerialized && null === $value = $this->freeze($value, $key)) {
-            return false;
+        if ($this->storeSerialized) {
+            try {
+                $value = serialize($value);
+            } catch (\Exception $e) {
+                $type = \is_object($value) ? \get_class($value) : \gettype($value);
+                CacheItem::log($this->logger, 'Failed to save key "{key}" ({type})', ['key' => $key, 'type' => $type, 'exception' => $e]);
+
+                return false;
+            }
         }
-        if (null === $expiry && 0 < $item["\0*\0defaultLifetime"]) {
-            $expiry = microtime(true) + $item["\0*\0defaultLifetime"];
+        if (null === $expiry && 0 < $this->defaultLifetime) {
+            $expiry = time() + $this->defaultLifetime;
         }
 
         $this->values[$key] = $value;
-        $this->expiries[$key] = null !== $expiry ? $expiry : PHP_INT_MAX;
+        $this->expiries[$key] = null !== $expiry ? $expiry : \PHP_INT_MAX;
 
         return true;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function saveDeferred(CacheItemInterface $item)
     {
@@ -153,19 +152,9 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
     public function commit()
     {
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(string $key): bool
-    {
-        return $this->deleteItem($key);
     }
 }

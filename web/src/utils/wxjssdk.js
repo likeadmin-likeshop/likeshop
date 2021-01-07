@@ -1,3 +1,19 @@
+// +----------------------------------------------------------------------
+// | LikeShop有特色的全开源社交分销电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | 微信公众号：好象科技
+// | 访问官网：http://www.likemarket.net
+// | 访问社区：http://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 
 import wx from "weixin-js-sdk"
 import { urlencode, getUrlparams } from '@/utils/relUrl'
@@ -45,7 +61,7 @@ function _share(to) {
 			if (res.code == 1) {
 				goodsImage = res.data.image;
 				goodsName = res.data.name;
-				const shareTitle = "likeMall";
+				const shareTitle = "likeShop";
 				const shareLink = window.location.origin + to.fullPath;
 				const shareImage = goodsImage;
 				const shareDesc = goodsName;
@@ -84,7 +100,7 @@ function _share(to) {
 		return;
 	}
 	else {
-		const shareTitle = "likeMall";
+		const shareTitle = "likeShop";
 		const shareLink = to.name == "goodsDetail" ? window.location.origin + to.fullPath : window.location.origin;
 		const shareImage = goodsImage ? goodsName : "";
 		const shareDesc = goodsName ? goodsName : "";

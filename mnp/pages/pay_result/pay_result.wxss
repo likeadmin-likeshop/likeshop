@@ -1,0 +1,55 @@
+/* pages/pay_result/pay_result.wxss */
+
+
+
+.pay-result .contain {
+  width: 682rpx;
+  /* height: 732rpx; */
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  border-radius: 10rpx;
+  margin-top: 78rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  padding-bottom: 40rpx;
+  position: relative;
+}
+.pay-result .contain .tips-icon {
+  width: 112rpx;
+  height: 112rpx;
+}
+
+
+.pay-result .contain .header {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -50rpx;
+}
+.order-num {
+  align-items: flex-start;
+}
+.pay-result .contain .info {
+  margin-bottom: 40rpx;
+}
+
+.pay-result .contain .opt-btn-contain {
+  margin-top: 40rpx;
+}
+
+.pay-result .contain .opt-btn-contain .check-order-btn {
+  width: 650rpx;
+  height: 84rpx;
+}
+
+.pay-result .contain .opt-btn-contain .go-back-btn {
+  width: 650rpx;
+  height: 84rpx;
+  border: solid 1rpx var(--primary-color);
+  box-sizing: border-box;
+}
+
+.line {
+  width: 650rpx;
+  border-top: 1px solid rgba(229,229,229,1);
+}

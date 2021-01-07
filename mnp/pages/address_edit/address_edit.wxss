@@ -1,0 +1,49 @@
+/* pages/address_edit/address_edit.wxss */
+
+.address-edit {
+    padding-top: 10rpx;
+}
+.address-edit .form {
+    flex: 1;
+}
+
+.address-edit .form .form-item {
+    padding: 0 24rpx;
+    height: 80rpx;
+}
+.address-edit .form .form-item:not(:nth-of-type(3)) {
+    border-bottom: var(--border);
+}
+.address-edit .check-wrap {
+    padding: 20rpx;
+}
+.address-edit .form .form-item .label {
+    width: 150rpx;
+}
+.address-edit .form .form-item input {
+    height: 100%;
+    flex: 1;
+}
+.address-edit .btn {
+    margin: 30rpx 26rpx;
+    padding: 20rpx 0;
+    text-align: center;
+}
+
+
+van-field view {
+    height: 100%;
+}
+
+van-field textarea {
+    height: 100% !important;
+    padding-top: 10rpx !important;
+}
+
+.van-cell {
+    padding: 20rpx !important;
+}
+
+.van-field__body--textarea, .van-field__input {
+    margin-left: 15rpx;
+}

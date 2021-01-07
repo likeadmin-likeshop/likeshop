@@ -17,6 +17,8 @@
 
 namespace Zxing\Common;
 
+use Zxing\ResultPoint;
+
 /**
  * <p>Encapsulates the result of detecting a barcode in an image. This includes the raw
  * matrix of black/white pixels corresponding to the barcode, and possibly points of interest
@@ -24,24 +26,22 @@ namespace Zxing\Common;
  *
  * @author Sean Owen
  */
-class DetectorResult
-{
-    private $bits;
-    private $points;
+class DetectorResult {
 
-    public function __construct($bits, $points)
-    {
-        $this->bits   = $bits;
+    private  $bits;
+    private  $points;
+
+    public function __construct($bits, $points) {
+        $this->bits = $bits;
         $this->points = $points;
     }
 
-    public final function getBits()
-    {
+    public final function getBits() {
         return $this->bits;
     }
 
-    public final function getPoints()
-    {
+    public final function getPoints() {
         return $this->points;
     }
+
 }

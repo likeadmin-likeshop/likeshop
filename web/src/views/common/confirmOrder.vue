@@ -1,3 +1,21 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
 <template>
     <div class="confirm-order">
         <div class="confirm-con">
@@ -35,6 +53,21 @@
                     />
                 </div>
             </div>
+            <div class="contain coupons">
+                <div class="item row-between" @click="showCoupon = true">
+                    <div>优惠券</div>
+                    <div class="row">
+                        <span v-if="orderInfo.discount_amount" class="primary"
+                            >-￥{{ orderInfo.discount_amount }}</span
+                        >
+                        <span v-else class="muted md">请选择</span>
+                        <img
+                            class="icon-sm ml10"
+                            src="@A/images/arrow_right.png"
+                        />
+                    </div>
+                </div>
+            </div>
             <div class="price contain">
                 <div class="item row-between">
                     <div>商品金额</div>
@@ -43,6 +76,10 @@
                 <div class="item row-between">
                     <div>运费</div>
                     <div>¥{{ orderInfo.shipping_price }}</div>
+                </div>
+                <div class="item row-between" v-if="orderInfo.discount_amount">
+                    <div>优惠券</div>
+                    <div class="primary">-¥{{ orderInfo.discount_amount }}</div>
                 </div>
             </div>
             <div class="pay-way contain">
@@ -94,14 +131,48 @@
                 提交订单
             </button>
         </div>
+        <van-popup
+            safe-area-inset-bottom
+            class="coupon-popup"
+            v-model="showCoupon"
+            closeable
+            round
+            position="bottom"
+            @close="onCloseCoupon"
+        >
+            <div class="title">优惠券</div>
+            <van-tabs :active="popActive">
+                <van-tab :title="`可使用优惠券 (${usableCoupon.length})`">
+                    <coupon-popup
+                        :list="usableCoupon"
+                        :type="0"
+                        @select="onSelectCoupon"
+                    ></coupon-popup>
+                </van-tab>
+                <van-tab :title="`不可用优惠券 (${unusableCoupon.length})`">
+                    <coupon-popup
+                        :list="unusableCoupon"
+                        :type="1"
+                    ></coupon-popup>
+                </van-tab>
+            </van-tabs>
+            <div
+                class="bg-primary white br60 btn lg"
+                size="md"
+                @click="onCloseCoupon"
+            >
+                确认
+            </div>
+        </van-popup>
     </div>
 </template>
 
 <script>
 import wx from "weixin-js-sdk";
-import { orderBuy } from "@/api/store";
+import { orderBuy, getOrderCoupon } from "@/api/store";
 import { prepay } from "@/api/app";
 import OrderGoods from "@C/OrderGoods";
+import CouponPopup from "@C/CouponPopup";
 import { payWayType } from "@/utils/type";
 import { wxPay } from "@/utils/wxjssdk";
 import { Dialog } from 'vant';
@@ -109,6 +180,7 @@ export default {
     name: "confirmOrder",
     components: {
         OrderGoods,
+        CouponPopup,
     },
     data() {
         return {
@@ -117,7 +189,10 @@ export default {
             userRemark: "",
             goodsLists: [],
             addressId: "",
+            showCoupon: false,
             popActive: 0,
+            usableCoupon: [],
+            unusableCoupon: [],
             payWay: 1,
             payWayArr: [
                 {
@@ -125,14 +200,9 @@ export default {
                     name: "微信支付",
                     type: payWayType.wechat,
                     desc: "微信快捷支付",
-                },
-                {
-                    icon: require("@A/images/icon_balance.png"),
-                    name: "余额支付",
-                    type: payWayType.balance,
-                    desc: "可用余额：",
-                },
+                }
             ],
+            showCoupon: false,
             useIntegral: 0,
         };
     },
@@ -143,6 +213,7 @@ export default {
         goods = JSON.parse(goods) || [];
         this.confirmType = type || "";
         this.goods = goods;
+        await this.$getOrderCoupon();
         this.$orderBuy();
     },
     mounted() {
@@ -157,6 +228,13 @@ export default {
                 },
             });
         },
+        onCloseCoupon() {
+            this.showCoupon = false;
+            this.$orderBuy();
+        },
+        onSelectCoupon(id) {
+            this.couponId = id;
+        },
         onSubmitOrder() {
             this.toast = this.$toast({
                 type: "loading",
@@ -165,12 +243,27 @@ export default {
             });
             this.$orderBuy("submit");
         },
+        $getOrderCoupon() {
+            return new Promise((resolve) => {
+                console.log(this.goods);
+                getOrderCoupon({
+                    goods: this.goods,
+                }).then((res) => {
+                    if (res.code == 1) {
+                        const { usable, unusable } = res.data;
+                        this.usableCoupon = usable;
+                        this.unusableCoupon = unusable;
+                        resolve();
+                    }
+                });
+            });
+        },
         $orderBuy(action = "info") {
-            let { address, userRemark, useIntegral } = this;
+            let { address, userRemark } = this;
             let submitObj = {
                 action,
                 goods: this.goods,
-                use_integral: useIntegral,
+                coupon_id: this.couponId
             };
 
             if (action == "info") {
@@ -263,6 +356,12 @@ export default {
                 flex: 1;
             }
         }
+        .coupons {
+            .item {
+                height: 50px;
+                padding: 0 10px;
+            }
+        }
         .goods {
             .title {
                 padding: 11px 10px;
@@ -330,6 +429,23 @@ export default {
         );
         padding: 0 !important;
         justify-content: center;
+    }
+    .coupon-popup {
+        .title {
+            height: 50px;
+            border-bottom: $--border-base;
+            padding-left: 15px;
+            font-weight: bold;
+            line-height: 50px;
+        }
+        .btn {
+            margin: 5px 10px;
+            display: block;
+            box-sizing: border-box;
+            height: 37px;
+            line-height: 37px;
+            text-align: center;
+        }
     }
 }
 </style>

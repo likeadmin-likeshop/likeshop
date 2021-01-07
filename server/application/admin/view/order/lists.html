@@ -112,9 +112,9 @@
                                     <div class="layui-input-block">
                                         <select name="delivery_type" id="delivery_type">
                                             <option value="">全部</option>
-                                            <option value="1">快递发货</option>
-                                            <option value="2">上门自提</option>
-                                            <option value="3">同城配送</option>
+                                            {foreach $delivery_type as $item => $val}
+                                            <option value="{$item}">{$val}</option>
+                                            {/foreach}
                                         </select>
                                     </div>
                                 </div>
@@ -209,7 +209,7 @@
                                 <p>会员编号:{{d.user.sn}}</p>
                                 <p>手机号码:{{d.user.mobile}}</p>
                                 <p>会员昵称:{{d.user.nickname}}</p>
-                                <p>会员等级:</p>
+                                <p>会员等级:{{d.user_level}}</p>
                                 <p>性别:{{d.user.sex}}</p>
                                 <p>注册时间:{{d.user.create_time}}</p>
                             </div>
@@ -221,7 +221,7 @@
                                 <p>收货人:{{d.consignee}}</p>
                                 <p>手机号码:{{d.mobile}}</p>
                                 <p>收货地址:{{d.delivery_address}}</p>
-                                <p>配送方式:</p>
+                                <p>配送方式:{{d.delivery_type}}</p>
                             </div>
                         </script>
 

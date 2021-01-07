@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "recommend": "/components/recommend/recommend"
+  },
+  "navigationBarTitleText": "我的钱包"
+}

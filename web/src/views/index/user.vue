@@ -1,51 +1,73 @@
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
+
+
+
 <template>
     <div class="user-container">
         <div class="user-header">
             <div class="title lg white row-center">个人中心</div>
-            <div class="user-info row" @click="goToPage('userProfile')">
-                <van-image
-                    width="55"
-                    height="55"
-                    round
-                    :src="
-                        userInfo.avatar ||
-                        require('@A/images/default_avatar.png')
-                    "
-                ></van-image>
-                <div v-if="userInfo.nickname" class="user-nickname">
-                    <div
-                        style="
-                            font-size: 21px;
-                            line-height: 30px;
-                            font-weight: 500;
-                            text-align: left;
+            <div class="user-info row-between">
+                <div class="row">
+                    <van-image
+                        width="55"
+                        height="55"
+                        round
+                        @click="goToPage('userProfile')"
+                        :src="
+                            userInfo.avatar ||
+                            require('@A/images/default_avatar.png')
                         "
-                    >
-                        {{ userInfo.nickname }}
-                    </div>
-                    <div class="invite-code-box row">
-                        <div class="xs white ml10">邀请码: {{userInfo.distribution_code}}</div>
+                    ></van-image>
+                    <div v-if="userInfo.nickname" class="user-nickname">
                         <div
-                            @click.stop="onCopy(userInfo.distribution_code)"
-                            class="xs normal copy-btn row-center ml5"
+                            style="
+                                font-size: 21px;
+                                line-height: 30px;
+                                font-weight: 500;
+                                text-align: left;
+                            "
                         >
-                            复制
+                            {{ userInfo.nickname }}
+                        </div>
+                        <div class="invite-code-box row">
+                            <div class="xs white ml10">会员ID:  {{userInfo.sn}}</div>
+                            <div
+                                @click.stop="onCopy(userInfo.sn)"
+                                class="xs normal copy-btn row-center ml5"
+                            >
+                                复制
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div v-else class="user-text column">
-                    <div
-                        style="
-                            font-size: 21px;
-                            line-height: 30px;
-                            font-weight: 500;
-                            text-align: left;
-                        "
-                    >
-                        点击登录
-                    </div>
-                    <div class="sm" style="line-height: 16px; text-align: left">
-                        登录体验更多功能
+                    <div v-else class="user-text column" @click="goToPage('userProfile')">
+                        <div
+                            style="
+                                font-size: 21px;
+                                line-height: 30px;
+                                font-weight: 500;
+                                text-align: left;
+                            "
+                        >
+                            点击登录
+                        </div>
+                        <div class="sm" style="line-height: 16px; text-align: left">
+                            登录体验更多功能
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,11 +94,56 @@
                         class="sm mr5"
                         style="line-height: 25px; color: #ffe0a1"
                     >
-                        解锁更多会员权益
+                        {{userInfo.next_level_tips || '查看会员权益'}}
                     </div>
                     <van-icon name="arrow" color="#FFE0A1" />
                 </div>
             </router-link>
+        </div>
+        <div class="my-assets-box">
+            <div class="my-assets-header row-between md">
+                <div class="ml10 md" style="font-weight: 500">我的资产</div>
+            </div>
+            <div class="my-assets-content row">
+                <router-link
+                    :to="{ name: 'userWallet' }"
+                    class="my-assets-item column-center"
+                >
+                    <div
+                        class="xl primary"
+                        style="line-height: 18px; margin-bottom: 9px"
+                    >
+                        {{ userInfo.user_money || 0 }}
+                    </div>
+                    <div class="sm normal" style="line-height: 18px">余额</div>
+                </router-link>
+                <router-link
+                    :to="{ name: 'signUp' }"
+                    class="my-assets-item column-center"
+                >
+                    <div
+                        class="xl primary"
+                        style="line-height: 18px; margin-bottom: 9px"
+                    >
+                        {{ userInfo.user_integral || 0 }}
+                    </div>
+                    <div class="sm normal" style="line-height: 18px">积分</div>
+                </router-link>
+                <router-link
+                    :to="{ name: 'userCoupon' }"
+                    class="my-assets-item column-center"
+                >
+                    <div
+                        class="xl primary"
+                        style="line-height: 18px; margin-bottom: 9px"
+                    >
+                        {{ userInfo.coupon || 0 }}
+                    </div>
+                    <div class="sm normal" style="line-height: 18px">
+                        优惠券
+                    </div>
+                </router-link>
+            </div>
         </div>
         <div class="my-order-box ml10 bg-white">
             <router-link
@@ -157,6 +224,21 @@
                         />
                     </div>
                     <div class="order-text">商品评价</div>
+                </router-link>
+                <router-link
+                    :to="{ name: 'postSale' }"
+                    class="my-order-item column-center"
+                >
+                    <div class="img-wrap column">
+                        <div v-if="userInfo.after_sale" class="badge bg-white">
+                            {{ userInfo.after_sale }}
+                        </div>
+                        <img
+                            class="order-icon"
+                            src="@A/images/icon_my_shouhou.png"
+                        />
+                    </div>
+                    <div class="order-text">退款/售后</div>
                 </router-link>
             </div>
         </div>
@@ -287,6 +369,21 @@ export default {
             }
             .user-text {
                 margin-left: 15px;
+            }
+            .user-opt {
+                position: relative;
+                .dot {
+                    position: absolute;
+                    background-color: #ee0a24;
+                    border: 1px solid #FFFFFF;
+                    color: var(--primary-color);
+                    border-radius: 100%;
+                    top: 3px;
+                    right: 0px;
+                    font-size: 11px;
+                    min-width: 8px;
+                    height: 8px;
+                }
             }
         }
         .user-header-footer {

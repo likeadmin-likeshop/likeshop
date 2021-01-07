@@ -25,6 +25,7 @@ use Zxing\Common\DecoderResult;
 use Zxing\Common\StringUtils;
 
 
+
 /**
  * <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
  * in one QR Code. This class decodes the bits back into text.</p>
@@ -33,35 +34,39 @@ use Zxing\Common\StringUtils;
  *
  * @author Sean Owen
  */
-final class DecodedBitStreamParser
-{
+final class DecodedBitStreamParser {
 
     /**
      * See ISO 18004:2006, 6.4.4 Table 5
      */
-    private static $ALPHANUMERIC_CHARS = [
+    private static  $ALPHANUMERIC_CHARS = array(
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
         'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        ' ', '$', '%', '*', '+', '-', '.', '/', ':',
-    ];
-    private static $GB2312_SUBSET = 1;
+        ' ', '$', '%', '*', '+', '-', '.', '/', ':'
+    );
+    private static  $GB2312_SUBSET = 1;
 
-    public static function decode($bytes,
-                                  $version,
-                                  $ecLevel,
-                                  $hints)
-    {
-        $bits           = new BitSource($bytes);
-        $result         = '';//new StringBuilder(50);
-        $byteSegments   = [];
+
+    private function DecodedBitStreamParser() {
+
+
+    }
+
+    static function decode($bytes,
+                           $version,
+                           $ecLevel,
+                           $hints)  {
+        $bits = new BitSource($bytes);
+        $result = '';//new StringBuilder(50);
+        $byteSegments = array();
         $symbolSequence = -1;
-        $parityData     = -1;
+        $parityData = -1;
 
         try {
             $currentCharacterSetECI = null;
-            $fc1InEffect            = false;
-            $mode                   = '';
+            $fc1InEffect = false;
+            $mode='';
             do {
                 // While still another segment to read...
                 if ($bits->available() < 4) {
@@ -81,10 +86,10 @@ final class DecodedBitStreamParser
                         // sequence number and parity is added later to the result metadata
                         // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
                         $symbolSequence = $bits->readBits(8);
-                        $parityData     = $bits->readBits(8);
+                        $parityData = $bits->readBits(8);
                     } else if ($mode == Mode::$ECI) {
                         // Count doesn't apply to ECI
-                        $value                  = self::parseECIValue($bits);
+                        $value = self::parseECIValue($bits);
                         $currentCharacterSetECI = CharacterSetECI::getCharacterSetECIByValue($value);
                         if ($currentCharacterSetECI == null) {
                             throw FormatException::getFormatInstance();
@@ -93,7 +98,7 @@ final class DecodedBitStreamParser
                         // First handle Hanzi mode which does not start with character count
                         if ($mode == Mode::$HANZI) {
                             //chinese mode contains a sub set indicator right after mode indicator
-                            $subset     = $bits->readBits(4);
+                            $subset = $bits->readBits(4);
                             $countHanzi = $bits->readBits($mode->getCharacterCountBits($version));
                             if ($subset == self::$GB2312_SUBSET) {
                                 self::decodeHanziSegment($bits, $result, $countHanzi);
@@ -117,7 +122,7 @@ final class DecodedBitStreamParser
                     }
                 }
             } while ($mode != Mode::$TERMINATOR);
-        } catch (\InvalidArgumentException $iae) {
+        } catch (IllegalArgumentException $iae) {
             // from readBits() calls
             throw FormatException::getFormatInstance();
         }
@@ -130,35 +135,12 @@ final class DecodedBitStreamParser
             $parityData);
     }
 
-    private static function parseECIValue($bits)
-    {
-        $firstByte = $bits->readBits(8);
-        if (($firstByte & 0x80) == 0) {
-            // just one byte
-            return $firstByte & 0x7F;
-        }
-        if (($firstByte & 0xC0) == 0x80) {
-            // two bytes
-            $secondByte = $bits->readBits(8);
-
-            return (($firstByte & 0x3F) << 8) | $secondByte;
-        }
-        if (($firstByte & 0xE0) == 0xC0) {
-            // three bytes
-            $secondThirdBytes = $bits->readBits(16);
-
-            return (($firstByte & 0x1F) << 16) | $secondThirdBytes;
-        }
-        throw FormatException::getFormatInstance();
-    }
-
     /**
      * See specification GBT 18284-2000
      */
     private static function decodeHanziSegment($bits,
                                                &$result,
-                                               $count)
-    {
+                                               $count)  {
         // Don't crash trying to read more bits than we have available.
         if ($count * 13 > $bits->available()) {
             throw FormatException::getFormatInstance();
@@ -166,11 +148,11 @@ final class DecodedBitStreamParser
 
         // Each character will require 2 bytes. Read the characters as 2-byte pairs
         // and decode as GB2312 afterwards
-        $buffer = fill_array(0, 2 * $count, 0);
+        $buffer = fill_array(0,2 * $count,0);
         $offset = 0;
         while ($count > 0) {
             // Each 13 bits encodes a 2-byte character
-            $twoBytes          = $bits->readBits(13);
+            $twoBytes = $bits->readBits(13);
             $assembledTwoBytes = (($twoBytes / 0x060) << 8) | ($twoBytes % 0x060);
             if ($assembledTwoBytes < 0x003BF) {
                 // In the 0xA1A1 to 0xAAFE range
@@ -179,103 +161,54 @@ final class DecodedBitStreamParser
                 // In the 0xB0A1 to 0xFAFE range
                 $assembledTwoBytes += 0x0A6A1;
             }
-            $buffer[$offset]     = (($assembledTwoBytes >> 8) & 0xFF);//(byte)
-            $buffer[$offset + 1] = ($assembledTwoBytes & 0xFF);//(byte)
-            $offset              += 2;
+            $buffer[$offset] =  (($assembledTwoBytes >> 8) & 0xFF);//(byte)
+            $buffer[$offset + 1] =  ($assembledTwoBytes & 0xFF);//(byte)
+            $offset += 2;
             $count--;
         }
-        $result .= iconv('GB2312', 'UTF-8', implode($buffer));
-    }
 
-    private static function decodeNumericSegment($bits,
-                                                 &$result,
-                                                 $count)
-    {
-        // Read three digits at a time
-        while ($count >= 3) {
-            // Each 10 bits encodes three digits
-            if ($bits->available() < 10) {
-                throw FormatException::getFormatInstance();
-            }
-            $threeDigitsBits = $bits->readBits(10);
-            if ($threeDigitsBits >= 1000) {
-                throw FormatException::getFormatInstance();
-            }
-            $result .= (self::toAlphaNumericChar($threeDigitsBits / 100));
-            $result .= (self::toAlphaNumericChar(($threeDigitsBits / 10) % 10));
-            $result .= (self::toAlphaNumericChar($threeDigitsBits % 10));
-            $count  -= 3;
-        }
-        if ($count == 2) {
-            // Two digits left over to read, encoded in 7 bits
-            if ($bits->available() < 7) {
-                throw FormatException::getFormatInstance();
-            }
-            $twoDigitsBits = $bits->readBits(7);
-            if ($twoDigitsBits >= 100) {
-                throw FormatException::getFormatInstance();
-            }
-            $result .= (self::toAlphaNumericChar($twoDigitsBits / 10));
-            $result .= (self::toAlphaNumericChar($twoDigitsBits % 10));
-        } else if ($count == 1) {
-            // One digit left over to read
-            if ($bits->available() < 4) {
-                throw FormatException::getFormatInstance();
-            }
-            $digitBits = $bits->readBits(4);
-            if ($digitBits >= 10) {
-                throw FormatException::getFormatInstance();
-            }
-            $result .= (self::toAlphaNumericChar($digitBits));
+        try {
+            $result .=  iconv('GB2312', 'UTF-8', implode($buffer));
+        } catch (UnsupportedEncodingException $ignored) {
+            throw FormatException::getFormatInstance();
         }
     }
 
-    private static function toAlphaNumericChar($value)
-    {
-        if ($value >= count(self::$ALPHANUMERIC_CHARS)) {
+    private static function decodeKanjiSegment($bits,
+                                               &$result,
+                                               $count)  {
+        // Don't crash trying to read more bits than we have available.
+        if ($count * 13 > $bits->available()) {
             throw FormatException::getFormatInstance();
         }
 
-        return self::$ALPHANUMERIC_CHARS[$value];
-    }
+        // Each character will require 2 bytes. Read the characters as 2-byte pairs
+        // and decode as Shift_JIS afterwards
+        $buffer = array(0,2 * $count,0);
+        $offset = 0;
+        while ($count > 0) {
+            // Each 13 bits encodes a 2-byte character
+            $twoBytes = $bits->readBits(13);
+            $assembledTwoBytes = (($twoBytes / 0x0C0) << 8) | ($twoBytes % 0x0C0);
+            if ($assembledTwoBytes < 0x01F00) {
+                // In the 0x8140 to 0x9FFC range
+                $assembledTwoBytes += 0x08140;
+            } else {
+                // In the 0xE040 to 0xEBBF range
+                $assembledTwoBytes += 0x0C140;
+            }
+            $buffer[$offset] =  ($assembledTwoBytes >> 8);//(byte)
+            $buffer[$offset + 1] = $assembledTwoBytes; //(byte)
+            $offset += 2;
+            $count--;
+        }
+        // Shift_JIS may not be supported in some environments:
+        try {
+            $result .= iconv('shift-jis','utf-8',implode($buffer));
 
-    private static function decodeAlphanumericSegment($bits,
-                                                      &$result,
-                                                      $count,
-                                                      $fc1InEffect)
-    {
-        // Read two characters at a time
-        $start = strlen($result);
-        while ($count > 1) {
-            if ($bits->available() < 11) {
-                throw FormatException::getFormatInstance();
-            }
-            $nextTwoCharsBits = $bits->readBits(11);
-            $result           .= (self::toAlphaNumericChar($nextTwoCharsBits / 45));
-            $result           .= (self::toAlphaNumericChar($nextTwoCharsBits % 45));
-            $count            -= 2;
-        }
-        if ($count == 1) {
-            // special case: one character left
-            if ($bits->available() < 6) {
-                throw FormatException::getFormatInstance();
-            }
-            $result .= self::toAlphaNumericChar($bits->readBits(6));
-        }
-        // See section 6.4.8.1, 6.4.8.2
-        if ($fc1InEffect) {
-            // We need to massage the result a bit if in an FNC1 mode:
-            for ($i = $start; $i < strlen($result); $i++) {
-                if ($result[$i] == '%') {
-                    if ($i < strlen($result) - 1 && $result[$i + 1] == '%') {
-                        // %% is rendered as %
-                        $result = substr_replace($result, '', $i + 1, 1);//deleteCharAt(i + 1);
-                    } else {
-                        // In alpha mode, % should be converted to FNC1 separator 0x1D
-                        $result . setCharAt($i, chr(0x1D));
-                    }
-                }
-            }
+
+        } catch (UnsupportedEncodingException $ignored) {
+            throw FormatException::getFormatInstance();
         }
     }
 
@@ -284,18 +217,17 @@ final class DecodedBitStreamParser
                                               $count,
                                               $currentCharacterSetECI,
                                               &$byteSegments,
-                                              $hints)
-    {
+                                              $hints)  {
         // Don't crash trying to read more bits than we have available.
         if (8 * $count > $bits->available()) {
             throw FormatException::getFormatInstance();
         }
 
-        $readBytes = fill_array(0, $count, 0);
+        $readBytes = fill_array(0,$count,0);
         for ($i = 0; $i < $count; $i++) {
             $readBytes[$i] = $bits->readBits(8);//(byte)
         }
-        $text     = implode(array_map('chr', $readBytes));
+        $text = implode(array_map('chr',$readBytes));
         $encoding = '';
         if ($currentCharacterSetECI == null) {
             // The spec isn't clear on this mode; see
@@ -308,48 +240,120 @@ final class DecodedBitStreamParser
         } else {
             $encoding = $currentCharacterSetECI->name();
         }
-        //  $result.= mb_convert_encoding($text ,$encoding);//(new String(readBytes, encoding));
-        $result .= $text;//(new String(readBytes, encoding));
-
+        try {
+          //  $result.= mb_convert_encoding($text ,$encoding);//(new String(readBytes, encoding));
+            $result.= $text;//(new String(readBytes, encoding));
+        } catch (UnsupportedEncodingException $ignored) {
+            throw FormatException::getFormatInstance();
+        }
         $byteSegments = array_merge($byteSegments, $readBytes);
     }
 
-    private static function decodeKanjiSegment($bits,
-                                               &$result,
-                                               $count)
-    {
-        // Don't crash trying to read more bits than we have available.
-        if ($count * 13 > $bits->available()) {
+    private static function toAlphaNumericChar($value) {
+        if ($value >= count(self::$ALPHANUMERIC_CHARS)) {
             throw FormatException::getFormatInstance();
         }
+        return self::$ALPHANUMERIC_CHARS[$value];
+    }
 
-        // Each character will require 2 bytes. Read the characters as 2-byte pairs
-        // and decode as Shift_JIS afterwards
-        $buffer = [0, 2 * $count, 0];
-        $offset = 0;
-        while ($count > 0) {
-            // Each 13 bits encodes a 2-byte character
-            $twoBytes          = $bits->readBits(13);
-            $assembledTwoBytes = (($twoBytes / 0x0C0) << 8) | ($twoBytes % 0x0C0);
-            if ($assembledTwoBytes < 0x01F00) {
-                // In the 0x8140 to 0x9FFC range
-                $assembledTwoBytes += 0x08140;
-            } else {
-                // In the 0xE040 to 0xEBBF range
-                $assembledTwoBytes += 0x0C140;
+    private static function decodeAlphanumericSegment($bits,
+                                                      &$result,
+                                                      $count,
+                                                      $fc1InEffect) {
+        // Read two characters at a time
+        $start = strlen($result);
+        while ($count > 1) {
+            if ($bits->available() < 11) {
+                throw FormatException::getFormatInstance();
             }
-            $buffer[$offset]     = ($assembledTwoBytes >> 8);//(byte)
-            $buffer[$offset + 1] = $assembledTwoBytes; //(byte)
-            $offset              += 2;
-            $count--;
+            $nextTwoCharsBits = $bits->readBits(11);
+            $result.=(self::toAlphaNumericChar($nextTwoCharsBits / 45));
+            $result.=(self::toAlphaNumericChar($nextTwoCharsBits % 45));
+            $count -= 2;
         }
-        // Shift_JIS may not be supported in some environments:
-
-        $result .= iconv('shift-jis', 'utf-8', implode($buffer));
+        if ($count == 1) {
+            // special case: one character left
+            if ($bits->available() < 6) {
+                throw FormatException::getFormatInstance();
+            }
+            $result.=self::toAlphaNumericChar($bits->readBits(6));
+        }
+        // See section 6.4.8.1, 6.4.8.2
+        if ($fc1InEffect) {
+            // We need to massage the result a bit if in an FNC1 mode:
+            for ($i = $start; $i < strlen($result); $i++) {
+                if ($result{$i} == '%') {
+                    if ($i < strlen($result) - 1 && $result{$i + 1} == '%') {
+                        // %% is rendered as %
+                        $result  = substr_replace($result,'',$i + 1,1);//deleteCharAt(i + 1);
+                    } else {
+                        // In alpha mode, % should be converted to FNC1 separator 0x1D
+                        $result.setCharAt($i,  chr(0x1D));
+                    }
+                }
+            }
+        }
     }
 
-    private function DecodedBitStreamParser()
-    {
-
+    private static function  decodeNumericSegment($bits,
+                                                  &$result,
+                                                  $count) {
+        // Read three digits at a time
+        while ($count >= 3) {
+            // Each 10 bits encodes three digits
+            if ($bits->available() < 10) {
+                throw FormatException::getFormatInstance();
+            }
+            $threeDigitsBits = $bits->readBits(10);
+            if ($threeDigitsBits >= 1000) {
+                throw FormatException::getFormatInstance();
+            }
+            $result.=(self::toAlphaNumericChar($threeDigitsBits / 100));
+            $result.=(self::toAlphaNumericChar(($threeDigitsBits / 10) % 10));
+            $result.=(self::toAlphaNumericChar($threeDigitsBits % 10));
+            $count -= 3;
+        }
+        if ($count == 2) {
+            // Two digits left over to read, encoded in 7 bits
+            if ($bits->available() < 7) {
+                throw FormatException::getFormatInstance();
+            }
+            $twoDigitsBits = $bits->readBits(7);
+            if ($twoDigitsBits >= 100) {
+                throw FormatException::getFormatInstance();
+            }
+            $result.=(self::toAlphaNumericChar($twoDigitsBits / 10));
+            $result.=(self::toAlphaNumericChar($twoDigitsBits % 10));
+        } else if ($count == 1) {
+            // One digit left over to read
+            if ($bits->available() < 4) {
+                throw FormatException::getFormatInstance();
+            }
+            $digitBits = $bits->readBits(4);
+            if ($digitBits >= 10) {
+                throw FormatException::getFormatInstance();
+            }
+            $result.=(self::toAlphaNumericChar($digitBits));
+        }
     }
+
+    private static function parseECIValue($bits) {
+        $firstByte = $bits->readBits(8);
+        if (($firstByte & 0x80) == 0) {
+            // just one byte
+            return $firstByte & 0x7F;
+        }
+        if (($firstByte & 0xC0) == 0x80) {
+            // two bytes
+            $secondByte = $bits->readBits(8);
+            return (($firstByte & 0x3F) << 8) | $secondByte;
+        }
+        if (($firstByte & 0xE0) == 0xC0) {
+            // three bytes
+            $secondThirdBytes = $bits->readBits(16);
+            return (($firstByte & 0x1F) << 16) | $secondThirdBytes;
+        }
+        throw FormatException::getFormatInstance();
+    }
+
 }

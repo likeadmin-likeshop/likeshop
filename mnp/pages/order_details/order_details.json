@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "order-goods": "/components/order-goods/order-goods",
+    "loading-view": "/components/loading-view/loading-view",
+    "van-dialog": "/components/weapp/dialog/index",
+    "price-slice": "/components/price-slice/price-slice",
+    "van-count-down": "/components/weapp/count-down/index"
+  },
+  "navigationBarTitleText": "订单详情"
+}

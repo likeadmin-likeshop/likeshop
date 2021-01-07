@@ -1,0 +1,123 @@
+<!-- pages/goods_details/goods_details.wxml -->
+<view class="goods-details">
+    <bubble-tips />
+    <product-swiper imgUrls="{{swiperList}}"></product-swiper>
+    <view class="goods-info bg-white">
+        <view class="info-header row">
+            <view class="price row" style="flex:1">
+                <view class="primary mr10">
+                    <text class="lg">￥</text>
+                    <price-slice first-size="{{46}}" second-size="{{32}}"
+                        price="{{checkedGoods.price || goodsDetail.price}}" weight="{{700}}"></price-slice>
+                    <!-- <text style="font-size: 38rpx">{{checkedGoods.price || goodsDetail.price}}</text> -->
+                </view>
+                <view class="line-through muted md">
+                    <text>¥</text>
+                    <price-slice first-size="{{30}}" second-size="{{30}}"
+                        price="{{checkedGoods.market_price || goodsDetail.market_price}}"></price-slice>
+                </view>
+            </view>
+        </view>
+        <view class="row">
+            <view class="goods-name lg bold">{{goodsDetail.name}}</view>
+        </view>
+        <view class="row-between xs lighter" style="padding: 0 24rpx 20rpx">
+            <text wx:if="{{goodsDetail.stock !== true}}">库存: {{checkedGoods.stock || goodsDetail.stock}}件</text>
+            <text>销量: {{goodsDetail.sales_sum}}件</text>
+            <text>浏览量: {{goodsDetail.click_count}}次</text>
+        </view>
+    </view>
+    <view class="coupons row mt20 bg-white" style="align-items: flex-start;" bind:tap="onShowCoupons"  wx:if="{{couponList.length}}">
+        <view class="text muted">优惠</view>
+        <view style="flex: 1">
+            <view class="row mb10">
+                <van-tag color="#FF2C3C" plain>领券</van-tag>
+                <view class="con row ml20" style="flex: 1">
+                    <view class="coupons-item  mr20" wx:for="{{couponList}}" wx:key="id">
+                        <view wx:if="{{index < 2}}" class="row xs">{{item.use_condition}}</view>
+                    </view>
+                </view>
+                <image class="icon-sm" src="/images/arrow_right.png" />
+            </view>
+        </view>
+    </view>
+    <view class="spec row bg-white mt20" data-type="{{0}}" bindtap="showSpec">
+        <view class="text lighter">已选</view>
+        <view style="flex: 1;">{{checkedGoods.spec_value_str}}</view>
+        <image class="icon-sm" src="/images/arrow_right.png" />
+    </view>
+    <view class="evaluation bg-white mt20">
+        <navigator hover-class="none" url="/pages/all_comments/all_comments?id={{goodsDetail.id}}"
+            class="title row-between">
+            <view>
+                <text class="balck md mr10">用户评价</text>
+                <text class="primary sm">好评率{{comment.goods_rate || '0%'}}</text>
+            </view>
+            <view class="row">
+                <text class="lighter">查看全部</text>
+                <image class="icon-sm" src="/images/arrow_right.png" />
+            </view>
+        </navigator>
+        <view class="con" wx:if="{{comment.goods_rate}}">
+            <view class="user-info row">
+                <image class="avatar mr20" src="{{comment.avatar}}" />
+                <view class="user-name md mr10">{{comment.nickname}}</view>
+            </view>
+            <view class="muted xs mt10">
+                <text class="mr20">{{comment.create_time}}</text>
+            </view>
+            <view wx:if="{{comment.comment}}" class="dec mt20">{{comment.comment}}</view>
+        </view>
+        <view class="con row-center muted" wx:else>暂无评价</view>
+    </view>
+    <view class="goods-like mt20 bg-white">
+        <goods-like list="{{goodsLike}}"></goods-like>
+    </view>
+    <view class="details mt20 bg-white">
+        <view class="title lg">商品详情</view>
+        <view class="content">
+            <template is="wxParse" data="{{wxParseData:content.nodes}}" />
+        </view>
+    </view>
+    <view class="footer row bg-white fixed">
+        <button class="btn column-center" hover-class="none" open-type="contact">
+            <image class="icon-md" src="/images/icon_contact.png" />
+            <text class="xxs lighter">客服</text>
+        </button>
+        <button class="btn column-center" hover-class="none" bindtap="collectGoods">
+            <image class="icon-md"
+                src="{{(goodsDetail.is_collect == 1)?'/images/icon_collection_s.png' : '/images/icon_collection.png'}}" />
+            <text class="xxs lighter">收藏</text>
+        </button>
+        <navigator class="btn cart column-center" hover-class="none" open-type="switchTab"
+            url="/pages/shop_cart/shop_cart">
+            <image animation="{{cartActionObj}}" class="icon-md" src="/images/icon_cart.png" />
+            <text class="xxs lighter">购物车</text>
+            <view wx:if="{{cartNum}}" class="cart-num white xxs row-center">{{cartNum}}</view>
+        </navigator>
+        <view wx:if="{{!activity.type == 1}}" class="addcart br60 white mr20 md ml20" data-type="{{1}}"
+            bindtap="showSpec">
+            加入购物车
+        </view>
+        <view class="right-buy br60 white mr20 md" data-type="{{2}}" bindtap="showSpec">
+           立即购买
+        </view>
+    </view>
+    <view id="goods-ball" animation="{{actionData}}">
+        <image src="{{goodsDetail.image}}"></image>
+    </view>
+</view>
+<!-- 领券弹窗 -->
+<van-popup class="coupons-popup" catchtouchmove show="{{ showCoupons }}" position="bottom" round closeable bind:close="onClose">
+    <view class="title md bold">领券</view>
+    <view class="content bg-gray">
+        <scroll-view scroll-y="true" style="height: 700rpx">
+            <coupon-list list="{{couponList}}" bind:reflash="$getCoupons" btn-type="{{3}}"></coupon-list>
+        </scroll-view>
+    </view>
+</van-popup>
+
+<loading-view wx:if="{{isFirstLoading}}"></loading-view>
+<spec-popup show="{{showSpec}}" show-add="{{popupType != 2}}" show-buy="{{popupType != 1}}" goods="{{goodsDetail}}"
+    bind:close="onClose" bind:change="onChangeSpec" bind:addcart="onAddCart" bind:buynow="onBuyNow"></spec-popup>
+<import src="/wxParse/wxParse.wxml" />

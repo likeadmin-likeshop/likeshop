@@ -26,6 +26,7 @@ class Client extends BaseClient
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function list()
     {
@@ -35,13 +36,10 @@ class Client extends BaseClient
     /**
      * 关联小程序.
      *
-     * @param string $appId
-     * @param bool   $notifyUsers
-     * @param bool   $showProfile
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function link(string $appId, bool $notifyUsers = true, bool $showProfile = false)
     {
@@ -57,11 +55,10 @@ class Client extends BaseClient
     /**
      * 解除已关联的小程序.
      *
-     * @param string $appId
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function unlink(string $appId)
     {

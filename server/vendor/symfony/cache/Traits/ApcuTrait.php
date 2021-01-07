@@ -26,7 +26,7 @@ trait ApcuTrait
         return \function_exists('apcu_fetch') && filter_var(ini_get('apc.enabled'), \FILTER_VALIDATE_BOOLEAN);
     }
 
-    private function init($namespace, $defaultLifetime, $version)
+    private function init(string $namespace, int $defaultLifetime, ?string $version)
     {
         if (!static::isSupported()) {
             throw new CacheException('APCu is not enabled.');
@@ -51,14 +51,20 @@ trait ApcuTrait
      */
     protected function doFetch(array $ids)
     {
+        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__.'::handleUnserializeCallback');
         try {
+            $values = [];
             foreach (apcu_fetch($ids, $ok) ?: [] as $k => $v) {
                 if (null !== $v || $ok) {
-                    yield $k => $v;
+                    $values[$k] = $v;
                 }
             }
+
+            return $values;
         } catch (\Error $e) {
             throw new \ErrorException($e->getMessage(), $e->getCode(), \E_ERROR, $e->getFile(), $e->getLine());
+        } finally {
+            ini_set('unserialize_callback_func', $unserializeCallbackHandler);
         }
     }
 
@@ -95,7 +101,7 @@ trait ApcuTrait
     /**
      * {@inheritdoc}
      */
-    protected function doSave(array $values, $lifetime)
+    protected function doSave(array $values, int $lifetime)
     {
         try {
             if (false === $failures = apcu_store($values, null, $lifetime)) {
@@ -103,15 +109,13 @@ trait ApcuTrait
             }
 
             return array_keys($failures);
-        } catch (\Error $e) {
-        } catch (\Exception $e) {
-        }
+        } catch (\Throwable $e) {
+            if (1 === \count($values)) {
+                // Workaround https://github.com/krakjoe/apcu/issues/170
+                apcu_delete(key($values));
+            }
 
-        if (1 === \count($values)) {
-            // Workaround https://github.com/krakjoe/apcu/issues/170
-            apcu_delete(key($values));
+            throw $e;
         }
-
-        throw $e;
     }
 }

@@ -22,7 +22,7 @@ use ReflectionClass;
  */
 class Client extends BaseClient
 {
-    const API_SEND = 'cgi-bin/message/template/send';
+    public const API_SEND = 'cgi-bin/message/template/send';
 
     /**
      * Attributes.
@@ -51,6 +51,9 @@ class Client extends BaseClient
      * @param int $industryTwo
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setIndustry($industryOne, $industryTwo)
     {
@@ -66,6 +69,9 @@ class Client extends BaseClient
      * Get industry.
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getIndustry()
     {
@@ -78,6 +84,9 @@ class Client extends BaseClient
      * @param string $shortId
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function addTemplate($shortId)
     {
@@ -90,6 +99,9 @@ class Client extends BaseClient
      * Get private templates.
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getPrivateTemplates()
     {
@@ -102,6 +114,9 @@ class Client extends BaseClient
      * @param string $templateId
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function deletePrivateTemplate($templateId)
     {
@@ -113,12 +128,11 @@ class Client extends BaseClient
     /**
      * Send a template message.
      *
-     * @param array $data
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $data = [])
     {
@@ -132,11 +146,11 @@ class Client extends BaseClient
     /**
      * Send template-message for subscription.
      *
-     * @param array $data
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function sendSubscription(array $data = [])
     {
@@ -148,8 +162,6 @@ class Client extends BaseClient
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
@@ -172,8 +184,6 @@ class Client extends BaseClient
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     protected function formatData(array $data)
@@ -182,7 +192,7 @@ class Client extends BaseClient
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                if (isset($value['value'])) {
+                if (\array_key_exists('value', $value)) {
                     $formatted[$key] = $value;
 
                     continue;

@@ -24,9 +24,10 @@ class Client extends BaseClient
     /**
      * Create a user.
      *
-     * @param array $data
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(array $data)
     {
@@ -36,10 +37,10 @@ class Client extends BaseClient
     /**
      * Update an exist user.
      *
-     * @param string $id
-     * @param array  $data
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(string $id, array $data)
     {
@@ -52,6 +53,9 @@ class Client extends BaseClient
      * @param string|array $userId
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete($userId)
     {
@@ -65,9 +69,10 @@ class Client extends BaseClient
     /**
      * Batch delete users.
      *
-     * @param array $userIds
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function batchDelete(array $userIds)
     {
@@ -77,9 +82,9 @@ class Client extends BaseClient
     /**
      * Get user.
      *
-     * @param string $userId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function get(string $userId)
     {
@@ -89,10 +94,9 @@ class Client extends BaseClient
     /**
      * Get simple user list.
      *
-     * @param int  $departmentId
-     * @param bool $fetchChild
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function getDepartmentUsers(int $departmentId, bool $fetchChild = false)
     {
@@ -107,10 +111,9 @@ class Client extends BaseClient
     /**
      * Get user list.
      *
-     * @param int  $departmentId
-     * @param bool $fetchChild
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function getDetailedDepartmentUsers(int $departmentId, bool $fetchChild = false)
     {
@@ -125,10 +128,10 @@ class Client extends BaseClient
     /**
      * Convert userId to openid.
      *
-     * @param string   $userId
-     * @param int|null $agentId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function userIdToOpenid(string $userId, int $agentId = null)
     {
@@ -143,9 +146,10 @@ class Client extends BaseClient
     /**
      * Convert openid to userId.
      *
-     * @param string $openid
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function openidToUserId(string $openid)
     {
@@ -159,11 +163,10 @@ class Client extends BaseClient
     /**
      * Convert mobile to userId.
      *
-     * @param string $mobile
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function mobileToUserId(string $mobile)
     {
@@ -175,9 +178,9 @@ class Client extends BaseClient
     }
 
     /**
-     * @param string $userId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function accept(string $userId)
     {
@@ -191,11 +194,10 @@ class Client extends BaseClient
     /**
      * Batch invite users.
      *
-     * @param array $params
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function invite(array $params)
     {
@@ -204,8 +206,6 @@ class Client extends BaseClient
 
     /**
      * Get invitation QR code.
-     *
-     * @param int $sizeType
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *

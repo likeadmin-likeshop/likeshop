@@ -32,8 +32,6 @@ class BaseClient extends PaymentBaseClient
 
     /**
      * BaseClient constructor.
-     *
-     * @param \EasyWeChat\MicroMerchant\Application $app
      */
     public function __construct(Application $app)
     {
@@ -55,17 +53,14 @@ class BaseClient extends PaymentBaseClient
     /**
      * httpUpload.
      *
-     * @param string $url
-     * @param array  $files
-     * @param array  $form
-     * @param array  $query
-     * @param bool   $returnResponse
+     * @param bool $returnResponse
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\InvalidSignException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function httpUpload(string $url, array $files = [], array $form = [], array $query = [], $returnResponse = false)
     {
@@ -118,10 +113,7 @@ class BaseClient extends PaymentBaseClient
     /**
      * request.
      *
-     * @param string $endpoint
-     * @param array  $params
      * @param string $method
-     * @param array  $options
      * @param bool   $returnResponse
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
@@ -129,6 +121,7 @@ class BaseClient extends PaymentBaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\InvalidSignException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function request(string $endpoint, array $params = [], $method = 'post', array $options = [], $returnResponse = false)
     {
@@ -158,8 +151,6 @@ class BaseClient extends PaymentBaseClient
     /**
      * processing parameters contain fields that require sensitive information encryption.
      *
-     * @param array $params
-     *
      * @return array
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
@@ -185,8 +176,6 @@ class BaseClient extends PaymentBaseClient
 
     /**
      * To id card, mobile phone number and other fields sensitive information encryption.
-     *
-     * @param string $string
      *
      * @return string
      *
@@ -235,8 +224,6 @@ class BaseClient extends PaymentBaseClient
     /**
      * getSign.
      *
-     * @param array $params
-     *
      * @return string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
@@ -246,13 +233,8 @@ class BaseClient extends PaymentBaseClient
         $params = array_filter($params);
 
         $key = $this->app->getKey();
-        if ('HMAC-SHA256' === ($params['sign_type'] ?? 'MD5')) {
-            $encryptMethod = function ($str) use ($key) {
-                return hash_hmac('sha256', $str, $key);
-            };
-        } else {
-            $encryptMethod = 'md5';
-        }
+
+        $encryptMethod = Support\get_encrypt_method(Support\Arr::get($params, 'sign_type', 'MD5'), $key);
 
         return Support\generate_sign($params, $key, $encryptMethod);
     }

@@ -23,8 +23,6 @@ class SessionClient extends BaseClient
     /**
      * List all sessions of $account.
      *
-     * @param string $account
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -49,12 +47,10 @@ class SessionClient extends BaseClient
     /**
      * Create a session.
      *
-     * @param string $account
-     * @param string $openid
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(string $account, string $openid)
     {
@@ -69,12 +65,10 @@ class SessionClient extends BaseClient
     /**
      * Close a session.
      *
-     * @param string $account
-     * @param string $openid
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function close(string $account, string $openid)
     {
@@ -88,8 +82,6 @@ class SessionClient extends BaseClient
 
     /**
      * Get a session.
-     *
-     * @param string $openid
      *
      * @return mixed
      *

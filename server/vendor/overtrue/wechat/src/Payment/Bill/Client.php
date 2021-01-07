@@ -19,12 +19,11 @@ class Client extends BaseClient
     /**
      * Download bill history as a table file.
      *
-     * @param string $date
-     * @param string $type
-     *
      * @return \EasyWeChat\Kernel\Http\StreamResponse|\Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(string $date, string $type = 'ALL', array $optional = [])
     {

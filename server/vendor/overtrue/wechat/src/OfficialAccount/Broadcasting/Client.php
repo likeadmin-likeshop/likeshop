@@ -34,18 +34,17 @@ use EasyWeChat\Kernel\Support\Arr;
  */
 class Client extends BaseClient
 {
-    const PREVIEW_BY_OPENID = 'touser';
-    const PREVIEW_BY_NAME = 'towxname';
+    public const PREVIEW_BY_OPENID = 'touser';
+    public const PREVIEW_BY_NAME = 'towxname';
 
     /**
      * Send a message.
      *
-     * @param array $message
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $message)
     {
@@ -61,11 +60,10 @@ class Client extends BaseClient
     /**
      * Preview a message.
      *
-     * @param array $message
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function preview(array $message)
     {
@@ -75,16 +73,16 @@ class Client extends BaseClient
     /**
      * Delete a broadcast.
      *
-     * @param string $msgId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function delete(string $msgId)
+    public function delete(string $msgId, int $index = 0)
     {
         $options = [
             'msg_id' => $msgId,
+            'article_idx' => $index,
         ];
 
         return $this->httpPostJson('cgi-bin/message/mass/delete', $options);
@@ -93,11 +91,10 @@ class Client extends BaseClient
     /**
      * Get a broadcast status.
      *
-     * @param string $msgId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function status(string $msgId)
     {
@@ -111,9 +108,7 @@ class Client extends BaseClient
     /**
      * Send a text message.
      *
-     * @param string $message
-     * @param mixed  $reception
-     * @param array  $attributes
+     * @param mixed $reception
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
@@ -128,9 +123,7 @@ class Client extends BaseClient
     /**
      * Send a news message.
      *
-     * @param string $mediaId
-     * @param mixed  $reception
-     * @param array  $attributes
+     * @param mixed $reception
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
@@ -145,9 +138,7 @@ class Client extends BaseClient
     /**
      * Send a voice message.
      *
-     * @param string $mediaId
-     * @param mixed  $reception
-     * @param array  $attributes
+     * @param mixed $reception
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
@@ -162,9 +153,7 @@ class Client extends BaseClient
     /**
      * Send a image message.
      *
-     * @param string $mediaId
-     * @param mixed  $reception
-     * @param array  $attributes
+     * @param mixed $reception
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
@@ -179,9 +168,7 @@ class Client extends BaseClient
     /**
      * Send a video message.
      *
-     * @param string $mediaId
-     * @param mixed  $reception
-     * @param array  $attributes
+     * @param mixed $reception
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
@@ -196,9 +183,7 @@ class Client extends BaseClient
     /**
      * Send a card message.
      *
-     * @param string $cardId
-     * @param mixed  $reception
-     * @param array  $attributes
+     * @param mixed $reception
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
@@ -313,9 +298,7 @@ class Client extends BaseClient
     }
 
     /**
-     * @param \EasyWeChat\Kernel\Contracts\MessageInterface $message
-     * @param string                                        $reception
-     * @param string                                        $method
+     * @param string $method
      *
      * @return mixed
      *
@@ -330,9 +313,8 @@ class Client extends BaseClient
     }
 
     /**
-     * @param \EasyWeChat\Kernel\Contracts\MessageInterface $message
-     * @param mixed                                         $reception
-     * @param array                                         $attributes
+     * @param mixed $reception
+     * @param array $attributes
      *
      * @return mixed
      *

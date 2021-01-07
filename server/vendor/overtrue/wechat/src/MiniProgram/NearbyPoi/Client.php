@@ -24,11 +24,10 @@ class Client extends BaseClient
     /**
      * Add nearby poi.
      *
-     * @param array $params
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function add(array $params)
     {
@@ -43,12 +42,10 @@ class Client extends BaseClient
     /**
      * Update nearby poi.
      *
-     * @param string $poiId
-     * @param array  $params
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(string $poiId, array $params)
     {
@@ -63,9 +60,10 @@ class Client extends BaseClient
     /**
      * Delete nearby poi.
      *
-     * @param string $poiId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete(string $poiId)
     {
@@ -77,10 +75,9 @@ class Client extends BaseClient
     /**
      * Get nearby poi list.
      *
-     * @param int $page
-     * @param int $pageRows
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function list(int $page, int $pageRows)
     {
@@ -93,10 +90,11 @@ class Client extends BaseClient
     /**
      * Set nearby poi show status.
      *
-     * @param string $poiId
-     * @param int    $status
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setVisibility(string $poiId, int $status)
     {

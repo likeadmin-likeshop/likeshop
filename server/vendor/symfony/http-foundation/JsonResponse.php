@@ -29,7 +29,7 @@ class JsonResponse extends Response
 
     // Encode <, >, ', &, and " characters in the JSON, making it also safe to be embedded into HTML.
     // 15 === JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
-    const DEFAULT_ENCODING_OPTIONS = 15;
+    public const DEFAULT_ENCODING_OPTIONS = 15;
 
     protected $encodingOptions = self::DEFAULT_ENCODING_OPTIONS;
 
@@ -39,9 +39,13 @@ class JsonResponse extends Response
      * @param array $headers An array of response headers
      * @param bool  $json    If the data is already a JSON string
      */
-    public function __construct($data = null, $status = 200, $headers = [], $json = false)
+    public function __construct($data = null, int $status = 200, array $headers = [], bool $json = false)
     {
         parent::__construct('', $status, $headers);
+
+        if ($json && !\is_string($data) && !is_numeric($data) && !\is_callable([$data, '__toString'])) {
+            throw new \TypeError(sprintf('"%s": If $json is set to true, argument $data must be a string or object implementing __toString(), "%s" given.', __METHOD__, get_debug_type($data)));
+        }
 
         if (null === $data) {
             $data = new \ArrayObject();
@@ -77,13 +81,13 @@ class JsonResponse extends Response
      *     return JsonResponse::fromJsonString('{"key": "value"}')
      *         ->setSharedMaxAge(300);
      *
-     * @param string|null $data    The JSON response string
-     * @param int         $status  The response status code
-     * @param array       $headers An array of response headers
+     * @param string $data    The JSON response string
+     * @param int    $status  The response status code
+     * @param array  $headers An array of response headers
      *
      * @return static
      */
-    public static function fromJsonString($data = null, $status = 200, $headers = [])
+    public static function fromJsonString($data, $status = 200, $headers = [])
     {
         return new static($data, $status, $headers, true);
     }
@@ -129,8 +133,6 @@ class JsonResponse extends Response
      * @param string $json
      *
      * @return $this
-     *
-     * @throws \InvalidArgumentException
      */
     public function setJson($json)
     {
@@ -150,33 +152,17 @@ class JsonResponse extends Response
      */
     public function setData($data = [])
     {
-        if (\defined('HHVM_VERSION')) {
-            // HHVM does not trigger any warnings and let exceptions
-            // thrown from a JsonSerializable object pass through.
-            // If only PHP did the same...
+        try {
             $data = json_encode($data, $this->encodingOptions);
-        } else {
-            if (!interface_exists('JsonSerializable', false)) {
-                set_error_handler(function () { return false; });
-                try {
-                    $data = @json_encode($data, $this->encodingOptions);
-                } finally {
-                    restore_error_handler();
-                }
-            } else {
-                try {
-                    $data = json_encode($data, $this->encodingOptions);
-                } catch (\Exception $e) {
-                    if ('Exception' === \get_class($e) && 0 === strpos($e->getMessage(), 'Failed calling ')) {
-                        throw $e->getPrevious() ?: $e;
-                    }
-                    throw $e;
-                }
-
-                if (\PHP_VERSION_ID >= 70300 && (\JSON_THROW_ON_ERROR & $this->encodingOptions)) {
-                    return $this->setJson($data);
-                }
+        } catch (\Exception $e) {
+            if ('Exception' === \get_class($e) && 0 === strpos($e->getMessage(), 'Failed calling ')) {
+                throw $e->getPrevious() ?: $e;
             }
+            throw $e;
+        }
+
+        if (\PHP_VERSION_ID >= 70300 && (\JSON_THROW_ON_ERROR & $this->encodingOptions)) {
+            return $this->setJson($data);
         }
 
         if (\JSON_ERROR_NONE !== json_last_error()) {

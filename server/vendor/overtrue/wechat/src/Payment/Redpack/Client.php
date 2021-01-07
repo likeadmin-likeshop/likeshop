@@ -28,8 +28,9 @@ class Client extends BaseClient
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function info($mchBillno)
     {
@@ -43,13 +44,31 @@ class Client extends BaseClient
     }
 
     /**
-     * Send normal redpack.
-     *
-     * @param array $params
+     * Send miniprogram normal redpack.
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function sendMiniprogramNormal(array $params)
+    {
+        $base = [
+            'total_num' => 1,
+            'client_ip' => $params['client_ip'] ?? Support\get_server_ip(),
+            'wxappid' => $this->app['config']->app_id,
+        ];
+
+        return $this->safeRequest('mmpaymkttransfers/sendminiprogramhb', array_merge($base, $params));
+    }
+
+    /**
+     * Send normal redpack.
+     *
+     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function sendNormal(array $params)
     {
@@ -65,11 +84,11 @@ class Client extends BaseClient
     /**
      * Send group redpack.
      *
-     * @param array $params
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function sendGroup(array $params)
     {

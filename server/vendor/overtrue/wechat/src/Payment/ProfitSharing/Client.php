@@ -36,18 +36,26 @@ class Client extends BaseClient
      * 后续可通过发起分账请求将结算后的钱分到该分账接收方.
      *
      * @param array $receiver 分账接收方对象，json格式
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function addReceiver(array $receiver)
     {
         $params = [
             'appid' => $this->app['config']->app_id,
             'receiver' => json_encode(
-                $receiver, JSON_UNESCAPED_UNICODE
+                $receiver,
+                JSON_UNESCAPED_UNICODE
             ),
         ];
 
         return $this->request(
-            'pay/profitsharingaddreceiver', $params
+            'pay/profitsharingaddreceiver',
+            $params
         );
     }
 
@@ -57,18 +65,26 @@ class Client extends BaseClient
      * 删除后不支持将结算后的钱分到该分账接收方.
      *
      * @param array $receiver 分账接收方对象，json格式
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function deleteReceiver(array $receiver)
     {
         $params = [
             'appid' => $this->app['config']->app_id,
             'receiver' => json_encode(
-                $receiver, JSON_UNESCAPED_UNICODE
+                $receiver,
+                JSON_UNESCAPED_UNICODE
             ),
         ];
 
         return $this->request(
-            'pay/profitsharingremovereceiver', $params
+            'pay/profitsharingremovereceiver',
+            $params
         );
     }
 
@@ -84,6 +100,7 @@ class Client extends BaseClient
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function share(
         string $transactionId,
@@ -95,12 +112,14 @@ class Client extends BaseClient
             'transaction_id' => $transactionId,
             'out_order_no' => $outOrderNo,
             'receivers' => json_encode(
-                $receivers, JSON_UNESCAPED_UNICODE
+                $receivers,
+                JSON_UNESCAPED_UNICODE
             ),
         ];
 
         return $this->safeRequest(
-            'secapi/pay/profitsharing', $params
+            'secapi/pay/profitsharing',
+            $params
         );
     }
 
@@ -116,6 +135,7 @@ class Client extends BaseClient
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function multiShare(
         string $transactionId,
@@ -127,12 +147,14 @@ class Client extends BaseClient
             'transaction_id' => $transactionId,
             'out_order_no' => $outOrderNo,
             'receivers' => json_encode(
-                $receivers, JSON_UNESCAPED_UNICODE
+                $receivers,
+                JSON_UNESCAPED_UNICODE
             ),
         ];
 
         return $this->safeRequest(
-            'secapi/pay/multiprofitsharing', $params
+            'secapi/pay/multiprofitsharing',
+            $params
         );
     }
 
@@ -140,7 +162,11 @@ class Client extends BaseClient
      * Finish profit sharing.
      * 完结分账.
      *
-     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function markOrderAsFinished(array $params)
     {
@@ -148,7 +174,8 @@ class Client extends BaseClient
         $params['sub_appid'] = null;
 
         return $this->safeRequest(
-            'secapi/pay/profitsharingfinish', $params
+            'secapi/pay/profitsharingfinish',
+            $params
         );
     }
 
@@ -158,9 +185,16 @@ class Client extends BaseClient
      *
      * @param string $transactionId 微信支付订单号
      * @param string $outOrderNo    商户系统内部的分账单号
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function query(
-        string $transactionId, string $outOrderNo
+        string $transactionId,
+        string $outOrderNo
     ) {
         $params = [
             'sub_appid' => null,
@@ -169,7 +203,47 @@ class Client extends BaseClient
         ];
 
         return $this->request(
-            'pay/profitsharingquery', $params
+            'pay/profitsharingquery',
+            $params
+        );
+    }
+
+    /**
+     * Profit sharing return.
+     * 分账回退.
+     *
+     * @param string $outOrderNo    商户系统内部的分账单号
+     * @param string $outReturnNo   商户系统内部分账回退单号
+     * @param int    $returnAmount  回退金额
+     * @param string $returnAccount 回退方账号
+     * @param string $description   回退描述
+     *
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function returnShare(
+        string $outOrderNo,
+        string $outReturnNo,
+        int $returnAmount,
+        string $returnAccount,
+        string $description
+    ) {
+        $params = [
+            'appid' => $this->app['config']->app_id,
+            'out_order_no' => $outOrderNo,
+            'out_return_no' => $outReturnNo,
+            'return_account_type' => 'MERCHANT_ID',
+            'return_account' => $returnAccount,
+            'return_amount' => $returnAmount,
+            'description' => $description,
+        ];
+
+        return $this->safeRequest(
+            'secapi/pay/profitsharingreturn',
+            $params
         );
     }
 }

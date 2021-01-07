@@ -29,12 +29,9 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
     private $factory;
     private $tmpDir;
 
-    /**
-     * @return HttpMessageFactoryInterface
-     */
-    abstract protected function buildHttpMessageFactory();
+    abstract protected function buildHttpMessageFactory(): HttpMessageFactoryInterface;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->factory = $this->buildHttpMessageFactory();
         $this->tmpDir = sys_get_temp_dir();
@@ -44,36 +41,36 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
     {
         $stdClass = new \stdClass();
         $request = new Request(
-            array(
+            [
+                'bar' => ['baz' => '42'],
                 'foo' => '1',
-                'bar' => array('baz' => '42'),
-            ),
-            array(
-                'twitter' => array(
+            ],
+            [
+                'twitter' => [
                     '@dunglas' => 'Kévin Dunglas',
                     '@coopTilleuls' => 'Les-Tilleuls.coop',
-                ),
+                ],
                 'baz' => '2',
-            ),
-            array(
+            ],
+            [
                 'a1' => $stdClass,
-                'a2' => array('foo' => 'bar'),
-            ),
-            array(
+                'a2' => ['foo' => 'bar'],
+            ],
+            [
                 'c1' => 'foo',
-                'c2' => array('c3' => 'bar'),
-            ),
-            array(
+                'c2' => ['c3' => 'bar'],
+            ],
+            [
                 'f1' => $this->createUploadedFile('F1', 'f1.txt', 'text/plain', UPLOAD_ERR_OK),
-                'foo' => array('f2' => $this->createUploadedFile('F2', 'f2.txt', 'text/plain', UPLOAD_ERR_OK)),
-            ),
-            array(
+                'foo' => ['f2' => $this->createUploadedFile('F2', 'f2.txt', 'text/plain', UPLOAD_ERR_OK)],
+            ],
+            [
                 'REQUEST_METHOD' => 'POST',
                 'HTTP_HOST' => 'dunglas.fr',
                 'HTTP_X_SYMFONY' => '2.8',
-                'REQUEST_URI' => '/testCreateRequest?foo=1&bar[baz]=42',
-                'QUERY_STRING' => 'foo=1&bar[baz]=42',
-            ),
+                'REQUEST_URI' => '/testCreateRequest?bar[baz]=42&foo=1',
+                'QUERY_STRING' => 'bar[baz]=42&foo=1',
+            ],
             'Content'
         );
 
@@ -86,7 +83,7 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $this->assertEquals('42', $queryParams['bar']['baz']);
 
         $requestTarget = $psrRequest->getRequestTarget();
-        $this->assertEquals('/testCreateRequest?foo=1&bar[baz]=42', urldecode($requestTarget));
+        $this->assertEquals('/testCreateRequest?bar[baz]=42&foo=1', urldecode($requestTarget));
 
         $parsedBody = $psrRequest->getParsedBody();
         $this->assertEquals('Kévin Dunglas', $parsedBody['twitter']['@dunglas']);
@@ -116,13 +113,13 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $this->assertEquals('POST', $serverParams['REQUEST_METHOD']);
         $this->assertEquals('2.8', $serverParams['HTTP_X_SYMFONY']);
         $this->assertEquals('POST', $psrRequest->getMethod());
-        $this->assertEquals(array('2.8'), $psrRequest->getHeader('X-Symfony'));
+        $this->assertEquals(['2.8'], $psrRequest->getHeader('X-Symfony'));
     }
 
     public function testGetContentCanBeCalledAfterRequestCreation()
     {
-        $header = array('HTTP_HOST' => 'dunglas.fr');
-        $request = new Request(array(), array(), array(), array(), array(), $header, 'Content');
+        $header = ['HTTP_HOST' => 'dunglas.fr'];
+        $request = new Request([], [], [], [], [], $header, 'Content');
 
         $psrRequest = $this->factory->createRequest($request);
 
@@ -135,11 +132,7 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $path = tempnam($this->tmpDir, uniqid());
         file_put_contents($path, $content);
 
-        if (class_exists('Symfony\Component\HttpFoundation\HeaderUtils')) {
-            // Symfony 4.1+
-            return new UploadedFile($path, $originalName, $mimeType, $error, true);
-        }
-        return new UploadedFile($path, $originalName, $mimeType, filesize($path), $error, true);
+        return new UploadedFile($path, $originalName, $mimeType, $error, true);
     }
 
     public function testCreateResponse()
@@ -147,17 +140,17 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $response = new Response(
             'Response content.',
             202,
-            array('X-Symfony' => array('3.4'))
+            ['X-Symfony' => ['3.4']]
         );
         $response->headers->setCookie(new Cookie('city', 'Lille', new \DateTime('Wed, 13 Jan 2021 22:23:01 GMT'), '/', null, false, true, false, 'lax'));
 
         $psrResponse = $this->factory->createResponse($response);
         $this->assertEquals('Response content.', $psrResponse->getBody()->__toString());
         $this->assertEquals(202, $psrResponse->getStatusCode());
-        $this->assertEquals(array('3.4'), $psrResponse->getHeader('X-Symfony'));
+        $this->assertEquals(['3.4'], $psrResponse->getHeader('X-Symfony'));
 
         $cookieHeader = $psrResponse->getHeader('Set-Cookie');
-        $this->assertInternalType('array', $cookieHeader);
+        $this->assertIsArray($cookieHeader);
         $this->assertCount(1, $cookieHeader);
         $this->assertRegExp('{city=Lille; expires=Wed, 13-Jan-2021 22:23:01 GMT;( max-age=\d+;)? path=/; httponly}i', $cookieHeader[0]);
     }
@@ -189,29 +182,46 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $this->assertEquals('Binary', $psrResponse->getBody()->__toString());
     }
 
+    public function testCreateResponseFromBinaryFileWithRange()
+    {
+        $path = tempnam($this->tmpDir, uniqid());
+        file_put_contents($path, 'Binary');
+
+        $request = new Request();
+        $request->headers->set('Range', 'bytes=1-4');
+
+        $response = new BinaryFileResponse($path, 200, ['Content-Type' => 'plain/text']);
+        $response->prepare($request);
+
+        $psrResponse = $this->factory->createResponse($response);
+
+        $this->assertEquals('inar', $psrResponse->getBody()->__toString());
+        $this->assertSame('bytes 1-4/6', $psrResponse->getHeaderLine('Content-Range'));
+    }
+
     public function testUploadErrNoFile()
     {
-        if (class_exists('Symfony\Component\HttpFoundation\HeaderUtils')) {
-            // Symfony 4.1+
-            $file = new UploadedFile('', '', null, UPLOAD_ERR_NO_FILE, true);
-        } else {
-            $file = new UploadedFile('', '', null, 0, UPLOAD_ERR_NO_FILE, true);
-        }
+        $file = new UploadedFile('', '', null, UPLOAD_ERR_NO_FILE, true);
+
         $this->assertEquals(0, $file->getSize());
         $this->assertEquals(UPLOAD_ERR_NO_FILE, $file->getError());
         $this->assertFalse($file->getSize(), 'SplFile::getSize() returns false on error');
 
-        $request = new Request(array(), array(), array(), array(),
-          array(
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [
             'f1' => $file,
-            'f2' => array('name' => null, 'type' => null, 'tmp_name' => null, 'error' => UPLOAD_ERR_NO_FILE, 'size' => 0),
-          ),
-          array(
+            'f2' => ['name' => null, 'type' => null, 'tmp_name' => null, 'error' => UPLOAD_ERR_NO_FILE, 'size' => 0],
+          ],
+            [
             'REQUEST_METHOD' => 'POST',
             'HTTP_HOST' => 'dunglas.fr',
             'HTTP_X_SYMFONY' => '2.8',
-          ),
-          'Content'
+          ],
+            'Content'
         );
 
         $psrRequest = $this->factory->createRequest($request);

@@ -24,13 +24,12 @@ class Client extends BaseClient
     /**
      * apply to settle in to become a small micro merchant.
      *
-     * @param array $params
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\EncryptException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function submitApplication(array $params)
     {
@@ -47,13 +46,11 @@ class Client extends BaseClient
     /**
      * query application status.
      *
-     * @param string $applymentId
-     * @param string $businessCode
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getStatus(string $applymentId, string $businessCode = '')
     {
@@ -79,13 +76,12 @@ class Client extends BaseClient
     /**
      * merchant upgrade api.
      *
-     * @param array $params
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\EncryptException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function upgrade(array $params)
     {
@@ -103,12 +99,11 @@ class Client extends BaseClient
     /**
      * get upgrade status.
      *
-     * @param string $subMchId
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUpgradeStatus(string $subMchId = '')
     {

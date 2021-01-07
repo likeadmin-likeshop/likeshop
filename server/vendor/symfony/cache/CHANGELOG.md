@@ -1,6 +1,43 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * added support for connecting to Redis Sentinel clusters
+ * added argument `$prefix` to `AdapterInterface::clear()`
+ * improved `RedisTagAwareAdapter` to support Redis server >= 2.8 and up to 4B items per tag
+ * added `TagAwareMarshaller` for optimized data storage when using `AbstractTagAwareAdapter`
+ * added `DeflateMarshaller` to compress serialized values
+ * removed support for phpredis 4 `compression`
+ * [BC BREAK] `RedisTagAwareAdapter` is not compatible with `RedisCluster` from `Predis` anymore, use `phpredis` instead
+ * Marked the `CacheDataCollector` class as `@final`.
+
+4.3.0
+-----
+
+ * removed `psr/simple-cache` dependency, run `composer require psr/simple-cache` if you need it
+ * deprecated all PSR-16 adapters, use `Psr16Cache` or `Symfony\Contracts\Cache\CacheInterface` implementations instead
+ * deprecated `SimpleCacheAdapter`, use `Psr16Adapter` instead
+
+4.2.0
+-----
+
+ * added support for connecting to Redis clusters via DSN
+ * added support for configuring multiple Memcached servers via DSN
+ * added `MarshallerInterface` and `DefaultMarshaller` to allow changing the serializer and provide one that automatically uses igbinary when available
+ * implemented `CacheInterface`, which provides stampede protection via probabilistic early expiration and should become the preferred way to use a cache
+ * added sub-second expiry accuracy for backends that support it
+ * added support for phpredis 4 `compression` and `tcp_keepalive` options
+ * added automatic table creation when using Doctrine DBAL with PDO-based backends
+ * throw `LogicException` when `CacheItem::tag()` is called on an item coming from a non tag-aware pool
+ * deprecated `CacheItem::getPreviousTags()`, use `CacheItem::getMetadata()` instead
+ * deprecated the `AbstractAdapter::unserialize()` and `AbstractCache::unserialize()` methods
+ * added `CacheCollectorPass` (originally in `FrameworkBundle`)
+ * added `CachePoolClearerPass` (originally in `FrameworkBundle`)
+ * added `CachePoolPass` (originally in `FrameworkBundle`)
+ * added `CachePoolPrunerPass` (originally in `FrameworkBundle`)
+
 3.4.0
 -----
 
@@ -13,7 +50,7 @@ CHANGELOG
 3.3.0
 -----
 
- * [EXPERIMENTAL] added CacheItem::getPreviousTags() to get bound tags coming from the pool storage if any
+ * added CacheItem::getPreviousTags() to get bound tags coming from the pool storage if any
  * added PSR-16 "Simple Cache" implementations for all existing PSR-6 adapters
  * added Psr6Cache and SimpleCacheAdapter for bidirectional interoperability between PSR-6 and PSR-16
  * added MemcachedAdapter (PSR-6) and MemcachedCache (PSR-16)

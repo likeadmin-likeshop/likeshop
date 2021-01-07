@@ -61,13 +61,13 @@ class OverflowHandler extends AbstractHandler implements FormattableHandlerInter
     /**
      * @param HandlerInterface $handler
      * @param int[]            $thresholdMap Dictionary of logger level => threshold
-     * @param int              $level
+     * @param int|string       $level        The minimum logging level at which this handler will be triggered
      * @param bool             $bubble
      */
     public function __construct(
         HandlerInterface $handler,
         array $thresholdMap = [],
-        int $level = Logger::DEBUG,
+        $level = Logger::DEBUG,
         bool $bubble = true
     ) {
         $this->handler = $handler;
@@ -131,9 +131,13 @@ class OverflowHandler extends AbstractHandler implements FormattableHandlerInter
      */
     public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
-        $this->handler->setFormatter($formatter);
+        if ($this->handler instanceof FormattableHandlerInterface) {
+            $this->handler->setFormatter($formatter);
 
-        return $this;
+            return $this;
+        }
+
+        throw new \UnexpectedValueException('The nested handler of type '.get_class($this->handler).' does not support formatters.');
     }
 
     /**
@@ -141,6 +145,10 @@ class OverflowHandler extends AbstractHandler implements FormattableHandlerInter
      */
     public function getFormatter(): FormatterInterface
     {
-        return $this->handler->getFormatter();
+        if ($this->handler instanceof FormattableHandlerInterface) {
+            return $this->handler->getFormatter();
+        }
+
+        throw new \UnexpectedValueException('The nested handler of type '.get_class($this->handler).' does not support formatters.');
     }
 }

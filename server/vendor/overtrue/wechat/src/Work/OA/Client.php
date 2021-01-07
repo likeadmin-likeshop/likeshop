@@ -23,12 +23,10 @@ class Client extends BaseClient
     /**
      * Get the checkin data.
      *
-     * @param int   $startTime
-     * @param int   $endTime
-     * @param array $userList
-     * @param int   $type
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function checkinRecords(int $startTime, int $endTime, array $userList, int $type = 3)
     {
@@ -43,13 +41,100 @@ class Client extends BaseClient
     }
 
     /**
+     * Get the checkin rules.
+     *
+     * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function checkinRules(int $datetime, array $userList)
+    {
+        $params = [
+            'datetime' => $datetime,
+            'useridlist' => $userList,
+        ];
+
+        return $this->httpPostJson('cgi-bin/checkin/getcheckinoption', $params);
+    }
+
+    /**
+     * Get approval template details.
+     *
+     * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function approvalTemplate(string $templateId)
+    {
+        $params = [
+            'template_id' => $templateId,
+        ];
+
+        return $this->httpPostJson('cgi-bin/oa/gettemplatedetail', $params);
+    }
+
+    /**
+     * Submit an application for approval.
+     *
+     * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function createApproval(array $data)
+    {
+        return $this->httpPostJson('cgi-bin/oa/applyevent', $data);
+    }
+
+    /**
+     * Get Approval number.
+     *
+     * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function approvalNumbers(int $startTime, int $endTime, int $nextCursor = 0, int $size = 100, array $filters = [])
+    {
+        $params = [
+            'starttime' => $startTime,
+            'endtime' => $endTime,
+            'cursor' => $nextCursor,
+            'size' => $size > 100 ? 100 : $size,
+            'filters' => $filters,
+        ];
+
+        return $this->httpPostJson('cgi-bin/oa/getapprovalinfo', $params);
+    }
+
+    /**
+     * Get approval detail.
+     *
+     * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function approvalDetail(int $number)
+    {
+        $params = [
+            'sp_no' => $number,
+        ];
+
+        return $this->httpPostJson('cgi-bin/oa/getapprovaldetail', $params);
+    }
+
+    /**
      * Get Approval Data.
      *
-     * @param int $startTime
-     * @param int $endTime
      * @param int $nextNumber
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function approvalRecords(int $startTime, int $endTime, int $nextNumber = null)
     {

@@ -25,13 +25,13 @@ class Client extends BaseClient
      */
     protected $baseUri = 'https://api.weixin.qq.com/cgi-bin/';
 
-    const DAY = 86400;
-    const SCENE_MAX_VALUE = 100000;
-    const SCENE_QR_CARD = 'QR_CARD';
-    const SCENE_QR_TEMPORARY = 'QR_SCENE';
-    const SCENE_QR_TEMPORARY_STR = 'QR_STR_SCENE';
-    const SCENE_QR_FOREVER = 'QR_LIMIT_SCENE';
-    const SCENE_QR_FOREVER_STR = 'QR_LIMIT_STR_SCENE';
+    public const DAY = 86400;
+    public const SCENE_MAX_VALUE = 100000;
+    public const SCENE_QR_CARD = 'QR_CARD';
+    public const SCENE_QR_TEMPORARY = 'QR_SCENE';
+    public const SCENE_QR_TEMPORARY_STR = 'QR_STR_SCENE';
+    public const SCENE_QR_FOREVER = 'QR_LIMIT_SCENE';
+    public const SCENE_QR_FOREVER_STR = 'QR_LIMIT_STR_SCENE';
 
     /**
      * Create forever QR code.
@@ -98,6 +98,9 @@ class Client extends BaseClient
      * @param int    $expireSeconds
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function create($actionName, $actionInfo, $temporary = true, $expireSeconds = null)
     {

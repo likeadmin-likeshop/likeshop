@@ -27,6 +27,9 @@ class CartClient extends BaseClient
      * @param bool  $isTest
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function add($params, $isTest = false)
     {
@@ -39,6 +42,9 @@ class CartClient extends BaseClient
      * @param array $params
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function query($params)
     {
@@ -51,6 +57,9 @@ class CartClient extends BaseClient
      * @param array $params
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function queryByPage($params)
     {
@@ -61,9 +70,11 @@ class CartClient extends BaseClient
      * 删除收藏.
      *
      * @param string $openid
-     * @param array  $products
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete($openid, array $products = [])
     {

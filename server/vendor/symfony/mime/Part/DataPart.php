@@ -35,7 +35,7 @@ class DataPart extends TextPart
         if (null === $contentType) {
             $contentType = 'application/octet-stream';
         }
-        list($this->mediaType, $subtype) = explode('/', $contentType);
+        [$this->mediaType, $subtype] = explode('/', $contentType);
 
         parent::__construct($body, null, $subtype, $encoding);
 
@@ -54,6 +54,10 @@ class DataPart extends TextPart
                 self::$mimeTypes = new MimeTypes();
             }
             $contentType = self::$mimeTypes->getMimeTypes($ext)[0] ?? 'application/octet-stream';
+        }
+
+        if (false === is_readable($path)) {
+            throw new InvalidArgumentException(sprintf('Path "%s" is not readable.', $path));
         }
 
         if (false === $handle = @fopen($path, 'r', false)) {

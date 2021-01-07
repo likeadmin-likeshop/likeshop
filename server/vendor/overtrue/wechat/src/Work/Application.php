@@ -29,8 +29,8 @@ use EasyWeChat\Work\MiniProgram\Application as MiniProgram;
  * @property \EasyWeChat\Work\Message\Messenger                $messenger
  * @property \EasyWeChat\Work\User\Client                      $user
  * @property \EasyWeChat\Work\User\TagClient                   $tag
- * @property \EasyWeChat\Work\Server\ServiceProvider           $server
- * @property \EasyWeChat\BasicService\Jssdk\Client             $jssdk
+ * @property \EasyWeChat\Work\Server\Guard                     $server
+ * @property \EasyWeChat\Work\Jssdk\Client                     $jssdk
  * @property \Overtrue\Socialite\Providers\WeWorkProvider      $oauth
  * @property \EasyWeChat\Work\Invoice\Client                   $invoice
  * @property \EasyWeChat\Work\Chat\Client                      $chat
@@ -40,6 +40,9 @@ use EasyWeChat\Work\MiniProgram\Application as MiniProgram;
  * @property \EasyWeChat\Work\ExternalContact\MessageClient    $external_contact_message
  * @property \EasyWeChat\Work\GroupRobot\Client                $group_robot
  * @property \EasyWeChat\Work\GroupRobot\Messenger             $group_robot_messenger
+ * @property \EasyWeChat\Work\Calendar\Client                  $calendar
+ * @property \EasyWeChat\Work\Schedule\Client                  $schedule
+ * @property \EasyWeChat\Work\MsgAudit\Client                  $msg_audit
  *
  * @method mixed getCallbackIp()
  */
@@ -65,6 +68,9 @@ class Application extends ServiceContainer
         Chat\ServiceProvider::class,
         ExternalContact\ServiceProvider::class,
         GroupRobot\ServiceProvider::class,
+        Calendar\ServiceProvider::class,
+        Schedule\ServiceProvider::class,
+        MsgAudit\ServiceProvider::class,
     ];
 
     /**
@@ -79,8 +85,6 @@ class Application extends ServiceContainer
 
     /**
      * Creates the miniProgram application.
-     *
-     * @return \EasyWeChat\Work\MiniProgram\Application
      */
     public function miniProgram(): MiniProgram
     {

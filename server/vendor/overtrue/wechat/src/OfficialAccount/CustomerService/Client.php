@@ -24,6 +24,8 @@ class Client extends BaseClient
      * List all staffs.
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function list()
     {
@@ -34,6 +36,8 @@ class Client extends BaseClient
      * List all online staffs.
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function online()
     {
@@ -43,10 +47,10 @@ class Client extends BaseClient
     /**
      * Create a staff.
      *
-     * @param string $account
-     * @param string $nickname
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(string $account, string $nickname)
     {
@@ -61,10 +65,10 @@ class Client extends BaseClient
     /**
      * Update a staff.
      *
-     * @param string $account
-     * @param string $nickname
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(string $account, string $nickname)
     {
@@ -79,9 +83,10 @@ class Client extends BaseClient
     /**
      * Delete a staff.
      *
-     * @param string $account
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete(string $account)
     {
@@ -91,10 +96,10 @@ class Client extends BaseClient
     /**
      * Invite a staff.
      *
-     * @param string $account
-     * @param string $wechatId
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function invite(string $account, string $wechatId)
     {
@@ -109,10 +114,10 @@ class Client extends BaseClient
     /**
      * Set staff avatar.
      *
-     * @param string $account
-     * @param string $path
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setAvatar(string $account, string $path)
     {
@@ -125,8 +130,6 @@ class Client extends BaseClient
      * @param \EasyWeChat\Kernel\Messages\Message|string $message
      *
      * @return \EasyWeChat\OfficialAccount\CustomerService\Messenger
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function message($message)
     {
@@ -138,11 +141,10 @@ class Client extends BaseClient
     /**
      * Send a message.
      *
-     * @param array $message
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $message)
     {
@@ -152,9 +154,10 @@ class Client extends BaseClient
     /**
      * Show typing status.
      *
-     * @param string $openid
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function showTypingStatusToUser(string $openid)
     {
@@ -167,9 +170,10 @@ class Client extends BaseClient
     /**
      * Hide typing status.
      *
-     * @param string $openid
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function hideTypingStatusToUser(string $openid)
     {
@@ -184,10 +188,11 @@ class Client extends BaseClient
      *
      * @param int $startTime
      * @param int $endTime
-     * @param int $msgId
-     * @param int $number
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function messages($startTime, $endTime, int $msgId = 1, int $number = 10000)
     {

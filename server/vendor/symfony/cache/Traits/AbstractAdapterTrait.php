@@ -13,6 +13,7 @@ namespace Symfony\Component\Cache\Traits;
 
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Cache\CacheItem;
+use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
@@ -138,7 +139,7 @@ trait AbstractAdapterTrait
         try {
             foreach ($items as $id => $value) {
                 if (!isset($keys[$id])) {
-                    $id = key($keys);
+                    throw new InvalidArgumentException(sprintf('Could not match value id "%s" to keys "%s".', $id, implode('", "', $keys)));
                 }
                 $key = $keys[$id];
                 unset($keys[$id]);

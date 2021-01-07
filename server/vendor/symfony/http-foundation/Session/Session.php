@@ -18,6 +18,11 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 
+// Help opcache.preload discover always-needed symbols
+class_exists(AttributeBag::class);
+class_exists(FlashBag::class);
+class_exists(SessionBagProxy::class);
+
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Drak <drak@zikula.org>
@@ -31,11 +36,6 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     private $data = [];
     private $usageIndex = 0;
 
-    /**
-     * @param SessionStorageInterface $storage    A SessionStorageInterface instance
-     * @param AttributeBagInterface   $attributes An AttributeBagInterface instance, (defaults null for default AttributeBag)
-     * @param FlashBagInterface       $flashes    A FlashBagInterface instance (defaults null for default FlashBag)
-     */
     public function __construct(SessionStorageInterface $storage = null, AttributeBagInterface $attributes = null, FlashBagInterface $flashes = null)
     {
         $this->storage = $storage ?: new NativeSessionStorage();
@@ -134,29 +134,22 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     /**
      * Returns the number of attributes.
      *
-     * @return int The number of attributes
+     * @return int
      */
     public function count()
     {
         return \count($this->getAttributeBag()->all());
     }
 
-    /**
-     * @return int
-     *
-     * @internal
-     */
-    public function getUsageIndex()
+    public function &getUsageIndex(): int
     {
         return $this->usageIndex;
     }
 
     /**
-     * @return bool
-     *
      * @internal
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         if ($this->isStarted()) {
             ++$this->usageIndex;
@@ -272,10 +265,8 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      * Gets the attributebag interface.
      *
      * Note that this method was added to help with IDE autocompletion.
-     *
-     * @return AttributeBagInterface
      */
-    private function getAttributeBag()
+    private function getAttributeBag(): AttributeBagInterface
     {
         return $this->getBag($this->attributeName);
     }

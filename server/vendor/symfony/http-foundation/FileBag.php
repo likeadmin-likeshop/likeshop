@@ -24,7 +24,7 @@ class FileBag extends ParameterBag
     private static $fileKeys = ['error', 'name', 'size', 'tmp_name', 'type'];
 
     /**
-     * @param array $parameters An array of HTTP files
+     * @param array|UploadedFile[] $parameters An array of HTTP files
      */
     public function __construct(array $parameters = [])
     {
@@ -84,7 +84,7 @@ class FileBag extends ParameterBag
                 if (\UPLOAD_ERR_NO_FILE == $file['error']) {
                     $file = null;
                 } else {
-                    $file = new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['size'], $file['error']);
+                    $file = new UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['error'], false);
                 }
             } else {
                 $file = array_map([$this, 'convertFileInformation'], $file);

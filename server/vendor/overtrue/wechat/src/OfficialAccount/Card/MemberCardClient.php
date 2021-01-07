@@ -21,9 +21,10 @@ class MemberCardClient extends Client
     /**
      * 会员卡接口激活.
      *
-     * @param array $info
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function activate(array $info = [])
     {
@@ -33,10 +34,10 @@ class MemberCardClient extends Client
     /**
      * 设置开卡字段接口.
      *
-     * @param string $cardId
-     * @param array  $settings
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setActivationForm(string $cardId, array $settings)
     {
@@ -48,10 +49,10 @@ class MemberCardClient extends Client
     /**
      * 拉取会员信息接口.
      *
-     * @param string $cardId
-     * @param string $code
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUser(string $cardId, string $code)
     {
@@ -66,9 +67,10 @@ class MemberCardClient extends Client
     /**
      * 更新会员信息.
      *
-     * @param array $params
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function updateUser(array $params = [])
     {
@@ -81,6 +83,9 @@ class MemberCardClient extends Client
      * @param string $activateTicket
      *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getActivationForm($activateTicket)
     {
@@ -99,6 +104,7 @@ class MemberCardClient extends Client
      * @return string 开卡组件链接
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getActivateUrl(array $params = [])
     {

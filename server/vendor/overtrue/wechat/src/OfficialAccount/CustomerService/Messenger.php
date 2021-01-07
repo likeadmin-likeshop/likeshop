@@ -82,8 +82,6 @@ class Messenger
     /**
      * Set staff account to send message.
      *
-     * @param string $account
-     *
      * @return Messenger
      */
     public function by(string $account)
@@ -94,8 +92,6 @@ class Messenger
     }
 
     /**
-     * @param string $account
-     *
      * @return Messenger
      */
     public function from(string $account)
@@ -122,7 +118,9 @@ class Messenger
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
-     * @throws RuntimeException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      */
     public function send()
     {
@@ -147,8 +145,6 @@ class Messenger
 
     /**
      * Return property.
-     *
-     * @param string $property
      *
      * @return mixed
      */

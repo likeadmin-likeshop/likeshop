@@ -24,9 +24,10 @@ class SubMerchantClient extends BaseClient
     /**
      * 添加子商户.
      *
-     * @param array $info
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(array $info = [])
     {
@@ -50,15 +51,16 @@ class SubMerchantClient extends BaseClient
     /**
      * 更新子商户.
      *
-     * @param int   $merchantId
-     * @param array $info
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(int $merchantId, array $info = [])
     {
         $params = [
-            'info' => array_merge(['merchant_id' => $merchantId],
+            'info' => array_merge(
+                ['merchant_id' => $merchantId],
                 Arr::only($info, [
                     'brand_name',
                     'logo_url',
@@ -69,7 +71,8 @@ class SubMerchantClient extends BaseClient
                     'agreement_media_id',
                     'operator_media_id',
                     'app_id',
-                ])),
+                ])
+            ),
         ];
 
         return $this->httpPostJson('card/submerchant/update', $params);
@@ -78,9 +81,10 @@ class SubMerchantClient extends BaseClient
     /**
      * 获取子商户信息.
      *
-     * @param int $merchantId
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(int $merchantId)
     {
@@ -90,11 +94,10 @@ class SubMerchantClient extends BaseClient
     /**
      * 批量获取子商户信息.
      *
-     * @param int    $beginId
-     * @param int    $limit
-     * @param string $status
-     *
      * @return mixed
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function list(int $beginId = 0, int $limit = 50, string $status = 'CHECKING')
     {

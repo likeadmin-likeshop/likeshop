@@ -1,11 +1,83 @@
 CHANGELOG
 =========
 
-3.4.14
-------
+4.4.0
+-----
+
+ * passing arguments to `Request::isMethodSafe()` is deprecated.
+ * `ApacheRequest` is deprecated, use the `Request` class instead.
+ * passing a third argument to `HeaderBag::get()` is deprecated, use method `all()` instead
+ * [BC BREAK] `PdoSessionHandler` with MySQL changed the type of the lifetime column,
+   make sure to run `ALTER TABLE sessions MODIFY sess_lifetime INTEGER UNSIGNED NOT NULL` to
+   update your database.
+ * `PdoSessionHandler` now precalculates the expiry timestamp in the lifetime column,
+    make sure to run `CREATE INDEX EXPIRY ON sessions (sess_lifetime)` to update your database
+    to speed up garbage collection of expired sessions.
+ * added `SessionHandlerFactory` to create session handlers with a DSN
+ * added `IpUtils::anonymize()` to help with GDPR compliance.
+
+4.3.0
+-----
+
+ * added PHPUnit constraints: `RequestAttributeValueSame`, `ResponseCookieValueSame`, `ResponseHasCookie`,
+   `ResponseHasHeader`, `ResponseHeaderSame`, `ResponseIsRedirected`, `ResponseIsSuccessful`, and `ResponseStatusCodeSame`
+ * deprecated `MimeTypeGuesserInterface` and `ExtensionGuesserInterface` in favor of `Symfony\Component\Mime\MimeTypesInterface`.
+ * deprecated `MimeType` and `MimeTypeExtensionGuesser` in favor of `Symfony\Component\Mime\MimeTypes`.
+ * deprecated `FileBinaryMimeTypeGuesser` in favor of `Symfony\Component\Mime\FileBinaryMimeTypeGuesser`.
+ * deprecated `FileinfoMimeTypeGuesser` in favor of `Symfony\Component\Mime\FileinfoMimeTypeGuesser`.
+ * added `UrlHelper` that allows to get an absolute URL and a relative path for a given path
+
+4.2.0
+-----
+
+ * the default value of the "$secure" and "$samesite" arguments of Cookie's constructor
+   will respectively change from "false" to "null" and from "null" to "lax" in Symfony
+   5.0, you should define their values explicitly or use "Cookie::create()" instead.
+ * added `matchPort()` in RequestMatcher
+
+4.1.3
+-----
 
  * [BC BREAK] Support for the IIS-only `X_ORIGINAL_URL` and `X_REWRITE_URL`
    HTTP headers has been dropped for security reasons.
+
+4.1.0
+-----
+
+ * Query string normalization uses `parse_str()` instead of custom parsing logic.
+ * Passing the file size to the constructor of the `UploadedFile` class is deprecated.
+ * The `getClientSize()` method of the `UploadedFile` class is deprecated. Use `getSize()` instead.
+ * added `RedisSessionHandler` to use Redis as a session storage
+ * The `get()` method of the `AcceptHeader` class now takes into account the
+   `*` and `*/*` default values (if they are present in the Accept HTTP header)
+   when looking for items.
+ * deprecated `Request::getSession()` when no session has been set. Use `Request::hasSession()` instead.
+ * added `CannotWriteFileException`, `ExtensionFileException`, `FormSizeFileException`,
+   `IniSizeFileException`, `NoFileException`, `NoTmpDirFileException`, `PartialFileException` to
+   handle failed `UploadedFile`.
+ * added `MigratingSessionHandler` for migrating between two session handlers without losing sessions
+ * added `HeaderUtils`.
+
+4.0.0
+-----
+
+ * the `Request::setTrustedHeaderName()` and `Request::getTrustedHeaderName()`
+   methods have been removed
+ * the `Request::HEADER_CLIENT_IP` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_FOR` instead
+ * the `Request::HEADER_CLIENT_HOST` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_HOST` instead
+ * the `Request::HEADER_CLIENT_PROTO` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_PROTO` instead
+ * the `Request::HEADER_CLIENT_PORT` constant has been removed, use
+   `Request::HEADER_X_FORWARDED_PORT` instead
+ * checking for cacheable HTTP methods using the `Request::isMethodSafe()`
+   method (by not passing `false` as its argument) is not supported anymore and
+   throws a `\BadMethodCallException`
+ * the `WriteCheckSessionHandler`, `NativeSessionHandler` and `NativeProxy` classes have been removed
+ * setting session save handlers that do not implement `\SessionHandlerInterface` in
+   `NativeSessionStorage::setSaveHandler()` is not supported anymore and throws a
+   `\TypeError`
 
 3.4.0
 -----

@@ -18,11 +18,11 @@ namespace Symfony\Component\HttpFoundation;
  */
 class ResponseHeaderBag extends HeaderBag
 {
-    const COOKIES_FLAT = 'flat';
-    const COOKIES_ARRAY = 'array';
+    public const COOKIES_FLAT = 'flat';
+    public const COOKIES_ARRAY = 'array';
 
-    const DISPOSITION_ATTACHMENT = 'attachment';
-    const DISPOSITION_INLINE = 'inline';
+    public const DISPOSITION_ATTACHMENT = 'attachment';
+    public const DISPOSITION_INLINE = 'inline';
 
     protected $computedCacheControl = [];
     protected $cookies = [];
@@ -51,7 +51,7 @@ class ResponseHeaderBag extends HeaderBag
     {
         $headers = [];
         foreach ($this->all() as $name => $value) {
-            $headers[isset($this->headerNames[$name]) ? $this->headerNames[$name] : $name] = $value;
+            $headers[$this->headerNames[$name] ?? $name] = $value;
         }
 
         return $headers;
@@ -87,10 +87,19 @@ class ResponseHeaderBag extends HeaderBag
 
     /**
      * {@inheritdoc}
+     *
+     * @param string|null $key The name of the headers to return or null to get them all
      */
-    public function all()
+    public function all(/*string $key = null*/)
     {
         $headers = parent::all();
+
+        if (1 <= \func_num_args() && null !== $key = func_get_arg(0)) {
+            $key = strtr($key, self::UPPER, self::LOWER);
+
+            return 'set-cookie' !== $key ? $headers[$key] ?? [] : array_map('strval', $this->getCookies());
+        }
+
         foreach ($this->getCookies() as $cookie) {
             $headers['set-cookie'][] = (string) $cookie;
         }
@@ -103,7 +112,7 @@ class ResponseHeaderBag extends HeaderBag
      */
     public function set($key, $values, $replace = true)
     {
-        $uniqueKey = str_replace('_', '-', strtolower($key));
+        $uniqueKey = strtr($key, self::UPPER, self::LOWER);
 
         if ('set-cookie' === $uniqueKey) {
             if ($replace) {
@@ -122,8 +131,7 @@ class ResponseHeaderBag extends HeaderBag
         parent::set($key, $values, $replace);
 
         // ensure the cache-control header has sensible defaults
-        if (\in_array($uniqueKey, ['cache-control', 'etag', 'last-modified', 'expires'], true)) {
-            $computed = $this->computeCacheControlValue();
+        if (\in_array($uniqueKey, ['cache-control', 'etag', 'last-modified', 'expires'], true) && '' !== $computed = $this->computeCacheControlValue()) {
             $this->headers['cache-control'] = [$computed];
             $this->headerNames['cache-control'] = 'Cache-Control';
             $this->computedCacheControl = $this->parseCacheControl($computed);
@@ -135,7 +143,7 @@ class ResponseHeaderBag extends HeaderBag
      */
     public function remove($key)
     {
-        $uniqueKey = str_replace('_', '-', strtolower($key));
+        $uniqueKey = strtr($key, self::UPPER, self::LOWER);
         unset($this->headerNames[$uniqueKey]);
 
         if ('set-cookie' === $uniqueKey) {
@@ -254,52 +262,11 @@ class ResponseHeaderBag extends HeaderBag
     }
 
     /**
-     * Generates a HTTP Content-Disposition field-value.
-     *
-     * @param string $disposition      One of "inline" or "attachment"
-     * @param string $filename         A unicode string
-     * @param string $filenameFallback A string containing only ASCII characters that
-     *                                 is semantically equivalent to $filename. If the filename is already ASCII,
-     *                                 it can be omitted, or just copied from $filename
-     *
-     * @return string A string suitable for use as a Content-Disposition field-value
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @see RFC 6266
+     * @see HeaderUtils::makeDisposition()
      */
     public function makeDisposition($disposition, $filename, $filenameFallback = '')
     {
-        if (!\in_array($disposition, [self::DISPOSITION_ATTACHMENT, self::DISPOSITION_INLINE])) {
-            throw new \InvalidArgumentException(sprintf('The disposition must be either "%s" or "%s".', self::DISPOSITION_ATTACHMENT, self::DISPOSITION_INLINE));
-        }
-
-        if ('' == $filenameFallback) {
-            $filenameFallback = $filename;
-        }
-
-        // filenameFallback is not ASCII.
-        if (!preg_match('/^[\x20-\x7e]*$/', $filenameFallback)) {
-            throw new \InvalidArgumentException('The filename fallback must only contain ASCII characters.');
-        }
-
-        // percent characters aren't safe in fallback.
-        if (false !== strpos($filenameFallback, '%')) {
-            throw new \InvalidArgumentException('The filename fallback cannot contain the "%" character.');
-        }
-
-        // path separators aren't allowed in either.
-        if (false !== strpos($filename, '/') || false !== strpos($filename, '\\') || false !== strpos($filenameFallback, '/') || false !== strpos($filenameFallback, '\\')) {
-            throw new \InvalidArgumentException('The filename and the fallback cannot contain the "/" and "\\" characters.');
-        }
-
-        $output = sprintf('%s; filename="%s"', $disposition, str_replace('"', '\\"', $filenameFallback));
-
-        if ($filename !== $filenameFallback) {
-            $output .= sprintf("; filename*=utf-8''%s", rawurlencode($filename));
-        }
-
-        return $output;
+        return HeaderUtils::makeDisposition((string) $disposition, (string) $filename, (string) $filenameFallback);
     }
 
     /**
@@ -334,7 +301,7 @@ class ResponseHeaderBag extends HeaderBag
         return $header;
     }
 
-    private function initDate()
+    private function initDate(): void
     {
         $now = \DateTime::createFromFormat('U', time());
         $now->setTimezone(new \DateTimeZone('UTC'));

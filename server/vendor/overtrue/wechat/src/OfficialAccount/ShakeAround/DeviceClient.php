@@ -12,7 +12,6 @@
 namespace EasyWeChat\OfficialAccount\ShakeAround;
 
 use EasyWeChat\Kernel\BaseClient;
-use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 
 /**
  * Class DeviceClient.
@@ -22,9 +21,10 @@ use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 class DeviceClient extends BaseClient
 {
     /**
-     * @param array $data
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function apply(array $data)
     {
@@ -34,9 +34,10 @@ class DeviceClient extends BaseClient
     /**
      * Get audit status.
      *
-     * @param int $applyId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function status(int $applyId)
     {
@@ -50,10 +51,10 @@ class DeviceClient extends BaseClient
     /**
      * Update a device comment.
      *
-     * @param array  $deviceIdentifier
-     * @param string $comment
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(array $deviceIdentifier, string $comment)
     {
@@ -68,12 +69,10 @@ class DeviceClient extends BaseClient
     /**
      * Bind location for device.
      *
-     * @param array $deviceIdentifier
-     * @param int   $poiId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      *
-     * @throws InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function bindPoi(array $deviceIdentifier, int $poiId)
     {
@@ -86,11 +85,10 @@ class DeviceClient extends BaseClient
     }
 
     /**
-     * @param array  $deviceIdentifier
-     * @param int    $poiId
-     * @param string $appId
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function bindThirdPoi(array $deviceIdentifier, int $poiId, string $appId)
     {
@@ -107,8 +105,6 @@ class DeviceClient extends BaseClient
     /**
      * Fetch batch of devices by deviceIds.
      *
-     * @param array $deviceIdentifiers
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      */
     public function listByIds(array $deviceIdentifiers)
@@ -123,9 +119,6 @@ class DeviceClient extends BaseClient
 
     /**
      * Pagination to get batch of devices.
-     *
-     * @param int $lastId
-     * @param int $count
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      */
@@ -142,10 +135,6 @@ class DeviceClient extends BaseClient
 
     /**
      * Fetch batch of devices by applyId.
-     *
-     * @param int $applyId
-     * @param int $lastId
-     * @param int $count
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
      */
@@ -164,9 +153,10 @@ class DeviceClient extends BaseClient
     /**
      * Fetch batch of devices.
      *
-     * @param array $params
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function search(array $params)
     {

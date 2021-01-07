@@ -24,13 +24,12 @@ class Client extends BaseClient
     /**
      * update settlement card.
      *
-     * @param array $params
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\EncryptException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setSettlementCard(array $params)
     {
@@ -48,13 +47,12 @@ class Client extends BaseClient
     /**
      * update contact info.
      *
-     * @param array $params
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \EasyWeChat\MicroMerchant\Kernel\Exceptions\EncryptException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function updateContact(array $params)
     {

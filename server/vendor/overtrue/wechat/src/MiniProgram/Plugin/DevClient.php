@@ -23,12 +23,10 @@ class DevClient extends BaseClient
     /**
      * Get users.
      *
-     * @param int $page
-     * @param int $size
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUsers(int $page = 1, int $size = 10)
     {
@@ -42,11 +40,10 @@ class DevClient extends BaseClient
     /**
      * Agree to use plugin.
      *
-     * @param string $appId
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function agree(string $appId)
     {
@@ -59,11 +56,10 @@ class DevClient extends BaseClient
     /**
      * Refuse to use plugin.
      *
-     * @param string $reason
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function refuse(string $reason)
     {
@@ -79,6 +75,7 @@ class DevClient extends BaseClient
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete()
     {

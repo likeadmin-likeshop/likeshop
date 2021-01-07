@@ -23,9 +23,9 @@ class Client extends BaseClient
     /**
      * Get chat.
      *
-     * @param string $chatId
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function get(string $chatId)
     {
@@ -35,9 +35,10 @@ class Client extends BaseClient
     /**
      * Create chat.
      *
-     * @param array $data
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(array $data)
     {
@@ -47,10 +48,10 @@ class Client extends BaseClient
     /**
      * Update chat.
      *
-     * @param string $chatId
-     * @param array  $data
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(string $chatId, array $data)
     {
@@ -60,9 +61,10 @@ class Client extends BaseClient
     /**
      * Send a message.
      *
-     * @param array $message
-     *
      * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $message)
     {

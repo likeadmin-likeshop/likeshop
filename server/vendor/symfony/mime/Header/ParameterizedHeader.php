@@ -23,7 +23,7 @@ final class ParameterizedHeader extends UnstructuredHeader
      *
      * @var string
      */
-    const TOKEN_REGEX = '(?:[\x21\x23-\x27\x2A\x2B\x2D\x2E\x30-\x39\x41-\x5A\x5E-\x7E]+)';
+    public const TOKEN_REGEX = '(?:[\x21\x23-\x27\x2A\x2B\x2D\x2E\x30-\x39\x41-\x5A\x5E-\x7E]+)';
 
     private $encoder;
     private $parameters = [];
@@ -158,7 +158,8 @@ final class ParameterizedHeader extends UnstructuredHeader
      */
     private function getEndOfParameterValue(string $value, bool $encoded = false, bool $firstLine = false): string
     {
-        if (!preg_match('/^'.self::TOKEN_REGEX.'$/D', $value)) {
+        $forceHttpQuoting = 'content-disposition' === strtolower($this->getName()) && 'form-data' === $this->getValue();
+        if ($forceHttpQuoting || !preg_match('/^'.self::TOKEN_REGEX.'$/D', $value)) {
             $value = '"'.$value.'"';
         }
         $prepend = '=';

@@ -31,7 +31,7 @@ class StrictSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function open($savePath, $sessionName)
     {
@@ -49,7 +49,7 @@ class StrictSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function updateTimestamp($sessionId, $data)
     {
@@ -65,7 +65,7 @@ class StrictSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function destroy($sessionId)
     {
@@ -86,7 +86,7 @@ class StrictSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function close()
     {

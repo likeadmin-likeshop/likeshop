@@ -11,22 +11,25 @@
 
 namespace Symfony\Component\Cache\Simple;
 
-use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\CacheInterface as Psr16CacheInterface;
+use Symfony\Component\Cache\Adapter\TraceableAdapter;
 use Symfony\Component\Cache\PruneableInterface;
 use Symfony\Component\Cache\ResettableInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Service\ResetInterface;
+
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.3, use "%s" and type-hint for "%s" instead.', TraceableCache::class, TraceableAdapter::class, CacheInterface::class), \E_USER_DEPRECATED);
 
 /**
- * An adapter that collects data about all cache calls.
- *
- * @author Nicolas Grekas <p@tchwork.com>
+ * @deprecated since Symfony 4.3, use TraceableAdapter and type-hint for CacheInterface instead.
  */
-class TraceableCache implements CacheInterface, PruneableInterface, ResettableInterface
+class TraceableCache implements Psr16CacheInterface, PruneableInterface, ResettableInterface
 {
     private $pool;
     private $miss;
     private $calls = [];
 
-    public function __construct(CacheInterface $pool)
+    public function __construct(Psr16CacheInterface $pool)
     {
         $this->pool = $pool;
         $this->miss = new \stdClass();
@@ -56,6 +59,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function has($key)
     {
@@ -69,6 +74,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function delete($key)
     {
@@ -82,6 +89,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function set($key, $value, $ttl = null)
     {
@@ -95,6 +104,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function setMultiple($values, $ttl = null)
     {
@@ -122,6 +133,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return iterable
      */
     public function getMultiple($keys, $default = null)
     {
@@ -150,6 +163,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function clear()
     {
@@ -163,6 +178,8 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function deleteMultiple($keys)
     {
@@ -200,7 +217,7 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
      */
     public function reset()
     {
-        if (!$this->pool instanceof ResettableInterface) {
+        if (!$this->pool instanceof ResetInterface) {
             return;
         }
         $event = $this->start(__FUNCTION__);
@@ -220,7 +237,7 @@ class TraceableCache implements CacheInterface, PruneableInterface, ResettableIn
         }
     }
 
-    private function start($name)
+    private function start(string $name): TraceableCacheEvent
     {
         $this->calls[] = $event = new TraceableCacheEvent();
         $event->name = $name;

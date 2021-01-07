@@ -31,8 +31,6 @@ class SuiteTicket
 
     /**
      * SuiteTicket constructor.
-     *
-     * @param Application $app
      */
     public function __construct(Application $app)
     {
@@ -40,12 +38,11 @@ class SuiteTicket
     }
 
     /**
-     * @param string $ticket
-     *
      * @return $this
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function setTicket(string $ticket)
     {
@@ -59,9 +56,8 @@ class SuiteTicket
     }
 
     /**
-     * @return string
-     *
-     * @throws RuntimeException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getTicket(): string
@@ -73,9 +69,6 @@ class SuiteTicket
         throw new RuntimeException('Credential "suite_ticket" does not exist in cache.');
     }
 
-    /**
-     * @return string
-     */
     protected function getCacheKey(): string
     {
         return 'easywechat.open_work.suite_ticket.'.$this->app['config']['suite_id'];

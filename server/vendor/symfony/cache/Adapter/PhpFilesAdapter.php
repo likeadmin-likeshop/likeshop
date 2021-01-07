@@ -20,22 +20,19 @@ class PhpFilesAdapter extends AbstractAdapter implements PruneableInterface
     use PhpFilesTrait;
 
     /**
-     * @param string      $namespace
-     * @param int         $defaultLifetime
-     * @param string|null $directory
+     * @param $appendOnly Set to `true` to gain extra performance when the items stored in this pool never expire.
+     *                    Doing so is encouraged because it fits perfectly OPcache's memory model.
      *
      * @throws CacheException if OPcache is not enabled
      */
-    public function __construct($namespace = '', $defaultLifetime = 0, $directory = null)
+    public function __construct(string $namespace = '', int $defaultLifetime = 0, string $directory = null, bool $appendOnly = false)
     {
-        if (!static::isSupported()) {
-            throw new CacheException('OPcache is not enabled.');
-        }
+        $this->appendOnly = $appendOnly;
+        self::$startTime = self::$startTime ?? $_SERVER['REQUEST_TIME'] ?? time();
         parent::__construct('', $defaultLifetime);
         $this->init($namespace, $directory);
-
-        $e = new \Exception();
-        $this->includeHandler = function () use ($e) { throw $e; };
-        $this->zendDetectUnicode = filter_var(ini_get('zend.detect_unicode'), \FILTER_VALIDATE_BOOLEAN);
+        $this->includeHandler = static function ($type, $msg, $file, $line) {
+            throw new \ErrorException($msg, 0, $type, $file, $line);
+        };
     }
 }

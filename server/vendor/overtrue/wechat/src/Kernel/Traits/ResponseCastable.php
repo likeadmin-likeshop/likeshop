@@ -26,8 +26,7 @@ use Psr\Http\Message\ResponseInterface;
 trait ResponseCastable
 {
     /**
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param string|null                         $type
+     * @param string|null $type
      *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
@@ -49,10 +48,7 @@ trait ResponseCastable
                 return $response;
             default:
                 if (!is_subclass_of($type, Arrayable::class)) {
-                    throw new InvalidConfigException(sprintf(
-                        'Config key "response_type" classname must be an instanceof %s',
-                        Arrayable::class
-                    ));
+                    throw new InvalidConfigException(sprintf('Config key "response_type" classname must be an instanceof %s', Arrayable::class));
                 }
 
                 return new $type($response);
@@ -84,7 +80,7 @@ trait ResponseCastable
 
                 break;
             case is_scalar($response):
-                $response = new Response(200, [], $response);
+                $response = new Response(200, [], (string) $response);
 
                 break;
             default:

@@ -20,8 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class Handler
 {
-    const SUCCESS = 'SUCCESS';
-    const FAIL = 'FAIL';
+    public const SUCCESS = 'SUCCESS';
+    public const FAIL = 'FAIL';
 
     /**
      * @var \EasyWeChat\Payment\Application
@@ -69,24 +69,16 @@ abstract class Handler
     /**
      * Handle incoming notify.
      *
-     * @param \Closure $closure
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     abstract public function handle(Closure $closure);
 
-    /**
-     * @param string $message
-     */
     public function fail(string $message)
     {
         $this->fail = $message;
     }
 
     /**
-     * @param array $attributes
-     * @param bool  $sign
-     *
      * @return $this
      */
     public function respondWith(array $attributes, bool $sign = false)
@@ -100,7 +92,7 @@ abstract class Handler
     /**
      * Build xml and return the response to WeChat.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function toResponse(): Response
     {
@@ -120,8 +112,6 @@ abstract class Handler
 
     /**
      * Return the notify message from request.
-     *
-     * @return array
      *
      * @throws \EasyWeChat\Kernel\Exceptions\Exception
      */
@@ -151,8 +141,6 @@ abstract class Handler
     /**
      * Decrypt message.
      *
-     * @param string $key
-     *
      * @return string|null
      *
      * @throws \EasyWeChat\Kernel\Exceptions\Exception
@@ -165,14 +153,16 @@ abstract class Handler
         }
 
         return Support\AES::decrypt(
-            base64_decode($message[$key], true), md5($this->app['config']->key), '', OPENSSL_RAW_DATA, 'AES-256-ECB'
+            base64_decode($message[$key], true),
+            md5($this->app['config']->key),
+            '',
+            OPENSSL_RAW_DATA,
+            'AES-256-ECB'
         );
     }
 
     /**
      * Validate the request params.
-     *
-     * @param array $message
      *
      * @throws \EasyWeChat\Payment\Kernel\Exceptions\InvalidSignException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException

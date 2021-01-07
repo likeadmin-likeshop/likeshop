@@ -32,9 +32,6 @@ class Client extends JssdkClient
      * );
      * </pre>
      *
-     * @param string $prepayId
-     * @param bool   $json
-     *
      * @return string|array
      */
     public function bridgeConfig(string $prepayId, bool $json = true)
@@ -58,10 +55,6 @@ class Client extends JssdkClient
      * <pre>
      * wx.chooseWXPay({...});
      * </pre>
-     *
-     * @param string $prepayId
-     *
-     * @return array
      */
     public function sdkConfig(string $prepayId): array
     {
@@ -75,10 +68,6 @@ class Client extends JssdkClient
 
     /**
      * Generate app payment parameters.
-     *
-     * @param string $prepayId
-     *
-     * @return array
      */
     public function appConfig(string $prepayId): array
     {
@@ -100,7 +89,6 @@ class Client extends JssdkClient
      * Generate js config for share user address.
      *
      * @param string|\Overtrue\Socialite\AccessTokenInterface $accessToken
-     * @param bool                                            $json
      *
      * @return string|array
      */
@@ -131,5 +119,18 @@ class Client extends JssdkClient
         $params['addrSign'] = sha1(urldecode(http_build_query($signParams)));
 
         return $json ? json_encode($params) : $params;
+    }
+
+    /**
+     * Generate js config for contract of mini program.
+     */
+    public function contractConfig(array $params): array
+    {
+        $params['appid'] = $this->app['config']->app_id;
+        $params['timestamp'] = time();
+
+        $params['sign'] = Support\generate_sign($params, $this->app['config']->key);
+
+        return $params;
     }
 }

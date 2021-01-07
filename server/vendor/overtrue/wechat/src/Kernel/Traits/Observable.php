@@ -58,6 +58,16 @@ trait Observable
     }
 
     /**
+     * @return $this
+     */
+    public function setHandlers(array $handlers = [])
+    {
+        $this->handlers = $handlers;
+
+        return $this;
+    }
+
+    /**
      * @param \Closure|EventHandlerInterface|string $handler
      * @param \Closure|EventHandlerInterface|string $condition
      *
@@ -86,6 +96,7 @@ trait Observable
      * @return \EasyWeChat\Kernel\Clauses\Clause
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function observe($condition, $handler)
     {
@@ -99,6 +110,7 @@ trait Observable
      * @return \EasyWeChat\Kernel\Clauses\Clause
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function on($condition, $handler)
     {
@@ -164,8 +176,6 @@ trait Observable
 
     /**
      * @param mixed $handler
-     *
-     * @return \EasyWeChat\Kernel\Clauses\Clause
      */
     protected function newClause($handler): Clause
     {
@@ -193,8 +203,7 @@ trait Observable
     }
 
     /**
-     * @param callable $handler
-     * @param mixed    $payload
+     * @param mixed $payload
      *
      * @return mixed
      */
@@ -228,7 +237,7 @@ trait Observable
             return $handler;
         }
 
-        if (is_string($handler)) {
+        if (is_string($handler) && '*' !== $handler) {
             if (!class_exists($handler)) {
                 throw new InvalidArgumentException(sprintf('Class "%s" not exists.', $handler));
             }
@@ -254,8 +263,6 @@ trait Observable
     /**
      * @param mixed $handler
      * @param mixed $condition
-     *
-     * @return array
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \ReflectionException

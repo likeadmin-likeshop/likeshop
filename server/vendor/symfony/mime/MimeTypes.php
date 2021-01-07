@@ -137,7 +137,7 @@ final class MimeTypes implements MimeTypesInterface
         }
 
         if (!$this->isGuesserSupported()) {
-            throw new LogicException('Unable to guess the MIME type as no guessers are available (have you enable the php_fileinfo extension?).');
+            throw new LogicException('Unable to guess the MIME type as no guessers are available (have you enabled the php_fileinfo extension?).');
         }
 
         return null;
@@ -166,6 +166,7 @@ final class MimeTypes implements MimeTypesInterface
         'application/cdmi-queue' => ['cdmiq'],
         'application/cdr' => ['cdr'],
         'application/coreldraw' => ['cdr'],
+        'application/csv' => ['csv'],
         'application/cu-seeme' => ['cu'],
         'application/davmount+xml' => ['davmount'],
         'application/dbase' => ['dbf'],
@@ -1113,7 +1114,7 @@ final class MimeTypes implements MimeTypesInterface
         'audio/mp2' => ['mp2'],
         'audio/mp3' => ['mp3', 'mpga'],
         'audio/mp4' => ['m4a', 'mp4a', 'f4a'],
-        'audio/mpeg' => ['mpga', 'mp2', 'mp2a', 'mp3', 'm2a', 'm3a'],
+        'audio/mpeg' => ['mp3', 'mpga', 'mp2', 'mp2a', 'm2a', 'm3a'],
         'audio/mpegurl' => ['m3u', 'm3u8', 'vlc'],
         'audio/ogg' => ['oga', 'ogg', 'spx', 'opus'],
         'audio/prs.sid' => ['sid', 'psid'],
@@ -1817,7 +1818,7 @@ final class MimeTypes implements MimeTypesInterface
         'csp' => ['application/vnd.commonspace'],
         'css' => ['text/css'],
         'cst' => ['application/x-director'],
-        'csv' => ['text/csv', 'text/x-comma-separated-values', 'text/x-csv'],
+        'csv' => ['text/csv', 'text/x-comma-separated-values', 'text/x-csv', 'application/csv'],
         'csvs' => ['text/csv-schema'],
         'cu' => ['application/cu-seeme'],
         'cue' => ['application/x-cue'],

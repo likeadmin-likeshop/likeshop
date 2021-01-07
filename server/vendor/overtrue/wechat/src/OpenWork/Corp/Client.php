@@ -24,8 +24,6 @@ class Client extends BaseClient
     /**
      * Client constructor.
      * 三方接口有三个access_token，这里用的是suite_access_token.
-     *
-     * @param \EasyWeChat\Kernel\ServiceContainer $app
      */
     public function __construct(ServiceContainer $app)
     {
@@ -37,7 +35,6 @@ class Client extends BaseClient
      *
      * @param string $preAuthCode 预授权码
      * @param string $redirectUri 回调地址
-     * @param string $state
      *
      * @return string
      *
@@ -75,12 +72,10 @@ class Client extends BaseClient
      * 设置授权配置.
      * 该接口可对某次授权进行配置.
      *
-     * @param string $preAuthCode
-     * @param array  $sessionInfo
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setSession(string $preAuthCode, array $sessionInfo)
     {
@@ -100,6 +95,7 @@ class Client extends BaseClient
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getPermanentByCode(string $authCode)
     {
@@ -113,12 +109,10 @@ class Client extends BaseClient
     /**
      * 获取企业授权信息.
      *
-     * @param string $authCorpId
-     * @param string $permanentCode
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getAuthorization(string $authCorpId, string $permanentCode)
     {
@@ -133,12 +127,10 @@ class Client extends BaseClient
     /**
      * 获取应用的管理员列表.
      *
-     * @param string $authCorpId
-     * @param string $agentId
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getManagers(string $authCorpId, string $agentId)
     {
@@ -147,15 +139,11 @@ class Client extends BaseClient
             'agentid' => $agentId,
         ];
 
-        return $this->httpPostJson('cgi-bin/service/get_admin_lis', $params);
+        return $this->httpPostJson('cgi-bin/service/get_admin_list', $params);
     }
 
     /**
      * 获取登录url.
-     *
-     * @param string      $redirectUri
-     * @param string      $scope
-     * @param string|null $state
      *
      * @return string
      */
@@ -177,8 +165,6 @@ class Client extends BaseClient
     /**
      * 第三方根据code获取企业成员信息.
      *
-     * @param string $code
-     *
      * @return mixed
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -195,11 +181,10 @@ class Client extends BaseClient
     /**
      * 第三方使用user_ticket获取成员详情.
      *
-     * @param string $userTicket
-     *
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUserByTicket(string $userTicket)
     {

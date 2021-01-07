@@ -40,20 +40,23 @@ class Client extends BaseClient
     /**
      * Get config json for jsapi.
      *
-     * @param array $jsApiList
-     * @param bool  $debug
-     * @param bool  $beta
-     * @param bool  $json
+     * @param array  $jsApiList
+     * @param bool   $debug
+     * @param bool   $beta
+     * @param bool   $json
+     * @param array  $openTagList
+     * @param string $url
      *
      * @return array|string
      *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      */
-    public function buildConfig(array $jsApiList, bool $debug = false, bool $beta = false, bool $json = true)
+    public function buildConfig(array $jsApiList, bool $debug = false, bool $beta = false, bool $json = true, array $openTagList = [], string $url = null)
     {
-        $config = array_merge(compact('debug', 'beta', 'jsApiList'), $this->configSignature());
+        $config = array_merge(compact('debug', 'beta', 'jsApiList', 'openTagList'), $this->configSignature($url));
 
         return $json ? json_encode($config) : $config;
     }
@@ -61,33 +64,32 @@ class Client extends BaseClient
     /**
      * Return jsapi config as a PHP array.
      *
-     * @param array $apis
-     * @param bool  $debug
-     * @param bool  $beta
+     * @param array  $apis
+     * @param bool   $debug
+     * @param bool   $beta
+     * @param array  $openTagList
+     * @param string $url
      *
      * @return array
      *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      */
-    public function getConfigArray(array $apis, bool $debug = false, bool $beta = false)
+    public function getConfigArray(array $apis, bool $debug = false, bool $beta = false, array $openTagList = [], string $url = null)
     {
-        return $this->buildConfig($apis, $debug, $beta, false);
+        return $this->buildConfig($apis, $debug, $beta, false, $openTagList, $url);
     }
 
     /**
      * Get js ticket.
      *
-     * @param bool   $refresh
-     * @param string $type
-     *
-     * @return array
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getTicket(bool $refresh = false, string $type = 'jsapi'): array
     {
@@ -115,15 +117,12 @@ class Client extends BaseClient
     /**
      * Build signature.
      *
-     * @param string|null $url
-     * @param string|null $nonce
-     * @param int|null    $timestamp
+     * @param int|null $timestamp
      *
-     * @return array
-     *
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function configSignature(string $url = null, string $nonce = null, $timestamp = null): array
     {
@@ -147,8 +146,6 @@ class Client extends BaseClient
      * @param string $nonce
      * @param int    $timestamp
      * @param string $url
-     *
-     * @return string
      */
     public function getTicketSignature($ticket, $nonce, $timestamp, $url): string
     {
@@ -170,8 +167,6 @@ class Client extends BaseClient
     /**
      * Set current url.
      *
-     * @param string $url
-     *
      * @return $this
      */
     public function setUrl(string $url)
@@ -183,8 +178,6 @@ class Client extends BaseClient
 
     /**
      * Get current url.
-     *
-     * @return string
      */
     public function getUrl(): string
     {

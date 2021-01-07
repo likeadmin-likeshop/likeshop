@@ -1,6 +1,7 @@
 <p align="center">
 <a target="_blank" href="https://www.likemarket.net">
-    <img src="https://www.likemarket.net/images/gitee_head.png" />
+    <img src="https://www.likemarket.net/images/gitee_logo.png" />
+    
 </a>
 </p> 
 
@@ -36,7 +37,7 @@
 - 软件公司：电商项目二次开发的场景，100%开源，放心的做改动，免费商用，0成本【真的可去界面版权】。
 - 个人开发者：学习如何用ThinkPHP、Vue、React Native、MySQL、websocket等”前沿技术“开发企业级电商项目，以及无忧无虑0成本接私活【好吧，这可能是主要目的】。
 - 学生：纸上得来终觉浅，绝知此事要躬行，看了再多不如下载一套代码改一改，玩一玩。
-- 特殊收藏癖好者：也不知道暂时的用处，点个star，先收藏吧。
+- 特殊收藏爱好者：也不知道暂时的用处，点个star，先收藏吧。
 
 ### ⚾ chapter four 《喔，团队》
 

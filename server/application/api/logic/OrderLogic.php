@@ -22,7 +22,6 @@ namespace app\api\logic;
 use app\api\model\{Coupon, Order, User};
 use app\common\server\WeChatServer;
 use app\common\logic\{AccountLogLogic,
-    IntegralLogic,
     LogicBase,
     OrderGoodsLogic,
     OrderLogLogic,
@@ -30,7 +29,6 @@ use app\common\logic\{AccountLogLogic,
     PayNotifyLogic};
 use app\common\model\{AccountLog,
     Client_,
-    DistributionOrder,
     Goods,
     MessageScene_,
     OrderGoods,
@@ -860,40 +858,5 @@ class OrderLogic extends LogicBase
             return $result;
         }
 
-    }
-
-
-    //下单奖励积分
-    public static function rewardIntegral($user_id, $order_id = '', $order_sn = '')
-    {
-        //是否为当天第一个订单(是->奖励积分)
-        $check = Db::name('account_log')
-            ->where(['user_id' => $user_id])
-            ->where('source_type', AccountLog::order_add_integral)
-            ->whereTime('create_time', 'today')
-            ->find();
-
-        //下单奖励开关;0-关闭;1-开启;
-        $order_award_integral = ConfigServer::get('marketing', 'order_award_integral', 0);
-
-        if ($order_award_integral == 0 || $check){
-            return;
-        }
-
-        //增加用户积分
-        $user = User::get($user_id);
-        $user->user_integral = ['inc', $order_award_integral];
-        $user->save();
-
-        //增加流水记录
-        AccountLogLogic::AccountRecord(
-            $user_id,
-            $order_award_integral,
-            1,
-            AccountLog::order_add_integral,
-            '',
-            $order_id,
-            $order_sn
-        );
     }
 }

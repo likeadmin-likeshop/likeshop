@@ -22,7 +22,6 @@ use app\common\logic\LogicBase;
 use app\common\logic\NoticeLogic;
 use app\common\model\AccountLog;
 use app\common\model\AfterSale;
-use app\common\model\DistributionOrder;
 use app\common\model\Order;
 use app\common\server\ConfigServer;
 use app\common\server\WeChatServer;
@@ -50,8 +49,6 @@ class UserLogic extends LogicBase {
             ->where('status','<>',AfterSale::STATUS_SUCCESS_REFUND)
             ->count();
         $user->coupon = Db::name('coupon_list')->where(['user_id'=>$user_id,'del'=>0,'status'=>0])->count();
-        //分销开关
-        $user->distribution_setting = ConfigServer::get('distribution', 'is_open',1);
         //消息数量
         $user->notice_num = NoticeLogic::unRead($user_id) ? 1 : 0;
         //下个会员等级提示
@@ -67,7 +64,7 @@ class UserLogic extends LogicBase {
         }
         $user->visible(['id','nickname','sn','avatar','next_level_tips','user_money','total_order_amount','total_recharge_amount',
             'coupon','user_integral','level','wait_pay','wait_take','wait_delivery',
-            'wait_comment','after_sale', 'distribution_setting', 'distribution_code', 'notice_num']);
+            'wait_comment','after_sale', 'notice_num']);
 
         return $user;
     }
@@ -159,81 +156,6 @@ class UserLogic extends LogicBase {
         }
     }
 
-
-    //我的粉丝列表
-    public static function fans($user_id, $get, $page, $size)
-    {
-        $where = [];
-        if (isset($get['keyword']) && $get['keyword'] != ''){
-            $where[] = ['nickname|mobile','like','%'.$get['keyword'].'%'];
-        }
-
-        //查询条件
-        $type = $get['type'] ?? 'all';
-        switch ($type){
-            case 'first':
-                $where[] = ['first_leader', '=', $user_id];
-                break;
-            case 'second':
-                $where[] = ['second_leader', '=', $user_id];
-                break;
-            default:
-                $where[] = ['', 'exp', Db::raw("FIND_IN_SET($user_id, ancestor_relation)")];
-        }
-
-        $field = 'u.id, avatar, nickname, mobile, u.create_time, distribution_order_num as fans_order,
-                  distribution_money as fans_money, fans as fans_team';
-
-        $count = Db::name('user u')
-            ->field($field)
-            ->leftJoin('user_distribution d', 'd.user_id = u.id')
-            ->where($where)
-            ->count();
-
-        $lists = Db::name('user u')
-            ->field($field)
-            ->leftJoin('user_distribution d', 'd.user_id = u.id')
-            ->where($where)
-            ->page($page, $size)
-            ->order(self::fansListsSort($get))
-            ->order(['fans_money' => 'desc'])
-            ->select();
-
-        foreach ($lists as &$item){
-            $item['fans_team'] = $item['fans_team'] ?? 0;
-            $item['fans_order'] = $item['fans_order'] ?? 0;
-            $item['fans_money'] = $item['fans_money'] ?? 0;
-            $item['create_time'] = date('Y-m-d H:i:s', $item['create_time']);
-            unset($item['fans'], $item['distribution_order_num'], $item['distribution_money']);
-        }
-
-        $data = [
-            'list' => $lists,
-            'page' => $page,
-            'size' => $size,
-            'count' => $count,
-            'more' => is_more($count, $page, $size)
-        ];
-        return $data;
-    }
-
-
-    //粉丝列表排序
-    public static function fansListsSort($get)
-    {
-        if (isset($get['fans']) && $get['fans'] != ''){
-            return ['fans_team' =>  $get['fans']];
-        }
-
-        if (isset($get['money']) && $get['money'] != ''){
-            return ['fans_money' =>  $get['money']];
-        }
-
-        if (isset($get['order']) && $get['order'] != ''){
-            return ['fans_order' =>  $get['order']];
-        }
-        return ['create_time' =>  $get['desc']];
-    }
 
 
     public static function myWallet($user_id){

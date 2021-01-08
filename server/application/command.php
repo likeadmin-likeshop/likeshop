@@ -29,6 +29,4 @@
 return [
     'app\common\command\Crontab',
     'app\common\command\OrderClose',
-    'app\common\command\UserDistribution',//更新会员分销信息
-    'app\common\command\DistributionOrder',//结算分销订单进行分佣
 ];

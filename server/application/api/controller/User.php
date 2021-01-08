@@ -98,15 +98,6 @@ class User extends ApiBase{
     }
 
 
-    //我的粉丝
-    public function fans()
-    {
-        $get = $this->request->get();
-        $page = $this->request->get('page_no', $this->page_no);
-        $size = $this->request->get('page_size', $this->page_size);
-        $this->_success('', UserLogic::fans($this->user_id, $get, $page, $size));
-    }
-
     /**
      * note 我的钱包
      * create_time 2020/11/27 16:58

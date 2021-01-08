@@ -92,16 +92,14 @@ class User extends Model
         return $fans;
     }
 
-    //分销订单
+
     public function getDistributionOrderAttr($value, $data)
     {
-        $info = Db::name('distribution_order_goods d')
-            ->join('order_goods g', 'g.id = d.order_goods_id')
-            ->join('order o', 'o.id = g.order_id')
-            ->field('sum(d.id) as num, sum(money) as money, sum(order_amount) as amount')
-            ->where(['d.user_id' => $data['id'], 'd.status' => 2])
-            ->find();
-        return $info;
+        return [
+            'num' => 0,
+            'money' => 0,
+            'amount' => 0,
+        ];
     }
 
 }

@@ -1,9 +1,8 @@
 <?php
 namespace app\admin\logic;
-use app\common\model\DistributionOrder;
-use app\common\model\Pay;
 
-use app\common\model\Withdraw;
+
+use app\common\model\Pay;
 use think\Db;
 
 // +----------------------------------------------------------------------

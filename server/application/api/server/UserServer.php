@@ -21,7 +21,6 @@
 namespace app\api\server;
 
 
-use app\api\logic\DistributionLogic;
 use app\common\model\Client_;
 use app\common\model\Notice_;
 use app\common\server\UrlServer;
@@ -70,14 +69,8 @@ class UserServer
                 'sn' => create_user_sn(),
                 'avatar' => '/' . $avatar,
                 'create_time' => $time,
-                'distribution_code' => generate_invite_code(),//分销邀请码
+                'distribution_code' => generate_invite_code(),
             ];
-
-            //分销会员申请--1,申请分销; 2-全员分销; 3-后台指定
-            $distribution = ConfigServer::get('distribution', 'member_apply', 1);
-            if ($distribution == 2) {
-                $data['is_distribution'] = 1;
-            }
 
             $user_id = Db::name('user')
                 ->insertGetId($data);
@@ -92,8 +85,6 @@ class UserServer
             Db::name('user_auth')
                 ->insert($data);
 
-            //生成会员分销扩展表
-            DistributionLogic::createUserDistribution($user_id);
             //消息通知
             Hook::listen('notice', [
                 'user_id' => $user_id,

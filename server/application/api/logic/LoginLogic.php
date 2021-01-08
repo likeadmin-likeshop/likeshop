@@ -65,14 +65,8 @@ class LoginLogic extends LogicBase
             'salt'          => $salt,
             'password'      => $password,
             'create_time'   => $time,
-            'distribution_code' => generate_invite_code(),//分销邀请码
+            'distribution_code' => generate_invite_code(),
         ];
-
-        //分销会员申请--1,申请分销; 2-全员分销; 3-后台指定
-        $distribution = ConfigServer::get('distribution','member_apply',1);
-        if ($distribution == 2){
-            $user_data['is_distribution'] = 1;
-        }
 
         $user = new User();
         $user->save($user_data);
@@ -80,8 +74,6 @@ class LoginLogic extends LogicBase
         $user->save();
         $token = self::createSession($user->id, $client);
 
-        //生成会员分销扩展表
-        DistributionLogic::createUserDistribution($user->id);
         //注册赠送
         self::registerAward($user->id);
         //消息通知

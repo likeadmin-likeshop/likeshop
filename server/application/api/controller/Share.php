@@ -17,30 +17,21 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\api\controller;
+
 use app\api\logic\ShareLogic;
 
-class Share extends ApiBase{
-    public function shareGoods(){
+class Share extends ApiBase
+{
+    public function shareGoods()
+    {
         $id = $this->request->get('id');
         $url = $this->request->get('url');
-        $client = $this->request->get('client',1);
-        if($id && $url){
-            $result = ShareLogic::shareGoods($this->user_id,$id,$url,$client);
+        $client = $this->request->get('client', 1);
+        if ($id && $url) {
+            $result = ShareLogic::shareGoods($this->user_id, $id, $url, $client);
             $this->_success('获取成功', $result);
         }
         $this->_error('缺少参数', '');
     }
 
-
-    //用户分销海报
-    public function userPoster()
-    {
-        $url = $this->request->get('url');
-        $client = $this->request->get('client');
-        if (empty($client)){
-            $this->_error('参数缺失');
-        }
-        $result = ShareLogic::getUserPoster($this->user_id, $url, $client);
-        return $result;
-    }
 }

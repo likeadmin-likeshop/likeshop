@@ -21,7 +21,7 @@ namespace app\admin\controller;
 
 use app\admin\logic\{
     HelpLogic,
-    HelpCategoryLogic,
+    HelpCategoryLogic
 };
 
 class Help extends AdminBase

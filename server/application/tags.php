@@ -53,9 +53,5 @@ return [
     //消息通知
     'notice' => [
         'app\\common\\behavior\\Notice'
-    ],
-    //足迹记录
-    'footprint' => [
-        'app\\common\\behavior\\Footprint'
-    ],
+    ]
 ];

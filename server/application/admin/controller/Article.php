@@ -57,8 +57,8 @@ class Article extends AdminBase
             $this->_error($result);
 
         }
-        $acticle_category = ArticleCategoryLogic::getArticleCategory();
-        $this->assign('category_list', $acticle_category);
+        $article_category = ArticleCategoryLogic::getArticleCategory();
+        $this->assign('category_list', $article_category);
         return $this->fetch();
     }
 

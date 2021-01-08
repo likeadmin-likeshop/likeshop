@@ -21,7 +21,7 @@ namespace app\admin\controller;
 
 use app\admin\logic\{
     ArticleLogic,
-    ArticleCategoryLogic,
+    ArticleCategoryLogic
 };
 
 class Article extends AdminBase

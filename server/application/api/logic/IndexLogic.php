@@ -70,34 +70,7 @@ class IndexLogic{
             }
         }
         $coupon_list->hidden(['condition_money','condition_type']);
-        //活动专区
-        $activity_area = Db::name('activity_area')->field('id,name,title,image')->where(['del'=>0,'status'=>1])->select();
-        foreach ($activity_area as &$area_item){
-            $area_item['image'] = UrlServer::getFileUrl($area_item['image']);
-        }
 
-        //秒杀活动
-        $seckill = SeckillLogic::getSeckill();
-        if($seckill){
-            $seckill['goods'] = Db::name('goods g')
-                ->join('seckill_goods sg','g.id = sg.goods_id')
-                ->where(['seckill_id'=>$seckill['id'],'g.del'=>0,'sg.del'=>0,'status'=>1,])
-                ->group('sg.goods_id')
-                ->order('sg.sales_sum,sg.id desc')
-                ->limit(9)
-                ->field('g.id,g.name,g.image,g.min_price,sg.price as seckill_price,sg.sales_sum')
-                ->select();
-            foreach ($seckill['goods'] as &$seckill_item ){
-                // 传入默认商品主图
-                if(empty( $seckill_item['image'])){
-                    $seckill_item['image'] = $default_image;
-                }else{
-                    $seckill_item['image'] = UrlServer::getFileUrl($seckill_item['image']);
-                }
-            }
-        }else{
-            $seckill['goods'] = [];
-        }
 
 
         //商城logo
@@ -125,8 +98,6 @@ class IndexLogic{
             'news'          => $news,
             'shop_logo'     => $shop_logo,
             'coupon'        => $coupon_list,
-            'activity_area' => $activity_area,
-            'seckill'       => $seckill,
             'host_goods'    => $host_goods,
             'new_goods'     => $new_goods,
             'mall_logo'     => $mall_logo

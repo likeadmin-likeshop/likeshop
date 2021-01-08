@@ -89,8 +89,9 @@ class PayConfig extends AdminBase
             $this->_success('修改成功');
         }
         $res = db::name('dev_pay')->where('type', 2)->find();
-        $domain_name = ConfigServer::get('website', 'domain_name', '', $_SERVER['SERVER_NAME']);
-        $this->assign('domain', 'http:' . $domain_name);
+        $domain_name = ConfigServer::get('website', 'domain_name', '');
+        $domain_name = $domain_name ? $domain_name : request()->domain();
+        $this->assign('domain', $domain_name);
         $this->assign('res', $res); //逻辑层处理数据,返回已有信息
         $this->assign('info', ConfigServer::get('pay_official')); //逻辑层处理数据,返回已有信息
         return $this->fetch();
@@ -114,8 +115,9 @@ class PayConfig extends AdminBase
             $this->_success('修改成功');
         }
         $res = db::name('dev_pay')->where('type', 3)->find();
-        $domain_name = ConfigServer::get('website', 'domain_name', '', $_SERVER['SERVER_NAME']);
-        $this->assign('domain', 'http:' . $domain_name);
+        $domain_name = ConfigServer::get('website', 'domain_name', '');
+        $domain_name = $domain_name ? $domain_name : request()->domain();
+        $this->assign('domain', $domain_name);
         $this->assign('res', $res); //逻辑层处理数据,返回已有信息
         $this->assign('info', ConfigServer::get('pay_applet')); //逻辑层处理数据,返回已有信息
         $this->assign('config', ConfigServer::get('upload', 'image', ''));
@@ -155,8 +157,9 @@ class PayConfig extends AdminBase
             $this->_success('修改成功');
         }
         $res = db::name('dev_pay')->where('type', 5)->find();
-        $domain_name = ConfigServer::get('website', 'domain_name', '', $_SERVER['SERVER_NAME']);
-        $this->assign('domain', 'http:' . $domain_name);
+        $domain_name = ConfigServer::get('website', 'domain_name', '');
+        $domain_name = $domain_name ? $domain_name : request()->domain();
+        $this->assign('domain', $domain_name);
         $this->assign('res', $res); //逻辑层处理数据,返回已有信息
         $this->assign('info', ConfigServer::get('pay_app')); //逻辑层处理数据,返回已有信息
         $this->assign('config', ConfigServer::get('upload', 'image', ''));

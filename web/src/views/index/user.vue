@@ -118,18 +118,6 @@
                     <div class="sm normal" style="line-height: 18px">余额</div>
                 </router-link>
                 <router-link
-                    :to="{ name: 'signUp' }"
-                    class="my-assets-item column-center"
-                >
-                    <div
-                        class="xl primary"
-                        style="line-height: 18px; margin-bottom: 9px"
-                    >
-                        {{ userInfo.user_integral || 0 }}
-                    </div>
-                    <div class="sm normal" style="line-height: 18px">积分</div>
-                </router-link>
-                <router-link
                     :to="{ name: 'userCoupon' }"
                     class="my-assets-item column-center"
                 >

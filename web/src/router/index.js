@@ -190,15 +190,6 @@ const routes = [
                 title: "我的钱包"
             }
         }, {
-            path: "userPayment",
-            name: "userPayment",
-            component: () => import("@V/user/userPayment"),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: "余额充值"
-            }
-        }, {
             path: "userEvaluate",
             name: "userEvaluate",
             component: () => import("@V/user/userEvaluate"),
@@ -288,15 +279,6 @@ const routes = [
             keepAlive: true
         },
         children: [{
-            path: "signUp",
-            name: "signUp",
-            component: () => import("@V/common/signUp"),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: '积分签到'
-            }
-        }, {
             path: "newsCenter",
             name: "newsCenter",
             component: () => import("@V/common/newsCenter"),
@@ -313,24 +295,6 @@ const routes = [
                 auth: true,
                 keepAlive: false,
                 title: "咨询详情"
-            }
-        }, {
-            path: "signRule",
-            name: "signRule",
-            component: () => import("@V/common/signRule"),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: "签到规则"
-            }
-        }, {
-            path: "signDetail",
-            name: "signDetail",
-            component: () => import("@V/common/signDetail"),
-            meta: {
-                auth: true,
-                keepAlive: false,
-                title: "积分明细"
             }
         }, {
             path: "goodsDetail",

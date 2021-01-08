@@ -261,7 +261,6 @@ import {
     getGoodsDetail,
     getGoodsCoupon,
     addCart,
-    getPoster,
 } from "@/api/store";
 import { handleCollectGoods, getCoupon } from "@API/user";
 import { getAppDownload } from "@API/app";

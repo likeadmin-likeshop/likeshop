@@ -339,13 +339,6 @@ const routes = [
             meta: {
                 title: "服务协议"
             }
-        }, {
-            path: "widthdrawResult",
-            name: "widthdrawResult",
-            component: () => import("@V/common/widthdrawResult"),
-            meta: {
-                title: '提现结果'
-            }
         }]
     },
     {

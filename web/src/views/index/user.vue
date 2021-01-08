@@ -263,7 +263,6 @@ export default {
     data() {
         return {
             myOptList: [],
-            isLogin: false,
             loading: true,
             finished: false,
             page: 1,

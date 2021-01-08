@@ -114,7 +114,7 @@ const routes = [
             component: () => import("@V/user/userAddress"),
             meta: {
                 auth: true,
-                keepAlive: false,
+                keepAlive: true,
                 title: "收货地址"
             }
         }, {

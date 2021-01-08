@@ -81,12 +81,6 @@
         </van-dialog>
 
         <div class="address-footer row-between">
-            <div class="btn row-center bg-gray" @click="chooseAddressFromWeChat">
-                <div class="wechat-icon">
-                    <img src="@A/images/pay_wechat.png" />
-                </div>
-                <div class="ml5">微信导入</div>
-            </div>
             <div class="btn row bg-primary row-center" @click="toAddressEdit">
                 <div class="white">新增收货地址</div>
             </div>
@@ -206,8 +200,10 @@ export default {
     },
     created() {
         this.type = this.$route.query.type;
-        this.$getAddressLists();
     },
+    activated() {
+        this.$getAddressLists();
+    }
 };
 </script>
 
@@ -235,7 +231,7 @@ img {
         padding-left: 15px;
         padding-right: 15px;
         & .btn {
-            width: 168px;
+            flex: 1;
             height: 37px;
             border-radius: 30px;
             .wechat-icon {

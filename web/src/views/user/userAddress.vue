@@ -200,10 +200,8 @@ export default {
     },
     created() {
         this.type = this.$route.query.type;
-    },
-    activated() {
         this.$getAddressLists();
-    }
+    },
 };
 </script>
 

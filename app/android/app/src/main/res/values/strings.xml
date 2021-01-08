@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LikeShop自营B2C商城</string>
+    <string moduleConfig="true" name="CodePushServerUrl">http://rn.yixiangonline.com/</string>
+</resources>

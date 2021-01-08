@@ -518,7 +518,6 @@ INSERT INTO `yx_dev_auth` VALUES (36, 1, 0, 33, '会员分组', '', 'userGroup/l
 INSERT INTO `yx_dev_auth` VALUES (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 97, 0, 1602576261, 1608101850, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (38, 1, 0, 37, '订单列表', '', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (39, 1, 0, 0, '营销', 'layui-icon-component', '', 93, 0, 1602579530, 1608101924, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (40, 1, 0, 39, '会员签到', '', 'signDaily/lists', 50, 0, 1602647177, 1606963046, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, 1608102230, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (43, 1, 0, 56, '配送管理', '', 'freight/lists', 50, 0, 1602666008, 1603525668, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (44, 1, 0, 29, '商品管理', '', 'goods/lists', 99, 0, 1603159926, 1608102157, 0, 0);
@@ -556,7 +555,6 @@ INSERT INTO `yx_dev_auth` VALUES (80, 1, 0, 17, '短信管理', '', 'sms/lists',
 INSERT INTO `yx_dev_auth` VALUES (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (87, 1, 0, 81, '积分记录', '', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (90, 1, 0, 56, '会员提现', '', 'shopSetting/withdraw', 50, 0, 1606357500, 1606361192, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (93, 1, 0, 92, 'H5装修', '', '', 100, 0, 1606449177, 1606792239, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (94, 1, 0, 92, '小程序装修', '', '', 90, 0, 1606449275, 1606792694, 0, 0);

@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "van-popup": "/components/weapp/popup/index"
-  },
-  "navigationBarTitleText": "签到"
-}

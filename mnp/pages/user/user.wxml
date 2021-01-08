@@ -43,10 +43,6 @@
                 <view class="xl primary">{{userInfo.user_money}}</view>
                 <view class="sm">余额</view>
             </view>
-            <view class="column-center mb20 assets-item" bindtap="goPage" data-url="/pages/user_sign/user_sign">
-                <view class="xl primary">{{userInfo.user_integral}}</view>
-                <view class="sm">积分</view>
-            </view>
             <view class="column-center mb20 assets-item" bindtap="goPage" data-url="/pages/user_coupon/user_coupon">
                 <view class="xl primary">{{userInfo.coupon}}</view>
                 <view class="sm">优惠券</view>

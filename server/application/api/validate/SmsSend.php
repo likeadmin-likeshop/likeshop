@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------
 namespace app\api\validate;
 
+use app\api\logic\LoginLogic;
 use app\api\model\User;
 use think\{
     Db,
@@ -50,6 +51,11 @@ class SmsSend extends Validate{
                 if($user) return '该手机号码已存在';
                 break;
             case 'YZMDL':   //验证码登录
+                if (empty($user) || !$user) { //账号不存在, 给他注册
+                    $data['password'] = '';
+                    LoginLogic::register($data);
+                }
+                break;
             case 'ZHMM':    //找回密码
             case 'BGSJHM':  //变更手机号码
                 if(empty($user)) return '手机号码不存在';

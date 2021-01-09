@@ -52,8 +52,9 @@ class SmsSend extends Validate{
                 break;
             case 'YZMDL':   //验证码登录
                 if (empty($user) || !$user) { //账号不存在, 给他注册
-                    $data['password'] = '';
-                    LoginLogic::register($data);
+                    $post = request()->post();
+                    $post['password'] = '';
+                    LoginLogic::register($post);
                 }
                 break;
             case 'ZHMM':    //找回密码

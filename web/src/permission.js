@@ -25,12 +25,10 @@ router.beforeEach(async (to, form, next) => {
 	const { code } = to.query
 	document.title = title
 	if(code) return getWxLogin(code).then(() => {
+		if(to.name == "login") return next({name: "home"})
 		next()
 	})
 	if(auth === true && !$store.state.token) {
-		// if (form.name === "login") {
-		// 	return;
-		// }
 		return login(true, to.fullPath);
 	}
 	next()

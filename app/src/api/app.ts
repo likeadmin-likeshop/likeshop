@@ -39,7 +39,7 @@ export function forgetPwd(data: any, loading?: boolean) {
 }
 // sms/send
 export function sendSms(data: any, loading?: boolean) {
-    return post("sms/send", data, loading )
+    return post("sms/send", {...data, client}, loading )
 }
 
 // 获取服务协议

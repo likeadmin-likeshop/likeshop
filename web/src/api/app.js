@@ -83,7 +83,7 @@ export function getSignRule() {
 
 // 发送短信
 export function sendSms(data) {
-    return request.post('sms/send', data)
+    return request.post('sms/send', {...data, client: 2})
 }
 
 // 获取服务协议

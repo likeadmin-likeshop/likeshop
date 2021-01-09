@@ -26,20 +26,21 @@ use EasyWeChat\Kernel\Exceptions\Exception;
 class OaLogic  extends LogicBase{
     public static function getOa(){
         $domain_name = ConfigServer::get('website', 'domain_name', $_SERVER['SERVER_NAME']);
+        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https:' : 'http:';
         $config = [
             'name' => ConfigServer::get('oa', 'name', ''),
             'original_id' => ConfigServer::get('oa', 'original_id', ''),
             'qr_code' => ConfigServer::get('oa', 'qr_code', ''),
             'app_id' => ConfigServer::get('oa', 'app_id', ''),
             'app_secret' => ConfigServer::get('oa', 'secret', ''),
-            'url' => ConfigServer::get('oa', 'url', ''),
+            'url' => $http_type.$domain_name.'/api/wechat/index',
             'token' => ConfigServer::get('oa', 'token', 'LikeShop'),
             'encoding_ses_key' => ConfigServer::get('oa', 'encoding_ses_key', ''),
             'encryption_type' => ConfigServer::get('oa', 'encryption_type', ''),
             'business_domain' => $domain_name,
             'safety_domain' => $domain_name,
             'auth_domain' => $domain_name,
-            ];
+        ];
         return $config;
     }
     public static function setOa($post){
@@ -52,7 +53,6 @@ class OaLogic  extends LogicBase{
             ConfigServer::set('oa','qr_code',$post['qr_code']);
             ConfigServer::set('oa','app_id',$post['app_id']);
             ConfigServer::set('oa','secret',$post['app_secret']);
-            ConfigServer::set('oa','url',$post['url']);
             ConfigServer::set('oa','token',$post['token']);
             ConfigServer::set('oa','encoding_ses_key',$post['encoding_ses_key']);
             ConfigServer::set('oa','encryption_type',$post['encryption_type']);

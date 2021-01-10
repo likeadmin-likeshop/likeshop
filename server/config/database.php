@@ -15,7 +15,7 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => Env::get('database.hostname','like-mysql'),
+    'hostname'        => Env::get('database.hostname','likeshop-mysql'),
     // 数据库名
     'database'        => Env::get('database.database','localhost_likeshopv2'),
     // 用户名

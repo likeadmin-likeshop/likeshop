@@ -1,0 +1,98 @@
+# +----------------------------------------------------------------------
+# | LikeShop100%开源免费商用电商系统
+# +----------------------------------------------------------------------
+# | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+# | 开源版本可自由商用，可去除界面版权logo
+# | 商业版本务必购买商业授权，以免引起法律纠纷
+# | 禁止对系统程序代码以任何目的，任何形式的再发布
+# | Gitee下载：https://gitee.com/likemarket/likeshopv2
+# | 访问官网：https://www.likemarket.net
+# | 访问社区：https://home.likemarket.net
+# | 访问手册：http://doc.likemarket.net
+# | 微信公众号：好象科技
+# | 好象科技开发团队 版权所有 拥有最终解释权
+# +----------------------------------------------------------------------
+# | Author: LikeShop-令狐冲
+# +----------------------------------------------------------------------
+version: '3'
+
+networks:
+  likeshop:
+    driver: bridge
+
+services:
+
+  nginx:
+    container_name: likeshop-nginx
+    image: nginx:1.17.0
+    restart: always
+    depends_on:
+      - "php7.2.4"
+    volumes:
+      - ../server:/server
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./log/nginx/logs:/logs
+    networks:
+      - likeshop
+    ports:
+      - "80:80"
+      - "443:443"
+
+
+
+
+  php7.2.4:
+    container_name: likeshop-php7.2.4
+    image: indexlin/likeshop-php7.2.4:1.0
+    restart: always
+    working_dir: /server
+    volumes:
+      - ../server:/server
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - likeshop
+    ports:
+      - "9004:9000"
+    #user: "1000:1000"
+
+
+
+  mysql:
+    container_name: likeshop-mysql
+    #image: mysql:5.7.29 #X86架构
+    image: amd64/mysql:5.7.29 #arm架构
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data/mysql5.7.29/lib:/var/lib/mysql
+      - ./config/mysql/mysqld.cnf:/etc/mysql/my.cnf
+    networks:
+      - likeshop
+    ports:
+      - "3306:3306"
+
+
+  redis:
+    container_name: likeshop-redis
+    image: redis:5.0.5
+    restart: always
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - likeshop
+    ports:
+      - "6379:6379"
+
+  node:
+    container_name: likeshop-node
+    image: node:10.15.3
+    restart: always
+    volumes:
+      - ../web:/web
+    networks:
+      - likeshop
+    tty: true
+    working_dir: /web
+    ports:
+      - "8080:8080"

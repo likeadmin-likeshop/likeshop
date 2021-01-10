@@ -25,5 +25,5 @@ return [
 
     'port' =>Env::get('cache.port','6379'),
 
-    'host' => Env::get('cache.host','like-redis'),
+    'host' => Env::get('cache.host','likeshop-redis'),
 ];

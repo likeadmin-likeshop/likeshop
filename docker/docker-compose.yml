@@ -59,8 +59,8 @@ services:
 
   mysql:
     container_name: likeshop-mysql
-    #image: mysql:5.7.29 #X86架构
-    image: amd64/mysql:5.7.29 #arm架构
+    image: mysql:5.7.29 #X86架构
+    #image: amd64/mysql:5.7.29 #arm架构
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root

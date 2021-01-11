@@ -110,14 +110,11 @@
             <script type="text/html" id="referrer">
                 {{# if(d.first_leader){}}
                 <img src="{{d.referrer_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
-                <div class="layui-input-inline">
-                    <label>编号：{{d.sn}}</label>
-                    <br/>
-                    <label>手机号码：{{d.referrer_mobile}}</label>
-                    <br/>
-                    <label>昵称：{{d.referrer_nickname}}</label>
-                    <br/>
-                    <label>等级：{{d.referrer_level_name}}</label>
+                <div class="layui-input-inline" style="text-align:left">
+                    <p>编号：{{d.sn}}</p>
+                    <p>手机号码：{{d.referrer_mobile}}</p>
+                    <p>昵称：{{d.referrer_nickname}}</p>
+                    <p>等级：{{d.referrer_level_name}}</p>
                 </div>
                 {{# }else{ }}
                 -

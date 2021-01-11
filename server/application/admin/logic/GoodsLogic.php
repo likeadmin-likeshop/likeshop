@@ -578,4 +578,28 @@ class GoodsLogic
         }
         return $info;
     }
+
+    /**
+     * Notes: 上架 / 下架 商品
+     * @author 张无忌(2021/1/11 14:35)
+     * @param array $ids (要更新的数据ID)
+     * @param int $type (类型[0=下架, 1=上架])
+     * @return bool
+     */
+    public static function upperOrLower(array $ids, int $type=0)
+    {
+        if (empty($ids)) {
+            return false;
+        }
+
+        try {
+            $result = Db::name('goods')->whereIn('id', $ids)->update([
+                'status'      => $type,
+                'update_time' => time()
+            ]);
+            return $result ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }

@@ -68,6 +68,8 @@
                     <div class="layui-card-body">
                         <div style="padding-bottom: 10px;" class="add">
                             <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" data-type="add">发布商品</button>
+                            <button id="lower" class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" data-type="lower">下架</button>
+                            <button id="upper" class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" data-type="upper" style="display: none;">上架</button>
                         </div>
                         <table id="goods-lists" lay-filter="goods-lists"></table>
                         <script type="text/html" id="ratio">
@@ -160,6 +162,7 @@
 
         //事件
         var active = {
+            //添加商品
             add: function(){
                 var index = layer.open({
                     type: 2
@@ -211,18 +214,86 @@
                         return false;
                     }
                 });
+            },
+            //批量下架
+            lower: function(){
+                var checkStatus = table.checkStatus('goods-lists');
+                var checkData = checkStatus.data;
+                var ids = [];
+                // 取出选中的行ID
+                checkData.forEach(function (item) {
+                    ids.push(parseInt(item['id']));
+                });
+                if (ids.length <= 0) {
+                    layui.layer.msg('未选择', {time: 1000});
+                    return false;
+                }
+                // 提交数据
+                like.ajax({
+                    url:'{:url("goods/lowerStatus")}',
+                    data:{"ids":ids},
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:1 ,time: 1000});
+                            table.reload('goods-lists', { where: [] });
+                        } else {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:2 ,time: 1000});
+                        }
+                    }
+                });
+
+            },
+            //批量上架
+            upper: function(){
+                var checkStatus = table.checkStatus('goods-lists');
+                var checkData = checkStatus.data;
+                var ids = [];
+                // 取出选中的行ID
+                checkData.forEach(function (item) {
+                    ids.push(parseInt(item['id']));
+                });
+                if (ids.length <= 0) {
+                    layui.layer.msg('未选择', {time: 1000});
+                    return false;
+                }
+                // 提交数据
+                like.ajax({
+                    url:'{:url("goods/upperStatus")}',
+                    data:{"ids":ids},
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:1 ,time: 1000});
+                            table.reload('goods-lists', { where: [] });
+                        } else {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:2 ,time: 1000});
+                        }
+                    }
+                });
+
             }
-        }
+        };
 
 
 
 
         //获取列表
-        getList(1)
+        getList(1);
         //切换列表
         element.on('tab(tab-all)', function (data) {
             var type = $(this).attr('data-type');
-            getList(type)
+            getList(type);
+            if (type === '1') {
+                $("#lower").show();
+                $("#upper").hide();
+            } else if (type === '2')  {
+                $("#lower").hide();
+                $("#upper").show();
+            } else{
+                $("#lower").hide();
+                $("#upper").hide();
+            }
         });
 
         //监听工具条

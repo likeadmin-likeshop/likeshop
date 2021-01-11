@@ -216,6 +216,36 @@ class Goods extends AdminBase
         $this->_error('修改失败');
     }
 
+    /**
+     * Notes: 下架商品
+     * @author 张无忌(2021/1/11 14:33)
+     */
+    public function lowerStatus()
+    {
+        if ($this->request->isAjax()) {
+            $ids = $this->request->post('ids', []);
+            $result = GoodsLogic::upperOrLower($ids, 0);
+            if ($result) {
+                $this->_success('下架成功');
+            }
+            $this->_error('下架失败');
+        }
+    }
 
+    /**
+     * Notes: 上架商品
+     * @author 张无忌(2021/1/11 14:33)
+     */
+    public function upperStatus()
+    {
+        if ($this->request->isAjax()) {
+            $ids = $this->request->post('ids', []);
+            $result = GoodsLogic::upperOrLower($ids, 1);
+            if ($result) {
+                $this->_success('上架成功');
+            }
+            $this->_error('上架失败');
+        }
+    }
 
 }

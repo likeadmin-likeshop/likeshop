@@ -75,15 +75,12 @@ export function wxAutoLogin() {
 	return new Promise((resolve) => {
 		let code
 		return getWxCode().then(res => {
-			code = res.code
+			code = res
 			return wxgetUserInfo()
 		}).then(res => {
 			if (!res.userInfo) return
-			return wxLogin({
-				code,
-				encrypted_data: res.encryptedData,
-				iv: res.iv
-			})
+			let { encryptedData: encrypted_data, iv } = res
+			return mnpLogin({ encrypted_data,iv, code })
 		}).then(res => {
 			resolve(res)
 		})

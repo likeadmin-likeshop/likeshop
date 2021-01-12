@@ -91,7 +91,7 @@
                         ,{field: 'use_time_type',align: 'center',width: 320, align: 'center',title:'用券时间'}
                         ,{field: 'get_type',align: 'center',width:160, title:'领取方式'}
                         ,{field: 'status_desc',align: 'center',width:160, title:'状态'}
-                        ,{field: 'create_time',align: 'center',width:180, title:'创建时间'}
+                        ,{fixed: 'right', field: 'create_time',align: 'center',width:180, title:'创建时间'}
                     ]]
                     ,page:true
                     ,text: {none: '暂无数据！'}
@@ -102,6 +102,13 @@
                             "count": res.data.count, //解析数据长度
                             "data": res.data.list, //解析数据列表
                         };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
                     }
                 });
 

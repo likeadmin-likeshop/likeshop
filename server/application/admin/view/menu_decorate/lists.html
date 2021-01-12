@@ -166,7 +166,7 @@
                 ,{field: 'link_address', title: '链接地址',width: 180}
                 ,{field: 'sort', title: '排序',width: 100,event: 'tips',edit:'text'}
                 ,{field: 'is_show', title:'显示', templet: '#status', width: 100, align: 'center'}
-                ,{title: '操作', align: 'center', toolbar: '#menu_decorate-operation'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#menu_decorate-operation'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -177,6 +177,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.lists, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

@@ -97,7 +97,7 @@
                 {field: 'id', width: 80, title: 'ID', sort: true}
                 ,{field: 'name', width: 200, title: '分组名称'}
                 ,{field: 'remark', title: '备注'}
-                ,{title: '操作', width: 180, align: 'center', fixed: 'right', toolbar: '#user_group-operation'}
+                ,{fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#user_group-operation'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -108,6 +108,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.list, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

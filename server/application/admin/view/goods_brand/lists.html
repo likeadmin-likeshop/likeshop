@@ -190,7 +190,7 @@
                 ,{field: 'initial', title: '品牌首字母', align: 'center',width:120}
                 ,{field: 'is_show', title: '显示状态', width: 120, align: 'center',toolbar:'#status'}
                 ,{field: 'sort', title: '排序', width: 80, align: 'center',sort: true}
-                ,{title: '操作', align: 'center', width: 250,toolbar: '#goods_brand-operation'}
+                ,{fixed: 'right', title: '操作', align: 'center', width: 250,toolbar: '#goods_brand-operation'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -202,6 +202,13 @@
                     "data": res.data.list, //解析数据列表
                 };
 
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

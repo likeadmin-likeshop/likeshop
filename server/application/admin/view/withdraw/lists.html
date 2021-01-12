@@ -175,7 +175,7 @@
                 ,{field: 'money_qr_code', title: '收款码', templet:'#img-info', width:150}
                 ,{field: 'real_name', title: '真实姓名', width:100,align:'center'}
                 ,{field: 'status_text', title: '提现状态', align:'center', width:100}
-                ,{title: '操作', align: 'center', toolbar: '#withdraw-operation',width:200}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#withdraw-operation',width:200}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -186,6 +186,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.lists, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

@@ -326,7 +326,7 @@
                         , {field: 'days', title: '连续天数',width:100}
                         , {field: 'reward', title: '签到奖励',templet:'#integral',width:250}
                         , {field: 'continuous_reward', title: '连续奖励',templet:'#continuous_integral',width:250}
-                        , {field:'sign_time',title:'签到时间',width:250}
+                        , {fixed: 'right', field:'sign_time',title:'签到时间',width:250}
 
                     ];
                 }
@@ -348,7 +348,13 @@
                             "count": res.data.count, //解析数据长度
                             "data": res.data.list, //解析数据列表
                         };
-
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
                     }
                 })})};
 

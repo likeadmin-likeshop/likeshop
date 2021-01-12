@@ -112,7 +112,7 @@
                 {field: 'name', title: '文章分类'}
                 ,{field: 'is_show_text', title:'分类状态', minWidth: 40, align: 'center'}
                 ,{field: 'create_time', title: '创建时间'}
-                ,{title: '操作',  align: 'center', toolbar: '#article-operation'}
+                ,{fixed: 'right', title: '操作',  align: 'center', toolbar: '#article-operation'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -123,6 +123,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.lists, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

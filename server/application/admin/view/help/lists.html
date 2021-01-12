@@ -219,7 +219,7 @@
                 ,{field: 'likes', title: '点赞量',width:100}
                 ,{field: 'sort', title: '排序',sort:true,width:100}
                 ,{field: 'create_time', title: '创建时间',width:160}
-                ,{title: '操作', align: 'center', toolbar: '#help-operation',width:250}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#help-operation',width:250}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -230,6 +230,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.lists, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

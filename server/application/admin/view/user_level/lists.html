@@ -83,7 +83,7 @@
                     ,{field: 'background_image',width:160, title: '等级背景图片',toolbar:'#background'}
                     ,{field: 'privilege_list',width:160, title: '等级权益'}
                     ,{field: 'remark',width:160, title:'等级说明'}
-                    ,{title: '操作', width:160,align: 'center', toolbar: '#user_level-operation'}
+                    ,{fixed: 'right', title: '操作', width:160,align: 'center', toolbar: '#user_level-operation'}
                 ]]
                 ,page:true
                 ,text: {none: '暂无数据！'}
@@ -94,6 +94,13 @@
                         "count": res.data.count, //解析数据长度
                         "data": res.data.list, //解析数据列表
                     };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
                 }
             });
 

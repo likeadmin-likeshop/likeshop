@@ -356,7 +356,7 @@
                     , {field: 'delivery', title: '收货信息', align: 'center',templet:'#delivery',width:200}
                     , {field: 'pay_status_text', title: '支付状态', align: 'center',width:100}
                     , {field: 'order_status_text', title: '订单状态', align: 'center',width:100}
-                    , {title: '操作', width: 280, align: 'center', toolbar: '#order-operation'}
+                    , {fixed: 'right', title: '操作', width: 280, align: 'center', toolbar: '#order-operation'}
                 ]]
                 , page: true
                 , text: {none: '暂无数据！'}
@@ -367,6 +367,13 @@
                         "count": res.data.count,
                         "data": res.data.lists,
                     };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
                 }
             });
         }

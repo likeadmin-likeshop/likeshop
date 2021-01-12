@@ -170,7 +170,7 @@
                     , {field: 'send_status', title: '发送状态', align: 'center'}
                     , {field: 'send_time', title: '发送时间', align: 'center'}
                     , {field: 'create_time', title: '创建时间', align: 'center'}
-                    , {title: '操作', width: 250, align: 'center', fixed: 'right', toolbar: '#sms_log-operation'}
+                    , {fixed: 'right', title: '操作', width: 250, align: 'center', toolbar: '#sms_log-operation'}
                 ];
                 var page = true;
             }
@@ -188,6 +188,13 @@
                         "count": res.data.count, //解析数据长度
                         "data": res.data.list, //解析数据列表
                     };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
                 }
             });
         }

@@ -192,7 +192,7 @@
                 ,{field: 'tel',width:150, title: '联系电话'}
                 ,{field: 'address',width:250, title: '联系地址'}
                 ,{field: 'remark',width:250, title: '备注'}
-                ,{title: '操作', width: 200, align: 'center', toolbar: '#supplier-operation'}
+                ,{fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#supplier-operation'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -203,6 +203,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.lists, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

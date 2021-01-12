@@ -175,7 +175,7 @@
                 ,{field: 'login_state',width:90, title:'登录状态', templet: '#login-state', minWidth: 40, align: 'center'}
                 ,{field: 'disable', width:70,title:'状态', templet: '#buttonTpl', minWidth: 40, align: 'center'}
                 ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#admin-operation'}
-                ,{title: '', width: '',align: 'center', fixed: 'right'}
+                ,{fixed: 'right', title: '', width: '',align: 'center'}
             ]]
             ,text: {none: '暂无相关数据'}
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
@@ -185,6 +185,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.lists, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

@@ -218,7 +218,7 @@
                         , {field: 'name', title: '广告位', align: 'center'}
                         , {field: 'attr_show', title: '广告位属性', align: 'center'}
                         , {field: 'status_show', title: '广告位状态', align: 'center'}
-                        , {title: '操作',  align: 'center', toolbar: '#ad_position-operation'}
+                        , {fixed: 'right', title: '操作',  align: 'center', toolbar: '#ad_position-operation'}
                     ]]
                     , page: true
                     , text: {none: '暂无数据！'}
@@ -229,6 +229,13 @@
                             "count": res.data.count, //解析数据长度
                             "data": res.data.list, //解析数据列表
                         };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
                     }
                 });
         }

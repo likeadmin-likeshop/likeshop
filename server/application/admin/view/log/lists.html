@@ -215,7 +215,7 @@
                     , {field: 'type', title: '访问方式', align: 'center',  width: 80}
                     , {field: 'param', title: '访问参数', align: 'left',  width: 200}
                     , {field: 'ip', title: '来源', align: 'center',  width: 110}
-                    , {field: 'create_time_str', title: '日志时间', align: 'center',  width: 160}
+                    , {fixed: 'right', field: 'create_time_str', title: '日志时间', align: 'center',  width: 160}
                 ]]
                 , page: true
                 , text: {none: '暂无数据！'}
@@ -226,6 +226,13 @@
                         "count": res.data.count, //解析数据长度
                         "data": res.data.lists, //解析数据列表
                     };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
                 }
             });
         }

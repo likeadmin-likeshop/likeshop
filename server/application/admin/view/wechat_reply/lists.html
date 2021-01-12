@@ -155,7 +155,7 @@
                         , {field: 'content_type', title: '回复类型', align: 'center'}
                         , {field: 'content', title: '回复内容', align: 'center'}
                         , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
-                        , {title: '操作',  align: 'center', toolbar: '#reply-operation'}
+                        , {fixed: 'right', title: '操作',  align: 'center', toolbar: '#reply-operation'}
                     ];
                     break;
                 case "text":
@@ -166,7 +166,7 @@
                         , {field: 'content', title: '回复内容', align: 'center'}
                         , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
                         , {field: 'sort', title: '排序', align: 'center',edit:'text'}
-                        , {title: '操作',  align: 'center', toolbar: '#reply-operation'}
+                        , {fixed: 'right', title: '操作',  align: 'center', toolbar: '#reply-operation'}
                     ];
                     break;
                 case "default":
@@ -175,7 +175,7 @@
                         , {field: 'content_type', title: '回复类型', align: 'center'}
                         , {field: 'content', title: '回复内容', align: 'center'}
                         , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
-                        , {title: '操作',  align: 'center', toolbar: '#reply-operation'}
+                        , {fixed: 'right', title: '操作',  align: 'center', toolbar: '#reply-operation'}
                     ];
                     break;
             }
@@ -196,6 +196,13 @@
                         "count": res.data.count, //解析数据长度
                         "data": res.data.list, //解析数据列表
                     };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
                 }
             });
         }

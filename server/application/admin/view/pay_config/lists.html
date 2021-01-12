@@ -64,7 +64,7 @@
                 ,{field: 'use',width:450, title: '适用场景'}
                 ,{field: 'pay_use', title: '状态', width: 100, templet: '#pay_use', minWidth: 40, align: 'center'}
                 ,{field: 'sort', title: '排序', width: 100,event: 'tips',edit:'number',sort: true}
-                ,{title: '操作', width: 150, align: 'center', toolbar: '#pay_config-operation'}
+                ,{fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#pay_config-operation'}
             ]]
             ,text: {none: '暂无数据！'}
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
@@ -74,6 +74,13 @@
                     "count": res.data.count, //解析数据长度
                     "data": res.data.list, //解析数据列表
                 };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
             }
         });
 

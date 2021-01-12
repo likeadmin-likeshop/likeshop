@@ -31,6 +31,9 @@ router.beforeEach(async (to, form, next) => {
 	if(auth === true && !$store.state.token) {
 		return login(true, to.fullPath);
 	}
+	if($store.state.token && to.name == "login" ) {
+		return next({name: "home"})
+	}
 	next()
 })
 

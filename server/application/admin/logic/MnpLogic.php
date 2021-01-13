@@ -23,7 +23,7 @@ use EasyWeChat\Factory;
 
 class MnpLogic{
     public static function getMnp(){
-        $domain_name = ConfigServer::get('website', 'domain_name', $_SERVER['SERVER_NAME']);
+        $domain_name = $_SERVER['SERVER_NAME'];
         $config = [
             'name' => ConfigServer::get('mnp', 'name', ''),
             'original_id' => ConfigServer::get('mnp', 'original_id', ''),

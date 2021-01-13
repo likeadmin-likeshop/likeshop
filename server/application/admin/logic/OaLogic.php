@@ -25,21 +25,20 @@ use EasyWeChat\Kernel\Exceptions\Exception;
 
 class OaLogic  extends LogicBase{
     public static function getOa(){
-        $domain_name = ConfigServer::get('website', 'domain_name', $_SERVER['SERVER_NAME']);
-        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $domain_name = $_SERVER['SERVER_NAME'];
         $config = [
-            'name' => ConfigServer::get('oa', 'name', ''),
-            'original_id' => ConfigServer::get('oa', 'original_id', ''),
-            'qr_code' => ConfigServer::get('oa', 'qr_code', ''),
-            'app_id' => ConfigServer::get('oa', 'app_id', ''),
-            'app_secret' => ConfigServer::get('oa', 'secret', ''),
-            'url' => $http_type.$domain_name.'/api/wechat/index',
-            'token' => ConfigServer::get('oa', 'token', 'LikeShop'),
-            'encoding_ses_key' => ConfigServer::get('oa', 'encoding_ses_key', ''),
-            'encryption_type' => ConfigServer::get('oa', 'encryption_type', 1),
-            'business_domain' => $domain_name,
-            'safety_domain' => $domain_name,
-            'auth_domain' => $domain_name,
+            'name'              => ConfigServer::get('oa', 'name', ''),
+            'original_id'       => ConfigServer::get('oa', 'original_id', ''),
+            'qr_code'           => ConfigServer::get('oa', 'qr_code', ''),
+            'app_id'            => ConfigServer::get('oa', 'app_id', ''),
+            'app_secret'        => ConfigServer::get('oa', 'secret', ''),
+            'url'               => url('api/weChat/index','','',true),
+            'token'             => ConfigServer::get('oa', 'token', 'LikeShop'),
+            'encoding_ses_key'  => ConfigServer::get('oa', 'encoding_ses_key', ''),
+            'encryption_type'   => ConfigServer::get('oa', 'encryption_type', 1),
+            'business_domain'   => $domain_name,
+            'safety_domain'     => $domain_name,
+            'auth_domain'       => $domain_name,
         ];
         return $config;
     }

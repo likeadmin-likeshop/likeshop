@@ -107,8 +107,6 @@ class AfterSaleLogic
             ->group('a.id')
             ->select();
 
-        $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
-
         foreach ($lists as &$list) {
             $list['order']['pay_way'] = Pay::getPayWay($list['order']['pay_way']);
             $list['order']['order_status'] = Order::getOrderStatus($list['order']['order_status']);
@@ -117,12 +115,10 @@ class AfterSaleLogic
             $list['status'] = AfterSale::getStatusDesc($list['status']);
 
             foreach ($list['order_goods'] as &$good) {
-                if (isset($goods_info[$good['item_id']])) {
-                    $info = $goods_info[$good['item_id']];
-                    $good['goods_name'] = $info['name'];
-                    $good['spec_value'] = $info['spec_value_str'];
-                    $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
-                }
+                $info = json_decode($good['goods_info'], true);
+                $good['goods_name'] = $info['goods_name'];
+                $good['spec_value'] = $info['spec_value_str'];
+                $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
             }
         }
         return ['count' => $count, 'lists' => $lists];
@@ -143,15 +139,11 @@ class AfterSaleLogic
         $result['order']['order_status'] = Order::getOrderStatus($result['order']['order_status']);
         $result['create_time'] = date('Y-m-d H:i:s', $result['create_time']);
 
-        $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
-
         foreach ($result['order_goods'] as &$good) {
-            if (isset($goods_info[$good['item_id']])) {
-                $info = $goods_info[$good['item_id']];
-                $good['goods_name'] = $info['name'];
-                $good['spec_value'] = $info['spec_value_str'];
-                $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
-            }
+            $info = json_decode($good['goods_info'], true);
+            $good['goods_name'] = $info['goods_name'];
+            $good['spec_value'] = $info['spec_value_str'];
+            $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }
 
         //售后日志

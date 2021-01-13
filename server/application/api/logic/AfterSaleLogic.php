@@ -39,11 +39,8 @@ class AfterSaleLogic extends LogicBase
     public static function lists($user_id, $type, $page, $size)
     {
         $where = [];
-
         $where[] = ['o.user_id', '=', $user_id];
         $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH]];
-
-        $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
 
         $data = $result = [];
         switch ($type) {
@@ -90,11 +87,9 @@ class AfterSaleLogic extends LogicBase
                             'image' => '',
                         ];
 
-                        if (isset($goods_info[$good['item_id']])){
-                            $info = $goods_info[$good['item_id']];
-                            $goods['goods_name'] = $info['name'];
-                            $goods['image'] = empty($info['spec_image']) ? UrlServer::getFileUrl($info['image']) : UrlServer::getFileUrl($info['spec_image']);
-                        }
+                        $goods_data = json_decode($good['goods_info'], true);
+                        $goods['goods_name'] = $goods_data['goods_name'];
+                        $goods['image'] = empty($goods_data['spec_image']) ? UrlServer::getFileUrl($goods_data['image']) : UrlServer::getFileUrl($goods_data['spec_image']);
 
                         $order_goods[] = $goods;
                     }
@@ -143,14 +138,9 @@ class AfterSaleLogic extends LogicBase
 
         foreach ($lists as $k => $item) {
 
-            $goods_name = '';
-            $image = '';
-
-            if (isset($goods_info[$item['item_id']])){
-                $info = $goods_info[$item['item_id']];
-                $goods_name = $info['name'];
-                $image = empty($info['spec_image']) ? UrlServer::getFileUrl($info['image']) : UrlServer::getFileUrl($info['spec_image']);
-            }
+            $goods_data = json_decode($item['goods_info'], true);
+            $goods_name = $goods_data['goods_name'];
+            $image = empty($goods_data['spec_image']) ? UrlServer::getFileUrl($goods_data['image']) : UrlServer::getFileUrl($goods_data['spec_image']);
 
             $result = [
                 'order_id' => $item['order_id'],
@@ -260,9 +250,8 @@ class AfterSaleLogic extends LogicBase
             ->hidden('id,total_price,spec_value_ids,delivery_id,create_time')
             ->find();
 
-        $info = Goods::getOneByItem($item_id);
-
-        $goods['goods_name'] = $info['name'];
+        $info = json_decode($goods['goods_info'], true);
+        $goods['goods_name'] = $info['goods_name'];
         $goods['spec_value'] = $info['spec_value_str'];
         $goods['image'] = isset($info['image']) ? UrlServer::getFileUrl($info['image']) : '';
 
@@ -343,13 +332,13 @@ class AfterSaleLogic extends LogicBase
         $detail['status_text'] = AfterSale::getStatusDesc($detail['status']);
         $detail['create_time'] = date('Y-m-d H:i:s', $detail['create_time']);
 
-        $goods = Goods::getOneByItem($detail['order_goods']['item_id'], 'g.name,g.image,i.spec_value_str,i.image as spec_image');
+        $goods = json_decode($detail['order_goods']['goods_info'], true);
 
         $image = $goods['image'];
         $spec_image = $goods['spec_image'];
 
         $detail['order_goods']['image'] = empty($spec_image) ? UrlServer::getFileUrl($image) : UrlServer::getFileUrl($spec_image);
-        $detail['order_goods']['goods_name'] = $goods['name'];
+        $detail['order_goods']['goods_name'] = $goods['goods_name'];
         $detail['order_goods']['spec_value'] = $goods['spec_value_str'];
 
         $detail['refund_type_text'] = AfterSale::getRefundTypeDesc($detail['refund_type']);
@@ -400,13 +389,6 @@ class AfterSaleLogic extends LogicBase
                 $user_id,
                 AfterSaleLog::USER_AGAIN_REFUND
             );
-//            $shop_mobile = Db::name('shop')->where(['id' => $after_sale->shop_id])->value('phone');
-//            $send_data = [
-//                'key' => 'SHTKDDTZ',
-//                'mobile' => $shop_mobile,
-//                'params' => ['order_sn' => $after_sale->sn],
-//            ];
-//            Hook::listen('sms_send', $send_data);
             Db::commit();
             return self::dataSuccess('提交成功', ['after_sale_id' => $id]);
         } catch (Exception $e) {

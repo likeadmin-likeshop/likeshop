@@ -122,22 +122,12 @@ class OrderLogic
             ->group('o.id')
             ->select()->toArray();
 
-
-        $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
-
         foreach ($lists as &$list){
             foreach ($list['order_goods'] as &$order_goods){
-                $item_id = $order_goods['item_id'];
-                $order_goods['goods_name'] = '';
-                $order_goods['spec_value'] = '';
-                $order_goods['image'] = '';
-
-                if (isset($goods_info[$item_id])){
-                    $info = $goods_info[$item_id];
-                    $order_goods['goods_name'] = $info['name'];
-                    $order_goods['spec_value'] = $info['spec_value_str'];
-                    $order_goods['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
-                }
+                $order_good_info = json_decode($order_goods['goods_info'], true);
+                $order_goods['goods_name'] = $order_good_info['goods_name'];
+                $order_goods['spec_value'] = $order_good_info['spec_value_str'];
+                $order_goods['image'] =  empty($order_good_info['spec_image']) ? $order_good_info['image'] : $order_good_info['spec_image'];
             }
             $list['delivery_type'] = Order::getDeliveryType($list['delivery_type']);
             $list['user_level'] = $list['user']['level']['name']?? '';
@@ -155,8 +145,8 @@ class OrderLogic
             ->find();
 
         foreach ($result['order_goods'] as &$order_goods) {
-            $info = Goods::getOneByItem($order_goods['item_id'], 'g.name,g.image,i.spec_value_str,i.image as spec_image');
-            $order_goods['goods_name'] = $info['name'];
+            $info = json_decode($order_goods['goods_info'], true);
+            $order_goods['goods_name'] = $info['goods_name'];
             $order_goods['spec_value'] = $info['spec_value_str'];
             $order_goods['goods_image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }

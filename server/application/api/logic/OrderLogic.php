@@ -28,7 +28,6 @@ use app\common\logic\{AccountLogLogic,
     PaymentLogic,
     PayNotifyLogic};
 use app\common\model\{AccountLog,
-    Client_,
     Goods,
     MessageScene_,
     OrderGoods,
@@ -63,30 +62,28 @@ class OrderLogic extends LogicBase
             $discount_amount = 0;//优惠金额
             $order_type = \app\common\model\Order::NORMAL_ORDER;//普通订单
 
-
             foreach ($goods as $good) {
-                if (isset($infos[$good['item_id']])) {
-                    $goods_info = $infos[$good['item_id']];
-
-                    $goods_info['goods_num'] = $good['num'];
-                    $goods_info['image_str'] = empty($goods_info['spec_image']) ? UrlServer::getFileUrl($goods_info['image']) : UrlServer::getFileUrl($goods_info['spec_image']);
-
-                    unset($goods_info['id'], $goods_info['image'], $goods_info['spec_image']);
-                    $goods_info['discount_price'] = 0;
-                    $goods_lists[] = $goods_info;
-
-                    //订单汇总信息
-                    $total_num += $good['num'];
-                    $total_goods_price += $goods_info['goods_price'] * $good['num'];
+                if (!isset($infos[$good['item_id']])) {
+                    continue;
                 }
+                $goods_info = $infos[$good['item_id']];
+
+                $goods_info['goods_num'] = $good['num'];
+                $goods_info['image_str'] = empty($goods_info['spec_image']) ? UrlServer::getFileUrl($goods_info['image']) : UrlServer::getFileUrl($goods_info['spec_image']);
+
+                unset($goods_info['id']);
+                $goods_info['discount_price'] = 0;
+                $goods_lists[] = $goods_info;
+
+                //订单汇总信息
+                $total_num += $good['num'];
+                $total_goods_price += $goods_info['goods_price'] * $good['num'];
             }
 
             //用户地址
             $user_address = UserAddressLogic::getOrderUserAddress($post, $user_id);
-
             //运费
             $total_shipping_price = FreightLogic::calculateFreight($goods_lists, $user_address);
-
             //订单金额
             $total_amount = $total_goods_price + $total_shipping_price;
             //订单应付金额
@@ -217,7 +214,7 @@ class OrderLogic extends LogicBase
     public static function getGoodsColumn($item_ids)
     {
         $field = 'i.id as item_id,g.id as goods_id,g.name as goods_name,g.status,g.del,g.image,i.stock,
-        g.free_shipping_type,g.free_shipping,g.free_shipping_template_id,
+        g.free_shipping_type,g.free_shipping,g.free_shipping_template_id,g.image, i.image as spec_image,
         i.spec_value_str,i.spec_value_ids,i.price as goods_price,i.image as spec_image,i.volume,
         i.weight,g.third_category_id';
 
@@ -245,7 +242,7 @@ class OrderLogic extends LogicBase
             $goods_lists = $data['goods_lists'];
             $user_address = $data['address'];
 
-            //1,订单主表记录
+            //订单主表记录
             $order_data = [
                 'order_type' => $data['order_type'],
                 'order_sn' => createSn('order', 'order_sn', '', 4),
@@ -297,12 +294,13 @@ class OrderLogic extends LogicBase
                     'total_pay_price' => ($good['goods_price'] * $good['goods_num']) - $good['discount_price'],//实际支付商品金额(扣除优惠金额)
                     'spec_value_ids' => $good['spec_value_ids'],
                     'discount_price' => $good['discount_price'],
+                    'goods_info'   => json_encode($good, JSON_UNESCAPED_UNICODE),
                     'create_time' => $time,
                 ];
 
                 $cart_items[] = $good['item_id'];//购物车提交商品规格id
             }
-            //2,添加订单商品
+            //添加订单商品
             Db::name('order_goods')->insertAll($goods_data);
 
             self::addOrderAfter($order_id, $user_id, $type, $cart_items, $data);
@@ -372,21 +370,20 @@ class OrderLogic extends LogicBase
         $order = new Order();
         $where[] = ['del', '=', 0];
         $where[] = ['user_id', '=', $user_id];
-        if ($type) {
-            switch ($type) {
-                case 'pay':
-                    $where[] = ['order_status', '=', CommonOrder::STATUS_WAIT_PAY];
-                    break;
-                case 'delivery':
-                    $where[] = ['order_status', 'in', [CommonOrder::STATUS_WAIT_DELIVERY, CommonOrder::STATUS_WAIT_RECEIVE]];
-                    break;
-                case 'finish':
-                    $where[] = ['order_status', '=', CommonOrder::STATUS_FINISH];
-                    break;
-                case 'close':
-                    $where[] = ['order_status', '=', CommonOrder::STATUS_CLOSE];
-                    break;
-            }
+
+        switch ($type) {
+            case 'pay':
+                $where[] = ['order_status', '=', CommonOrder::STATUS_WAIT_PAY];
+                break;
+            case 'delivery':
+                $where[] = ['order_status', 'in', [CommonOrder::STATUS_WAIT_DELIVERY, CommonOrder::STATUS_WAIT_RECEIVE]];
+                break;
+            case 'finish':
+                $where[] = ['order_status', '=', CommonOrder::STATUS_FINISH];
+                break;
+            case 'close':
+                $where[] = ['order_status', '=', CommonOrder::STATUS_CLOSE];
+                break;
         }
 
         $order_count = $order->where(['del' => 0, 'user_id' => $user_id])
@@ -403,36 +400,22 @@ class OrderLogic extends LogicBase
 
         $order_list->append(['goods_count', 'pay_btn', 'cancel_btn', 'delivery_btn', 'take_btn', 'del_btn', 'comment_btn', 'order_cancel_time']);
 
-        $goods_info = Goods::getColumnGoods('g.name,g.image,i.spec_value_str,i.image as spec_image');
-
         foreach ($order_list as $list){
             foreach ($list['order_goods'] as &$order_goods){
-
-                $item_id = $order_goods['item_id'];
-
-                $order_goods['goods_name'] = '';
-                $order_goods['spec_value'] = '';
-                $order_goods['image'] = '';
-
-                if (isset($goods_info[$item_id])){
-
-                    $info = $goods_info[$item_id];
-
-                    $order_goods['goods_name'] = $info['name'];
-                    $order_goods['spec_value'] = $info['spec_value_str'];
-                    $order_goods['image'] = empty($info['spec_image']) ? UrlServer::getFileUrl($info['image']) : UrlServer::getFileUrl($info['spec_image']);
-                }
+                $order_good_info = json_decode($order_goods['goods_info'], true);
+                $order_goods['goods_name'] = $order_good_info['goods_name'];
+                $order_goods['spec_value'] = $order_good_info['spec_value_str'];
+                $image = empty($order_good_info['spec_image']) ? $order_good_info['image'] : $order_good_info['spec_image'];
+                $order_goods['image'] = UrlServer::getFileUrl($image);
             }
         }
 
-        $more = is_more($order_count, $page, $size);  //是否有下一页
-
         $data = [
-            'list' => $order_list,
-            'page' => $page,
-            'size' => $size,
+            'list'  => $order_list,
+            'page'  => $page,
+            'size'  => $size,
             'count' => $order_count,
-            'more' => $more
+            'more'  => is_more($order_count, $page, $size)
         ];
         return $data;
     }
@@ -441,37 +424,40 @@ class OrderLogic extends LogicBase
     public static function getOrderDetail($order_id)
     {
         $order = Order::get(['del' => 0, 'id' => $order_id], ['orderGoods']);
+        if (!$order) {
+            return [];
+        }
 
-        if ($order) {
-            $order->append(['delivery_address', 'pay_btn', 'cancel_btn', 'delivery_btn', 'take_btn', 'del_btn', 'order_cancel_time', 'pay_way_text'])
-                ->hidden([
-                    'user_id', 'order_source', 'city', 'district', 'address', 'shipping_status', 'shipping_code',
-                    'pay_status', 'transaction_id', 'del', 'province'
-                ]);
+        $order_append = [
+            'delivery_address', 'pay_btn', 'cancel_btn', 'delivery_btn', 'take_btn', 'del_btn', 'order_cancel_time', 'pay_way_text'
+        ];
+        $order_hidden = [
+            'user_id', 'order_source', 'city', 'district', 'address', 'shipping_status', 'shipping_code',
+            'pay_status', 'transaction_id', 'del', 'province'
+        ];
+        $order->append($order_append)->hidden($order_hidden);
 
-            $refund_days = ConfigServer::get('after_sale', 'refund_days', 0) * 86400;
-            $now = time();
-            //显示是否评论按钮
-            foreach ($order->order_goods as &$item) {
-                $item['comment_btn'] = 0;
-                if ($order['pay_status'] == Pay::ISPAID && $order['order_status'] == CommonOrder::STATUS_FINISH && $item['is_comment'] == 0) {
-                    $item['comment_btn'] = 1;
-                }
-                $item['refund_btn'] = 0;
-
-                $confirm_take_time = strtotime($order['confirm_take_time']) ?: 0;
-                $refund_time = $confirm_take_time + $refund_days;
-
-                if ($order['order_status'] == CommonOrder::STATUS_FINISH && $refund_time > $now && $item['refund_status'] == \app\common\model\OrderGoods::REFUND_STATUS_NO) {
-                    $item['refund_btn'] = 1;
-                }
-
-                $goods_info = Goods::getOneByItem($item['item_id'], 'g.name,g.image,i.spec_value_str,i.image as spec_image');
-
-                $item['goods_name'] = $goods_info['name'];
-                $item['spec_value'] = $goods_info['spec_value_str'];
-                $item['image'] = empty($goods_info['spec_image']) ? UrlServer::getFileUrl($goods_info['image']) : UrlServer::getFileUrl($goods_info['spec_image']);
+        $refund_days = ConfigServer::get('after_sale', 'refund_days', 0) * 86400;
+        $now = time();
+        //显示是否评论按钮
+        foreach ($order->order_goods as &$item) {
+            $item['comment_btn'] = 0;
+            if ($order['pay_status'] == Pay::ISPAID && $order['order_status'] == CommonOrder::STATUS_FINISH && $item['is_comment'] == 0) {
+                $item['comment_btn'] = 1;
             }
+            $item['refund_btn'] = 0;
+
+            $confirm_take_time = strtotime($order['confirm_take_time']) ?: 0;
+            $refund_time = $confirm_take_time + $refund_days;
+
+            if ($order['order_status'] == CommonOrder::STATUS_FINISH && $refund_time > $now && $item['refund_status'] == \app\common\model\OrderGoods::REFUND_STATUS_NO) {
+                $item['refund_btn'] = 1;
+            }
+
+            $goods_info = json_decode($item['goods_info'], true);
+            $item['goods_name'] = $goods_info['goods_name'];
+            $item['spec_value'] = $goods_info['spec_value_str'];
+            $item['image'] = empty($goods_info['spec_image']) ? UrlServer::getFileUrl($goods_info['image']) : UrlServer::getFileUrl($goods_info['spec_image']);
         }
         return $order;
     }

@@ -20,6 +20,7 @@
 namespace app\api\controller;
 
 use app\api\logic\OrderLogic;
+use think\Db;
 
 /**
  * 订单
@@ -69,14 +70,14 @@ class Order extends ApiBase
     public function detail()
     {
         $order_id = $this->request->get('id');
-        if ($order_id) {
-            $order_detail = OrderLogic::getOrderDetail($order_id);
-            if ($order_detail) {
-                $this->_success('获取成功', $order_detail);
-            }
+        if (!$order_id) {
+            $this->_error('请选择订单');
+        }
+        $order_detail = OrderLogic::getOrderDetail($order_id);
+        if (!$order_detail) {
             $this->_error('订单不存在了!', '');
         }
-        $this->_error('请选择订单');
+        $this->_success('获取成功', $order_detail);
     }
 
     //取消订单
@@ -126,4 +127,49 @@ class Order extends ApiBase
         $this->_error($tips);
     }
 
+    //修复旧数据
+    public function goods()
+    {
+        $orders = Db::name('order_goods og')
+            ->field('og.goods_id,og.item_id,og.goods_info,og.spec_value_ids,og.id as og_id')
+            ->join('goods g', 'og.goods_id = g.id')
+            ->join('goods_item i', 'i.id = og.item_id')
+            ->where('og.goods_info', 'null')
+            ->select();
+
+        $goods_ids = array_column($orders, 'goods_id');
+        $item_ids = array_column($orders, 'item_id');
+        $spec_ids = array_column($orders, 'spec_value_ids');
+
+        $goods = Db::name('goods')->where(['id' => $goods_ids])->column('image,name', 'id');
+        $goods_item = Db::name('goods_item')->where(['id' => $item_ids])->column('image', 'id');
+        $spec = Db::name('goods_spec_value')->where(['id' => $spec_ids])->column('value', 'id');
+
+        $handle_arr = [];
+        foreach ($orders as $order){
+            if (!empty($order['goods_info'])){
+                continue;
+            }
+
+            $goods_id = $order['goods_id'];
+            $item_id =  $order['item_id'];
+            $spec_id = $order['spec_value_ids'];
+
+            $data = [];
+            $data['goods_name'] =  $goods[$goods_id]['name'] ?? '';
+            $data['image'] =  $goods[$goods_id]['image'] ?? '';
+            $data['spec_image'] = $goods_item[$item_id] ?? '';
+            $data['spec_value_str'] = $spec[$spec_id] ?? '';
+
+            Db::name('order_goods')
+                ->where(['id'=> $order['og_id']])
+                ->update([
+                    'goods_info' => json_encode($data, JSON_UNESCAPED_UNICODE),
+                ]);
+
+            $handle_arr[] = $order['og_id'];
+        }
+
+        return '修改'.count($handle_arr).'条数据';
+    }
 }

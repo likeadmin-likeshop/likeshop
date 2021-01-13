@@ -33,7 +33,11 @@
         background: hsla(0, 0%, 60%, .6);
         border-radius: 10px;
     }
+    .tips{
+        color: red;
+    }
     .copy{
+        margin-left: 10px;
         margin-top: 5px;
     }
 </style>
@@ -60,14 +64,18 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">小程序名称：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" value="{$mnp.name}" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" name="name" value="{$mnp.name}"  class="layui-input" autocomnplete="off">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">原始ID：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="original_id" value="{$mnp.original_id}" autocomnplete="off" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" name="original_id" value="{$mnp.original_id}"  class="layui-input" autocomnplete="off">
+                        </div>
                     </div>
 
                 </div>
@@ -97,16 +105,20 @@
                 </fieldset>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">AppID：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="app_id" value="{$mnp.app_id}"  lay-verify="required" lay-verType="tips"
-                           class="layui-input">
+                <label class="layui-form-label"><span class="tips">*</span>AppID：</label>
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="app_id" value="{$mnp.app_id}" autocomplete="off"   lay-verify="required" lay-verType="tips"
+                               class="layui-input">
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">AppSecret：</label>
-                <div class="layui-input-inline">
-                    <input type="text"  name="app_secret" value="{$mnp.app_secret}"  lay-verify="required"  lay-verType="tips" autocomnplete="off" class="layui-input">
+                <label class="layui-form-label"><span class="tips">*</span>AppSecret：</label>
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text"  name="app_secret" value="{$mnp.app_secret}" lay-verify="required"  lay-verType="tips" autocomnplete="off" class="layui-input">
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -122,10 +134,12 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label">request合法域名：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="request_domain" value="{$mnp.request_domain}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="request_domain" readonly="readonly" value="{$mnp.request_domain}" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -133,10 +147,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">socket合法域名：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="socket_domain" value="{$mnp.socket_domain}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="socket_domain" readonly="readonly"  value="{$mnp.socket_domain}" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -144,10 +160,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">uploadFile合法域名：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="uploadfile_domain" value="{$mnp.uploadfile_domain}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="uploadfile_domain" readonly="readonly" value="{$mnp.uploadfile_domain}" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -155,10 +173,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">downloadFile合法域名：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="downloadfile_domain" value="{$mnp.downloadfile_domain}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="downloadfile_domain" readonly="readonly" value="{$mnp.downloadfile_domain}" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -166,10 +186,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">udp合法域名：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="udp_domain" value="{$mnp.udp_domain}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="udp_domain" readonly="readonly" value="{$mnp.udp_domain}" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -183,10 +205,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">业务域名：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="business_domain" value="{$mnp.business_domain}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="business_domain" readonly="readonly"  value="{$mnp.business_domain}" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -201,11 +225,12 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label">URL：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="url" value="{$mnp.url}" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text" name="url" value="{$mnp.url}" class="layui-input" autocomplete="off">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
-
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -213,10 +238,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">Token：</label>
-                <div class="layui-input-inline">
-                    <input type="text"  name="token" value="{$mnp.token}" autocomnplete="off" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text"  name="token" value="{$mnp.token}" autocomnplete="off" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -224,10 +251,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">EncodingAESKey：</label>
-                <div class="layui-input-inline">
-                    <input type="text"  name="encoding_ses_key" value="{$mnp.encoding_ses_key}" autocomnplete="off" class="layui-input">
+                <div class="layui-input-block">
+                    <div class="layui-col-md3">
+                        <input type="text"  name="encoding_ses_key" value="{$mnp.encoding_ses_key}" autocomnplete="off" class="layui-input">
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
-                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>

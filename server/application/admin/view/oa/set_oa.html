@@ -34,25 +34,29 @@
         border-radius: 10px;
     }
     .copy{
+        margin-left: 10px;
         margin-top: 5px;
+    }
+    .tips{
+        color: red;
     }
 </style>
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-body">
-        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
-            <div class="layui-colla-item">
-                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
-                <div class="layui-colla-content layui-show">
-                    *填写微信公众号开发配置，请前往微信公众平台申请服务号并完成认证。
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        *填写微信公众号开发配置，请前往微信公众平台申请服务号并完成认证。
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
         <div class="layui-card-header" style="margin-top: 20px">公众号配置</div>
         <div class="layui-card-body" pad15>
             <div class="layui-form" lay-filter="">
-<!--                微信公众号-->
+                <!--                微信公众号-->
                 <div class="layui-form-item div-flex">
                     <fieldset class="layui-elem-field layui-field-title">
                         <legend>微信公众号</legend>
@@ -60,14 +64,18 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">公众号名称：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" value="{$oa.name}" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" name="name" value="{$oa.name}" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">原始ID：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="original_id" value="{$oa.original_id}" autocomplete="off" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" name="original_id" value="{$oa.original_id}" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
 
                 </div>
@@ -89,30 +97,34 @@
                     <label class="layui-form-label"></label>
                     <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</span>
                 </div>
-<!--                公众号开发者信息-->
+                <!--                公众号开发者信息-->
                 <div class="layui-form-item div-flex">
                     <fieldset class="layui-elem-field layui-field-title">
                         <legend>公众号开发者信息</legend>
                     </fieldset>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">AppID：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="app_id" value="{$oa.app_id}"  lay-verify="required" lay-verType="tips"
-                               class="layui-input">
+                    <label class="layui-form-label"><span class="tips">*</span>AppID：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" name="app_id" value="{$oa.app_id}"  lay-verify="required" lay-verType="tips"
+                                   class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">AppSecret：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="app_secret" value="{$oa.app_secret}"  lay-verify="required"  lay-verType="tips" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label"><span class="tips">*</span>AppSecret：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="app_secret" value="{$oa.app_secret}"  lay-verify="required"  lay-verType="tips" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
                     <span style="color: #a3a3a3;font-size: 9px">登录微信公众平台，点击开发>基本配置>公众号开发信息，设置AppID和AppSecret</span>
                 </div>
-<!--                服务器配置-->
+                <!--                服务器配置-->
                 <div class="layui-form-item div-flex">
                     <fieldset class="layui-elem-field layui-field-title">
                         <legend>服务器配置</legend>
@@ -120,10 +132,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">URL：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" value="{$oa.url}" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" value="{$oa.url}" readonly="readonly" class="layui-input">
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
 
                 </div>
                 <div class="layui-form-item">
@@ -132,10 +146,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">Token：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="token" value="{$oa.token}" autocomplete="off" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="token" value="{$oa.token}" autocomplete="off" class="layui-input">
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy " >复制</button>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
@@ -143,10 +159,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">EncodingAESKey：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="encoding_ses_key" value="{$oa.encoding_ses_key}" autocomplete="off" class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="encoding_ses_key" value="{$oa.encoding_ses_key}" autocomplete="off" class="layui-input">
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
@@ -164,7 +182,7 @@
                         <input type="radio" name="encryption_type"  value="3" title="安全模式（推荐）(消息包为纯密文，需要开发者加密和解密，安全系数高)" {if $oa.encryption_type == 3} checked {/if}  >
                     </div>
                 </div>
-<!--                功能设置-->
+                <!--                功能设置-->
                 <div class="layui-form-item div-flex">
                     <fieldset class="layui-elem-field layui-field-title">
                         <legend>功能设置</legend>
@@ -172,10 +190,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">业务域名：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"value="{$oa.business_domain}"  class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"value="{$oa.business_domain}"  class="layui-input">
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
@@ -183,10 +203,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">JS接口安全域名：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" value="{$oa.safety_domain}"  class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text" value="{$oa.safety_domain}"  class="layui-input">
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
@@ -194,10 +216,12 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">网页授权域名：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  value="{$oa.auth_domain}"  class="layui-input">
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  value="{$oa.auth_domain}"  class="layui-input">
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>

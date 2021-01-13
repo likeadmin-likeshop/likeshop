@@ -3,6 +3,9 @@
     .layui-form-label{
         width: 150px;
     }
+    .tips{
+        color: red;
+    }
 </style>
 <div class="layui-fluid">
     <div class="layui-card">
@@ -24,15 +27,19 @@
                     </fieldset>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">AppID：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="app_id" value="{$config.app_id}" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label"><span class="tips">*</span>AppID：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="app_id" value="{$config.app_id}"  lay-verify="required"  autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">AppSecret：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="secret" value="{$config.secret}" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label"><span class="tips">*</span>AppSecret：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="secret" value="{$config.secret}"  lay-verify="required"  autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label"></label>

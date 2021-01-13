@@ -37,10 +37,10 @@ class OrderClose extends Command{
     }
     protected function execute(Input $input, Output $output)
     {
-        //是否下单扣库存
+        //是否下单扣库存 todo 默认是下单扣库存
         $deduct_type = ConfigServer::get('trading', 'deduct_type', 1);
-        //取消订单时长
-        $order_cancel_time = ConfigServer::get('trading','order_cancel', '',30) * 60;
+        //取消订单时长 todo 默认是30分钟
+        $order_cancel_time = ConfigServer::get('trading','order_cancel', 30) * 60;
         $now = time();
 
         $order = new Order();

@@ -30,6 +30,9 @@ use think\Db;
 class Order extends ApiBase
 {
 
+    public $like_not_need_login = ['goods'];
+
+
     //订单列表
     public function lists()
     {

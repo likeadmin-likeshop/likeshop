@@ -113,43 +113,55 @@
 
 
         <!--快捷功能-->
-        <div class="layui-col-md12">
+        <div class="layui-col-sm12">
             <div class="layui-card">
                 <div class="layui-card-header">快捷功能</div>
                 <div class="layui-card-body">
-                    <div class="layui-carousel layadmin-carousel layadmin-shortcut">
+                    <div class="layadmin-shortcut">
                         <ul class="layui-row layui-col-space10">
-                                <li class="layui-col-xs3">
-                                    <a lay-href="{:url('goods/lists')}">
-                                        <i class="layui-icon layui-icon-cart-simple"></i>
-                                        <cite>商品</cite>
-                                    </a>
-                                </li>
-                                <li class="layui-col-xs3">
-                                    <a lay-href="{:url('user/lists')}">
-                                        <i class="layui-icon layui-icon-username"></i>
-                                        <cite>会员</cite>
-                                    </a>
-                                </li>
-                                <li class="layui-col-xs3">
-                                    <a lay-href="{:url('order/lists')}">
-                                        <i class="layui-icon layui-icon-form"></i>
-                                        <cite>订单</cite>
-                                    </a>
-                                </li>
-                                <li class="layui-col-xs3">
-                                    <a lay-href="{:url('coupon/lists')}">
-                                        <i class="layui-icon layui-icon-gift"></i>
-                                        <cite>优惠券</cite>
-                                    </a>
-                                </li>
-                                <li class="layui-col-xs3">
-                                    <a lay-href="{:url('article/lists')}">
-                                        <i class="layui-icon layui-icon-file"></i>
-                                        <cite>内容管理</cite>
-                                    </a>
-                                </li>
-                            </ul>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('goods/lists')}">
+                                    <i class="layui-icon layui-icon-cart-simple"></i>
+                                    <cite>商品</cite>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('user/lists')}">
+                                    <i class="layui-icon layui-icon-username"></i>
+                                    <cite>会员</cite>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('order/lists')}">
+                                    <i class="layui-icon layui-icon-form"></i>
+                                    <cite>订单</cite>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('coupon/lists')}">
+                                    <i class="layui-icon layui-icon-gift"></i>
+                                    <cite>优惠券</cite>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('seckill/lists')}">
+                                    <i class="layui-icon layui-icon-star"></i>
+                                    <cite>限时秒杀</cite>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('distributionMember/index')}">
+                                    <i class="layui-icon layui-icon-group"></i>
+                                    <cite>分销管理</cite>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3">
+                                <a lay-href="{:url('article/lists')}">
+                                    <i class="layui-icon layui-icon-file"></i>
+                                    <cite>内容管理</cite>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -211,7 +223,7 @@
 
                 var option_amount = {
                     title: {
-                      text: '销售金额'
+                        text: '销售金额'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -272,7 +284,7 @@
 
                 var option_member = {
                     title: {
-                      text: '用户访问量'
+                        text: '用户访问量'
                     },
                     tooltip: {
                         trigger: 'axis',

@@ -120,11 +120,15 @@ class Goods extends Model{
             foreach ($comment_image as &$image_item){
                 $image_item =  UrlServer::getFileUrl($image_item);
             }
+
             $comment['image'] = $comment_image;
             foreach ($this->goods_item as $item){
                 if($item['id'] == $comment['item_id']){
                     $comment['spec_value_str'] = $item['spec_value_str'];
                 }
+            }
+            if(empty($goods_comment['comment'])){
+                $goods_comment['comment'] = '此用户没有填写评论';
             }
         }
         return $comment;

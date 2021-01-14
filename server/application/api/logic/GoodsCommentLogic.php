@@ -81,6 +81,9 @@ class GoodsCommentLogic{
                     $comment['image'][] = UrlServer::getFileUrl($image['uri']);
                 }
             }
+            if(empty($comment['comment'])){
+                $comment['comment'] = '此用户没有填写评论';
+            }
         }
         //好评总数
         $good_count = Db::name('goods_comment')
@@ -249,7 +252,7 @@ class GoodsCommentLogic{
 
             $goods_comment = Db::name('goods_comment')
                         ->where(['order_goods_id'=>$order_goods_ids,'del'=>0])
-                        ->column('goods_comment,comment','order_goods_id');
+                        ->column('goods_comment,comment,create_time','order_goods_id');
         }
 
         $goods_id_ids = array_column($order_goods_list,'goods_id');
@@ -257,11 +260,14 @@ class GoodsCommentLogic{
         foreach ($order_goods_list as &$goods){
             $goods['image'] = '';
             $goods['goods_name'] = '';
+            $goods['goods_comment'] = '';
+            $goods['comment'] = '';
+            $goods['create_time'] = '';
             if(isset($goods_comment[$goods['id']])){
-                $goods['goods_comment'] =$goods_comment[$goods['id']]['goods_comment'];
-                $goods['comment'] =$goods_comment[$goods['id']]['comment'];
+                $goods['goods_comment'] = $goods_comment[$goods['id']]['goods_comment'];
+                $goods['comment'] = $goods_comment[$goods['id']]['comment'] ?:'此用户没有填写评论';
+                $goods['create_time'] = date('Y-m-d H:i:s',$goods_comment[$goods['id']]['create_time']);
             }
-
             if(isset($goods_list[$goods['goods_id']])){
                 $goods['image'] =  UrlServer::getFileUrl($goods_list[$goods['goods_id']]['image']);
                 $goods['goods_name'] = $goods_list[$goods['goods_id']]['name'];

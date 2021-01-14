@@ -44,6 +44,21 @@ class Menu_{
     const centre_my_collect       = 16;
     const centre_service          = 17;
 
+    /**
+     * Notes: 菜单内容
+     * @param bool $scene 场景：1-首页导航；2-个人中心
+     * @param bool $from 菜单来源：获取具体的某个菜单
+     * @return array
+     * name => '菜单名称'
+     * link =>[
+     *      'link1' => 小程序链接
+     *      'link2' => H5
+     *      'link3' => APP
+     * ]
+     * is_tab    => 是否的tab页
+     * type      => 菜单类型：1-跳转；3-按钮（微信小程序可调用客服）
+     *
+     */
     public static function getMenuContent($scene = true,$from = true){
         $config1 = [
             self::index_seckill            => [

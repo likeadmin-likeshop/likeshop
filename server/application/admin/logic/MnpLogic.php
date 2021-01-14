@@ -35,7 +35,7 @@ class MnpLogic{
             'uploadfile_domain' => ConfigServer::get('mnp', 'uploadfile_domain', 'https://'.$domain_name),
             'downloadfile_domain' => ConfigServer::get('mnp', 'downloadfile_domain', 'https://'.$domain_name),
             'udp_domain' => ConfigServer::get('mnp', 'udp_domain', 'udp://'.$domain_name),
-            'business_domain' => ConfigServer::get('mnp', 'business_domain', ''),
+            'business_domain' => $domain_name,
             'url' => ConfigServer::get('mnp', 'url', ''),
             'token' => ConfigServer::get('mnp', 'token', 'LikeShop'),
             'encoding_ses_key' => ConfigServer::get('mnp', 'encoding_ses_key', ''),
@@ -57,7 +57,6 @@ class MnpLogic{
             ConfigServer::set('mnp','qr_code',$post['qr_code']);
             ConfigServer::set('mnp','app_id',$post['app_id']);
             ConfigServer::set('mnp','secret',$post['app_secret']);
-            ConfigServer::set('mnp','business_domain',$post['business_domain']);
             ConfigServer::set('mnp','url',$post['url']);
             ConfigServer::set('mnp','token',$post['token']);
             ConfigServer::set('mnp','encoding_ses_key',$post['encoding_ses_key']);

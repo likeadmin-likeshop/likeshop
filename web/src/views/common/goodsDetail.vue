@@ -341,15 +341,10 @@ export default {
                         content,
                         comment,
                         like,
-                        activity,
                     } = res.data;
                     this.goodsDetail = res.data;
                     this.swiperList = goods_image;
                     this.goodsLike = like;
-                    this.countTime = activity.info
-                        ? activity.info.end_time * 1000 - Date.now()
-                        : 0;
-                    this.activity = activity;
                     this.comment = comment;
                     this.isFirstLoading = false;
                 } else {

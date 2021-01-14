@@ -50,6 +50,10 @@
     .label-dir{
         color: #0C0C0C;
     }
+    .copy{
+        margin-left: 10px;
+        margin-top: 5px;
+    }
 
 
 </style>
@@ -97,20 +101,31 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" style="width: 90px;">支付授权目录:</label>
-        <div class="layui-input-block" style="width: 360px;margin-left: 120px">
-            <label class="label-dir" >{$domain}/mobile/common/</label>
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" style="margin-left: 43px;">复制</button>
-        </div>
-        <div class="layui-input-block" style="width: 360px;margin-left: 120px">
-            <label class="label-dir" >{$domain}/common/confirmorder/</label>
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy"  style="margin-left: 6px;">复制</button>
-        </div>
-        <div class="layui-input-block" style="width: 360px;margin-left: 120px">
-            <label  class="label-dir">{$domain}/mobile/user/</label>
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" style="margin-left: 70px;">复制</button>
+        <div class="layui-input-block">
+            <div class="layui-col-md3">
+                <input type="text"   value="{$domain}/mobile/common/" autocomplete="off" class="layui-input">
+            </div>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px;"></label>
+        <div class="layui-input-block">
+            <div class="layui-col-md3">
+                <input type="text"   value="{$domain}/common/confirmorder/" autocomplete="off" class="layui-input">
+            </div>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px;"></label>
+        <div class="layui-input-block">
+            <div class="layui-col-md3">
+                <input type="text"   value="{$domain}/mobile/user/" autocomplete="off" class="layui-input">
+            </div>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+        </div>
+    </div>
     <div class="layui-form-item ">
         <label class="layui-form-label">apiclient_cert.pem:</label>
         <div class="layui-inline" id="icon">
@@ -177,151 +192,142 @@
             <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
         </div>
     </div>
-<script>
-    layui.config({
-        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'form','like','upload'], function(){
-        var $ = layui.$
-            ,form = layui.form
-            ,like = layui.like
-            ,upload = layui.upload;
+    <script>
+        layui.config({
+            base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'form','like','upload'], function(){
+            var $ = layui.$
+                ,form = layui.form
+                ,like = layui.like
+                ,upload = layui.upload;
 
-        //复制
-        $(document).on('click', '.copy', function () {
-            var Copytext = $(this).prev().html();
-            var input = document.createElement('input');
-            input.setAttribute('readonly', 'readonly');
-            input.setAttribute('value', Copytext);
-            document.body.appendChild(input);
-            input.select();
-            input.setSelectionRange(0, 9999);
-            document.execCommand("Copy");
-            layui.layer.msg('复制成功', {
-                offset: '15px'
-                , icon: 1
-                , time: 1000
+            //复制
+            $(document).on('click', '.copy', function () {
+                var copyText = $(this).prev().children()
+                copyText.select()
+                document.execCommand("Copy");
+
+            })
+
+            //上传
+            upload.render({
+                elem: '.aa' //绑定元素
+                // elem: '#apiclient_cert' //绑定元素
+                ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
+                ,accept:'file'
+                ,exts:'pem|txt|doc' //允许上传的文件后缀
+                // ,auto: false //选择文件后不自动上传
+                // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
+
+                ,done: function(res, index, upload){ //上传完毕回调
+
+                    var html = '<div class="goods-li">\n' +
+                        '<img class="goods-img" ' +
+                        'src="/static/common/image/default/upload.png">' +
+                        '<a class="goods-img-del-x" style="display: none">x</a>' +
+                        '</div>';
+
+                    $('.cc').append(html);
+                    $('.aa').css('display','none');
+                    $("input[name='apiclient_cert']").attr("value",res.data.uri);
+
+
+                    var item = this.item;
+                    console.log(res);
+                    layer.msg('上传成功', {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                    });
+                }
+                ,error: function(res){
+                    //请求异常回调
+                    layer.msg('上传异常', {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 1000
+                    });
+                }
             });
+
+            //删除图片
+            $(document).on('click', '.goods-img-del-x', function () {
+
+                $('.aa').css('display','block');
+                $('.goods-li').remove();
+                $("input[name='apiclient_cert']").val('');
+            });
+
+            //上传
+            upload.render({
+                elem: '.bb' //绑定元素
+                // elem: '#apiclient_cert' //绑定元素
+                ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
+                ,accept:'file'
+                ,exts:'pem|txt|doc' //允许上传的文件后缀
+                // ,auto: false //选择文件后不自动上传
+                // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
+
+                ,done: function(res, index, upload){ //上传完毕回调
+
+                    var html = '<div class="goods-li-a">\n' +
+                        '<img class="goods-img" ' +
+                        'src="/static/common/image/default/upload.png">' +
+                        '<a class="goods-img-del-x-a" style="display: none">x</a>' +
+                        '</div>';
+
+                    $('.dd').append(html);
+                    $('.bb').css('display','none');
+                    $("input[name='apiclient_key']").attr("value",res.data.uri);
+
+
+                    var item = this.item;
+                    console.log(res);
+                    layer.msg('上传成功', {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                    });
+                }
+                ,error: function(res){
+                    //请求异常回调
+                    layer.msg('上传异常', {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 1000
+                    });
+                }
+            });
+
+            //删除图片
+            $(document).on('click', '.goods-img-del-x-a', function () {
+
+                $('.bb').css('display','block');
+                $('.goods-li-a').remove();
+                $("input[name='apiclient_key']").val('');
+            });
+
+            //  删除按钮的显示与隐藏
+            $(document).on('mouseover', '.goods-img', function () {
+                $(this).next().show();
+            });
+            $(document).on('mouseout', '.goods-img', function () {
+                $(this).next().hide();
+            });
+            $(document).on('mouseover', '.goods-img-del-x', function () {
+                $(this).show();
+            });
+            $(document).on('mouseout', '.goods-img-del-x', function () {
+                $(this).hide();
+            });
+            $(document).on('mouseover', '.goods-img-del-x-a', function () {
+                $(this).show();
+            });
+            $(document).on('mouseout', '.goods-img-del-x-a', function () {
+                $(this).hide();
+            });
+
         })
-
-        //上传
-        upload.render({
-            elem: '.aa' //绑定元素
-            // elem: '#apiclient_cert' //绑定元素
-            ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
-            ,accept:'file'
-            ,exts:'pem|txt|doc' //允许上传的文件后缀
-            // ,auto: false //选择文件后不自动上传
-            // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
-
-            ,done: function(res, index, upload){ //上传完毕回调
-
-                var html = '<div class="goods-li">\n' +
-                    '<img class="goods-img" ' +
-                    'src="/static/common/image/default/upload.png">' +
-                    '<a class="goods-img-del-x" style="display: none">x</a>' +
-                    '</div>';
-
-                $('.cc').append(html);
-                $('.aa').css('display','none');
-                $("input[name='apiclient_cert']").attr("value",res.data.uri);
-
-
-                var item = this.item;
-                console.log(res);
-                layer.msg('上传成功', {
-                    offset: '15px'
-                    , icon: 1
-                    , time: 1000
-                });
-            }
-            ,error: function(res){
-                //请求异常回调
-                layer.msg('上传异常', {
-                    offset: '15px'
-                    , icon: 2
-                    , time: 1000
-                });
-            }
-        });
-
-        //删除图片
-        $(document).on('click', '.goods-img-del-x', function () {
-
-            $('.aa').css('display','block');
-            $('.goods-li').remove();
-            $("input[name='apiclient_cert']").val('');
-        });
-
-        //上传
-        upload.render({
-            elem: '.bb' //绑定元素
-            // elem: '#apiclient_cert' //绑定元素
-            ,url:'{:url("file/other")}?sub_dir='+'cert' //上传接口
-            ,accept:'file'
-            ,exts:'pem|txt|doc' //允许上传的文件后缀
-            // ,auto: false //选择文件后不自动上传
-            // ,bindAction: '#pay_config-submit-edit' //指向一个按钮触发上传
-
-            ,done: function(res, index, upload){ //上传完毕回调
-
-                var html = '<div class="goods-li-a">\n' +
-                    '<img class="goods-img" ' +
-                    'src="/static/common/image/default/upload.png">' +
-                    '<a class="goods-img-del-x-a" style="display: none">x</a>' +
-                    '</div>';
-
-                $('.dd').append(html);
-                $('.bb').css('display','none');
-                $("input[name='apiclient_key']").attr("value",res.data.uri);
-
-
-                var item = this.item;
-                console.log(res);
-                layer.msg('上传成功', {
-                    offset: '15px'
-                    , icon: 1
-                    , time: 1000
-                });
-            }
-            ,error: function(res){
-                //请求异常回调
-                layer.msg('上传异常', {
-                    offset: '15px'
-                    , icon: 2
-                    , time: 1000
-                });
-            }
-        });
-
-        //删除图片
-        $(document).on('click', '.goods-img-del-x-a', function () {
-
-            $('.bb').css('display','block');
-            $('.goods-li-a').remove();
-            $("input[name='apiclient_key']").val('');
-        });
-
-        //  删除按钮的显示与隐藏
-        $(document).on('mouseover', '.goods-img', function () {
-            $(this).next().show();
-        });
-        $(document).on('mouseout', '.goods-img', function () {
-            $(this).next().hide();
-        });
-        $(document).on('mouseover', '.goods-img-del-x', function () {
-            $(this).show();
-        });
-        $(document).on('mouseout', '.goods-img-del-x', function () {
-            $(this).hide();
-        });
-        $(document).on('mouseover', '.goods-img-del-x-a', function () {
-            $(this).show();
-        });
-        $(document).on('mouseout', '.goods-img-del-x-a', function () {
-            $(this).hide();
-        });
-
-    })
-</script>
+    </script>

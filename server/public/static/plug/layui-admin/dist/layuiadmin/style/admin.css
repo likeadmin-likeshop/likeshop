@@ -27,7 +27,7 @@ html #layuicss-layuiAdmin{display: none; position: absolute; width: 1989px;}
 
 
 /* 全局 */
-html{background-color: #f2f2f2; color: #666;}
+html{background-color: #f8f8f8;; color: #666;}
 *[template],
 .layadmin-tabsbody-item{display: none;}
 *[lay-href],

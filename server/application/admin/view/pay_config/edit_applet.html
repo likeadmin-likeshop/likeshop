@@ -202,26 +202,6 @@
                 });
             }
         });
-
-
-
-        $(document).on('click', '.copy', function () {
-            var Copytext = $(this).prev().html();
-            var input = document.createElement('input');
-            input.setAttribute('readonly', 'readonly');
-            input.setAttribute('value', Copytext);
-            document.body.appendChild(input);
-            input.select();
-            input.setSelectionRange(0, 9999);
-            document.execCommand("Copy");
-            layui.layer.msg('复制成功', {
-                offset: '15px'
-                , icon: 1
-                , time: 1000
-            });
-        })
-
-
         //上传
          upload.render({
             elem: '.aa' //绑定元素

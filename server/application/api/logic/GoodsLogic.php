@@ -100,8 +100,7 @@ class GoodsLogic{
             $goods->save();
             $goods->sales_sum += $goods->virtual_sales_sum;
             $goods->is_collect = 0;
-            //检查商品是否整在参加活动，如果正在参加活动替换商品的价格为活动价
-            $goods = self::checkActivity($goods);
+           
             if($user_id){
                 //是否收藏
                 $collect = Db::name('goods_collect')->where(['user_id'=>$user_id,'goods_id'=>$id])->find();
@@ -193,29 +192,7 @@ class GoodsLogic{
         ];
     }
 
-    //检查商品是否正在参加活动
-    public static function checkActivity($goods){
-        $goods['activity'] = [];
-        $seckill = SeckillLogic::getSeckillGoods();
-        if($seckill['seckill_goods']){
-            $seckill_goods_ids = array_column($seckill['seckill_goods'],'goods_id');
-            if($seckill['seckill_goods'] && in_array($goods['id'],$seckill_goods_ids)){
-                $goods['activity'] = [
-                    'type'       => 1,
-                    'info'       => $seckill['seckill'],
-                ];
-                foreach ($goods['goods_item'] as &$item){
-                    if(isset($seckill['seckill_goods'][$item['id']])){
 
-                        $item['price'] = $seckill['seckill_goods'][$item['id']]['price'];
-                    }
-                }
-            }
-
-        }
-        return $goods;
-
-    }
 
     //清空搜索记录
     public static function clearSearch($user_id){

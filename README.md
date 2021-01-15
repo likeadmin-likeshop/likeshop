@@ -10,7 +10,7 @@
 
 [![star](https://gitee.com/likemarket/likeshopv2/badge/star.svg?theme=dark)](https://www.likemarket.net)
 [![fork](https://gitee.com/likemarket/likeshopv2/badge/fork.svg?theme=gray)](https://www.likemarket.net)
-[![PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-8892BF.svg)](https://www.likemarket.net)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D7.1-8892BF.svg)](https://www.likemarket.net)
 [![License](https://img.shields.io/badge/license-Apache2.0-success.svg)](https://www.likemarket.net)
 
 </div>

@@ -87,15 +87,7 @@ class Order extends Validate
                 ->join('goods g', 'gi.goods_id = g.id')
                 ->where(['gi.id' => $item_ids])
                 ->column('gi.*', 'gi.id');
-            $seckill_list = SeckillLogic::getSeckillGoods();
-            $seckill_goods = $seckill_list['seckill_goods'];
-            if($seckill_goods){
-                foreach ($goods_price_array as $key => $item){
-                    if(isset($seckill_goods[$item['id']])){
-                        $goods_price_array[$key]['price'] = $seckill_goods[$item['id']]['price'];
-                    }
-                }
-            }
+          
             //所有的商品id
             $goods_ids = array_column($goods_price_array, 'goods_id');
             //优惠券商品

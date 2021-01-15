@@ -1,5 +1,5 @@
 /*
- Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
  Source Server         : localhost
  Source Server Type    : MySQL
@@ -11,7 +11,7 @@
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 07/01/2021 15:54:02
+ Date: 15/01/2021 19:58:22
 */
 
 SET NAMES utf8mb4;
@@ -5875,6 +5875,7 @@ CREATE TABLE `yx_order_goods` (
   `refund_status` tinyint(1) DEFAULT '0' COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
   `is_comment` tinyint(1) DEFAULT '0' COMMENT '是否已评论；0-否；1-是',
   `is_seckill` tinyint(1) DEFAULT '0' COMMENT '秒杀商品;0-不是;1-是',
+  `goods_info` text COMMENT '商品信息',
   `create_time` int(10) DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单商品表';

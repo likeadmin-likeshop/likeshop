@@ -1,5 +1,5 @@
 /*
- Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
  Source Server         : localhost
  Source Server Type    : MySQL
@@ -11,7 +11,7 @@
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 07/01/2021 16:13:20
+ Date: 15/01/2021 20:05:56
 */
 
 SET NAMES utf8mb4;
@@ -130,6 +130,35 @@ INSERT INTO `yx_ad_position` VALUES (17, '热销广告位', 0, 2, 300, 300, '', 
 INSERT INTO `yx_ad_position` VALUES (18, '秒杀广告位', 0, 3, 0, 0, '', 1, 1599634879, 0, 0);
 INSERT INTO `yx_ad_position` VALUES (19, '热销榜单', 0, 3, 0, 0, '', 1, 1600160518, 0, 0);
 INSERT INTO `yx_ad_position` VALUES (20, 'app启动页面', 1, 3, 300, 300, '', 1, 0, 0, 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yx_admin
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_admin`;
+CREATE TABLE `yx_admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `root` tinyint(1) DEFAULT '1' COMMENT '0-非超级管理员；1-超级管理；',
+  `name` varchar(8) NOT NULL DEFAULT '0' COMMENT '名称',
+  `type` tinyint(4) DEFAULT '0' COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
+  `account` varchar(16) NOT NULL DEFAULT '' COMMENT '账号',
+  `password` varchar(32) NOT NULL COMMENT '密码',
+  `salt` varchar(4) NOT NULL DEFAULT '' COMMENT '密码盐',
+  `role_id` int(11) NOT NULL DEFAULT '0' COMMENT '角色id',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
+  `login_time` int(10) DEFAULT NULL COMMENT '最后登录时间',
+  `login_ip` varchar(15) DEFAULT '' COMMENT '最后登录ip',
+  `disable` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用：0-否；1-是；',
+  `del` tinyint(10) NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `account` (`account`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='后台管理员表';
+
+-- ----------------------------
+-- Records of yx_admin
+-- ----------------------------
+BEGIN;
 COMMIT;
 
 -- ----------------------------
@@ -5848,6 +5877,7 @@ CREATE TABLE `yx_order_goods` (
   `refund_status` tinyint(1) DEFAULT '0' COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
   `is_comment` tinyint(1) DEFAULT '0' COMMENT '是否已评论；0-否；1-是',
   `is_seckill` tinyint(1) DEFAULT '0' COMMENT '秒杀商品;0-不是;1-是',
+  `goods_info` text COMMENT '商品信息',
   `create_time` int(10) DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单商品表';

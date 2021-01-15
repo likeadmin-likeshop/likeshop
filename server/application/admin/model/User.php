@@ -92,14 +92,4 @@ class User extends Model
         return $fans;
     }
 
-
-    public function getDistributionOrderAttr($value, $data)
-    {
-        return [
-            'num' => 0,
-            'money' => 0,
-            'amount' => 0,
-        ];
-    }
-
 }

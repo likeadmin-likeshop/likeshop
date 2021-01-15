@@ -68,8 +68,7 @@ class UserServer
                 'nickname' => $nickname,
                 'sn' => create_user_sn(),
                 'avatar' => '/' . $avatar,
-                'create_time' => $time,
-                'distribution_code' => generate_invite_code(),
+                'create_time' => $time
             ];
 
             $user_id = Db::name('user')

@@ -64,8 +64,7 @@ class LoginLogic extends LogicBase
             'mobile'        => $post['mobile'],
             'salt'          => $salt,
             'password'      => $password,
-            'create_time'   => $time,
-            'distribution_code' => generate_invite_code(),
+            'create_time'   => $time
         ];
 
         $user = new User();

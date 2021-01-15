@@ -38,9 +38,4 @@ class User extends Model{
         return $level_name;
 
     }
-
-    public function getFansDistributionAttr($value,$data)
-    {
-
-    }
 }

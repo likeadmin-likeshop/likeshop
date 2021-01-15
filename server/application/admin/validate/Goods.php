@@ -23,7 +23,7 @@ use think\Validate;
 class Goods extends Validate
 {
     protected $rule = [
-        'goods_id'                  => 'require|checkGoods',
+        'goods_id'                  => 'require',
         'name'                      => 'require|min:3|max:64|unique:Goods,name^del',
         'first_category_id'         => 'require',
         'second_category_id'        => 'require',
@@ -72,16 +72,7 @@ class Goods extends Validate
         'shareholder_ratio.lt'                  => '股东分红比例不能超过100',
     ];
 
-    //活动商品不可编辑
-    protected function checkGoods($value,$rule,$data){
-        $seckill_goods = Db::name('seckill_goods')
-            ->where(['goods_id'=>$value,'del'=>0])
-            ->find();
-        if($seckill_goods){
-            return '商品正在参与秒杀活动，无法修改';
-        }
-        return true;
-    }
+
     /**
      * 编辑
      */

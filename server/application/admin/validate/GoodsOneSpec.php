@@ -25,18 +25,18 @@ class GoodsOneSpec extends Validate
 {
     protected $rule = [
 //        'one_market_price' => 'require|egt:0.01',
-        'one_price'        => 'require|egt:0.01',
-        'one_cost_price'   => 'require|gt:0.1',
+        'one_price'        => 'require|gt:0.01',
+        'one_cost_price'   => 'require|gt:0.01',
         'one_stock'        => 'require|integer',
-        'one_volume'       => 'require|gt:0',
-        'one_weight'       => 'require|gt:0',
+        'one_volume'       => 'require|egt:0',
+        'one_weight'       => 'require|egt:0',
     ];
 
     protected $message = [
         'one_volume.require'        => '请输入体积',
-        'one_volume.gt'             => '体积必须为大于0',
+        'one_volume.egt'             => '体积必须为大于0',
         'one_weight.require'        => '请输入重量',
-        'one_weight.gt'             => '重量必须为大于0',
+        'one_weight.egt'             => '重量必须为大于0',
 //        'one_market_price.require'  => '请输入市场价',
 //        'one_market_price.gt'       => '市场价必须大于或等于0.01',
         'one_price.require'         => '请输入价格',

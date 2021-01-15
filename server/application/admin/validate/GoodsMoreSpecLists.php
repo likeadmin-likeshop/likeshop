@@ -28,15 +28,15 @@ class GoodsMoreSpecLists extends Validate
         'price'         => 'require|gt:0.1',
         'cost_price'    => 'require|gt:0.1',
         'stock'         => 'require|integer',
-        'weight'        => 'require|gt:0',
-        'volume'        => 'require|gt:0',
+        'weight'        => 'require|egt:0',
+        'volume'        => 'require|egt:0',
     ];
 
     protected $message = [
         'volume.require'        => '请输入体积',
-        'volume.gt'             => '体积必须大于0',
+        'volume.egt'             => '体积必须大于或等于0',
         'weight.require'        => '请输入重量',
-        'weight.gt'             => '重量必须大于0',
+        'weight.egt'             => '重量必须大于或等于0',
         'market_price.require'  => '请输入市场价',
         'market_price.gt'       => '市场价必须大于0.1',
         'price.require'         => '请输入价格',

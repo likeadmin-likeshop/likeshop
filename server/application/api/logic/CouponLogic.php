@@ -302,7 +302,7 @@ class CouponLogic{
                 ->join('goods g','gi.goods_id = g.id')
                 ->where(['gi.id'=>$item_ids])
                 ->column('gi.*','gi.id');
-          
+
 
             if($my_coupon){
                 //处理优惠券信息

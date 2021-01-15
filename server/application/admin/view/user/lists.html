@@ -107,19 +107,6 @@
             </script>
 
 
-            <script type="text/html" id="referrer">
-                {{# if(d.first_leader){}}
-                <img src="{{d.referrer_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
-                <div class="layui-input-inline" style="text-align:left">
-                    <p>编号：{{d.sn}}</p>
-                    <p>手机号码：{{d.referrer_mobile}}</p>
-                    <p>昵称：{{d.referrer_nickname}}</p>
-                    <p>等级：{{d.referrer_level_name}}</p>
-                </div>
-                {{# }else{ }}
-                -
-                {{# } }}
-            </script>
             <script type="text/html" id="account">
                 <div class="layui-input-inline">
                     <label>余额：{{d.user_money}}</label>
@@ -335,7 +322,6 @@
                 ,{field: 'avatar', title: '会员信息',width: 350,align: 'center', toolbar: '#user-info'}
                 ,{field: 'level_name', title: '会员等级',width: 100,}
                 ,{field: 'group_name', title: '会员分组',width: 100,}
-                ,{field: 'referrals', title: '推荐人信息',align: 'center',width: 300,toolbar: '#referrer'}
                 ,{field: 'total_order_amount', title: '消费金额',width: 90,}
                 ,{field: 'money', title: '账户余额',width: 120,toolbar: '#account'}
                 ,{field: 'login_time', title: '最后登录时间',width: 160,}

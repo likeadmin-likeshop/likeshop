@@ -85,7 +85,6 @@ class UserLogic{
         //会员等级
         $user_level = Db::name('user_level')->where(['del'=>0])->column('name','id');
 
-        $all_user_list = $user->where(['del'=>0])->column('nickname,avatar,mobile,level','id');
         $group_list = db::name('user_group')->where(['del'=>0])->column('name','id');
 
         foreach ($user_list as &$item){
@@ -100,20 +99,6 @@ class UserLogic{
                 $item['level_name'] = $user_level[$item['level']];
             }
 
-            $item['referrer_nickname'] = '';
-            $item['referrer_mobile'] = '';
-            $item['referrer_avatar'] = '';
-            $item['referrer_level_name'] = '-';
-            if(isset($all_user_list[$item['first_leader']])){
-                 $referrer_user = $all_user_list[$item['first_leader']];
-                 $item['referrer_nickname'] = $referrer_user['nickname'];
-                 $item['referrer_mobile'] = $referrer_user['mobile'];
-                 $item['referrer_avatar'] = $referrer_user['avatar'];
-                 if(isset($user_level[$referrer_user['level']])){
-                     $item['referrer_level_name'] =$user_level[$referrer_user['level']];
-
-                 }
-            }
 
 
             if(isset($group_list[$item['group_id']])){
@@ -165,16 +150,7 @@ class UserLogic{
             $user['month_num'] = round($month_num,2);
             $user['total_num'] = round($total_num,2);
             $user['avg_amount'] = '￥'.round($avg_amount,2);
-            //分销会员
-            $user['distribution_tips'] = '否';
-            $user['superior_referrer'] = '-';
-            $user['superior_referrer_sn'] = '-';
-            if($user['is_distribution']){
-                $user['distribution_tips'] = '是';
-                $superior_referrer = Db::name('user')->where(['id'=>$user['first_leader']])->field('nickname,sn')->find();
-                $user['superior_referrer'] = $superior_referrer['nickname'];
-                $user['superior_referrer_sn'] = $superior_referrer['sn'];
-            }
+
 
         }
         return $user;

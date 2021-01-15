@@ -499,32 +499,3 @@ function real_path()
     }
     return $real_path;
 }
-
-
-//生成用户邀请码
-function generate_invite_code(){
-
-    $letter_all = range('A', 'Z');
-    shuffle($letter_all);
-    //排除I、O字母
-    $letter_array = array_diff($letter_all, ['I', 'O', 'D']);
-    //排除1、0
-    $num_array = range('2', '9');
-    shuffle($num_array);
-
-    $pattern = array_merge($num_array, $letter_array, $num_array);
-    shuffle($pattern);
-    $pattern = array_values($pattern);
-
-    $code = '';
-    for($i = 0;$i < 6; $i++) {
-        $code .= $pattern[mt_rand(0, count($pattern)-1)];
-    }
-
-    $code = strtoupper($code);
-    $check = Db::name('user')->where('distribution_code', $code)->find();
-    if($check){
-        return generate_invite_code();
-    }
-    return $code;
-}

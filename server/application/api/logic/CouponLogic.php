@@ -302,15 +302,7 @@ class CouponLogic{
                 ->join('goods g','gi.goods_id = g.id')
                 ->where(['gi.id'=>$item_ids])
                 ->column('gi.*','gi.id');
-            $seckill_list = SeckillLogic::getSeckillGoods();
-            $seckill_goods = $seckill_list['seckill_goods'];
-            if($seckill_goods){
-                foreach ($goods_price_array as $key => $item){
-                    if(isset($seckill_goods[$item['id']])){
-                        $goods_price_array[$key]['price'] = $seckill_goods[$item['id']]['price'];
-                    }
-                }
-            }
+          
 
             if($my_coupon){
                 //处理优惠券信息

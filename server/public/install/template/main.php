@@ -250,13 +250,25 @@
                                                 <td>/runtime</td>
                                                 <td>runtime目录可写</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('runtime')) ?>
-                                                <td></td>
+                                                <td><?php if($modelInstall->checkDirWrite('runtime') =='fail') echo'请给runtime目录权限，若目录不存在先新建';?></td>
                                             </tr>
                                             <tr>
                                                 <td>/public/uploads</td>
                                                 <td>uploads目录可写</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('public/uploads')) ?>
-                                                <td></td>
+                                                <td><?php if($modelInstall->checkDirWrite('public/uploads')=='fail') echo'请给public/uploads目录权限，若目录不存在先新建';?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>../config</td>
+                                                <td>config目录可写</td>
+                                                <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('config')) ?>
+                                                <td><?php if($modelInstall->checkDirWrite('config')=='fail') echo'请给config目录权限，若目录不存在先新建';?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>../.env</td>
+                                                <td>.env文件可写</td>
+                                                <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('.env')) ?>
+                                                <td><?php if($modelInstall->checkDirWrite('.env')=='fail') echo'请给.env文件权限，若文件不存在，注意文件名第1字符是" . "';?></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -406,7 +418,7 @@
                                             <img src="./images/icon_mountSuccess.png"/>
                                         </div>
                                         <div class="mt16 result">安装完成，进入管理后台</div>
-                                        <div style="margin-top: 5px;font-size:14px;">版本号：2.0.2.20210107</div>
+                                        <div style="margin-top: 5px;font-size:14px;">版本号：2.0.5.20210110</div>
                                         <div class="tips">
                                             为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹删除，或者config/install.lock/目录下创建install.lock文件防止重复安装。
                                         </div>

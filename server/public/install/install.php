@@ -24,6 +24,9 @@ if ($modelInstall->appIsInstalled() && in_array($step, [1, 2, 3, 4])) {
 // 加载Example文件
 $yxEnv->load($modelInstall->getAppRoot() . '/.example.env');
 
+//尝试生成.env
+$yxEnv->makeEnv($modelInstall->getAppRoot() . '/.env');
+
 $post = [
     'host'                   => $_POST['host'] ?? 'localhost',
     'port'                   => $_POST['port'] ?? '3306',

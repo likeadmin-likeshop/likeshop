@@ -27,6 +27,16 @@ class YxEnv
         $this->set($env);
     }
 
+    public function makeEnv($file){
+        if(!file_exists($file)){
+            try{
+                touch($file);
+            }catch (Exception $e){
+                return;
+            }
+        }
+    }
+
     /**
      * 获取环境变量值
      * @access public

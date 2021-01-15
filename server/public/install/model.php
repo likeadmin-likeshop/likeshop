@@ -302,7 +302,8 @@ class installModel
         }
         if ( !is_object($this->dbh)) {
             $return->result = 'fail';
-            $return->error = '安装错误，请检查连接信息';
+            $return->error = '安装错误，请检查连接信息:'.mb_strcut($this->dbh,0,30).'...';
+            echo $this->dbh;
             return $return;
         }
 
@@ -375,8 +376,11 @@ class installModel
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->exec("SET NAMES {$this->encoding}");
             $dbh->exec("SET NAMES {$this->encoding}");
-            $dbh->exec("SET GLOBAL sql_mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';");
-            //$dbh->exec("SET @@sql_mode= ''");
+            try{
+                $dbh->exec("SET GLOBAL sql_mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';");
+            }catch (Exception $e){
+
+            }
             return $dbh;
         } catch (PDOException $exception) {
             return $exception->getMessage();
@@ -667,6 +671,18 @@ class installModel
         $route = $this->getAppRoot().'/'.$dir;
         return $result = is_writable($route) ? 'ok' : 'fail';
     }
+
+    /**
+     * Notes: 检查目录是否可写
+     * @param $dir
+     * @return string
+     */
+    public function checkSuperiorDirWrite($dir='')
+    {
+        $route = $this->getAppRoot().'/'.$dir;
+        return $result = is_writable($route) ? 'ok' : 'fail';
+    }
+
 
     /**
      * Notes: 初始化管理账号

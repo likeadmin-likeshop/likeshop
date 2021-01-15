@@ -20,7 +20,6 @@
 namespace app\common\logic;
 
 
-use app\api\logic\SeckillLogic;
 use app\common\model\Pay;
 use app\common\server\ConfigServer;
 use think\Db;
@@ -61,10 +60,6 @@ class OrderGoodsLogic
     //下单扣除订单库存
     public static function decStock($goods)
     {
-        $seckill_data = SeckillLogic::getSeckillGoods();
-        $seckill = $seckill_data['seckill'];
-        $seckill_goods = $seckill_data['seckill_goods'];
-
         foreach ($goods as $k1 => $good) {
             $item_id = $good['item_id'];
             //扣除库存,扣除规格库存,增加商品销量
@@ -79,17 +74,6 @@ class OrderGoodsLogic
             Db::name('goods_item')
                 ->where('id', $item_id)
                 ->setDec('stock', $good['goods_num']);
-
-            //秒杀商品增加销量
-            if (isset($seckill_goods[$item_id])){
-                $seckill_goods_id = $seckill_goods[$item_id]['seckill_goods_id'];
-                Db::name('seckill_goods')
-                    ->where('id', $seckill_goods_id)
-                    ->update([
-                        'sales_sum' => Db::raw("sales_sum+" . $good['goods_num']),
-                        'update_time' => time()
-                    ]);
-            }
         }
     }
 

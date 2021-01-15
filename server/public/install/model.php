@@ -42,7 +42,7 @@ class installModel
      */
     public function checkPHP()
     {
-        return $result = version_compare(PHP_VERSION, '7.0.0') >= 0 ? 'ok' : 'fail';
+        return $result = version_compare(PHP_VERSION, '7.1.0') >= 0 ? 'ok' : 'fail';
     }
 
     /**

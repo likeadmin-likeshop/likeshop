@@ -184,9 +184,9 @@
                                             <tbody>
                                             <tr>
                                                 <td>PHP版本</td>
-                                                <td>5.4或者5.4以上</td>
+                                                <td>大于7.1</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkPHP()) ?>
-                                                <td></td>
+                                                <td>建议使用PHP7.2.4版本</td>
                                             </tr>
                                             <tr>
                                                 <td>PDO_MYSQL</td>

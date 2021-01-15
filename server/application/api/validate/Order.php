@@ -18,7 +18,6 @@
 // +----------------------------------------------------------------------
 
 namespace app\api\validate;
-use app\api\logic\SeckillLogic;
 use think\Db;
 use think\Validate;
 

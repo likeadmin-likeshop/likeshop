@@ -139,7 +139,7 @@ DROP TABLE IF EXISTS `yx_admin`;
 CREATE TABLE `yx_admin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `root` tinyint(1) DEFAULT '1' COMMENT '0-非超级管理员；1-超级管理；',
-  `name` varchar(8) NOT NULL DEFAULT '0' COMMENT '名称',
+  `name` varchar(32) NOT NULL DEFAULT '0' COMMENT '名称',
   `type` tinyint(4) DEFAULT '0' COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
   `account` varchar(16) NOT NULL DEFAULT '' COMMENT '账号',
   `password` varchar(32) NOT NULL COMMENT '密码',

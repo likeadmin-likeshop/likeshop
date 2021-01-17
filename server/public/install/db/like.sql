@@ -11,7 +11,7 @@
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 15/01/2021 19:58:22
+ Date: 17/01/2021 13:04:11
 */
 
 SET NAMES utf8mb4;
@@ -63,28 +63,12 @@ CREATE TABLE `yx_ad` (
   `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   `del` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '0为非删除状态，非0位删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='广告表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='广告表';
 
 -- ----------------------------
 -- Records of yx_ad
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_ad` VALUES (1, '妥妥的', 1, 1, '/uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1, '0', 1, 0, 0, 50, 1605520417, 1607589473, 0);
-INSERT INTO `yx_ad` VALUES (2, '分销会员', 3, 3, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605521571, 1607589667, 0);
-INSERT INTO `yx_ad` VALUES (3, '广告广告', 2, 2, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605521876, 1607589488, 0);
-INSERT INTO `yx_ad` VALUES (4, '新品上市', 5, 2, '/uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png', 2, '10', 1, 0, 0, 50, 1605578941, 1607589523, 0);
-INSERT INTO `yx_ad` VALUES (5, 'likeshop', 11, 2, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '3', 1, 0, 0, 50, 1605578988, 1607589627, 0);
-INSERT INTO `yx_ad` VALUES (6, '新闻广告', 8, 2, '/uploads/images/background/20201020/716260271cf10dcaedcfee3e87bba7af.jpg', 2, '23', 0, 0, 0, 50, 1605579056, 1607589709, 0);
-INSERT INTO `yx_ad` VALUES (7, '秒杀广告', 16, 2, '/uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1, '0', 1, 0, 0, 50, 1605580755, 1607589707, 0);
-INSERT INTO `yx_ad` VALUES (8, '热销榜单', 17, 2, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605581057, 1607589703, 0);
-INSERT INTO `yx_ad` VALUES (9, '分类', 6, 3, '/uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1, '1', 1, 0, 0, 50, 1605583712, 1607589673, 0);
-INSERT INTO `yx_ad` VALUES (10, '秒杀', 18, 3, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605592289, 1607589692, 0);
-INSERT INTO `yx_ad` VALUES (11, '味儿', 18, 3, '/uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1, '0', 1, 0, 0, 50, 1605592579, 1607589688, 0);
-INSERT INTO `yx_ad` VALUES (12, '测试', 4, 1, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605775436, 1607589463, 0);
-INSERT INTO `yx_ad` VALUES (13, '智能', 16, 2, '/uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1, '0', 1, 0, 0, 50, 1605854094, 1607589699, 0);
-INSERT INTO `yx_ad` VALUES (14, '秒杀广告位', 14, 1, '/uploads/images/background/20201210/a664cf34b0a5f5de424ab24701f41c5a.jpeg', 1, '0', 1, 0, 0, 50, 1605855781, 1607589445, 0);
-INSERT INTO `yx_ad` VALUES (15, '秒杀广告2', 14, 1, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1605855818, 1607589423, 0);
-INSERT INTO `yx_ad` VALUES (16, '活动开启', 4, 1, '/uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1, '0', 1, 0, 0, 50, 1606443246, 1607589404, 0);
 COMMIT;
 
 -- ----------------------------
@@ -325,17 +309,6 @@ INSERT INTO `yx_config` VALUES (6, 'marketing', 'register_award_coupon', '', NUL
 INSERT INTO `yx_config` VALUES (7, 'marketing', 'integral_deduction_status', '1', NULL);
 INSERT INTO `yx_config` VALUES (8, 'marketing', 'integral_deduction_money', '0.01', NULL);
 INSERT INTO `yx_config` VALUES (9, 'sign_rule', 'instructions', '1.每天签到可以获得每天签到奖励；\n2.每日最多可签到1次，断签则会重新计算连签天数，达到连续天数后即可获得连续奖励；\n3.活动以及奖励最终解释权归商家所有。', NULL);
-INSERT INTO `yx_config` VALUES (10, 'mnp', 'name', '', NULL);
-INSERT INTO `yx_config` VALUES (11, 'mnp', 'original_id', '', NULL);
-INSERT INTO `yx_config` VALUES (12, 'mnp', 'qr_code', '', NULL);
-INSERT INTO `yx_config` VALUES (13, 'mnp', 'app_id', 'wx75faf8824586138a', NULL);
-INSERT INTO `yx_config` VALUES (14, 'mnp', 'secret', '456a462d9d14e1b5693610733035c45c', NULL);
-INSERT INTO `yx_config` VALUES (15, 'mnp', 'business_domain', '', NULL);
-INSERT INTO `yx_config` VALUES (16, 'mnp', 'url', '', NULL);
-INSERT INTO `yx_config` VALUES (17, 'mnp', 'token', '', NULL);
-INSERT INTO `yx_config` VALUES (18, 'mnp', 'encoding_ses_key', '', NULL);
-INSERT INTO `yx_config` VALUES (19, 'mnp', 'encryption_type', '', NULL);
-INSERT INTO `yx_config` VALUES (20, 'mnp', 'data_type', '', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -365,17 +338,12 @@ CREATE TABLE `yx_coupon` (
   `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除；1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优惠券表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优惠券表';
 
 -- ----------------------------
 -- Records of yx_coupon
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_coupon` VALUES (1, '满500可用', 1607588307, 1639065600, 500.00, 2, 500.00, 1, 0, 1, 1607588325, 1639065600, 0, 1, 1, 0, 1, 1, 1607588370, 1607588370, 0);
-INSERT INTO `yx_coupon` VALUES (2, '满50可用', 1607588378, 1623945600, 5.00, 2, 50.00, 2, 2000, 2, 0, 0, 10, 1, 2, 10, 1, 1, 1607588445, 1607588445, 0);
-INSERT INTO `yx_coupon` VALUES (3, '新人专享', 1607588457, 1671783661, 10.00, 2, 10.00, 1, 0, 2, 0, 0, 10, 1, 2, 1, 1, 1, 1607588498, 1607588498, 0);
-INSERT INTO `yx_coupon` VALUES (4, '大牌商品专享', 1607588529, 1619107200, 500.00, 2, 5000.00, 2, 600, 2, 0, 0, 10, 1, 3, 0, 2, 1, 1607588599, 1607588599, 0);
-INSERT INTO `yx_coupon` VALUES (5, '后台赠送', 1607588613, 1640361600, 500.00, 1, 0.00, 1, 0, 2, 0, 0, 10, 2, 1, 0, 1, 1, 1607588676, 1607588676, 0);
 COMMIT;
 
 -- ----------------------------
@@ -388,13 +356,12 @@ CREATE TABLE `yx_coupon_goods` (
   `goods_id` int(10) NOT NULL COMMENT '商品id',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优惠券商品管理表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优惠券商品管理表';
 
 -- ----------------------------
 -- Records of yx_coupon_goods
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_coupon_goods` VALUES (1, 4, 9, 1607588599);
 COMMIT;
 
 -- ----------------------------
@@ -5127,92 +5094,12 @@ CREATE TABLE `yx_file` (
   `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除：0-否；1-是；',
   `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '机构id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文件表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文件表';
 
 -- ----------------------------
 -- Records of yx_file
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_file` VALUES (1, 'home_icon_@3x.png', 0, 1, 'uploads/images/background/20201210/b80089e7224871ee70ef7014453b6a28.png', 1607566134, 0, 0);
-INSERT INTO `yx_file` VALUES (2, 'home_icon_collect@3x(1).png', 0, 1, 'uploads/images/background/20201210/643833719ae963e6a9035e4b98a6279c.png', 1607566134, 0, 0);
-INSERT INTO `yx_file` VALUES (3, 'home_icon_member@3x.png', 0, 1, 'uploads/images/background/20201210/1fbb2fb37597896efd7b95506ed7cdda.png', 1607566134, 0, 0);
-INSERT INTO `yx_file` VALUES (4, 'home_icon_collect@3x.png', 0, 1, 'uploads/images/background/20201210/3a3228fcfdb8fa0808a9e67b6c43df53.png', 1607566134, 0, 0);
-INSERT INTO `yx_file` VALUES (5, 'home_icon_coupon@3x.png', 0, 1, 'uploads/images/background/20201210/520c72e1a1d48cb088b0f070d77bc031.png', 1607566134, 0, 0);
-INSERT INTO `yx_file` VALUES (6, 'home_icon_newproduct@3x.png', 0, 1, 'uploads/images/background/20201210/1668b4385dd0296ae033da6e6ad5f125.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (7, 'home_icon_newproduct@3x(1).png', 0, 1, 'uploads/images/background/20201210/bbd816d5b586cdeca8e87dd7c06e2fcf.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (8, 'home_icon_sale@3x.png', 0, 1, 'uploads/images/background/20201210/94a0d54ab18f3d93072c73a1e0dcba17.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (9, 'home_icon_news@3x.png', 0, 1, 'uploads/images/background/20201210/06332ce973851322e050de07a7b7631f.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (10, 'home_icon_signIn@3x.png', 0, 1, 'uploads/images/background/20201210/0158588a36f9f0ae6a58509f6dd0d80e.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (11, 'banner@3x.png', 0, 1, 'uploads/images/background/20201210/f0f1dc5b175b270c69ee86c52c37f00e.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (12, 'icon_toutiao@3x.png', 0, 1, 'uploads/images/background/20201210/c104274c93fc677e1705197574ac5be9.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (13, 'No.1@3x.png', 0, 1, 'uploads/images/background/20201210/2065def29f8a34d94635eb37422191c2.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (14, 'No.2@3x.png', 0, 1, 'uploads/images/background/20201210/d5ea0605f6c904aca66dca006694e088.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (15, 'No.3@3x.png', 0, 1, 'uploads/images/background/20201210/83294baa4cfa0fbc1e03653007828c67.png', 1607566135, 0, 0);
-INSERT INTO `yx_file` VALUES (16, 'icon_my_wallet@3x.png', 0, 1, 'uploads/images/background/20201210/d650559b128bfca62870205445365ac8.png', 1607567013, 0, 0);
-INSERT INTO `yx_file` VALUES (17, 'icon_my_address@3x.png', 0, 1, 'uploads/images/background/20201210/dd7b3e6885221f0c94a7092dc95e1f8f.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (18, 'icon_my_collection@3x.png', 0, 1, 'uploads/images/background/20201210/ad841b1109ad0d5a8f40585d47ecd8f2.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (19, 'icon_my_huiyuan@3x.png', 0, 1, 'uploads/images/background/20201210/29474ae22229ae68460c51466e47ce56.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (20, 'icon_my_coupon@3x.png', 0, 1, 'uploads/images/background/20201210/c03fd3359bcb6a575a479dc41a013fff.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (21, 'icon_my_fahuo@3x.png', 0, 1, 'uploads/images/background/20201210/f36785f5c21da9b0e2522b341b7d2daf.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (22, 'icon_my_help@3x.png', 0, 1, 'uploads/images/background/20201210/f6189105a4bfb39631e193a83047ad7a.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (23, 'icon_my_kanjia@3x.png', 0, 1, 'uploads/images/background/20201210/d01e2ab0defbad866f19420e6483f7b2.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (24, 'icon_my_fenxiao@3x.png', 0, 1, 'uploads/images/background/20201210/1226785362c5f02ef2616be8a1a5737a.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (25, 'icon_my_payment@3x.png', 0, 1, 'uploads/images/background/20201210/6658970c34316982a317f16a7a573a3d.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (26, 'icon_my_pingjia@3x.png', 0, 1, 'uploads/images/background/20201210/ead90dc1a6bb3c9a2ec20cb968c409ee.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (27, 'icon_my_shouhou@3x.png', 0, 1, 'uploads/images/background/20201210/739f6f1223c71a5ead9064ef61e48ab4.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (28, 'icon_my_shouhuo@3x.png', 0, 1, 'uploads/images/background/20201210/db7bb9bcd979c260cc9e4497ce260444.png', 1607567023, 0, 0);
-INSERT INTO `yx_file` VALUES (29, '1212.jpg', 0, 1, 'uploads/images/background/20201210/5b82112f4d294b11b80da87edd422772.jpg', 1607568456, 0, 0);
-INSERT INTO `yx_file` VALUES (30, '1acd6abcaba4b25bcf91f2c8525905ed', 0, 1, 'uploads/images/background/20201210/a664cf34b0a5f5de424ab24701f41c5a.jpeg', 1607568678, 0, 0);
-INSERT INTO `yx_file` VALUES (31, '签到.png', 0, 1, 'uploads/images/background/20201210/f7c7bdc7e0b7fc3d7fbd25d67bd6f7d3.png', 1607568975, 0, 0);
-INSERT INTO `yx_file` VALUES (32, 'icon_discount@3x.png', 0, 1, 'uploads/images/background/20201210/35e522faf28bee80048703f4a9f97f99.png', 1607569362, 0, 0);
-INSERT INTO `yx_file` VALUES (33, 'icon_yunfei@3x.png', 0, 1, 'uploads/images/background/20201210/001258dae3fb475ceecb294dfb0314fd.png', 1607569362, 0, 0);
-INSERT INTO `yx_file` VALUES (34, 'icon_customer@3x.png', 0, 1, 'uploads/images/background/20201210/b993e87092f20dbc7b32536d6a867ccb.png', 1607569362, 0, 0);
-INSERT INTO `yx_file` VALUES (35, 'icon_coupon@3x.png', 0, 1, 'uploads/images/background/20201210/a98c5a589526627f9458bdf4ed640bd9.png', 1607569362, 0, 0);
-INSERT INTO `yx_file` VALUES (36, 'icon_grade4@3x.png', 0, 1, 'uploads/images/background/20201210/1bf35b2f5eacab8ac547b64218a6fdc9.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (37, 'icon_grade3@3x.png', 0, 1, 'uploads/images/background/20201210/79ee4347c8066f965c9ce7034f249cea.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (38, 'icon_grade2@3x.png', 0, 1, 'uploads/images/background/20201210/eab147f969fce1475d4892c57256f8ec.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (39, 'bg_silverMember@3x.png', 0, 1, 'uploads/images/background/20201210/b3ea3f1db613eecfe7ae8e0cf2c155b3.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (40, '5443.png', 0, 1, 'uploads/images/background/20201210/263af68dbb3a7beb43d13273abddef59.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (41, 'icon_grade@3x.png', 0, 1, 'uploads/images/background/20201210/d74e01d4a8b86f331fcca2f485080353.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (42, '34532.png', 0, 1, 'uploads/images/background/20201210/2bb17478228b324a613ffa3565a48737.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (43, '12424.png', 0, 1, 'uploads/images/background/20201210/e00c91e6d52bcf8fc117bf9d4cc8213d.png', 1607569662, 0, 0);
-INSERT INTO `yx_file` VALUES (44, '1607569881(1).png', 0, 1, 'uploads/images/background/20201210/dd2610485ad76c0d24f88f8ce58d3dd5.png', 1607569911, 0, 0);
-INSERT INTO `yx_file` VALUES (45, '1607570636(1).png', 0, 1, 'uploads/images/background/20201210/2dad83f2345046d47045c160a3db6896.png', 1607570661, 0, 0);
-INSERT INTO `yx_file` VALUES (46, '1607570777(1).png', 0, 1, 'uploads/images/background/20201210/10b16861c6eeb1e9a744b86dd69b051f.png', 1607570792, 0, 0);
-INSERT INTO `yx_file` VALUES (47, '1607570850(1).png', 0, 1, 'uploads/images/background/20201210/8529fda6cb6c3cf62c084df9c7c911a9.png', 1607570882, 0, 0);
-INSERT INTO `yx_file` VALUES (48, '1607570949(1).png', 0, 1, 'uploads/images/background/20201210/720a002e5c6bdf95a2dd3c31737d0e57.png', 1607571037, 0, 0);
-INSERT INTO `yx_file` VALUES (49, '晨光中性笔.png', 0, 1, 'uploads/images/background/20201210/dceddf4cb321cf612eee441477d3b93f.png', 1607571355, 0, 0);
-INSERT INTO `yx_file` VALUES (50, '晨光铅笔.png', 0, 1, 'uploads/images/background/20201210/47829c77b7b5135de799182d1c197746.png', 1607571557, 0, 0);
-INSERT INTO `yx_file` VALUES (51, '1607571648(1).png', 0, 1, 'uploads/images/background/20201210/45b6bb2224e4051ecf407cabb54cd781.png', 1607571735, 0, 0);
-INSERT INTO `yx_file` VALUES (52, '1607571666(1).png', 0, 1, 'uploads/images/background/20201210/910e9d4fc9f10c7a11825315785c555d.png', 1607571735, 0, 0);
-INSERT INTO `yx_file` VALUES (53, '1607571971(1).png', 0, 1, 'uploads/images/background/20201210/e645ff4cbef1fae6a6169624029eb214.png', 1607572040, 0, 0);
-INSERT INTO `yx_file` VALUES (54, '1607571961(1).png', 0, 1, 'uploads/images/background/20201210/c55d952325ac38959c57e127d97c5592.png', 1607572040, 0, 0);
-INSERT INTO `yx_file` VALUES (55, '1607571942(1).png', 0, 1, 'uploads/images/background/20201210/5a23d75c44ef8c293aa2a1bed1f10e41.png', 1607572040, 0, 0);
-INSERT INTO `yx_file` VALUES (56, '1607571984(1).png', 0, 1, 'uploads/images/background/20201210/3261d7a8935ca47e0f19b354a36bab79.png', 1607572040, 0, 0);
-INSERT INTO `yx_file` VALUES (57, '1607572189(1).png', 0, 1, 'uploads/images/background/20201210/a3bf099101793a2e0bfe087b92e51403.png', 1607572240, 0, 0);
-INSERT INTO `yx_file` VALUES (58, '1607572177(1).png', 0, 1, 'uploads/images/background/20201210/6515fd4b2e7a1932f76ec5232fe22fdf.png', 1607572240, 0, 0);
-INSERT INTO `yx_file` VALUES (59, '1607572168(1).png', 0, 1, 'uploads/images/background/20201210/2d62627fef767a38034162c066f9c253.png', 1607572240, 0, 0);
-INSERT INTO `yx_file` VALUES (60, '1607572367(1).png', 0, 1, 'uploads/images/background/20201210/d97a7d56854eb8cd5afa228b1d9608c3.png', 1607572407, 0, 0);
-INSERT INTO `yx_file` VALUES (61, '1607572344(1).png', 0, 1, 'uploads/images/background/20201210/956e95bc35d0a8005255889036e9aae5.png', 1607572407, 0, 0);
-INSERT INTO `yx_file` VALUES (62, '1607572356(1).png', 0, 1, 'uploads/images/background/20201210/4b06036c7e6c8f653a51fd94d4cb5bc5.png', 1607572407, 0, 0);
-INSERT INTO `yx_file` VALUES (63, '1607572740(1).png', 0, 1, 'uploads/images/background/20201210/551c831039db5df10f16bbd40ba0ebc0.png', 1607572887, 0, 0);
-INSERT INTO `yx_file` VALUES (64, '1607572776(1).png', 0, 1, 'uploads/images/background/20201210/532a61a9cb3294ea13015c11e51d243f.png', 1607572887, 0, 0);
-INSERT INTO `yx_file` VALUES (65, '1607572754(1).png', 0, 1, 'uploads/images/background/20201210/2ff3147b913abbcbb39646de816eb5d2.png', 1607572887, 0, 0);
-INSERT INTO `yx_file` VALUES (66, '1607580094(1).png', 0, 1, 'uploads/images/background/20201210/ccd5fe4fe21804ee7e33174cf347bbb2.png', 1607580122, 0, 0);
-INSERT INTO `yx_file` VALUES (67, '1607580094.png', 0, 1, 'uploads/images/background/20201210/d0fd78d3b5de45b870f43b6db3d5a0be.png', 1607580122, 0, 0);
-INSERT INTO `yx_file` VALUES (68, '1607580094(2).png', 0, 1, 'uploads/images/background/20201210/6c7921165fab863c86018878e839bc60.png', 1607580122, 0, 0);
-INSERT INTO `yx_file` VALUES (69, '1607584417(1).png', 0, 1, 'uploads/images/background/20201210/5e11c751c7e662764764e132ab6a8f72.png', 1607584436, 0, 0);
-INSERT INTO `yx_file` VALUES (70, '1607584630(1).png', 0, 1, 'uploads/images/background/20201210/4985ef90fea9fc132e37af97a1f0597f.png', 1607584686, 0, 0);
-INSERT INTO `yx_file` VALUES (71, '1607584620.png', 0, 1, 'uploads/images/background/20201210/3f25d88bc10820af2fb3583484de06c8.png', 1607584686, 0, 0);
-INSERT INTO `yx_file` VALUES (72, '1607585000(1).png', 0, 1, 'uploads/images/background/20201210/63d91cdfdb659e57a10a99d1cf44567e.png', 1607585026, 0, 0);
-INSERT INTO `yx_file` VALUES (73, '1607585522.png', 0, 1, 'uploads/images/background/20201210/1860d0763b8703121d93cf0b8a3e1e1e.png', 1607585551, 0, 0);
-INSERT INTO `yx_file` VALUES (74, '1607585516(1).png', 0, 1, 'uploads/images/background/20201210/989bbc585e0eaa435d1c0486008ad52a.png', 1607585551, 0, 0);
-INSERT INTO `yx_file` VALUES (75, '1607585516(2).png', 0, 1, 'uploads/images/background/20201210/f245c44d136296f80071a26765e93cdf.png', 1607585551, 0, 0);
-INSERT INTO `yx_file` VALUES (76, '1607585816(1).png', 0, 1, 'uploads/images/background/20201210/254590f48981940296d63640c64cae83.png', 1607585908, 0, 0);
-INSERT INTO `yx_file` VALUES (77, '1607585802(1).png', 0, 1, 'uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png', 1607585908, 0, 0);
-INSERT INTO `yx_file` VALUES (78, '1607585829(1).png', 0, 1, 'uploads/images/background/20201210/930d0719e718db9bfaf2f3acacc1fbe8.png', 1607585908, 0, 0);
-INSERT INTO `yx_file` VALUES (79, '88bc1a42240ee3aba127b3fc3410d9a5', 0, 1, 'uploads/images/background/20201210/386e909e5887dcaffe99a6200d591394.jpg', 1607589348, 0, 0);
-INSERT INTO `yx_file` VALUES (80, '1acd6abcaba4b25bcf91f2c8525905ed', 0, 1, 'uploads/images/background/20201210/1fd2fe53cd9953f78dc312165713dd2d.jpeg', 1607589434, 0, 0);
 COMMIT;
 
 -- ----------------------------
@@ -5325,22 +5212,12 @@ CREATE TABLE `yx_goods` (
   `update_time` int(10) DEFAULT NULL COMMENT '商品更新时间',
   `del` tinyint(1) DEFAULT '0' COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品主表';
 
 -- ----------------------------
 -- Records of yx_goods
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods` VALUES (1, '晨光中性笔笔芯黑0.5mm黑色碳素签字笔GP-1008按动式水笔学生考试用蓝黑医生处方笔教师专用红笔圆珠笔文具', '2646541621', 1, 4, 9, 1, 1, 1, '/uploads/images/background/20201210/45b6bb2224e4051ecf407cabb54cd781.png', '耐用好书写', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i4.440377deK9wjsl\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i3.440377deK9wjsl\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;GP1008\">型号:&nbsp;GP1008</li><li title=\"&nbsp;办公\">功能:&nbsp;办公</li><li title=\"&nbsp;按动\">闭合方式:&nbsp;按动</li><li title=\"&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装\">颜色分类:&nbsp;黑色12支【送笔筒】&nbsp;黑笔2支+黑笔芯10支&nbsp;红色12支【送笔筒】&nbsp;蓝色12支【送笔筒】&nbsp;墨蓝色12支【送笔筒】&nbsp;颜色混拍12支（拍下请备注，无备注默认发4色各3支）【送笔筒】&nbsp;颜色混拍6支（拍下请备注，无备注默认发黑3支其他各1支）&nbsp;黑笔2支+黑笔芯20支&nbsp;红笔2支+红笔芯20支&nbsp;蓝笔2支+蓝笔芯20支&nbsp;0.38黑色6支装&nbsp;0.38黑色12支装【送笔筒】&nbsp;墨蓝笔2支+墨蓝笔芯20支&nbsp;黑色6支&nbsp;红色6支&nbsp;蓝色6支&nbsp;墨蓝色6支&nbsp;黑笔12支+黑笔芯20支【送笔筒】&nbsp;金品黑色6支装&nbsp;金品黑色12支装</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色&nbsp;墨蓝</li><li title=\"&nbsp;否\">是否可擦:&nbsp;否</li><li title=\"&nbsp;盒装\">包装方式:&nbsp;盒装</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;晨光文具</li><li title=\"&nbsp;AGP02301\">货号:&nbsp;AGP02301</li><li title=\"&nbsp;日常书写&nbsp;备考\">适用场景:&nbsp;日常书写&nbsp;备考</li><li title=\"&nbsp;12支\">支数:&nbsp;12支</li><li title=\"&nbsp;小学生&nbsp;中学生\">适用人群:&nbsp;小学生&nbsp;中学生</li><li title=\"&nbsp;塑料\">笔杆材质:&nbsp;塑料</li><li title=\"&nbsp;子弹头型\">笔头类型:&nbsp;子弹头型</li><li title=\"&nbsp;水性墨水\">适用墨水类型:&nbsp;水性墨水</li><li title=\"&nbsp;否\">墨水是否速干:&nbsp;否</li><li title=\"&nbsp;滚珠式\">出墨方式:&nbsp;滚珠式</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><a name=\"hnhb_35262147071570768519_start\"></a><div class=\"J_TWidget maGong\" data-title=\"\"><div class=\"J_TWidget abs_father\"><div class=\"abs_father abs sn-simple-logo\"><div class=\"abs sn-simple-logo\"><img src=\"https://img.alicdn.com/imgextra/i3/3526214707/O1CN01bqIvqE1kdqodqmbyw_!!3526214707.jpg\" usemap=\"#GGQDK\" class=\"img-ks-lazyload\"><map name=\"GGQDK\"><area shape=\"rect\" coords=\"6,1459,395,1954\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.54.35b02c1di2LqW3&amp;id=562104876494&amp;rn=f5f37d71881463703d64fdf111995028&amp;abbucket=11\"><area shape=\"rect\" coords=\"400,1463,790,1954\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.47.2f502c1drqo8QB&amp;id=579893286030&amp;rn=5c00e93c8f01c53c34458de734c14417&amp;abbucket=11\"><area shape=\"rect\" coords=\"0,1979,395,2488\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\"><area shape=\"rect\" coords=\"397,1975,785,2490\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\"><area shape=\"rect\" coords=\"2,958,397,1458\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.270.62452c1d9xKvsz&amp;id=566618504016&amp;rn=ae469d5cacdaaba31b309ebe684e36f8&amp;abbucket=11\"><area shape=\"rect\" coords=\"398,955,787,1455\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.55.516f2c1dA6r4oP&amp;id=562043025193&amp;rn=e47834e9c60d4db10f1a5ee7d9e3484e&amp;abbucket=11\"><area shape=\"rect\" coords=\"8,121,199,377\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=24b977154bbe433fa8e79788b1d00e08\"><area shape=\"rect\" coords=\"205,121,391,381\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=1d1c066bb7794ed8a88f359a564ea55d\"><area shape=\"rect\" coords=\"397,124,587,382\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=5f5f49e8899946f6bae8cd360ce335b5\"><area shape=\"rect\" coords=\"590,119,779,383\" href=\"https://taoquan.taobao.com/coupon/unify_apply.htm?sellerId=3526214707&amp;activityId=14feb924955941cfa151092b4529de61\"></map></div></div><ul><li></li></ul></div></div><a name=\"hnhb_35262147071570768519_end\"></a><a name=\"hnhb_35262147071585543173_start\"></a><div class=\"J_TWidget maGong\" data-title=\"\"><div class=\"J_TWidget abs_father\"><div class=\"abs_father abs sn-simple-logo\"><div class=\"abs sn-simple-logo\"><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN010nnE8U1kdqsAvdQ2l_!!3526214707.jpg\" usemap=\"#UHATE\" class=\"img-ks-lazyload\"><map name=\"UHATE\"><area shape=\"rect\" coords=\"5,1459,394,1954\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.37.2dde2c1dAkoMdP&amp;id=562239844865&amp;rn=16d62b1b41445d6797bf0629d67bfd86&amp;abbucket=9\"><area shape=\"rect\" coords=\"399,1464,789,1955\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.59.4d722c1dphoapI&amp;id=562043025193&amp;rn=75c2c3736cf3e6a3d863436e17bc7e66&amp;abbucket=9\"><area shape=\"rect\" coords=\"0,1979,395,2488\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.48.7b1b2c1dIpGm5f&amp;id=563488770464&amp;rn=d1bf16d51991e16a3421f078ef67f21d&amp;abbucket=11\"><area shape=\"rect\" coords=\"397,1975,785,2490\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.64.7b1b2c1dHGWhF0&amp;id=600191720840&amp;rn=dea2ebf54c89719be6ace08d82c4a3c8&amp;abbucket=11\"><area shape=\"rect\" coords=\"1,125,790,915\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.89.5eaf2c1df2itrv&amp;id=562976052813&amp;rn=7af77012f8e4cd76454bb83058579bca&amp;abbucket=9\"><area shape=\"rect\" coords=\"4,957,395,1450\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.283.5eaf2c1df2itrv&amp;id=562164922383&amp;rn=7af77012f8e4cd76454bb83058579bca\"><area shape=\"rect\" coords=\"401,958,785,1443\" href=\"https://detail.tmall.com/item.htm?spm=a1z10.3-b-s.w4011-18816637352.279.5eaf2c1df2itrv&amp;id=563519378087&amp;rn=7af77012f8e4cd76454bb83058579bca\"></map></div></div><ul><li></li></ul></div></div><a name=\"hnhb_35262147071585543173_end\"></a><div><div><br><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN011kdqkKOiKQZjEV6_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN011kdqkEFE7PehA5E_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN019FRnnd1kdqsx0xA5F_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN011kdqkKgwkZ00RV9_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/3526214707/O1CN011kdqkJsJeoDb6zd_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/3526214707/O1CN011kdqkLfoilfGe0C_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN011kdqkM3UUHnW9SE_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/3526214707/O1CN011kdqkEFCqUqV98K_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/3526214707/O1CN011kdqkL1EEg3jfbW_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/3526214707/O1CN011kdqkL9uvcY7OZL_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN011kdqkJPHqM3TyeD_!!3526214707.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/3526214707/O1CN01rQyABc1kdql6sjmxP_!!3526214707.jpg\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3526214707/O1CN01a4NMGi1kdql7sytmi_!!3526214707.jpg\" class=\"img-ks-lazyload\"></div></div></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_ZebraPriceDesc\" class=\"j-mdv\"><img width=\"790\" src=\"https://img.alicdn.com/tfs/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\"></div></div><div id=\"J_Detail\"><div id=\"J_Reviews\" class=\"J_DetailSection\"></div></div>', 0, 0, 6873, 5, 1, 44.82, 44.82, 55.00, 9863, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607571853, 1607571834, 0);
-INSERT INTO `yx_goods` VALUES (2, '晨光文具速干中性笔直液式签字笔学生考试大容量全针管子弹头水笔直液式笔黑色0.5/0.38', '75687', 1, 4, 9, 1, 1, 1, '/uploads/images/background/20201210/5a23d75c44ef8c293aa2a1bed1f10e41.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i2.4a277eb8mClAGN\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;ARP57501A\">型号:&nbsp;ARP57501A</li><li title=\"&nbsp;速干\">功能:&nbsp;速干</li><li title=\"&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装\">颜色分类:&nbsp;0.5mm子弹头黑色6支装&nbsp;0.5mm全针管黑色6支装&nbsp;0.5mm全针管黑色12支装(新老款随机)&nbsp;0.5mm子弹头黑色12支装&nbsp;0.5mm黑色6支装（外观颜色随机）&nbsp;0.4mm黑色6支装（外观颜色随机）&nbsp;0.38mm黑色12支装（外观颜色随机）&nbsp;0.5mm黑色12支装（外观颜色随机）&nbsp;替芯黑色 10支装</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色</li><li title=\"&nbsp;否\">是否可擦:&nbsp;否</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;晨光文具</li><li title=\"&nbsp;ARP57501\">货号:&nbsp;ARP57501</li><li title=\"&nbsp;日常书写&nbsp;备考\">适用场景:&nbsp;日常书写&nbsp;备考</li><li title=\"&nbsp;12支\">支数:&nbsp;12支</li><li title=\"&nbsp;大学生&nbsp;商务办公人士\">适用人群:&nbsp;大学生&nbsp;商务办公人士</li><li title=\"&nbsp;是\">墨水是否速干:&nbsp;是</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01PQkKHu1jhgaxfBt9y_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><a href=\"http://detail.tmall.com/item.htm?id=565519962541\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01xMiOTk1jhgazbwagf_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></a><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01gBVSbQ1jhgaorKXoa_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01oXbdqx1jhgav0RNCP_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN017Nr4IO1jhgb1qSV0N_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01EetLax1jhgatXxojO_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01omJeFd1jhgazbx3nx_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01hSmDW31jhgb29dBRi_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01h463731jhgaxfEyPY_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01y6ctID1jhgaorJKy5_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01WbNw7Q1jhgb1qSleG_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN0105duS21jhgax0kT5z_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01Aaf51O1jhgaxVpmEC_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><p data-spm-anchor-id=\"a220o.1000855.0.i3.4a277eb8mClAGN\">温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p><div><a name=\"maijsoft_s1_191268_end\"></a></div><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 6863, 1, 1, 43.90, 43.90, 78.00, 8676, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607572135, 1607572125, 0);
-INSERT INTO `yx_goods` VALUES (3, '晨光文具经典六角木杆铅笔中小学生考试绘图铅笔 2B铅笔练字笔20支 AWP35715', '654161', 1, 4, 10, 1, 1, 1, '/uploads/images/background/20201210/2d62627fef767a38034162c066f9c253.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i2.99cd68a70vn9mz\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i4.99cd68a70vn9mz\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"M＆G/晨光 AWP35715\">产品名称：M＆G/晨光 AWP35715</li><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;AWP35715\">晨光型号:&nbsp;AWP35715</li><li title=\"&nbsp;其他\">包装种类:&nbsp;其他</li><li title=\"&nbsp;六角杆  2B  2包（20支）&nbsp;六角杆 2B 30支装\">颜色分类:&nbsp;六角杆 2B 2包（20支）&nbsp;六角杆 2B 30支装</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;晨光文具</li><li title=\"&nbsp;2B\">笔芯硬度:&nbsp;2B</li><li title=\"&nbsp;书写&nbsp;考试专用\">适用场景:&nbsp;书写&nbsp;考试专用</li><li title=\"&nbsp;10支\">支数:&nbsp;10支</li><li title=\"&nbsp;单色\">颜色数:&nbsp;单色</li><li title=\"&nbsp;gb国标标准\">安全标准:&nbsp;gb国标标准</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01UZMdzf1jhgXJJMNic_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\" data-spm-anchor-id=\"a220o.1000855.0.i3.99cd68a70vn9mz\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01xseJHg1jhgXOdNiME_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01Ny1E3X1jhgXDmsuri_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN018JKuJ71jhgXOARXnX_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01ipHvdk1jhgXLMwMWL_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01rAj6AB1jhgXL5VEwy_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01wT3uFw1jhgXJV8bqe_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01Nye0M91jhgXOATgoY_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 35368, 3, 1, 13.50, 13.50, 21.00, 56832, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607572312, 1607572580, 0);
-INSERT INTO `yx_goods` VALUES (4, '晨光文具可削铅笔 六角2B 红黑抽条 木杆铅笔 儿童铅笔 AWP30804', '62649526', 1, 4, 10, 1, 1, 1, '/uploads/images/background/20201210/4b06036c7e6c8f653a51fd94d4cb5bc5.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i3.26c46d7d371Jfl\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">M＆G/晨光</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"M＆G/晨光 AWP30804\">产品名称：M＆G/晨光 AWP30804</li><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;M＆G/晨光</li><li title=\"&nbsp;AWP30804\">晨光型号:&nbsp;AWP30804</li><li title=\"&nbsp;2B 六角 10支装\">颜色分类:&nbsp;2B 六角 10支装</li><li title=\"&nbsp;石墨/普通铅笔\">笔类型:&nbsp;石墨/普通铅笔</li><li title=\"&nbsp;上海晨光文具股份有限公司\">生产企业:&nbsp;上海晨光文具股份有限公司</li><li title=\"&nbsp;2B\">笔芯硬度:&nbsp;2B</li><li title=\"&nbsp;书写\">适用场景:&nbsp;书写</li><li title=\"&nbsp;10支\">支数:&nbsp;10支</li><li title=\"&nbsp;单色\">颜色数:&nbsp;单色</li><li title=\"&nbsp;棕榈树\">笔杆材质:&nbsp;棕榈树</li><li title=\"&nbsp;gb国标标准\">安全标准:&nbsp;gb国标标准</li><li title=\"&nbsp;是\">是否带橡皮头:&nbsp;是</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2ceIhcW8lpuFjy0FpXXaGrpXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2m0QbcYtlpuFjSspoXXbcDpXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i1/682114580/TB2M.v5c4XlpuFjSsphXXbJOXXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB22C7fc80kpuFjSsppXXcGTXXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i2/682114580/TB2oq.fcYVkpuFjSspcXXbSMVXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2K6z6c4XkpuFjy0FiXXbUfFXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB2OGIcc90jpuFjy0FlXXc0bpXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i1/682114580/TB29Sn3cYBkpuFjy1zkXXbSpFXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i2/682114580/TB2dOQpc9FjpuFjSszhXXaBuVXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB2FkYVc3JkpuFjSszcXXXfsFXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB221ZkcYFkpuFjy1XcXXclapXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2pO_7cY0kpuFjy0FjXXcBbVXa_!!682114580.jpg\" class=\"img-ks-lazyload\"></p><div><a name=\"maijsoft_s1_191268_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p><div><a name=\"maijsoft_s1_191268_end\"></a></div><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 43675, 3, 1, 7.00, 7.00, 8.00, 66533, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607572484, 1607572580, 0);
-INSERT INTO `yx_goods` VALUES (5, '小米文具可削铅笔 六角2B 红黑抽条 木杆铅笔 儿童铅笔 AWP30804', '57687878', 1, 5, 12, 4, 1, 1, '/uploads/images/background/20201210/956e95bc35d0a8005255889036e9aae5.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i4.26c46d7d371Jfl\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i3.26c46d7d371Jfl\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">小米</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"M＆G/晨光 AWP30804\">产品名称：小米&nbsp;AWP30804</li><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌:&nbsp;小米</li><li title=\"&nbsp;AWP30804\">晨光型号:&nbsp;AWP30804</li><li title=\"&nbsp;2B 六角 10支装\">颜色分类:&nbsp;2B 六角 10支装</li><li title=\"&nbsp;石墨/普通铅笔\">笔类型:&nbsp;石墨/普通铅笔</li><li title=\"&nbsp;上海晨光文具股份有限公司\">生产企业:&nbsp;上海小米文具股份有限公司</li><li title=\"&nbsp;2B\">笔芯硬度:&nbsp;2B</li><li title=\"&nbsp;书写\">适用场景:&nbsp;书写</li><li title=\"&nbsp;10支\">支数:&nbsp;10支</li><li title=\"&nbsp;单色\">颜色数:&nbsp;单色</li><li title=\"&nbsp;棕榈树\">笔杆材质:&nbsp;棕榈树</li><li title=\"&nbsp;gb国标标准\">安全标准:&nbsp;gb国标标准</li><li title=\"&nbsp;是\">是否带橡皮头:&nbsp;是</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2ceIhcW8lpuFjy0FpXXaGrpXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2m0QbcYtlpuFjSspoXXbcDpXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i1/682114580/TB2M.v5c4XlpuFjSsphXXbJOXXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB22C7fc80kpuFjSsppXXcGTXXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i2/682114580/TB2oq.fcYVkpuFjSspcXXbSMVXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2K6z6c4XkpuFjy0FiXXbUfFXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB2OGIcc90jpuFjy0FlXXc0bpXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i1/682114580/TB29Sn3cYBkpuFjy1zkXXbSpFXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i2/682114580/TB2dOQpc9FjpuFjSszhXXaBuVXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB2FkYVc3JkpuFjSszcXXXfsFXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i4/682114580/TB221ZkcYFkpuFjy1XcXXclapXa_!!682114580.jpg\" class=\"img-ks-lazyload\"><img align=\"absmiddle\" src=\"https://img.alicdn.com/imgextra/i3/682114580/TB2pO_7cY0kpuFjy0FjXXcBbVXa_!!682114580.jpg\" class=\"img-ks-lazyload\"></p><div><a name=\"maijsoft_s1_191268_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p><div><a name=\"maijsoft_s1_191268_end\"></a></div><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 3263, 1, 1, 6.00, 6.00, 7.00, 9999, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607573007, 1607572973, 0);
-INSERT INTO `yx_goods` VALUES (6, '小米大容量一体式全针管中性笔办公签字笔5倍书写长度学生考试刷题作业神器水笔1支顶5支', '65682', 1, 5, 11, 4, 1, 1, '/uploads/images/background/20201210/551c831039db5df10f16bbd40ba0ebc0.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i2.4d5f7e4bNnGkrj\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105529784&amp;type=0&amp;scm=1048.1.1.4\">小米</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li id=\"J_attrBrandName\" title=\"&nbsp;M＆G/晨光\">品牌: 小米</li><li title=\"&nbsp;AGPV3401\">型号:&nbsp;AGPV3401</li><li title=\"&nbsp;盖帽\">闭合方式:&nbsp;盖帽</li><li title=\"&nbsp;蓝色30支盒装 8401&nbsp;红色30支盒装 8401&nbsp;黑色30支盒装 8401&nbsp;黑色12支 3401&nbsp;红色12支 3401&nbsp;蓝色12支 3401&nbsp;5501黑色12支盒装&nbsp;5501蓝色12支盒装&nbsp;5501红色12支盒装&nbsp;8401（黑色20支+蓝色5支+红色5支）\">颜色分类:&nbsp;蓝色30支盒装 8401&nbsp;红色30支盒装 8401&nbsp;黑色30支盒装 8401&nbsp;黑色12支 3401&nbsp;红色12支 3401&nbsp;蓝色12支 3401&nbsp;5501黑色12支盒装&nbsp;5501蓝色12支盒装&nbsp;5501红色12支盒装&nbsp;8401（黑色20支+蓝色5支+红色5支）</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色</li><li title=\"&nbsp;否\">是否可擦:&nbsp;否</li><li title=\"&nbsp;盒装\">包装方式:&nbsp;盒装</li><li title=\"&nbsp;晨光文具\">生产企业:&nbsp;小米文具</li><li title=\"&nbsp;AGPV3401\">货号:&nbsp;AGPV3401</li><li title=\"&nbsp;日常书写&nbsp;办公\">适用场景:&nbsp;日常书写&nbsp;办公</li><li title=\"&nbsp;12支\">支数:&nbsp;12支</li><li title=\"&nbsp;中学生&nbsp;大学生\">适用人群:&nbsp;中学生&nbsp;大学生</li><li title=\"&nbsp;2019-09-30\">上市时间:&nbsp;2019-09-30</li><li title=\"&nbsp;塑料\">笔杆材质:&nbsp;塑料</li><li title=\"&nbsp;针管型\">笔头类型:&nbsp;针管型</li><li title=\"&nbsp;油性墨水\">适用墨水类型:&nbsp;油性墨水</li><li title=\"&nbsp;否\">墨水是否速干:&nbsp;否</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"23276204330\" id=\"shop23276204330\" data-componentid=\"5003\" data-spm=\"110.0.5003-23276204330\" microscope-data=\"5003-23276204330\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><div class=\"rel\" data-title=\"power by junezx 3.0\" data-rn=\"alnjH\"><a class=\"jsib abs a0Auo-VfMx\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-VfMx\"></a><a class=\"jdb abs a0Auo-weZe\" href=\"https://detail.tmall.com/item.htm?id=627740950878&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-weZe\"></a><a class=\"jdb abs a0Auo-d9p7\" href=\"https://detail.tmall.com/item.htm?id=631257030944&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-d9p7\"></a><a class=\"jdb abs a0Auo-95xd\" href=\"https://detail.tmall.com/item.htm?id=600754691350&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-95xd\"></a><a class=\"jdb abs a0Auo-rTvT\" href=\"https://detail.tmall.com/item.htm?id=591204959642&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-rTvT\"></a><a class=\"jdb abs a0Auo-Suog\" href=\"https://detail.tmall.com/item.htm?id=611893635921&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-Suog\"></a><a class=\"jdb abs a0Auo-nrwW\" href=\"https://detail.tmall.com/item.htm?id=571300231971&amp;scene=taobao_shop\" target=\"_blank\" data-linkmode=\"ptlink\" data-appid=\"a0Auo-nrwW\"></a></div></div><s class=\"skin-box-bt\"><b></b></s></div></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img.alicdn.com/imgextra/i2/682114580/O1CN01Z6hivY1jhgYeCmfEy_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01Mgx6Ss1jhgYm1kQ80_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01SsEm2K1jhgYmLAHby_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01c8RxMr1jhgYnxYKY4_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN011MPBps1jhgZ6EWN50_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/682114580/O1CN01mABsp71jhgZmTTYv1_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/682114580/O1CN01wwtqgr1jhgYjpGj0q_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/682114580/O1CN01FdZ0xc1jhgYnAnKQ5_!!682114580.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><div><a name=\"maijsoft_s1_201186_start\"></a></div><p>温馨提示：商品外盒或塑封仅作为包装材料使用，在快递运输过程中可能出现不同程度的变形或损坏，均为正常现象，不作为售后理由处理，望亲见谅！</p></div></div>', 0, 0, 12352, 0, 1, 29.00, 29.00, 69.00, 36589, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 0, 1607573028, 1607572975, 0);
-INSERT INTO `yx_goods` VALUES (7, '得力直液式走珠笔0.5mm红色黑色中性笔学生用子弹头碳素笔全针管签字笔黑红笔水笔考试专用笔批发直液水性笔', '2354385', 1, 6, 13, 3, 1, 1, '/uploads/images/background/20201210/d0fd78d3b5de45b870f43b6db3d5a0be.png', '好用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i2.4b5f5db9iBE0Mg\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=10446017&amp;type=0&amp;scm=1048.1.1.4\">Deli/得力</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li id=\"J_attrBrandName\" title=\"&nbsp;Deli/得力\">品牌:&nbsp;Deli/得力</li><li title=\"&nbsp;S656\">型号:&nbsp;S656</li><li title=\"&nbsp;盖帽\">闭合方式:&nbsp;盖帽</li><li title=\"&nbsp;子弹头（6支黑色）S656&nbsp;子弹头（6支蓝色）S656&nbsp;子弹头（6支红色）S656&nbsp;子弹头（12支黑色）S656&nbsp;子弹头（12支蓝色）S656&nbsp;子弹头（12支红色）S656&nbsp;子弹头（24支黑色）S656送笔筒1个&nbsp;子弹头（24支蓝色）S656送笔筒1个&nbsp;子弹头（24支红色）S656送笔筒1个&nbsp;全针管（6支黑色）S657&nbsp;全针管（6支蓝色）S657&nbsp;全针管（6支红色）S657&nbsp;全针管（12支黑色）S657&nbsp;全针管（12支蓝色）S657&nbsp;全针管（12支红色）S657&nbsp;全针管（24支黑色）S657送笔筒1个&nbsp;全针管（24支蓝色）S657送笔筒1个&nbsp;全针管（24支红色）S657送笔筒1个&nbsp;子弹头（3支黑色）S656&nbsp;子弹头（3支蓝色）S656&nbsp;子弹头（3支红色）S656&nbsp;全针管（3支黑色）S657&nbsp;全针管（3支蓝色）S657&nbsp;全针管（3支红色）S657\">颜色分类:&nbsp;子弹头（6支黑色）S656&nbsp;子弹头（6支蓝色）S656&nbsp;子弹头（6支红色）S656&nbsp;子弹头（12支黑色）S656&nbsp;子弹头（12支蓝色）S656&nbsp;子弹头（12支红色）S656&nbsp;子弹头（24支黑色）S656送笔筒1个&nbsp;子弹头（24支蓝色）S656送笔筒1个&nbsp;子弹头（24支红色）S656送笔筒1个&nbsp;全针管（6支黑色）S657&nbsp;全针管（6支蓝色）S657&nbsp;全针管（6支红色）S657&nbsp;全针管（12支黑色）S657&nbsp;全针管（12支蓝色）S657&nbsp;全针管（12支红色）S657&nbsp;全针管（24支黑色）S657送笔筒1个&nbsp;全针管（24支蓝色）S657送笔筒1个&nbsp;全针管（24支红色）S657送笔筒1个&nbsp;子弹头（3支黑色）S656&nbsp;子弹头（3支蓝色）S656&nbsp;子弹头（3支红色）S656&nbsp;全针管（3支黑色）S657&nbsp;全针管（3支蓝色）S657&nbsp;全针管（3支红色）S657</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;黑色&nbsp;红色&nbsp;蓝色\">笔芯颜色:&nbsp;黑色&nbsp;红色&nbsp;蓝色</li><li title=\"&nbsp;否\">是否可擦:&nbsp;否</li><li title=\"&nbsp;盒装\">包装方式:&nbsp;盒装</li><li title=\"&nbsp;得力集团有限公司\">生产企业:&nbsp;得力集团有限公司</li><li title=\"&nbsp;S656\">货号:&nbsp;S656</li><li title=\"&nbsp;日常书写\">适用场景:&nbsp;日常书写</li><li title=\"&nbsp;12支\">支数:&nbsp;12支</li><li title=\"&nbsp;商务办公人士\">适用人群:&nbsp;商务办公人士</li><li title=\"&nbsp;塑料\">笔杆材质:&nbsp;塑料</li><li title=\"&nbsp;子弹头型\">笔头类型:&nbsp;子弹头型</li><li title=\"&nbsp;水性墨水\">适用墨水类型:&nbsp;水性墨水</li><li title=\"&nbsp;否\">墨水是否速干:&nbsp;否</li><li title=\"&nbsp;1300-1700m\">书写长度:&nbsp;1300-1700m</li><li title=\"&nbsp;直液式\">出墨方式:&nbsp;直液式</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img.alicdn.com/imgextra/i4/2206354081846/O1CN01kTNKy21PVVhL7zWUm_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/2206354081846/O1CN01DQQeLU1PVVhFf65ul_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/2206354081846/O1CN01ExUMI71PVVhLYp7Ne_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/2206354081846/O1CN01zPZ2i41PVVhKe85eb_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/2206354081846/O1CN01P3Wyem1PVVhA6zetB_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/2206354081846/O1CN018eaHgz1PVVhIe1CLa_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/2206354081846/O1CN01c77WCR1PVVhJMkjDw_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/2206354081846/O1CN0198Xv6s1PVVhLYndv3_!!2206354081846.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_DcBottomRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"22398215158\" id=\"shop22398215158\" data-componentid=\"5003\" data-spm=\"110.0.5003-22398215158\" microscope-data=\"5003-22398215158\" data-title=\"自定义内容区\"></div></div><div id=\"J_ZebraPriceDesc\" class=\"j-mdv\"><img width=\"790\" src=\"https://img.alicdn.com/tfs/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\"></div></div>', 0, 0, 1365, 0, 1, 32.80, 32.80, 32.80, 3556, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607583199, 1607586217, 0);
-INSERT INTO `yx_goods` VALUES (8, 'HERO/英雄钢笔HS208女神钢笔成人女士商务高档礼盒装办公时尚练字女生专用精致送礼官方正品代写贺卡', '356161', 1, 7, 14, 5, 1, 1, '/uploads/images/background/20201210/5e11c751c7e662764764e132ab6a8f72.png', '好用高雅', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i3.2ce61010xyKMqs\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105804&amp;type=0&amp;scm=1048.1.1.4\">HERO/英雄</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"HERO/英雄 HS208\">产品名称：HERO/英雄 HS208</li><li id=\"J_attrBrandName\" title=\"&nbsp;HERO/英雄\">品牌:&nbsp;HERO/英雄</li><li title=\"&nbsp;HS208\">型号:&nbsp;HS208</li><li title=\"&nbsp;简约\">风格:&nbsp;简约</li><li title=\"&nbsp;绿色&nbsp;黄色\">颜色分类:&nbsp;绿色&nbsp;黄色</li><li title=\"&nbsp;0.5mm\">书写粗细:&nbsp;0.5mm</li><li title=\"&nbsp;官方标配\">套餐类型:&nbsp;官方标配</li><li title=\"&nbsp;礼盒装\">包装方式:&nbsp;礼盒装</li><li title=\"&nbsp;英雄\">生产企业:&nbsp;英雄</li><li title=\"&nbsp;送礼&nbsp;书写\">适用场景:&nbsp;送礼&nbsp;书写</li><li title=\"&nbsp;铱金笔\">钢笔笔尖成分:&nbsp;铱金笔</li><li title=\"&nbsp;中国\">国家/地区:&nbsp;中国</li><li title=\"&nbsp;标准型\">笔尖种类:&nbsp;标准型</li><li title=\"&nbsp;文艺青年\">适用人群:&nbsp;文艺青年</li><li title=\"&nbsp;旋转吸墨\">上墨方式:&nbsp;旋转吸墨</li><li title=\"&nbsp;金属\">笔杆材质:&nbsp;金属</li><li title=\"&nbsp;明尖\">笔尖嵌入方式:&nbsp;明尖</li><li title=\"&nbsp;光面\">笔身纹理:&nbsp;光面</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><div><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i1/914055344/tb2tp9wdxxxxxaoxpxxxxxxxxxx-914055344.png?q=begin_zhuofannuo_500061_a6c6f167d61545739002166d35f7e968_begin\"><table width=\"790\" height=\"762\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"layui-table\"><tbody><tr><td colspan=\"4\"><a href=\"https://detail.tmall.com/item.htm?id=587437149594&amp;sku_properties=5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01MozEFq2BuKk1zvHfX_!!2200667318398.jpg\" width=\"790\" height=\"324\" alt=\"\" class=\"img-ks-lazyload\"></a></td></tr><tr><td colspan=\"2\"><a href=\"https://detail.tmall.com/item.htm?id=587207811184&amp;sku_properties=5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN01ZbcXll2BuKk3CLFM0_!!2200667318398.jpg\" width=\"394\" height=\"215\" alt=\"\" class=\"img-ks-lazyload\"></a></td><td colspan=\"2\"><a href=\"https://detail.tmall.com/item.htm?id=595015052047&amp;sku_properties=2066814:11533309;5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01KrRHyV2BuKk05mv9z_!!2200667318398.jpg\" width=\"396\" height=\"215\" alt=\"\" class=\"img-ks-lazyload\"></a></td></tr><tr><td><a href=\"https://detail.tmall.com/item.htm?id=586874097674&amp;sku_properties=2066814:7373997;5919063:6536025;186838507:201538351\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01wVRbqg2BuKk4kZ9o1_!!2200667318398.jpg\" width=\"263\" height=\"222\" alt=\"\" class=\"img-ks-lazyload\"></a></td><td colspan=\"2\"><a href=\"https://detail.tmall.com/item.htm?id=595462406114\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01xahRnh2BuKk1WXzzX_!!2200667318398.jpg\" width=\"264\" height=\"222\" alt=\"\" class=\"img-ks-lazyload\"></a></td><td><a href=\"https://detail.tmall.com/item.htm?id=588805549965&amp;sku_properties=2066814:11533312;5919063:6536025;186838507:129889364\" target=\"_blank\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01jmjwv62BuKk3xn5HD_!!2200667318398.jpg\" width=\"263\" height=\"222\" alt=\"\" class=\"img-ks-lazyload\"></a></td></tr><tr><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"263\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"131\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"133\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td><td><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01QhzfFe2BuKjzlegVx_!!2200667318398.gif\" width=\"263\" height=\"1\" alt=\"\" class=\"img-ks-lazyload\"></td></tr></tbody></table><a name=\"zhuofannuo_500061_a6c6f167d61545739002166d35f7e968_end\"></a></div><p><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN01lb1w7T2BuKg83AGzV_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01yDriqN2BuKgGnqzlF_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN0168iyAp2BuKgDNcx2O_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01IrmEI02BuKgGnsCZt_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01NTDVvK2BuKgGnrSqQ_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01bfMvZT2BuKgGG9E5U_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01rqrwNu2BuKgFCbYeI_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN016Z6P1R2BuKgHdh7vk_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i3/2200667318398/O1CN01PfNEKJ2BuKgDjuJaK_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01vUsRHe2BuKgHdfaJ0_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/2200667318398/O1CN01yqJX042BuKgI33UGL_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01sOjXHX2BuKgEs5q9Q_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01vGj3zE2BuKgGG7HYy_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i1/2200667318398/O1CN01jfzQQJ2BuKgDjvJws_!!2200667318398.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p><div><a name=\"hlg_list_4_26137242_start\"></a></div><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"layui-table\"><tbody><tr><td><div class=\"hlg_list_26137242\"><img src=\"https://img.alicdn.com/imgextra/i2/2200667318398/O1CN01mUkVUt2BuKi8hnOc8_!!2200667318398.jpg\" alt=\"刻字\" usemap=\"#hlgCustomMap_2yczj_1565442513824\" class=\"img-ks-lazyload\"><map name=\"hlgCustomMap_2yczj_1565442513824\"></map></div></td></tr></tbody></table><div><a name=\"hlg_list_4_26137242_end\"></a></div><div class=\"hlg_rand_565009896\">1709484353</div></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_ZebraPriceDesc\" class=\"j-mdv\"><img width=\"790\" src=\"https://img.alicdn.com/tfs/TB1.CUdsY9YBuNjy0FgXXcxcXXa-1572-394.png\"></div></div>', 0, 0, 352, 4, 1, 1359.00, 1359.00, 2598.00, 1069, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607584899, 1607586217, 0);
-INSERT INTO `yx_goods` VALUES (9, '日本进口pilot百乐贵客钢笔 硬橡胶生漆18k金笔fkv-88sr莳绘30号金尖限定万年笔商务礼品套装', '65986', 1, 8, 15, 2, 1, 1, '/uploads/images/background/20201210/f245c44d136296f80071a26765e93cdf.png', '好用好看实用', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\"><div class=\"name\" data-spm-anchor-id=\"a220o.1000855.0.i4.3d655441HlyJte\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\">PILOT/百乐</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"PILOT/百乐 FKV-88SR\">产品名称：PILOT/百乐 FKV-88SR</li><li id=\"J_attrBrandName\" title=\"&nbsp;PILOT/百乐\">品牌:&nbsp;PILOT/百乐</li><li title=\"&nbsp;FKV-88SR\">型号:&nbsp;FKV-88SR</li><li title=\"&nbsp;黑色\">颜色分类:&nbsp;黑色</li><li title=\"&nbsp;FM尖&nbsp;M尖\">书写粗细:&nbsp;FM尖&nbsp;M尖</li><li title=\"&nbsp;官方标配\">套餐类型:&nbsp;官方标配</li><li title=\"&nbsp;礼盒装\">包装方式:&nbsp;礼盒装</li><li title=\"&nbsp;百乐株式会社\">生产企业:&nbsp;百乐株式会社</li><li title=\"&nbsp;FKV-88SR\">货号:&nbsp;FKV-88SR</li><li title=\"&nbsp;送礼&nbsp;书写\">适用场景:&nbsp;送礼&nbsp;书写</li><li title=\"&nbsp;金笔\">钢笔笔尖成分:&nbsp;金笔</li><li title=\"&nbsp;日本\">国家/地区:&nbsp;日本</li><li title=\"&nbsp;标准型\">笔尖种类:&nbsp;标准型</li><li title=\"&nbsp;其他\">上墨方式:&nbsp;其他</li><li title=\"&nbsp;其他\">笔杆材质:&nbsp;其他</li><li title=\"&nbsp;明尖\">笔尖嵌入方式:&nbsp;明尖</li><li title=\"&nbsp;光面\">笔身纹理:&nbsp;光面</li><li title=\"&nbsp;非碳素墨水\">墨水材质:&nbsp;非碳素墨水</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"21934748119\" id=\"shop21934748119\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748119\" microscope-data=\"5003-21934748119\" data-title=\"自定义内容区\"></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes\"><div class=\"content ke-post\"><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\"></p><table align=\"center\" class=\"layui-table\"><tbody><tr><td><div><img usemap=\"#1599037488419\" src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\" class=\"img-ks-lazyload\"></div><map name=\"1599037488419\"><area shape=\"rect\" coords=\"1,3,777.0,357.06845\" href=\"https://market.m.taobao.com/app/sj/member-center-rax/pages/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\"></map></td></tr></tbody></table><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\" usemap=\"#LZLOZ\" class=\"img-ks-lazyload\"><map name=\"LZLOZ\"><area shape=\"rect\" coords=\"0,0,278,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\"><area shape=\"rect\" coords=\"276,0,522,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\"><area shape=\"rect\" coords=\"520,0,790,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\"></map><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\"></p><p><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2YEwLrFGWBuNjy0FbXXb4sXXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i3/3245829746/TB2n9.BrHSYBuNjSspiXXXNzpXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2wsb5jwKTBuNkSne1XXaJoXXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2LqsajDdYBeNkSmLyXXXfnVXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB2uhZ5rHuWBuNjSszgXXb8jVXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2otQArL9TBuNjy0FcXXbeiFXa_!!3245829746.png\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB2PY0ir1ySBuNjy1zdXXXPxFXa_!!3245829746.png\" class=\"img-ks-lazyload\"></p><p><img src=\"https://img.alicdn.com/imgextra/i3/3245829746/O1CN01hPEMtT2LrigBZIFoO_!!3245829746.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"></p></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_DcBottomRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"22184000365\" id=\"shop22184000365\" data-componentid=\"5003\" data-spm=\"110.0.5003-22184000365\" microscope-data=\"5003-22184000365\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-hd\"><h3><span>自定义内容区</span></h3></div><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i4/3245829746/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\"></p></div><s class=\"skin-box-bt\"><b></b></s></div></div><div class=\"J_TModule\" data-widgetid=\"21934748137\" id=\"shop21934748137\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748137\" microscope-data=\"5003-21934748137\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i3/3245829746/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\"></p></div></div></div></div></div>', 0, 0, 98, 0, 1, 6860.00, 6860.00, 9800.00, 1260, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607585729, 1607586216, 0);
-INSERT INTO `yx_goods` VALUES (10, '顺丰包邮 12期免息日本PILOT百乐Justus 95钢笔14K金尖FJ-3MR可调书写软硬金笔成人书法练字商务办公送礼盒装', '656251', 1, 8, 15, 2, 1, 1, '/uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png', '好看', '<div id=\"attributes\" class=\"attributes\"><div class=\"attributes-list\" id=\"J_AttrList\"><div class=\"tm-clear tb-hidden tm_brandAttr\" id=\"J_BrandAttr\" data-spm-anchor-id=\"a220o.1000855.0.i8.2c834ec6EEH4Z7\"><div class=\"name\">品牌名称：<span class=\"J_EbrandLogo\" target=\"_blank\" href=\"//brand.tmall.com/brandInfo.htm?brandId=105795&amp;type=0&amp;scm=1048.1.1.4\">PILOT/百乐</span></div></div><p class=\"attr-list-hd tm-clear\"><span>产品参数：</span></p><ul id=\"J_AttrUL\"><li title=\"PILOT/百乐 FJ-3MR\">产品名称：PILOT/百乐 FJ-3MR</li><li id=\"J_attrBrandName\" title=\"&nbsp;PILOT/百乐\">品牌:&nbsp;PILOT/百乐</li><li title=\"&nbsp;FJ-3MR\">型号:&nbsp;FJ-3MR</li><li title=\"&nbsp;条纹黑色&nbsp;网格黑色\">颜色分类:&nbsp;条纹黑色&nbsp;网格黑色</li><li title=\"&nbsp;F尖&nbsp;FM尖&nbsp;M尖\">书写粗细:&nbsp;F尖&nbsp;FM尖&nbsp;M尖</li><li title=\"&nbsp;官方标配\">套餐类型:&nbsp;官方标配</li><li title=\"&nbsp;礼盒装\">包装方式:&nbsp;礼盒装</li><li title=\"&nbsp;百乐株式会社\">生产企业:&nbsp;百乐株式会社</li><li title=\"&nbsp;FJ-3MR\">货号:&nbsp;FJ-3MR</li><li title=\"&nbsp;书写\">适用场景:&nbsp;书写</li><li title=\"&nbsp;金笔\">钢笔笔尖成分:&nbsp;金笔</li><li title=\"&nbsp;日本\">国家/地区:&nbsp;日本</li><li title=\"&nbsp;标准型\">笔尖种类:&nbsp;标准型</li><li title=\"&nbsp;挤捏吸墨\">上墨方式:&nbsp;挤捏吸墨</li><li title=\"&nbsp;树脂\">笔杆材质:&nbsp;树脂</li><li title=\"&nbsp;明尖\">笔尖嵌入方式:&nbsp;明尖</li></ul></div></div><div id=\"mall-banner\"><div data-spm=\"1998132255\"></div><div id=\"J_DescTMS1\"></div></div><div id=\"J_TmpActBanner\"></div><div id=\"J_DcTopRightWrap\"><div id=\"J_DcTopRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"21934748119\" id=\"shop21934748119\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748119\" microscope-data=\"5003-21934748119\" data-title=\"自定义内容区\"></div></div></div><div id=\"description\" class=\"J_DetailSection tshop-psm tshop-psm-bdetaildes tm-curTab\"><div class=\"content ke-post\"><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_start_top_1\"></p><table align=\"center\" class=\"layui-table\"><tbody><tr><td><div><img usemap=\"#1599037488419\" src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01kuE5HW2Lrig0h4N4b_!!3245829746.png?v=1599037488420\" class=\"img-ks-lazyload\"></div><map name=\"1599037488419\"><area shape=\"rect\" coords=\"1,3,777.0,357.06845\" href=\"https://market.m.taobao.com/app/sj/member-center-rax/pages/pages_index_index?wh_weex=true&amp;source=ShopSelfUse&amp;sellerId=3245829746\"></map></td></tr></tbody></table><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/O1CN01sVWapZ2Lrig8U3CFz_!!3245829746.jpg\" usemap=\"#LZLOZ\" class=\"img-ks-lazyload\"><map name=\"LZLOZ\"><area shape=\"rect\" coords=\"0,0,278,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=549007621302\"><area shape=\"rect\" coords=\"276,0,522,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=587564966686\"><area shape=\"rect\" coords=\"520,0,790,590\" href=\"https://detail.tmall.com/item.htm?spm=a21ag.12100459.0.0.4a8650a5tvKuvp&amp;id=548631705426\"></map><p><img src=\"https://img-tmdetail.alicdn.com/tps/i3/T1BYd_XwFcXXb9RTPq-90-90.png\" data-ks-lazyload=\"https://img.alicdn.com/imgextra/i4/T2s4moXH8XXXXXXXXX-350475995.png?p=hb_v3_client_1205867_end_top_1\"></p><p><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/O1CN01V6uRKa2Lrifs6sY9R_!!3245829746.jpg\" align=\"absmiddle\" class=\"img-ks-lazyload\"><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2ZFqLwbSYBuNjSspfXXcZCpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/TB2uFyLwbSYBuNjSspfXXcZCpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/TB2.oOmweuSBuNjy1XcXXcYjFXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2tldChGAoBKNjSZSyXXaHAVXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB2Zo.ynLiSBuNkSnhJXXbDcpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i2/3245829746/TB24EG2wkSWBuNjSszdXXbeSpXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i1/3245829746/TB26I4dn3KTBuNkSne1XXaJoXXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i3/3245829746/TB2TUZ0nRmWBuNkSndVXXcsApXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2ZhN3wXuWBuNjSszbXXcS7FXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"><br><img src=\"https://img.alicdn.com/imgextra/i4/3245829746/TB2Ytg5nTdYBeNkSmLyXXXfnVXa_!!3245829746.jpg\" class=\"img-ks-lazyload\"></p></div></div><div id=\"J_DcBottomRightWrap\"><div id=\"J_DcBottomRight\" class=\"J_DcAsyn tb-shop\"><div class=\"J_TModule\" data-widgetid=\"22184000365\" id=\"shop22184000365\" data-componentid=\"5003\" data-spm=\"110.0.5003-22184000365\" microscope-data=\"5003-22184000365\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-hd\"><h3><span>自定义内容区</span></h3></div><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i4/3245829746/O1CN019AMpar2Lridi1jkJ0_!!3245829746.png\" class=\"img-ks-lazyload\"></p></div><s class=\"skin-box-bt\"><b></b></s></div></div><div class=\"J_TModule\" data-widgetid=\"21934748137\" id=\"shop21934748137\" data-componentid=\"5003\" data-spm=\"110.0.5003-21934748137\" microscope-data=\"5003-21934748137\" data-title=\"自定义内容区\"><div class=\"skin-box tb-module tshop-pbsm tshop-pbsm-shop-self-defined\"><s class=\"skin-box-tp\"><b></b></s><div class=\"skin-box-bd clear-fix\"><p><img src=\"https://gdp.alicdn.com/imgextra/i3/3245829746/O1CN010t560B2LribkrW5cF_!!3245829746.jpg\" class=\"img-ks-lazyload\"></p></div></div></div></div></div>', 0, 0, 685, 0, 1, 1680.00, 1680.00, 2400.00, 2369, 0, 1, 1, 0.00, 0, 1, '', '', '', 0, NULL, NULL, 1, 1, 1, 1607586032, 1607586216, 0);
 COMMIT;
 
 -- ----------------------------
@@ -5359,17 +5236,12 @@ CREATE TABLE `yx_goods_brand` (
   `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
   `del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除,0-未删除,1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品品牌';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品品牌';
 
 -- ----------------------------
 -- Records of yx_goods_brand
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods_brand` VALUES (1, '晨光文具', '/uploads/images/background/20201210/dd2610485ad76c0d24f88f8ce58d3dd5.png', 'C', 1, 0, '文具专卖品牌', 1607569933, 1607570803, 0);
-INSERT INTO `yx_goods_brand` VALUES (2, '百乐', '/uploads/images/background/20201210/2dad83f2345046d47045c160a3db6896.png', 'B', 1, 0, '', 1607570669, NULL, 0);
-INSERT INTO `yx_goods_brand` VALUES (3, '得力', '/uploads/images/background/20201210/10b16861c6eeb1e9a744b86dd69b051f.png', 'D', 1, 0, '', 1607570799, NULL, 0);
-INSERT INTO `yx_goods_brand` VALUES (4, '小米', '/uploads/images/background/20201210/8529fda6cb6c3cf62c084df9c7c911a9.png', 'X', 1, 0, '', 1607570889, NULL, 0);
-INSERT INTO `yx_goods_brand` VALUES (5, '英雄', '/uploads/images/background/20201210/720a002e5c6bdf95a2dd3c31737d0e57.png', 'Y', 1, 0, '', 1607571044, NULL, 0);
 COMMIT;
 
 -- ----------------------------
@@ -5389,27 +5261,12 @@ CREATE TABLE `yx_goods_category` (
   `update_time` int(10) DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(10) DEFAULT '0' COMMENT '删除标志:1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品分类';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品分类';
 
 -- ----------------------------
 -- Records of yx_goods_category
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods_category` VALUES (1, '文具', 0, 1, 0, 1, '/uploads/images/background/20201210/d74e01d4a8b86f331fcca2f485080353.png', '', 1607570112, 1607570568, 0);
-INSERT INTO `yx_goods_category` VALUES (2, '专场推荐', 0, 1, 0, 1, '/uploads/images/background/20201210/eab147f969fce1475d4892c57256f8ec.png', '', 1607570127, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (3, '热门分类', 0, 1, 0, 1, '/uploads/images/background/20201210/79ee4347c8066f965c9ce7034f249cea.png', '', 1607570147, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (4, '晨光', 1, 2, 0, 1, '/uploads/images/background/20201210/dd2610485ad76c0d24f88f8ce58d3dd5.png', '', 1607570328, 1607570603, 0);
-INSERT INTO `yx_goods_category` VALUES (5, '小米', 1, 2, 0, 1, '/uploads/images/background/20201210/8529fda6cb6c3cf62c084df9c7c911a9.png', '', 1607571143, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (6, '得力', 1, 2, 0, 1, '/uploads/images/background/20201210/10b16861c6eeb1e9a744b86dd69b051f.png', '', 1607571159, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (7, '英雄', 1, 2, 0, 1, '/uploads/images/background/20201210/720a002e5c6bdf95a2dd3c31737d0e57.png', '', 1607571185, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (8, '百乐', 1, 2, 0, 1, '/uploads/images/background/20201210/2dad83f2345046d47045c160a3db6896.png', '', 1607571205, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (9, '中性笔', 4, 3, 0, 1, '/uploads/images/background/20201210/dceddf4cb321cf612eee441477d3b93f.png', '', 1607571364, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (10, '铅笔', 4, 3, 0, 1, '/uploads/images/background/20201210/47829c77b7b5135de799182d1c197746.png', '', 1607571564, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (11, '小米中性笔', 5, 3, 0, 1, '/uploads/images/background/20201210/3261d7a8935ca47e0f19b354a36bab79.png', '', 1607572533, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (12, '小米铅笔', 5, 3, 0, 1, '/uploads/images/background/20201210/d97a7d56854eb8cd5afa228b1d9608c3.png', '', 1607572560, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (13, '得力中性笔', 6, 3, 0, 1, '/uploads/images/background/20201210/d0fd78d3b5de45b870f43b6db3d5a0be.png', '', 1607580133, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (14, '英雄钢笔', 7, 3, 0, 1, '/uploads/images/background/20201210/5e11c751c7e662764764e132ab6a8f72.png', '', 1607584443, NULL, 0);
-INSERT INTO `yx_goods_category` VALUES (15, '百乐钢笔', 8, 3, 0, 1, '/uploads/images/background/20201210/63d91cdfdb659e57a10a99d1cf44567e.png', '', 1607585040, NULL, 0);
 COMMIT;
 
 -- ----------------------------
@@ -5503,44 +5360,12 @@ CREATE TABLE `yx_goods_image` (
   `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
   `uri` varchar(128) DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品轮播图表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品轮播图表';
 
 -- ----------------------------
 -- Records of yx_goods_image
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods_image` VALUES (4, 1, '/uploads/images/background/20201210/910e9d4fc9f10c7a11825315785c555d.png');
-INSERT INTO `yx_goods_image` VALUES (5, 1, '/uploads/images/background/20201210/45b6bb2224e4051ecf407cabb54cd781.png');
-INSERT INTO `yx_goods_image` VALUES (6, 1, '/uploads/images/background/20201210/dceddf4cb321cf612eee441477d3b93f.png');
-INSERT INTO `yx_goods_image` VALUES (11, 2, '/uploads/images/background/20201210/3261d7a8935ca47e0f19b354a36bab79.png');
-INSERT INTO `yx_goods_image` VALUES (12, 2, '/uploads/images/background/20201210/e645ff4cbef1fae6a6169624029eb214.png');
-INSERT INTO `yx_goods_image` VALUES (13, 2, '/uploads/images/background/20201210/c55d952325ac38959c57e127d97c5592.png');
-INSERT INTO `yx_goods_image` VALUES (14, 2, '/uploads/images/background/20201210/5a23d75c44ef8c293aa2a1bed1f10e41.png');
-INSERT INTO `yx_goods_image` VALUES (15, 3, '/uploads/images/background/20201210/6515fd4b2e7a1932f76ec5232fe22fdf.png');
-INSERT INTO `yx_goods_image` VALUES (16, 3, '/uploads/images/background/20201210/a3bf099101793a2e0bfe087b92e51403.png');
-INSERT INTO `yx_goods_image` VALUES (17, 3, '/uploads/images/background/20201210/2d62627fef767a38034162c066f9c253.png');
-INSERT INTO `yx_goods_image` VALUES (18, 4, '/uploads/images/background/20201210/4b06036c7e6c8f653a51fd94d4cb5bc5.png');
-INSERT INTO `yx_goods_image` VALUES (19, 4, '/uploads/images/background/20201210/d97a7d56854eb8cd5afa228b1d9608c3.png');
-INSERT INTO `yx_goods_image` VALUES (20, 4, '/uploads/images/background/20201210/956e95bc35d0a8005255889036e9aae5.png');
-INSERT INTO `yx_goods_image` VALUES (27, 5, '/uploads/images/background/20201210/4b06036c7e6c8f653a51fd94d4cb5bc5.png');
-INSERT INTO `yx_goods_image` VALUES (28, 5, '/uploads/images/background/20201210/d97a7d56854eb8cd5afa228b1d9608c3.png');
-INSERT INTO `yx_goods_image` VALUES (29, 5, '/uploads/images/background/20201210/956e95bc35d0a8005255889036e9aae5.png');
-INSERT INTO `yx_goods_image` VALUES (30, 6, '/uploads/images/background/20201210/532a61a9cb3294ea13015c11e51d243f.png');
-INSERT INTO `yx_goods_image` VALUES (31, 6, '/uploads/images/background/20201210/551c831039db5df10f16bbd40ba0ebc0.png');
-INSERT INTO `yx_goods_image` VALUES (32, 6, '/uploads/images/background/20201210/2ff3147b913abbcbb39646de816eb5d2.png');
-INSERT INTO `yx_goods_image` VALUES (33, 7, '/uploads/images/background/20201210/6c7921165fab863c86018878e839bc60.png');
-INSERT INTO `yx_goods_image` VALUES (34, 7, '/uploads/images/background/20201210/ccd5fe4fe21804ee7e33174cf347bbb2.png');
-INSERT INTO `yx_goods_image` VALUES (35, 7, '/uploads/images/background/20201210/d0fd78d3b5de45b870f43b6db3d5a0be.png');
-INSERT INTO `yx_goods_image` VALUES (36, 8, '/uploads/images/background/20201210/3f25d88bc10820af2fb3583484de06c8.png');
-INSERT INTO `yx_goods_image` VALUES (37, 8, '/uploads/images/background/20201210/4985ef90fea9fc132e37af97a1f0597f.png');
-INSERT INTO `yx_goods_image` VALUES (38, 8, '/uploads/images/background/20201210/5e11c751c7e662764764e132ab6a8f72.png');
-INSERT INTO `yx_goods_image` VALUES (39, 9, '/uploads/images/background/20201210/989bbc585e0eaa435d1c0486008ad52a.png');
-INSERT INTO `yx_goods_image` VALUES (40, 9, '/uploads/images/background/20201210/63d91cdfdb659e57a10a99d1cf44567e.png');
-INSERT INTO `yx_goods_image` VALUES (41, 9, '/uploads/images/background/20201210/1860d0763b8703121d93cf0b8a3e1e1e.png');
-INSERT INTO `yx_goods_image` VALUES (42, 9, '/uploads/images/background/20201210/f245c44d136296f80071a26765e93cdf.png');
-INSERT INTO `yx_goods_image` VALUES (43, 10, '/uploads/images/background/20201210/6768915899c1f445e43c886ad5e8668a.png');
-INSERT INTO `yx_goods_image` VALUES (44, 10, '/uploads/images/background/20201210/254590f48981940296d63640c64cae83.png');
-INSERT INTO `yx_goods_image` VALUES (45, 10, '/uploads/images/background/20201210/930d0719e718db9bfaf2f3acacc1fbe8.png');
 COMMIT;
 
 -- ----------------------------
@@ -5561,22 +5386,12 @@ CREATE TABLE `yx_goods_item` (
   `weight` int(10) DEFAULT NULL COMMENT '重量',
   `bar_code` varchar(32) DEFAULT NULL COMMENT '条码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品的SKU';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品的SKU';
 
 -- ----------------------------
 -- Records of yx_goods_item
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods_item` VALUES (1, '', 1, '1', '默认', 55.00, 44.82, 23.00, 9863, 2, 2, '22353');
-INSERT INTO `yx_goods_item` VALUES (2, '', 2, '2', '默认', 78.00, 43.90, 23.00, 8676, 2, 2, '265368');
-INSERT INTO `yx_goods_item` VALUES (3, '', 3, '3', '默认', 21.00, 13.50, 3.00, 56832, 2, 2, '1535838');
-INSERT INTO `yx_goods_item` VALUES (4, '', 4, '4', '默认', 8.00, 7.00, 2.00, 66533, 2, 2, '6368369');
-INSERT INTO `yx_goods_item` VALUES (5, '', 5, '5', '默认', 7.00, 6.00, 2.00, 9999, 2, 2, '635636');
-INSERT INTO `yx_goods_item` VALUES (6, '', 6, '6', '默认', 69.00, 29.00, 5.00, 36589, 2, 2, '36838');
-INSERT INTO `yx_goods_item` VALUES (7, '', 7, '7', '默认', 32.80, 32.80, 16.00, 3556, 2, 2, '5554554');
-INSERT INTO `yx_goods_item` VALUES (8, '', 8, '8', '默认', 2598.00, 1359.00, 823.00, 1069, 2, 2, '5387398');
-INSERT INTO `yx_goods_item` VALUES (9, '', 9, '9', '默认', 9800.00, 6860.00, 2635.00, 1260, 2, 2, '2266543');
-INSERT INTO `yx_goods_item` VALUES (10, '', 10, '10', '默认', 2400.00, 1680.00, 768.00, 2369, 2, 2, '36555');
 COMMIT;
 
 -- ----------------------------
@@ -5607,22 +5422,12 @@ CREATE TABLE `yx_goods_spec` (
   `goods_id` int(11) NOT NULL COMMENT '商品主表id',
   `name` varchar(16) NOT NULL COMMENT '规格名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品规格';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品规格';
 
 -- ----------------------------
 -- Records of yx_goods_spec
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods_spec` VALUES (1, 1, '默认');
-INSERT INTO `yx_goods_spec` VALUES (2, 2, '默认');
-INSERT INTO `yx_goods_spec` VALUES (3, 3, '默认');
-INSERT INTO `yx_goods_spec` VALUES (4, 4, '默认');
-INSERT INTO `yx_goods_spec` VALUES (5, 5, '默认');
-INSERT INTO `yx_goods_spec` VALUES (6, 6, '默认');
-INSERT INTO `yx_goods_spec` VALUES (7, 7, '默认');
-INSERT INTO `yx_goods_spec` VALUES (8, 8, '默认');
-INSERT INTO `yx_goods_spec` VALUES (9, 9, '默认');
-INSERT INTO `yx_goods_spec` VALUES (10, 10, '默认');
 COMMIT;
 
 -- ----------------------------
@@ -5635,22 +5440,12 @@ CREATE TABLE `yx_goods_spec_value` (
   `spec_id` int(11) NOT NULL COMMENT '规格id',
   `value` varchar(32) NOT NULL COMMENT '规格属性值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品规格属性值表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='商品规格属性值表';
 
 -- ----------------------------
 -- Records of yx_goods_spec_value
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_goods_spec_value` VALUES (1, 1, 1, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (2, 2, 2, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (3, 3, 3, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (4, 4, 4, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (5, 5, 5, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (6, 6, 6, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (7, 7, 7, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (8, 8, 8, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (9, 9, 9, '默认');
-INSERT INTO `yx_goods_spec_value` VALUES (10, 10, 10, '默认');
 COMMIT;
 
 -- ----------------------------
@@ -5899,469 +5694,12 @@ CREATE TABLE `yx_order_log` (
   `content` varchar(255) DEFAULT NULL COMMENT '日志内容',
   `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=487 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单日志表';
 
 -- ----------------------------
 -- Records of yx_order_log
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_order_log` VALUES (1, 0, 101, 1, 39, '会员提交订单', 1603437495);
-INSERT INTO `yx_order_log` VALUES (2, 0, 101, 2, 39, '会员提交订单', 1603439570);
-INSERT INTO `yx_order_log` VALUES (3, 0, 101, 3, 39, '会员提交订单', 1603439748);
-INSERT INTO `yx_order_log` VALUES (4, 0, 101, 4, 39, '会员提交订单', 1603439879);
-INSERT INTO `yx_order_log` VALUES (5, 0, 101, 5, 39, '会员提交订单', 1603440849);
-INSERT INTO `yx_order_log` VALUES (6, 0, 101, 6, 39, '会员提交订单', 1603441109);
-INSERT INTO `yx_order_log` VALUES (7, 0, 105, 6, 39, '会员支付订单', 1603441970);
-INSERT INTO `yx_order_log` VALUES (8, 0, 101, 7, 39, '会员提交订单', 1603449768);
-INSERT INTO `yx_order_log` VALUES (9, 0, 101, 8, 39, '会员提交订单', 1603449781);
-INSERT INTO `yx_order_log` VALUES (10, 0, 101, 9, 39, '会员提交订单', 1603450121);
-INSERT INTO `yx_order_log` VALUES (11, 0, 101, 10, 39, '会员提交订单', 1603450155);
-INSERT INTO `yx_order_log` VALUES (12, 0, 101, 11, 39, '会员提交订单', 1603450167);
-INSERT INTO `yx_order_log` VALUES (13, 0, 101, 12, 39, '会员提交订单', 1603450226);
-INSERT INTO `yx_order_log` VALUES (14, 0, 101, 13, 39, '会员提交订单', 1603450261);
-INSERT INTO `yx_order_log` VALUES (15, 0, 101, 14, 39, '会员提交订单', 1603450354);
-INSERT INTO `yx_order_log` VALUES (16, 0, 101, 15, 39, '会员提交订单', 1603450422);
-INSERT INTO `yx_order_log` VALUES (17, 0, 101, 16, 39, '会员提交订单', 1603450436);
-INSERT INTO `yx_order_log` VALUES (18, 0, 105, 16, 39, '会员支付订单', 1603450443);
-INSERT INTO `yx_order_log` VALUES (19, 0, 101, 17, 39, '会员提交订单', 1603450490);
-INSERT INTO `yx_order_log` VALUES (20, 0, 101, 18, 42, '会员提交订单', 1603505734);
-INSERT INTO `yx_order_log` VALUES (21, 0, 101, 19, 42, '会员提交订单', 1603505761);
-INSERT INTO `yx_order_log` VALUES (22, 0, 101, 20, 42, '会员提交订单', 1603505895);
-INSERT INTO `yx_order_log` VALUES (23, 0, 101, 21, 42, '会员提交订单', 1603505952);
-INSERT INTO `yx_order_log` VALUES (24, 0, 101, 22, 42, '会员提交订单', 1603505956);
-INSERT INTO `yx_order_log` VALUES (25, 0, 102, 22, 42, '会员取消订单', 1603522631);
-INSERT INTO `yx_order_log` VALUES (26, 0, 103, 22, 42, '会员删除订单', 1603522942);
-INSERT INTO `yx_order_log` VALUES (27, 0, 102, 21, 42, '会员取消订单', 1603522994);
-INSERT INTO `yx_order_log` VALUES (28, 0, 101, 23, 42, '会员提交订单', 1603531917);
-INSERT INTO `yx_order_log` VALUES (29, 0, 101, 24, 42, '会员提交订单', 1603531963);
-INSERT INTO `yx_order_log` VALUES (30, 0, 101, 25, 40, '会员提交订单', 1603683757);
-INSERT INTO `yx_order_log` VALUES (31, 0, 101, 26, 39, '会员提交订单', 1603699576);
-INSERT INTO `yx_order_log` VALUES (32, 0, 101, 27, 39, '会员提交订单', 1603701063);
-INSERT INTO `yx_order_log` VALUES (33, 0, 101, 28, 39, '会员提交订单', 1603701076);
-INSERT INTO `yx_order_log` VALUES (34, 0, 101, 29, 39, '会员提交订单', 1603701436);
-INSERT INTO `yx_order_log` VALUES (35, 0, 101, 30, 39, '会员提交订单', 1603701748);
-INSERT INTO `yx_order_log` VALUES (36, 0, 101, 31, 42, '会员提交订单', 1603703156);
-INSERT INTO `yx_order_log` VALUES (37, 0, 101, 32, 39, '会员提交订单', 1603703171);
-INSERT INTO `yx_order_log` VALUES (38, 0, 101, 33, 39, '会员提交订单', 1603703185);
-INSERT INTO `yx_order_log` VALUES (39, 0, 101, 34, 42, '会员提交订单', 1603703537);
-INSERT INTO `yx_order_log` VALUES (40, 0, 101, 35, 42, '会员提交订单', 1603705398);
-INSERT INTO `yx_order_log` VALUES (41, 0, 101, 36, 41, '会员提交订单', 1603705688);
-INSERT INTO `yx_order_log` VALUES (42, 0, 101, 37, 41, '会员提交订单', 1603705744);
-INSERT INTO `yx_order_log` VALUES (43, 0, 101, 38, 41, '会员提交订单', 1603706122);
-INSERT INTO `yx_order_log` VALUES (44, 0, 101, 39, 41, '会员提交订单', 1603706289);
-INSERT INTO `yx_order_log` VALUES (45, 0, 105, 39, 41, '会员支付订单', 1603706299);
-INSERT INTO `yx_order_log` VALUES (46, 1, 203, 39, 1, '商家发货', 1603707778);
-INSERT INTO `yx_order_log` VALUES (47, 0, 104, 39, 41, '会员确认收货', 1603707789);
-INSERT INTO `yx_order_log` VALUES (48, 0, 101, 40, 39, '会员提交订单', 1603763941);
-INSERT INTO `yx_order_log` VALUES (49, 0, 101, 41, 39, '会员提交订单', 1603763984);
-INSERT INTO `yx_order_log` VALUES (50, 0, 105, 41, 39, '会员支付订单', 1603764010);
-INSERT INTO `yx_order_log` VALUES (51, 0, 101, 42, 39, '会员提交订单', 1603778524);
-INSERT INTO `yx_order_log` VALUES (52, 0, 105, 42, 39, '会员支付订单', 1603778524);
-INSERT INTO `yx_order_log` VALUES (53, 0, 101, 43, 39, '会员提交订单', 1603778557);
-INSERT INTO `yx_order_log` VALUES (54, 0, 105, 43, 39, '会员支付订单', 1603778557);
-INSERT INTO `yx_order_log` VALUES (55, 0, 101, 44, 39, '会员提交订单', 1603778708);
-INSERT INTO `yx_order_log` VALUES (56, 0, 105, 44, 39, '会员支付订单', 1603778708);
-INSERT INTO `yx_order_log` VALUES (57, 0, 101, 45, 39, '会员提交订单', 1603778761);
-INSERT INTO `yx_order_log` VALUES (58, 0, 105, 45, 39, '会员支付订单', 1603778761);
-INSERT INTO `yx_order_log` VALUES (59, 0, 101, 46, 39, '会员提交订单', 1603778865);
-INSERT INTO `yx_order_log` VALUES (60, 0, 105, 46, 39, '会员支付订单', 1603778865);
-INSERT INTO `yx_order_log` VALUES (61, 0, 101, 47, 39, '会员提交订单', 1603778901);
-INSERT INTO `yx_order_log` VALUES (62, 0, 105, 47, 39, '会员支付订单', 1603778901);
-INSERT INTO `yx_order_log` VALUES (63, 0, 101, 48, 39, '会员提交订单', 1603778937);
-INSERT INTO `yx_order_log` VALUES (64, 0, 105, 48, 39, '会员支付订单', 1603778937);
-INSERT INTO `yx_order_log` VALUES (65, 0, 101, 49, 39, '会员提交订单', 1603779004);
-INSERT INTO `yx_order_log` VALUES (66, 0, 105, 49, 39, '会员支付订单', 1603779004);
-INSERT INTO `yx_order_log` VALUES (67, 0, 101, 50, 39, '会员提交订单', 1603779550);
-INSERT INTO `yx_order_log` VALUES (68, 0, 105, 50, 39, '会员支付订单', 1603779550);
-INSERT INTO `yx_order_log` VALUES (69, 0, 102, 38, 41, '会员取消订单', 1603853493);
-INSERT INTO `yx_order_log` VALUES (70, 0, 102, 37, 41, '会员取消订单', 1603853497);
-INSERT INTO `yx_order_log` VALUES (71, 0, 102, 36, 41, '会员取消订单', 1603853502);
-INSERT INTO `yx_order_log` VALUES (72, 0, 101, 51, 41, '会员提交订单', 1603853526);
-INSERT INTO `yx_order_log` VALUES (73, 0, 105, 51, 41, '会员支付订单', 1603853543);
-INSERT INTO `yx_order_log` VALUES (74, 1, 203, 51, 1, '商家发货', 1603853815);
-INSERT INTO `yx_order_log` VALUES (75, 0, 104, 51, 41, '会员确认收货', 1603853892);
-INSERT INTO `yx_order_log` VALUES (76, 0, 101, 52, 42, '会员提交订单', 1604025077);
-INSERT INTO `yx_order_log` VALUES (77, 0, 101, 53, 43, '会员提交订单', 1604390284);
-INSERT INTO `yx_order_log` VALUES (78, 0, 101, 54, 41, '会员提交订单', 1604392272);
-INSERT INTO `yx_order_log` VALUES (79, 0, 101, 55, 42, '会员提交订单', 1604470869);
-INSERT INTO `yx_order_log` VALUES (80, 0, 101, 56, 42, '会员提交订单', 1604484200);
-INSERT INTO `yx_order_log` VALUES (81, 0, 101, 57, 40, '会员提交订单', 1605076742);
-INSERT INTO `yx_order_log` VALUES (82, 0, 105, 57, 40, '会员支付订单', 1605076748);
-INSERT INTO `yx_order_log` VALUES (83, 0, 101, 58, 44, '会员提交订单', 1605081359);
-INSERT INTO `yx_order_log` VALUES (84, 0, 102, 58, 44, '会员取消订单', 1605081743);
-INSERT INTO `yx_order_log` VALUES (85, 0, 101, 59, 44, '会员提交订单', 1605081779);
-INSERT INTO `yx_order_log` VALUES (86, 0, 101, 60, 44, '会员提交订单', 1605082849);
-INSERT INTO `yx_order_log` VALUES (87, 0, 102, 59, 44, '会员取消订单', 1605082957);
-INSERT INTO `yx_order_log` VALUES (88, 0, 101, 61, 44, '会员提交订单', 1605082995);
-INSERT INTO `yx_order_log` VALUES (89, 0, 102, 60, 44, '会员取消订单', 1605083053);
-INSERT INTO `yx_order_log` VALUES (90, 0, 101, 62, 44, '会员提交订单', 1605084150);
-INSERT INTO `yx_order_log` VALUES (93, 0, 101, 65, 40, '会员提交订单', 1605171904);
-INSERT INTO `yx_order_log` VALUES (96, 0, 101, 68, 41, '会员提交订单', 1605232858);
-INSERT INTO `yx_order_log` VALUES (98, 0, 101, 70, 41, '会员提交订单', 1605233706);
-INSERT INTO `yx_order_log` VALUES (102, 0, 101, 74, 41, '会员提交订单', 1605233958);
-INSERT INTO `yx_order_log` VALUES (104, 0, 101, 76, 44, '会员提交订单', 1605234550);
-INSERT INTO `yx_order_log` VALUES (105, 0, 102, 76, 44, '会员取消订单', 1605234563);
-INSERT INTO `yx_order_log` VALUES (106, 0, 103, 76, 44, '会员删除订单', 1605234566);
-INSERT INTO `yx_order_log` VALUES (107, 0, 101, 77, 44, '会员提交订单', 1605234620);
-INSERT INTO `yx_order_log` VALUES (108, 0, 105, 77, 44, '会员支付订单', 1605234620);
-INSERT INTO `yx_order_log` VALUES (109, 0, 101, 78, 44, '会员提交订单', 1605234649);
-INSERT INTO `yx_order_log` VALUES (110, 0, 102, 78, 44, '会员取消订单', 1605234676);
-INSERT INTO `yx_order_log` VALUES (111, 0, 103, 78, 44, '会员删除订单', 1605234678);
-INSERT INTO `yx_order_log` VALUES (112, 0, 102, 62, 44, '会员取消订单', 1605234713);
-INSERT INTO `yx_order_log` VALUES (113, 0, 102, 61, 44, '会员取消订单', 1605234715);
-INSERT INTO `yx_order_log` VALUES (114, 0, 103, 58, 44, '会员删除订单', 1605234721);
-INSERT INTO `yx_order_log` VALUES (115, 0, 103, 59, 44, '会员删除订单', 1605234724);
-INSERT INTO `yx_order_log` VALUES (116, 0, 103, 60, 44, '会员删除订单', 1605234726);
-INSERT INTO `yx_order_log` VALUES (117, 0, 103, 61, 44, '会员删除订单', 1605234728);
-INSERT INTO `yx_order_log` VALUES (118, 0, 103, 62, 44, '会员删除订单', 1605234729);
-INSERT INTO `yx_order_log` VALUES (119, 0, 105, 74, 41, '会员支付订单', 1605234806);
-INSERT INTO `yx_order_log` VALUES (120, 0, 105, 65, 40, '会员支付订单', 1605235162);
-INSERT INTO `yx_order_log` VALUES (121, 0, 101, 79, 39, '会员提交订单', 1605236377);
-INSERT INTO `yx_order_log` VALUES (122, 0, 101, 80, 39, '会员提交订单', 1605236497);
-INSERT INTO `yx_order_log` VALUES (123, 0, 101, 81, 39, '会员提交订单', 1605236604);
-INSERT INTO `yx_order_log` VALUES (124, 0, 101, 82, 39, '会员提交订单', 1605236622);
-INSERT INTO `yx_order_log` VALUES (125, 0, 101, 83, 39, '会员提交订单', 1605236723);
-INSERT INTO `yx_order_log` VALUES (126, 0, 105, 83, 39, '会员支付订单', 1605236723);
-INSERT INTO `yx_order_log` VALUES (127, 0, 101, 84, 39, '会员提交订单', 1605236737);
-INSERT INTO `yx_order_log` VALUES (128, 0, 105, 84, 39, '会员支付订单', 1605236744);
-INSERT INTO `yx_order_log` VALUES (129, 0, 101, 85, 39, '会员提交订单', 1605236798);
-INSERT INTO `yx_order_log` VALUES (130, 0, 102, 85, 39, '会员取消订单', 1605237933);
-INSERT INTO `yx_order_log` VALUES (131, 0, 102, 1, 39, '会员取消订单', 1605238043);
-INSERT INTO `yx_order_log` VALUES (132, 0, 103, 1, 39, '会员删除订单', 1605238055);
-INSERT INTO `yx_order_log` VALUES (133, 0, 101, 86, 39, '会员提交订单', 1605239043);
-INSERT INTO `yx_order_log` VALUES (134, 0, 101, 87, 40, '会员提交订单', 1605252017);
-INSERT INTO `yx_order_log` VALUES (135, 0, 105, 87, 40, '会员支付订单', 1605252017);
-INSERT INTO `yx_order_log` VALUES (136, 1, 203, 74, 1, '商家发货', 1605253452);
-INSERT INTO `yx_order_log` VALUES (137, 0, 104, 74, 41, '会员确认收货', 1605253856);
-INSERT INTO `yx_order_log` VALUES (138, 0, 105, 70, 41, '会员支付订单', 1605258425);
-INSERT INTO `yx_order_log` VALUES (139, 1, 203, 70, 1, '商家发货', 1605258466);
-INSERT INTO `yx_order_log` VALUES (140, 0, 104, 70, 41, '会员确认收货', 1605258479);
-INSERT INTO `yx_order_log` VALUES (141, 0, 101, 88, 40, '会员提交订单', 1605261218);
-INSERT INTO `yx_order_log` VALUES (142, 0, 105, 88, 40, '会员支付订单', 1605261218);
-INSERT INTO `yx_order_log` VALUES (143, 1, 203, 88, 1, '商家发货', 1605261245);
-INSERT INTO `yx_order_log` VALUES (144, 0, 104, 88, 40, '会员确认收货', 1605261255);
-INSERT INTO `yx_order_log` VALUES (145, 0, 101, 89, 40, '会员提交订单', 1605261421);
-INSERT INTO `yx_order_log` VALUES (146, 0, 105, 89, 40, '会员支付订单', 1605261421);
-INSERT INTO `yx_order_log` VALUES (147, 1, 203, 89, 1, '商家发货', 1605261436);
-INSERT INTO `yx_order_log` VALUES (148, 0, 104, 89, 40, '会员确认收货', 1605261441);
-INSERT INTO `yx_order_log` VALUES (149, 0, 101, 90, 40, '会员提交订单', 1605261541);
-INSERT INTO `yx_order_log` VALUES (150, 0, 105, 90, 40, '会员支付订单', 1605261541);
-INSERT INTO `yx_order_log` VALUES (151, 0, 101, 91, 41, '会员提交订单', 1605262658);
-INSERT INTO `yx_order_log` VALUES (152, 0, 101, 92, 47, '会员提交订单', 1605494728);
-INSERT INTO `yx_order_log` VALUES (153, 0, 101, 93, 47, '会员提交订单', 1605495149);
-INSERT INTO `yx_order_log` VALUES (154, 0, 101, 94, 47, '会员提交订单', 1605495162);
-INSERT INTO `yx_order_log` VALUES (155, 0, 101, 95, 47, '会员提交订单', 1605495179);
-INSERT INTO `yx_order_log` VALUES (156, 0, 101, 96, 47, '会员提交订单', 1605495226);
-INSERT INTO `yx_order_log` VALUES (157, 0, 101, 97, 47, '会员提交订单', 1605495509);
-INSERT INTO `yx_order_log` VALUES (158, 0, 102, 97, 47, '会员取消订单', 1605521614);
-INSERT INTO `yx_order_log` VALUES (159, 0, 103, 97, 47, '会员删除订单', 1605521639);
-INSERT INTO `yx_order_log` VALUES (160, 0, 101, 98, 47, '会员提交订单', 1605521838);
-INSERT INTO `yx_order_log` VALUES (161, 0, 101, 99, 47, '会员提交订单', 1605521870);
-INSERT INTO `yx_order_log` VALUES (162, 0, 101, 100, 39, '会员提交订单', 1605521874);
-INSERT INTO `yx_order_log` VALUES (163, 0, 101, 101, 47, '会员提交订单', 1605521887);
-INSERT INTO `yx_order_log` VALUES (164, 0, 101, 102, 39, '会员提交订单', 1605522316);
-INSERT INTO `yx_order_log` VALUES (165, 0, 105, 102, 39, '会员支付订单', 1605522316);
-INSERT INTO `yx_order_log` VALUES (166, 0, 101, 103, 47, '会员提交订单', 1605524082);
-INSERT INTO `yx_order_log` VALUES (167, 0, 101, 104, 47, '会员提交订单', 1605524084);
-INSERT INTO `yx_order_log` VALUES (168, 0, 101, 105, 47, '会员提交订单', 1605524088);
-INSERT INTO `yx_order_log` VALUES (169, 0, 101, 106, 47, '会员提交订单', 1605524121);
-INSERT INTO `yx_order_log` VALUES (170, 0, 101, 107, 47, '会员提交订单', 1605524123);
-INSERT INTO `yx_order_log` VALUES (171, 0, 101, 108, 47, '会员提交订单', 1605524135);
-INSERT INTO `yx_order_log` VALUES (172, 0, 101, 109, 42, '会员提交订单', 1605524375);
-INSERT INTO `yx_order_log` VALUES (173, 0, 101, 110, 42, '会员提交订单', 1605524376);
-INSERT INTO `yx_order_log` VALUES (174, 0, 101, 111, 42, '会员提交订单', 1605524390);
-INSERT INTO `yx_order_log` VALUES (175, 0, 101, 112, 42, '会员提交订单', 1605524392);
-INSERT INTO `yx_order_log` VALUES (176, 0, 101, 113, 42, '会员提交订单', 1605524392);
-INSERT INTO `yx_order_log` VALUES (177, 0, 101, 114, 42, '会员提交订单', 1605524393);
-INSERT INTO `yx_order_log` VALUES (178, 0, 101, 115, 42, '会员提交订单', 1605524393);
-INSERT INTO `yx_order_log` VALUES (179, 0, 101, 116, 42, '会员提交订单', 1605524394);
-INSERT INTO `yx_order_log` VALUES (180, 0, 101, 117, 42, '会员提交订单', 1605524394);
-INSERT INTO `yx_order_log` VALUES (181, 0, 101, 118, 42, '会员提交订单', 1605524396);
-INSERT INTO `yx_order_log` VALUES (182, 0, 101, 119, 42, '会员提交订单', 1605524396);
-INSERT INTO `yx_order_log` VALUES (183, 0, 101, 120, 42, '会员提交订单', 1605524396);
-INSERT INTO `yx_order_log` VALUES (184, 0, 101, 121, 42, '会员提交订单', 1605524397);
-INSERT INTO `yx_order_log` VALUES (185, 0, 101, 122, 42, '会员提交订单', 1605524397);
-INSERT INTO `yx_order_log` VALUES (186, 0, 101, 123, 42, '会员提交订单', 1605524397);
-INSERT INTO `yx_order_log` VALUES (187, 0, 101, 124, 42, '会员提交订单', 1605524397);
-INSERT INTO `yx_order_log` VALUES (188, 0, 101, 125, 42, '会员提交订单', 1605524397);
-INSERT INTO `yx_order_log` VALUES (189, 0, 101, 126, 42, '会员提交订单', 1605524859);
-INSERT INTO `yx_order_log` VALUES (190, 0, 101, 127, 42, '会员提交订单', 1605524896);
-INSERT INTO `yx_order_log` VALUES (191, 0, 101, 128, 42, '会员提交订单', 1605524897);
-INSERT INTO `yx_order_log` VALUES (192, 0, 101, 129, 42, '会员提交订单', 1605524899);
-INSERT INTO `yx_order_log` VALUES (193, 0, 101, 130, 42, '会员提交订单', 1605524900);
-INSERT INTO `yx_order_log` VALUES (194, 0, 101, 131, 42, '会员提交订单', 1605524901);
-INSERT INTO `yx_order_log` VALUES (195, 0, 101, 132, 42, '会员提交订单', 1605524901);
-INSERT INTO `yx_order_log` VALUES (196, 0, 101, 133, 42, '会员提交订单', 1605524902);
-INSERT INTO `yx_order_log` VALUES (197, 0, 101, 134, 42, '会员提交订单', 1605524902);
-INSERT INTO `yx_order_log` VALUES (198, 0, 101, 135, 42, '会员提交订单', 1605524903);
-INSERT INTO `yx_order_log` VALUES (199, 0, 101, 136, 42, '会员提交订单', 1605524903);
-INSERT INTO `yx_order_log` VALUES (200, 0, 101, 137, 42, '会员提交订单', 1605524903);
-INSERT INTO `yx_order_log` VALUES (201, 0, 101, 138, 42, '会员提交订单', 1605524903);
-INSERT INTO `yx_order_log` VALUES (202, 0, 101, 139, 42, '会员提交订单', 1605524903);
-INSERT INTO `yx_order_log` VALUES (203, 0, 101, 140, 42, '会员提交订单', 1605524904);
-INSERT INTO `yx_order_log` VALUES (204, 0, 101, 141, 42, '会员提交订单', 1605524904);
-INSERT INTO `yx_order_log` VALUES (205, 0, 101, 142, 42, '会员提交订单', 1605524904);
-INSERT INTO `yx_order_log` VALUES (206, 0, 101, 143, 42, '会员提交订单', 1605524904);
-INSERT INTO `yx_order_log` VALUES (207, 0, 101, 144, 42, '会员提交订单', 1605524904);
-INSERT INTO `yx_order_log` VALUES (208, 0, 101, 145, 42, '会员提交订单', 1605524905);
-INSERT INTO `yx_order_log` VALUES (209, 0, 101, 146, 42, '会员提交订单', 1605524908);
-INSERT INTO `yx_order_log` VALUES (210, 0, 101, 147, 42, '会员提交订单', 1605524909);
-INSERT INTO `yx_order_log` VALUES (211, 0, 101, 148, 42, '会员提交订单', 1605524910);
-INSERT INTO `yx_order_log` VALUES (212, 0, 101, 149, 42, '会员提交订单', 1605524911);
-INSERT INTO `yx_order_log` VALUES (213, 0, 101, 150, 42, '会员提交订单', 1605524912);
-INSERT INTO `yx_order_log` VALUES (214, 0, 101, 151, 42, '会员提交订单', 1605524913);
-INSERT INTO `yx_order_log` VALUES (215, 0, 102, 151, 42, '会员取消订单', 1605579659);
-INSERT INTO `yx_order_log` VALUES (216, 0, 101, 152, 40, '会员提交订单', 1605584792);
-INSERT INTO `yx_order_log` VALUES (217, 0, 105, 152, 40, '会员支付订单', 1605584792);
-INSERT INTO `yx_order_log` VALUES (218, 0, 101, 153, 42, '会员提交订单', 1605594080);
-INSERT INTO `yx_order_log` VALUES (219, 0, 101, 154, 42, '会员提交订单', 1605594145);
-INSERT INTO `yx_order_log` VALUES (220, 0, 101, 155, 42, '会员提交订单', 1605597450);
-INSERT INTO `yx_order_log` VALUES (221, 0, 101, 156, 42, '会员提交订单', 1605597452);
-INSERT INTO `yx_order_log` VALUES (222, 0, 105, 91, 41, '会员支付订单', 1605598723);
-INSERT INTO `yx_order_log` VALUES (223, 1, 203, 91, 1, '商家发货', 1605598800);
-INSERT INTO `yx_order_log` VALUES (224, 0, 104, 91, 41, '会员确认收货', 1605598823);
-INSERT INTO `yx_order_log` VALUES (225, 0, 101, 157, 41, '会员提交订单', 1605599265);
-INSERT INTO `yx_order_log` VALUES (226, 0, 105, 157, 41, '会员支付订单', 1605599265);
-INSERT INTO `yx_order_log` VALUES (227, 1, 203, 157, 1, '商家发货', 1605599312);
-INSERT INTO `yx_order_log` VALUES (228, 0, 104, 157, 41, '会员确认收货', 1605599341);
-INSERT INTO `yx_order_log` VALUES (229, 0, 101, 158, 40, '会员提交订单', 1605600639);
-INSERT INTO `yx_order_log` VALUES (230, 0, 105, 158, 40, '会员支付订单', 1605600639);
-INSERT INTO `yx_order_log` VALUES (231, 1, 203, 158, 1, '商家发货', 1605600675);
-INSERT INTO `yx_order_log` VALUES (232, 0, 101, 159, 42, '会员提交订单', 1605600739);
-INSERT INTO `yx_order_log` VALUES (233, 0, 105, 159, 42, '会员支付订单', 1605600740);
-INSERT INTO `yx_order_log` VALUES (234, 1, 203, 159, 1, '商家发货', 1605600770);
-INSERT INTO `yx_order_log` VALUES (235, 0, 101, 160, 47, '会员提交订单', 1605602396);
-INSERT INTO `yx_order_log` VALUES (236, 0, 101, 161, 49, '会员提交订单', 1605602435);
-INSERT INTO `yx_order_log` VALUES (237, 0, 101, 162, 49, '会员提交订单', 1605602805);
-INSERT INTO `yx_order_log` VALUES (238, 0, 101, 163, 44, '会员提交订单', 1605603359);
-INSERT INTO `yx_order_log` VALUES (239, 0, 105, 163, 44, '会员支付订单', 1605603359);
-INSERT INTO `yx_order_log` VALUES (240, 0, 101, 164, 44, '会员提交订单', 1605603512);
-INSERT INTO `yx_order_log` VALUES (241, 0, 105, 164, 44, '会员支付订单', 1605603517);
-INSERT INTO `yx_order_log` VALUES (242, 1, 203, 164, 1, '商家发货', 1605603557);
-INSERT INTO `yx_order_log` VALUES (243, 0, 104, 164, 44, '会员确认收货', 1605603574);
-INSERT INTO `yx_order_log` VALUES (244, 0, 101, 165, 44, '会员提交订单', 1605603965);
-INSERT INTO `yx_order_log` VALUES (245, 0, 101, 166, 44, '会员提交订单', 1605605285);
-INSERT INTO `yx_order_log` VALUES (246, 0, 105, 166, 44, '会员支付订单', 1605605285);
-INSERT INTO `yx_order_log` VALUES (247, 0, 102, 166, 44, '会员取消订单', 1605605309);
-INSERT INTO `yx_order_log` VALUES (248, 0, 101, 167, 44, '会员提交订单', 1605605347);
-INSERT INTO `yx_order_log` VALUES (249, 0, 105, 167, 44, '会员支付订单', 1605605347);
-INSERT INTO `yx_order_log` VALUES (250, 1, 203, 167, 1, '商家发货', 1605605371);
-INSERT INTO `yx_order_log` VALUES (251, 0, 104, 167, 44, '会员确认收货', 1605605384);
-INSERT INTO `yx_order_log` VALUES (252, 0, 101, 168, 39, '会员提交订单', 1605606016);
-INSERT INTO `yx_order_log` VALUES (253, 0, 105, 168, 39, '会员支付订单', 1605606016);
-INSERT INTO `yx_order_log` VALUES (254, 0, 101, 169, 40, '会员提交订单', 1605606302);
-INSERT INTO `yx_order_log` VALUES (255, 0, 105, 169, 40, '会员支付订单', 1605606302);
-INSERT INTO `yx_order_log` VALUES (256, 0, 101, 170, 40, '会员提交订单', 1605606354);
-INSERT INTO `yx_order_log` VALUES (257, 0, 102, 170, 40, '会员取消订单', 1605606360);
-INSERT INTO `yx_order_log` VALUES (258, 0, 101, 171, 47, '会员提交订单', 1605606378);
-INSERT INTO `yx_order_log` VALUES (259, 0, 101, 172, 44, '会员提交订单', 1605607486);
-INSERT INTO `yx_order_log` VALUES (260, 0, 105, 172, 44, '会员支付订单', 1605607486);
-INSERT INTO `yx_order_log` VALUES (261, 1, 203, 172, 1, '商家发货', 1605607508);
-INSERT INTO `yx_order_log` VALUES (262, 0, 104, 172, 44, '会员确认收货', 1605607535);
-INSERT INTO `yx_order_log` VALUES (263, 0, 101, 173, 44, '会员提交订单', 1605607611);
-INSERT INTO `yx_order_log` VALUES (264, 0, 105, 173, 44, '会员支付订单', 1605607616);
-INSERT INTO `yx_order_log` VALUES (265, 1, 203, 173, 1, '商家发货', 1605607632);
-INSERT INTO `yx_order_log` VALUES (266, 1, 204, 173, 1, '商家确认收货', 1605607643);
-INSERT INTO `yx_order_log` VALUES (267, 0, 101, 174, 39, '会员提交订单', 1605610593);
-INSERT INTO `yx_order_log` VALUES (268, 0, 101, 175, 42, '会员提交订单', 1605610797);
-INSERT INTO `yx_order_log` VALUES (269, 0, 101, 176, 39, '会员提交订单', 1605667035);
-INSERT INTO `yx_order_log` VALUES (270, 0, 101, 177, 41, '会员提交订单', 1605667679);
-INSERT INTO `yx_order_log` VALUES (271, 0, 105, 177, 41, '会员支付订单', 1605667679);
-INSERT INTO `yx_order_log` VALUES (272, 1, 203, 177, 1, '商家发货', 1605667749);
-INSERT INTO `yx_order_log` VALUES (273, 0, 101, 178, 50, '会员提交订单', 1605667943);
-INSERT INTO `yx_order_log` VALUES (274, 0, 104, 177, 41, '会员确认收货', 1605667963);
-INSERT INTO `yx_order_log` VALUES (275, 0, 101, 179, 47, '会员提交订单', 1605671268);
-INSERT INTO `yx_order_log` VALUES (276, 0, 101, 180, 41, '会员提交订单', 1605682620);
-INSERT INTO `yx_order_log` VALUES (277, 0, 105, 180, 41, '会员支付订单', 1605682627);
-INSERT INTO `yx_order_log` VALUES (278, 1, 203, 180, 1, '商家发货', 1605682689);
-INSERT INTO `yx_order_log` VALUES (279, 0, 104, 180, 41, '会员确认收货', 1605682724);
-INSERT INTO `yx_order_log` VALUES (280, 0, 103, 38, 41, '会员删除订单', 1605686567);
-INSERT INTO `yx_order_log` VALUES (281, 0, 101, 181, 42, '会员提交订单', 1605686815);
-INSERT INTO `yx_order_log` VALUES (282, 0, 101, 182, 48, '会员提交订单', 1605688775);
-INSERT INTO `yx_order_log` VALUES (283, 0, 101, 183, 40, '会员提交订单', 1605691099);
-INSERT INTO `yx_order_log` VALUES (284, 0, 105, 183, 40, '会员支付订单', 1605691099);
-INSERT INTO `yx_order_log` VALUES (285, 0, 101, 184, 40, '会员提交订单', 1605692863);
-INSERT INTO `yx_order_log` VALUES (286, 0, 105, 184, 40, '会员支付订单', 1605692863);
-INSERT INTO `yx_order_log` VALUES (287, 0, 101, 185, 39, '会员提交订单', 1605692956);
-INSERT INTO `yx_order_log` VALUES (288, 0, 105, 185, 39, '会员支付订单', 1605692956);
-INSERT INTO `yx_order_log` VALUES (289, 1, 203, 185, 1, '商家发货', 1605755141);
-INSERT INTO `yx_order_log` VALUES (290, 0, 104, 159, 42, '会员确认收货', 1605770025);
-INSERT INTO `yx_order_log` VALUES (291, 0, 101, 186, 51, '会员提交订单', 1605855794);
-INSERT INTO `yx_order_log` VALUES (292, 0, 101, 187, 51, '会员提交订单', 1605855815);
-INSERT INTO `yx_order_log` VALUES (293, 0, 101, 188, 51, '会员提交订单', 1605857667);
-INSERT INTO `yx_order_log` VALUES (294, 0, 101, 189, 41, '会员提交订单', 1605860628);
-INSERT INTO `yx_order_log` VALUES (295, 0, 105, 189, 41, '会员支付订单', 1605860647);
-INSERT INTO `yx_order_log` VALUES (296, 1, 203, 189, 1, '商家发货', 1605860793);
-INSERT INTO `yx_order_log` VALUES (297, 0, 104, 189, 41, '会员确认收货', 1605861062);
-INSERT INTO `yx_order_log` VALUES (298, 0, 101, 190, 39, '会员提交订单', 1605925324);
-INSERT INTO `yx_order_log` VALUES (299, 0, 105, 190, 39, '会员支付订单', 1605925333);
-INSERT INTO `yx_order_log` VALUES (300, 0, 101, 191, 43, '会员提交订单', 1605927910);
-INSERT INTO `yx_order_log` VALUES (301, 0, 102, 86, 39, '会员取消订单', 1606271618);
-INSERT INTO `yx_order_log` VALUES (302, 0, 101, 192, 40, '会员提交订单', 1606377738);
-INSERT INTO `yx_order_log` VALUES (303, 0, 105, 192, 40, '会员支付订单', 1606377739);
-INSERT INTO `yx_order_log` VALUES (304, 0, 101, 193, 44, '会员提交订单', 1606379634);
-INSERT INTO `yx_order_log` VALUES (305, 0, 105, 193, 44, '会员支付订单', 1606379634);
-INSERT INTO `yx_order_log` VALUES (306, 0, 102, 193, 44, '会员取消订单', 1606379682);
-INSERT INTO `yx_order_log` VALUES (307, 0, 101, 194, 44, '会员提交订单', 1606379689);
-INSERT INTO `yx_order_log` VALUES (308, 0, 105, 194, 44, '会员支付订单', 1606379689);
-INSERT INTO `yx_order_log` VALUES (309, 0, 101, 195, 44, '会员提交订单', 1606379800);
-INSERT INTO `yx_order_log` VALUES (310, 0, 105, 195, 44, '会员支付订单', 1606379800);
-INSERT INTO `yx_order_log` VALUES (311, 0, 101, 196, 40, '会员提交订单', 1606382132);
-INSERT INTO `yx_order_log` VALUES (312, 0, 105, 196, 40, '会员支付订单', 1606382132);
-INSERT INTO `yx_order_log` VALUES (313, 0, 101, 197, 40, '会员提交订单', 1606382268);
-INSERT INTO `yx_order_log` VALUES (314, 0, 105, 197, 40, '会员支付订单', 1606382268);
-INSERT INTO `yx_order_log` VALUES (315, 0, 101, 198, 40, '会员提交订单', 1606382751);
-INSERT INTO `yx_order_log` VALUES (316, 0, 101, 199, 51, '会员提交订单', 1606387042);
-INSERT INTO `yx_order_log` VALUES (317, 0, 101, 200, 51, '会员提交订单', 1606443884);
-INSERT INTO `yx_order_log` VALUES (318, 0, 101, 201, 51, '会员提交订单', 1606443892);
-INSERT INTO `yx_order_log` VALUES (319, 0, 101, 202, 39, '会员提交订单', 1606446615);
-INSERT INTO `yx_order_log` VALUES (320, 0, 102, 202, 39, '会员取消订单', 1606446625);
-INSERT INTO `yx_order_log` VALUES (321, 0, 101, 203, 52, '会员提交订单', 1606446854);
-INSERT INTO `yx_order_log` VALUES (322, 0, 101, 204, 52, '会员提交订单', 1606446857);
-INSERT INTO `yx_order_log` VALUES (323, 0, 101, 205, 52, '会员提交订单', 1606446869);
-INSERT INTO `yx_order_log` VALUES (324, 0, 101, 206, 52, '会员提交订单', 1606446873);
-INSERT INTO `yx_order_log` VALUES (325, 0, 101, 207, 52, '会员提交订单', 1606446876);
-INSERT INTO `yx_order_log` VALUES (326, 0, 101, 208, 52, '会员提交订单', 1606446878);
-INSERT INTO `yx_order_log` VALUES (327, 0, 101, 209, 52, '会员提交订单', 1606446879);
-INSERT INTO `yx_order_log` VALUES (328, 0, 101, 210, 52, '会员提交订单', 1606446879);
-INSERT INTO `yx_order_log` VALUES (329, 0, 101, 211, 52, '会员提交订单', 1606446880);
-INSERT INTO `yx_order_log` VALUES (330, 0, 101, 212, 40, '会员提交订单', 1606465408);
-INSERT INTO `yx_order_log` VALUES (331, 0, 105, 212, 40, '会员支付订单', 1606465408);
-INSERT INTO `yx_order_log` VALUES (332, 0, 101, 213, 40, '会员提交订单', 1606472768);
-INSERT INTO `yx_order_log` VALUES (333, 0, 101, 214, 40, '会员提交订单', 1606472949);
-INSERT INTO `yx_order_log` VALUES (334, 0, 101, 215, 40, '会员提交订单', 1606473161);
-INSERT INTO `yx_order_log` VALUES (335, 0, 101, 216, 40, '会员提交订单', 1606473368);
-INSERT INTO `yx_order_log` VALUES (336, 0, 101, 217, 40, '会员提交订单', 1606473546);
-INSERT INTO `yx_order_log` VALUES (337, 0, 101, 218, 40, '会员提交订单', 1606473825);
-INSERT INTO `yx_order_log` VALUES (338, 0, 101, 219, 39, '会员提交订单', 1606474762);
-INSERT INTO `yx_order_log` VALUES (339, 0, 101, 220, 52, '会员提交订单', 1606707365);
-INSERT INTO `yx_order_log` VALUES (340, 0, 101, 221, 52, '会员提交订单', 1606707405);
-INSERT INTO `yx_order_log` VALUES (341, 0, 101, 222, 52, '会员提交订单', 1606715972);
-INSERT INTO `yx_order_log` VALUES (342, 0, 102, 222, 52, '会员取消订单', 1606716286);
-INSERT INTO `yx_order_log` VALUES (343, 0, 101, 223, 52, '会员提交订单', 1606716572);
-INSERT INTO `yx_order_log` VALUES (344, 0, 102, 223, 52, '会员取消订单', 1606716580);
-INSERT INTO `yx_order_log` VALUES (345, 0, 101, 224, 41, '会员提交订单', 1606718066);
-INSERT INTO `yx_order_log` VALUES (346, 0, 105, 224, 41, '会员支付订单', 1606718071);
-INSERT INTO `yx_order_log` VALUES (347, 1, 203, 224, 1, '商家发货', 1606718295);
-INSERT INTO `yx_order_log` VALUES (348, 0, 104, 224, 41, '会员确认收货', 1606718463);
-INSERT INTO `yx_order_log` VALUES (349, 1, 201, 221, 1, '商家取消订单', 1606719460);
-INSERT INTO `yx_order_log` VALUES (350, 1, 201, 220, 1, '商家取消订单', 1606719471);
-INSERT INTO `yx_order_log` VALUES (351, 1, 202, 223, 1, '商家删除订单', 1606719488);
-INSERT INTO `yx_order_log` VALUES (352, 0, 101, 225, 52, '会员提交订单', 1606719550);
-INSERT INTO `yx_order_log` VALUES (353, 0, 101, 226, 52, '会员提交订单', 1606719552);
-INSERT INTO `yx_order_log` VALUES (354, 0, 101, 227, 51, '会员提交订单', 1606720401);
-INSERT INTO `yx_order_log` VALUES (355, 0, 101, 228, 41, '会员提交订单', 1606722295);
-INSERT INTO `yx_order_log` VALUES (356, 0, 105, 228, 41, '会员支付订单', 1606722296);
-INSERT INTO `yx_order_log` VALUES (357, 1, 203, 228, 1, '商家发货', 1606722347);
-INSERT INTO `yx_order_log` VALUES (358, 0, 104, 228, 41, '会员确认收货', 1606722369);
-INSERT INTO `yx_order_log` VALUES (359, 0, 101, 229, 55, '会员提交订单', 1606726227);
-INSERT INTO `yx_order_log` VALUES (360, 0, 101, 230, 55, '会员提交订单', 1606733257);
-INSERT INTO `yx_order_log` VALUES (361, 0, 101, 231, 40, '会员提交订单', 1606812347);
-INSERT INTO `yx_order_log` VALUES (362, 0, 105, 231, 40, '会员支付订单', 1606812347);
-INSERT INTO `yx_order_log` VALUES (363, 1, 203, 231, 1, '商家发货', 1606812440);
-INSERT INTO `yx_order_log` VALUES (364, 0, 101, 232, 40, '会员提交订单', 1606812467);
-INSERT INTO `yx_order_log` VALUES (365, 0, 105, 232, 40, '会员支付订单', 1606812467);
-INSERT INTO `yx_order_log` VALUES (366, 1, 203, 232, 1, '商家发货', 1606812479);
-INSERT INTO `yx_order_log` VALUES (367, 0, 101, 233, 52, '会员提交订单', 1606820426);
-INSERT INTO `yx_order_log` VALUES (368, 0, 101, 234, 56, '会员提交订单', 1607049394);
-INSERT INTO `yx_order_log` VALUES (369, 0, 105, 234, 56, '会员支付订单', 1607049394);
-INSERT INTO `yx_order_log` VALUES (370, 0, 101, 235, 56, '会员提交订单', 1607049526);
-INSERT INTO `yx_order_log` VALUES (371, 0, 105, 235, 56, '会员支付订单', 1607049537);
-INSERT INTO `yx_order_log` VALUES (372, 0, 101, 236, 56, '会员提交订单', 1607050066);
-INSERT INTO `yx_order_log` VALUES (373, 0, 105, 236, 56, '会员支付订单', 1607050066);
-INSERT INTO `yx_order_log` VALUES (374, 0, 101, 237, 56, '会员提交订单', 1607050289);
-INSERT INTO `yx_order_log` VALUES (375, 0, 105, 237, 56, '会员支付订单', 1607050289);
-INSERT INTO `yx_order_log` VALUES (376, 0, 101, 238, 56, '会员提交订单', 1607052410);
-INSERT INTO `yx_order_log` VALUES (377, 0, 105, 238, 56, '会员支付订单', 1607052410);
-INSERT INTO `yx_order_log` VALUES (378, 0, 101, 239, 56, '会员提交订单', 1607052606);
-INSERT INTO `yx_order_log` VALUES (379, 0, 105, 239, 56, '会员支付订单', 1607052606);
-INSERT INTO `yx_order_log` VALUES (380, 0, 101, 240, 56, '会员提交订单', 1607052614);
-INSERT INTO `yx_order_log` VALUES (381, 0, 105, 240, 56, '会员支付订单', 1607052614);
-INSERT INTO `yx_order_log` VALUES (382, 0, 101, 241, 56, '会员提交订单', 1607052644);
-INSERT INTO `yx_order_log` VALUES (383, 0, 105, 241, 56, '会员支付订单', 1607052644);
-INSERT INTO `yx_order_log` VALUES (384, 0, 101, 242, 56, '会员提交订单', 1607052815);
-INSERT INTO `yx_order_log` VALUES (385, 0, 105, 242, 56, '会员支付订单', 1607052815);
-INSERT INTO `yx_order_log` VALUES (386, 0, 101, 243, 56, '会员提交订单', 1607052819);
-INSERT INTO `yx_order_log` VALUES (387, 0, 105, 243, 56, '会员支付订单', 1607052819);
-INSERT INTO `yx_order_log` VALUES (388, 0, 101, 244, 56, '会员提交订单', 1607052927);
-INSERT INTO `yx_order_log` VALUES (389, 0, 105, 244, 56, '会员支付订单', 1607052927);
-INSERT INTO `yx_order_log` VALUES (390, 0, 101, 245, 57, '会员提交订单', 1607071924);
-INSERT INTO `yx_order_log` VALUES (391, 0, 105, 245, 57, '会员支付订单', 1607071924);
-INSERT INTO `yx_order_log` VALUES (392, 0, 101, 246, 57, '会员提交订单', 1607073248);
-INSERT INTO `yx_order_log` VALUES (393, 0, 105, 246, 57, '会员支付订单', 1607073248);
-INSERT INTO `yx_order_log` VALUES (394, 0, 102, 246, 57, '会员取消订单', 1607073893);
-INSERT INTO `yx_order_log` VALUES (395, 1, 203, 245, 1, '商家发货', 1607074815);
-INSERT INTO `yx_order_log` VALUES (396, 1, 203, 246, 1, '商家发货', 1607075138);
-INSERT INTO `yx_order_log` VALUES (397, 0, 101, 247, 52, '会员提交订单', 1607078510);
-INSERT INTO `yx_order_log` VALUES (398, 0, 105, 247, 52, '会员支付订单', 1607078511);
-INSERT INTO `yx_order_log` VALUES (399, 0, 101, 248, 52, '会员提交订单', 1607078513);
-INSERT INTO `yx_order_log` VALUES (400, 0, 105, 248, 52, '会员支付订单', 1607078513);
-INSERT INTO `yx_order_log` VALUES (401, 0, 102, 233, 52, '会员取消订单', 1607078542);
-INSERT INTO `yx_order_log` VALUES (402, 0, 102, 225, 52, '会员取消订单', 1607078543);
-INSERT INTO `yx_order_log` VALUES (403, 0, 102, 226, 52, '会员取消订单', 1607078545);
-INSERT INTO `yx_order_log` VALUES (404, 0, 101, 249, 52, '会员提交订单', 1607078558);
-INSERT INTO `yx_order_log` VALUES (405, 0, 101, 250, 52, '会员提交订单', 1607078590);
-INSERT INTO `yx_order_log` VALUES (406, 0, 105, 250, 52, '会员支付订单', 1607078590);
-INSERT INTO `yx_order_log` VALUES (407, 0, 102, 249, 52, '会员取消订单', 1607078603);
-INSERT INTO `yx_order_log` VALUES (408, 0, 102, 250, 52, '会员取消订单', 1607078630);
-INSERT INTO `yx_order_log` VALUES (409, 0, 102, 248, 52, '会员取消订单', 1607078721);
-INSERT INTO `yx_order_log` VALUES (410, 0, 102, 247, 52, '会员取消订单', 1607078737);
-INSERT INTO `yx_order_log` VALUES (411, 0, 101, 251, 52, '会员提交订单', 1607078749);
-INSERT INTO `yx_order_log` VALUES (412, 0, 105, 251, 52, '会员支付订单', 1607078749);
-INSERT INTO `yx_order_log` VALUES (413, 0, 101, 252, 52, '会员提交订单', 1607078758);
-INSERT INTO `yx_order_log` VALUES (414, 0, 105, 252, 52, '会员支付订单', 1607078758);
-INSERT INTO `yx_order_log` VALUES (415, 0, 102, 252, 52, '会员取消订单', 1607078811);
-INSERT INTO `yx_order_log` VALUES (416, 0, 102, 251, 52, '会员取消订单', 1607078812);
-INSERT INTO `yx_order_log` VALUES (417, 0, 101, 253, 52, '会员提交订单', 1607078825);
-INSERT INTO `yx_order_log` VALUES (418, 0, 105, 253, 52, '会员支付订单', 1607078825);
-INSERT INTO `yx_order_log` VALUES (419, 1, 203, 253, 1, '商家发货', 1607079361);
-INSERT INTO `yx_order_log` VALUES (420, 1, 204, 253, 1, '商家确认收货', 1607079393);
-INSERT INTO `yx_order_log` VALUES (421, 0, 101, 254, 52, '会员提交订单', 1607079509);
-INSERT INTO `yx_order_log` VALUES (422, 0, 105, 254, 52, '会员支付订单', 1607079509);
-INSERT INTO `yx_order_log` VALUES (423, 0, 101, 255, 52, '会员提交订单', 1607079523);
-INSERT INTO `yx_order_log` VALUES (424, 0, 105, 255, 52, '会员支付订单', 1607079523);
-INSERT INTO `yx_order_log` VALUES (425, 1, 203, 254, 1, '商家发货', 1607079542);
-INSERT INTO `yx_order_log` VALUES (426, 0, 104, 254, 52, '会员确认收货', 1607079574);
-INSERT INTO `yx_order_log` VALUES (427, 0, 102, 255, 52, '会员取消订单', 1607133028);
-INSERT INTO `yx_order_log` VALUES (428, 0, 101, 256, 52, '会员提交订单', 1607133079);
-INSERT INTO `yx_order_log` VALUES (429, 0, 105, 256, 52, '会员支付订单', 1607133079);
-INSERT INTO `yx_order_log` VALUES (430, 1, 203, 256, 1, '商家发货', 1607133146);
-INSERT INTO `yx_order_log` VALUES (431, 0, 104, 256, 52, '会员确认收货', 1607133158);
-INSERT INTO `yx_order_log` VALUES (432, 0, 101, 257, 52, '会员提交订单', 1607133277);
-INSERT INTO `yx_order_log` VALUES (433, 0, 105, 257, 52, '会员支付订单', 1607133277);
-INSERT INTO `yx_order_log` VALUES (434, 1, 203, 257, 1, '商家发货', 1607133287);
-INSERT INTO `yx_order_log` VALUES (435, 0, 104, 257, 52, '会员确认收货', 1607133297);
-INSERT INTO `yx_order_log` VALUES (436, 0, 101, 258, 56, '会员提交订单', 1607134922);
-INSERT INTO `yx_order_log` VALUES (437, 0, 105, 258, 56, '会员支付订单', 1607134923);
-INSERT INTO `yx_order_log` VALUES (438, 0, 101, 259, 41, '会员提交订单', 1607154775);
-INSERT INTO `yx_order_log` VALUES (439, 0, 101, 260, 41, '会员提交订单', 1607156971);
-INSERT INTO `yx_order_log` VALUES (440, 0, 105, 260, 41, '会员支付订单', 1607156971);
-INSERT INTO `yx_order_log` VALUES (453, 0, 101, 267, 52, '会员提交订单', 1607160014);
-INSERT INTO `yx_order_log` VALUES (454, 0, 105, 267, 52, '会员支付订单', 1607160014);
-INSERT INTO `yx_order_log` VALUES (457, 1, 203, 267, 1, '商家发货', 1607160030);
-INSERT INTO `yx_order_log` VALUES (458, 1, 204, 267, 1, '商家确认收货', 1607160044);
-INSERT INTO `yx_order_log` VALUES (459, 1, 204, 267, 1, '商家确认收货', 1607160044);
-INSERT INTO `yx_order_log` VALUES (466, 0, 101, 272, 54, '会员提交订单', 1607160408);
-INSERT INTO `yx_order_log` VALUES (467, 0, 105, 272, 54, '会员支付订单', 1607160408);
-INSERT INTO `yx_order_log` VALUES (468, 0, 101, 273, 56, '会员提交订单', 1607160425);
-INSERT INTO `yx_order_log` VALUES (469, 0, 105, 273, 56, '会员支付订单', 1607160425);
-INSERT INTO `yx_order_log` VALUES (470, 1, 203, 272, 1, '商家发货', 1607160464);
-INSERT INTO `yx_order_log` VALUES (471, 1, 204, 272, 1, '商家确认收货', 1607160479);
-INSERT INTO `yx_order_log` VALUES (472, 0, 101, 274, 54, '会员提交订单', 1607160558);
-INSERT INTO `yx_order_log` VALUES (473, 0, 102, 274, 54, '会员取消订单', 1607160571);
-INSERT INTO `yx_order_log` VALUES (474, 0, 101, 275, 44, '会员提交订单', 1607160924);
-INSERT INTO `yx_order_log` VALUES (475, 0, 105, 275, 44, '会员支付订单', 1607160925);
-INSERT INTO `yx_order_log` VALUES (476, 0, 101, 276, 44, '会员提交订单', 1607161586);
-INSERT INTO `yx_order_log` VALUES (477, 0, 105, 276, 44, '会员支付订单', 1607161586);
-INSERT INTO `yx_order_log` VALUES (478, 0, 101, 277, 44, '会员提交订单', 1607161696);
-INSERT INTO `yx_order_log` VALUES (479, 0, 105, 277, 44, '会员支付订单', 1607161696);
-INSERT INTO `yx_order_log` VALUES (480, 0, 102, 258, 56, '会员取消订单', 1607164579);
-INSERT INTO `yx_order_log` VALUES (481, 0, 102, 273, 56, '会员取消订单', 1607164662);
-INSERT INTO `yx_order_log` VALUES (482, 0, 101, 278, 56, '会员提交订单', 1607164744);
-INSERT INTO `yx_order_log` VALUES (483, 0, 105, 278, 56, '会员支付订单', 1607164744);
-INSERT INTO `yx_order_log` VALUES (484, 0, 102, 278, 56, '会员取消订单', 1607164753);
-INSERT INTO `yx_order_log` VALUES (485, 0, 101, 279, 56, '会员提交订单', 1607164996);
-INSERT INTO `yx_order_log` VALUES (486, 0, 105, 279, 56, '会员支付订单', 1607164996);
 COMMIT;
 
 -- ----------------------------
@@ -6462,17 +5800,12 @@ CREATE TABLE `yx_session` (
   `expire_time` int(10) NOT NULL COMMENT '到期时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `user_id_client` (`user_id`,`client`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会话表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会话表';
 
 -- ----------------------------
 -- Records of yx_session
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_session` VALUES (1, 1, '6d4469078637e7c47f503498a4e631fe', 1, 1607598009, 1612782009);
-INSERT INTO `yx_session` VALUES (2, 2, '8c6e0a2d064fb12b3f85e1db78638a12', 1, 1607654998, 1612838998);
-INSERT INTO `yx_session` VALUES (3, 3, '2ab04328e7691caeed22ce8cd08f9144', 1, 1607655256, 1612839256);
-INSERT INTO `yx_session` VALUES (4, 4, '577ec262e030338f783650fdb5909ac6', 1, 1607654385, 1612838385);
-INSERT INTO `yx_session` VALUES (5, 5, 'ceaff3eab946a9e25debf700c481a18d', 1, 1607655080, 1612839080);
 COMMIT;
 
 -- ----------------------------
@@ -6491,18 +5824,12 @@ CREATE TABLE `yx_sign_daily` (
   `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
   `growth` int(16) DEFAULT NULL COMMENT '成长值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_sign_daily
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_sign_daily` VALUES (1, '2', 10, 1, 1, 2, 1607588705, 1607588727, 0, 10);
-INSERT INTO `yx_sign_daily` VALUES (2, '2', 20, 1, 1, 4, 1607588735, NULL, 0, 20);
-INSERT INTO `yx_sign_daily` VALUES (3, '2', 40, 1, 1, 8, 1607588744, NULL, 0, 40);
-INSERT INTO `yx_sign_daily` VALUES (4, '2', 80, 1, 1, 10, 1607588757, NULL, 0, 80);
-INSERT INTO `yx_sign_daily` VALUES (5, '2', 120, 1, 1, 12, 1607588765, NULL, 0, 120);
-INSERT INTO `yx_sign_daily` VALUES (6, '1', 2, 1, 1, 0, 1607588778, NULL, 0, 2);
 COMMIT;
 
 -- ----------------------------
@@ -6562,16 +5889,12 @@ CREATE TABLE `yx_stat` (
   `today_user_pv` int(10) DEFAULT '0' COMMENT '今日用户访问量',
   `create_time` int(10) unsigned NOT NULL COMMENT '变动时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='统计表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='统计表';
 
 -- ----------------------------
 -- Records of yx_stat
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_stat` VALUES (1, 4, 1607516635);
-INSERT INTO `yx_stat` VALUES (2, 935, 1607565431);
-INSERT INTO `yx_stat` VALUES (3, 425, 1607650296);
-INSERT INTO `yx_stat` VALUES (4, 1, 1609768599);
 COMMIT;
 
 -- ----------------------------
@@ -6592,13 +5915,12 @@ CREATE TABLE `yx_supplier` (
   `district_id` int(11) DEFAULT NULL COMMENT '区',
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='供货商表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='供货商表';
 
 -- ----------------------------
 -- Records of yx_supplier
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_supplier` VALUES (1, '文具旗舰店', 0, 1607570262, 1607570274, '13648795627', '晨先生', '文具专卖供货商', NULL, NULL, NULL, '北京朝阳北巷3街道');
 COMMIT;
 
 -- ----------------------------
@@ -6616,49 +5938,12 @@ CREATE TABLE `yx_system_log` (
   `param` text COMMENT '请求数据',
   `ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'Ip地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_log
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_system_log` VALUES (5, 1, 'admin', 'admin', 1610000837, '/admin/index/index.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (6, 1, 'admin', 'admin', 1610000838, '/admin/index/stat.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (7, 1, 'admin', 'admin', 1610000838, '/admin/index/stat.html', 'POST', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (8, 1, 'admin', 'admin', 1610000848, '/admin/user/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (9, 1, 'admin', 'admin', 1610000848, '/admin/user/lists.html', 'GET', '{\"page\":\"1\",\"limit\":\"10\"}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (10, 1, 'admin', 'admin', 1610000849, '/admin/order/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (11, 1, 'admin', 'admin', 1610000850, '/admin/order/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (12, 1, 'admin', 'admin', 1610000850, '/admin/after_sale/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (13, 1, 'admin', 'admin', 1610000851, '/admin/after_sale/lists.html', 'GET', '{\"type\":\"\",\"page\":\"1\",\"limit\":\"10\"}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (14, 1, 'admin', 'admin', 1610000862, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (15, 1, 'admin', 'admin', 1610000930, '/admin/auth/del.html', 'POST', '{\"ids\":[\"55\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (16, 1, 'admin', 'admin', 1610000931, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (17, 1, 'admin', 'admin', 1610000944, '/admin/auth/del.html', 'POST', '{\"ids\":[\"72\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (18, 1, 'admin', 'admin', 1610000945, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (19, 1, 'admin', 'admin', 1610000950, '/admin/auth/del.html', 'POST', '{\"ids\":[\"89\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (20, 1, 'admin', 'admin', 1610000951, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (21, 1, 'admin', 'admin', 1610000956, '/admin/auth/del.html', 'POST', '{\"ids\":[\"112\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (22, 1, 'admin', 'admin', 1610000957, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (23, 1, 'admin', 'admin', 1610000968, '/admin/auth/del.html', 'POST', '{\"ids\":[\"113\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (24, 1, 'admin', 'admin', 1610000969, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (25, 1, 'admin', 'admin', 1610000973, '/admin/auth/del.html', 'POST', '{\"ids\":[\"114\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (26, 1, 'admin', 'admin', 1610000975, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (27, 1, 'admin', 'admin', 1610000979, '/admin/auth/del.html', 'POST', '{\"ids\":[\"117\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (28, 1, 'admin', 'admin', 1610000980, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (29, 1, 'admin', 'admin', 1610000985, '/admin/auth/del.html', 'POST', '{\"ids\":[\"118\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (30, 1, 'admin', 'admin', 1610000987, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (31, 1, 'admin', 'admin', 1610001012, '/admin/auth/del.html', 'POST', '{\"ids\":[\"85\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (32, 1, 'admin', 'admin', 1610001014, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (33, 1, 'admin', 'admin', 1610001049, '/admin/auth/del.html', 'POST', '{\"ids\":[\"91\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (34, 1, 'admin', 'admin', 1610001050, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (35, 1, 'admin', 'admin', 1610001065, '/admin/auth/del.html', 'POST', '{\"ids\":[\"84\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (36, 1, 'admin', 'admin', 1610001066, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (37, 1, 'admin', 'admin', 1610001073, '/admin/auth/del.html', 'POST', '{\"ids\":[\"82\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (38, 1, 'admin', 'admin', 1610001075, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (39, 1, 'admin', 'admin', 1610001089, '/admin/finance/lists.html', 'GET', '[]', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (40, 1, 'admin', 'admin', 1610001098, '/admin/auth/del.html', 'POST', '{\"ids\":[\"106\"]}', '172.19.0.1');
-INSERT INTO `yx_system_log` VALUES (41, 1, 'admin', 'admin', 1610001100, '/admin/auth/lists.html', 'GET', '[]', '172.19.0.1');
 COMMIT;
 
 -- ----------------------------
@@ -6720,17 +6005,12 @@ CREATE TABLE `yx_user` (
   `earnings` float(10,2) DEFAULT '0.00' COMMENT '佣金收益',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `distribution_code` (`distribution_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of yx_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_user` VALUES (1, '72826148', 0, 'mofung1', 'uploads/user/avatar/9731aaeaca7ff6f1905b16d872c154a2.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', '5WSP2Q', 1607597684, NULL, 1607597684, '58.62.167.117', 0, 0, 0, 0.00);
-INSERT INTO `yx_user` VALUES (2, '49350578', 0, 'Jason', 'uploads/user/avatar/03f1dece077e0dd9d4053fb6029912a0.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', 'Y9KFU8', 1607597860, NULL, 1607597860, '58.62.167.117', 0, 0, 0, 0.00);
-INSERT INTO `yx_user` VALUES (3, '01336963', 0, '上 心', 'uploads/user/avatar/612b86b42b081f9ace2dcff6eb73bb9a.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', '694762', 1607650297, NULL, 1607650297, '58.62.167.117', 0, 0, 0, 0.00);
-INSERT INTO `yx_user` VALUES (4, '28293528', 0, '小心立早鱼', 'uploads/user/avatar/5c34b7288665351b19d773257e5f0732.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', 'P39YQ8', 1607654071, NULL, 1607654072, '58.62.167.117', 0, 0, 0, 0.00);
-INSERT INTO `yx_user` VALUES (5, '24349278', 0, 'momo', 'uploads/user/avatar/259dd42fa8f6b7f34669f51d803c83eb.jpeg', '', 0, NULL, 0, NULL, 0.00, 0, 0.00, 0.00, '', NULL, NULL, '', 0, 0, 0, NULL, 0, 0, '', '', '', 'KFU5RX', 1607655080, NULL, 1607655080, '58.62.167.117', 0, 0, 0, 0.00);
 COMMIT;
 
 -- ----------------------------
@@ -6776,17 +6056,12 @@ CREATE TABLE `yx_user_auth` (
   `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `openid` (`openid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户授权表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户授权表';
 
 -- ----------------------------
 -- Records of yx_user_auth
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_user_auth` VALUES (1, 1, 'omBUr43sSxWd-GkrNwfrJ38ZpviQ', '', 1607597684, NULL, 1);
-INSERT INTO `yx_user_auth` VALUES (2, 2, 'omBUr4xgS9v94mJeHEKLjs2risBo', '', 1607597860, NULL, 1);
-INSERT INTO `yx_user_auth` VALUES (3, 3, 'omBUr44GnU4alc2S467k_jmGSGkU', '', 1607650297, NULL, 1);
-INSERT INTO `yx_user_auth` VALUES (4, 4, 'omBUr409Re9h3VpPYDGEInDEXoFk', '', 1607654071, NULL, 1);
-INSERT INTO `yx_user_auth` VALUES (5, 5, 'omBUr42OKmg7XHqXz5a-D4KHoQys', '', 1607655080, NULL, 1);
 COMMIT;
 
 -- ----------------------------

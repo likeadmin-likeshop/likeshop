@@ -520,8 +520,6 @@ INSERT INTO `yx_dev_auth` VALUES (75, 1, 0, 73, '文章分类', '', 'articleCate
 INSERT INTO `yx_dev_auth` VALUES (79, 1, 0, 17, '消息管理', '', 'message/config', 93, 0, 1605602385, 1608467368, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (80, 1, 0, 17, '短信管理', '', 'sms/lists', 91, 0, 1605603890, 1608467380, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (87, 1, 0, 81, '积分记录', '', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (93, 1, 0, 92, 'H5装修', '', '', 100, 0, 1606449177, 1606792239, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (94, 1, 0, 92, '小程序装修', '', '', 90, 0, 1606449275, 1606792694, 0, 0);

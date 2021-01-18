@@ -21,6 +21,8 @@ if (!file_exists(__DIR__ .'/../config/install.lock')) {
     header("location:/install/install.php");
     exit;
 }
+define('ROOT_PATH',__DIR__);
+
 
 // 执行应用并响应
 Container::get('app')->run()->send();

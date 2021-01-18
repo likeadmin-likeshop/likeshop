@@ -35,10 +35,16 @@
     }
     .copy{
         margin-left: 10px;
-        margin-top: 5px;
     }
     .tips{
         color: red;
+    }
+    .layui-form-item .layui-input-inline{
+        width: 410px;
+    }
+    .layui-input{
+        display: inline-block;
+        width: 80%;
     }
 </style>
 <div class="layui-fluid">
@@ -64,18 +70,14 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">公众号名称：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" name="name" value="{$oa.name}" class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="{$oa.name}" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">原始ID：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" name="original_id" value="{$oa.original_id}" autocomplete="off" class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="original_id" value="{$oa.original_id}" autocomplete="off" class="layui-input">
                     </div>
 
                 </div>
@@ -105,19 +107,14 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="tips">*</span>AppID：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" name="app_id" value="{$oa.app_id}"  lay-verify="required" lay-verType="tips"
-                                   class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="app_id" value="{$oa.app_id}"  lay-verify="required" lay-verType="tips" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="tips">*</span>AppSecret：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text"  name="app_secret" value="{$oa.app_secret}"  lay-verify="required"  lay-verType="tips" autocomplete="off" class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="app_secret" value="{$oa.app_secret}"  lay-verify="required"  lay-verType="tips" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -132,10 +129,8 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">URL：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" value="{$oa.url}" readonly="readonly" class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input  type="text" value="{$oa.url}" readonly="readonly" class="layui-input">
                         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
 
@@ -146,10 +141,8 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">Token：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text"  name="token" value="{$oa.token}" autocomplete="off" class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="token" value="{$oa.token}" autocomplete="off" class="layui-input">
                         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy " >复制</button>
                     </div>
                 </div>
@@ -159,10 +152,8 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">EncodingAESKey：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text"  name="encoding_ses_key" value="{$oa.encoding_ses_key}" autocomplete="off" class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="encoding_ses_key" value="{$oa.encoding_ses_key}" autocomplete="off" class="layui-input">
                         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
                 </div>
@@ -190,11 +181,9 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">业务域名：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" readonly="readonly" value="{$oa.business_domain}"  class="layui-input">
-                        </div>
-                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                    <div class="layui-input-inline">
+                        <input type="text" readonly="readonly" value="{$oa.business_domain}"  class="layui-input">
+                        <button type="button"  class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -203,10 +192,8 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">JS接口安全域名：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" readonly="readonly" value="{$oa.safety_domain}"  class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text" readonly="readonly" value="{$oa.safety_domain}"  class="layui-input">
                         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
                 </div>
@@ -216,10 +203,8 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">网页授权域名：</label>
-                    <div class="layui-input-block">
-                        <div class="layui-col-md3">
-                            <input type="text" readonly="readonly"  value="{$oa.auth_domain}"  class="layui-input">
-                        </div>
+                    <div class="layui-input-inline">
+                        <input type="text" readonly="readonly"  value="{$oa.auth_domain}"  class="layui-input">
                         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
                     </div>
                 </div>
@@ -228,7 +213,7 @@
                     <span style="color: #a3a3a3;font-size: 9px">登录微信公众平台，点击设置>公众号设置>功能设置，填写网页授权域名</span>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setoa">确定</button>
                     </div>
                 </div>
@@ -275,7 +260,7 @@
         });
         //复制
         $(document).on('click','.copy',function () {
-            var copyText = $(this).prev().children()
+            var copyText = $(this).prev()
             copyText.select()
             document.execCommand("Copy");
 

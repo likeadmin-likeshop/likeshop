@@ -72,6 +72,6 @@ class MnpMessage extends AdminBase
         if ($result === true) {
             $this->_success('同步成功');
         }
-        $this->_error('同步失败', $result);
+        $this->_error('同步失败,请检查配置信息', $result);
     }
 }

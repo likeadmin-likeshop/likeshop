@@ -89,7 +89,7 @@ class Payment extends ApiBase
                     case 'order':
                         $order = Db::name('order')->where(['order_sn' => $message['out_trade_no']])->find();
 
-                        if (!$order || $order['pay_status'] == Pay::ISPAID) {
+                        if (!$order || $order['pay_status'] >= Pay::ISPAID) {
                             return true;
                         }
                         PayNotifyLogic::handle('order', $message['out_trade_no'], $extra);
@@ -97,7 +97,7 @@ class Payment extends ApiBase
                     case 'recharge':
                         $order = Db::name('recharge_order')->where(['order_sn' => $message['out_trade_no']])->find();
 
-                        if (!$order || $order['pay_status'] == Pay::ISPAID) {
+                        if (!$order || $order['pay_status'] >= Pay::ISPAID) {
                             return true;
                         }
                         PayNotifyLogic::handle('recharge', $message['out_trade_no'], $extra);

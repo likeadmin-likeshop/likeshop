@@ -582,6 +582,7 @@ CREATE TABLE `yx_dev_crontab` (
 -- Records of yx_dev_crontab
 -- ----------------------------
 BEGIN;
+INSERT INTO `yx_dev_crontab` VALUES (2, '关闭订单', 1, '', ' order_close ', '', 1, '*/5 * * * *', NULL, 1606817054, 1608716729, NULL, '0', '0', 0);
 COMMIT;
 
 -- ----------------------------
@@ -6824,10 +6825,10 @@ CREATE TABLE `yx_user_level` (
 -- Records of yx_user_level
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_user_level` VALUES (2, '普通会员', 100, '普通会员', '/uploads/images/background/20201210/e00c91e6d52bcf8fc117bf9d4cc8213d.png', '/uploads/images/background/20201210/d74e01d4a8b86f331fcca2f485080353.png', '', 1606285025, 1607569701, 0);
-INSERT INTO `yx_user_level` VALUES (3, '黄金会员', 2000, '黄金会员', '/uploads/images/background/20201210/263af68dbb3a7beb43d13273abddef59.png', '/uploads/images/background/20201210/eab147f969fce1475d4892c57256f8ec.png', '', 1606285088, 1607569720, 0);
-INSERT INTO `yx_user_level` VALUES (4, '铂金会员', 3000, '铂金会员', '/uploads/images/background/20201210/2bb17478228b324a613ffa3565a48737.png', '/uploads/images/background/20201210/79ee4347c8066f965c9ce7034f249cea.png', '', 1606285126, 1607569740, 0);
-INSERT INTO `yx_user_level` VALUES (5, '钻石会员', 5000, '钻石会员', '/uploads/images/background/20201210/b3ea3f1db613eecfe7ae8e0cf2c155b3.png', '/uploads/images/background/20201210/1bf35b2f5eacab8ac547b64218a6fdc9.png', '', 1606285250, 1607569752, 0);
+INSERT INTO `yx_user_level` (`id`, `name`, `growth_value`, `remark`, `background_image`, `image`, `privilege`, `create_time`, `update_time`, `del`) VALUES (1, '普通会员', 100, '普通会员', '/images/user_level/bg_grade1.png', '/images/user_level/icon_grade1.png', '1', 1606285025, 1607497610, 0);
+INSERT INTO `yx_user_level` (`id`, `name`, `growth_value`, `remark`, `background_image`, `image`, `privilege`, `create_time`, `update_time`, `del`) VALUES (2, '黄金会员', 2000, '黄金会员', '/images/user_level/bg_grade2.png', '/images/user_level/icon_grade2.png', '1', 1606285088, 1608967712, 0);
+INSERT INTO `yx_user_level` (`id`, `name`, `growth_value`, `remark`, `background_image`, `image`, `privilege`, `create_time`, `update_time`, `del`) VALUES (3, '铂金会员', 3000, '铂金会员', '/images/user_level/bg_grade3.png', '/images/user_level/icon_grade3.png', '4', 1606285126, 1607497601, 0);
+INSERT INTO `yx_user_level` (`id`, `name`, `growth_value`, `remark`, `background_image`, `image`, `privilege`, `create_time`, `update_time`, `del`) VALUES (4, '钻石会员', 5000, '钻石会员', '/images/user_level/bg_grade4.png', '/images/user_level/icon_grade4.png', '1,2,3,4', 1606285250, 1608967632, 0);
 COMMIT;
 
 -- ----------------------------
@@ -6849,10 +6850,10 @@ CREATE TABLE `yx_user_privilege` (
 -- Records of yx_user_privilege
 -- ----------------------------
 BEGIN;
-INSERT INTO `yx_user_privilege` VALUES (1, '购物折扣', '/uploads/images/background/20201210/35e522faf28bee80048703f4a9f97f99.png', '', 1607569381, NULL, 0);
-INSERT INTO `yx_user_privilege` VALUES (2, '全场免邮费', '/uploads/images/background/20201210/001258dae3fb475ceecb294dfb0314fd.png', '', 1607569404, NULL, 0);
-INSERT INTO `yx_user_privilege` VALUES (3, '会员优惠券', '/uploads/images/background/20201210/a98c5a589526627f9458bdf4ed640bd9.png', '', 1607569417, NULL, 0);
-INSERT INTO `yx_user_privilege` VALUES (4, '专属客服', '/uploads/images/background/20201210/b993e87092f20dbc7b32536d6a867ccb.png', '', 1607569427, NULL, 0);
+INSERT INTO `yx_user_privilege` (`id`, `name`, `image`, `remark`, `create_time`, `update_time`, `del`) VALUES (1, '购物折扣', '/images/user_privilege/icon_discount.png', '', 1606898429, NULL, 0);
+INSERT INTO `yx_user_privilege` (`id`, `name`, `image`, `remark`, `create_time`, `update_time`, `del`) VALUES (2, '全场免邮费', '/images/user_privilege/icon_freight.png', '', 1606898448, NULL, 0);
+INSERT INTO `yx_user_privilege` (`id`, `name`, `image`, `remark`, `create_time`, `update_time`, `del`) VALUES (3, '会员优惠券', '/images/user_privilege/icon_coupon.png', '', 1606898471, NULL, 0);
+INSERT INTO `yx_user_privilege` (`id`, `name`, `image`, `remark`, `create_time`, `update_time`, `del`) VALUES (4, '专属客服', '/images/user_privilege/icon_customer.png', '', 1606898498, NULL, 0);
 COMMIT;
 
 -- ----------------------------

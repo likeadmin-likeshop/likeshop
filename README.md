@@ -76,7 +76,7 @@
 <br/>
 <br/>官方网站：<a target="_blank" href="https://www.likemarket.net">https://www.likemarket.net</a>
 <br/>知识社区：<a  target="_blank" href="https://home.likemarket.net">https://home.likemarket.net/</a>
-<br/>文档手册：<a target="_blank" href="https://doc.likemarket.net">https://doc.likemarket.net/</a>
+<br/>文档手册：<a target="_blank" href="http://doc.likemarket.net">http://doc.likemarket.net/</a>
 
 qq技术群：371752229
 

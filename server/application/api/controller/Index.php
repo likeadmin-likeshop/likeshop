@@ -21,10 +21,11 @@ namespace app\api\controller;
 use app\api\logic\IndexLogic;
 use app\common\model\Client_;
 use app\common\server\ConfigServer;
+use app\common\server\UrlServer;
 
 class Index extends ApiBase
 {
-   public $like_not_need_login = ['lists', 'appInit', 'downLine'];
+   public $like_not_need_login = ['lists', 'appInit', 'downLine', 'share'];
     /**
      * note 首页接口
      * create_time 2020/10/21 19:05
@@ -62,5 +63,35 @@ class Index extends ApiBase
             'agreement' => ConfigServer::get('app', 'agreement', '',1)
         ];
         $this->_success('', $data);
+    }
+
+    /**
+     * Notes: 获取分享信息
+     * @author 张无忌(2021/1/20 17:04)
+     * @return array|mixed|string
+     */
+    public function share()
+    {
+        $client = $this->request->get('client', Client_::mnp, 'intval');
+        $config = [];
+        switch ($client) {
+            case Client_::mnp:
+                $config = ConfigServer::get('share', 'mnp', []);
+                break;
+            case Client_::h5:
+                $config = ConfigServer::get('share', 'h5', []);
+                if (empty($config['h5_share_image']) and $config['h5_share_image'] !== '') {
+                    $config['h5_share_image'] = UrlServer::getFileUrl($config['h5_share_image']);
+                }
+                break;
+            case Client_::android:
+            case Client_::ios:
+                $config = ConfigServer::get('share', 'app', []);
+                if (empty($config['app_share_image']) and $config['app_share_image'] !== '') {
+                    $config['app_share_image'] = UrlServer::getFileUrl($config['app_share_image']);
+                }
+                break;
+        }
+        return $config;
     }
 }

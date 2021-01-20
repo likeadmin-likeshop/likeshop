@@ -97,7 +97,7 @@ class YxEnv
             'database.password' => $databaseEnv['password'],
             'database.hostport' => $databaseEnv['port'],
             'database.prefix' => $databaseEnv['prefix'],
-            'project.file_domain' => $_SERVER['SERVER_NAME'],
+            'project.file_domain' => $_SERVER['HTTP_HOST'],
         ];
 
         $envLine = array_merge($this->data, $applyDbEnv);

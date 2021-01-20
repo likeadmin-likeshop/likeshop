@@ -116,7 +116,7 @@ class YxEnv
                 $lastPrefix = $prefix;
             }
 
-            $content .= "$key = $value\n";
+            $content .= "$key = \"$value\"\n";
         }
 
         if ( !empty($content)) {

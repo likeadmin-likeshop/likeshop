@@ -236,6 +236,7 @@
                     success:function(res) {
                         if(res.code === 1) {
                             layui.layer.msg(res.msg, {offset:'15px', icon:1 ,time: 1000});
+                            updateTabNumber();
                             table.reload('goods-lists', { where: [] });
                         } else {
                             layui.layer.msg(res.msg, {offset:'15px', icon:2 ,time: 1000});
@@ -265,6 +266,7 @@
                     success:function(res) {
                         if(res.code === 1) {
                             layui.layer.msg(res.msg, {offset:'15px', icon:1 ,time: 1000});
+                            updateTabNumber();
                             table.reload('goods-lists', { where: [] });
                         } else {
                             layui.layer.msg(res.msg, {offset:'15px', icon:2 ,time: 1000});
@@ -398,6 +400,7 @@
                                     , time: 1000
                                 });
                                 layer.close(index); //关闭弹层
+                                updateTabNumber();
                                 table.reload('goods-lists'); //数据刷新
                             }
                         }
@@ -515,6 +518,7 @@
                                 window.location.href = window.location.href;
                             }
                         });
+                        updateTabNumber();
                     }else {
                         layui.layer.msg(res.msg, {
                             offset: '15px'
@@ -524,6 +528,25 @@
                     }
                 }
             })
+        }
+
+        /**
+         * 更新选项卡 统计数据
+         */
+        function updateTabNumber() {
+            like.ajax({
+                url: '{:url("goods/totalCount")}',
+                data: {},
+                type: "GET",
+                success: function (res) {
+                    if (res.code === 1) {
+                        $(".layui-tab-title li[data-type=1]").html("销售中商品(" + res.data.sell + ")");
+                        $(".layui-tab-title li[data-type=2]").html("仓库中商品(" + res.data.warehouse + ")");
+                        $(".layui-tab-title li[data-type=3]").html("库存预警商品(" + res.data.warn + ")");
+                        $(".layui-tab-title li[data-type=4]").html("回收站商品(" + res.data.recycle + ")");
+                    }
+                }
+            });
         }
 
     });

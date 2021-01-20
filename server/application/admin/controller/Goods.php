@@ -48,6 +48,17 @@ class Goods extends AdminBase
     }
 
     /**
+     * Notes: 获取Tab统计数据
+     * @author 张无忌(2021/1/19 18:49)
+     */
+    public function totalCount()
+    {
+        if ($this->request->isAjax()) {
+            $this->_success('获取成功', GoodsLogic::statistics());
+        }
+    }
+
+    /**
      * 添加商品
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException

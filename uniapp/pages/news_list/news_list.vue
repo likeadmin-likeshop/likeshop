@@ -7,11 +7,11 @@
             <!-- 存在就是10 不存在为7 -->
             <swipers :pid="type ? 11 : 8" height="300rpx" radius="0rpx"></swipers>
         </view>
-        <van-tabs :active="active" @change="changeActive" :line-width="40">
-            <van-tab title="全部" :name="0"></van-tab>
-            <van-tab v-for="(item, index) in categoryList" :key="index" :title="item.name" :name="item.id"></van-tab>
-        </van-tabs>
-        <view class="mian">
+        <tabs :active="active" @change="changeActive" :line-width="40">
+            <tab title="全部"></tab>
+            <tab v-for="(item, index) in categoryList" :key="index" :title="item.name" ></tab>
+        </tabs>
+        <view class="main">
             <view class="article-list">
                 <view v-for="(item, index) in newsList" :key="index" :data-id="item.id" class="article-item bg-white" @tap="goPage">
                     <view class="row">
@@ -21,7 +21,7 @@
                                 <view>{{ item.synopsis }}</view>
                             </view>
                         </view>
-                        <van-image width="240rpx" height="180rpx" lazy-load class="img ml20" :src="item.image"></van-image>
+                        <image width="240rpx" height="180rpx" lazy-load class="img ml20" :src="item.image" />
                     </view>
                     <view class="row-between mt20">
                         <view class="xs muted">发布时间: {{item.create_time}}</view>
@@ -62,15 +62,9 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { getCategoryList, getArticleList } from '../../api/store';
+import { getCategoryList, getArticleList } from '../../api/new';
 import { loadingType } from '../../utils/type';
 import swipers from "../../components/swipers/swipers";
-// import vanTab from "../../components/weapp/tab/index";
-// import vanTabs from "../../components/weapp/tabs/index";
-// import vanLoading from "../../components/weapp/loading/index";
-// import loadingFooter from "../../components/loading-footer/loading-footer";
-// import loadingView from "../../components/loading-view/loading-view";
-// import vanImage from "../../components/weapp/image/index";
 
 export default {
   data() {
@@ -88,12 +82,6 @@ export default {
 
   components: {
     swipers,
-    // vanTab,
-    // vanTabs,
-    // vanLoading,
-    // loadingFooter,
-    // loadingView,
-    // vanImage
   },
   props: {},
 
@@ -105,10 +93,7 @@ export default {
     this.id = options.id; //type存在则为帮助中心
 
     this.type = options.type || '';
-    this.setData({
-      type: this.type
-    });
-
+    
     if (this.type) {
       uni.setNavigationBarTitle({
         title: '帮助中心'
@@ -161,12 +146,10 @@ export default {
       let {
         name
       } = e.detail;
-      this.setData({
-        active: name,
-        page: 1,
-        newsList: [],
-        status: loadingType.LOADING
-      });
+      this.active = name;
+      this.page = 1;
+      this.newsList = [];
+      this.status = loadingType.LOADING
       setTimeout(() => {
         this.getArticleListFun();
       }, 100);
@@ -177,10 +160,9 @@ export default {
         type: this.type
       }).then(res => {
         if (res.code == 1) {
-          this.setData({
-            categoryList: res.data
-          });
-          this.getArticleListFun();
+            this.categoryList = res.data
+            console.log(this.categoryList)
+            this.getArticleListFun();
         }
       });
     },
@@ -204,23 +186,18 @@ export default {
             more
           } = res.data;
           newsList.push(...list);
-          this.setData({
-            newsList,
-            page: ++page,
-            showLoading: false
-          });
-          uni.nextTick(() => {
+          this.newsList = newsList
+          this.page ++;
+          this.showLoading = false
+          
+          this.$nextTick(() => {
             if (!more) {
-              this.setData({
-                status: loadingType.FINISHED
-              });
+                this.status = loadingType.FINISHED
             }
 
             if (newsList.length <= 0) {
-              this.setData({
-                status: loadingType.EMPTY
-              });
-              return;
+                this.status = loadingType.EMPTY;
+                return;
             }
           });
         }
@@ -239,40 +216,43 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 /* pages/information/information.wxss */
-.news_list .banner {
+.news_list {
+    .banner {
+    
+    }
+    .main {        
+        .article-list {
+            padding-top: 20rpx;
+            .article-item {
+                padding: 20rpx;
+                border-bottom: var(--border);
+                align-items: flex-start;
+                .info {
+                    flex: 1;
+                }
+                .img {
+                    width: 240rpx;
+                    height: 180rpx;
+                    flex: none;
+                }
+            }
+            &:last-of-type {
+                border: none;
+            }
+        }
+    }
+    .footer {
+        padding: 30rpx 0;
+    }
 }
 
 page .van-tabs .van-tab--active {
     color: #333;
 }
 
-.article-list {
-    padding-top: 20rpx;
-}
 
-.article-list .article-item {
-    padding: 20rpx;
-    border-bottom: var(--border);
-    align-items: flex-start;
-}
-.article-list .article-item:last-of-type {
-    border: none;
-}
-
-.article-list .article-item .info {
-    flex: 1;
-}
-.article-list .article-item .img {
-    width: 240rpx;
-    height: 180rpx;
-    flex: none;
-}
-
-.news_list .footer {
-    padding: 30rpx 0;
-}
 .news_list .van-tab {
     width: 25%;
     flex: none;

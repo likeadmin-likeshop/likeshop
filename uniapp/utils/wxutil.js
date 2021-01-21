@@ -14,7 +14,7 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { mnpLogin } from '../api/app'; //用户是否已经授权
+import { mnpLogin } from '@/api/app'; //用户是否已经授权
 
 export function isAuthorize() {
   return new Promise((resolve, reject) => {

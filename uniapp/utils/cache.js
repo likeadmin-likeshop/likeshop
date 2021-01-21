@@ -30,6 +30,9 @@ const Cache = {
 	//获取当前时间
 	time() {
 		return Math.round(new Date() / 1000);
+	},
+	remove(key) {
+		if(key) uni.removeStorageSync(key)
 	}
 }
 

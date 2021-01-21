@@ -36,6 +36,9 @@
 		created() {
 			this.tabs.childrens.push(this)
 		},
+		mounted() {
+			this.update()
+		},
 		methods: {
 			getComputedName: function() {
 				if (this.data.name !== '') {

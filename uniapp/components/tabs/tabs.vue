@@ -78,15 +78,7 @@
 		},
 
 		watch: {
-			tabData(value) {
-				this.updateData();
-				setTimeout(() => {
-					this.updateTabWidth();
-				}, 0);
-			},
-			config(value) {
-				this.updateConfig();
-			},
+			
 		},
 		created() {
 			this.childrens = []
@@ -117,7 +109,7 @@
 						updateRender
 					}
 				})
-
+				console.log(this.tabList)
 				this.updateConfig();
 				this.tagIndex = this.activeIndex;
 				this.$nextTick(() => {

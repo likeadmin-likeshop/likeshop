@@ -130,7 +130,8 @@
 </view>
 </template>
 
-// <script>
+ <script>
+	 import {mapGetters} from 'vuex'
 // import { getUser } from '../../api/user';
 // import { showLoginDialog } from '../../utils/wxutil';
 // import event from '../../utils/events';
@@ -158,10 +159,8 @@ export default {
   },
   props: {},
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onLoad(options) {
+	  console.log(this.isLogin)
     // this.setData({
     //   navH: app.globalData.navHeight,
     //   statusBarH: app.globalData.statusBarHeight
@@ -172,42 +171,18 @@ export default {
     // });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
     // this.getUserInfoFun();
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
+  onUnload() {
     this.observeLine.disconnect();
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
   onPullDownRefresh: function () {
     this.getUserInfoFun();
     this.getMenuFun();
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
   methods: {
     goLogin() {
       let {
@@ -352,6 +327,9 @@ export default {
       });
     }
 
+  },
+  computed:{
+	  ...mapGetters(['isLogin']),
   }
 };
 </script>

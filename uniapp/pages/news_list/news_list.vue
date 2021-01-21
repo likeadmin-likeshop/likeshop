@@ -32,12 +32,12 @@
                     </view>
                 </view>
             </view>
-            <!-- <loading-footer :status="status" slot-footer="true">
+            <loading-footer :status="status" slot-footer="true">
                 <view class="column-center" style="padding-top: 200rpx">
                     <image class="img-null" src="/static/images/null_news.png"></image>
                     <text class="nr muted">暂无数据～</text>
                 </view>
-            </loading-footer> -->
+            </loading-footer>
         </view>
     </view>
 </view>
@@ -143,10 +143,7 @@ export default {
 
   methods: {
     changeActive(e) {
-      let {
-        name
-      } = e.detail;
-      this.active = name;
+      this.active = e;
       this.page = 1;
       this.newsList = [];
       this.status = loadingType.LOADING
@@ -177,7 +174,7 @@ export default {
       if (status == loadingType.FINISHED) return;
       getArticleList({
         type: this.type,
-        id: active ? active : '',
+        id: active ? active.toString() : '',
         page_no: page
       }).then(res => {
         if (res.code == 1) {

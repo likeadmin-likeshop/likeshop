@@ -68,12 +68,16 @@ export function hasRegionCode(data) {
 
 //我的优惠券
 export function getMyCoupon(data) {
-    return request.get('coupon/myCoupon', data)
+    return request.get('coupon/myCoupon', {
+        params: data
+    })
 }
 
 // 获取商品的收藏列表
 export function getCollectGoods(data) {
-    return request.get('collect/getCollectGoods', data)
+    return request.get('collect/getCollectGoods', {
+        params: data
+    })
 }
 
 // 商品的增添取消收藏

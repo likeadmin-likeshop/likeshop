@@ -224,6 +224,7 @@
 	}
 
 	.uni-navbar--fixed {
+		top:0;
 		position: fixed;
 		z-index: 998;
 	}
@@ -238,5 +239,8 @@
 		border-bottom-width: 1rpx;
 		border-bottom-style: solid;
 		border-bottom-color: $uni-border-color;
+	}
+	.uni-nav-bar-text {
+		font-weight: bold;
 	}
 </style>

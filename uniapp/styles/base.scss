@@ -254,9 +254,20 @@ page {
 .br60 {
     border-radius: 60rpx;
 }
-button {
+
+/* 初始化按钮 */
+page button {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    font-weight: normal;
+    font-size: 28rpx;
+    overflow: unset;
 	margin-left: 0;
 	margin-right: 0;
+}
+page button::after {
+	border: none;
 }
 
 button[type=primary] {

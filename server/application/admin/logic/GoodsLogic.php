@@ -353,7 +353,7 @@ class GoodsLogic
                 'free_shipping'             => $free_shipping,
                 'free_shipping_template_id' => $free_shipping_template_id,
                 'spec_type'                 => $post['spec_type'],
-                'create_time'               => $time
+                'update_time'               => $time
             ];
             Db::name('goods')
                 ->where(['id' => $post['goods_id']])

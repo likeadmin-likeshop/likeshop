@@ -116,7 +116,7 @@ class AfterSaleLogic extends LogicBase
                 break;
         }
 
-        $field = 'g.order_id,g.goods_id,g.item_id,g.goods_num,g.goods_price,a.status,a.refund_type,a.id as after_sale_id,a.create_time';
+        $field = 'g.order_id,g.goods_id,g.item_id,g.goods_num,g.goods_price,g.goods_info,a.status,a.refund_type,a.id as after_sale_id,a.create_time';
 
         $count = Db::name('order_goods g')
             ->field($field)

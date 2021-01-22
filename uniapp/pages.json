@@ -60,6 +60,18 @@
             "style": {
                 "navigationBarTitleText": "我的收藏"
             }
+        },
+        {
+            "path": "pages/user_wallet/user_wallet",
+            "style": {
+                "navigationBarTitleText": "我的钱包"
+            }
+        },
+        {
+            "path": "pages/user_coupon/user_coupon",
+            "style": {
+                "navigationBarTitleText": "我的优惠券"
+            }
         }
 	    ,{
             "path" : "pages/login/login",

@@ -199,7 +199,7 @@ export function toast(info = {}, navigateOpt) {
 }
 
 //菜单跳转
-export function navigateTo(item) {
+export function menuJump(item) {
 	const {
 		is_tab,
 		link,

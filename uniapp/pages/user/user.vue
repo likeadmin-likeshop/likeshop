@@ -102,7 +102,7 @@
 			</view>
 			<view class="nav row wrap">
 				<button v-for="(item, index) in menuList" :key="index" class="item column-center mb20" hover-class="none"
-				 :open-type="item.link_type == 3 ?'contact' :''" :data-item="item" @tap="navigateTo" style="width: 25%;">
+				 :open-type="item.link_type == 3 ?'contact' :''" @tap="tapMenu(item)" style="width: 25%;">
 					<image class="nav-icon" :src="item.image"></image>
 					<view class="sm mt10">{{item.name}}</view>
 				</button>
@@ -124,6 +124,7 @@
 	import {
 		showLoginDialog
 	} from '@/utils/wxutil'
+	import {menuJump} from '@/utils/tools'
 	const app = getApp()
 	export default {
 		data() {
@@ -178,12 +179,15 @@
 			},
 
 			goPage(url) {
-				showLoginDialog()
+				if(!this.isLogin) return showLoginDialog()
 				uni.navigateTo({
 					url
 				});
 			},
-
+			tapMenu(item) {
+				if(!this.isLogin) return showLoginDialog()
+				menuJump(item)
+			},
 			async getMenuFun() {
 				const {
 					data,

@@ -19,7 +19,7 @@
 					<swiper style="height: 374rpx;" @change="swiperChange">
 						<swiper-item v-for="(items, index) in navList" :key="index">
 							<view class="nav-list row wrap">
-								<view v-for="(item, index2) in items" :key="index2" :data-item="item" @tap="goPage" class="nav-item column-center">
+								<view v-for="(item, index2) in items" :key="index2" @tap="tapMenu(item)" class="nav-item column-center">
 									<image class="nav-icon" :src="item.image"></image>
 									<view class="name xs">{{item.name}}</view>
 								</view>
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+	import {mapGetters} from 'vuex'
 	import {
 		getHome,
 		getMenu,
@@ -85,7 +86,10 @@
 		arraySlice
 	} from '@/utils/tools'
 	import {loadingType} from '@/utils/type'
-	import {loadingFun} from '@/utils/tools'
+	import {loadingFun, menuJump} from '@/utils/tools'
+	import {
+		showLoginDialog
+	} from '@/utils/wxutil'
 	const app = getApp()
 	export default {
 		data() {
@@ -171,10 +175,14 @@
 				this.page = data.page
 				this.goodsList = data.dataList
 				this.status = data.status
+			},
+			tapMenu(item) {
+				if(!this.isLogin) return showLoginDialog()
+				menuJump(item)
 			}
 		},
 		computed: {
-
+			...mapGetters(['isLogin']),
 		}
 	}
 </script>

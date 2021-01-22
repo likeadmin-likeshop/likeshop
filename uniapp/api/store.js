@@ -8,7 +8,7 @@ export function getHome() {
 //获取菜单
 export function getMenu(data) {
 	return request.get('menu/lists', {
-		params: data
+		params: {...data, client: 1},
 	});
 }
 

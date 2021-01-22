@@ -43,7 +43,7 @@
 			"style": {
 				"navigationBarTitleText": "个人中心",
 				"navigationStyle": "custom",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": true
 			}
 			
 		}
@@ -61,7 +61,16 @@
                 "navigationBarTitleText": "我的收藏"
             }
         }
-	],
+	    ,{
+            "path" : "pages/login/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "登录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#FF2C3C",

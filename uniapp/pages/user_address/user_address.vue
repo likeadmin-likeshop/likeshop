@@ -77,7 +77,6 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 import { getAddressLists, delAddress, setDefaultAddress } from '../../api/user';
-import { Tips } from '../../utils/util';
 
 export default {
   data() {
@@ -176,7 +175,7 @@ export default {
       let id = e.detail.value;
       console.log(e);
       setDefaultAddress(id).then(res => {
-        if (res.code == 1) Tips({
+        if (res.code == 1) this.$toast({
           title: res.msg
         });
         this.getAddressListsFun();
@@ -191,7 +190,7 @@ export default {
       let id = this.currentId;
       delAddress(id).then(res => {
         if (res.code == 1) {
-          Tips({
+          this.$toast({
             title: res.msg
           });
 		  this.deleteSure = false
@@ -214,7 +213,7 @@ export default {
               }, 200);
             },
             fail: function (res) {
-              if (res.errMsg == 'chooseAddress:cancel') return Tips({
+              if (res.errMsg == 'chooseAddress:cancel') return this.$toast({
                 title: '取消选择'
               });
             }
@@ -231,7 +230,7 @@ export default {
                   success: function (res) {}
                 });
               } else if (res.cancel) {
-                return Tips({
+                return this.$toast({
                   title: '已取消！'
                 });
               }

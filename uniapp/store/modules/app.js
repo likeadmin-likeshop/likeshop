@@ -6,6 +6,7 @@ import {
 	TOKEN
 } from '@/config/cachekey';
 import Cache from '@/utils/cache'
+console.log(TOKEN)
 const state = {
 	userInfo: null,
 	token: Cache.get(TOKEN) || null

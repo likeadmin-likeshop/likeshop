@@ -1,5 +1,5 @@
 <template>
-	<uni-popup ref="popup" type="bottom">
+	<uni-popup ref="popup" type="bottom" :mask-click="false">
 		<view class="bg-white spec-contain">
 			<view class="close" @tap="close">
 				<image class="icon-lg" src="/static/images/icon_close.png"></image>

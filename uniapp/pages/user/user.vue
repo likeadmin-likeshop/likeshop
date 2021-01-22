@@ -2,14 +2,15 @@
 	<view class="user">
 		<view class="header">
 			<view class="header-line" :style="{height: '1px','background-color': navBg}"></view>
-			<uni-nav-bar title="个人中心" :shadow="false" :border="false" :status-bar="true" :fixed="true" :background-color="navBg" :color="navC"></uni-nav-bar>
+			<uni-nav-bar title="个人中心" :shadow="false" :border="false" :status-bar="true" :fixed="true" :background-color="navBg"
+			 :color="navC"></uni-nav-bar>
 			<view class="user-info row-between">
 				<view class="info row">
 					<image class="avatar mr20" @tap="goLogin" :src="isLogin ? userInfo.avatar : require('static/images/my_portrait_empty.png')"></image>
-					<view class="white" v-if="false">
+					<view class="white" v-if="isLogin">
 						<view class="name xxl">{{userInfo.nickname}}</view>
-						<view class="invite-code-box row-between">
-							<view class="xs white ml20 mr20">会员ID: {{userInfo.sn}}</view>
+						<view class="user-id row-between">
+							<view class="xs white ml20 mr20">会员ID: {{userInfo.sn || ''}}</view>
 							<view class="xs normal copy-btn row-center ml5" @tap.stop="onCopy">复制</view>
 						</view>
 					</view>
@@ -23,22 +24,22 @@
 		<view class="my-assets bg-white">
 			<view class="title row lg">我的资产</view>
 			<view class="nav row">
-				<view class="column-center mb20 assets-item" @tap="goPage" data-url="/pages/user_wallet/user_wallet">
+				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_wallet/user_wallet')">
 					<view class="xl primary">{{userInfo.user_money}}</view>
 					<view class="sm">余额</view>
 				</view>
-				<view class="column-center mb20 assets-item" @tap="goPage" data-url="/pages/user_sign/user_sign">
+				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_sign/user_sign')">
 					<view class="xl primary">{{userInfo.user_integral}}</view>
 					<view class="sm">积分</view>
 				</view>
-				<view class="column-center mb20 assets-item" @tap="goPage" data-url="/pages/user_coupon/user_coupon">
+				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_coupon/user_coupon')">
 					<view class="xl primary">{{userInfo.coupon}}</view>
 					<view class="sm">优惠券</view>
 				</view>
 			</view>
 		</view>
 		<view class="order-nav bg-white">
-			<view class="title row-between" data-url="/pages/user_order/user_order" @tap="goPage">
+			<view class="title row-between" @tap="goPage('/pages/user_order/user_order')">
 				<view class="lg">我的订单</view>
 				<view class="muted sm row">
 					全部订单
@@ -46,7 +47,7 @@
 				</view>
 			</view>
 			<view class="nav row">
-				<view class="item column-center mb20" data-url="/pages/user_order/user_order?type=pay" @tap="goPage">
+				<view class="item column-center mb20" @tap="goPage('/pages/user_order/user_order?type=pay')">
 					<view class="icon-contain">
 						<view v-if="userInfo.wait_pay" class="badge xs row-center bg-white">
 							{{userInfo.wait_pay}}
@@ -55,7 +56,7 @@
 					</view>
 					<view class="sm mt10">待付款</view>
 				</view>
-				<view class="item column-center mb20" data-url="/pages/user_order/user_order?type=delivery" @tap="goPage">
+				<view class="item column-center mb20" @tap="goPage('/pages/user_order/user_order?type=delivery')">
 					<view class="icon-contain">
 						<view v-if="userInfo.wait_delivery" class="badge xs row-center bg-white">
 							{{userInfo.wait_delivery}}
@@ -64,7 +65,7 @@
 					</view>
 					<view class="sm">待发货</view>
 				</view>
-				<view class="item column-center mb20" data-url="/pages/user_order/user_order?type=delivery" @tap="goPage">
+				<view class="item column-center mb20" @tap="goPage('/pages/user_order/user_order?type=delivery')">
 					<view class="icon-contain">
 						<view v-if="userInfo.wait_take" class="badge xs row-center bg-white">
 							{{userInfo.wait_take}}
@@ -73,7 +74,7 @@
 					</view>
 					<view class="sm mt10">待收货</view>
 				</view>
-				<view class="item column-center mb20" data-url="/pages/goods_comment_list/goods_comment_list" @tap="goPage">
+				<view class="item column-center mb20" @tap="goPage('/pages/goods_comment_list/goods_comment_list')">
 					<view class="icon-contain">
 						<view v-if="userInfo.wait_comment" class="badge xs row-center bg-white">
 							{{userInfo.wait_comment}}
@@ -82,7 +83,7 @@
 					</view>
 					<view class="sm mt10">商品评价</view>
 				</view>
-				<view class="item column-center mb20" data-url="/pages/post_sale/post_sale" @tap="goPage">
+				<view class="item column-center mb20" @tap="goPage('/pages/post_sale/post_sale')">
 					<view class="icon-contain">
 						<view v-if="userInfo.after_sale" class="badge xs row-center bg-white">
 							{{userInfo.after_sale}}
@@ -117,8 +118,12 @@
 	import {
 		getUser
 	} from '@/api/user';
-	import {getMenu} from '@/api/store'
-	
+	import {
+		getMenu
+	} from '@/api/store'
+	import {
+		showLoginDialog
+	} from '@/utils/wxutil'
 	const app = getApp()
 	export default {
 		data() {
@@ -139,7 +144,7 @@
 		onLoad(options) {
 			this.getMenuFun();
 			this.$nextTick(() => {
-			  this.observeHeader();
+				this.observeHeader();
 			});
 		},
 
@@ -157,75 +162,28 @@
 		},
 		methods: {
 			goLogin() {
+				console.log(this)
 				let {
-					$state
+					isLogin
 				} = this;
-
-				if ($state.isLogin) {
+				if (isLogin) {
 					uni.navigateTo({
 						url: '/pages/user_profile/user_profile'
 					});
 					return;
 				}
-
 				uni.navigateTo({
 					url: '/pages/login/login'
 				});
 			},
 
-			goPage(e) {
-				let {
-					url
-				} = e.currentTarget.dataset;
-				let {
-					$state
-				} = this;
-
+			goPage(url) {
+				showLoginDialog()
 				uni.navigateTo({
 					url
 				});
 			},
 
-			navigateTo(e) {
-				const {
-					item: {
-						is_tab,
-						link,
-						link_type
-					}
-				} = e.currentTarget.dataset;
-				let {
-					$state
-				} = this;
-				if (!$state.isLogin) return showLoginDialog();
-				console.log(e);
-
-				switch (link_type) {
-					case 1:
-						// 本地跳转
-						if (is_tab) {
-							uni.switchTab({
-								url: link
-							});
-							return;
-						}
-
-						uni.navigateTo({
-							url: link
-						});
-						break;
-
-					case 2:
-						// webview
-						uni.navigateTo({
-							url: "/pages/webview/webview?url=" + link
-						});
-						break;
-
-					case 3: // tabbar
-
-				}
-			},
 			async getMenuFun() {
 				const {
 					data,
@@ -264,15 +222,15 @@
 							frontColor: "#000000",
 							backgroundColor: '#fff'
 						});
-							this.navBg = '#fff'
-							this.navC = '#000'
+						this.navBg = '#fff'
+						this.navC = '#000'
 					} else {
 						uni.setNavigationBarColor({
 							frontColor: "#ffffff",
 							backgroundColor: '#000'
 						});
-							this.navBg = 'transparent'
-							this.navC = '#fff'
+						this.navBg = 'transparent'
+						this.navC = '#fff'
 					}
 				});
 			},
@@ -283,7 +241,7 @@
 				});
 			},
 
-		
+
 
 		},
 		computed: {
@@ -296,24 +254,43 @@
 		background-image: url(../../static/images/my_topbg.png);
 		background-size: 100% 400rpx;
 		background-repeat: no-repeat;
+
 		.header {
 			display: flex;
 			flex-direction: column;
 			height: 300rpx;
+
 			.user-info {
 				padding: 10rpx 30rpx;
+
 				.avatar {
 					height: 110rpx;
 					width: 110rpx;
 					border-radius: 50%;
 					overflow: hidden;
 				}
+
 				.name {
 					text-align: left;
 					margin-bottom: 5rpx;
 				}
+
+				.user-id {
+					border: 1rpx solid white;
+					border-radius: 100rpx;
+					height: 40rpx;
+
+					.copy-btn {
+						background-color: #FFDFDA;
+						height: 100%;
+						width: 90rpx;
+						border-radius: 100rpx;
+					}
+				}
+
 				.user-opt {
 					position: relative;
+
 					.dot {
 						position: absolute;
 						background-color: #ee0a24;
@@ -327,55 +304,68 @@
 						height: 16rpx;
 					}
 				}
+
 				.buyer-type {
 					background-color: #FFA200;
 					height: 38rpx;
 					padding: 0 10rpx;
 				}
 			}
-			
+
 		}
+
+		.order-nav {
+			.icon-contain {
+				position: relative;
+			}
+		}
+
 		.order-nav,
 		.my-assets {
 			margin: 20rpx 20rpx 0;
 			border-radius: 8rpx;
 		}
+
 		.server-nav {
 			margin: 20rpx;
 			border-radius: 8rpx;
 		}
+
 		.title {
 			height: 88rpx;
 			padding: 0 30rpx;
-			border-bottom: 1px dashed #E5E5E5;
+			border-bottom: $-dashed-border;
 		}
+
 		.nav {
 			padding: 26rpx 0 0;
+
 			.assets-item {
 				flex: 1;
 			}
+
 			.item {
 				width: 25%;
 			}
+
 			.badge {
 				padding: 0 6rpx;
 				min-width: 28rpx;
 				height: 28rpx;
 				border-radius: 28rpx;
 				box-sizing: border-box;
-				border: solid 1rpx #FF2C3C;
-				color: #FF2C3C;
+				border: 1rpx solid $-color-primary;
+				color: $-color-primary;
 				position: absolute;
 				left: 33rpx;
 				top: -10rpx;
 				z-index: 2;
 			}
+
 			.nav-icon {
 				width: 52rpx;
 				height: 52rpx;
 			}
 		}
 	}
-
-
 </style>

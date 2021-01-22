@@ -1,10 +1,13 @@
 const Cache = {
 	//设置缓存(expire为缓存时效)
 	set(key, value, expire) {
+		
 		let data = {
 			expire: expire ? (this.time() + expire) : "",
 			value
 		}
+		
+		console.log(data, key)
 		if (typeof data === 'object')
 			data = JSON.stringify(data);
 		try {
@@ -21,7 +24,7 @@ const Cache = {
 				uni.removeStorageSync(key)
 				return false;
 			}else {
-				return uni.getStorageSync(key)
+				return value
 			}
 		} catch (e) {
 			return false;

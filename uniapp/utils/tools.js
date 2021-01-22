@@ -1,4 +1,6 @@
-import {loadingType} from './type'
+import {
+	loadingType
+} from './type'
 
 //节流
 export const trottle = (func, time = 1000, context) => {
@@ -97,7 +99,7 @@ export async function loadingFun(fun, page, dataList = [], status, params) {
 		if (dataList.length <= 0) {
 			loadingType.FINISHED
 		}
-	}else {
+	} else {
 		status = loadingType.ERROR
 	}
 	return {
@@ -111,21 +113,120 @@ export async function loadingFun(fun, page, dataList = [], status, params) {
 // 获取wxml元素
 
 export function getRect(selector, all, context) {
-  return new Promise(function (resolve) {
-    let qurey =  uni.createSelectorQuery();
+	return new Promise(function(resolve) {
+		let qurey = uni.createSelectorQuery();
 
-    if (context) {
-      qurey = uni.createSelectorQuery().in(context);
-    }
+		if (context) {
+			qurey = uni.createSelectorQuery().in(context);
+		}
 
-   qurey[all ? 'selectAll' : 'select'](selector).boundingClientRect(function (rect) {
-      if (all && Array.isArray(rect) && rect.length) {
-        resolve(rect);
-      }
+		qurey[all ? 'selectAll' : 'select'](selector).boundingClientRect(function(rect) {
+			if (all && Array.isArray(rect) && rect.length) {
+				resolve(rect);
+			}
 
-      if (!all && rect) {
-        resolve(rect);
-      }
-    }).exec();
-  });
-} 
+			if (!all && rect) {
+				resolve(rect);
+			}
+		}).exec();
+	});
+}
+
+
+// 轻提示
+export function toast(info = {}, navigateOpt) {
+	let title = info.title || ''
+	let icon = info.icon || 'none'
+	let endtime = info.endtime || 2000
+	if (title) uni.showToast({
+		title: title,
+		icon: icon,
+		duration: endtime
+	})
+	if (navigateOpt != undefined) {
+		if (typeof navigateOpt == 'object') {
+			let tab = navigateOpt.tab || 1,
+				url = navigateOpt.url || '';
+			switch (tab) {
+				case 1:
+					//跳转至 table
+					setTimeout(function() {
+						uni.switchTab({
+							url: url
+						})
+					}, endtime);
+					break;
+				case 2:
+					//跳转至非table页面
+					setTimeout(function() {
+						uni.navigateTo({
+							url: url,
+						})
+					}, endtime);
+					break;
+				case 3:
+					//返回上页面
+					setTimeout(function() {
+						uni.navigateBack({
+							delta: parseInt(url),
+						})
+					}, endtime);
+					break;
+				case 4:
+					//关闭当前所有页面跳转至非table页面
+					setTimeout(function() {
+						uni.reLaunch({
+							url: url,
+						})
+					}, endtime);
+					break;
+				case 5:
+					//关闭当前页面跳转至非table页面
+					setTimeout(function() {
+						ini.redirectTo({
+							url: url,
+						})
+					}, endtime);
+					break;
+			}
+
+		} else if (typeof navigateOpt == 'function') {
+			setTimeout(function() {
+				navigateOpt && navigateOpt();
+			}, endtime);
+		}
+	}
+}
+
+//菜单跳转
+export function navigateTo(item) {
+	const {
+		is_tab,
+		link,
+		link_type
+	} = item
+	switch (link_type) {
+		case 1:
+			// 本地跳转
+			if (is_tab) {
+				uni.switchTab({
+					url: link
+				});
+				return;
+			}
+			uni.navigateTo({
+				url: link
+			});
+			break;
+
+		case 2:
+			// webview
+			uni.navigateTo({
+				url: "/pages/webview/webview?url=" + link
+			});
+			break;
+
+		case 3: // tabbar
+
+	}
+}

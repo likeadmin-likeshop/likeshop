@@ -1,20 +1,24 @@
 import axios from '../js_sdk/xtshadow-axios/axios.min'
 import {paramsToStr} from './tools'
+import Cache from './cache'
+import {TOKEN} from '../config/cachekey'
+
+
 const service = axios.create({
   baseURL: 'https://likeshop.yixiangonline.com/api/',
   timeout: 10000,
-  headers: {'content-type': 'application/json'}
+  header: {'content-type': 'application/json'}
 });
 
-
+console.log(service)
 // request拦截器
 service.interceptors.request.use(
     config => {
-		if(config.method = 'GET') {
+		if(config.method == 'GET') {
 			config.url += paramsToStr(config.params)
 		}
-		
-		    console.log(config)
+		config.header.token = Cache.get(TOKEN)
+		console.log(config)
         return config
     },
     error => {

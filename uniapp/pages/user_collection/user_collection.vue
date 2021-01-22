@@ -15,7 +15,7 @@
                 </view>
             </view>
         </view>
-        <loading-footer :status="status" slotFooter>
+        <loading-footer :status="status" slotEmpty>
             <view class="data-null column-center">
                 <image src="/static/images/profit_null.png" class="img-null" />
                 <text class="sm muted">暂无收藏～</text>
@@ -53,7 +53,6 @@
 // +----------------------------------------------------------------------
 import { getCollectGoods, collectGoods } from "../../api/user";
 import { CollectType, loadingType } from "../../utils/type";
-import PriceFormat from "../../components/price-format/price-format.vue";
 
 export default {
   data() {
@@ -66,7 +65,6 @@ export default {
   },
 
   components: {
-    PriceFormat,
   },
   props: {},
 
@@ -241,12 +239,8 @@ export default {
             height: 230rpx;
             width: 100%;
         }
-        image {
-            height: 100%;
-            width: 100%;
-        }
         .data-null {
-            padding-top: 100%;
+            padding-top: 100rpx;
         }
     }
 } 

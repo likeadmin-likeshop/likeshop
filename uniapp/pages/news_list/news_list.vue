@@ -32,9 +32,9 @@
                     </view>
                 </view>
             </view>
-            <loading-footer :status="status" slot-footer="true">
+            <loading-footer :status="status" slotEmpty>
                 <view class="column-center" style="padding-top: 200rpx">
-                    <image class="img-null" src="/static/images/null_news.png"></image>
+                    <image class="img-null" src="/static/images/news_null.png"></image>
                     <text class="nr muted">暂无数据～</text>
                 </view>
             </loading-footer>

@@ -4,7 +4,8 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{
@@ -41,11 +42,20 @@
 			"path": "pages/user/user",
 			"style": {
 				"navigationStyle": "custom",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "个人中心"
 			}
 			
 		}
-	],
+	    ,{
+            "path" : "pages/goods_details/goods_details",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "商品详情"
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#FF2C3C",
@@ -81,7 +91,11 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "LikeShop",
 		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"h5": {
+			"navigationStyle": "custom"
+		}
+		
 	},
 	"easycom": {
 		"autoscan": true,

@@ -32,7 +32,8 @@ export default {
       default: 400
     },
     price: {
-      type: String
+      type: [String, Number],
+	  default: ""
     },
     showSubscript: {
       type: Boolean,
@@ -58,14 +59,17 @@ export default {
   methods: {
 	priceFormat() {
 		let {
-		  priceSlice,
 		  price
 		} = this;
-		price = parseFloat(price);
-		price = String(price).split('.');
-		priceSlice.first = price[0];
-		priceSlice.second = price[1];
-		this.priceSlice = priceSlice
+		let priceSlice = {}
+		if(price !== null) {
+			price = parseFloat(price);
+			price = String(price).split('.');
+			priceSlice.first = price[0];
+			priceSlice.second = price[1];
+			this.priceSlice = priceSlice
+		}
+		
 	}
   }
 };

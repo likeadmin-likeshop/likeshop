@@ -315,10 +315,10 @@ button[size="lg"]{
     @include icon-image(30rpx);
 }
 
-.icon {
-    @include icon-image(44rpx);
-}
 
+.icon-md {
+	@include icon-image(44rpx);
+}
 .icon-lg {
     @include icon-image(52rpx);
 }

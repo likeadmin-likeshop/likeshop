@@ -52,7 +52,6 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 import { getCoupon } from '../../api/user';
-import { Tips } from '../../utils/util';
 
 export default {
   data() {
@@ -126,9 +125,7 @@ export default {
     getCouponFun() {
       getCoupon(this.id).then(res => {
         if (res.code == 1) {
-          Tips({
-            title: res.msg
-          });
+          this.$toast(res.msg)
           this.$emit('reflash');
         }
       });

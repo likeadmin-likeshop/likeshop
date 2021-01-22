@@ -155,7 +155,7 @@ export function applyAgain(data) {
 
 // 账户明细 积分明细
 export function getAccountLog(params) {
-    return request.get("user/accountLog", params)
+    return request.get("user/accountLog", {params})
 }
 
 //充值

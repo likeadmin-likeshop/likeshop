@@ -79,7 +79,16 @@
                 "navigationBarTitleText": "领券中心"
             }
         }
-	],
+	    ,{
+            "path" : "pages/login/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "登录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#FF2C3C",

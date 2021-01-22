@@ -76,7 +76,6 @@
 
 <script>
 import { getCartList, changeCartSelset, changeGoodsCount, deleteGoods } from '../../api/store';
-import { Tips } from '../../utils/util';
 import { getUser } from '../../api/user';
 import PriceFormat from '@/components/price-format/price-format'
 
@@ -267,7 +266,7 @@ export default {
           });
         }
       });
-      if (goods.length == 0) return Tips({
+      if (goods.length == 0) return this.$toast({
         title: '您还没有选择商品哦'
       });
       uni.navigateTo({

@@ -56,7 +56,6 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 import { editAddress, getOneAddress, hasRegionCode, addAddress } from '../../api/user';
-import { Tips } from '../../utils/util';
 
 export default {
   data() {
@@ -125,16 +124,16 @@ export default {
         addressId
       } = this;
       value.address = address;
-      if (!value.contact) return Tips({
+      if (!value.contact) return this.$toast({
         title: '请填写收货人姓名'
       });
-      if (!value.telephone) return Tips({
+      if (!value.telephone) return this.$toast({
         title: '请填写手机号码'
       });
-      if (!value.region) return Tips({
+      if (!value.region) return this.$toast({
         title: '请选择省、市、区'
       });
-      if (!value.address) return Tips({
+      if (!value.address) return this.$toast({
         title: '请填写小区、街道、门牌号等信息'
       });
       value.province_id = parseInt(province_id);
@@ -147,7 +146,7 @@ export default {
       if (addressId) {
         editAddress(value).then(res => {
           if (res.code == 1) {
-            Tips({
+            this.$toast({
               title: res.msg
             }, {
               tab: 3,
@@ -155,14 +154,14 @@ export default {
             });
           }
         }).catch(err => {
-          return Tips({
+          return this.$toast({
             title: err
           });
         });
       } else {
         addAddress(value).then(res => {
           if (res.code == 1) {
-            Tips({
+            this.$toast({
               title: res.msg
             }, {
               tab: 3,
@@ -170,7 +169,7 @@ export default {
             });
           }
         }).catch(err => {
-          return Tips({
+          return this.$toast({
             title: err
           });
         });

@@ -280,7 +280,7 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
-
+			padding-bottom: env(safe-area-inset-bottom);
 			.btn {
 				width: 100rpx;
 				height: 100rpx;

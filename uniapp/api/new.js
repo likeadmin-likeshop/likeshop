@@ -13,7 +13,9 @@ export function getArticleList(data) {
     let {type} = data
     let url = type ? 'help/lists' : 'article/lists'
     delete data.type
-    return request.get(url)
+    return request.get(url, {
+        params: data
+    })
 }
 
 // 文章详情
@@ -21,5 +23,7 @@ export function getArticleDetail(data) {
     let {type} = data
     let url = type ? 'help/detail' : 'article/detail'
     delete data.type
-    return request.get(url, { id: data.id })
+    return request.get(url, {
+        params: { id: data.id }
+    })
 }

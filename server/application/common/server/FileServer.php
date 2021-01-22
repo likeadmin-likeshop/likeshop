@@ -50,7 +50,7 @@ class FileServer extends ServerBase
             $data = [
                 'name' => $file->getInfo('name'),
                 'type' => File::type_image,
-                'uri' => $save_dir . '/' . $info->getSaveName(),
+                'uri' => $save_dir . '/' . str_replace("\\","/",$info->getSaveName()),
                 'create_time' => time(),
                 'cate_id' => $cate_id,
             ];
@@ -95,7 +95,7 @@ class FileServer extends ServerBase
             $data = [
                 'name' => $file->getInfo('name'),
                 'type' => File::type_image,
-                'uri' => '/'.  $save_dir . '/' . $info->getSaveName(),
+                'uri' => '/'.  $save_dir . '/' . str_replace("\\","/",$info->getSaveName()),
                 'create_time' => time(),
                 'user_id' => $user_id,
             ];
@@ -139,7 +139,7 @@ class FileServer extends ServerBase
             $data = [
                 'name' => $file->getInfo('name'),
                 'type' => File::type_other,
-                'uri' => $save_dir . '/' . $info->getSaveName(),
+                'uri' => $save_dir . '/' . str_replace("\\","/",$info->getSaveName()),
                 'create_time' => time(),
             ];
             Db::name('file')->insert($data);

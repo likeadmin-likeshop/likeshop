@@ -41,9 +41,9 @@
 		{
 			"path": "pages/user/user",
 			"style": {
+				"navigationBarTitleText": "个人中心",
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": true,
-				"navigationBarTitleText": "个人中心"
 			}
 			
 		}
@@ -54,8 +54,14 @@
                 "navigationBarTitleText": "商品详情"
             }
             
+        },
+        {
+            "path": "pages/user_collection/user_collection",
+            "style": {
+                "navigationBarTitleText": "我的收藏"
+            }
         }
-    ],
+	],
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#FF2C3C",

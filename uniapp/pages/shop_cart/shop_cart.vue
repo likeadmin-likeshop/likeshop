@@ -41,7 +41,7 @@
                 <text>去登录</text>
             </navigator>
         </view>
-        <!-- <recommend v-if="isShow"></recommend> -->
+        <recommend v-if="isShow"></recommend>
     </view>
     <view class="footer row bg-white" v-show="cartType == 1">
         <checkbox-group class="row" @change="changeAllSelect">
@@ -121,7 +121,9 @@ export default {
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {},
+  onLoad: function (options) {
+      
+  },
 
   /**
    * 生命周期函数--监听页面显示

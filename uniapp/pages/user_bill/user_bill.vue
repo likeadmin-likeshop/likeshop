@@ -1,8 +1,8 @@
 <template>
 <!--pages/user_bill/user_bill.wxml-->
 <view class="user-bill">
-      <van-tabs :active="active" line-width="40" @change="onChange">
-        <van-tab title="全部">
+    <tabs :active="active" line-width="40" @change="onChange">
+        <tab title="全部">
             <view class="list mt20">
                 <view v-for="(item, index) in lists" :key="index" class="item">
                     <view class="bill-list bg-white">
@@ -22,8 +22,8 @@
                     <text class="nr muted">暂无记录～</text>
                 </view>
             </loading-footer>
-        </van-tab>
-        <van-tab title="消费">
+        </tab>
+        <tab title="消费">
             <view class="list mt20">
                 <view v-for="(item, index) in lists" :key="index" class="item">
                     <view class="bill-list bg-white">
@@ -44,29 +44,8 @@
                     <text class="nr muted">暂无消费记录～</text>
                 </view>
             </loading-footer>
-        </van-tab>
-        <van-tab title="充值">
-            <view class="list mt20">
-                <view v-for="(item, index) in lists" :key="index" class="item">
-                    <view class="bill-list bg-white">
-                        <view class="bill-item row-between">
-                            <view>
-                                <view class="black mb10">{{item.source_type}}</view>
-                                <view class="xs muted">{{item.create_time}}</view>
-                            </view>
-                            <view class="lg income">{{item.change_amount}}</view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-            <loading-footer :status="loadingStatus" slotFooter>
-                <view class="data-null column-center">
-                    <image class="img-null" src="/static/images/order_null.png"></image>
-                    <text class="nr muted">暂无充值记录～</text>
-                </view>
-            </loading-footer>
-        </van-tab>
-    </van-tabs>
+        </tab>
+    </tabs>
 </view>
 </template>
 

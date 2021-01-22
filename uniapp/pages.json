@@ -43,11 +43,11 @@
 			"style": {
 				"navigationBarTitleText": "个人中心",
 				"navigationStyle": "custom",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": true
 			}
 			
-		}
-	    ,{
+		},
+        {
             "path" : "pages/goods_details/goods_details",
             "style" :                                                                                    
             {
@@ -71,6 +71,12 @@
             "path": "pages/user_coupon/user_coupon",
             "style": {
                 "navigationBarTitleText": "我的优惠券"
+            }
+        },
+        {
+            "path": "pages/user_getcoupon/user_getcoupon",
+            "style": {
+                "navigationBarTitleText": "领券中心"
             }
         }
 	],

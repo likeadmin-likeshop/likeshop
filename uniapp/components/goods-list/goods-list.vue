@@ -4,7 +4,7 @@
 			<navigator v-for="(item, index) in list" :key="index" class="item bg-white mt20" hover-class="none" open-type="navigate"
 			 :url="'/pages/goods_details/goods_details?id=' + item.id">
 				<view class="goods-img" style="width: 347rpx;height:347rpx;">
-					<custom-image width="347rpx" height="347rpx" radius="10rpx" lazy-load :src="item.image"></custom-image>
+					<custom-image :lazy-load="true" width="347rpx" height="347rpx" radius="10rpx" lazy-load :src="item.image"></custom-image>
 				</view>
 				<view class="goods-info">
 					<view class="goods-name line2">{{item.name}}</view>
@@ -19,7 +19,7 @@
 			<navigator v-for="(item, index) in list" :key="index" class="item bg-white mt20 row" hover-class="none" open-type="navigate"
 			 :url="'/pages/goods_details/goods_details?id=' + item.id">
 				<view class="goods-img" style="width: 180rpx;height:180rpx;">
-					<custom-image width="180rpx" height="180rpx" radius="6rpx" lazy-load :src="item.image"></custom-image>
+					<custom-image :lazy-load="true" width="180rpx" height="180rpx" radius="6rpx" lazy-load :src="item.image"></custom-image>
 				</view>
 				<view class="goods-info ml20">
 					<view class="goods-name line2 mb10">{{item.name}}</view>
@@ -40,7 +40,7 @@
 			<navigator v-for="(item, index) in list" :key="index" class="item bg-white mt20 row" hover-class="none" open-type="navigate"
 			 :url="'/pages/goods_details/goods_details?id=' + item.id">
 				<view class="goods-img">
-					<custom-image width="240rpx" height="240rpx" radius="10rpx" lazy-load :src="item.image"></custom-image>
+					<custom-image :lazy-load="true" width="240rpx" height="240rpx" radius="10rpx" lazy-load :src="item.image"></custom-image>
 				</view>
 				<view class="goods-info ml20 mr20 flex1">
 					<view class="goods-name line2 mb20">{{item.name}}</view>
@@ -63,7 +63,7 @@
 			<navigator v-for="(item, index) in list" :key="index" class="item bg-white row" hover-class="none" open-type="navigate"
 			 :url="'/pages/goods_details/goods_details?id=' + item.id">
 				<view class="goods-img" style="width: 200rpx;height:200rpx;">
-					<custom-image width="200rpx" height="200rpx" radius="6rpx" lazy-load :src="item.image"></custom-image>
+					<custom-image :lazy-load="true" width="200rpx" height="200rpx" radius="6rpx" lazy-load :src="item.image"></custom-image>
 				</view>
 				<view class="goods-info ml20">
 					<view class="goods-name line2 mb10">{{item.name}}</view>

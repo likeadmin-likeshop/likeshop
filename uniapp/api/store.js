@@ -17,7 +17,7 @@ export function getAdList(data) {
 	return request.get('ad/lists', {
 		params: data
 	});
-} 
+}
 
 // 购物车列表
 export function getCartList() {
@@ -34,6 +34,13 @@ export function getBestList(data) {
 
 // 商品分类
 export function getCatrgory() {
-  return request.get('goods_category/lists');
-} 
+	return request.get('goods_category/lists');
+}
 
+
+//商品详情
+export function getGoodsDetail(data) {
+	return request.get('goods/getGoodsDetail', {
+		params: data
+	});
+}

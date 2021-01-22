@@ -1,14 +1,14 @@
 <template>
 <!--components/recommend/recommend.wxml-->
 <view class="recommend" v-if="goodsList.length">
-    <!-- <view class="header ~row-center">
+    <!-- <view class="header row-center">
         <image class="title" src="/images/recommend_title.png" />
     </view> -->
-    <view class="goods-title ~row-center">
+    <view class="goods-title row-center">
         <text class="line"></text>
-        <view class="~row">
-            <image class="~mr10" src="/static/images/icon_like.png"></image>
-            <text class="~bold ~xxl">好物优选</text>
+        <view class="row">
+            <image class="mr10" src="/static/images/icon_like.png"></image>
+            <text class="bold xxl">好物优选</text>
         </view>
         <text class="line"></text>
     </view>

@@ -44,3 +44,9 @@ export function getGoodsDetail(data) {
 		params: data
 	});
 }
+
+//领券中心
+export function getCouponList(data) {
+	return request.get("coupon/couponList", {params: data});
+}
+

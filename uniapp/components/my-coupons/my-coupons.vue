@@ -2,9 +2,9 @@
 <!-- components/my-coupons/my-coupons.wxml -->
 <view class="my-coupons">
     <coupon-list v-if="!showNull" :list="couponList" :btnType="type"></coupon-list>
-    <view v-else class="~column-center" style="padding-top: 200rpx">
-        <image class="~img-null" src="/static/images/coupon_null.png"></image>
-        <text class="~muted">暂无优惠券～</text>
+    <view v-else class="column-center" style="padding-top: 200rpx">
+        <image class="img-null" src="/static/images/coupon_null.png"></image>
+        <text class="muted">暂无优惠券～</text>
     </view>
 </view>
 </template>

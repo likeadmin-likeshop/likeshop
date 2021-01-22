@@ -59,9 +59,7 @@ export default {
         page_size: 6
       }).then(res => {
         if (res.code == 1) {
-          this.setData({
-            goodsList: res.data.list
-          });
+            this.goodsList = res.data.list
         }
       });
     }

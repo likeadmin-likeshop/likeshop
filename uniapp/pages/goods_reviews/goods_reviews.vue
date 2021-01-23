@@ -4,7 +4,7 @@
     <order-goods :list="goods"></order-goods>
     <view class="goods-evaluate row">
         <view class="lable">商品评价</view>
-        <van-rate name="goodsRate" color="#FF2C3C" :value="goodsRate" @change="goodsRateChange"></van-rate>
+        <uni-rate name="goodsRate" activeColor="#FF2C3C" :value="goodsRate" @change="goodsRateChange" />
         <view :class="'desc ' + ((goodsRate<=2)? 'muted': 'primary') + ' '" :hidden="goodsRate == 0">
             {{goodsRateDesc}}
         </view>
@@ -13,15 +13,15 @@
             <view class="item nr lighter mb20">{{goods[0].name}}</view>
             <view class="item row mb20">
                 <view class="lable">描述相符</view>
-                <van-rate name="descRate" color="#FF2C3C" data-type="descRate" :value="descRate" @change="onChange"></van-rate>
+                <uni-rate name="descRate" activeColor="#FF2C3C" data-type="descRate" :value="descRate" @change="onChange" />
             </view>
             <view class="item row mb20">
                 <view class="lable">服务态度</view>
-                <van-rate name="serverRate" color="#FF2C3C" data-type="serverRate" :value="serverRate" @change="onChange"></van-rate>
+                <uni-rate name="serverRate" activeColor="#FF2C3C" data-type="serverRate" :value="serverRate" @change="onChange" />
             </view>
             <view class="item row">
                 <view class="lable">配送服务</view>
-                <van-rate name="deliveryRate" color="#FF2C3C" data-type="deliveryRate" :value="deliveryRate" @change="onChange"></van-rate>
+                <uni-rate name="deliveryRate" activeColor="#FF2C3C" data-type="deliveryRate" :value="deliveryRate" @change="onChange" />
             </view>
         </view>
         <view class="goods-dec bg-white mt20">
@@ -120,22 +120,16 @@ export default {
   onShareAppMessage: function () {},
   methods: {
     onChange(e) {
-      let {
-        type
-      } = e.currentTarget.dataset;
-      this.type = type
-      // this.setData({
-      //   [type]: e.detail
-      // });
+      this.type = e.value
     },
 
     goodsRateChange: function (e) {
-      let num = e.detail;
+      let num = e.value;
       let goodsRateDesc = "";
 
-      if (e.detail <= 2) {
+      if (e.value <= 2) {
         goodsRateDesc = "差评";
-      } else if (e.detail == 3) {
+      } else if (e.value == 3) {
         goodsRateDesc = "中评";
       } else {
         goodsRateDesc = "好评";

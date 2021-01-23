@@ -108,6 +108,7 @@
 				</button>
 			</view>
 		</view>
+        <recommend/>
 	</view>
 </template>
 

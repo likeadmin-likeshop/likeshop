@@ -87,10 +87,21 @@
         },
         {
             "path" : "pages/login/login",
-            "style" :                                                                                    
-            {
+            "style" : {
                 "navigationBarTitleText": "登录",
                 "enablePullDownRefresh": false
+            }
+        }, 
+        {
+            "path": "pages/goods_comment_list/goods_comment_list",
+            "style": {
+                "navigationBarTitleText": "商品评价列表"
+            }
+        },
+        {
+            "path": "pages/goods_reviews/goods_reviews",
+            "style": {
+                "navigationBarTitleText": "商品评价"
             }
         }
     ],

@@ -50,3 +50,12 @@ export function getCouponList(data) {
 	return request.get("coupon/couponList", {params: data});
 }
 
+//评价列表
+export function getCommentList(data) {
+	return request.get("goods_comment/lists", data)
+}
+
+// 获取评价列表
+export function getOrderCommentList(data) {
+	return request.get("goods_comment/getOrderGoods", data)
+}

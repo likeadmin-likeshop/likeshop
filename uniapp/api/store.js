@@ -52,12 +52,12 @@ export function getCouponList(data) {
 
 //评价列表
 export function getCommentList(data) {
-	return request.get("goods_comment/lists", data)
+	return request.get("goods_comment/lists", {params: data})
 }
 
 // 获取评价列表
 export function getOrderCommentList(data) {
-	return request.get("goods_comment/getOrderGoods", data)
+	return request.get("goods_comment/getOrderGoods", {params: data})
 }
 
 // 购物车数量更改
@@ -78,4 +78,9 @@ export function deleteGoods(data) {
 //购物车选中状态
 export function changeCartSelect(data) {
 	return request.post('cart/selected',  data)
+}
+
+//评价分类
+export function getCommentCategory(id) {
+	return request.get("/goods_comment/category", {params: {goods_id: id}})
 }

@@ -3,7 +3,7 @@
 <view class="user-collection">
     <view class="goods-list mt20">
         <view v-for="(item, index) in collectionList" :key="index" class="collection-item row bg-white" @tap="goToGoodsDetail" :data-id="item.id">
-            <image width="160rpx" height="160rpx" radius="6rpx" lazy-load class="mr20 goods-img" :src="item.image"></van-image>
+            <custom-image width="160rpx" height="160rpx" radius="6rpx" lazy-load class="mr20 goods-img" :src="item.image" />
             <view class="info">
                 <view class="row-between">
                     <view class="name line2">{{item.name}}</view>
@@ -211,7 +211,7 @@ export default {
                 width: 148rpx;
                 height: 52rpx;
                 right: 20rpx;
-                border: 1px solid var(--primary-color);
+                border: 1rpx solid $-color-primary;
                 display: flex;
                 justify-content: center;
                 align-items: center;

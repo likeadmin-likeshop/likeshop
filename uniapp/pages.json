@@ -111,6 +111,12 @@
             "style": {
                 "navigationBarTitleText": "商品评价"
             }
+        },
+        {
+            "path": "pages/all_comments/all_comments",
+            "style": {
+                "navigationBarTitleText": "全部评价"
+            }
         }
     ],
 	"tabBar": {

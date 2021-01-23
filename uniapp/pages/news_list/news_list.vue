@@ -7,7 +7,7 @@
             <!-- 存在就是10 不存在为7 -->
             <swipers :pid="type ? 11 : 8" height="300rpx" radius="0rpx"></swipers>
         </view>
-        <tabs :active="active" @change="changeActive" :line-width="40">
+        <tabs :active="active" @change="changeActive" v-if="categoryList.length">
             <tab title="全部"></tab>
             <tab v-for="(item, index) in categoryList" :key="index" :title="item.name" ></tab>
         </tabs>

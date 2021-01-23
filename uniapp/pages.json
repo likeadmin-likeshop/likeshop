@@ -111,7 +111,20 @@
             "style": {
                 "navigationBarTitleText": "商品评价"
             }
-        }
+        },
+		{
+		    "path": "pages/user_order/user_order",
+		    "style": {
+		        "navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": true
+		    }
+		},
+		{
+		    "path": "pages/order_details/order_details",
+		    "style": {
+		        "navigationBarTitleText": "订单详情"
+		    }
+		}
     ],
 	"tabBar": {
 		"color": "#666",

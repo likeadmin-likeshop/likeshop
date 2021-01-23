@@ -18,3 +18,16 @@ export const payWay = {
 	WECHAT: 1,
 	BALANCE:3
 }
+
+export const orderType = {
+ ALL: 'all',
+  //全部
+ PAY: 'pay',
+  //待付款
+ DELIVERY: 'delivery',
+  //待收货
+ FINISH: 'finish',
+  //待收货
+ CLOSE: 'close' //待收货
+
+};

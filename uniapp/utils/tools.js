@@ -97,7 +97,7 @@ export async function loadingFun(fun, page, dataList = [], status, params) {
 			status = loadingType.FINISHED
 		}
 		if (dataList.length <= 0) {
-			loadingType.FINISHED
+			status = loadingType.EMPTY
 		}
 	} else {
 		status = loadingType.ERROR

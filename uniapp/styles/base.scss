@@ -343,3 +343,82 @@ button[size="lg"]{
     height: 0;
     color: transparent;
 }
+//#ifndef H5
+/* 单选 */
+radio {
+	
+	.uni-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+	}
+	.uni-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.uni-radio-input-checked {
+			border: 1px solid $-color-primary !important;
+			background-color: $-color-primary !important;
+		}
+	}
+} 
+
+
+/* 多选 */
+checkbox {
+	.uni-checkbox-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.uni-checkbox-input-checked {
+		    border: 1px solid $-color-primary !important;
+		    background-color: $-color-primary !important;
+		    color: #fff !important;
+			&::before {
+				font-size: 35rpx;
+			}
+		}
+	}
+}
+//#endif
+// #ifdef MP-WEIXIN
+/* 单选 */
+radio {
+	
+	.wx-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+	}
+	.wx-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.wx-radio-input-checked {
+			border: 1px solid $-color-primary !important;
+			background-color: $-color-primary !important;
+		}
+	}
+} 
+
+
+/* 多选 */
+checkbox {
+	.wx-checkbox-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.wx-checkbox-input-checked {
+		    border: 1px solid $-color-primary !important;
+		    background-color: $-color-primary !important;
+		    color: #fff !important;
+			&::before {
+				font-size: 35rpx;
+			}
+		}
+	}
+}
+// #endif
+
+
+

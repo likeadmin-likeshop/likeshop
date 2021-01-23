@@ -1,6 +1,6 @@
 <template>
-<view :class="'loading ' + ( type == 'flex' ? 'flex' : '' )">
-    <loading></loading>
+<view :class="'loading ' + ( type == 'flex' ? 'flex' : '' )" :style="{backgroundColor, }">
+    <loading :color="color" :size="size"></loading>
 </view>
 </template>
 
@@ -14,7 +14,17 @@ export default {
     type: {
       type: String,
       default: 'fixed'
-    }
+    },
+		
+	backgroundColor: {
+		type: String,
+	},
+	color: {
+		type: String,
+	},
+	size: {
+		type: Number,
+	}
   },
   methods: {}
 };

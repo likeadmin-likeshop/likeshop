@@ -12,3 +12,9 @@ export const CollectType = {
     COLLECTION: 1,
     CANCEL_COLLECTION: 0
 }
+
+//支付方式
+export const payWay = {
+	WECHAT: 1,
+	BALANCE:3
+}

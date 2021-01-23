@@ -24,7 +24,7 @@ service.interceptors.request.use(
 		if (config.method == 'GET') {
 			config.url += paramsToStr(config.params)
 		}
-		config.header.token = Cache.get(TOKEN)
+		config.header.token = Cache.get(TOKEN) || "ac772e3dfa25352ba70c7779ea2bc7e8"
 		console.log(config)
 		return config
 	},

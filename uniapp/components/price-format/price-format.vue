@@ -1,5 +1,5 @@
 <template>
-<text :style="{color, 'font-weight': weight}" :class="(lineThrough ? '~line-through' : '') + ' price'">
+<text :style="{color, 'font-weight': weight}" :class="(lineThrough ? '~line-through' : '') + ' price-format'">
     <text v-if="showSubscript" :style="{'font-size': subscriptSize + 'rpx', 'margin-right': '2rpx'}">¥</text>
     <text :style="{'font-size': firstSize + 'rpx', 'margin-right': '1rpx'}">{{priceSlice.first}}</text>
     <text v-if="priceSlice.second" :style="{'font-size': secondSize + 'rpx'}">.{{priceSlice.second}}</text>
@@ -75,7 +75,7 @@ export default {
 };
 </script>
 <style>
-.price {
+.price-format {
   font-family: Avenir;
 }
 </style>

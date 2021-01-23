@@ -55,6 +55,14 @@
             }
             
         },
+		{
+		    "path" : "pages/confirm_order/confirm_order",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "确认订单"
+		    }
+		    
+		},
         {
             "path": "pages/user_collection/user_collection",
             "style": {

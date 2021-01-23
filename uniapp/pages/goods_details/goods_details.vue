@@ -2,7 +2,7 @@
 	
 	<view class="goods-details">
 		<loading-view v-if="isFirstLoading"></loading-view>
-		<view v-else class="contain">
+		<view class="contain">
 			<product-swiper :imgUrls="swiperList"></product-swiper>
 				<view class="goods-info bg-white">
 					<view class="info-header row">
@@ -102,7 +102,7 @@
 					<image :src="goodsDetail.image"></image>
 				</view> -->
 			</view>
-			<spec-popup :show="showSpec" :goods="goodsDetail" @close="showSpec = false" :show-add="popupType == 1 || popupType == 0" :show-buy="popupType == 2 || popupType == 0"></spec-popup>
+			<spec-popup :show="showSpec" :goods="goodsDetail" @close="showSpec = false" :show-add="popupType == 1 || popupType == 0" :show-buy="popupType == 2 || popupType == 0" @buynow="onBuy"></spec-popup>
 		</view>
 </template>
 
@@ -170,6 +170,22 @@
 			    this.popupType = type
 			    this.showSpec = true
 			},
+			onBuy(e) {
+				let {
+				  id,
+				  goodsNum
+				} = e.detail;
+				let goods = [{
+				  item_id: id,
+				  num: goodsNum
+				}];
+				uni.navigateTo({
+					url: '/pages/confirm_order/confirm_order',
+					success: function(res) {
+					   res.eventChannel.emit('acceptData', {data: goods})
+					 }
+				})
+			}
 		}
 	}
 </script>

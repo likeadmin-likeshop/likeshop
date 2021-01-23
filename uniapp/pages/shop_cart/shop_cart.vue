@@ -10,7 +10,7 @@
                     </view>
                 </view>
                 <view class="row" style="padding: 20rpx" @tap="goPage" :data-url="'/pages/goods_details/goods_details?id=' + item.goods_id">
-                    <image width="180rpx" height="180rpx" radius="10rpx" class="goods-img mr20" lazy-load :src="item.img"></image>
+                    <custom-image width="180rpx" height="180rpx" radius="10rpx" class="goods-img mr20" lazy-load :src="item.img"/>
                     <view class="info" style="flex: 1">
                         <view class="line2 nr">{{item.name}}</view>
                         <view class="muted xs line1 mt10">
@@ -20,8 +20,8 @@
                             <view class="price row primary">
                                 <price-format :price="item.price" :firstSize="32" :secondSize="32" showSubscript="true" :subscriptSize="32"></price-format>
                             </view>
-                            <view class="cartNum" @tap.stop="true">
-                                <van-stepper :value="item.goods_num" integer :data-cartid="item.cart_id" @change="countChange" async-change></van-stepper>
+                            <view class="cartNum" @tap.stop="">
+                                <uni-number-box v-model="item.goods_num" :value="item.goods_num" integer @change="countChange($event, item.cart_id)" async-change />
                             </view>
                         </view>
                     </view>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getCartList, changeCartSelset, changeGoodsCount, deleteGoods } from '../../api/store';
+import { getCartList, changeCartSelect, changeGoodsCount, deleteGoods } from '../../api/store';
 import { getUser } from '../../api/user';
 import PriceFormat from '@/components/price-format/price-format'
 import {mapGetters} from 'vuex'
@@ -216,7 +216,7 @@ export default {
         select
       } = e.currentTarget.dataset;
       let selected = !select;
-      this.changeCartSelsetFun([cartid], selected);
+      this.changeCartSelectFun([cartid], selected);
     },
 
     changeAllSelect() {
@@ -225,11 +225,11 @@ export default {
         cartLists
       } = this;
       let cartid = cartLists.map(item => item.cart_id);
-      this.changeCartSelsetFun(cartid, !isSelectedAll);
+      this.changeCartSelectFun(cartid, !isSelectedAll);
     },
 
-    changeCartSelsetFun(cartId, selected) {
-      changeCartSelset({
+    changeCartSelectFun(cartId, selected) {
+      changeCartSelect({
         cart_id: cartId,
         selected: selected ? 1 : 0
       }).then(res => {
@@ -239,13 +239,12 @@ export default {
       });
     },
 
-    countChange(e) {
-      const {
-        cartid
-      } = e.currentTarget.dataset;
+    countChange(e, cartId) {
+        console.log("countChange", e, cartId)
+       let cartid = cartId;
       changeGoodsCount({
         cart_id: cartid,
-        goods_num: e.detail
+        goods_num: e
       }).then(res => {
         if (res.code == 1) {
           this.getCartListFun();

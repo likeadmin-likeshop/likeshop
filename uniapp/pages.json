@@ -124,7 +124,13 @@
 		    "style": {
 		        "navigationBarTitleText": "订单详情"
 		    }
-		}
+		},
+        {
+            "path": "pages/all_comments/all_comments",
+            "style": {
+                "navigationBarTitleText": "全部评价"
+            }
+        }
     ],
 	"tabBar": {
 		"color": "#666",

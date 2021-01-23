@@ -125,3 +125,8 @@ export function getRegisterCoupon(data) {
 export function getService() {
     return request.get("service/lists")
 }
+
+// 用户自定义分享
+export function userShare(data) {
+    return request.get("index/share", {...data, client: 2})
+}

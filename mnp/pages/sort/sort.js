@@ -16,6 +16,7 @@
 // +----------------------------------------------------------------------
 import { getCatrgory } from '../../api/store'
 import { getRect } from '../../utils/wxutil'
+import {userShare} from "../../api/app"
 import { navigateTo } from '../../utils/util'
 import event from '../../utils/events'
 Page({
@@ -155,6 +156,17 @@ Page({
 	/**
 	 * 用户点击右上角分享
 	 */
-	onShareAppMessage: function () {
-	}
+	onShareAppMessage: async function () {
+        let shareRes = await userShare();
+        if(shareRes.code == 1) {
+            return {
+                title: shareRes.data.mnp_share_title,
+                path: "pages/index/index"
+            }    
+        } else {
+            return {
+                path: "pages/index/index"
+            }
+        }
+    }
 })

@@ -94,7 +94,17 @@ function share(to) {
 		})
 		return;
 	}
-	wxShare(option)
+	userShare().then(res => {
+		if(res.code == 1) {
+			option.shareTitle = res.data.h5_share_title;
+			option.shareImage = res.data.h5_share_image;
+			option.shareDesc = res.data.h5_share_intro;
+			wxShare(option)
+		}
+		else {
+			wxShare(option)
+		}
+	})
 }
 
 export function wxPay(opt) {

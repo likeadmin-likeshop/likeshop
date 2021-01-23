@@ -59,3 +59,23 @@ export function getCommentList(data) {
 export function getOrderCommentList(data) {
 	return request.get("goods_comment/getOrderGoods", data)
 }
+
+// 购物车数量更改
+export function changeGoodsCount(data) {
+	return request.post("cart/change", data)
+}
+
+// 单选/全选/店铺选择
+export function selectedOpt(data) {
+	return request.post("cart/selected", data)
+}
+
+// 删除商品
+export function deleteGoods(data) {
+	return request.post("cart/del", data);
+}
+
+//购物车选中状态
+export function changeCartSelect(data) {
+	return request.post('cart/selected',  data)
+}

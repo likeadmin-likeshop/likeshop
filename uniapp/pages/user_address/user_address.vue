@@ -18,8 +18,8 @@
                         </view>
                     </view>
                     <view class="operation row-between">
-                        <view @tap.stop="true">
-                            <radio class="radio row" :value="item.id" :checked="item.is_default=='1' ? true : false">
+                        <view>
+                            <radio class="radio row" color="#FF2C3C" :value="item.id" :checked="item.is_default=='1' ? true : false">
                                 <text>设为默认</text>
                             </radio>
                         </view>

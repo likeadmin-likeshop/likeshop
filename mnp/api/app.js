@@ -76,3 +76,8 @@ export function getRegisterCoupon(data) {
 export function getMnpNotice(data) {
     return request.get("subscribe/lists", data);
 }
+
+// 用户自定义分享
+export function userShare(data) {
+    return request.get("index/share", {...data, client: 1})
+}

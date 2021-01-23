@@ -76,6 +76,12 @@
             }
         },
         {
+            "path": "pages/user_bill/user_bill",
+            "style": {
+                "navigationBarTitleText": "钱包明细"
+            }
+        },
+        {
             "path": "pages/user_coupon/user_coupon",
             "style": {
                 "navigationBarTitleText": "我的优惠券"
@@ -86,15 +92,25 @@
             "style": {
                 "navigationBarTitleText": "领券中心"
             }
-        }
-	    ,{
+        },
+        {
             "path" : "pages/login/login",
-            "style" :                                                                                    
-            {
+            "style" : {
                 "navigationBarTitleText": "登录",
                 "enablePullDownRefresh": false
             }
-            
+        }, 
+        {
+            "path": "pages/goods_comment_list/goods_comment_list",
+            "style": {
+                "navigationBarTitleText": "商品评价列表"
+            }
+        },
+        {
+            "path": "pages/goods_reviews/goods_reviews",
+            "style": {
+                "navigationBarTitleText": "商品评价"
+            }
         }
     ],
 	"tabBar": {

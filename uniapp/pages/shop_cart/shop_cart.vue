@@ -1,7 +1,7 @@
 <template>
 <view class="shop-cart">
     <view class="main " :style="{'padding-bottom':  (cartType == 1 ?  '100rpx' : 0)}">
-        <view v-for="(item, index) in cartLists" :key="index" class="cart-list mb20" v-show="cartType==1">
+        <view v-for="(item, index) in cartLists" :key="index" class="cart-list mb20" v-show="!(cartType!=1)">
             <view class="cart-item bg-white">
                 <view class="row-between select">
                     <checkbox :value="item.cart_id" :checked="item.selected == 1" :data-cartid="item.cart_id" :data-select="item.selected" @tap="changOneSelect">选择</checkbox>
@@ -10,7 +10,7 @@
                     </view>
                 </view>
                 <view class="row" style="padding: 20rpx" @tap="goPage" :data-url="'/pages/goods_details/goods_details?id=' + item.goods_id">
-                    <van-image width="180rpx" height="180rpx" radius="10rpx" class="goods-img mr20" lazy-load :src="item.img"></van-image>
+                    <image width="180rpx" height="180rpx" radius="10rpx" class="goods-img mr20" lazy-load :src="item.img"></image>
                     <view class="info" style="flex: 1">
                         <view class="line2 nr">{{item.name}}</view>
                         <view class="muted xs line1 mt10">
@@ -28,12 +28,12 @@
                 </view>
             </view>
         </view>
-        <view class="cart-null column-center bg-white mb20" style="padding: 80rpx 0 50rpx" :v-show="cartType==2">
+        <view class="cart-null column-center bg-white mb20" style="padding: 80rpx 0 50rpx" v-show="!(cartType != 2)">
             <image class="img-null" src="/static/images/cart_null.png"></image>
             <view class="muted mb20">购物车暂无任何商品~</view>
             <navigator open-type="switchTab" url="/pages/index/index" hover-class="none" class="primary br60 btn row-center">去逛逛</navigator>
         </view>
-        <view v-if="false" class="login column-center">
+        <view v-if="!isLogin" class="login column-center">
             <image class="img-null" src="/static/images/cart_null.png"></image>
             <view class="muted mt20">微信授权登录后才能查看购物车哦</view>
             <navigator class="white br60 row-center btn" url="/pages/login/login">
@@ -43,7 +43,7 @@
         </view>
         <recommend v-if="isShow"></recommend>
     </view>
-    <view class="footer row bg-white" v-show="cartType == 1">
+    <view class="footer row bg-white" v-show="!(cartType != 1)">
         <checkbox-group class="row" @change="changeAllSelect">
             <checkbox id="checkAll" value="all" :checked="isSelectedAll"></checkbox>
             <label for="checkAll" class="ml10">全选</label>
@@ -78,7 +78,7 @@
 import { getCartList, changeCartSelset, changeGoodsCount, deleteGoods } from '../../api/store';
 import { getUser } from '../../api/user';
 import PriceFormat from '@/components/price-format/price-format'
-
+import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
@@ -114,7 +114,8 @@ export default {
         }
 
         return false;
-    }
+    },
+    ...mapGetters(['isLogin']),
   },
 
   /**
@@ -157,7 +158,6 @@ export default {
       };
     }
   },
-  
   methods: {
     goodsDelete() {
       deleteGoods({

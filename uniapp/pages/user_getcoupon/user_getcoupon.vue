@@ -27,6 +27,7 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 import { getCouponList } from '../../api/store';
+import {getCoupon} from "../../api/user.js"
 
 export default {
   data() {

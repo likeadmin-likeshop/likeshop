@@ -12,19 +12,18 @@
                     <view class="xs">累计消费(元)</view>
                      <view style="font-size: 38rpx">{{wallet.total_order_amount || 0}}</view>
                 </view>
-                <button v-if="wallet.open_racharge" class="primary bg-white br60 btn" size="xs" data-url="/pages/user_payment/user_payment" @tap="goPage">充值</button>
             </view>
         </view>
         <view class="nav row">
-            <view class="nav-item column-center" data-url="/pages/user_bill/user_bill?type=0" @tap="goPage">
+            <navigator class="nav-item column-center" hover-class="none" url="/pages/user_bill/user_bill?type=0">
                 <image src="/static/images/icon_account.png"></image>
                 <view class="mt10">账户明细</view>
-            </view>
-            <view class="nav-item column-center" data-url="/pages/user_bill/user_bill?type=1" @tap="goPage">
+            </navigator>
+            <navigator class="nav-item column-center" hover-class="none" url="/pages/user_bill/user_bill?type=1">
                 <image src="/static/images/icon_consume.png"></image>
                 <view class="mt10">消费记录</view>
-            </view>
-            <view class="nav-item column-center" data-url="/pages/user_bill/user_bill?type=2" @tap="goPage">
+            </navigator>
+            <view class="nav-item column-center">
                
             </view>
         </view>
@@ -42,44 +41,6 @@
                     <view class="xs">满减享优惠</view>
                 </navigator>
             </view>
-            <!-- <view class="activity-items-contain mt10 row-between wrap">
-                <navigator hover-class="none" class="activity-item row" url="/pages/goods_combination/goods_combination">
-                    <view class="activity-img">
-                        <image src="/images/icon_activity_pintuan.png"></image>
-                    </view>
-                    <view class="ml20">
-                        <view class="md" style="font-weight: bold;">火爆拼团</view>
-                        <view class="xs muted">优惠商品上架拼团</view>
-                    </view>
-                </navigator>
-                <navigator hover-class="none" class="activity-item row" url="/pages/goods_seckill/goods_seckill">
-                    <view class="activity-img">
-                        <image src="/images/icon_activity_seckill.png"></image>
-                    </view>
-                    <view class="ml20">
-                        <view class="md" style="font-weight: bold;">限时秒杀</view>
-                        <view class="xs muted">最新商品秒杀中</view>
-                    </view>
-                </navigator>
-                <navigator hover-class="none" class="activity-item row" url="/pages/goods_bargain/goods_bargain">
-                    <view class="activity-img">
-                        <image src="/images/icon_activity_kanjia.png"></image>
-                    </view>
-                    <view class="ml20">
-                        <view class="md" style="font-weight: bold;">砍价活动</view>
-                        <view class="xs muted">最低砍至1元价</view>
-                    </view>
-                </navigator>
-                <navigator hover-class="none" class="activity-item row">
-                    <view class="activity-img">
-                        <image src="/images/icon_activity_newProdect.png"></image>
-                    </view>
-                    <view class="ml20">
-                        <view class="md" style="font-weight: bold;">新品首发</view>
-                        <view class="xs muted">精选精品已上架</view>
-                    </view>
-                </navigator>
-            </view> -->
         </view>
     </view>
 </view>

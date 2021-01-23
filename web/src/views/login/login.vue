@@ -63,7 +63,7 @@
             <div class="lighter nr" @click="changeLoginType"> {{this.loginType == 0 ? '短信验证码登录' : '账号密码登录'}}</div>
             <div class="lighter nr" @click="goPage('register')">注册账号</div>
         </div>
-        <div class="other-way-contain column-center">
+        <div class="other-way-contain column-center" v-if="isWeChat">
             <div class="row">
                 <div class="row-line"></div>
                 <div class="sm ml10 mr10 muted">其他登录方式</div>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {pwdLogin, smsCodeLogin, sendSms, weichatLogin, getCodeUrl} from '@API/app'
+import {pwdLogin, smsCodeLogin, sendSms, weichatLogin, getCodeUrl, isWeixinClient} from '@API/app'
 import { ACCESS_TOKEN } from '@/configs'
 import {inputInviteCode} from "@API/user"
 import {SMSType} from '@U/type'
@@ -105,6 +105,7 @@ export default {
             smsCode: '',
             time: 60 * 1000,
             canSendSms: true,
+            isWeChat: false
         }
     },
     methods: {
@@ -211,7 +212,7 @@ export default {
         },
     },
     created() {
-
+        this.isWeChat = isWeixinClient();
     }
 }
 </script>

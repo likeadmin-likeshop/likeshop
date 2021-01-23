@@ -12,7 +12,6 @@
     "pages/goods_details/goods_details",
     "pages/user_getcoupon/user_getcoupon",
     "pages/all_comments/all_comments",
-    "pages/goods_comment/goods_comment",
     "pages/goods_comment_list/goods_comment_list",
     "pages/user_order/user_order",
     "pages/order_details/order_details",

@@ -1,5 +1,5 @@
 <!--pages/goods_comment_list/goods_comment_list.wxml-->
-<view class="goods-commen-list">
+<view class="goods-comment-list">
     <van-tabs active="{{active}}" line-width="40">
         <van-tab title="待评价">
             <comment-list type="1" wx:if="{{active == 0}}"></comment-list>

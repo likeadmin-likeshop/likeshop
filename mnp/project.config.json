@@ -265,6 +265,12 @@
         {
           "name": "pages/goods_combination/goods_combination",
           "pathName": "pages/goods_combination/goods_combination",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/goods_comment_list/goods_comment_list",
+          "pathName": "pages/goods_comment_list/goods_comment_list",
           "scene": null
         }
       ]

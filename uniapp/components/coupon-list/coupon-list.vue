@@ -2,37 +2,36 @@
 <!-- components/coupon-list/coupon-list.wxml -->
 
 <view class="coupon-list">
-    <view v-for="(item, index) in list" :key="index" class="~mb20">
-        <view :class="'coupon-item ~row ' + (btnType == 1 || btnType == 2 ? 'gray': '')">
-            <view class="price ~white ~column-center">
-                <view class="~xl">
+    <view v-for="(item, index) in list" :key="index" class="mb20">
+        <view :class="'coupon-item row ' + (btnType == 1 || btnType == 2 ? 'gray': '')">
+            <view class="price white column-center">
+                <view class="xl">
                     <text>￥</text>
                     <price-format :first-size="60" :second-size="50" :price="item.money" :weight="500" />
                 </view>
-                <view class="~sm" style="text-align: center">{{item.use_condition}}</view>
+                <view class="sm" style="text-align: center">{{item.use_condition}}</view>
             </view>
-            <view class="info ~ml20">
-                <view class="~bold ~lg ~mb10">{{item.name}}</view>
-                <view class="~xs ~lighter ~mb20">{{item.use_time_tips}}</view>
-                <view class="~xs ~lighter ">{{item.coupon_type}}</view>
+            <view class="info ml20">
+                <view class="bold lg mb10">{{item.name}}</view>
+                <view class="xs lighter mb20">{{item.use_time_tips}}</view>
+                <view class="xs lighter ">{{item.coupon_type}}</view>
             </view>
-            <button type="primary" :class="'btn ~br60 ~white ~xs ' + (btnType != 3 ? 'plain': '')" :data-id="item.id" @tap="onHandle">
-                {{getBtn(btnType)}}
+            <button type="primary" :class="'btn br60 white xs ' + (btnType != 3 ? 'plain': '')" :data-id="item.id" @tap="onHandle">
+                {{getBtn}}
             </button>
             <image v-if="item.is_get" class="receive" src="/static/images/coupon_receive.png"></image>
         </view>
-        <view style="padding: 14rpx 20rpx" class="~bg-white" v-if="item.tips" :data-index="index" @tap="onShowTips">
-            <view class="~row-between">
-                <view class="~xs">使用说明</view>
+        <view style="padding: 14rpx 20rpx" class="bg-white" v-if="item.tips" :data-index="index" @tap="onShowTips">
+            <view class="row-between">
+                <view class="xs">使用说明</view>
                  <van-icon :class="showTips[index] ? 'rotate' : ''" name="arrow-down"></van-icon>
             </view>
-            <view :hidden="!showTips[index]" class="~mt10 ~xs">{{item.tips}}</view>
+            <view :hidden="!showTips[index]" class="mt10 xs">{{item.tips}}</view>
         </view>
     </view>
 </view>
 </template>
 
-<script module="getBtn" lang="wxs" src="./getBtn.wxs"></script>
 
 <script>
 // +----------------------------------------------------------------------
@@ -82,6 +81,27 @@ export default {
       },
       immediate: true,
       deep: true
+    }
+  },
+  computed: {
+    getBtn() {
+        var text = ''
+        switch (this.btnType) {
+          
+            case 0:
+                text = '去使用';
+                break;
+            case 1:
+                text = '已使用';
+                break;
+            case 2:
+                text = '已过期';
+                 break;
+            case 3:
+                text = '领取';
+                break;
+        }
+        return text
     }
   },
   methods: {

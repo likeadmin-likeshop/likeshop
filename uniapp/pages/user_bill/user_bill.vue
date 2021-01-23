@@ -16,9 +16,9 @@
                     </view>
                 </view>
             </view>
-            <loading-footer :status="loadingStatus" slotFooter>
+            <loading-footer :status="loadingStatus" slotEmpty>
                 <view class="data-null column-center">
-                    <image class="img-null" src="/static/images/order_null.png"></image>
+                    <image class="img-null" src="/static/images/order_null.png" />
                     <text class="nr muted">暂无记录～</text>
                 </view>
             </loading-footer>
@@ -38,9 +38,9 @@
                     </view>
                 </view>
             </view>
-            <loading-footer :status="loadingStatus" slotFooter>
+            <loading-footer :status="loadingStatus" slotEmpty>
                 <view class="data-null column-center">
-                    <image class="img-null" src="/static/images/order_null.png"></image>
+                    <image class="img-null" src="/static/images/order_null.png" />
                     <text class="nr muted">暂无消费记录～</text>
                 </view>
             </loading-footer>
@@ -87,6 +87,7 @@ export default {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+      console.log(options.type, "option.type")
     this.active = parseInt(options.type);
 
     this.getAccountLogFun(this.active);
@@ -130,9 +131,9 @@ export default {
   onShareAppMessage: function () {},
   methods: {
     onChange(e) {
-      this.active = e.detail.index;
+      this.active = e;
       this.cleanStatus();
-      this.getAccountLogFun(e.detail.index);
+      this.getAccountLogFun(e);
     },
 
     cleanStatus() {

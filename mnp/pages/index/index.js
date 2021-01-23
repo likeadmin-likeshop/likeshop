@@ -15,7 +15,7 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 import { getBestList, getHome } from '../../api/store'
-import { getMenu, getCouponPopList } from '../../api/app'
+import { getMenu, getCouponPopList, userShare } from '../../api/app'
 import { Tips } from '../../utils/util'
 import { showLoginDialog } from '../../utils/wxutil'
 import event from '../../utils/events'
@@ -234,7 +234,17 @@ Page({
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function () {
-
+    onShareAppMessage: async function () {
+        let shareRes = await userShare();
+        if(shareRes.code == 1) {
+            return {
+                title: shareRes.data.mnp_share_title,
+                path: "pages/index/index"
+            }    
+        } else {
+            return {
+                path: "pages/index/index"
+            }
+        }
     }
 })

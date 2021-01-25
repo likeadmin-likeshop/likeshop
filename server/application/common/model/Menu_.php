@@ -21,7 +21,6 @@ class Menu_{
     /*
      * 首页菜单
      */
-    const index_seckill             = 1;
     const index_team_activity       = 2;
     const index_hot_sell            = 3;
     const index_coupon_list         = 4;
@@ -61,16 +60,6 @@ class Menu_{
      */
     public static function getMenuContent($scene = true,$from = true){
         $config1 = [
-            self::index_seckill            => [
-                'name'          => '限时秒杀',
-                'link'          => [
-                      'link1' => '/pages/goods_seckill/goods_seckill',  //小程序
-                      'link2' => '/home/goodsSeckill',                  //H5
-                      'link3' => 'SeckillActivity',                     //APP
-                ],
-                'is_tab'        => 0,
-                'type'          => 1,
-            ],
             self::index_team_activity      => [
                 'name'          => '拼团活动',
                 'link'          => [

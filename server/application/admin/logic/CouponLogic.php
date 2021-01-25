@@ -24,20 +24,26 @@ use think\Db;
 class CouponLogic{
     public static function lists($get){
         //更新过期优惠券
-        \app\common\logic\CouponLogic::couponClose();
+        $now = time();
+        Db::name('coupon')
+            ->where([['send_time_start','<',$now], ['send_time_end','<',$now],['status','=',1]])
+            ->update(['status'=>0,'update_time'=>$now]);
+
         $where[] = ['del','=',0];
         //优惠券名称搜索
         if(isset($get['name']) && $get['name']){
             $where[] = ['name','like','%'.$get['name'].'%'];
         }
-        if($get['type'] !== '' && $get['type'] === 'send'){
+        if(isset($get['type']) && $get['type'] === 'send'){
             $where[] = ['status','=',1];
             $where[] = ['get_type','=',2];
 
-        }elseif($get['type']){
+        }
+        if(isset($get['type']) && $get['type'] !== ''){
             $where[] = ['status','=',$get['type']];
 
         }
+
         $coupon = new Coupon();
 
         $coupon_count = $coupon

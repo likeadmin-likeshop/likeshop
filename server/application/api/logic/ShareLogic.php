@@ -34,11 +34,14 @@ class ShareLogic extends LogicBase {
                 case Client_::mnp: //小程序
                     $url_type = 'path';
                     break;
-                case Client_::h5: //H5
+                case Client_::h5: //H5.
+                    $url_type = 'url';
+                    $url = url($url,['id'=>$goods_id,'invite_code'=>$user['distribution_code']],'',true);
+                    break;
                 case Client_::android:
                 case Client_::ios:
                     $url_type = 'url';
-                    $url = UrlServer::getFileUrl($url);
+                    $url = url($url,['id'=>$goods_id,'invite_code'=>$user['distribution_code'],'isapp'=>1],'',true);
             }
             $base64 = $qr_code_logic->makeGoodsPoster($user,$goods,$url,$url_type);
         }

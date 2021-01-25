@@ -94,7 +94,7 @@ class QrCodeLogic{
             $poster_config = self::goodsShareConfig();
             //生成二维码
             if($url_type == 'path'){
-                $this->makeMnpQrcode($goods,$url,$qr_src,$save_dir);
+                $this->makeMnpQrcode($goods['id'],$user['distribution_code'],$url,$qr_src,$save_dir);
             }else{
                 $qrCode = new QrCode();
                 $qrCode->setText($url);
@@ -150,12 +150,12 @@ class QrCodeLogic{
 
     }
     //小程序生成二维码
-    public function makeMnpQrcode($goods,$url,$img_src,$save_dir){
+    public function makeMnpQrcode($goods_id,$code,$url,$img_src,$save_dir){
         try {
             $config = WeChatServer::getMnpConfig();
             $app = Factory::miniProgram($config);
 
-            $response = $app->app_code->getUnlimit('id='.$goods['id'], [
+            $response = $app->app_code->getUnlimit('id='.$goods_id.'&invite_code='.$code, [
                 'page'  => $url,
             ]);
 

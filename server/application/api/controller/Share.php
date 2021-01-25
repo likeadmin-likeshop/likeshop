@@ -27,9 +27,9 @@ class Share extends ApiBase
         $id = $this->request->get('id');
         $url = $this->request->get('url');
         $client = $this->request->get('client', 1);
-        if ($id && $url) {
-            $result = ShareLogic::shareGoods($this->user_id, $id, $url, $client);
-            $this->_success('获取成功', $result);
+        if($id && $url){
+            $result = ShareLogic::shareGoods($this->user_id,$id,$url,$client);
+            $this->_success($result['msg'], $result['data'], $result['code']);
         }
         $this->_error('缺少参数', '');
     }

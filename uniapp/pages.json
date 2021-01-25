@@ -117,6 +117,12 @@
             "style": {
                 "navigationBarTitleText": "全部评价"
             }
+        }, 
+        {
+            "path": "pages/post_sale/post_sale",
+            "style": {
+                "navigationBarTitleText": "退款/售后"
+            }
         }
     ],
 	"tabBar": {

@@ -18,3 +18,13 @@ export const payWay = {
 	WECHAT: 1,
 	BALANCE:3
 }
+
+// 售后状态
+export const AfterSaleType = {
+    // 售后申请 
+    NORMAL: 'normal',
+    // 处理中
+    HANDLING: 'apply',
+    // 已处理
+    FINISH: 'finish'
+}

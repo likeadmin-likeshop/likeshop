@@ -76,17 +76,27 @@ class Index extends ApiBase
         $config = [];
         switch ($client) {
             case Client_::mnp:
-                $config = ConfigServer::get('share', 'mnp', []);
+                $config = ConfigServer::get('share', 'mnp', [
+                    'mnp_share_title' => ''
+                ]);
                 break;
             case Client_::h5:
-                $config = ConfigServer::get('share', 'h5', []);
+                $config = ConfigServer::get('share', 'h5', [
+                    'h5_share_title' => '',
+                    'h5_share_intro' => '',
+                    'h5_share_image' => ''
+                ]);
                 if (empty($config['h5_share_image']) and $config['h5_share_image'] !== '') {
                     $config['h5_share_image'] = UrlServer::getFileUrl($config['h5_share_image']);
                 }
                 break;
             case Client_::android:
             case Client_::ios:
-                $config = ConfigServer::get('share', 'app', []);
+                $config = ConfigServer::get('share', 'app', [
+                    'app_share_title' => '',
+                    'app_share_intro' => '',
+                    'app_share_image' => ''
+                ]);
                 if (empty($config['app_share_image']) and $config['app_share_image'] !== '') {
                     $config['app_share_image'] = UrlServer::getFileUrl($config['app_share_image']);
                 }

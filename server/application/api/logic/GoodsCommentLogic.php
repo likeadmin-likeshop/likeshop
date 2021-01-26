@@ -270,7 +270,8 @@ class GoodsCommentLogic{
                 $goods['goods_comment'] = $goods_comment['goods_comment'];
                 $goods['comment'] = $goods_comment['comment'] ?: '此用户没有填写评论';
                 $goods['create_time'] = date('Y-m-d H:i:s', $goods_comment['create_time']);
-                $goods['comment_image'] = Db::name('goods_comment_image')->where(['id' => $goods_comment['id']])->column('uri');
+                $goods['comment_image'] = Db::name('goods_comment_image')->where(['goods_comment_id' => $goods_comment['id']])->column('uri');
+
                 foreach ($goods['comment_image'] as &$imgae){
                     $goods_comment['comment_image'] = UrlServer::getFileUrl($imgae);
                 }

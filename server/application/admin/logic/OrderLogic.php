@@ -25,6 +25,9 @@ use app\common\model\MessageScene_;
 use app\common\model\Order;
 use app\common\model\OrderLog;
 use app\common\logic\OrderLogLogic;
+use app\common\server\ConfigServer;
+use expressage\Kd100;
+use expressage\Kdniao;
 use think\Db;
 use think\facade\Hook;
 
@@ -304,6 +307,66 @@ class OrderLogic
         if ($shipping) {
             $shipping['create_time_text'] = date('Y-m-d H:i:s', $shipping['create_time']);
         }
+        $shipping['traces'] = self::getShipping($order_id);
         return $shipping;
+    }
+
+    public static function getShipping($order_id)
+    {
+        $field = 'o.id,order_status,total_num,image,consignee,mobile,province,city,
+        district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time,delivery_id';
+
+        $order = new \app\api\model\Order();
+        $order = $order->alias('o')
+            ->join('order_goods og', 'o.id = og.order_id')
+            ->join('goods g','g.id = og.goods_id')
+            ->where(['o.id' => $order_id,])
+            ->field($field)
+            ->append(['delivery_address'])
+            ->find();
+
+        $order_delivery = Db::name('delivery')
+            ->where(['order_id' => $order['id']])
+            ->field('invoice_no,shipping_name,shipping_id')->find();
+
+        $express = ConfigServer::get('express', 'way', '', '');
+        $app = ConfigServer::get($express, 'appkey', '', '');
+        $key = ConfigServer::get($express, 'appsecret', '', '');
+
+        if (!$express || $order['shipping_status'] != 1){
+            return $traces[] = ['暂无物流信息'];
+        }
+
+        if (!$app || !$key){
+            return $traces[] = ['暂无物流信息'];
+        }
+
+        //快递配置设置为快递鸟时
+        if($express === 'kdniao'){
+            $expressage = (new Kdniao($app, $key, true));
+            $shipping_field = 'codebird';
+        }else{
+            $expressage = (new Kd100($app, $key, true));
+            $shipping_field = 'code100';
+        }
+
+        //快递编码
+        $shipping_code = Db::name('express')
+            ->where(['id' => $order_delivery['shipping_id']])
+            ->value($shipping_field);
+
+        //获取物流轨迹
+        $expressage->logistics($shipping_code, $order_delivery['invoice_no']);
+        $traces = $expressage->logisticsFormat();
+
+        //获取不到物流轨迹时
+        if ($traces == false) {
+            $traces[] = ['暂无物流信息'];
+        } else {
+            foreach ($traces as &$item) {
+                $item = array_values(array_unique($item));
+            }
+        }
+        return $traces;
     }
 }

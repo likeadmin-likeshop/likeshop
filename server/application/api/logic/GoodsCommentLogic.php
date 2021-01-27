@@ -225,63 +225,70 @@ class GoodsCommentLogic{
     }
     //订单商品列表
     public static function getOrderGoods($type,$user_id,$page,$size){
-        $where[] = ['order_status','=',Order::STATUS_FINISH];
-        $where[] = ['del','=',0];
-        $where[] = ['user_id','=',$user_id];
+        $where[] = ['O.order_status','=',Order::STATUS_FINISH];
+        $where[] = ['O.del','=',0];
+        $where[] = ['O.user_id','=',$user_id];
 
         if($type == 1) {
             $where[] = ['is_comment', '=',0];
         }else{
             $where[] = ['is_comment', '=',1];
         }
-        $order_goods_count = Db::name('order')->alias('o')
-                        ->join('order_goods og','o.id = og.order_id')
-                        ->where($where)
-                        ->count();
+        $order_goods_count = Db::name('order')->alias('O')
+            ->join('order_goods OG','O.id = OG.order_id')
+            ->join('goods G','OG.goods_id = G.id')
+            ->where($where)
+            ->count();
 
-        $order_goods_list = Db::name('order')->alias('o')
-                    ->join('order_goods og','o.id = og.order_id')
-                    ->where($where)
-                    ->field('og.id,og.goods_id,item_id,og.goods_price,goods_num')
-                    ->page($page,$size)
-                    ->select();
+        $order_goods_list =  Db::name('order')->alias('O')
+            ->join('order_goods OG','O.id = OG.order_id')
+            ->join('goods G','OG.goods_id = G.id')
+            ->where($where)
+            ->field('OG.id,OG.goods_id,item_id,OG.goods_price,goods_num,G.image,G.name as goods_name')
+            ->page($page,$size)
+            ->order('O.id desc')
+            ->select();
+
 
         $goods_comment = [];
-        if($type == 2 && $order_goods_list){
-            $order_goods_ids = array_column($order_goods_list,'id');
+        if($type == 2 && $order_goods_list) {
+            $order_goods_ids = array_column($order_goods_list, 'id');
 
-            $goods_comment = Db::name('goods_comment')
-                        ->where(['order_goods_id'=>$order_goods_ids,'del'=>0])
-                        ->column('goods_comment,comment,create_time','order_goods_id');
+            $goods_comment_list = Db::name('goods_comment')
+                ->where(['order_goods_id' => $order_goods_ids, 'del' => 0])
+                ->column('goods_comment,comment,create_time,id', 'order_goods_id');
+
         }
-
-        $goods_id_ids = array_column($order_goods_list,'goods_id');
-        $goods_list = Db::name('goods')->where(['id'=>$goods_id_ids])->column('name,image','id');
-        foreach ($order_goods_list as &$goods){
-            $goods['image'] = '';
-            $goods['goods_name'] = '';
+        foreach ($order_goods_list as &$goods) {
+            $goods['image'] = UrlServer::getFileUrl($goods['image']);
             $goods['goods_comment'] = '';
             $goods['comment'] = '';
             $goods['create_time'] = '';
-            if(isset($goods_comment[$goods['id']])){
-                $goods['goods_comment'] = $goods_comment[$goods['id']]['goods_comment'];
-                $goods['comment'] = $goods_comment[$goods['id']]['comment'] ?:'此用户没有填写评论';
-                $goods['create_time'] = date('Y-m-d H:i:s',$goods_comment[$goods['id']]['create_time']);
-            }
-            if(isset($goods_list[$goods['goods_id']])){
-                $goods['image'] =  UrlServer::getFileUrl($goods_list[$goods['goods_id']]['image']);
-                $goods['goods_name'] = $goods_list[$goods['goods_id']]['name'];
+            if (isset($goods_comment_list[$goods['id']])) {
+                $goods_comment = $goods_comment_list[$goods['id']];
+
+                $goods['goods_comment'] = $goods_comment['goods_comment'];
+                $goods['comment'] = $goods_comment['comment'] ?: '此用户没有填写评论';
+                $goods['create_time'] = date('Y-m-d H:i:s', $goods_comment['create_time']);
+                $goods['comment_image'] = Db::name('goods_comment_image')->where(['goods_comment_id' => $goods_comment['id']])->column('uri');
+
+                foreach ($goods['comment_image'] as &$uri){
+
+                    $uri = UrlServer::getFileUrl($uri);
+
+                }
+
             }
 
         }
-        $more = is_more($order_goods_count,$page,$size);  //是否有下一页
+        $more = is_more($order_goods_count, $page, $size);  //是否有下一页
 
         return [
-            'list'      => $order_goods_list,
-            'count'     => $order_goods_count,
-            'page_no'   => $page,
+            'list' => $order_goods_list,
+            'count' => $order_goods_count,
+            'page_no' => $page,
             'page_size' => $size,
-            'more'      => $more
+            'more' => $more
         ];
     }
 

@@ -177,6 +177,15 @@ class AfterSale extends Validate
         if (!$after_sale) {
             return '订单信息错误';
         }
+
+        $check = [
+            \app\common\model\AfterSale::STATUS_WAIT_REFUND,
+            \app\common\model\AfterSale::STATUS_SUCCESS_REFUND,
+        ];
+
+        if (in_array($after_sale['status'], $check)){
+            return '订单正在等待退款或已退款,无法撤销售后';
+        }
         return true;
     }
 }

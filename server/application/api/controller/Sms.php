@@ -22,6 +22,7 @@ class Sms extends ApiBase{
 
     public $like_not_need_login = ['send'];
 
+
     /**
      * showdoc
      * @catalog 接口/短信
@@ -43,7 +44,10 @@ class Sms extends ApiBase{
         if($result !== true){
             $this->_error($result);
         }
-        SmsLogic::send($mobile,$key);
+        $send_result = SmsLogic::send($mobile,$key);
+        if($send_result !== true){
+            $this->_error($send_result);
+        }
         $this->_success('发送成功');
     }
 }

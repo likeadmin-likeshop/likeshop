@@ -28,6 +28,8 @@ class SmsLogic{
             'mobile'    => $mobile,
             'params'    => ['code'=>$code],
         ];
-        Hook::listen('sms_send',$send_data);
+        $result = Hook::listen('sms_send',$send_data);
+        return array_pop($result);
+
     }
 }

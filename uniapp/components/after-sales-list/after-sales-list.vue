@@ -20,7 +20,16 @@
 					</view>
 				</view>
 				<view :class="'sale-footer row-end ' + (items.after_sale.able_apply == 1 ? '' : 'bottom-opacity')">
-					<view class="btn row-center bd-primary primary br60" @tap="items.after_sale.able_apply == 1 ? 'goPage' : ''" data-url="/pages/apply_refund/apply_refund" :data-order_id="items.order_id" :data-item_id="item.item_id">申请售后</view>
+					<view class="btn row-center bd-primary primary br60" 
+                    @click="
+                        goPage($event, 
+                        items.after_sale.able_apply, 
+                        '/pages/apply_refund/apply_refund', 
+                        items.order_id, 
+                        item.item_id)"
+                     >
+                        申请售后
+                        </view>
 				</view>
 			</view>
 		</view>
@@ -36,13 +45,13 @@
 			<navigator v-for="(item, index2) in items.order_goods" :key="index2" hover-class="none" class="sale-goods-show" :url="'/pages/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id + '&order_id=' + items.order_id">
 				<view class="row">
 					<view class="goods-img">
-						<van-image width="100%" height="100%" radius="6rpx" lazy-load :src="item.image"></van-image>
+						<custom-image width="100%" height="100%" radius="6rpx" lazy-load :src="item.image" />
 					</view>
 					<view class="goods-desc">
 						<view class="goods-name line2 nr">{{item.goods_name}}</view>
 						<view class="row-between mt20">
 							<view>
-								<price-slice :firstSize="26" :price="item.goods_price" weight="600" showSubscript="true"></price-slice>
+								<price-format :firstSize="26" :price="item.goods_price" weight="600" showSubscript="true" />
 							</view>
 							<view class="nr">x{{item.goods_num}}</view>
 						</view>
@@ -71,12 +80,12 @@
 			<view v-for="(item, index2) in items.order_goods" :key="index2" class="sale-goods-show">
 				<view class="row">
 					<view class="goods-img">
-						<van-image lazy-load width="100%" height="100%" radius="6rpx" :src="item.image"></van-image>
+						<custom-image lazy-load width="100%" height="100%" radius="6rpx" :src="item.image" />
 					</view>
 					<view class="goods-desc">
 						<view class="goods-name line2 nr">{{item.goods_name}}</view>
 						<view class="row-between mt20 row-between">
-							<price-slice :firstSize="26" :price="item.goods_price" weight="600" showSubscript="true"></price-slice>
+							<price-format :firstSize="26" :price="item.goods_price" weight="600" showSubscript="true" />
 							<view class="nr">x{{item.goods_num}}</view>
 						</view>
 					</view>
@@ -182,42 +191,31 @@ export default {
           } = res.data;
           lists.push(...list);
           this.lists = lists
-          this.setData({
-            lists: lists,
-            page: ++page
-          });
+          this.page ++;
 
           if (!more) {
-            this.setData({
-              loadingStatus: loadingType.FINISHED
-            });
+              this.loadingStatus = loadingType.FINISHED
           }
 
           if (lists.length <= 0) {
-            this.setData({
-              loadingStatus: loadingType.EMPTY
-            });
+            this.loadingStatus = loadingType.EMPTY
           }
 
           return;
         } else {
-          this.setData({
-            loadingStatus: loadingType.ERROR
-          });
+            this.loadingStatus = loadingType.ERROR
         }
       });
     },
 
-    goPage(e) {
-      let {
-        url,
-        order_id,
-        item_id
-      } = e.currentTarget.dataset;
-      url = url + '?order_id=' + order_id + '&item_id=' + item_id;
-      uni.navigateTo({
-        url: url
-      });
+    goPage(e, able_apply, url, order_id, item_id) {
+        if(able_apply != 1) {
+            return
+        }
+        url = url + '?order_id=' + order_id + '&item_id=' + item_id;
+        uni.navigateTo({
+          url: url
+        });
     },
 
     reflesh() {
@@ -242,63 +240,47 @@ export default {
   }
 };
 </script>
-<style>
-image {
-  width: 100%;
-  height: 100%;
-}
-
-
+<style lang="scss">
 .sale-list {
   /* padding: 20rpx 0; */
-}
-
-.sale-list .sale-item {
-  
-}
-
-.sale-list .sale-item .sale-header {
-  padding: 20rpx 24rpx;
-}
-
-.sale-list .sale-item .sale-header .store-name {
-  font-family:PingFang SC;
-  line-height: 40rpx;
-}
-
-.sale-list .sale-item .sale-goods-show {
-  padding: 20rpx 24rpx;
-}
-
-.sale-goods-show .goods-img {
-  height: 160rpx;
-  width: 160rpx;
-}
-
-.sale-goods-show .goods-desc {
-  margin-left: 24rpx;
-  flex: 1;
-}
-
-.sale-goods-show .sale-status {
-  padding: 20rpx 40rpx;
-  background-color: #F6F6F6;
-  border-radius: 6rpx;
-}
-
-.sale-list .sale-item .sale-footer {
-  padding: 0 24rpx 22rpx;
-}
-
-.sale-list .sale-item .sale-footer .btn {
-  padding: 9rpx 34rpx;
-  font-family: PingFang SC;
-}
-
-.sale-list .sale-item .sale-footer .grey-btn {
-  border: 1rpx solid #CCCCCC;
-  padding: 9rpx 34rpx;
-  font-family: PingFang SC;
+  .sale-item {
+    .sale-goods-show {
+      padding: 20rpx 24rpx;
+      .goods-img {
+        height: 160rpx;
+        width: 160rpx;
+      }
+      .goods-desc {
+        margin-left: 24rpx;
+        flex: 1;
+      }
+      .sale-status {
+        padding: 20rpx 40rpx;
+        background-color: #F6F6F6;
+        border-radius: 6rpx;
+      }
+    }
+    .sale-header {
+      padding: 20rpx 24rpx;
+      .store-name {
+        font-family:PingFang SC;
+        line-height: 40rpx;
+      }
+    }
+    .sale-footer {
+      padding: 0 24rpx 22rpx;
+      .btn {
+        padding: 9rpx 34rpx;
+        font-family: PingFang SC;
+        border: 1rpx solid $-color-primary;
+      }
+      .grey-btn {
+        border: 1rpx solid #CCCCCC;
+        padding: 9rpx 34rpx;
+        font-family: PingFang SC;
+      }
+    }
+  }
 }
 
 .bottom-opacity {

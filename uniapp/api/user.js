@@ -120,7 +120,7 @@ export function rechargeTemplate() {
 
 // 获取售后列表
 export function getAfterSaleList(params) {
-    return request.get("after_sale/lists", params);
+    return request.get("after_sale/lists", {params});
 }
 
 // 申请售后
@@ -130,7 +130,7 @@ export function applyAfterSale(data) {
 
 // 获取商品信息
 export function getGoodsInfo(params) {
-    return request.get("after_sale/goodsInfo", params)
+    return request.get("after_sale/goodsInfo", {params})
 }
 
 // 填写快递信息

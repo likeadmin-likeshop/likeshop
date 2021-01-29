@@ -123,6 +123,12 @@
             "style": {
                 "navigationBarTitleText": "退款/售后"
             }
+        },
+        {
+            "path": "pages/apply_refund/apply_refund",
+            "style": {
+                "navigationBarTitleText": "申请售后"
+            }
         }
     ],
 	"tabBar": {

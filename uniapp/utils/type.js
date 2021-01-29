@@ -28,3 +28,11 @@ export const AfterSaleType = {
     // 已处理
     FINISH: 'finish'
 }
+
+// 售后退款操作
+export const refundOptType = {
+    // 仅退款
+    ONLY_REFUND: 0,
+    // 退货退款
+    REFUNDS: 1
+}

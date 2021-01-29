@@ -100,6 +100,7 @@ class GoodsLogic
         $goods_list = Db::name('goods')
                 ->where($where)
                 ->page($get['page'], $get['limit'])
+                ->field('*,virtual_sales_sum+sales_sum as total_sales_sum')
                 ->order('id desc')
                 ->select();
 

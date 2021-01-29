@@ -215,7 +215,7 @@ class AdLogic
         if ($info['link_type'] == 2) {
             $goods = Db::name('goods g')
                 ->where(['g.id' => $info['link']])
-                ->field('g.name, g.image, min_price, max_price')
+                ->field('g.id, g.name, g.image, min_price, max_price')
                 ->find();
             $price = '￥' . $goods['max_price'];
             if ($goods['max_price'] !== $goods['min_price']) {

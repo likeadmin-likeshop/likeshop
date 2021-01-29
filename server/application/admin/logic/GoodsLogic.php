@@ -117,8 +117,8 @@ class GoodsLogic
             if(isset($goods_category_list[$item['third_category_id']])){
                 $item['cat_name'] = $goods_category_list[$item['third_category_id']];
             }
-            if($item['spec_type'] == 2){
-                $item['price'] = '￥'.$item['max_price'].'~'.'￥'.$item['min_price'];
+            if($item['spec_type'] == 2 && $item['max_price'] !== $item['min_price']){
+                $item['price'] = '￥'.$item['min_price'].'~'.'￥'.$item['max_price'];
             }
             $item['create_time_desc'] = date('Y-m-d H:i:s',$item['create_time']);
             $item['first_ratio_desc'] = 0;

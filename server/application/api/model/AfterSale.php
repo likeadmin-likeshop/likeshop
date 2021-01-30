@@ -26,7 +26,7 @@ class AfterSale extends Model
     public function orderGoods()
     {
         return $this->hasOne('order_goods','id','order_goods_id')
-            ->field('id,goods_id,item_id,total_pay_price,goods_num,goods_price');
+            ->field('id,goods_id,item_id,total_pay_price,goods_num,goods_price,goods_info');
     }
 
     public function shop()

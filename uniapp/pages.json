@@ -129,6 +129,18 @@
             "style": {
                 "navigationBarTitleText": "申请售后"
             }
+        },
+        {
+            "path": "pages/after_sales_detail/after_sales_detail",
+            "style": {
+                "navigationBarTitleText": "售后详情"
+            }
+        },
+        {
+            "path": "pages/input_express_info/input_express_info",
+            "style": {
+                "navigationBarTitleText": "填写快递单号"
+            }
         }
     ],
 	"tabBar": {

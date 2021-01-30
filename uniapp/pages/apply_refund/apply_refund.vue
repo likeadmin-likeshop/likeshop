@@ -34,7 +34,7 @@
         </view>
         <view class="refund-info row-between">
             <view class="lable">退款金额</view>
-            <price-slice color="#FF2C3C" :price="goods.goods_price" showSubscript="true" :subscriptSize="28" :firstSize="28" :secondSize="28"></price-slice>
+            <price-format color="#FF2C3C" :price="goods.goods_price" showSubscript="true" :subscriptSize="28" :firstSize="28" :secondSize="28" />
         </view>
         <view class="refund-info row-between" @tap="showPopup">
             <view class="lable">退款原因</view>
@@ -58,21 +58,23 @@
     </view>
 </view>
 
-    <uni-popup id="popup" ref="popup"  :animation="true" position="bottom" custom-style="height: 70%" @close="hidePopup"> 
+    <uni-popup id="popup" ref="popup"  :animation="true" type="bottom" @close="hidePopup">
         <view class="pop-container bg-white">
             <view class="pop-header row-center md normal">
                 退款原因
             </view>
-            <view class="reason-box mt20">
-                <radio-group @change="radioChange">
-                    <label v-for="(item, index) in reason" :key="index" class="reason-item row-between" @tap="hidePopup">
-                        <view class="reason-desc nr">
-                            {{item}}
-                        </view>
-                        <radio :value="index"></radio>
-                    </label>
-                </radio-group>
-            </view>
+            <scroll-view style="height: 800rpx" :scroll-y="true">
+                <view class="reason-box mt20">
+                    <radio-group @change="radioChange">
+                        <label v-for="(item, index) in reason" :key="index" class="reason-item row-between" @tap="hidePopup">
+                            <view class="reason-desc nr">
+                                {{item}}
+                            </view>
+                            <radio :value="index"></radio>
+                        </label>
+                    </radio-group>
+                </view>
+            </scroll-view>
         </view>
     </uni-popup>
 </view>

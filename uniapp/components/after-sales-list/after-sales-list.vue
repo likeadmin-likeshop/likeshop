@@ -58,7 +58,7 @@
 					</view>
 				</view>
 				<view class="sale-status mt20 row">
-					<view class="nr" style="font-weight: bold;">{{items.after_sale.status_text}}</view>
+					<view class="nr" style="font-weight: bold;">申请状态</view>
 					<view class="nr ml20">{{items.after_sale.desc}}</view>
 				</view>
 			</navigator>

@@ -145,7 +145,7 @@ export function cancelApply(data) {
 
 // 售后详情
 export function afterSaleDetail(params) {
-    return request.get("after_sale/detail", params)
+    return request.get("after_sale/detail", {params})
 }
 
 // 重新申请
@@ -185,7 +185,7 @@ export function getInviteInfo() {
 
 // 获取评价信息
 export function getCommentInfo(data) {
-    return request.get("goods_comment/getGoods", data);
+    return request.get("goods_comment/getGoods", {params: data});
 }
 
 // 分销主页
@@ -195,7 +195,7 @@ export function getPromoteHome() {
 
 // 分销订单列表
 export function getPromoteOrder(data) {
-    return request.get("distribution/order", data)
+    return request.get("distribution/order", {params: data})
 }
 
 //商品评价
@@ -224,12 +224,12 @@ export function getLevelList() {
 }
 // 我的粉丝
 export function getUserFans(data) {
-    return request.get("user/fans", data)
+    return request.get("user/fans", {params: data})
 }
 
 // 获取活动专区商品列表
 export function getActivityGoodsLists(data) {
-    return request.get("activity_area/activityGoodsList", data)
+    return request.get("activity_area/activityGoodsList", {params: data})
 }
 
 // 佣金提现
@@ -238,13 +238,13 @@ export function applyWithdraw(data) {
 }
 
 // 提现记录列表
-export function getWithdrawRecords(data) {
-    return request.get("withdraw/records", data)
+export function getWithdrawRecords(params) {
+    return request.get("withdraw/records", {params})
 }
 
 // 提现详情
-export function getWithdrawDetail(data) {
-    return request.get("withdraw/info", data)
+export function getWithdrawDetail(params) {
+    return request.get("withdraw/info", params)
 }
 
 // 提现页信息
@@ -253,18 +253,18 @@ export function getWithdrawConfig() {
 }
 
 // 月度账单
-export function getMonthBill(data) {
-    return request.get("distribution/monthbill", data)
+export function getMonthBill(params) {
+    return request.get("distribution/monthbill", {params})
 }
 
 // 月度账单明细
-export function getMonthOrderDetail(data) {
-    return request.get("distribution/monthDetail", data)
+export function getMonthOrderDetail(params) {
+    return request.get("distribution/monthDetail", {params})
 }
 
 // 邀请海报
 export function getInviteBanner(data) {
-    return request.get("share/userPoster", {...data, client: 1})
+    return request.get("share/userPoster", {params: {...data, client: 1}})
 }
 
 // 用户钱包

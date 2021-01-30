@@ -80,7 +80,7 @@ Page({
         this.setData({
             fieldType: FieldType.SEX
         })
-        this.$setUserInfo(e.detail.value + 1)
+        this.$setUserInfo(parseInt(e.detail.value) + 1)
     },
 
     bindDateChange(e) {

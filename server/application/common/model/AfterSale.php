@@ -99,7 +99,7 @@ class AfterSale extends Model
     public function user()
     {
         return $this->hasOne('user', 'id', 'user_id')
-            ->field('id,nickname,avatar,mobile,sex,create_time');
+            ->field('id,sn,nickname,avatar,mobile,sex,create_time');
     }
 
     public function order()

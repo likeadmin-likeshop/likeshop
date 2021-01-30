@@ -55,7 +55,7 @@ Page({
     },
     onSubmit() {
         let { goodsRate,fileList, comment, deliveryRate, descRate, serverRate, } = this.data
-        let image = fileList.map(item => item.url)
+        let image = fileList.map(item => item.base_url)
         if(!goodsRate) return Tips({title: '请对商品进行评分'})
         if(!descRate) return Tips({title: '请对描述相符进行评分'})
         if(!serverRate) return Tips({title: '请对服务态度进行评分'})

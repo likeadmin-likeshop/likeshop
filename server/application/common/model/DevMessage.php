@@ -20,6 +20,7 @@ namespace app\common\model;
 use think\Model;
 
 class DevMessage extends Model{
+    //需要验证码的短信key
     const CODE_KEY = [
         'ZCYZ',     //注册验证
         'ZHMM',     //找回密码

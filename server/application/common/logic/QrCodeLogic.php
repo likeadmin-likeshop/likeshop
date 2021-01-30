@@ -25,7 +25,7 @@ use think\facade\Cache;
 use think\Exception;
 use EasyWeChat\Factory;
 
-class QrCodeLogic{
+class QrCodeLogic extends LogicBase {
 
     public function goodsShareConfig(){
         return [
@@ -77,8 +77,9 @@ class QrCodeLogic{
     }
     public function makeGoodsPoster($user,$goods,$url,$url_type){
 
+
         try {
-            $save_dir = 'uploads/qr_code/goods_share/';
+            $save_dir = ROOT_PATH .'/uploads/qr_code/goods_share/';
             $background_img = ROOT_PATH .'/images/share/share_goods_bg.png';
 
             $cache_key = 'gid' . $goods['id'].'uid'.$user['id'].$url_type;
@@ -87,14 +88,17 @@ class QrCodeLogic{
 
             $base64 = Cache::get($cache_key);
             if (!empty($base64)) {
-                return $base64;
+                return self::dataSuccess('海报生成成功',$base64);
             }
 
 
             $poster_config = self::goodsShareConfig();
             //生成二维码
             if($url_type == 'path'){
-                $this->makeMnpQrcode($goods,$url,$qr_src,$save_dir);
+                $result = $this->makeMnpQrcode($goods['id'],$user['distribution_code'],$url,$qr_src,$save_dir);
+                if(true !== $result){
+                    return self::dataError('微信配置错误：'.$result);
+                }
             }else{
                 $qrCode = new QrCode();
                 $qrCode->setText($url);
@@ -104,8 +108,8 @@ class QrCodeLogic{
                 $qrCode->writeFile($poster_url);
 
             }
-            $user_avatar = file_exists('./'.$user['avatar']) ? $user['avatar'] : ConfigServer::get('website', 'user_image');
-            $goods_image = $goods['image']?:ConfigServer::get('website', 'goods_image');
+            $user_avatar = file_exists('./'.$user['avatar']) ? ROOT_PATH.$user['avatar'] : ROOT_PATH.ConfigServer::get('website', 'user_image');
+            $goods_image = ROOT_PATH.$goods['image']?:ConfigServer::get('website', 'goods_image');
 
             $qr_code_logic = new QrCodeLogic();
             //获取背景图
@@ -142,10 +146,11 @@ class QrCodeLogic{
                 unlink($poster_url);
             }
             Cache::set($cache_key, $base64, 3600);
-            return $base64;
+
+            return self::dataSuccess('海报生成成功',$base64);
 
         }catch (Exception $e){
-            return $e->getMessage();
+            return self::dataError('海报生成错误:' . $e->getMessage());
         }
 
     }

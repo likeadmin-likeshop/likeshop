@@ -127,8 +127,8 @@ class Goods extends Model{
                     $comment['spec_value_str'] = $item['spec_value_str'];
                 }
             }
-            if(empty($goods_comment['comment'])){
-                $goods_comment['comment'] = '此用户没有填写评论';
+            if(empty($comment['comment'])){
+                $comment['comment'] = '此用户没有填写评论';
             }
         }
         return $comment;

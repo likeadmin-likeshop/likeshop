@@ -76,17 +76,27 @@ class Index extends ApiBase
         $config = [];
         switch ($client) {
             case Client_::mnp:
-                $config = ConfigServer::get('share', 'mnp', []);
+                $config = ConfigServer::get('share', 'mnp', [
+                    'mnp_share_title' => 'LikeShop——100%开源免费商用电商系统'
+                ]);
                 break;
             case Client_::h5:
-                $config = ConfigServer::get('share', 'h5', []);
+                $config = ConfigServer::get('share', 'h5', [
+                    'h5_share_title' => 'LikeShop——100%开源免费商用电商系统',
+                    'h5_share_intro' => 'likeshop已经把小程序、安卓APP、苹果APP都免费开源出来了！',
+                    'h5_share_image' => ''
+                ]);
                 if (empty($config['h5_share_image']) and $config['h5_share_image'] !== '') {
                     $config['h5_share_image'] = UrlServer::getFileUrl($config['h5_share_image']);
                 }
                 break;
             case Client_::android:
             case Client_::ios:
-                $config = ConfigServer::get('share', 'app', []);
+                $config = ConfigServer::get('share', 'app', [
+                    'app_share_title' => 'LikeShop——100%开源免费商用电商系统',
+                    'app_share_intro' => 'likeshop已经把小程序、安卓APP、苹果APP都免费开源出来了！',
+                    'app_share_image' => ''
+                ]);
                 if (empty($config['app_share_image']) and $config['app_share_image'] !== '') {
                     $config['app_share_image'] = UrlServer::getFileUrl($config['app_share_image']);
                 }

@@ -31,3 +31,20 @@ export const orderType = {
  CLOSE: 'close' //待收货
 
 };
+// 售后状态
+export const AfterSaleType = {
+    // 售后申请 
+    NORMAL: 'normal',
+    // 处理中
+    HANDLING: 'apply',
+    // 已处理
+    FINISH: 'finish'
+}
+
+// 售后退款操作
+export const refundOptType = {
+    // 仅退款
+    ONLY_REFUND: 0,
+    // 退货退款
+    REFUNDS: 1
+}

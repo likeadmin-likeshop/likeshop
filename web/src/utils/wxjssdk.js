@@ -84,10 +84,11 @@ function share(to) {
 	if (to.name == "goodsDetail") {
 		getGoodsDetail({ id: to.query.id }).then(res => {
 			if (res.code == 1) {
-				const {image , name} = res.data
+				const {image , name, remark} = res.data
 				option.shareLink = window.location.href
 				option.shareImage = image;
-				option.shareDesc = name;
+				option.shareDesc = remark;
+				option.shareTitle = name;
 				// 朋友圈 QQ空间
 				wxShare(option)
 			}

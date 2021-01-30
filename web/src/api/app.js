@@ -127,6 +127,9 @@ export function getService() {
 }
 
 // 用户自定义分享
-export function userShare(data) {
-    return request.get("index/share", {...data, client: 2})
+export function userShare(params) {
+    return request.get("index/share", {params: {
+        ...params,
+        client: 2
+    }})
 }

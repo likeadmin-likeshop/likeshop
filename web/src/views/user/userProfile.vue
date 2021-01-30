@@ -70,6 +70,10 @@
                     <div style="width: 56px;border-right: 1px solid #E5E5E5">+86</div>
                     <div style="margin-left: 15px">{{userInfo.mobile}}</div>
                 </div>
+                <div class="modify-row row" v-else >
+                    <div style="width: 71px;">手机号</div>
+                    <input v-model="new_mobile" placeholder="请输入绑定手机号" />
+                </div>
                 <div class="modify-row row">
                     <div style="width: 71px;">验证码</div>
                     <input v-model="smsCode" style="padding-left: 5px;width: 130px;" placeholder="请输入验证码" />
@@ -86,9 +90,9 @@
                             </template>
                         </van-count-down>
                 </div>
-                <div class="modify-row row">
-                    <div style="width: 71px;">{{userInfo.mobile ? '新手机号' : '手机号'}}</div>
-                    <input v-model="new_mobile" :placeholder="userInfo.mobile ? '请输入新的手机号码' : '请输入绑定手机号'" />
+                <div class="modify-row row" v-if="userInfo.mobile">
+                    <div style="width: 71px;">新手机号</div>
+                    <input v-model="new_mobile" placeholder="请输入新的手机号码" />
                 </div>
                 <div class="primary mt10">{{userInfo.mobile ? '更改' : '绑定'}}手机号码成功后，您的账号将会变更为该设置号码</div>
                 <div class="btn bg-primary white row-center" @click="$changeUserMobile">确定</div>
@@ -242,7 +246,7 @@ export default {
         // 发送短信
         $sendSms() {
             sendSms({
-                mobile: this.userInfo.mobile,
+                mobile: this.userInfo.mobile || this.new_mobile,
                 key: this.smsType
             }).then(res => {
                 if(res.code == 1) {

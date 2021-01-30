@@ -140,7 +140,31 @@
 			"style": {
 				"navigationBarTitleText": "会员中心"
 			}
-		}
+		},
+        {
+            "path": "pages/post_sale/post_sale",
+            "style": {
+                "navigationBarTitleText": "退款/售后"
+            }
+        },
+        {
+            "path": "pages/apply_refund/apply_refund",
+            "style": {
+                "navigationBarTitleText": "申请售后"
+            }
+        },
+        {
+            "path": "pages/after_sales_detail/after_sales_detail",
+            "style": {
+                "navigationBarTitleText": "售后详情"
+            }
+        },
+        {
+            "path": "pages/input_express_info/input_express_info",
+            "style": {
+                "navigationBarTitleText": "填写快递单号"
+            }
+        }
 	],
 	"tabBar": {
 		"color": "#666",
@@ -172,24 +196,6 @@
 			}
 		]
 	},
-	"subPackages": [{
-		"root": "pages/activity",
-		"name": "activity",
-		"pages": [
-			{
-				"path": "goods_combination/goods_combination",
-				"style": {
-					"navigationBarTitleText": "会员中心"
-				}
-			},
-			{
-				"path": "goods_seckill/goods_seckill",
-				"style": {
-					"navigationBarTitleText": "会员中心"
-				}
-			}
-		]
-	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "LikeShop",

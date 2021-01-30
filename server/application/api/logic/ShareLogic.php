@@ -27,7 +27,7 @@ class ShareLogic extends LogicBase {
     public static function shareGoods($user_id,$goods_id,$url,$client){
         $qr_code_logic = new QrCodeLogic();
         $goods = Db::name('goods')->where(['id'=>$goods_id])->find();
-        $base64 = '';
+        $result = '';
         if($goods){
             $user = Db::name('user')->where(['id'=>$user_id])->find();
             switch ($client){
@@ -40,9 +40,9 @@ class ShareLogic extends LogicBase {
                     $url_type = 'url';
                     $url = UrlServer::getFileUrl($url);
             }
-            $base64 = $qr_code_logic->makeGoodsPoster($user,$goods,$url,$url_type);
+            $result = $qr_code_logic->makeGoodsPoster($user,$goods,$url,$url_type);
         }
-        return $base64;
+        return $result;
     }
 
 }

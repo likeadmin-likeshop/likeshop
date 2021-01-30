@@ -21,6 +21,8 @@ namespace app\admin\logic;
 
 use app\common\logic\AccountLogLogic;
 use app\common\logic\OrderRefundLogic;
+use app\common\server\AreaServer;
+use app\common\server\ConfigServer;
 use app\common\server\WeChatServer;
 use app\common\logic\AfterSaleLogLogic;
 use app\common\logic\PaymentLogic;
@@ -197,6 +199,8 @@ class AfterSaleLogic
             }
 
         }
+
+        $result['shop_address'] = self::getShopAddress();
         return $result;
     }
 
@@ -411,4 +415,22 @@ class AfterSaleLogic
         }
     }
 
+
+
+    /**
+     * Notes: 获取商家地址
+     * @author 段誉(2021/1/30 16:57)
+     * @return string
+     */
+    public static function getShopAddress()
+    {
+        $shop_province = ConfigServer::get('shop', 'province_id', '');
+        $shop_city = ConfigServer::get('shop', 'city_id', '');
+        $shop_district = ConfigServer::get('shop', 'district_id', '');
+        $shop_address = ConfigServer::get('shop', 'address', '');
+        $shop_contact = ConfigServer::get('shop', 'contact', '');
+        $shop_mobile = ConfigServer::get('shop', 'mobile', '');
+        $shop_address = AreaServer::getAddress([$shop_province, $shop_city, $shop_district], $shop_address);
+        return $shop_address.'('.$shop_contact.','.$shop_mobile.')';
+    }
 }

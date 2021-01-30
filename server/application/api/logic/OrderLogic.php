@@ -281,15 +281,15 @@ class OrderLogic extends LogicBase
             }
 
             //短信通知
-//            Hook::listen('sms_send', [
-//                'key'       => 'DDTJTZ',
-//                'mobile'    => $user_address['telephone'],
-//                'params'    => [
-//                    'nickname'      => $user->mobile,
-//                    'order_sn'      => $order['order_sn'],
-//                    'order_money'   => $order['order_amount']
-//                ],
-//            ]);
+            Hook::listen('sms_send', [
+                'key'       => 'DDTJTZ',
+                'mobile'    => $user_address['telephone'],
+                'params'    => [
+                    'nickname'      => $user->mobile,
+                    'order_sn'      => $order['order_sn'],
+                    'order_money'   => $order['order_amount']
+                ],
+            ]);
 
             Db::commit();
             return self::dataSuccess('', ['order_id' => $order_id, 'type' => 'order']);

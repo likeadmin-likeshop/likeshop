@@ -143,7 +143,7 @@ class AfterSaleLogic
     {
         $after_sale = new AfterSale();
         $result = $after_sale
-            ->with(['order_goods', 'user', 'order'])
+            ->with(['order_goods', 'user', 'order', 'logs'])
             ->where('id', $id)
             ->find()->toArray();
 
@@ -160,16 +160,43 @@ class AfterSaleLogic
             $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }
 
-        //售后日志
-        $logs = AfterSaleLog::where('after_sale_id', $id)
-            ->order('id', 'desc')
-            ->select();
-
-        foreach ($logs as &$log) {
-            $log['create_time'] = date('Y-m-d H:i:s', $log['create_time']);
+        foreach ($result['order_goods'] as &$good) {
+            $info = json_decode($good['goods_info'], true);
+            $good['goods_name'] = $info['goods_name'];
+            $good['spec_value'] = $info['spec_value_str'];
+            $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }
-        $result['log'] = $logs;
 
+        foreach ($result['logs'] as &$log){
+            $log['create_time'] = date('Y-m-d H:i:s', $log['create_time']);
+
+            $log['log_img'] = '';
+            $log['log_remark'] = '';
+            switch ($log['channel']){
+                //会员申请售后
+                case AfterSaleLog::USER_APPLY_REFUND:
+                    $log['log_img'] = $result['refund_image'];
+                    $refund_reason = empty($result['refund_reason']) ? '未知' : $result['refund_reason'];
+                    $refund_remark = empty($result['refund_remark']) ? '暂无' : $result['refund_remark'];
+                    $log['log_remark'] = '退款原因('.$refund_reason.')'.'退款说明('.$refund_remark.')';
+                    break;
+                //会员发快递
+                case AfterSaleLog::USER_SEND_EXPRESS:
+                    $log['log_img'] = $result['express_image'];
+                    $express_name = $result['express_name'];
+                    $invoice_no = $result['invoice_no'];
+                    $express_remark = empty($result['express_remark']) ? '暂无' : $result['express_remark'];
+                    $log['log_remark'] = '快递公司('.$express_name.')'.'单号('.$invoice_no.')'.'备注说明('.$express_remark.')';
+                    break;
+                //商家拒绝退款 //商家拒绝收货
+                case AfterSaleLog::SHOP_REFUSE_REFUND:
+                case AfterSaleLog::SHOP_REFUSE_TAKE_GOODS:
+                    $admin_remark = empty($result['admin_remark']) ? '暂无' : $result['admin_remark'];
+                    $log['log_remark'] = '备注:'.$admin_remark;
+                    break;
+            }
+
+        }
         return $result;
     }
 

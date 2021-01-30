@@ -227,17 +227,24 @@
 
         <div class="layui-form-item div-flex">
             <div class="layui-input-block ">
-            <ul class="layui-timeline">
-                {volist name="$detail.log" id="vo"}
-                <li class="layui-timeline-item">
-                    <i class="layui-icon layui-timeline-axis"></i>
-                    <div class="layui-timeline-content layui-text">
-                        <h3 class="layui-timeline-title">{$vo.content}</h3>
-                        <p>{$vo.create_time}</p>
-                    </div>
-                </li>
-                {/volist}
-            </ul>
+                <ul class="layui-timeline">
+                    {volist name="$detail.logs" id="vo"}
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">{$vo.content}({$vo.create_time})</h3>
+                            <!--日志备注-->
+                            {notempty name="$vo.log_remark"}
+                            <h4>{$vo.log_remark}</h4>
+                            {/notempty}
+                            <!--日志图片-->
+                            {notempty name="$vo.log_img"}
+                            <img src="{$vo.log_img}" alt="" width="80" height="80" class="image-show">
+                            {/notempty}
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
             </div>
         </div>
 

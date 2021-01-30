@@ -140,7 +140,7 @@
 		width: $box-width;
 		height: $box-height;
 		text-align: center;
-		font-size: $uni-font-size-lg;
+		font-size: 28rpx;
 		border-width: 1rpx;
 		border-style: solid;
 		border-color: $uni-border-color;

@@ -17,3 +17,8 @@ export function prepay(data) {
 export function getMnpNotice(data) {
   return request.get("subscribe/lists", {params: data});
 } 
+
+//账号登录
+export function accountLogin(data) {
+    return request.post("account/login", data)
+}

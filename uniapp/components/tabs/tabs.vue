@@ -119,9 +119,7 @@
 				this.defaultConfig = Object.assign(this.defaultConfig, this.config);
 			},
 			calcScrollPosition() {
-
 				const query = uni.createSelectorQuery().in(this);
-
 				query.select('#_scroll').boundingClientRect((res) => {
 					this.scorll = res;
 					this.updateTabWidth();
@@ -244,7 +242,7 @@
 					height: 4rpx;
 					background-color: #e54d42;
 					border-radius: 6rpx;
-					transition: .5s;
+					transition: transform .5s;
 					position: absolute;
 					bottom: 0;
 				}

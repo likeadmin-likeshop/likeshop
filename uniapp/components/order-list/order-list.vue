@@ -1,19 +1,19 @@
-	// +----------------------------------------------------------------------
-	// | LikeShop100%开源免费商用电商系统
-	// +----------------------------------------------------------------------
-	// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-	// | 开源版本可自由商用，可去除界面版权logo
-	// | 商业版本务必购买商业授权，以免引起法律纠纷
-	// | 禁止对系统程序代码以任何目的，任何形式的再发布
-	// | Gitee下载：https://gitee.com/likemarket/likeshopv2
-	// | 访问官网：https://www.likemarket.net
-	// | 访问社区：https://home.likemarket.net
-	// | 访问手册：http://doc.likemarket.net
-	// | 微信公众号：好象科技
-	// | 好象科技开发团队 版权所有 拥有最终解释权
-	// +----------------------------------------------------------------------
-	// | Author: LikeShopTeam
-	// +----------------------------------------------------------------------
+// +----------------------------------------------------------------------
+// | LikeShop100%开源免费商用电商系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | Gitee下载：https://gitee.com/likemarket/likeshopv2
+// | 访问官网：https://www.likemarket.net
+// | 访问社区：https://home.likemarket.net
+// | 访问手册：http://doc.likemarket.net
+// | 微信公众号：好象科技
+// | 好象科技开发团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
+// +----------------------------------------------------------------------
 
 <template>
 	<view>
@@ -21,7 +21,7 @@
 			<navigator v-for="(item, index) in orderList" :key="index" hover-class="none" class="order-item bg-white mt20" :url="'/pages/order_details/order_details?id=' + item.id">
 				<view class="order-header row-between">
 					<view class="row">订单编号：{{item.order_sn}}</view>
-					<!-- <view :class="item.order_status == 4 ? 'muted' : 'primary'">{{orderUtil.getOrderStatus(item.order_status)}}</view> -->
+					<view :class="item.order_status == 4 ? 'muted' : 'primary'">{{getOrderStatus(item.order_status)}}</view>
 				</view>
 				<view class="order-con">
 					<order-goods :list="item.order_goods"></order-goods>
@@ -38,7 +38,7 @@
 						</view> -->
 					</view>
 					<view v-if="item.cancel_btn">
-						<button size="sm" class="plain br60 lighter" hover-class="none" :data-id="item.id" @tap.stop="cancelOrder">
+						<button size="sm" class="plain br60 lighter" hover-class="none" @tap.stop="cancelOrder(item.id)">
 							取消订单
 						</button>
 					</view>
@@ -46,10 +46,10 @@
 						<button size="sm" class="btn plain br60 lighter" hover-class="none">查看物流</button>
 					</navigator>
 					<view v-if="item.del_btn">
-						<button size="sm" class="btn plain br60 lighter" hover-class="none" :data-id="item.id" @tap.stop="delOrder">删除订单</button>
+						<button size="sm" class="btn plain br60 lighter" hover-class="none" @tap.stop="delOrder(item.id)">删除订单</button>
 					</view>
 					<view v-if="item.pay_btn" class="ml20">
-						<button size="sm" class="btn bg-primary br60 white" :data-id="item.id" @tap.stop="payNow">
+						<button size="sm" class="btn bg-primary br60 white" @tap.stop="payNow(item.id)">
 							立即付款
 						</button>
 					</view>
@@ -59,7 +59,7 @@
 						</button>
 					</view>
 					<view v-if="item.take_btn" class="ml20">
-						<button size="sm" class="btn plain br60 primary red" hover-class="none" :data-id="item.id" @tap.stop="comfirmOrder">确认收货</button>
+						<button size="sm" class="btn plain br60 primary red" hover-class="none" @tap.stop="comfirmOrder(item.id)">确认收货</button>
 					</view>
 				</view>
 			</navigator>
@@ -75,7 +75,6 @@
 
 
 <script>
-
 	import {
 		getOrderList,
 		cancelOrder,
@@ -92,7 +91,9 @@
 	import {
 		wxpay
 	} from '@/utils/wxutil';
-	import {loadingFun} from '@/utils/tools'
+	import {
+		loadingFun
+	} from '@/utils/tools'
 	export default {
 		data() {
 			return {
@@ -105,7 +106,7 @@
 		},
 
 		components: {
-			
+
 		},
 		props: {
 			orderType: {
@@ -113,44 +114,34 @@
 			}
 		},
 		created: function() {
-			
+
 		},
 		beforeMount: function() {
 			this.getOrderListFun();
 		},
 		destroyed: function() {
-			
+
 		},
 		methods: {
 			reflesh() {
-				this.page = 1, this.orderList = [], this.status = loadingType.LOADING;
+				this.page = 1
+				this.orderList = []
+				this.status = loadingType.LOADING
 				this.type = 0
 				this.getOrderListFun();
 			},
 
 			reload() {
-				this.setData({
-					status: loadingType.LOADING
-				});
+				this.status = loadingType.LOADING
 				this.getOrderListFun();
 			},
 
-			goPage(e) {
-				let {
-					url
-				} = e.currentTarget.dataset;
-				uni.navigateTo({
-					url
-				});
-			},
-
+		
 			onShowDialog() {
 				let {
 					showCancel
 				} = this;
-				this.setData({
-					showCancel: !showCancel
-				});
+				this.showCancel = !showCancel
 			},
 
 			async onConfirm() {
@@ -175,44 +166,38 @@
 
 				if (res.code == 1) {
 					this.onShowDialog();
-					Tips({
+					this.$toast({
 						title: res.msg
 					});
 				}
 			},
 
-			delOrder(e) {
-				this.id = e.currentTarget.dataset.id;
-				this.setData({
-					type: 1
-				});
-				uni.nextTick(() => {
+			delOrder(id) {
+				this.id = id
+				this.type = 1
+				this.$nextTick(() => {
 					this.onShowDialog();
 				});
 			},
 
-			comfirmOrder(e) {
-				this.id = e.currentTarget.dataset.id;
-				this.setData({
-					type: 2
-				});
-				uni.nextTick(() => {
+			comfirmOrder(id) {
+				this.id = id
+				this.type = 2
+				this.$nextTick(() => {
 					this.onShowDialog();
 				});
 			},
 
-			cancelOrder(e) {
-				this.id = e.currentTarget.dataset.id;
-				this.setData({
-					type: 0
-				});
-				uni.nextTick(() => {
+			cancelOrder(id) {
+				this.id = id
+				this.type = 0
+				this.$nextTick(() => {
 					this.onShowDialog();
 				});
 			},
 
 			payNow(e) {
-			
+
 				let {
 					id
 				} = e.currentTarget.dataset;
@@ -241,14 +226,41 @@
 					orderList,
 					status
 				} = this;
-				const data = await loadingFun(getOrderList,page, orderList,status, {type: orderType})
-				if(!data) return
+				const data = await loadingFun(getOrderList, page, orderList, status, {
+					type: orderType
+				})
+				if (!data) return
 				this.page = data.page
 				this.orderList = data.dataList
 				this.status = data.status
 				console.log(this.status)
 			}
 
+		},
+		computed: {
+			getOrderStatus() {
+				return (status) => {
+					var text = ''
+					switch (status) {
+						case 0:
+							text = '待支付';
+							break;
+						case 1:
+							text = '待发货';
+							break;
+						case 2:
+							text = '待收货';
+							break;
+						case 3:
+							text = '已完成';
+							break;
+						case 4:
+							text = '订单已关闭';
+							break;
+					}
+					return text
+				}
+			}
 		}
 	};
 </script>
@@ -257,23 +269,29 @@
 		min-height: calc(100vh - 80rpx);
 		padding: 0 20rpx;
 		overflow: hidden;
+
 		.order-item {
 			border-radius: 10rpx;
+
 			.order-header {
 				height: 80rpx;
 				padding: 0 24rpx;
 				border-bottom: 1px dotted #E5E5E5;
 			}
+
 			.all-price {
 				text-align: right;
-				padding: 20rpx 24rpx;
+				padding: 0 24rpx 20rpx;
 			}
+
 			.order-footer {
 				height: 100rpx;
 				border-top: $-solid-border;
 				padding: 0 24rpx;
+
 				.plain {
 					border: 1px solid #BBBBBB;
+
 					&.red {
 						border-color: $-color-primary;
 					}

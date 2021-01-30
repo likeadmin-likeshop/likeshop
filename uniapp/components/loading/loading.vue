@@ -17,7 +17,7 @@
 		    type: String,
 		    default: 'spinner'
 		  },
-		  size: String,
+		  size: Number,
 		  textSize: String
 		},
 		data() {

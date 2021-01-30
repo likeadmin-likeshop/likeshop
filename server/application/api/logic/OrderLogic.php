@@ -20,24 +20,16 @@
 namespace app\api\logic;
 
 use app\api\model\{Coupon, Order, User};
-use app\common\server\WeChatServer;
-use app\common\logic\{AccountLogLogic,
+use app\common\logic\{
     LogicBase,
     OrderGoodsLogic,
     OrderLogLogic,
-    PaymentLogic,
+    OrderRefundLogic,
     PayNotifyLogic};
-use app\common\model\{AccountLog,
-    Goods,
-    MessageScene_,
-    OrderGoods,
-    OrderLog,
-    Pay,
-    Order as CommonOrder};
+use app\common\model\{Client_, MessageScene_, OrderLog, Pay, Order as CommonOrder};
 use app\common\server\{ConfigServer, UrlServer};
 use think\Db;
 use think\Exception;
-use think\facade\Env;
 use expressage\{
     Kdniao,
     Kd100
@@ -47,7 +39,13 @@ use think\facade\Hook;
 
 class OrderLogic extends LogicBase
 {
-    //结算详情
+    /**
+     * Notes:结算详情
+     * @param $post
+     * @param $user_id
+     * @author 段誉(2021/1/30 14:44)
+     * @return array
+     */
     public static function info($post, $user_id)
     {
         try{
@@ -124,9 +122,16 @@ class OrderLogic extends LogicBase
     }
 
 
-    //计算优惠金额
-    //此处逻辑->1,找出商品在优惠条件中的 总商品金额和商品数量
-    //2,计算出每个商品可获得的优惠金额,最后一个商品,用总优惠券金额 - 已优惠金额
+    /**
+     * Notes: 计算优惠金额
+     * @param $goods
+     * @param $cl_id
+     * @author 段誉(2021/1/30 14:44)
+     * @return array
+     * @throws Exception
+     * 1,找出商品在优惠条件中的 总商品金额和商品数量
+     * 2,计算出每个商品可获得的优惠金额,最后一个商品,用总优惠券金额 - 已优惠金额
+     */
     public static function calculateDiscountAmount($goods, $cl_id)
     {
         $coupon = Coupon::getCouponByClId($cl_id);
@@ -174,7 +179,16 @@ class OrderLogic extends LogicBase
         ];
     }
 
-    //订单中优惠商品的总价
+
+    /**
+     * Notes: 订单中优惠商品的总价
+     * @param $goods
+     * @param $coupon
+     * @param $coupon_goods
+     * @author 段誉(2021/1/30 14:45)
+     * @return array
+     * @throws Exception
+     */
     public static function discountGoods($goods, $coupon, $coupon_goods)
     {
         $discount_goods = 0;
@@ -210,7 +224,13 @@ class OrderLogic extends LogicBase
     }
 
 
-    //获取指定商品信息
+
+    /**
+     * Notes:获取指定商品信息
+     * @param $item_ids
+     * @author 段誉(2021/1/30 14:45)
+     * @return array
+     */
     public static function getGoodsColumn($item_ids)
     {
         $field = 'i.id as item_id,g.id as goods_id,g.name as goods_name,g.status,g.del,g.image,i.stock,
@@ -227,97 +247,49 @@ class OrderLogic extends LogicBase
         return $goods;
     }
 
-    //添加订单
-    public static function add($user_id, $data, $type = '', $order_source)
+
+
+    /**
+     * Notes: 添加订单
+     * @param $user_id
+     * @param $data
+     * @param $post
+     * @author 段誉(2021/1/30 14:45)
+     * @return array
+     */
+    public static function add($user_id, $data, $post)
     {
-        $time = time();
         Db::startTrans();
         try {
+            $type = $post['type'] ?? '';
+            $order_source = $post['client'] ?? Client_::mnp;
+            $goods_lists = $data['goods_lists'];
+            $user_address = $data['address'];
+            $user = User::get($user_id);
+
             if (empty($data['address'])) {
                 throw  new Exception('请选择收货地址');
             }
 
-            $user = User::get($user_id);
+            $order = self::addOrder($user_id, $data, $order_source, $user_address);
+            $order_id = $order['order_id'];
+            self::addOrderGoods($order_id, $goods_lists);
+            self::addOrderAfter($order_id, $user_id, $type, $data);
 
-            $goods_lists = $data['goods_lists'];
-            $user_address = $data['address'];
-
-            //订单主表记录
-            $order_data = [
-                'order_type' => $data['order_type'],
-                'order_sn' => createSn('order', 'order_sn', '', 4),
-                'user_id' => $user_id,
-                'order_source' => $order_source,
-                'consignee' => $user_address['contact'],
-                'province' => $user_address['province_id'],
-                'city' => $user_address['city_id'],
-                'district' => $user_address['district_id'],
-                'address' => $user_address['address'],
-                'mobile' => $user_address['telephone'],
-                'goods_price' => $data['total_goods_price'],
-                'order_amount' => $data['order_amount'],//应付金额
-                'total_amount' => $data['total_amount'],//订单总金额
-                'shipping_price' => $data['shipping_price'],//店铺订单运费
-                'total_num' => $data['total_num'],//店铺订单商品数量
-                'user_remark' => $data['remark'],
-                'create_time' => $time,
-                'discount_amount' => $data['discount_amount'],//优惠券优惠金额
-                'pay_way' => $data['pay_way'],
-            ];
-
-            //有使用优惠券,把优惠券id保存到订单表中
-            if ($data['coupon_id'] > 0 && $data['discount_amount'] > 0){
-                $order_data['coupon_list_id'] = $data['coupon_id'];//此处coupon_id为前端传入的coupon_list_id
+            if ($data['order_amount'] == 0){
+                PayNotifyLogic::handle('order', $order['order_sn'], []);
             }
 
-            $order_id = Db::name('order')->insertGetId($order_data);
-
-            $goods_data = $cart_items = [];
-
-            foreach ($goods_lists as $k1 => $good) {
-                //商品验证
-                if ($good['del'] == 1 || $good['status'] != 1) {
-                    throw new Exception($good['goods_name'] . '不存在或已下架');
-                }
-                if ($good['goods_num'] > $good['stock']) {
-                    throw new Exception($good['goods_name'] . '库存不足');
-                }
-
-                $goods_data[] = [
-                    'order_id' => $order_id,
-                    'goods_id' => $good['goods_id'],
-                    'item_id' => $good['item_id'],
-                    'goods_name' => $good['goods_name'],
-                    'goods_num' => $good['goods_num'],
-                    'goods_price' => $good['goods_price'],
-                    'total_price' => $good['goods_price'] * $good['goods_num'],
-                    'total_pay_price' => ($good['goods_price'] * $good['goods_num']) - $good['discount_price'],//实际支付商品金额(扣除优惠金额)
-                    'spec_value_ids' => $good['spec_value_ids'],
-                    'discount_price' => $good['discount_price'],
-                    'goods_info'   => json_encode($good, JSON_UNESCAPED_UNICODE),
-                    'create_time' => $time,
-                ];
-
-                $cart_items[] = $good['item_id'];//购物车提交商品规格id
-            }
-            //添加订单商品
-            Db::name('order_goods')->insertAll($goods_data);
-
-            self::addOrderAfter($order_id, $user_id, $type, $cart_items, $data);
             //短信通知
             Hook::listen('sms_send', [
                 'key'       => 'DDTJTZ',
-                'mobile'    => $order_data['mobile'],
+                'mobile'    => $user_address['telephone'],
                 'params'    => [
                     'nickname'      => $user->mobile,
-                    'order_sn'      => $order_data['order_sn'],
-                    'order_money'   => $order_data['order_amount']
+                    'order_sn'      => $order['order_sn'],
+                    'order_money'   => $order['order_amount']
                 ],
             ]);
-
-            if ($data['order_amount'] == 0){
-                PayNotifyLogic::handle('order', $order_data['order_sn'], []);
-            }
 
             Db::commit();
             return self::dataSuccess('', ['order_id' => $order_id, 'type' => 'order']);
@@ -329,8 +301,108 @@ class OrderLogic extends LogicBase
     }
 
 
-    //下单后操作
-    public static function addOrderAfter($order_id, $user_id, $type, $cart_items, $data)
+
+    /**
+     * Notes:添加订单
+     * @param $user_id
+     * @param $data
+     * @param $order_source
+     * @param $user_address
+     * @author 段誉(2021/1/30 14:46)
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public static function addOrder($user_id, $data, $order_source, $user_address)
+    {
+        $order_data = [
+            'order_type' => $data['order_type'],
+            'order_sn' => createSn('order', 'order_sn', '', 4),
+            'user_id' => $user_id,
+            'order_source' => $order_source,
+            'consignee' => $user_address['contact'],
+            'province' => $user_address['province_id'],
+            'city' => $user_address['city_id'],
+            'district' => $user_address['district_id'],
+            'address' => $user_address['address'],
+            'mobile' => $user_address['telephone'],
+            'goods_price' => $data['total_goods_price'],
+            'order_amount' => $data['order_amount'],//应付金额
+            'total_amount' => $data['total_amount'],//订单总金额
+            'shipping_price' => $data['shipping_price'],//店铺订单运费
+            'total_num' => $data['total_num'],//店铺订单商品数量
+            'user_remark' => $data['remark'],
+            'create_time' => time(),
+            'discount_amount' => $data['discount_amount'],//优惠券优惠金额
+            'pay_way' => $data['pay_way'],
+        ];
+
+        if ($data['coupon_id'] > 0 && $data['discount_amount'] > 0){
+            $order_data['coupon_list_id'] = $data['coupon_id'];//此处coupon_id为前端传入的coupon_list_id
+        }
+
+        $order_id = Db::name('order')->insertGetId($order_data);
+
+        return [
+            'order_id' => $order_id,
+            'order_sn' => $order_data['order_sn'],
+            'order_amount' => $order_data['order_amount'],
+        ];
+    }
+
+
+
+
+    /**
+     * Notes: 添加订单商品
+     * @param $order_id
+     * @param $goods_lists
+     * @author 段誉(2021/1/30 14:46)
+     * @throws Exception
+     */
+    public static function addOrderGoods($order_id, $goods_lists)
+    {
+        foreach ($goods_lists as $k1 => $good) {
+            //商品验证
+            if ($good['del'] == 1 || $good['status'] != 1) {
+                throw new Exception($good['goods_name'] . '不存在或已下架');
+            }
+            if ($good['goods_num'] > $good['stock']) {
+                throw new Exception($good['goods_name'] . '库存不足');
+            }
+
+            $goods_data[] = [
+                'order_id' => $order_id,
+                'goods_id' => $good['goods_id'],
+                'item_id' => $good['item_id'],
+                'goods_name' => $good['goods_name'],
+                'goods_num' => $good['goods_num'],
+                'goods_price' => $good['goods_price'],
+                'total_price' => $good['goods_price'] * $good['goods_num'],
+                'total_pay_price' => ($good['goods_price'] * $good['goods_num']) - $good['discount_price'],//实际支付商品金额(扣除优惠金额)
+                'spec_value_ids' => $good['spec_value_ids'],
+                'discount_price' => $good['discount_price'],
+                'goods_info'   => json_encode($good, JSON_UNESCAPED_UNICODE),
+                'create_time' => time(),
+            ];
+        }
+        Db::name('order_goods')->insertAll($goods_data);
+    }
+
+
+
+    /**
+     * Notes:下单后操作
+     * @param $order_id
+     * @param $user_id
+     * @param $type
+     * @param $data
+     * @author 段誉(2021/1/30 14:46)
+     * @throws Exception
+     * @throws \think\exception\PDOException
+     */
+    public static function addOrderAfter($order_id, $user_id, $type, $data)
     {
         $goods_data = $data['goods_lists'];
         //下单时扣减商品库存
@@ -341,6 +413,7 @@ class OrderLogic extends LogicBase
 
         //删除购物车商品
         if ($type == 'cart') {
+            $cart_items = array_column($goods_data, 'item_id');
             Db::name('cart')->where([
                 ['user_id', '=', $user_id],
                 ['selected', '=', 1],
@@ -350,7 +423,7 @@ class OrderLogic extends LogicBase
 
         //有使用优惠券时更新coupon_list
         if ($data['coupon_id'] > 0){
-            \app\common\logic\CouponLogic::useCouponByOrder($order_id, $data['coupon_id']);
+            \app\common\logic\CouponLogic::handleCouponByOrder($data['coupon_id'], $order_id);
         }
 
         //增加订单日志
@@ -364,7 +437,17 @@ class OrderLogic extends LogicBase
     }
 
 
-    // 订单列表
+
+
+    /**
+     * Notes: 订单列表
+     * @param $user_id
+     * @param $type
+     * @param $page
+     * @param $size
+     * @author 段誉(2021/1/30 14:46)
+     * @return array
+     */
     public static function getOrderList($user_id, $type, $page, $size)
     {
         $order = new Order();
@@ -420,7 +503,14 @@ class OrderLogic extends LogicBase
         return $data;
     }
 
-    //订单详情
+
+
+    /**
+     * Notes: 订单详情
+     * @param $order_id
+     * @author 段誉(2021/1/30 14:46)
+     * @return Order|array
+     */
     public static function getOrderDetail($order_id)
     {
         $order = Order::get(['del' => 0, 'id' => $order_id], ['orderGoods']);
@@ -463,7 +553,15 @@ class OrderLogic extends LogicBase
     }
 
 
-    //取消订单
+
+
+    /**
+     * Notes: 取消订单
+     * @param $order_id
+     * @param $user_id
+     * @author 段誉(2021/1/30 14:47)
+     * @return array
+     */
     public static function cancel($order_id, $user_id)
     {
         $order = Order::get([
@@ -477,31 +575,18 @@ class OrderLogic extends LogicBase
         }
         Db::startTrans();
         try {
-            //下单扣库存的话(deduct_type=1),回退库存,支付后扣库存的话(deduct_type=0),判断订单是否支付才去回退库存
-            OrderGoodsLogic::backStock($order['orderGoods'], $order['pay_status']);
-
+            //取消订单
+            OrderRefundLogic::cancelOrder($order_id, OrderLog::TYPE_USER);
             //已支付的订单,取消,退款
             if ($order['pay_status'] == Pay::ISPAID) {
-                $refund_res = self::refund($order);
-                if ($refund_res !== true) {
-
-                    if (isset($refund_res['return_code']) && $refund_res['return_code'] == 'FAIL') {
-                        throw new Exception($refund_res['return_msg']);
-                    }
-
-                    if (isset($refund_res['err_code_des'])) {
-                        throw new Exception($refund_res['err_code_des']);
-                    }
-
-                    throw new Exception($refund_res);
-                }
+                //更新订单状态
+                OrderRefundLogic::cancelOrderRefundUpdate($order);
+                //订单退款
+                OrderRefundLogic::refund($order, $order['order_amount'], $order['order_amount']);
             }
 
-            $order->save(['order_status' => CommonOrder::STATUS_CLOSE, 'update_time' => time(), 'cancel_time' => time()]);
-
-            self::cancelAfter($order_id, $user_id);
-
             Db::commit();
+
             Hook::listen('wx_message_send', [
                 'user_id'  => $user_id,
                 'scene'    => MessageScene_::REFUND_SUCCESS,
@@ -511,35 +596,20 @@ class OrderLogic extends LogicBase
         } catch (Exception $e) {
             Db::rollback();
             //增加退款失败记录
-            if (empty($refund_res)) {
-                $refund_res = $e->getMessage();
-            }
-            self::addErrorRefund($order, $refund_res);
+            OrderRefundLogic::addErrorRefund($order, $e->getMessage());
             return self::dataError($e->getMessage());
         }
     }
 
 
-    //取消订单后
-    public static function cancelAfter($order_id, $user_id)
-    {
-        $order = Order::get($order_id);
 
-        OrderLogLogic::record(
-            OrderLog::TYPE_USER,
-            OrderLog::USER_CANCEL_ORDER,
-            $order_id,
-            $user_id,
-            OrderLog::USER_CANCEL_ORDER
-        );
-
-        if ($order['coupon_list_id'] > 0){
-            \app\common\logic\CouponLogic::rollBackCouponByOrder($order['coupon_list_id']);
-        }
-    }
-
-
-    //删除订单
+    /**
+     * Notes: 删除订单
+     * @param $order_id
+     * @param $user_id
+     * @author 段誉(2021/1/30 14:57)
+     * @return array
+     */
     public static function del($order_id, $user_id)
     {
         $order = Order::get([
@@ -567,36 +637,15 @@ class OrderLogic extends LogicBase
     }
 
 
-    //增加退款失败记录
-    public static function addErrorRefund($order, $wx_result)
-    {
-        $refund_fee = $order['order_amount'];//实际商品支付金额
-        $total_fee = $order['order_amount'];//订单应付金额
-
-        //在白名单内,一分钱
-        $white_list = Env::get('wechat.white_list', '');
-        $white_list = explode(',', $white_list);
-        if (in_array($order['user_id'], $white_list)) {
-            $total_fee = 0.01;
-            $refund_fee = 0.01;
-        }
-
-        $refund_data = [
-            'order_id' => $order['id'],
-            'user_id' => $order['user_id'],
-            'refund_sn' => createSn('order_refund', 'refund_sn'),
-            'order_amount' => $total_fee,
-            'refund_amount' => $refund_fee,
-            'transaction_id' => $order['transaction_id'],
-            'create_time' => time(),
-            'refund_status' => 2,
-            'refund_msg' => json_encode($wx_result, JSON_UNESCAPED_UNICODE),
-        ];
-        Db::name('order_refund')->insertGetId($refund_data);
-    }
 
 
-    //确认收货
+    /**
+     * Notes: 确认收货
+     * @param $order_id
+     * @param $user_id
+     * @author 段誉(2021/1/30 14:57)
+     * @return array
+     */
     public static function confirm($order_id, $user_id)
     {
         $order = Order::get(['del' => 0, 'id' => $order_id]);
@@ -728,9 +777,7 @@ class OrderLogic extends LogicBase
             ];
             return $order_traces;
         }
-
         return $order_traces;
-
     }
 
 
@@ -747,102 +794,4 @@ class OrderLogic extends LogicBase
         return true;
     }
 
-
-    //退款
-    public static function refund($order)
-    {
-        $refund_fee = $order['order_amount'];//实际商品支付金额
-        $total_fee = $order['order_amount'];//订单应付金额
-
-        //在白名单内,一分钱
-        $white_list = Env::get('wechat.white_list', '');
-        $white_list = explode(',', $white_list);
-        if (in_array($order['user_id'], $white_list)) {
-            $total_fee = 0.01;
-            $refund_fee = 0.01;
-        }
-
-        //增加退款记录
-        $refund_data = [
-            'order_id' => $order['id'],
-            'user_id' => $order['user_id'],
-            'refund_sn' => createSn('order_refund', 'refund_sn'),
-            'order_amount' => $total_fee,
-            'refund_amount' => $refund_fee,
-            'transaction_id' => $order['transaction_id'],
-            'create_time' => time(),
-        ];
-        $refund_id = Db::name('order_refund')->insertGetId($refund_data);
-
-        //余额支付回退余额
-        if ($order['pay_way'] == Pay::BALANCE_PAY){
-            $user = \app\common\model\User::get($order['user_id']);
-            //余额支付,回退余额
-            $user->user_money = ['inc', $order['order_amount']];
-            AccountLogLogic::AccountRecord(
-                $order['user_id'],
-                $order['order_amount'],
-                1,
-                AccountLog::cancel_order_refund,
-                '',
-                $order['id'],
-                $order['order_sn']
-            );
-            $user->save();
-            return true;
-        }
-
-        $data = [
-            'transaction_id' => $order['transaction_id'],
-            'refund_sn' => $refund_data['refund_sn'],
-            'total_fee' => $total_fee * 100,//订单金额,单位为分
-            'refund_fee' => $refund_fee * 100,
-        ];
-
-        $config = WeChatServer::getPayConfigBySource($order['order_source']);
-
-        if (empty($config)) {
-            return '请联系管理员设置微信相关配置!';
-        }
-
-        if (!isset($config['cert_path']) || !isset($config['key_path'])) {
-            return '请联系管理员设置微信证书!';
-        }
-
-        if (!file_exists($config['cert_path']) || !file_exists($config['cert_path'])) {
-            return '微信证书不存在,请联系管理员!';
-        }
-
-
-        $result = PaymentLogic::refund($config, $data);
-        if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
-            //更新退款记录
-            $update_refund = [
-                'refund_status' => 1,
-                'refund_at' => time(),
-                'wechat_refund_id' => $result['refund_id'],
-                'refund_msg' => json_encode($result, JSON_UNESCAPED_UNICODE),
-                'update_time' => time(),
-            ];
-            Db::name('order_refund')->where(['id' => $refund_id])->update($update_refund);
-
-            //订单商品=>标记退款成功状态
-            Db::name('order_goods')
-                ->where(['order_id' => $order['id']])
-                ->update(['refund_status' => OrderGoods::REFUND_STATUS_SUCCESS]);
-
-            //更新订单支付状态为已退款
-            $update = [
-                'pay_status' => Pay::REFUNDED,
-                'refund_status' => 2,
-                'refund_amount' => $order['refund_amount'] + $total_fee,
-            ];
-
-            Db::name('order')->where(['id' => $order['id']])->update($update);
-            return true;
-        } else {
-            return $result;
-        }
-
-    }
 }

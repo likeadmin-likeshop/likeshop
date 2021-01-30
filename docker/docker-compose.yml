@@ -56,7 +56,6 @@ services:
     #user: "1000:1000"
 
 
-
   mysql:
     container_name: likeshop-mysql
     image: mysql:5.7.29 #X86架构

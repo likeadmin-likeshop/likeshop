@@ -97,12 +97,12 @@
 			</view>
 		</navigator>
 	</view>
-      <loading-footer :status="loadingStatus" slotEmpty>
-            <view class="data-null column-center" slot="empty">
-                <image class="img-null" src="/static/images/order_null.png"></image>
-                <text class="nr muted">暂无售后数据～</text>
-            </view>
-        </loading-footer>
+    <loading-footer :status="loadingStatus" slotEmpty>
+        <view class="data-null column-center" slot="empty">
+            <image class="img-null" src="/static/images/order_null.png"></image>
+            <text class="nr muted">暂无售后数据～</text>
+        </view>
+    </loading-footer>
 </view>
 
 <van-dialog title="提示" :show="confirmDialog" show-cancel-button message="是否要撤销申请？" confirm-button-color="#FF2C3C" @confirm="$cancelApply" @close="hideDialog">

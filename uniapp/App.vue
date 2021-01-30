@@ -10,10 +10,7 @@
 			// #ifdef H5
 			uni.getSystemInfo({
 				success(e) {
-					/* 窗口宽度大于420px且不在PC页面且不在移动设备时跳转至 PC.html 页面 */
 					if (e.windowWidth > 420 && !window.top.isPC && !/iOS|Android/i.test(e.system)) {
-						// window.location.pathname = 'https://java.crmeb.net/';
-						/* 若你的项目未设置根目录（默认为 / 时），则使用下方代码 */
 						window.location.pathname = '/static/html/pc.html';
 					}
 				}

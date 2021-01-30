@@ -5,7 +5,7 @@
             <view class="goods-img">
                 <custom-image width="180rpx" radius="10rpx" height="180rpx" lazy-load :src="item.image_str || item.image"></custom-image>
             </view>
-            <view class="goods-info ml20">
+            <view class="goods-info ml20 flex1">
                 <view class="goods-name line2 mb10">
                      {{item.goods_name || item.name}}</view>
                 <view class="goods-spec xs muted mb20">{{item.spec_value_str}}</view>

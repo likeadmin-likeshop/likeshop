@@ -1,13 +1,13 @@
 <template>
-<view class="post-sale">
-  <view class="contain">
-    <tabs :active="active" :line-width="40" @change="onChange" sticky>
-      <tab v-for="(item, index) in afterSale" :key="index" :name="item.type" :title="item.name">
-        <after-sales-list :type="item.type" v-if="item.isShow" :id="item.type"></after-sales-list>
-      </tab>
-    </tabs>
-  </view>
-</view>
+    <view class="post-sale">
+      <view class="contain">
+        <tabs :active="active" :line-width="40" @change="onChange" sticky>
+          <tab v-for="(item, index) in afterSale" :key="index" :title="item.name">
+            <after-sales-list :type="item.type" v-if="item.isShow" :id="item.type"></after-sales-list>
+          </tab>
+        </tabs>
+      </view>
+    </view>
 </template>
 
 <script>
@@ -33,7 +33,7 @@ import { AfterSaleType } from "../../utils/type";
 export default {
   data() {
     return {
-      active: AfterSaleType.NORMAL,
+      active: 0,
       afterSaleType: AfterSaleType.NORMAL,
       afterSaleList: [],
       afterSale: [{
@@ -94,7 +94,24 @@ export default {
     const {
       active
     } = this;
-    let myComponent = this.selectComponent('#' + active);
+
+
+    let afterSaleType = AfterSaleType.NORMAL
+    switch(active) {
+        case 0:
+            afterSaleType = AfterSaleType.NORMAL
+            break;
+        case 1:
+            afterSaleType = AfterSaleType.HANDLING;
+            break;
+        case 2:
+            afterSaleType = AfterSaleType.FINISH;
+            break;
+        default:
+            afterSaleType = AfterSaleType.NORMAL
+            break;
+    }
+    let myComponent = this.selectComponent('#' + afterSaleType);
 
     if (myComponent.$getAfterSaleList) {
       myComponent.$getAfterSaleList();
@@ -102,25 +119,26 @@ export default {
   },
   methods: {
     onChange(e) {
-      const {
-        name
-      } = e.detail;
-      this.changeShow(name);
+      
+      // const {
+      //   name
+      // } = e.detail;
+      
+      this.changeShow(e);
     },
 
-    changeShow(type) {
+    changeShow(active) {
       const {
         afterSale
       } = this;
+      let type = active == 0 ? AfterSaleType.NORMAL : active == 1 ? AfterSaleType.HANDLING : AfterSaleType.FINISH
       let index = afterSale.findIndex(item => {
         return item.type == type;
       });
 
       if (index != -1) {
-        this.setData({
-          [`afterSale[${index}].isShow`]: true,
-          active: type
-        });
+          this.afterSale[index].isShow = true;
+          this.active = type
       }
     },
 

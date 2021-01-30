@@ -27,6 +27,7 @@ class OrderLog extends Model
     //操作人类型
     const TYPE_USER = 0;//会员
     const TYPE_SHOP = 1;//门店
+    const TYPE_SYSTEM   = 2;//系统
 
     //订单动作
     const USER_ADD_ORDER = 101;//提交订单
@@ -39,6 +40,8 @@ class OrderLog extends Model
     const SHOP_DEL_ORDER = 202;//商家删除订单
     const SHOP_DELIVERY_ORDER = 203;//商家发货
     const SHOP_CONFIRM_ORDER = 204;//商家确认收货
+
+    const SYSTEM_CANCEL_ORDER   = 301;//系统取消订单
 
     //订单动作明细
     public static function getLogDesc($log)
@@ -54,6 +57,8 @@ class OrderLog extends Model
             self::SHOP_DEL_ORDER => '商家删除订单',
             self::SHOP_DELIVERY_ORDER => '商家发货',
             self::SHOP_CONFIRM_ORDER => '商家确认收货',
+
+            self::SYSTEM_CANCEL_ORDER   => '系统取消订单',
         ];
 
         if ($log === true) {

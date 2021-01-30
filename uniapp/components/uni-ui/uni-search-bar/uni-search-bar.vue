@@ -9,10 +9,10 @@
 			<!-- #ifndef MP-ALIPAY -->
 			<uni-icons color="#999999" class="uni-searchbar__box-icon-search" size="18" type="search" />
 			<!-- #endif -->
-			<input :focus="showSync" :placeholder="placeholder" :maxlength="maxlength" @confirm="confirm" class="uni-searchbar__box-search-input"
+			<input :focus="showSync" :disabled="disabled" :placeholder="placeholder" :maxlength="maxlength" @focus="focus"  @confirm="confirm" class="uni-searchbar__box-search-input"
 			 confirm-type="search" type="text" v-model="searchVal" />
 			<view v-if="show && (clearButton==='always'||clearButton==='auto'&&searchVal!=='')" class="uni-searchbar__box-icon-clear" @click="clear">
-				<uni-icons color="#999999" class="" size="24" type="clear" />
+				<uni-icons color="#999999" class="" size="18" type="clear" />
 			</view>
 		</view>
 		<text @click="cancel" class="uni-searchbar__cancel" v-if="cancelButton ==='always' || show && cancelButton ==='auto'">{{cancelText}}</text>
@@ -50,6 +50,9 @@
 			uniIcons
 		},
 		props: {
+			value: {
+				type: String
+			},
 			placeholder: {
 				type: String,
 				default: "请输入搜索内容"
@@ -81,6 +84,10 @@
 			wrapBgColor: {
 				type: String,
 				default: "#fff"
+			},
+			disabled: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
@@ -95,6 +102,9 @@
 				this.$emit("input", {
 					value: this.searchVal
 				})
+			},
+			value(val) {
+				this.searchVal = val
 			}
 		},
 		methods: {
@@ -135,6 +145,9 @@
 				this.$emit("confirm", {
 					value: this.searchVal
 				})
+			},
+			focus() {
+				this.$emit("focus")
 			}
 		}
 	};

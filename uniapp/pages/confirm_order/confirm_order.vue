@@ -44,11 +44,27 @@
 						<view>积分抵扣</view>
 						<view class="ml20 muted xs row" style="flex:1">
 							共{{orderInfo.user_integral}}积分{{orderInfo.user_integral < orderInfo.integral_limit ? "，满" + orderInfo.integral_limit + "可用" : "" }}
-							<van-icon class="ml10" @tap.stop="showDialog" size="30rpx" name="question-o"></van-icon>
+							<uni-icons class="ml10" color="#999" @tap.stop="showDialog" size="15" type="help"></uni-icons>
 						</view>
-						<checkbox :disabled="orderInfo.user_integral < orderInfo.integral_limit" :checked="useIntegral">
+						<checkbox :disabled="orderInfo.user_integral < orderInfo.integral_limit" :checked="Boolean(useIntegral)">
 						</checkbox>
 					</view>
+				</view>
+
+				<view class="pay-way contain">
+					<view class="lighter title">支付方式</view>
+					<radio-group class="radio-group" @change="radioChange">
+						<label v-for="(item, index) in payWayArr" :key="index" class="item row-between">
+							<view class="row">
+								<image class="icon-lg mr20" :src="item.icon"></image>
+								<view class>
+									<view class="balck bt10">{{item.name}}</view>
+									<view class="muted xs">{{item.desc}}{{ item.type == 3 ? orderInfo.user_money : ''}}</view>
+								</view>
+							</view>
+							<radio class="radio" :value="String(item.type)" :checked="item.type == payWay"></radio>
+						</label>
+					</radio-group>
 				</view>
 				<view class="price contain">
 					<view class="item row-between">
@@ -68,22 +84,6 @@
 						<view class="primary">-¥{{orderInfo.integral_amount}}</view>
 					</view>
 				</view>
-				<view class="pay-way contain">
-					<view class="lighter title">支付方式</view>
-					<radio-group class="radio-group" @change="radioChange">
-						<label v-for="(item, index) in payWayArr" :key="index" class="item row-between">
-							<view class="row">
-								<image class="icon-lg mr20" :src="item.icon"></image>
-								<view class>
-									<view class="balck bt10">{{item.name}}</view>
-									<view class="muted xs">{{item.desc}}{{ item.type == 3 ? orderInfo.user_money : ''}}</view>
-								</view>
-							</view>
-							<radio class="radio" :value="item.type" :checked="item.type == payWay"></radio>
-						</label>
-					</radio-group>
-				</view>
-
 			</view>
 			<view class="footer bg-white row-between fixed">
 				<view class="all-price lg row">
@@ -126,6 +126,7 @@
 				orderInfo: {},
 				goodsLists: [],
 				addressId: '',
+				useIntegral: 0,
 				userRemark: '',
 				payWayArr: [{
 					icon: "/static/images/icon_wechat.png",
@@ -148,12 +149,9 @@
 		props: {},
 
 		onLoad(options) {
-			const eventChannel = this.getOpenerEventChannel()
-			eventChannel.on('acceptData', ({
-				data
-			}) => {
-				this.goods = data
-			})
+			console.log(options)
+			const data = JSON.parse(decodeURIComponent(options.data));
+			this.goods = data.goods
 		},
 
 		onShow: async function() {
@@ -175,13 +173,11 @@
 						user_integral
 					}
 				} = this;
-				if (integral_limit > user_integral) return Tips({
+				if (integral_limit > user_integral) return this.$toast({
 					title: "未满足使用条件"
 				});
-				this.setData({
-					useIntegral: useIntegral ? 0 : 1
-				});
-				uni.nextTick(() => {
+				this.useIntegral = useIntegral ? 0 : 1
+				this.$nextTick(() => {
 					this.orderBuyFun();
 				});
 			},
@@ -282,11 +278,13 @@
 					address,
 					userRemark,
 					payWay,
+					useIntegral
 				} = this;
 				let submitObj = {
 					action,
 					goods: this.goods,
-					pay_way: payWay
+					pay_way: payWay,
+					use_integral:useIntegral
 				};
 
 				if (action == 'info') {

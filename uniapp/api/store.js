@@ -8,7 +8,9 @@ export function getHome() {
 //获取菜单
 export function getMenu(data) {
 	return request.get('menu/lists', {
-		params: {...data, client: 1},
+		params: { ...data,
+			client: 1
+		},
 	});
 }
 
@@ -45,19 +47,38 @@ export function getGoodsDetail(data) {
 	});
 }
 
-//领券中心
-export function getCouponList(data) {
-	return request.get("coupon/couponList", {params: data});
+// 商品搜索
+
+export function getGoodsSearch(data) {
+	return request.get('goods/getGoodsList', {
+		params: data
+	});
+}
+//搜索页,热门搜索列表,和历史搜索列表
+
+export function getSearchpage(data) {
+	return request.get('goods/getSearchPage', {
+		params: data
+	});
+}
+// 清空历史搜索
+
+export function clearSearch() {
+	return request.get('goods/clearSearch');
 }
 
 //评价列表
 export function getCommentList(data) {
-	return request.get("goods_comment/lists", {params: data})
+	return request.get("goods_comment/lists", {
+		params: data
+	})
 }
 
 // 获取评价列表
 export function getOrderCommentList(data) {
-	return request.get("goods_comment/getOrderGoods", {params: data})
+	return request.get("goods_comment/getOrderGoods", {
+		params: data
+	})
 }
 
 // 购物车数量更改
@@ -77,10 +98,20 @@ export function deleteGoods(data) {
 
 //购物车选中状态
 export function changeCartSelect(data) {
-	return request.post('cart/selected',  data)
+	return request.post('cart/selected', data)
 }
 
 //评价分类
 export function getCommentCategory(id) {
-	return request.get("/goods_comment/category", {params: {goods_id: id}})
+	return request.get("/goods_comment/category", {
+		params: {
+			goods_id: id
+		}
+	})
 }
+
+//加入购物车
+
+export function addCart(data) {
+  return request.post('cart/add', data);
+} 

@@ -10,7 +10,7 @@
 					<view class="goods-name line2">{{item.name}}</view>
 					<view class="price mt10 row">
 						<price-format color="#FF2C3C"  class="mr10" :first-size="34" :second-size="26" :subscript-size="26" :price="item.price" :weight="500"></price-format>
-						<price-format class="muted" :firstSize="24" :secondSize="24" line-through :price="item.market_price"></price-format>
+						<price-format class="muted" :firstSize="24" :secondSize="24" :subscript-size="24" line-through :price="item.market_price"></price-format>
 					</view>
 				</view>
 			</navigator>
@@ -27,7 +27,7 @@
 					<view class="row-between  mt10">
 						<view class="price mt10 row">
 							<price-format :first-size="34" :second-size="26" :price="item.price" :weight="500"></price-format>
-							<price-format :first-size="24" :second-size="24" :price="item.market_price"></price-format>
+							<price-format :first-size="24" :second-size="24" :subscript-size="24" :price="item.market_price"></price-format>
 						</view>
 						<image class="icon-md" src="/static/images/icon_go_red.png"></image>
 					</view>
@@ -47,7 +47,7 @@
 					<view class="row-between muted xxs ">
 						<view class="line-through">
 							<text>原价</text>
-							<price-format :second-size="22" :first-size="22" :price="item.market_price"></price-format>
+							<price-format :second-size="22" :first-size="22" :subscript-size="22" :price="item.market_price"></price-format>
 						</view>
 						<view>{{item.sales_sum}}人购买</view>
 					</view>
@@ -70,7 +70,7 @@
 					<view class="row-between mt10">
 						<view class="price mt10 row">
 							<price-format :first-size="34" :second-size="26" :price="item.price" :weight="500"></price-format>
-							<price-format :first-size="24" :second-size="24" :price="item.market_price"></price-format>
+							<price-format :first-size="24" :second-size="24" :subscript-size="24" :price="item.market_price"></price-format>
 						</view>
 					</view>
 				</view>
@@ -104,7 +104,7 @@
 		.goods-double {
 			flex-wrap: wrap;
 			padding: 0 20rpx;
-
+			align-items: stretch;
 			.item {
 				width: 347rpx;
 				border-radius: 10rpx;

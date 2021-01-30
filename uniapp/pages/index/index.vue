@@ -5,9 +5,9 @@
 				<view class="navigation-bar bg-primary row" :style="{height: navHeight + 'px'}">
 					<image mode="heightFix" class="logo ml20" :src="logo"></image>
 				</view>
-				<view class="search">
-					<uni-search-bar :radius="60" @confirm="search" @input="input" bg-color="#FFF" cancel-button="none" wrap-bg-color="#FF2C3C"></uni-search-bar>
-				</view>
+				<navigator class="search" hover-class="none" url="/pages/goods_search/goods_search">
+					<uni-search-bar :disabled="true" :radius="60" @confirm="search" @input="input" bg-color="#FFF" cancel-button="none" wrap-bg-color="#FF2C3C"></uni-search-bar>
+				</navigator>
 			</sticky>
 		</view>
 		<view class="contain">

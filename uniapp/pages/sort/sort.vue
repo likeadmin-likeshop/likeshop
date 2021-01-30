@@ -1,8 +1,8 @@
 <template>
 	<view class="sort">
-		<view class="header">
-			<uni-search-bar :radius="60" @confirm="search" @input="input" bg-color="#F4F4F4" cancel-button="none"></uni-search-bar>
-		</view>
+		<navigator class="header" hover-class="none" url="/pages/goods_search/goods_search">
+			<uni-search-bar :disabled="true" :radius="60" @confirm="search" @input="input" bg-color="#F4F4F4" cancel-button="none"></uni-search-bar>
+		</navigator>
 		<view class="content row">
 			<view class="aside">
 				<scroll-view style="height: 100%" scroll-y="true" :scroll-top="leftScrollTop" scroll-with-animation="true">
@@ -50,7 +50,7 @@
 	} from '@/api/store';
 	import {
 		getRect
-	} from '@/utils/wxutil';
+	} from '@/utils/tools';
 	export default {
 		data() {
 			return {

@@ -192,7 +192,7 @@ export default {
 
 .user-collection {
     .goods-list {
-        height:  calc(100vh - 100rpx);
+        height:  100vh;
         overflow: hidden;
         .collection-item {
             padding: 20rpx;

@@ -19,6 +19,18 @@ export const payWay = {
 	BALANCE:3
 }
 
+export const orderType = {
+ ALL: 'all',
+  //全部
+ PAY: 'pay',
+  //待付款
+ DELIVERY: 'delivery',
+  //待收货
+ FINISH: 'finish',
+  //待收货
+ CLOSE: 'close' //待收货
+
+};
 // 售后状态
 export const AfterSaleType = {
     // 售后申请 
@@ -27,4 +39,12 @@ export const AfterSaleType = {
     HANDLING: 'apply',
     // 已处理
     FINISH: 'finish'
+}
+
+// 售后退款操作
+export const refundOptType = {
+    // 仅退款
+    ONLY_REFUND: 0,
+    // 退货退款
+    REFUNDS: 1
 }

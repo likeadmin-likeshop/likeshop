@@ -6,6 +6,7 @@
 			<view class="uni-popup__wrapper-box" @click.stop="clear">
 				<slot />
 			</view>
+			<view v-if="showSafeArea" class="uni-popup__safe-area"></view>
 		</uni-transition>
 	</view>
 </template>
@@ -48,6 +49,10 @@
 			},
 			// maskClick
 			maskClick: {
+				type: Boolean,
+				default: true
+			},
+			showSafeArea: {
 				type: Boolean,
 				default: true
 			}
@@ -268,13 +273,15 @@
 		display: block;
 		/* #endif */
 		position: relative;
+	}
+	.uni-popup__safe-area {
+		background-color: #fff;
 		/* iphonex 等安全区设置，底部安全区适配 */
 		/* #ifndef APP-NVUE */
 		padding-bottom: constant(safe-area-inset-bottom);
 		padding-bottom: env(safe-area-inset-bottom);
 		/* #endif */
 	}
-
 	.content-ani {
 		// transition: transform 0.3s;
 		transition-property: transform, opacity;

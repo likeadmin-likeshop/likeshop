@@ -54,7 +54,7 @@ class Order extends ApiBase
         $action = $post['action'];
         $info = OrderLogic::info($post, $this->user_id);
 
-        if ($info['code'] == 0){
+        if ($info['code'] == 0) {
             $this->_error($info['msg']);
         }
 
@@ -62,9 +62,7 @@ class Order extends ApiBase
             $this->_success('', $info['data']);
         }
 
-        $type = $post['type'] ?? '';
-        $client = $post['client'] ?? 1;
-        $order = OrderLogic::add($this->user_id, $info['data'], $type, $client);
+        $order = OrderLogic::add($this->user_id, $info['data'], $post);
         return $order;
     }
 
@@ -149,23 +147,23 @@ class Order extends ApiBase
         $spec = Db::name('goods_spec_value')->where(['id' => $spec_ids])->column('value', 'id');
 
         $handle_arr = [];
-        foreach ($orders as $order){
-            if (!empty($order['goods_info'])){
+        foreach ($orders as $order) {
+            if (!empty($order['goods_info'])) {
                 continue;
             }
 
             $goods_id = $order['goods_id'];
-            $item_id =  $order['item_id'];
+            $item_id = $order['item_id'];
             $spec_id = $order['spec_value_ids'];
 
             $data = [];
-            $data['goods_name'] =  $goods[$goods_id]['name'] ?? '';
-            $data['image'] =  $goods[$goods_id]['image'] ?? '';
+            $data['goods_name'] = $goods[$goods_id]['name'] ?? '';
+            $data['image'] = $goods[$goods_id]['image'] ?? '';
             $data['spec_image'] = $goods_item[$item_id] ?? '';
             $data['spec_value_str'] = $spec[$spec_id] ?? '';
 
             Db::name('order_goods')
-                ->where(['id'=> $order['og_id']])
+                ->where(['id' => $order['og_id']])
                 ->update([
                     'goods_info' => json_encode($data, JSON_UNESCAPED_UNICODE),
                 ]);
@@ -173,6 +171,6 @@ class Order extends ApiBase
             $handle_arr[] = $order['og_id'];
         }
 
-        return '修改'.count($handle_arr).'条数据';
+        return '修改' . count($handle_arr) . '条数据';
     }
 }

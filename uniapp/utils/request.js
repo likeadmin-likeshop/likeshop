@@ -8,6 +8,25 @@ import {
 	TOKEN
 } from '../config/cachekey'
 
+import {
+	wxAutoLogin,
+	isAuthorize
+} from './login'
+
+let index = 0;
+
+function checkParams(params) {
+	if (typeof params != 'object') return params
+	for (let key in params) {
+		const value = params[key];
+		if (value === null || value === undefined || value === "") {
+			delete params[key];
+		}
+	}
+	return params;
+}
+
+
 
 const service = axios.create({
 	baseURL: 'https://likeshop.yixiangonline.com/api/',
@@ -17,10 +36,12 @@ const service = axios.create({
 	}
 });
 
-console.log(service)
+
 // request拦截器
 service.interceptors.request.use(
 	config => {
+		config.data = checkParams(config.data)
+		config.params = checkParams(config.params)
 		if (config.method == 'GET') {
 			config.url += paramsToStr(config.params)
 		}
@@ -44,10 +65,30 @@ service.interceptors.response.use(
 					show,
 					msg
 				} = response.data;
-				if (code == 0) {
-
+				if (code == 0 && show) {
+					uni.showToast({
+						title:msg,
+						icon:"none"
+					})
 				} else if (code == -1) {
 					store.commit('LOGOUT')
+					let isAuth = await isAuthorize();
+					if (!isAuth) return;
+					if (index <= 0) {
+						index++;
+						uni.showLoading({
+							title: "登录中..."
+						})
+						const {
+							code: loginCode,
+							data: loginData
+						} = await wxAutoLogin()
+						if (loginCode == 1) {
+							index = 0;
+							uni.hideLoading()
+							store.commit('LOGIN', loginData)
+						}
+					}
 				}
 			}
 

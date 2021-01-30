@@ -20,12 +20,12 @@
 				"navigationBarTitleText": "收货地址"
 			}
 		},
-        {
-            "path": "pages/news_list/news_list",
-            "style": {
-                "navigationBarTitleText": "商城咨询"
-            }
-        },
+		{
+			"path": "pages/news_list/news_list",
+			"style": {
+				"navigationBarTitleText": "商城咨询"
+			}
+		},
 		{
 			"path": "pages/sort/sort",
 			"style": {
@@ -45,92 +45,132 @@
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": true
 			}
-			
+
 		},
-        {
-            "path" : "pages/goods_details/goods_details",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "商品详情"
-            }
-            
-        },
 		{
-		    "path" : "pages/confirm_order/confirm_order",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "确认订单"
-		    }
-		    
+			"path": "pages/goods_search/goods_search",
+			"style": {
+				"navigationBarTitleText": "商品搜索"
+			}
 		},
-        {
-            "path": "pages/user_collection/user_collection",
-            "style": {
-                "navigationBarTitleText": "我的收藏"
-            }
-        },
-        {
-            "path": "pages/user_wallet/user_wallet",
-            "style": {
-                "navigationBarTitleText": "我的钱包"
-            }
-        },
-        {
-            "path": "pages/user_bill/user_bill",
-            "style": {
-                "navigationBarTitleText": "钱包明细"
-            }
-        },
-        {
-            "path": "pages/user_coupon/user_coupon",
-            "style": {
-                "navigationBarTitleText": "我的优惠券"
-            }
-        },
-        {
-            "path": "pages/user_getcoupon/user_getcoupon",
-            "style": {
-                "navigationBarTitleText": "领券中心"
-            }
-        },
-        {
-            "path" : "pages/login/login",
-            "style" : {
-                "navigationBarTitleText": "登录",
-                "enablePullDownRefresh": false
-            }
-        }, 
-        {
-            "path": "pages/goods_comment_list/goods_comment_list",
-            "style": {
-                "navigationBarTitleText": "商品评价列表"
-            }
-        },
-        {
-            "path": "pages/goods_reviews/goods_reviews",
-            "style": {
-                "navigationBarTitleText": "商品评价"
-            }
-        },
-        {
-            "path": "pages/all_comments/all_comments",
-            "style": {
-                "navigationBarTitleText": "全部评价"
-            }
-        }, 
+		{
+			"path": "pages/goods_details/goods_details",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+
+		},
+		{
+			"path": "pages/confirm_order/confirm_order",
+			"style": {
+				"navigationBarTitleText": "确认订单"
+			}
+
+		},
+		{
+			"path": "pages/user_collection/user_collection",
+			"style": {
+				"navigationBarTitleText": "我的收藏"
+			}
+		},
+		{
+			"path": "pages/user_wallet/user_wallet",
+			"style": {
+				"navigationBarTitleText": "我的钱包"
+			}
+		},
+		{
+			"path": "pages/user_bill/user_bill",
+			"style": {
+				"navigationBarTitleText": "钱包明细"
+			}
+		},
+		{
+			"path": "pages/user_coupon/user_coupon",
+			"style": {
+				"navigationBarTitleText": "我的优惠券"
+			}
+		},
+		{
+			"path": "pages/user_getcoupon/user_getcoupon",
+			"style": {
+				"navigationBarTitleText": "领券中心"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/goods_comment_list/goods_comment_list",
+			"style": {
+				"navigationBarTitleText": "商品评价列表"
+			}
+		},
+		{
+			"path": "pages/goods_reviews/goods_reviews",
+			"style": {
+				"navigationBarTitleText": "商品评价"
+			}
+		},
+		{
+			"path": "pages/user_order/user_order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/order_details/order_details",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/all_comments/all_comments",
+			"style": {
+				"navigationBarTitleText": "全部评价"
+			}
+		},
+		{
+			"path": "pages/user_vip/user_vip",
+			"style": {
+				"navigationBarTitleText": "会员中心"
+			}
+		},
         {
             "path": "pages/post_sale/post_sale",
             "style": {
                 "navigationBarTitleText": "退款/售后"
             }
+        },
+        {
+            "path": "pages/apply_refund/apply_refund",
+            "style": {
+                "navigationBarTitleText": "申请售后"
+            }
+        },
+        {
+            "path": "pages/after_sales_detail/after_sales_detail",
+            "style": {
+                "navigationBarTitleText": "售后详情"
+            }
+        },
+        {
+            "path": "pages/input_express_info/input_express_info",
+            "style": {
+                "navigationBarTitleText": "填写快递单号"
+            }
         }
-    ],
+	],
 	"tabBar": {
 		"color": "#666",
 		"selectedColor": "#FF2C3C",
 		"borderStyle": "black",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/index/index",
 				"iconPath": "/static/images/tab_home.png",
 				"selectedIconPath": "/static/images/tab_home_s.png",
@@ -164,12 +204,12 @@
 		"h5": {
 			"navigationStyle": "custom"
 		}
-		
+
 	},
 	"easycom": {
 		"autoscan": true,
 		"custom": {
-			"^uni-(.*)": "@/components/uni-ui/uni-$1/uni-$1.vue"// 匹配components目录内的vue文件
+			"^uni-(.*)": "@/components/uni-ui/uni-$1/uni-$1.vue" // 匹配components目录内的vue文件
 		}
 	}
 }

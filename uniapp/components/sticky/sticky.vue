@@ -1,7 +1,7 @@
 <template>
-    <view class="weui-sticky" :style="'width: 100%;' + (fixed ? (`height: ${height}px; z-index: ${zIndex};`) : '')">
+    <view class="cu-sticky" :style="'width: 100%;' + (fixed ? (`height: ${height}px; z-index: ${zIndex};`) : '')">
         <view
-            :class="fixed ? 'weui-sticky__fixed' : ''"
+            :class="fixed ? 'cu-sticky__fixed' : ''"
             :style="fixed ? (`top: ${offsetTop}px;`) : ''">
             <slot></slot>
         </view>
@@ -12,8 +12,8 @@
 
 // 单独封装自 微信小程序扩展组件 mp-sticky，用法可参考其官方文档
 // https://developers.weixin.qq.com/miniprogram/dev/extended/component-plus/sticky.html
-import {getRect} from '@/utils/wxutil'
-const target = '.weui-sticky';
+import {getRect} from '@/utils/tools'
+const target = '.cu-sticky';
 
 export default {
     props: {
@@ -69,7 +69,7 @@ export default {
     mounted() {
         this.attached = true;
         if (!this.disabled) {
-            this.initObserver();
+			this.initObserver();
         }
     },
     destroyed() {
@@ -170,10 +170,10 @@ export default {
 </script>
 
 <style>
-.weui-sticky {
+.cu-sticky {
   position: relative;
 }
-.weui-sticky__fixed {
+.cu-sticky__fixed {
   position: fixed;
   width: 100%;
   left: 0;

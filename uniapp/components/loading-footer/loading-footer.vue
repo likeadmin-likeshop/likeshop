@@ -8,7 +8,7 @@
     <view v-if="status === 'error'" @click="onRefresh">{{ errorText }}</view>
     <view v-if="status === 'empty'" class="empty">
         <text v-if="!slotEmpty">暂无数据</text>
-        <slot v-else></slot>
+        <slot name="empty" v-else></slot>
     </view>
 </view>
 </template>

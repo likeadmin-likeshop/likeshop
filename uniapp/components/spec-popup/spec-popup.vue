@@ -8,7 +8,7 @@
 				<custom-image class="goods-img mr20" radius="10rpx" @tap="previewImage(checkedGoods.image)" :src="checkedGoods.image"></custom-image>
 				<view class="goods-info">
 					<view class="primary">
-						<price-format :first-size="46" :second-size="32" :show-subscript="32" :price="checkedGoods.price" :weight="500"></price-format>
+						<price-format :first-size="46" :second-size="32" :subscript-size="32" :price="checkedGoods.price" :weight="500"></price-format>
 					</view>
 					<view class="sm">
 						库存：{{checkedGoods.stock}}件

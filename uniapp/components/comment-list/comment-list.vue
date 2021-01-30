@@ -4,16 +4,16 @@
 	<view slot="content" class="comment-list">
 		<view v-for="(item, index) in list" :key="index" class="comment-item bg-white mt20">
 			<navigator class="comment-goods row" :url="'/pages/goods_details/goods_details?id=' + item.goods_id" hover-class="none">
-				<image width="160rpx" height="160rpx" radius="6rpx" lazy-load :src="item.image" />
+				<custom-image width="160rpx" height="160rpx" radius="6rpx" lazy-load :src="item.image" />
 				<view class="goods-desc">
 					<view class="goods-name line2 nr">{{item.goods_name}}</view>
-					<view class="row-between mt20" :hidden="type == 2">
+					<view class="row-between mt20" v-show="!(type == 2)">
 						<price-format :price="item.goods_price" showSubscript="true" :subscriptSize="26" :firstSize="30" :secondSize="30" />
 						<view class="nr">x{{item.goods_num}}</view>
 					</view>
-					<view :hidden="type == 1" class="row mt20">
+					<view v-show="!(type == 1)" class="row mt20">
 						<view class="sm mr10">评分</view>
-						<van-rate readonly :value="item.goods_comment" color="#FF2C3C" size="35rpx"></van-rate>
+                        <uni-rate :readonly="true" :value="item.goods_comment" activeColor="#FF2C3C" :size="17" />
 					</view>
 				</view>
 			</navigator>
@@ -26,7 +26,7 @@
 		</view>
 	</view>
     <loading-footer :status="status" slotEmpty>
-        <view class="data-null column-center">
+        <view class="data-null column-center" slot="empty">
             <image class="img-null" src="/static/images/news_null.png"></image>
             <text class="sm muted">暂无其他评价～</text>
         </view>        

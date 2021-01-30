@@ -4,7 +4,7 @@
 			<view class="_scroll-content" :style="{ backgroundColor: defaultConfig.bgColor}">
 				<view class="_tab-item-box" :class="[defaultConfig.itemWidth ? '_clamp' : '_flex']">
 					<block v-for="(item, index) in tabList" :key="index">
-						<view class="_item" :id="'_tab_'+index" :class="{ '_active': tagIndex === index }" :style="{color: tagIndex == index ? defaultConfig.activeColor : defaultConfig.color, 'width': defaultConfig.itemWidth ? defaultConfig.itemWidth : ''}"
+						<view class="_item" :id="'_tab_'+index" :class="{ '_active': tagIndex === index }" :style="{color: tagIndex == index ? defaultConfig.activeColor : defaultConfig.color, 'width': defaultConfig.itemWidth ? defaultConfig.itemWidth + 'rpx' : ''}"
 						 @click="tabClick(index)">{{ item.title }}</view>
 					</block>
 				</view>
@@ -16,7 +16,7 @@
 					}" />
 			</view>
 		</scroll-view>
-	<view class="tab-content" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd" @touchcancel="onTouchEnd">
+	<view class="tab-content">
 	  <view>
 	    <slot></slot>
 	  </view>
@@ -28,7 +28,7 @@
 	export default {
 		name: 'tabs',
 		props: {
-			activeIndex: {
+			active: {
 				type: Number,
 				default: 0
 			},
@@ -109,9 +109,8 @@
 						updateRender
 					}
 				})
-				console.log(this.tabList)
 				this.updateConfig();
-				this.tagIndex = this.activeIndex;
+				this.tagIndex = this.active;
 				this.$nextTick(() => {
 					this.calcScrollPosition();
 				})
@@ -120,9 +119,7 @@
 				this.defaultConfig = Object.assign(this.defaultConfig, this.config);
 			},
 			calcScrollPosition() {
-
 				const query = uni.createSelectorQuery().in(this);
-
 				query.select('#_scroll').boundingClientRect((res) => {
 					this.scorll = res;
 					this.updateTabWidth();
@@ -136,7 +133,6 @@
 				const query = uni.createSelectorQuery().in(this);
 
 				query.select('#_tab_' + index).boundingClientRect((res) => {
-
 					data[index]._slider = {
 						width: res.width,
 						left: res.left,
@@ -157,12 +153,11 @@
 			tabToIndex(index) {
 
 				let _slider = this.tabList[index]._slider;
-
 				let width = uni.upx2px(this.defaultConfig.underLineWidth);
-
+				
 				if (!width) {
 					if (this.defaultConfig.itemWidth) {
-						width = uni.upx2px(this.defaultConfig.itemWidth);
+						width = uni.upx2px(this.defaultConfig.itemWidth)/3;
 					} else {
 						width = this.tabList[index]['title'].length * uni.upx2px(this.defaultConfig.fontSize);
 					}
@@ -247,7 +242,7 @@
 					height: 4rpx;
 					background-color: #e54d42;
 					border-radius: 6rpx;
-					transition: .5s;
+					transition: transform .5s;
 					position: absolute;
 					bottom: 0;
 				}

@@ -7,7 +7,15 @@
 			this.getSystemInfo()
 		},
 		onShow: function() {
-			console.log('App Show')
+			// #ifdef H5
+			uni.getSystemInfo({
+				success(e) {
+					if (e.windowWidth > 420 && !window.top.isPC && !/iOS|Android/i.test(e.system)) {
+						window.location.pathname = '/static/html/pc.html';
+					}
+				}
+			})
+			// #endif
 		},
 		onHide: function() {
 			console.log('App Hide')
@@ -28,6 +36,7 @@
 							navHeight = statusBarHeight + 48;
 						}
 						this.globalData.navHeight = navHeight;
+
 					},
 					fail(err) {
 						console.log(err);

@@ -1,13 +1,11 @@
 <template>
-<!-- components/coupon-list/coupon-list.wxml -->
 
 <view class="coupon-list">
     <view v-for="(item, index) in list" :key="index" class="mb20">
         <view :class="'coupon-item row ' + (btnType == 1 || btnType == 2 ? 'gray': '')">
             <view class="price white column-center">
                 <view class="xl">
-                    <text>￥</text>
-                    <price-format :first-size="60" :second-size="50" :price="item.money" :weight="500" />
+                    <price-format :first-size="60" :second-size="50" :subscript-size="34" :price="item.money" :weight="500" />
                 </view>
                 <view class="sm" style="text-align: center">{{item.use_condition}}</view>
             </view>
@@ -16,12 +14,12 @@
                 <view class="xs lighter mb20">{{item.use_time_tips}}</view>
                 <view class="xs lighter ">{{item.coupon_type}}</view>
             </view>
-            <button type="primary" :class="'btn br60 white xs ' + (btnType != 3 ? 'plain': '')" :data-id="item.id" @tap="onHandle">
+            <button type="primary" :class="'btn br60 white xs ' + (btnType != 3 ? 'plain': '')" @tap="onHandle(item.id)">
                 {{getBtn}}
             </button>
             <image v-if="item.is_get" class="receive" src="/static/images/coupon_receive.png"></image>
         </view>
-        <view style="padding: 14rpx 20rpx" class="bg-white" v-if="item.tips" :data-index="index" @tap="onShowTips">
+        <view style="padding: 14rpx 20rpx" class="bg-white" v-if="item.tips" @tap="onShowTips(index)">
             <view class="row-between">
                 <view class="xs">使用说明</view>
                  <van-icon :class="showTips[index] ? 'rotate' : ''" name="arrow-down"></van-icon>
@@ -64,7 +62,7 @@ export default {
   props: {
     list: {
       type: Array,
-      default: []
+      default: () => []
     },
     btnType: {
       // 0 去使用  1已使用 2已过期 3领取
@@ -105,8 +103,8 @@ export default {
     }
   },
   methods: {
-    onHandle(e) {
-      this.id = e.currentTarget.dataset.id;
+    onHandle(id) {
+      this.id = id;
       const {
         btnType
       } = this;
@@ -132,13 +130,10 @@ export default {
       }
     },
 
-    onShowTips(e) {
+    onShowTips(index) {
       const {
         showTips
       } = this;
-      const {
-        index
-      } = e.currentTarget.dataset;
       this.showTips[index] = showTips[index] ? 0 : 1
     },
 

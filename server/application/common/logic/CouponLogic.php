@@ -79,7 +79,7 @@ class CouponLogic {
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
-    public static function useCouponByOrder($order_id, $coupon_list_id)
+    public static function handleCouponByOrder($coupon_list_id, $order_id)
     {
         $update_coupon = [
             'status' => 1,
@@ -90,27 +90,6 @@ class CouponLogic {
 
         Db::name('coupon_list')
             ->where('id', $coupon_list_id)
-            ->update($update_coupon);
-    }
-
-
-    /**
-     * Desc: 回退优惠券
-     * @param $coupon_list_id
-     * @throws \think\Exception
-     * @throws \think\exception\PDOException
-     */
-    public static function rollBackCouponByOrder($coupon_list_id)
-    {
-        $update_coupon = [
-            'status'        => 0,
-            'use_time'      => '',
-            'order_id'      => '',
-            'update_time'   => time(),
-        ];
-
-        Db::name('coupon_list')
-            ->where(['id' => $coupon_list_id])
             ->update($update_coupon);
     }
 }

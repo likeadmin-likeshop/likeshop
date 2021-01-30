@@ -107,4 +107,9 @@ class AfterSale extends Model
         return $this->hasOne('order', 'id', 'order_id')
             ->field('id,order_sn,total_amount,order_amount,pay_way,order_status');
     }
+
+    public function logs()
+    {
+        return $this->hasMany('after_sale_log', 'after_sale_id', 'id')->order('id desc');
+    }
 }

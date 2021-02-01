@@ -5,7 +5,7 @@
         <view class="form bg-white">
             <view class="form-item row">
                 <view class="label">收货人</view>
-                <input class="ml10" v-model="addressObj.contact" type="text" placeholder="请填写收货人姓名" />
+                <input class="ml10" v-model="addressObj.contact" name="contact" type="text" placeholder="请填写收货人姓名" />
             </view>
             <view class="form-item row">
                 <view class="label">联系方式</view>
@@ -82,8 +82,6 @@ export default {
    */
   onLoad: function (options) {
     this.addressId = parseInt(options.id)
-    console.log(options)
-    console.log(this.area)
     if (options.id) {
       uni.setNavigationBarTitle({
         title: '编辑地址'

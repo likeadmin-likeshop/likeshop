@@ -13,7 +13,7 @@
         </view>
     </view>
     <view class="main">
-        <jyf-parser :html="article_content"></jyf-parser>
+        <jyf-parser :html="article_content" :tag-style="tagStyle"></jyf-parser>
     </view>
 </view>
 <loading-view v-if="showLoading"></loading-view>
@@ -38,14 +38,17 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { getArticleDetail } from '../../api/store';
+import { getArticleDetail } from '../../api/new';
 
 export default {
   data() {
     return {
       showLoading: true,
       articleDetail: {},
-      article_content: ""
+      article_content: "",
+      tagStyle: {
+          img: 'width:100%;'
+      }
     };
   },
 

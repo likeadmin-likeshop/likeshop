@@ -21,7 +21,7 @@ namespace app\common\logic;
 
 use app\common\server\AliPayServer;
 use app\common\server\WeChatServer;
-use app\common\model\{Client_};
+use app\common\model\{Client_, Pay};
 use EasyWeChat\Factory;
 use think\Db;
 use think\Exception;
@@ -30,7 +30,66 @@ use think\facade\Env;
 class PaymentLogic extends LogicBase
 {
 
-    //微信统一下单
+    protected static $error = '未知错误';
+    protected static $return_code = 0;
+
+    /**
+     * Notes: 错误信息
+     * @return string
+     * @author 段誉(2021/2/1 11:19)
+     */
+    public static function getError()
+    {
+        return self::$error;
+    }
+
+    /**
+     * Notes: 返回状态码
+     * @return int
+     * @author 段誉(2021/2/1 11:19)
+     */
+    public static function getReturnCode()
+    {
+        return self::$return_code;
+    }
+
+    /**
+     * Notes: 支付
+     * @param $from
+     * @param $order
+     * @param $order_source
+     * @author 段誉(2021/2/1 11:58)
+     * @return array|bool|string
+     */
+    public static function pay($from, $order, $order_source)
+    {
+        switch ($order['pay_way']) {
+            case Pay::WECHAT_PAY:
+                $res = self::unifiedOrder($from, $order, $order_source);
+                break;
+            case Pay::ALI_PAY:
+                $res = self::appAlipay($from, $order, $order_source);
+                break;
+            default:
+                self::$error = '订单状态未知';
+                $res = false;
+        }
+        return $res;
+    }
+
+
+
+    /**
+     * Notes: 微信统一下单
+     * @param $from
+     * @param $order
+     * @param $order_source
+     * @author 段誉(2021/2/1 11:58)
+     * @return array|bool|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public static function unifiedOrder($from, $order, $order_source)
     {
         try {
@@ -107,19 +166,22 @@ class PaymentLogic extends LogicBase
                 }
                 throw new Exception('未知原因');
             }
-            return self::dataSuccess('', $data);
+
+            return $data;
         } catch (Exception $e) {
-            return self::dataError('支付失败:' . $e->getMessage());
+            self::$error = '支付失败:' . $e->getMessage();
+            return false;
         }
     }
 
 
     /**
-     * User: 意象信息科技 mjf
-     * Desc: 退款
+     * Notes: 退款
      * @param $config
-     * @param $data //微信订单号、商户退款单号、订单金额、退款金额、其他参数
-     * @param string $desc
+     * @param $data
+     * @author 段誉(2021/2/1 11:58)
+     * @return array|bool|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public static function refund($config, $data)
     {
@@ -138,7 +200,17 @@ class PaymentLogic extends LogicBase
     }
 
 
-    //获取微信配置
+
+    /**
+     * Notes: 获取微信配置
+     * @param $order
+     * @param $order_source
+     * @author 段誉(2021/2/1 11:58)
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public static function getWeChatConfig($order, $order_source)
     {
         $where[] = ['user_id', '=', $order['user_id']];
@@ -157,7 +229,15 @@ class PaymentLogic extends LogicBase
 
 
 
-    //支付宝APP支付
+
+    /**
+     * Notes: 支付宝APP支付
+     * @param $from
+     * @param $order
+     * @param $order_source
+     * @author 段誉(2021/2/1 11:58)
+     * @return bool|string
+     */
     public static function appAlipay($from, $order, $order_source)
     {
         try{
@@ -193,10 +273,13 @@ class PaymentLogic extends LogicBase
 
             $alipay = new AliPayServer();
             $result = $alipay->appAlipay($data, $notify_url);
-            return self::dataSuccess('', $result, 10002);
+
+            self::$return_code = 10002;
+            return $result;
 
         } catch (Exception $e) {
-            return self::dataError($e->getMessage());
+            self::$error = $e->getMessage();
+            return false;
         }
     }
 }

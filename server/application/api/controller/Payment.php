@@ -20,8 +20,6 @@
 namespace app\api\controller;
 
 use alipay\aop\AopClient;
-use app\api\logic\OrderLogic;
-use app\common\model\MessageScene_;
 use app\api\model\{Order};
 use app\common\server\AliPayServer;
 use app\common\server\WeChatServer;
@@ -29,14 +27,25 @@ use app\common\logic\{PaymentLogic, PayNotifyLogic};
 use app\common\model\Pay;
 use EasyWeChat\Payment\Application;
 use think\Db;
-use think\facade\Hook;
 
+
+/**
+ * 支付逻辑
+ * Class Payment
+ * @package app\api\controller
+ */
 class Payment extends ApiBase
 {
 
     public $like_not_need_login = ['notify', 'aliNotify'];
 
-
+    /**
+     * Notes: 预支付
+     * @author 段誉(2021/2/1 11:57)
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function prepay()
     {
         $post = $this->request->post();
@@ -45,7 +54,7 @@ class Payment extends ApiBase
                 $order = Order::get($post['order_id']);
                 break;
             case 'recharge':
-                $order = Db::name('recharge_order')->where(['id'=>$post['order_id']])->find();
+                $order = Db::name('recharge_order')->where(['id' => $post['order_id']])->find();
                 break;
         }
 
@@ -59,17 +68,20 @@ class Payment extends ApiBase
             $this->_success('支付成功', ['order_id' => $order['id']], 10001);
         }
 
-        if ($order['pay_way'] == Pay::WECHAT_PAY){
-            return PaymentLogic::unifiedOrder($post['from'], $order, $post['order_source']);
+        $result = PaymentLogic::pay($post['from'], $order, $post['order_source']);
+        if ($result === false){
+            $this->_error(PaymentLogic::getError(), ['order_id' => $order['id']], PaymentLogic::getReturnCode());
         }
 
-        if ($order['pay_way'] == Pay::ALI_PAY){
-            return PaymentLogic::appAlipay($post['from'], $order, $post['order_source']);
-        }
-
-        $this->_error('订单状态未知', ['order_id' => $order['id']]);
+        $this->_success('', $result);
     }
 
+
+    /**
+     * Notes: 微信支付回调
+     * @author 段誉(2021/2/1 11:57)
+     * @throws \EasyWeChat\Kernel\Exceptions\Exception
+     */
     public function notify()
     {
         $config = WeChatServer::getMnpPayConfig();
@@ -114,4 +126,19 @@ class Payment extends ApiBase
         $response->send();
     }
 
+
+    //支付宝回调
+    public function aliNotify()
+    {
+        $aop = new AopClient();
+        $config = AliPayServer::getAliConfig();
+        $aop->alipayrsaPublicKey = $config['alipayrsaPublicKey'];
+
+        $flag = $aop->rsaCheckV1($_POST, NULL, "RSA");
+        cache('alipay', json_encode($flag, true));
+        if ($flag) {
+            $order_no = $flag['out_trade_no'];
+        }
+        echo 'success';
+    }
 }

@@ -7,6 +7,11 @@ import {
 import store from '@/store'
 import Cache from './cache'
 import {BACK_URL} from '@/config/cachekey'
+import wechatH5 from './wechath5'
+
+
+
+
 function prePage() {
 	let pages = getCurrentPages();
 	let prePage = pages[pages.length - 1];

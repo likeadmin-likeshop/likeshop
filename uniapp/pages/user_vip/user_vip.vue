@@ -34,11 +34,10 @@
 									</view>
 								</view>
 								<view class="row-between mt20" style="padding: 0 30rpx">
-									<navigator url hover-class="none" class="row">
+									<navigator hover-class="none" class="row">
 										<view class="sm white" style="line-height: 36rpx">
 											当前成长值 <text class="bold">{{userInfo.user_growth}}</text>
 										</view>
-										<van-icon color="white" name="arrow" size="28rpx"></van-icon>
 									</navigator>
 									<view class="white">{{item.tips}}</view>
 								</view>

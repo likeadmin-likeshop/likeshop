@@ -27,6 +27,11 @@ export function isWeixinClient() {
 	}
 }
 
+//判断是否为安卓环境
+export function isAndroid() {
+	let u = navigator.userAgent;
+	return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+}
 
 //获取url后的参数  以对象返回
 export function getUrlparams(url) {

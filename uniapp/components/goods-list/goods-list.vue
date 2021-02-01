@@ -69,8 +69,8 @@
 					<view class="goods-name line2 mb10">{{item.name}}</view>
 					<view class="row-between mt10">
 						<view class="price mt10 row">
-							<price-format :first-size="34" :second-size="26" :price="item.price" :weight="500"></price-format>
-							<price-format :first-size="24" :second-size="24" :subscript-size="24" :price="item.market_price"></price-format>
+							<price-format color="#FF2C3C"  class="mr10" :first-size="34" :second-size="26" :subscript-size="26" :price="item.price" :weight="500"></price-format>
+							<price-format class="muted" :firstSize="24" :secondSize="24" :subscript-size="24" line-through :price="item.market_price"></price-format>
 						</view>
 					</view>
 				</view>
@@ -147,7 +147,7 @@
 			padding: 20rpx;
 			
 			&:not(:last-of-type) {
-				border-bottom: var(--border);
+				margin-bottom: 20rpx;
 			}
 		}
 		.goods-new .item {

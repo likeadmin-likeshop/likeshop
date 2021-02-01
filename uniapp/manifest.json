@@ -67,5 +67,9 @@
     },
     "uniStatistics" : {
         "enable" : false
+    },
+    "h5" : {
+        "title" : "uni-app",
+        "domain" : "http://likeshopv2.yixiangonline.com/mobile"
     }
 }

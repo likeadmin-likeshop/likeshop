@@ -90,7 +90,7 @@
 				<navigator class="btn cart column-center" hover-class="none" open-type="switchTab" url="/pages/shop_cart/shop_cart">
 					<image class="icon-md" src="/static/images/icon_cart.png"></image>
 					<text class="xxs lighter">购物车</text>
-					<uni-badge class="cart-num" type="primary" v-if="2" :text="2" color="#FF2C3C"></uni-badge>
+					<uni-badge class="cart-num" type="primary" v-if="cartNum" :text="cartNum" color="#FF2C3C"></uni-badge>
 				</navigator>
 				<view class="add-cart br60 white mr20 md ml20" @tap="showSpecFun(1)">
 					加入购物车

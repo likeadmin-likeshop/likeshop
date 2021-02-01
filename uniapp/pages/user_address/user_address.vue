@@ -18,7 +18,7 @@
                         </view>
                     </view>
                     <view class="operation row-between">
-                        <view @tab.stop="">
+                        <view>
                             <radio class="radio row" color="#FF2C3C" :value="item.id + ''" :checked="item.is_default=='1' ? true : false">
                                 <text>设为默认</text>
                             </radio>
@@ -175,9 +175,7 @@ export default {
       let id = e.detail.value;
       console.log(e);
       setDefaultAddress(id).then(res => {
-        if (res.code == 1) this.$toast({
-          title: res.msg
-        });
+        if (res.code == 1) 
         this.getAddressListsFun();
       });
     },

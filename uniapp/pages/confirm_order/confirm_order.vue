@@ -19,7 +19,9 @@
 	<view>
 		<view class="confirm-order">
 			<view class="confirm-con">
-				<address-item :address="address"></address-item>
+				<navigator hover-class="none" url="/pages/user_address/user_address?type=1">
+					<address-item :address="address"></address-item>
+				</navigator>
 				<view class="goods contain">
 					<order-goods :list="goodsLists"></order-goods>
 					<view class="item row-between">
@@ -149,7 +151,9 @@
 		props: {},
 
 		onLoad(options) {
-			console.log(options)
+			uni.$on("selectaddress", (e) => {
+				this.addressId = e.id;
+			})
 			const data = JSON.parse(decodeURIComponent(options.data));
 			this.goods = data.goods
 		},
@@ -162,7 +166,7 @@
 			}, 100)
 		},
 		onUnload: function() {
-
+			uni.$off("selectaddress")
 		},
 		methods: {
 			changeIntegral() {
@@ -202,11 +206,7 @@
 				this.orderBuyFun();
 			},
 
-			onSelectAddress() {
-				uni.navigateTo({
-					url: `/pages/user_address/user_address?type=1`
-				});
-			},
+		
 
 
 			getAuthMsg() {
@@ -284,16 +284,12 @@
 					action,
 					goods: this.goods,
 					pay_way: payWay,
-					use_integral:useIntegral
+					use_integral:useIntegral,
+					address_id: this.addressId
 				};
 
-				if (action == 'info') {
-					if (this.addressId) {
-						submitObj.address_id = this.addressId;
-					}
-				} else if (action == 'submit') {
+				if (action == 'submit') {
 					submitObj.remark = userRemark;
-					submitObj.address_id = address.id;
 					submitObj.type = this.confirmType;
 				}
 				const {
@@ -329,7 +325,7 @@
 						wxpay(prepayData).then(() => {
 							this.payStatus = true;
 							uni.redirectTo({
-								url: `/pages/pay_result/pay_result?id=${this.orderId}`
+								url: `/pages/pay_result/pay_result?id=${order_id}`
 							});
 						}).catch(() => {
 							this.payStatus = true;
@@ -340,7 +336,7 @@
 					} else if (prepayCode == 10001) {
 						//余额支付成功
 						uni.redirectTo({
-							url: `/pages/pay_result/pay_result?id=${this.orderId}`
+							url: `/pages/pay_result/pay_result?id=${order_id}`
 						});
 					} else {
 						this.showLoading = false
@@ -349,9 +345,7 @@
 			}
 		},
 
-		getAddress(e) {
-			this.addressId = e.id;
-		}
+		
 	}
 </script>
 <style>

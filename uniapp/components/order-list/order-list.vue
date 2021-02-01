@@ -70,6 +70,7 @@
 				</view>
 			</loading-footer>
 		</view>
+		<order-dialog ref="orderDialog" :order-id="orderId" :type="type" @refresh="reflesh"></order-dialog>
 	</view>
 </template>
 
@@ -101,7 +102,8 @@
 				orderList: [],
 				status: loadingType.LOADING,
 				showCancel: false,
-				type: 0
+				type: 0,
+				orderId: ""
 			};
 		},
 
@@ -114,13 +116,15 @@
 			}
 		},
 		created: function() {
-
+			uni.$on("refreshorder", () => {
+				this.reflesh()
+			})
 		},
 		beforeMount: function() {
 			this.getOrderListFun();
 		},
 		destroyed: function() {
-
+			uni.$off("refreshorder")
 		},
 		methods: {
 			reflesh() {
@@ -137,62 +141,31 @@
 			},
 
 		
-			onShowDialog() {
-				let {
-					showCancel
-				} = this;
-				this.showCancel = !showCancel
-			},
-
-			async onConfirm() {
-				const {
-					type
-				} = this;
-				let res = null;
-
-				switch (type) {
-					case 0:
-						res = await cancelOrder(this.id);
-						break;
-
-					case 1:
-						res = await delOrder(this.id);
-						break;
-
-					case 2:
-						res = await confirmOrder(this.id);
-						break;
-				}
-
-				if (res.code == 1) {
-					this.onShowDialog();
-					this.$toast({
-						title: res.msg
-					});
-				}
+			orderDialog() {
+				this.$refs.orderDialog.open()
 			},
 
 			delOrder(id) {
-				this.id = id
+				this.orderId = id
 				this.type = 1
 				this.$nextTick(() => {
-					this.onShowDialog();
+					this.orderDialog();
 				});
 			},
 
 			comfirmOrder(id) {
-				this.id = id
+				this.orderId = id
 				this.type = 2
 				this.$nextTick(() => {
-					this.onShowDialog();
+					this.orderDialog();
 				});
 			},
 
 			cancelOrder(id) {
-				this.id = id
+				this.orderId = id
 				this.type = 0
 				this.$nextTick(() => {
-					this.onShowDialog();
+					this.orderDialog();
 				});
 			},
 
@@ -240,7 +213,7 @@
 		computed: {
 			getOrderStatus() {
 				return (status) => {
-					var text = ''
+					let text = ''
 					switch (status) {
 						case 0:
 							text = '待支付';
@@ -260,7 +233,7 @@
 					}
 					return text
 				}
-			}
+			},
 		}
 	};
 </script>

@@ -19,7 +19,7 @@
 						</view>
 					</view>
 					<view class="tag row-center" @tap="changeType">
-						<image class="icon-sm" :src=" type === '1' ? '/images/icon_double.png' : '/images/icon_one.png'"></image>
+						<image class="icon-sm" :src=" type === '1' ? '/static/images/icon_double.png' : '/static/images/icon_one.png'"></image>
 					</view>
 				</view>
 			</sticky>

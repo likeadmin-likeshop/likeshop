@@ -23,7 +23,7 @@ export function getOrderDetail(id) {
 
 //取消订单
 export function cancelOrder(id) {
-    return request.post('order/cancel',{params: {id}})
+    return request.post('order/cancel', {id})
 }
 
 //物流
@@ -33,5 +33,5 @@ export function orderTraces(id) {
 
 //确认收货
 export function confirmOrder(id) {
-    return request.post("order/confirm", {params: {id}})
+    return request.post("order/confirm", {id})
 }

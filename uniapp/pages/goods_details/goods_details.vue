@@ -90,7 +90,7 @@
 				<navigator class="btn cart column-center" hover-class="none" open-type="switchTab" url="/pages/shop_cart/shop_cart">
 					<image class="icon-md" src="/static/images/icon_cart.png"></image>
 					<text class="xxs lighter">购物车</text>
-					<view v-if="cartNum" class="cart-num white xxs row-center">{{cartNum}}</view>
+					<uni-badge class="cart-num" type="primary" v-if="2" :text="2" color="#FF2C3C"></uni-badge>
 				</navigator>
 				<view class="add-cart br60 white mr20 md ml20" @tap="showSpecFun(1)">
 					加入购物车
@@ -139,6 +139,7 @@
 	import {
 		getGoodsCoupon
 	} from '@/api/activity';
+	import {mapActions, mapGetters} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -150,7 +151,6 @@
 				goodsLike: [],
 				checkedGoods: {},
 				couponList: [],
-				cartNum: "",
 				comment: {},
 				tagStyle: {
 					img: 'width:100%;'
@@ -170,8 +170,10 @@
 			}
 			this.getGoodsDetailFun();
 			this.getGoodsCouponFun()
+			this.getCartNum()
 		},
 		methods: {
+			...mapActions(['getCartNum']),
 			async getGoodsDetailFun() {
 				const {
 					data,
@@ -274,6 +276,9 @@
 					this.showSpec = false
 				}
 			}
+		},
+		computed: {
+			...mapGetters(["cartNum"])
 		}
 	}
 </script>
@@ -400,7 +405,11 @@
 				position: relative;
 				line-height: 1.3;
 			}
-
+			.cart-num {
+			    position: absolute;
+			    left: 60rpx;
+			    top: 6rpx;
+			}
 			.add-cart,
 			.right-buy {
 				flex: 1;

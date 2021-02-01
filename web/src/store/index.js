@@ -23,7 +23,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        token: "",
+        token: "0d91337dee853da5dee2be55302bec6b",
         cartNum: ''
     },
     mutations: {

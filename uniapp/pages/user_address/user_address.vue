@@ -18,7 +18,7 @@
                         </view>
                     </view>
                     <view class="operation row-between">
-                        <view>
+                        <view @tab.stop="">
                             <radio class="radio row" color="#FF2C3C" :value="item.id" :checked="item.is_default=='1' ? true : false">
                                 <text>设为默认</text>
                             </radio>
@@ -134,7 +134,7 @@ export default {
         let {
           id
         } = e.currentTarget.dataset;
-        this.$emit('SELECT_ADDRESS', {
+        uni.$emit('selectaddress', {
           id
         });
         uni.navigateBack();

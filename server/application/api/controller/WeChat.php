@@ -47,7 +47,8 @@ class WeChat extends ApiBase
         $url = $this->request->get('url');
         $result = WeChatLogic::jsConfig($url);
         if ($result['code'] != 1) {
-            $this->_error('', ['config' => $result['data']]);
+//            $this->_error('', ['config' => $result['data']]);
+            $this->_error($result['msg']);
         }
         $this->_success('', ['config' => $result['data']]);
     }

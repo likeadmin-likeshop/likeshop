@@ -42,10 +42,9 @@ Page({
         // 动画数据
         actionData: {},
         shopCartActionData: {},
-        cartNum: ""
+        cartNum: "",
+        emptyDetail: false
     },
-
-
 
     // 收藏商品
     collectGoods(e) {
@@ -128,9 +127,9 @@ Page({
                     })
                     wxParse.wxParse('content', 'html', content, this, 10);
                 }else {
-                    setTimeout(() => {
-                        wx.navigateBack()
-                    },500)
+                    this.setData({
+                        emptyDetail: true
+                    })
                 }
             })
     },

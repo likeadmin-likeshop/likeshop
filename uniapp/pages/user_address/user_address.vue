@@ -19,7 +19,7 @@
                     </view>
                     <view class="operation row-between">
                         <view>
-                            <radio class="radio row" color="#FF2C3C" :value="item.id" :checked="item.is_default=='1' ? true : false">
+                            <radio class="radio row" color="#FF2C3C" :value="item.id + ''" :checked="item.is_default=='1' ? true : false">
                                 <text>设为默认</text>
                             </radio>
                         </view>
@@ -37,16 +37,19 @@
                 </view>
             </radio-group>
         </view>
-    <uni-popup id="confirmPop" ref="confirmPop" type="dialog">
+    <uni-popup id="confirmPop" ref="confirmPop" :show="deleteSure" >
         <uni-popup-dialog 
-        type="msgType" 
-        content="确认删除该地址吗？" 
-        use-slot id="delete-dialog" 
-        :show="deleteSure"  
-        confirmButtonText="狠心删除" 
-        confirm-button-color="#FF2C3C" 
+        id="delete-dialog"
+        :showCancelButton="true"
+        confirmButtonText="狠心删除"
+        confirm-button-color="#FF2C3C"
+        :useSlot="true"
         @confirm="$delAddress" 
         @cancel="hidePop">
+            <view class="column-center tips-dialog">
+                <image class="icon-lg" src="/static/images/icon_warning.png"></image>
+                <view style="margin-top:30rpx">确认删除该地址吗？</view>
+            </view>
         </uni-popup-dialog>        
     </uni-popup>
     <view class="footer row-between fixed bg-white">
@@ -244,10 +247,9 @@ export default {
     showSurePop: function (e) {
       this.deleteSure = true;
       this.currentId = e.currentTarget.dataset.id;
-	  this.$refs.confirmPop.open()
     },
     hidePop: function (e) {
-      this.$refs.confirmPop.close();
+      this.deleteSure = false;
     }
   }
 };

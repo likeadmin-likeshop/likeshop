@@ -44,7 +44,7 @@
 				<view class="two-txt-cut nr">{{lists.order_goods.goods_name}}</view>
 				<view class="row-between mt20">
 					<!-- <view class="md">￥999.00</view> -->
-					<price-format :price="lists.order_goods.goods_price" :firstSize="30" :secondSize="30" showSubscript="true" :subscriptSize="30" color="#101010" />
+					<price-format :price="lists.order_goods.goods_price" :firstSize="30" :secondSize="30" :showSubscript="true" :subscriptSize="30" color="#101010" />
 					<view class="nr">x{{lists.order_goods.goods_num}}</view>
 				</view>
 			</view>
@@ -79,9 +79,16 @@
 		<view class="btn br60" v-show="false">平台退款</view>
 	</view>
 </view>
-
-<van-dialog title="提示" :show="confirmDialog" show-cancel-button message="是否要撤销申请？" confirm-button-color="#FF2C3C" @confirm="$cancelApply" @close="hideDialog">
-</van-dialog>
+<uni-popup :show="confirmDialog">    
+    <uni-popup-dialog 
+    title="提示"  
+    show-cancel-button 
+    content="是否要撤销申请？" 
+    confirmButtonColor="#FF2C3C" 
+    @confirm="$cancelApply" 
+    @cancel="hideDialog">
+    </uni-popup-dialog>
+</uni-popup>
 </view>
 </template>
 

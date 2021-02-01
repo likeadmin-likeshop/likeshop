@@ -4,9 +4,9 @@
         <view v-for="(item, index) in cartLists" :key="index" class="cart-list mb20" v-show="!(cartType!=1)">
             <view class="cart-item bg-white">
                 <view class="row-between select">
-                    <checkbox :value="item.cart_id" :checked="item.selected == 1" :data-cartid="item.cart_id" :data-select="item.selected" @tap="changOneSelect">选择</checkbox>
-                    <view :data-cartid="item.cart_id" @tap="changeDelPopup">
-                        <image class="icon-xl" src="/static/images/icon_del.png"></image>
+                    <checkbox :value="item.cart_id + ''" :checked="item.selected == 1" @click="changOneSelect(item.cart_id, item.selected)">选择</checkbox>
+                    <view :data-cartid="item.cart_id" @click="changeDelPopup(item.cart_id)">
+                        <image class="icon-xl" src="/static/images/icon_del.png" />
                     </view>
                 </view>
                 <view class="row" style="padding: 20rpx" @tap="goPage" :data-url="'/pages/goods_details/goods_details?id=' + item.goods_id">
@@ -18,7 +18,7 @@
                         </view>
                         <view class="row-between mt20">
                             <view class="price row primary">
-                                <price-format :price="item.price" :firstSize="32" :secondSize="32" showSubscript="true" :subscriptSize="32"></price-format>
+                                <price-format :price="item.price" :firstSize="32" :secondSize="32" :showSubscript="true" :subscriptSize="32"></price-format>
                             </view>
                             <view class="cartNum" @tap.stop="">
                                 <uni-number-box v-model="item.goods_num" :value="item.goods_num" integer @change="countChange($event, item.cart_id)" async-change />
@@ -50,19 +50,17 @@
         </checkbox-group>
         <view class="all-price lg mr20 row-end">
             <view>合计：</view>
-            <view class="primary">￥{{totalPrice}}</view>
+            <view class="primary">￥{{totalPrice || 0}}</view>
         </view>
         <view class="right-btn br60 white" :style="' ' + (nullSelect ? 'background: #d7d7d7' : '')" @tap="goToConfirm">去结算</view>
     </view>
-    <uni-popup id="confirmPopup" ref="confirmPopup">        
-        <uni-popup-dialog 
-        use-slot 
-        close-on-click-overlay="true" 
-        id="delete-dialog" 
-        :show="delPopup" 
-        showCancelButton="true" 
+    <uni-popup id="confirmPopup" ref="confirmPopup" :show="delPopup">        
+        <uni-popup-dialog
+        id="delete-dialog"
+        :showCancelButton="true"
         confirmButtonText="狠心删除" 
-        confirmButtonColor="#FF2C3C" 
+        confirmButtonColor="#FF2C3C"
+        :useSlot="true"
         @confirm="goodsDelete" 
         @cancel="changeDelPopup">
             <view class="column-center tips-dialog" style="padding-top: 40rpx">
@@ -106,9 +104,8 @@ export default {
         return false;
     },
     isSelectedAll() {
-
         let index = this.cartLists.findIndex(item => item.selected == 0);
-
+        
         if (index == -1) {
           return true;
         }
@@ -160,6 +157,7 @@ export default {
   },
   methods: {
     goodsDelete() {
+        this.delPopup = false
       deleteGoods({
         cart_id: this.cartId
       }).then(res => {
@@ -169,16 +167,12 @@ export default {
       });
     },
 
-    changeDelPopup(e) {
-      const {
-        cartid
-      } = e.currentTarget.dataset;
-
-      if (cartid) {
-        this.cartId = cartid;
+    changeDelPopup(cartId) {
+      if (cartId) {
+        this.cartId = cartId;
       }
 
-      this.delPopup = !this.delPopup
+      this.delPopup = !this.delPopup;
     },
 
     getCartListFun() {
@@ -210,13 +204,10 @@ export default {
       });
     },
 
-    changOneSelect(e) {
-      const {
-        cartid,
-        select
-      } = e.currentTarget.dataset;
-      let selected = !select;
-      this.changeCartSelectFun([cartid], selected);
+    changOneSelect(cartId, selected) {
+      console.log(cartId, selected, "changeOneSelect")
+      selected = !selected;
+      this.changeCartSelectFun([cartId], selected);
     },
 
     changeAllSelect() {
@@ -229,8 +220,9 @@ export default {
     },
 
     changeCartSelectFun(cartId, selected) {
+        console.log("selected ", selected)
       changeCartSelect({
-        cart_id: cartId,
+        cart_id: parseInt(cartId),
         selected: selected ? 1 : 0
       }).then(res => {
         if (res.code == 1) {
@@ -319,7 +311,7 @@ export default {
         box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
         bottom: var(--window-bottom);
         box-sizing: border-box;
-        z-index: 1000;
+        z-index: 20;
         .all-price {
             text-align: right;
             flex: 1;

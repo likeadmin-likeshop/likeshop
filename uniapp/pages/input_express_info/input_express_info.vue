@@ -128,7 +128,6 @@ export default {
           this.uploadFile(item.path).then(res => {
             uni.hideLoading();
             this.fileList.push(res);
-            console.log(this.fileList);
           });
       })
     },

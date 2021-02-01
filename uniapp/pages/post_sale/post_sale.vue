@@ -3,7 +3,7 @@
       <view class="contain">
         <tabs :active="active" :line-width="40" @change="onChange" sticky>
           <tab v-for="(item, index) in afterSale" :key="index" :title="item.name">
-            <after-sales-list :type="item.type" v-if="item.isShow"></after-sales-list>
+            <after-sales-list :ref="item.type" :type="item.type" v-if="item.isShow"></after-sales-list>
           </tab>
         </tabs>
       </view>
@@ -59,8 +59,10 @@ export default {
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {},
-
+  onLoad: function (options) {
+      
+  },
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -111,10 +113,10 @@ export default {
             afterSaleType = AfterSaleType.NORMAL
             break;
     }
-    let myComponent = this.selectComponent('#' + afterSaleType);
-
-    if (myComponent.$getAfterSaleList) {
-      myComponent.$getAfterSaleList();
+    
+    let myComponent = this.$refs.afterSaleType[0];
+    if (myComponent.getAfterSaleListFun) {
+      myComponent.getAfterSaleListFun();
     }
   },
   methods: {
@@ -138,7 +140,7 @@ export default {
 
       if (index != -1) {
           this.afterSale[index].isShow = true;
-          this.active = type
+          this.active = type == AfterSaleType.NORMAL ? 0 : type == AfterSaleType.HANDLING ? 1 : 2
       }
     },
 

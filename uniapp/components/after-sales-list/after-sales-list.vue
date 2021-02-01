@@ -14,7 +14,7 @@
 					<view class="goods-desc">
 						<view class="goods-name line2 nr">{{item.goods_name}}</view>
 						<view class="row-between mt20">
-							<price-format class="sm" :firstSize="30" :secondSize="30" showSubscript="true" :subscriptSize="26" :price="item.goods_price" />
+							<price-format class="sm" :firstSize="30" :secondSize="30" :showSubscript="true" :subscriptSize="26" :price="item.goods_price" />
 							<view class="nr">x{{item.goods_num}}</view>
 						</view>
 					</view>
@@ -51,7 +51,7 @@
 						<view class="goods-name line2 nr">{{item.goods_name}}</view>
 						<view class="row-between mt20">
 							<view>
-								<price-format :firstSize="26" :price="item.goods_price" weight="600" showSubscript="true" />
+								<price-format :firstSize="26" :price="item.goods_price" weight="600" :showSubscript="true" />
 							</view>
 							<view class="nr">x{{item.goods_num}}</view>
 						</view>
@@ -85,7 +85,7 @@
 					<view class="goods-desc">
 						<view class="goods-name line2 nr">{{item.goods_name}}</view>
 						<view class="row-between mt20 row-between">
-							<price-format :firstSize="26" :price="item.goods_price" weight="600" showSubscript="true" />
+							<price-format :firstSize="26" :price="item.goods_price" weight="600" :showSubscript="true" />
 							<view class="nr">x{{item.goods_num}}</view>
 						</view>
 					</view>
@@ -104,9 +104,16 @@
         </view>
     </loading-footer>
 </view>
-
-<van-dialog title="提示" :show="confirmDialog" show-cancel-button message="是否要撤销申请？" confirm-button-color="#FF2C3C" @confirm="$cancelApply" @close="hideDialog">
-</van-dialog>
+    <uni-popup ref="dialogPop" id="dialogPop" :show="confirmDialog" :maskClick="true">
+        <uni-popup-dialog
+        title="提示" 
+        show-cancel-button 
+        content="是否要撤销申请？" 
+        confirm-button-color="#FF2C3C" 
+        @confirm="cancelApplyFun" 
+        @cancel="hideDialog">
+        </uni-popup-dialog>        
+    </uni-popup>
 </view>
 </template>
 

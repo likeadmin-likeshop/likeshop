@@ -10,7 +10,7 @@
                     <image style="height: 56rpx;width: 56rpx;flex: none;margin-left: 14rpx" src="/static/images/icon_del.png" @tap.stop="deleteConfirm" :data-id="item.id"></image>
                 </view>
                 <view class="row-between mt20">
-                    <price-format :first-size="30" :second-size="26" :price="item.price" :weight="400" :subscriptSize="30" showSubscript="true" color="#FF2C3C" />
+                    <price-format :first-size="30" :second-size="26" :price="item.price" :weight="400" :subscriptSize="30" :showSubscript="true" color="#FF2C3C" />
                     <view class="btn primary br60 sm">去购买</view>
                 </view>
             </view>
@@ -22,14 +22,19 @@
             </view>
         </loading-footer>
     </view>
-    <uni-popup id="deleteDialog" ref="deleteDialog"  type="dialog">        
+    <uni-popup id="deleteDialog" ref="deleteDialog" :show="deleteSure"  type="dialog">        
         <uni-popup-dialog
-            content="确认删除该收藏吗？"
             confirmButtonText="狠心删除" 
-            confirm-button-color="#FF2C3C" 
+            confirmButtonColor="#FF2C3C"
+            useSlot
             @confirm="cancelCollect" 
             @cancel="deleteCancel"
-        />
+        >
+            <view class="column-center tips-dialog">
+                <image class="icon-lg" src="/static/images/icon_warning.png"></image>
+                <view style="margin-top:30rpx">确认删除该收藏吗？</view>
+            </view>
+        </uni-popup-dialog>
     </uni-popup>
 </view>
 </template>
@@ -60,7 +65,8 @@ export default {
       page: 1,
       status: "loading",
       collectionList: [],
-      collectionGoods: CollectType.COLLECTION
+      collectionGoods: CollectType.COLLECTION,
+      deleteSure: false,
     };
   },
 
@@ -110,11 +116,11 @@ export default {
   },
   methods: {
     deleteCancel: function (e) {
-        this.$refs.deleteDialog.close()
+        this.deleteSure = false;
     },
     deleteConfirm: function (e) {
       this.id = e.currentTarget.dataset.id;
-      this.$refs.deleteDialog.open()
+      this.deleteSure = true;
     },
 
     getCollectGoodsFun() {
@@ -244,15 +250,5 @@ export default {
         }
     }
 } 
-
-
-
-
-
-
-van-dialog van-button button {
-    width: 100% !important;
-}
-
 
 </style>

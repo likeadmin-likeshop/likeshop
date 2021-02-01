@@ -1,12 +1,17 @@
 <template>
 	<view class="uni-popup-dialog">
-		<view class="uni-dialog-title">
-			<text class="uni-dialog-title-text" :class="['uni-popup__'+dialogType]">{{title}}</text>
-		</view>
-		<view class="uni-dialog-content">
-			<text class="uni-dialog-content-text" v-if="mode === 'base'">{{content}}</text>
-			<input v-else class="uni-dialog-input" v-model="val" type="text" :placeholder="placeholder" :focus="focus" >
-		</view>
+        <view v-if="!useSlot">            
+            <view class="uni-dialog-title">
+                <text class="uni-dialog-title-text" :class="['uni-popup__'+dialogType]">{{title}}</text>
+            </view>
+            <view class="uni-dialog-content">
+                <text class="uni-dialog-content-text" v-if="mode === 'base'">{{content}}</text>
+                <input v-else class="uni-dialog-input" v-model="val" type="text" :placeholder="placeholder" :focus="focus" >
+            </view>
+        </view>
+        <view class="uni-dialog-content" v-else>
+            <slot></slot>
+        </view>
 		<view class="uni-dialog-button-group">
 			<view class="uni-dialog-button" @click="close">
 				<text class="uni-dialog-button-text">取消</text>
@@ -37,7 +42,7 @@
 	 * @property {String} content 对话框内容
 	 * @property {Boolean} beforeClose 是否拦截取消事件
 	 * @event {Function} confirm 点击确认按钮触发
-	 * @event {Function} close 点击取消按钮触发
+	 * @event {Function} cancel 点击取消按钮触发
 	 */
 
 	export default {
@@ -84,7 +89,7 @@
 			 */
 			beforeClose: {
 				type: Boolean,
-				default: false
+				default: true
 			},
             confirmButtonText: {
                 type: String,
@@ -93,6 +98,10 @@
             confirmButtonColor: {
                 type: String,
                 default: ""
+            },
+            useSlot: {
+                type: Boolean,
+                default: false
             }
 		},
 		data() {
@@ -144,7 +153,7 @@
 			 */
 			close() {
 				if (this.beforeClose) {
-					this.$emit('close', () => {
+					this.$emit('cancel', () => {
 						this.popup.close()
 					})
 					return

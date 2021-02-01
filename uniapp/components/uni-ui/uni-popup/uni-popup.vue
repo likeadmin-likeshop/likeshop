@@ -55,7 +55,11 @@
 			showSafeArea: {
 				type: Boolean,
 				default: true
-			}
+			},
+            show: {
+                type: Boolean,
+                default: false,
+            }
 		},
 		provide() {
 			return {
@@ -82,7 +86,19 @@
 					this.mkclick = val
 				},
 				immediate: true
-			}
+			},
+            show: {
+                handler: function(newVal) {
+                        
+                    if(newVal == true) {
+                        this.open()
+                    }
+                    else {
+                        this.close()
+                    }
+                },
+                immediate: true
+            }
 		},
 		data() {
 			return {
@@ -147,7 +163,8 @@
 				})
 			},
 			close(type) {
-				this.showTrans = false
+				this.showTrans = false;
+                this.showPopup = false;
 				this.$nextTick(() => {
 					this.$emit('change', {
 						show: false,

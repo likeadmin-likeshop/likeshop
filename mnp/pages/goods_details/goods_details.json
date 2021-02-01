@@ -9,7 +9,8 @@
     "coupon-list": "/components/coupon-list/coupon-list",
     "van-count-down": "/components/weapp/count-down/index",
     "goods-like": "/components/goods-like/goods-like",
-    "van-tag": "/components/weapp/tag/index"
+    "van-tag": "/components/weapp/tag/index",
+    "recommend": "/components/recommend/recommend"
   },
   "navigationBarTitleText": "商品详情"
 }

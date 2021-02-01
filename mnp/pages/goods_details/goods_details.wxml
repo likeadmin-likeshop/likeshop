@@ -1,6 +1,4 @@
-<!-- pages/goods_details/goods_details.wxml -->
-<view class="goods-details">
-    <bubble-tips />
+<view class="goods-details" wx:if="{{!emptyDetail}}">
     <product-swiper imgUrls="{{swiperList}}"></product-swiper>
     <view class="goods-info bg-white">
         <view class="info-header row">
@@ -106,6 +104,13 @@
     <view id="goods-ball" animation="{{actionData}}">
         <image src="{{goodsDetail.image}}"></image>
     </view>
+</view>
+<view class="goods-details-null" wx:else>
+  <view class="details-null column-center">
+    <image class="img-null" src="/images/goods_null.png" />
+    <view class="xs muted">该商品已下架，去逛逛别的吧~</view>
+  </view>
+  <recommend/>
 </view>
 <!-- 领券弹窗 -->
 <van-popup class="coupons-popup" catchtouchmove show="{{ showCoupons }}" position="bottom" round closeable bind:close="onClose">

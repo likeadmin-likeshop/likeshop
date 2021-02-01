@@ -171,3 +171,9 @@
     top: 6rpx;
     border-radius: 60rpx;
 }
+
+/* 空状态 */
+.goods-details-null .details-null {
+    padding-top: 140rpx;
+    margin-bottom: 100rpx;
+}

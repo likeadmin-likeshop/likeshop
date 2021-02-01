@@ -72,7 +72,7 @@ class WechatH5 {
 				shareImage,
 				shareDesc
 			} = option
-			wx.updateTimelineShareData({
+			weixin.updateTimelineShareData({
 				title: shareTitle, // 分享标题
 				link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 				imgUrl: shareImage, // 分享图标
@@ -81,7 +81,7 @@ class WechatH5 {
 				}
 			});
 			// 发送给好友
-			wx.updateAppMessageShareData({
+			weixin.updateAppMessageShareData({
 				title: shareTitle, // 分享标题
 				link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 				imgUrl: shareImage, // 分享图标
@@ -91,7 +91,7 @@ class WechatH5 {
 				}
 			});
 			// 发送到tx微博
-			wx.onMenuShareWeibo({
+			weixin.onMenuShareWeibo({
 				title: shareTitle, // 分享标题
 				link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 				imgUrl: shareImage, // 分享图标

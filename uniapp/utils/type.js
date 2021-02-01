@@ -48,3 +48,10 @@ export const refundOptType = {
     // 退货退款
     REFUNDS: 1
 }
+
+export const SMSType = {
+    REGISTER: 'ZCYZ',
+    FINDPWD: 'ZHMM',
+    LOGIN: 'YZMDL',
+    CHANGE_MOBILE: 'BGSJHM'
+}

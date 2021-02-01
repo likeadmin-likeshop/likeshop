@@ -48,12 +48,12 @@ export function delAddress(id) {
 
 // 获取单个地址
 export function getOneAddress(id) {
-    return request.get('user_address/detail', {id})
+    return request.get('user_address/detail', {params: {id}})
 }
 
 // 获取默认地址
 export function getDefaultAddress(id) {
-    return request.get('user_address/getDefault',{id})
+    return request.get('user_address/getDefault',{params: {id}})
 }
 
 // 设置默认地址
@@ -91,7 +91,7 @@ export function delOrder(id) {
 }
 //订单列表
 export function getOrderList(data) {
-    return request.get('order/lists', data)
+    return request.get('order/lists', {params: data})
 }
 //订单详情
 export function getOrderDetail(id) {
@@ -105,7 +105,7 @@ export function cancelOrder(id) {
 
 //物流
 export function orderTraces(id) {
-    return request.get("order/orderTraces", {id})
+    return request.get("order/orderTraces", {params: {id}})
 }
 
 //确认收货
@@ -244,7 +244,7 @@ export function getWithdrawRecords(params) {
 
 // 提现详情
 export function getWithdrawDetail(params) {
-    return request.get("withdraw/info", params)
+    return request.get("withdraw/info", {params})
 }
 
 // 提现页信息

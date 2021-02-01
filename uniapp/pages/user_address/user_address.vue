@@ -24,7 +24,7 @@
                             </radio>
                         </view>
                         <view class="row-center">
-                            <view class="row mr20" :data-id="item.id" @tap.stop="editAddress">
+                            <view class="row mr20" @click.stop="editAddress(item.id)">
                                 <image class="icon-md mr10" src="/static/images/icon_edit.png"></image>
                                 编辑
                             </view>
@@ -150,10 +150,7 @@ export default {
       });
     },
 
-    editAddress(e) {
-      let {
-        id
-      } = e.currentTarget.dataset;
+    editAddress(id) {
       uni.navigateTo({
         url: `/pages/address_edit/address_edit?id=${id}`
       });

@@ -23,9 +23,15 @@
 		{
 			"path": "pages/news_list/news_list",
 			"style": {
-				"navigationBarTitleText": "商城咨询"
+				"navigationBarTitleText": "商城资讯"
 			}
 		},
+        {
+            "path": "pages/news_details/news_details",
+            "style": {
+                "navigationBarTitleText": "资讯详情"
+            }
+        },
 		{
 			"path": "pages/sort/sort",
 			"style": {
@@ -104,6 +110,19 @@
 				"enablePullDownRefresh": false
 			}
 		},
+        {
+            "path": "pages/forget_pwd/forget_pwd",
+            "style": {
+                "navigationBarTitleText": "忘记密码",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/register/register",
+            "style": {
+                "navigationBarTitleText": "注册账号"
+            }
+        },
 		{
 			"path": "pages/goods_comment_list/goods_comment_list",
 			"style": {
@@ -172,8 +191,8 @@
                 "navigationBarTitleText": "支付详情"
             }
             
-        }
-        ,{
+        },
+        {
             "path" : "pages/goods_logistics/goods_logistics",
             "style" :                                                                                    
             {

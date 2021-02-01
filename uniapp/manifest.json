@@ -70,7 +70,13 @@
     },
     "h5" : {
         "title" : "uni-app",
-        "domain" : "http://likeshopv2.yixiangonline.com",
+        "domain" : "http://likeshopv2.yixiangonline.com/mobile/",
+        "router" : {
+            "base" : "/mobile/"
+        },
+        "devServer" : {
+            "https" : false
+        },
         "publicPath" : "/mobile/"
     }
 }

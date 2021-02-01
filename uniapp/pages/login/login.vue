@@ -11,7 +11,7 @@
 			</view>
 			<view class="title xxl mb20 bold">微信授权登录</view>
 			<button size="lg" class="white br60 row-center btn" open-type="getUserInfo" @getuserinfo="getUserInfo">
-				<image class="mr10" src="/static/images/icon_wechat.png"></image>
+				<image class="mr10" class="image" src="/static/images/icon_wechat.png"></image>
 				<text>微信一键授权</text>
 			</button>
 			<view class="muted mt20">微信授权登录后才可进行更多操作哦</view>
@@ -59,7 +59,9 @@
 		sendSms,
 		wxpLogin
 	} from '@/api/app';
-	import {BACK_URL} from '@/config/cachekey'
+	import {
+		BACK_URL
+	} from '@/config/cachekey'
 	export default {
 		data() {
 			return {
@@ -105,18 +107,21 @@
 					account,
 					password
 				} = this
-				const {code, data} = await accountLogin({
+				const {
+					code,
+					data
+				} = await accountLogin({
 					account,
 					password,
 					client: 2
 				})
-				if(code == 1) {
+				if (code == 1) {
 					this.LOGIN(data)
 					const pages = getCurrentPages();
 					const prevPage = pages[pages.length - 2]
-					if(prevPage) {
+					if (prevPage) {
 						uni.navigateBack()
-					}else {
+					} else {
 						uni.reLaunch({
 							url: '/pages/index/index'
 						})
@@ -136,6 +141,7 @@
 			height: 100vh;
 
 			.mpwx-login {
+				height: 100%;
 				.avatar {
 					display: inline-block;
 					width: 120rpx;
@@ -144,15 +150,17 @@
 					border: 1px solid #eee;
 					overflow: hidden;
 
-					image {
-						width: 50rpx;
-						height: 50rpx;
-					}
 
 					.user-name {
 						margin-bottom: 40rpx;
 						height: 40rpx;
 					}
+
+				}
+
+				.image {
+					width: 50rpx;
+					height: 50rpx;
 				}
 
 				.btn {

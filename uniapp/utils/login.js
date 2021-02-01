@@ -110,6 +110,7 @@ export function toLogin() {
 	}
 	store.commit("LOGOUT");
 	if (isWeixinClient()) {
+		wechatH5.getWxUrl()
 		//微信登录
 	} else {
 		if (name !=pathLogin) {

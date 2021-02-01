@@ -11,15 +11,21 @@
 					<view class="tag row-center" data-type="priceSort" @tap="onPriceSort">
 						<text :class="priceSort ? 'primary' : ''">价格</text>
 						<view>
+							<trigonometry direction="up" size="small" :color="priceSort == 'desc' ? '#FF5058' : '#333'">
+							</trigonometry>
+							<trigonometry size="small" :color="priceSort == 'asc' ? '#FF5058' : '#333'"></trigonometry>
 						</view>
 					</view>
 					<view class="tag row-center" data-type="saleSort" @tap="onSaleSort">
 						<text :class="saleSort ? 'primary' : ''">销量</text>
 						<view>
+							<trigonometry direction="up" size="small" :color="saleSort == 'desc' ? '#FF5058' : '#333'">
+							</trigonometry>
+							<trigonometry size="small" :color="saleSort == 'asc' ? '#FF5058' : '#333'"></trigonometry>
 						</view>
 					</view>
 					<view class="tag row-center" @tap="changeType">
-						<image class="icon-sm" :src=" type === '1' ? '/static/images/icon_double.png' : '/static/images/icon_one.png'"></image>
+						<image class="icon-sm" :src=" type === 'one' ? '/static/images/icon_double.png' : '/static/images/icon_one.png'"></image>
 					</view>
 				</view>
 			</sticky>
@@ -134,6 +140,10 @@
 
 
 		onLoad(options) {
+			this.onNormal = trottle(this.onNormal, 500, this);
+			this.onPriceSort = trottle(this.onPriceSort, 500, this);
+			this.onSaleSort = trottle(this.onSaleSort, 500, this);
+			this.onSearch = trottle(this.onSearch, 500, this);
 			this.init(options);
 		},
 
@@ -147,15 +157,7 @@
 			},
 
 			changeType() {
-				if (this.type === '1') {
-					this.setData({
-						type: '2'
-					});
-				} else {
-					this.setData({
-						type: '1'
-					});
-				}
+				this.goodsType = this.goodsType === 'one' ? 'double' : 'one'
 			},
 
 			clearSearchFun() {
@@ -167,50 +169,26 @@
 			},
 
 			onNormal() {
-				this.setData({
-					priceSort: '',
-					saleSort: ''
-				});
-				this.onSearch();
+				this.priceSort =  ''
+				this.saleSort = ''
+				this.onRefresh();
 			},
 
 			onPriceSort() {
 				let {
 					priceSort
 				} = this;
-				this.setData({
-					saleSort: ''
-				});
-
-				if (priceSort == 'asc') {
-					priceSort = 'desc';
-				} else {
-					priceSort = 'asc';
-				}
-
-				this.setData({
-					priceSort
-				});
-				this.onSearch();
+				this.saleSort = ''
+				this.priceSort = priceSort == 'asc' ? 'desc' : 'asc'
+				this.onRefresh();
 			},
 
 			onSaleSort() {
 				let {
 					saleSort
 				} = this;
-				this.setData({
-					priceSort: ''
-				});
-
-				if (saleSort == 'desc') {
-					saleSort = 'asc';
-				} else {
-					saleSort = 'desc';
-				}
-
-				this.setData({
-					saleSort
-				});
+				this.priceSort = ''
+				this.saleSort = saleSort == 'desc' ? 'asc' : 'desc'
 				this.onSearch();
 			},
 
@@ -257,22 +235,23 @@
 					this.onSearch();
 				}
 			},
-
 			onSearch() {
+				this.onRefresh()
+			},
+			onRefresh() {
 				this.showHistory = false
 				this.page = 1
 				this.goodsList = []
-					this.status = loadingType.LOADING
+				this.status = loadingType.LOADING
 				this.$nextTick(() => {
 					this.getGoodsSearchFun();
 				});
 			},
 
 			onChangeKeyword(item) {
-				console.log(item)
 				this.keyword = item
 				this.showHistory = false
-				this.onSearch();
+				this.onRefresh();
 			},
 
 			async getGoodsSearchFun() {

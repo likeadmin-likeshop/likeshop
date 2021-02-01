@@ -115,3 +115,9 @@ export function getCommentCategory(id) {
 export function addCart(data) {
   return request.post('cart/add', data);
 } 
+
+ //购物车数量
+
+export function getCartNum(data) {
+  return request.get("cart/num", data);
+}

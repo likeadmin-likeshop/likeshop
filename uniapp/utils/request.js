@@ -65,7 +65,7 @@ service.interceptors.response.use(
 					show,
 					msg
 				} = response.data;
-				if (code == 0 && show) {
+				if (code == 0 && show && msg) {
 					uni.showToast({
 						title:msg,
 						icon:"none"

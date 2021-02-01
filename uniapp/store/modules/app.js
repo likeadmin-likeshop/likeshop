@@ -34,6 +34,7 @@ const actions = {
 		state,
 		commit
 	}) {
+		console.log(111)
 		if (!state.token) return
 		getCartNum().then(res => {
 			if (res.code == 1) {
@@ -44,7 +45,6 @@ const actions = {
 };
 
 export default {
-	namespaced: true,
 	state,
 	mutations,
 	actions

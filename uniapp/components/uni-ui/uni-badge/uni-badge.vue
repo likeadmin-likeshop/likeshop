@@ -1,6 +1,6 @@
 <template>
 	<text v-if="text" :class="inverted ? 'uni-badge--' + type + ' uni-badge--' + size + ' uni-badge--' + type + '-inverted' : 'uni-badge--' + type + ' uni-badge--' + size"
-	 :style="badgeStyle" class="uni-badge" @click="onClick()">{{ text }}</text>
+	 :style="[badgeStyle, {'background-color': color}]" class="uni-badge" @click="onClick()">{{ text }}</text>
 </template>
 
 <script>
@@ -40,6 +40,9 @@
 			size: {
 				type: String,
 				default: 'normal'
+			},
+			color: {
+				type: String
 			}
 		},
 		data() {

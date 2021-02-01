@@ -2,14 +2,17 @@ import {
 	getUser
 } from '@/api/user'
 import {
+	getCartNum
+} from '@/api/store';
+import {
 	USER_INFO,
 	TOKEN
 } from '@/config/cachekey';
 import Cache from '@/utils/cache'
-console.log(TOKEN)
 const state = {
 	userInfo: null,
-	token: Cache.get(TOKEN) || null
+	token: Cache.get(TOKEN) || null,
+	cartNum: ""
 };
 
 const mutations = {
@@ -21,13 +24,27 @@ const mutations = {
 		state.token = undefined;
 		Cache.remove(TOKEN);
 	},
+	SETCARTNUM(state, num) {
+		state.cartNum = num
+	}
 };
 
 const actions = {
-
+	getCartNum({
+		state,
+		commit
+	}) {
+		if (!state.token) return
+		getCartNum().then(res => {
+			if (res.code == 1) {
+				commit('SETCARTNUM', res.data.num)
+			}
+		})
+	}
 };
 
 export default {
+	namespaced: true,
 	state,
 	mutations,
 	actions

@@ -38,8 +38,8 @@ class PaymentLogic extends LogicBase
             $auth = $wechat_config['auth'];
             $config = $wechat_config['config'];
 
-            if (empty($config)){
-                throw new Exception('请联系管理员配置支付信息');
+            if (empty($config) || empty($config['key']) || empty($config['mch_id']) || empty($config['app_id']) || empty($config['secret'])) {
+                throw new Exception('请联系管理员完善支付配置');
             }
 
             //app支付不需要openid

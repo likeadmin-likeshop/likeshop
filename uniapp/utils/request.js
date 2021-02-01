@@ -29,7 +29,7 @@ function checkParams(params) {
 
 
 const service = axios.create({
-	baseURL: 'https://likeshop.yixiangonline.com/api/',
+	baseURL: 'https://likeshopv2.yixiangonline.com/api/',
 	timeout: 10000,
 	header: {
 		'content-type': 'application/json'

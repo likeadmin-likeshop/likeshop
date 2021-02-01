@@ -11,9 +11,19 @@
             :style="{width: previewSize, height: previewSize}"
             @click="handleImage"
             v-show="fileList.length == 0 || mutiple"
+            v-if="!useSlot"
         >
             <uni-icons size="24" color="#dcdee0" type="camera" />
             <view type="image" accept="image/*" class="uploader-input" />
+        </view>
+        <view
+        class="uplader-upload row-center"
+        :style="{width: previewSize, height: previewSize}"
+        @click="handleImage"
+        v-show="fileList.length == 0 || mutiple"
+        v-else
+        >
+            <slot></slot>
         </view>
     </view>
 </template>
@@ -44,6 +54,10 @@
             deletable: {
                 type: Boolean,
                 default: false,
+            },
+            useSlot: {
+                type: Boolean,
+                default: false
             }
         },
         data() {

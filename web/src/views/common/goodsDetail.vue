@@ -18,204 +18,213 @@
 
 <template>
     <div class="goods-details" v-if="!isFirstLoading">
-        <div class="app-load row-between bg-white" v-if="isFromApp">
-            <div class="row">
-                <img src="@A/images/shop_logo.png" alt />
-                <div class="ml10">多商户电商平台</div>
-            </div>
-            <button
-                class="br60 bg-primary white"
-                size="xs"
-                @click="$getAppDownload()"
-            >
-                app下载
-            </button>
-        </div>
-        <product-swiper :imgList="swiperList"></product-swiper>
-        <div class="goods-info bg-white">
-            <div class="count-down row-between" v-if="activity.type == 1">
-                <div class="price white row">
-                    <div class="mr10">
-                        <price-slice
-                            :showSubscript="true"
-                            :price="checkedGoods.price || goodsDetail.price"
-                            :weight="700"
-                            first-class="first-price"
-                            second-class="xxl"
-                        ></price-slice>
-                    </div>
-                    <div class="line-through white md">
-                        <price-slice
-                            :showSubscript="true"
-                            :price="
-                                checkedGoods.market_price ||
-                                goodsDetail.market_price
-                            "
-                        ></price-slice>
-                    </div>
+        <div v-if="!emptyDetails">
+            <div class="app-load row-between bg-white" v-if="isFromApp">
+                <div class="row">
+                    <img src="@A/images/shop_logo.png" alt />
+                    <div class="ml10">多商户电商平台</div>
                 </div>
-            </div>
-            <div class="info-header row" v-else>
-                <div class="price row" style="flex: 1">
-                    <div class="primary mr10">
-                        <price-slice
-                            :showSubscript="true"
-                            :price="checkedGoods.price || goodsDetail.price"
-                            :weight="700"
-                            first-class="first-price"
-                            second-class="xxl"
-                        ></price-slice>
-                    </div>
-                    <div class="line-through muted md">
-                        <price-slice
-                            :showSubscript="true"
-                            :price="
-                                checkedGoods.market_price ||
-                                goodsDetail.market_price
-                            "
-                        ></price-slice>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="goods-name lg bold" style="flex: 1">
-                    {{ goodsDetail.name }}
-                </div>
-                <img
-                    v-if="activity.type == 1"
-                    class="icon-share"
-                    @click="showShare = true"
-                    src="@A/images/icon_share.png"
-                />
-            </div>
-            <div class="row-between xs lighter" style="padding: 0 0.32rem 10px">
-                <span v-if="goodsDetail.stock !== true"
-                    >库存: {{ checkedGoods.stock || goodsDetail.stock }}件</span
+                <button
+                    class="br60 bg-primary white"
+                    size="xs"
+                    @click="$getAppDownload()"
                 >
-                <span>销量: {{ goodsDetail.sales_sum }}件</span>
-                <span>浏览量: {{ goodsDetail.click_count }}次</span>
+                    app下载
+                </button>
             </div>
-        </div>
-        <div
-            class="coupons row mt10 bg-white"
-            style="align-items: flex-start"
-            @click="showCoupons = true"
-             v-if="couponLists.length"
-        >
-            <div class="text muted">优惠</div>
-            <div class="con" style="flex: 1">
-                <div class="row" style="flex: 1">
-                    <van-tag plain :color="primaryColor">领券</van-tag>
-                    <div class="row ml10" style="flex: 1">
-                        <div
-                            class="coupons-item primary mr10"
-                            v-for="(item, index) in couponLists"
-                            :key="item.id"
-                        >
-                            <div v-if="index < 2" class="row xs">
-                                {{ item.use_condition }}
-                            </div>
+            <product-swiper :imgList="swiperList"></product-swiper>
+            <div class="goods-info bg-white">
+                <div class="count-down row-between" v-if="activity.type == 1">
+                    <div class="price white row">
+                        <div class="mr10">
+                            <price-slice
+                                :showSubscript="true"
+                                :price="checkedGoods.price || goodsDetail.price"
+                                :weight="700"
+                                first-class="first-price"
+                                second-class="xxl"
+                            ></price-slice>
+                        </div>
+                        <div class="line-through white md">
+                            <price-slice
+                                :showSubscript="true"
+                                :price="
+                                    checkedGoods.market_price ||
+                                    goodsDetail.market_price
+                                "
+                            ></price-slice>
                         </div>
                     </div>
-                    <img class="icon-sm" src="@A/images/arrow_right.png" />
                 </div>
-            </div>
-        </div>
-        <div class="evaluation bg-white mt10" >
-            <div
-                class="title row-between"
-                @click="goPage('userEvaluate', { id: goodsDetail.id })"
-            >
-                <div>
-                    <span class="balck md mr10">用户评价</span>
-                    <span class="primary sm"
-                        >好评率{{ comment.goods_rate  || "0%"}}</span
-                    >
+                <div class="info-header row" v-else>
+                    <div class="price row" style="flex: 1">
+                        <div class="primary mr10">
+                            <price-slice
+                                :showSubscript="true"
+                                :price="checkedGoods.price || goodsDetail.price"
+                                :weight="700"
+                                first-class="first-price"
+                                second-class="xxl"
+                            ></price-slice>
+                        </div>
+                        <div class="line-through muted md">
+                            <price-slice
+                                :showSubscript="true"
+                                :price="
+                                    checkedGoods.market_price ||
+                                    goodsDetail.market_price
+                                "
+                            ></price-slice>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
-                    <span class="lighter">查看全部</span>
-                    <img class="icon-sm" src="@A/images/arrow_right.png" />
+                    <div class="goods-name lg bold" style="flex: 1">
+                        {{ goodsDetail.name }}
+                    </div>
+                    <img
+                        v-if="activity.type == 1"
+                        class="icon-share"
+                        @click="showShare = true"
+                        src="@A/images/icon_share.png"
+                    />
                 </div>
-            </div>
-            <div class="con" v-if="comment.goods_rate">
-                <div class="user-info row" >
-                    <img class="avatar mr10" :src="comment.avatar" />
-                    <div class="user-name md mr10">{{ comment.nickname }}</div>
-                </div>
-                <div class="muted xs mt10">
-                    <span class="mr10">{{ comment.create_time }}</span>
-                </div>
-                <div v-if="comment.comment" class="dec mt20">
-                    {{ comment.comment }}
-                </div>
-            </div>
-             <div class="con muted row-center" v-else>
-                 暂无评价
-             </div>
-        </div>
-        <goods-like class="mt10" v-if="goodsLike.length" :lists="goodsLike" />
-        <div class="details mt10 bg-white">
-            <div class="title lg">商品详情</div>
-            <div class="content" v-html="goodsDetail.content"></div>
-        </div>
-        <div class="footer row bg-white">
-            <div class="btn column-center" @click="goPage('contactOffical')">
-                <img class="icon" src="@A/images/icon_contact.png" />
-                <span class="xxs lighter">客服</span>
-            </div>
-            <div
-                class="btn column-center"
-                hover-class="none"
-                bindtap="collectGoods"
-                @click="$handleCollectGoods"
-            >
-                <img
-                    class="icon"
-                    :src="
-                        goodsDetail.is_collect == 0
-                            ? require('@A/images/icon_collection.png')
-                            : require('@A/images/detail_icon_service.png')
-                    "
-                />
-                <span class="xxs lighter">收藏</span>
-            </div>
-            <div class="btn column-center" @click="goPage('cart')">
-                <img
-                    class="icon"
-                    :class="{ shaking: iconShaking }"
-                    src="@A/images/icon_cart.png"
-                />
-                <span class="xxs lighter">购物车</span>
-                <div v-if="cartNum" class="cart-num white xxs row-center">
-                    {{ cartNum }}
+                <div class="row-between xs lighter" style="padding: 0 0.32rem 10px">
+                    <span v-if="goodsDetail.stock !== true"
+                        >库存: {{ checkedGoods.stock || goodsDetail.stock }}件</span
+                    >
+                    <span>销量: {{ goodsDetail.sales_sum }}件</span>
+                    <span>浏览量: {{ goodsDetail.click_count }}次</span>
                 </div>
             </div>
             <div
-                v-if="!activity.type == 1"
-                class="addcart br60 white mr10 md ml10"
-                @click="onShowSpec(1)"
+                class="coupons row mt10 bg-white"
+                style="align-items: flex-start"
+                @click="showCoupons = true"
+                v-if="couponLists.length"
             >
-                加入购物车
+                <div class="text muted">优惠</div>
+                <div class="con" style="flex: 1">
+                    <div class="row" style="flex: 1">
+                        <van-tag plain :color="primaryColor">领券</van-tag>
+                        <div class="row ml10" style="flex: 1">
+                            <div
+                                class="coupons-item primary mr10"
+                                v-for="(item, index) in couponLists"
+                                :key="item.id"
+                            >
+                                <div v-if="index < 2" class="row xs">
+                                    {{ item.use_condition }}
+                                </div>
+                            </div>
+                        </div>
+                        <img class="icon-sm" src="@A/images/arrow_right.png" />
+                    </div>
+                </div>
             </div>
-            <div class="right-buy br60 white mr10 md" @click="onShowSpec(2)">
-                立即购买
+            <div class="evaluation bg-white mt10" >
+                <div
+                    class="title row-between"
+                    @click="goPage('userEvaluate', { id: goodsDetail.id })"
+                >
+                    <div>
+                        <span class="balck md mr10">用户评价</span>
+                        <span class="primary sm"
+                            >好评率{{ comment.goods_rate  || "0%"}}</span
+                        >
+                    </div>
+                    <div class="row">
+                        <span class="lighter">查看全部</span>
+                        <img class="icon-sm" src="@A/images/arrow_right.png" />
+                    </div>
+                </div>
+                <div class="con" v-if="comment.goods_rate">
+                    <div class="user-info row" >
+                        <img class="avatar mr10" :src="comment.avatar" />
+                        <div class="user-name md mr10">{{ comment.nickname }}</div>
+                    </div>
+                    <div class="muted xs mt10">
+                        <span class="mr10">{{ comment.create_time }}</span>
+                    </div>
+                    <div v-if="comment.comment" class="dec mt20">
+                        {{ comment.comment }}
+                    </div>
+                </div>
+                <div class="con muted row-center" v-else>
+                    暂无评价
+                </div>
             </div>
+            <goods-like class="mt10" v-if="goodsLike.length" :lists="goodsLike" />
+            <div class="details mt10 bg-white">
+                <div class="title lg">商品详情</div>
+                <div class="content" v-html="goodsDetail.content"></div>
+            </div>
+            <div class="footer row bg-white">
+                <div class="btn column-center" @click="goPage('contactOffical')">
+                    <img class="icon" src="@A/images/icon_contact.png" />
+                    <span class="xxs lighter">客服</span>
+                </div>
+                <div
+                    class="btn column-center"
+                    hover-class="none"
+                    bindtap="collectGoods"
+                    @click="$handleCollectGoods"
+                >
+                    <img
+                        class="icon"
+                        :src="
+                            goodsDetail.is_collect == 0
+                                ? require('@A/images/icon_collection.png')
+                                : require('@A/images/detail_icon_service.png')
+                        "
+                    />
+                    <span class="xxs lighter">收藏</span>
+                </div>
+                <div class="btn column-center" @click="goPage('cart')">
+                    <img
+                        class="icon"
+                        :class="{ shaking: iconShaking }"
+                        src="@A/images/icon_cart.png"
+                    />
+                    <span class="xxs lighter">购物车</span>
+                    <div v-if="cartNum" class="cart-num white xxs row-center">
+                        {{ cartNum }}
+                    </div>
+                </div>
+                <div
+                    v-if="!activity.type == 1"
+                    class="addcart br60 white mr10 md ml10"
+                    @click="onShowSpec(1)"
+                >
+                    加入购物车
+                </div>
+                <div class="right-buy br60 white mr10 md" @click="onShowSpec(2)">
+                    立即购买
+                </div>
+            </div>
+            <goods-spec
+                :show="showSpec"
+                :show-add="popupType == 1"
+                :show-buy="popupType == 2"
+                :goods="goodsDetail"
+                @close="showSpec = false"
+                @change="onChangeSpec"
+                @addcart="onAddCart"
+                @buynow="onBuyNow"
+            />
+            <transition @after-leave="afterLeave" :duration="800" @after-enter="afterEnter" >
+                <div v-show="showAnim" class="goods-ball" ref="goodsBall">
+                    <img class="inner-ball" :src="goodsDetail.image" />
+                </div>
+            </transition>
         </div>
-        <goods-spec
-            :show="showSpec"
-            :show-add="popupType == 1"
-            :show-buy="popupType == 2"
-            :goods="goodsDetail"
-            @close="showSpec = false"
-            @change="onChangeSpec"
-            @addcart="onAddCart"
-            @buynow="onBuyNow"
-        />
-        <transition @after-leave="afterLeave" :duration="800" @after-enter="afterEnter" >
-            <div v-show="showAnim" class="goods-ball" ref="goodsBall">
-                <img class="inner-ball" :src="goodsDetail.image" />
+        <div class="goods-details-null" v-else>
+            <div class="details-null column-center">
+                <img class="img-null" src="@A/images/goods_null.png" />
+                <div class="xs muted">该商品已下架，去逛逛别的吧~</div>
             </div>
-        </transition>
+            <recommend/>
+        </div>
         <van-popup
             class="coupons-popup"
             v-model="showCoupons"
@@ -257,6 +266,7 @@ import PriceSlice from "@C/PriceSlice";
 import GoodsSpec from "@C/GoodsSpec";
 import CouponList from "@C/CouponList";
 import GoodsLike from "@C/GoodsLike";
+import recommend from "@C/Recommend"
 import {
     getGoodsDetail,
     getGoodsCoupon,
@@ -278,6 +288,7 @@ export default {
         GoodsSpec,
         CouponList,
         GoodsLike,
+        recommend
     },
     data() {
         return {
@@ -299,6 +310,7 @@ export default {
             isFromApp: this.$route.query.isapp,
             showAnim: false,
             iconShaking: false,
+            emptyDetails: false
         };
     },
 
@@ -348,9 +360,7 @@ export default {
                     this.comment = comment;
                     this.isFirstLoading = false;
                 } else {
-                    setTimeout(() => {
-                        this.$router.go(-1);
-                    }, 500);
+                    this.emptyDetails = true;
                 }
             });
         },
@@ -707,6 +717,13 @@ export default {
         opacity: 0;
         left: 75px;
         top: calc(100vh - 100px);
+    }
+}
+/* 空状态 */
+.goods-details-null {
+    .details-null {
+        padding-top: 70px;
+        margin-bottom: 50px;
     }
 }
 @-webkit-keyframes shake {

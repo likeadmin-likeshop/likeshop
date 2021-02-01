@@ -7,13 +7,13 @@
 			<view class="user-info row-between">
 				<view class="info row">
 					<image class="avatar mr20" @tap="goLogin" :src="isLogin ? userInfo.avatar : require('static/images/my_portrait_empty.png')"></image>
-					<view class="white" v-if="isLogin">
+					<navigator class="white" v-if="isLogin" url="/pages/user_profile/user_profile" hover-class="none">
 						<view class="name xxl">{{userInfo.nickname}}</view>
 						<view class="user-id row-between">
 							<view class="xs white ml20 mr20">会员ID: {{userInfo.sn || ''}}</view>
 							<view class="xs normal copy-btn row-center ml5" @tap.stop="onCopy">复制</view>
 						</view>
-					</view>
+					</navigator>
 					<view class="white" v-else @tap="goLogin">
 						<view style="font-size: 42rpx">点击登录</view>
 						<view class="sm">登录体验更多功能</view>

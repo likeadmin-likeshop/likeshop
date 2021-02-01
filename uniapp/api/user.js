@@ -215,7 +215,7 @@ export function setUserInfo(data) {
 
 // 更换手机号
 export function changeUserMobile(data) {
-    return request.post('user/getMobile', data);
+    return request.post('user/getMobile', {...data, client: 2});
 }
 
 //会员中心

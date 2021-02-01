@@ -183,23 +183,26 @@
             "style": {
                 "navigationBarTitleText": "填写快递单号"
             }
-        }
-	    ,{
-            "path" : "pages/pay_result/pay_result",
-            "style" :                                                                                    
-            {
+        },
+	    {
+            "path": "pages/pay_result/pay_result",
+            "style": {
                 "navigationBarTitleText": "支付详情"
             }
             
         },
         {
-            "path" : "pages/goods_logistics/goods_logistics",
-            "style" :                                                                                    
-            {
+            "path": "pages/goods_logistics/goods_logistics",
+            "style": {
                 "navigationBarTitleText": "物流详情",
                 "enablePullDownRefresh": false
             }
-            
+        },
+        {
+            "path": "pages/user_profile/user_profile",
+            "style": {
+                
+            }
         }
     ],
 	"tabBar": {

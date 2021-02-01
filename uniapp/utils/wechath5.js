@@ -65,7 +65,7 @@ class WechatH5 {
 
 	//微信分享
 	share(option) {
-		wx.ready(() => {
+		weixin.ready(() => {
 			const {
 				shareTitle,
 				shareLink,

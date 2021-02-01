@@ -70,7 +70,8 @@ class SmsSend{
             $send_status = SmsLog::send_fail;
             $this->updateSmsLog($send_status,$res);
 
-            return '短信配置错误：'.$res['Message'];
+            $message = $res['Message'] ?? $res;
+            return '短信配置错误：'. $message;
         }
 
 

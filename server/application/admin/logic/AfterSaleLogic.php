@@ -20,6 +20,9 @@
 namespace app\admin\logic;
 
 use app\common\logic\AccountLogLogic;
+use app\common\logic\OrderRefundLogic;
+use app\common\server\AreaServer;
+use app\common\server\ConfigServer;
 use app\common\server\WeChatServer;
 use app\common\logic\AfterSaleLogLogic;
 use app\common\logic\PaymentLogic;
@@ -31,6 +34,13 @@ use think\facade\Hook;
 
 class AfterSaleLogic
 {
+
+    /**
+     * Notes: 列表
+     * @param $get
+     * @author 段誉(2021/1/30 16:07)
+     * @return array
+     */
     public static function lists($get)
     {
         $after_sale = new AfterSale();
@@ -125,11 +135,17 @@ class AfterSaleLogic
     }
 
 
+    /**
+     * Notes: 详情
+     * @param $id
+     * @author 段誉(2021/1/30 16:07)
+     * @return array
+     */
     public static function getDetail($id)
     {
         $after_sale = new AfterSale();
         $result = $after_sale
-            ->with(['order_goods', 'user', 'order'])
+            ->with(['order_goods', 'user', 'order', 'logs'])
             ->where('id', $id)
             ->find()->toArray();
 
@@ -146,21 +162,57 @@ class AfterSaleLogic
             $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }
 
-        //售后日志
-        $logs = AfterSaleLog::where('after_sale_id', $id)
-            ->order('id', 'desc')
-            ->select();
-
-        foreach ($logs as &$log) {
-            $log['create_time'] = date('Y-m-d H:i:s', $log['create_time']);
+        foreach ($result['order_goods'] as &$good) {
+            $info = json_decode($good['goods_info'], true);
+            $good['goods_name'] = $info['goods_name'];
+            $good['spec_value'] = $info['spec_value_str'];
+            $good['image'] = empty($info['spec_image']) ? $info['image'] : $info['spec_image'];
         }
-        $result['log'] = $logs;
 
+        foreach ($result['logs'] as &$log){
+            $log['create_time'] = date('Y-m-d H:i:s', $log['create_time']);
+
+            $log['log_img'] = '';
+            $log['log_remark'] = '';
+            switch ($log['channel']){
+                //会员申请售后
+                case AfterSaleLog::USER_APPLY_REFUND:
+                    $log['log_img'] = $result['refund_image'];
+                    $refund_reason = empty($result['refund_reason']) ? '未知' : $result['refund_reason'];
+                    $refund_remark = empty($result['refund_remark']) ? '暂无' : $result['refund_remark'];
+                    $log['log_remark'] = '退款原因('.$refund_reason.')'.'退款说明('.$refund_remark.')';
+                    break;
+                //会员发快递
+                case AfterSaleLog::USER_SEND_EXPRESS:
+                    $log['log_img'] = $result['express_image'];
+                    $express_name = $result['express_name'];
+                    $invoice_no = $result['invoice_no'];
+                    $express_remark = empty($result['express_remark']) ? '暂无' : $result['express_remark'];
+                    $log['log_remark'] = '快递公司('.$express_name.')'.'单号('.$invoice_no.')'.'备注说明('.$express_remark.')';
+                    break;
+                //商家拒绝退款 //商家拒绝收货
+                case AfterSaleLog::SHOP_REFUSE_REFUND:
+                case AfterSaleLog::SHOP_REFUSE_TAKE_GOODS:
+                    $admin_remark = empty($result['admin_remark']) ? '暂无' : $result['admin_remark'];
+                    $log['log_remark'] = '备注:'.$admin_remark;
+                    break;
+            }
+
+        }
+
+        $result['shop_address'] = self::getShopAddress();
         return $result;
     }
 
 
-    //商家同意售后
+
+
+    /**
+     * Notes: 商家同意售后
+     * @param $id
+     * @param $admin_id
+     * @author 段誉(2021/1/30 16:07)
+     */
     public static function agree($id, $admin_id)
     {
         $after_sale = AfterSale::get($id);
@@ -211,7 +263,14 @@ class AfterSaleLogic
     }
 
 
-    //商家拒绝
+
+
+    /**
+     * Notes: 商家拒绝
+     * @param $post
+     * @param $admin_id
+     * @author 段誉(2021/1/30 16:07)
+     */
     public static function refuse($post, $admin_id)
     {
         $id = $post['id'];
@@ -240,7 +299,14 @@ class AfterSaleLogic
 
     }
 
-    //商家收货
+
+
+    /**
+     * Notes: 商家收货
+     * @param $post
+     * @param $admin_id
+     * @author 段誉(2021/1/30 16:08)
+     */
     public static function takeGoods($post, $admin_id)
     {
         $id = $post['id'];
@@ -264,7 +330,14 @@ class AfterSaleLogic
     }
 
 
-    //商家拒绝收货
+
+
+    /**
+     * Notes: 商家拒绝收货
+     * @param $post
+     * @param $admin_id
+     * @author 段誉(2021/1/30 16:08)
+     */
     public static function refuseGoods($post, $admin_id)
     {
         $id = $post['id'];
@@ -285,7 +358,16 @@ class AfterSaleLogic
     }
 
 
-    //确认退款 ===> 退款
+    /**
+     * Notes: 确认退款
+     * @param $id
+     * @param $admin_id
+     * @author 段誉(2021/1/30 16:08)
+     * @return bool|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public static function confirm($id, $admin_id)
     {
         //售后记录状态
@@ -293,124 +375,32 @@ class AfterSaleLogic
         $order = Order::get(['id' => $after_sale['order_id']]);
         $order_goods = OrderGoods::get(['id' => $after_sale['order_goods_id']]);
 
-        $result = [];
-
         Db::startTrans();
         try {
-            $total_fee = $order['order_amount'];//订单应付金额
-            $refund_fee = $order_goods['total_pay_price'];//实际商品支付金额
-
-            //在白名单内,一分钱
-            $white_list = Env::get('wechat.white_list', '');
-            $white_list = explode(',', $white_list);
-            if (in_array($order['user_id'], $white_list)) {
-                $total_fee = 0.01;
-                $refund_fee = 0.01;
-            }
-
-            //增加退款记录
-            $refund_data = [
-                'order_id' => $order['id'],
-                'user_id' => $order['user_id'],
-                'refund_sn' => createSn('order_refund', 'refund_sn'),
-                'order_amount' => $total_fee,
-                'refund_amount' => $refund_fee,
-                'transaction_id' => $order['transaction_id'],
-                'create_time' => time(),
-            ];
-            $refund_id = Db::name('order_refund')->insertGetId($refund_data);
-
-
-            //余额支付回退余额
-            if ($order['pay_way'] == Pay::BALANCE_PAY) {
-                $user = \app\common\model\User::get($order['user_id']);
-                //余额支付,回退余额
-                $user->user_money = ['inc', $order['order_amount']];
-                AccountLogLogic::AccountRecord($order['user_id'], $order['order_amount'], 1, AccountLog::after_sale_refund);
-                $user->save();
-            }
-
-
-            //微信支付
-            if ($order['pay_way'] == Pay::WECHAT_PAY) {
-                $config = self::payConfig($order['order_source']);
-                $data = [
-                    'transaction_id' => $order['transaction_id'],
-                    'refund_sn' => $refund_data['refund_sn'],
-                    'total_fee' => $total_fee * 100,
-                    'refund_fee' => $refund_fee * 100,
-                ];
-
-                $result = PaymentLogic::refund($config, $data);
-                if ($result['return_code'] != 'SUCCESS' || $result['result_code'] != 'SUCCESS') {
-                    $return_msg = '未知原因';
-                    if (isset($result['return_code']) && $result['return_code'] == 'FAIL') {
-                        $return_msg = $result['return_msg'];
-                        throw new Exception($return_msg);
-                    }
-
-                    if (isset($result['err_code_des'])) {
-                        $return_msg = $result['err_code_des'];
-                        throw new Exception($return_msg);
-                    }
-                    throw new Exception($return_msg);
-                }
-            }
-
-            //更新退款记录
-            $update_refund = [
-                'refund_status' => 1,
-                'refund_at' => time(),
-                'wechat_refund_id' => $result['refund_id'] ?? '',//微信的退款id
-                'refund_msg' => json_encode($result, JSON_UNESCAPED_UNICODE),
-                'update_time' => time(),
-            ];
-            Db::name('order_refund')->where(['id' => $refund_id])->update($update_refund);
-
+            //更新售后为退款成功状态
             $after_sale->update_time = time();
-            $after_sale->status = AfterSale::STATUS_SUCCESS_REFUND;//更新为退款成功状态
+            $after_sale->status = AfterSale::STATUS_SUCCESS_REFUND;
             $after_sale->save();
-
-            //记录日志
+            //售后日志
             AfterSaleLogLogic::record(
                 AfterSaleLog::TYPE_SHOP,
                 AfterSaleLog::REFUND_SUCCESS,
                 $after_sale['order_id'],
                 $after_sale['id'],
                 $admin_id,
-                AfterSaleLog::REFUND_SUCCESS//退款成功
+                AfterSaleLog::REFUND_SUCCESS
             );
-            $order_goods->refund_status = OrderGoods::REFUND_STATUS_SUCCESS;//退款成功
-            $order_goods->save();
+            //更新订单和订单商品状态
+            OrderRefundLogic::afterSaleRefundUpdate($order, $order_goods['id']);
+            //订单退款
+            OrderRefundLogic::refund($order, $order['order_amount'], $order_goods['total_pay_price']);
 
-            //更新订单状态
-            $order->pay_status = Pay::REFUNDED;
-            $order->refund_amount += $total_fee;//退款金额 + 以前的退款金额
-            $order->refund_status = 1;//退款状态：0-未退款；1-部分退款；2-全部退款
-
-            //退款金额等于订单应付金额时为全部退款
-            if ($order->refund_amount == $order['order_amount']) {
-                $order->refund_status = 2;
-            }
-            $order->save();
             Db::commit();
             return true;
         } catch (Exception $e) {
             Db::rollback();
             //增加退款失败记录
-            $refund_data = [
-                'order_id' => $order['id'],
-                'user_id' => $order['user_id'],
-                'refund_sn' => createSn('order_refund', 'refund_sn'),
-                'order_amount' => $total_fee,
-                'refund_amount' => $refund_fee,
-                'transaction_id' => $order['transaction_id'],
-                'create_time' => time(),
-                'refund_status' => 2,
-                'refund_msg' => json_encode($result, JSON_UNESCAPED_UNICODE),
-            ];
-            Db::name('order_refund')->insertGetId($refund_data);
-
+            OrderRefundLogic::addErrorRefund($order, $e->getMessage());
             //记录日志
             AfterSaleLogLogic::record(
                 AfterSaleLog::TYPE_SHOP,
@@ -421,29 +411,26 @@ class AfterSaleLogic
                 AfterSaleLog::REFUND_ERROR,//退款失败
                 $e->getMessage()
             );
-
             return $e->getMessage();
         }
     }
 
 
-    public static function payConfig($order_source)
+
+    /**
+     * Notes: 获取商家地址
+     * @author 段誉(2021/1/30 16:57)
+     * @return string
+     */
+    public static function getShopAddress()
     {
-        $config = WeChatServer::getPayConfigBySource($order_source);
-
-        if (empty($config)) {
-            throw new Exception('请联系管理员设置微信相关配置!');
-        }
-
-        if (!isset($config['cert_path']) || !isset($config['key_path'])) {
-            throw new Exception('请联系管理员设置微信证书!');
-        }
-
-        if (!file_exists($config['cert_path']) || !file_exists($config['cert_path'])) {
-            throw new Exception('微信证书不存在,请联系管理员!!');
-        }
-
-        return $config;
+        $shop_province = ConfigServer::get('shop', 'province_id', '');
+        $shop_city = ConfigServer::get('shop', 'city_id', '');
+        $shop_district = ConfigServer::get('shop', 'district_id', '');
+        $shop_address = ConfigServer::get('shop', 'address', '');
+        $shop_contact = ConfigServer::get('shop', 'contact', '');
+        $shop_mobile = ConfigServer::get('shop', 'mobile', '');
+        $shop_address = AreaServer::getAddress([$shop_province, $shop_city, $shop_district], $shop_address);
+        return $shop_address.'('.$shop_contact.','.$shop_mobile.')';
     }
-
 }

@@ -3,7 +3,7 @@
       <view class="contain">
         <tabs :active="active" :line-width="40" @change="onChange" sticky>
           <tab v-for="(item, index) in afterSale" :key="index" :title="item.name">
-            <after-sales-list :type="item.type" v-if="item.isShow" :id="item.type"></after-sales-list>
+            <after-sales-list :type="item.type" v-if="item.isShow"></after-sales-list>
           </tab>
         </tabs>
       </view>
@@ -154,68 +154,53 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 image {
     width: 100%;
     height: 100%;
 }
 
 .post-sale {
-
-}
-
-.post-sale .contain {
-
-}
-
-.post-sale .contain .sale-list {
-    padding: 20rpx 0;
-}
-
-.post-sale .contain .sale-list .sale-item {
-    
-}
-
-.post-sale .contain .sale-list .sale-item .sale-header {
-    padding: 20rpx 24rpx;
-}
-
-.post-sale .contain .sale-list .sale-item .sale-header .store-name {
-    font-weight: bold;
-    font-family:PingFang SC;
-    line-height: 40rpx;
-}
-
-.post-sale .contain .sale-list .sale-item .sale-goods-show {
-    padding: 20rpx 24rpx;
-}
-
-.sale-goods-show .goods-img {
-    height: 160rpx;
-    width: 160rpx;
-}
-
-.sale-goods-show .goods-desc {
-    margin-left: 24rpx;
-}
-
-.sale-goods-show .sale-status {
-    padding: 20rpx 60rpx;
-    background-color: #F6F6F6;
-}
-
-.post-sale .contain .sale-list .sale-item .sale-footer {
-    padding: 0 24rpx 22rpx;
-}
-
-.post-sale .contain .sale-list .sale-item .sale-footer .btn {
-    padding: 9rpx 34rpx;
-    font-family: PingFang SC;
-}
-
-.post-sale .contain .sale-list .sale-item .sale-footer .grey-btn {
-    border: 1rpx solid #CCCCCC;
-    padding: 9rpx 34rpx;
-    font-family: PingFang SC;
+    .contain {
+        .sale-list {
+            padding: 20rpx 0;
+            .sale-item {
+                .sale-header {
+                    padding: 20rpx 24rpx;
+                    .store-name {
+                        font-weight: bold;
+                        font-family:PingFang SC;
+                        line-height: 40rpx;
+                    }
+                }
+                .sale-goods-show {
+                    padding: 20rpx 24rpx;
+                    .goods-img {
+                        height: 160rpx;
+                        width: 160rpx;
+                    }
+                    .goods-desc {
+                        margin-left: 24rpx;
+                    }
+                    .sale-status {
+                        padding: 20rpx 60rpx;
+                        background-color: #F6F6F6;
+                    }
+                }
+                .sale-footer {
+                    padding: 0 24rpx 22rpx;
+                    .btn {
+                        padding: 9rpx 34rpx;
+                        font-family: PingFang SC;
+                    }
+                    .grey-btn {
+                        border: 1rpx solid #CCCCCC;
+                        padding: 9rpx 34rpx;
+                        font-family: PingFang SC;
+                    }
+                }
+            }
+        }
+    }
 }
 </style>

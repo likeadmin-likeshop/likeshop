@@ -129,9 +129,13 @@
                 <tbody>
                 {foreach $detail.shipping.traces as $k => $item}
                 <tr>
+                    {if is_array($item)}
                     {foreach $item as $k1 => $value}
                     <td>{$value}</td>
                     {/foreach}
+                    {else /}
+                    <td>{$item}</td>
+                    {/if}
                 </tr>
                 {/foreach}
                 </tbody>

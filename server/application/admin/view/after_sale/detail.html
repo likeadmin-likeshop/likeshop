@@ -177,7 +177,7 @@
 
         <div class="layui-form-item div-flex">
             <label class="layui-form-label ">退货地址:</label>
-            <div class="width-160 refund_address_text">--</div>
+            <div class="width-160 refund_address_text">{$detail.shop_address}</div>
             <label class="layui-form-label ">入库方式:</label>
             <div class="width-160"></div>
             <label class="layui-form-label ">收货时间:</label>
@@ -227,17 +227,24 @@
 
         <div class="layui-form-item div-flex">
             <div class="layui-input-block ">
-            <ul class="layui-timeline">
-                {volist name="$detail.log" id="vo"}
-                <li class="layui-timeline-item">
-                    <i class="layui-icon layui-timeline-axis"></i>
-                    <div class="layui-timeline-content layui-text">
-                        <h3 class="layui-timeline-title">{$vo.content}</h3>
-                        <p>{$vo.create_time}</p>
-                    </div>
-                </li>
-                {/volist}
-            </ul>
+                <ul class="layui-timeline">
+                    {volist name="$detail.logs" id="vo"}
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">{$vo.content}({$vo.create_time})</h3>
+                            <!--日志备注-->
+                            {notempty name="$vo.log_remark"}
+                            <h4>{$vo.log_remark}</h4>
+                            {/notempty}
+                            <!--日志图片-->
+                            {notempty name="$vo.log_img"}
+                            <img src="{$vo.log_img}" alt="" width="80" height="80" class="image-show">
+                            {/notempty}
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
             </div>
         </div>
 
@@ -259,7 +266,7 @@
         //主图放大
         $(document).on('click', '.image-show', function () {
             var src = $(this).attr('src');
-            like.showImg(src,600);
+            like.showImg(src,400);
         });
 
         var id = $('.after_sale_id').val();

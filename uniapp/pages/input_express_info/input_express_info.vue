@@ -22,7 +22,7 @@
         <view class="sm muted ml20">(请上传快递单号凭证）</view>
       </view>
       <view class="upload">
-        <van-uploader deletable="true" preview-size="160rpx" image-fit="aspectFill" max-count="1" :file-list="fileList" @after-read="afterRead"></van-uploader>
+        <Uploader :deletable="true" @delete="handleImage" preview-size="160rpx" max-count="1" :file-list="fileList" @after-read="afterRead" />
       </view>
     </view>
     <view class="submit-btn">
@@ -119,17 +119,18 @@ export default {
   onShareAppMessage: function () {},
   methods: {
     afterRead(e) {
-      const {
-        file
-      } = e.detail;
+      const file = e
       uni.showLoading({
         title: '正在上传中...',
         mask: true
       });
-      this.uploadFile(file.path).then(res => {
-        uni.hideLoading();
-        this.fileList = [res]
-      });
+      file.forEach(item => {
+          this.uploadFile(item.path).then(res => {
+            uni.hideLoading();
+            this.fileList.push(res);
+            console.log(this.fileList);
+          });
+      })
     },
 
     formSubmit(e) {
@@ -162,7 +163,10 @@ export default {
           url: baseURL + 'file/formimage',
           filePath: path,
           name: 'file',
+          fileType: 'image',
+          cloudPath: '',
           success: res => {
+              console.log('uploadFile res ==> ', res)
             const {
               fileList
             } = this;
@@ -171,6 +175,9 @@ export default {
             if (data.code == 1) {
               resolve(data.data);
             }
+          },
+          fail: (err) => {
+               console.log(err)
           }
         });
       });
@@ -187,6 +194,10 @@ export default {
           this.$emit('RESET_LIST');
         }
       });
+    },
+    
+    handleImage(index) {
+        this.fileList.splice(index)
     }
 
   }

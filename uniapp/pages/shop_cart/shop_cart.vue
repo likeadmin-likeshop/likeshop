@@ -317,7 +317,7 @@ export default {
         width: 100%;
         height: 100rpx;
         box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
-        bottom: 0;
+        bottom: var(--window-bottom);
         box-sizing: border-box;
         z-index: 1000;
         .all-price {

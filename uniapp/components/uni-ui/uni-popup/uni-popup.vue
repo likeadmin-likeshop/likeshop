@@ -89,13 +89,13 @@
 			},
             show: {
                 handler: function(newVal) {
-                        
                     if(newVal == true) {
                         this.open()
                     }
                     else {
                         this.close()
                     }
+                    return newVal
                 },
                 immediate: true
             }
@@ -164,7 +164,6 @@
 			},
 			close(type) {
 				this.showTrans = false;
-                this.showPopup = false;
 				this.$nextTick(() => {
 					this.$emit('change', {
 						show: false,
@@ -180,6 +179,7 @@
 			},
 			onTap() {
 				if (!this.mkclick) return
+                this.$emit('close');
 				this.close()
 			},
 			/**

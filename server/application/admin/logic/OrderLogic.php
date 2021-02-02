@@ -369,4 +369,28 @@ class OrderLogic
         }
         return $traces;
     }
+
+
+    /**
+     * Notes: 订单备注
+     * @param $post
+     * @param string $type
+     * @return int|string
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     * @author 张无忌(2021/2/1 18:50)
+     */
+    public static function remarks($post, $type="get")
+    {
+        if ($type==='get') {
+
+            return Db::name('order')->field('id,order_remarks')
+                ->where(['id'=>$post['id']])
+                ->findOrEmpty();
+        } else {
+            return Db::name('order')
+                ->where(['id'=>$post['id']])
+                ->update(['order_remarks'=>$post['order_remarks']]);
+        }
+    }
 }

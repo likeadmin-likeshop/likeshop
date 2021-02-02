@@ -1,6 +1,7 @@
 import {
 	loadingType
 } from './type'
+import baseURL from '@/config/app.js'
 
 //节流
 export const trottle = (func, time = 1000, context) => {
@@ -234,4 +235,30 @@ export function menuJump(item) {
 		case 3: // tabbar
 
 	}
+}
+
+export function uploadFile(path) {
+  return new Promise(resolve => {
+    uni.uploadFile({
+      url: baseURL + 'file/formimage',
+      filePath: path,
+      name: 'file',
+      fileType: 'image',
+      cloudPath: '',
+      success: res => {
+          console.log('uploadFile res ==> ', res)
+        const {
+          fileList
+        } = this;
+        let data = JSON.parse(res.data);
+
+        if (data.code == 1) {
+          resolve(data.data);
+        }
+      },
+      fail: (err) => {
+           console.log(err)
+      }
+    });
+  });
 }

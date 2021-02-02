@@ -180,6 +180,7 @@
                             {{#  if(d.order_status == 4){ }}
                             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除订单</a>
                             {{#  } }}
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="remarks">备注</a>
                             </div>
                         </script>
 
@@ -491,6 +492,40 @@
                     });
                 });
             }
+
+            //商家备注
+            if(obj.event === 'remarks') {
+
+                like.ajax({
+                    url: '{:url("order/remarks")}'
+                    , data: {'id': id}
+                    , type: 'get'
+                    , success: function (res) {
+                        if (res.code === 1) {
+                            layer.prompt({title: '备注信息', formType: 2, value: res.data.order_remarks}, function(value, index){
+                                layer.close(index);
+                                like.ajax({
+                                    url: '{:url("order/remarks")}'
+                                    , data: {'id': id, "order_remarks": value }
+                                    , type: 'post'
+                                    , success: function (res) {
+                                        if (res.code === 1) {
+                                            layui.layer.msg(res.msg, {
+                                                offset: '15px'
+                                                , icon: 1
+                                                , time: 1000
+                                            });
+                                        }
+                                    }
+                                });
+
+                            });
+                        }
+                    }
+                });
+
+            }
+
         });
     });
 </script>

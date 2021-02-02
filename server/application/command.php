@@ -29,4 +29,5 @@
 return [
     'app\common\command\Crontab',
     'app\common\command\OrderClose',
+    'app\common\command\OrderFinish',//自动确认收货(待收货订单)
 ];

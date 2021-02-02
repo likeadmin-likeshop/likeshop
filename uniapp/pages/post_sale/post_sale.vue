@@ -113,8 +113,8 @@ export default {
             afterSaleType = AfterSaleType.NORMAL
             break;
     }
-    
-    let myComponent = this.$refs.afterSaleType[0];
+
+    let myComponent = this.$refs[afterSaleType][0];
     if (myComponent.getAfterSaleListFun) {
       myComponent.getAfterSaleListFun();
     }

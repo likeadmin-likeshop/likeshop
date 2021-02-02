@@ -31,7 +31,7 @@ class Policy extends ApiBase
      */
     public function service()
     {
-        $this->_error('获取成功', PolicyLogic::service());
+        $this->_success('获取成功', PolicyLogic::service());
     }
 
     /**

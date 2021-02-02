@@ -103,33 +103,18 @@
                             </div>
                         </script>
 
-                        <!--评价内容-->
-                        <script type="text/html" id="comment">
-                            {{#  if(d.comment === null){ }}
-                            {{#  if(d.reply === null){ }}
-                            {{#  }
-                            else { }} 【商家回复】{{d.reply}} {{#  } }}
-
-                            {{#  }
-
-                            else if(d.reply === null) { }}
-                            {{#  if(d.comment === null){ }}
-                            {{#  }
-                            else { }} 【会员评论】{{d.comment}} {{#  } }}
-                            {{#  } }}
-
-                            {{# if(d.reply != null && d.comment != null) { }}
-                            <div class="layui-input-inline"  style="text-align: left">
-                                <p>【会员评论】{{d.comment}}</p>
-                                <p>【商家回复】{{d.reply}}</p>
-                            </div>
-                            {{#  } }}
-
+                        <script type="text/html" id="comment_image">
+                            {{#  layui.each(d.comment_image, function(index, item){ }}
+                            <img src="{{item}}" alt="评论图片" style="width:50px;height:50px;float:left;margin-right:5px;">
+                            {{#  }); }}
                         </script>
 
                         <script type="text/html" id="comment-operation">
                             {{# if(d.reply === null) { }}
                             <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="reply">回复</a>
+                            {{#  } }}
+                            {{# if(d.reply) { }}
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="reply">修改回复</a>
                             {{#  } }}
                             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">{{d.info_state_switch}}</a>
                             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
@@ -217,7 +202,10 @@
                     {field: 'user', title: '会员信息',templet:'#user',width:310},
                     {field: 'goods', title: '商品信息',templet:'#goods',width:320},
                     {field: 'goods_comment', title: '评分等级', align: 'center',width:100},
-                    {field: 'comment', title: '评价内容',templet:'#comment',width:250},
+                    // {field: 'comment', title: '评价内容',templet:'#comment',width:250},
+                    {field: 'comment', title: '买家评价',width:200},
+                    {field: 'commentImage', title: '买家评价',width:200, templet:"#comment_image"},
+                    {field: 'reply', title: '商家回复',width:200},
                     {field: 'status', title: '显示状态', align: 'center',width:100},
                     {field: 'comment_time', title: '评论时间', align: 'center',width:200},
                     {fixed: 'right', title: '操作', align: 'center', toolbar: '#comment-operation',width:200},

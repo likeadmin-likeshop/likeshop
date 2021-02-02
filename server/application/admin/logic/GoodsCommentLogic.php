@@ -69,10 +69,16 @@ class GoodsCommentLogic{
             ->join('user u','u.id = gc.user_id')
             ->where('gc.del',0)
             ->where($where)
+            ->withAttr('comment_image', function ($value, $data){
+                return Db::name('goods_comment_image')->where([
+                    'goods_comment_id' => $data['id']
+                ])->column('uri');
+            })
             ->field('u.id as user_id,u.nickname,u.mobile,u.sex,u.create_time,g.name,gi.spec_value_str
             ,gc.goods_comment,gc.comment,gc.create_time as comment_time,gc.status,u.avatar,g.image,gc.reply
             ,gc.id')
-            ->order('gc.create_time','desc');
+            ->order('gc.create_time','desc')
+            ->append(['comment_image']);;
         $count = $res->count();
         $lists = $res->page($get['page'],$get['limit'])->select();
 

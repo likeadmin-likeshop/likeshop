@@ -118,7 +118,8 @@ layui.define(["layer", "form"], function (t) {
             if ("a" === t && !r) {
                 return
             }
-            r && (n.innerHTML = r), a.deleteContents(), a.insertNode(n)
+            // r && (n.innerHTML = r), a.deleteContents(), a.insertNode(n)
+            r && (n.innerHTML = r), a.insertNode(n)
         }
     }, h = function (t, i) {
         var a = this.document, l = "layedit-tool-active", n = p(m(a)), o = function (e) {
@@ -146,7 +147,9 @@ layui.define(["layer", "form"], function (t) {
                 var n = this;
                 var windows = layer.open({type: 2, title: "上传图片", content: image_upload_url, area: ["90%", "90%"]});
                 window.callback = function (uri) {
-                    v.call(t, "img", {src: "/" + uri,}, a)
+                    uri.forEach(function (item) {
+                        v.call(t, "img", {src: "/" + item}, a)
+                    });
                 };
                 window.callbackSetUri = function (uri) {
                     v.call(t, "img", {src: "/" + uri,}, a);

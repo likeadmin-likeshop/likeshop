@@ -205,16 +205,17 @@ export default {
     },
 
     changOneSelect(cartId, selected) {
-      console.log(cartId, selected, "changeOneSelect")
       selected = !selected;
       this.changeCartSelectFun([cartId], selected);
     },
 
+    // 更改全选状态
     changeAllSelect() {
       const {
         isSelectedAll,
         cartLists
       } = this;
+      console.log(cartLists, "###")
       let cartid = cartLists.map(item => item.cart_id);
       this.changeCartSelectFun(cartid, !isSelectedAll);
     },
@@ -222,7 +223,7 @@ export default {
     changeCartSelectFun(cartId, selected) {
         console.log("selected ", selected)
       changeCartSelect({
-        cart_id: parseInt(cartId),
+        cart_id: cartId,
         selected: selected ? 1 : 0
       }).then(res => {
         if (res.code == 1) {

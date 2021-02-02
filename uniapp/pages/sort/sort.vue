@@ -161,7 +161,7 @@
 						padding: 26rpx 10rpx;
 
 						&.active {
-							color: var(--primary-color);
+							color: $-color-primary;
 							font-size: 26rpx;
 							font-weight: bold;
 						}

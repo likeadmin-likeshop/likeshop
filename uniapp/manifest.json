@@ -72,7 +72,8 @@
         "title" : "uni-app",
         "domain" : "http://likeshop.yixiangonline.com/mobile/",
         "router" : {
-            "base" : "/mobile/"
+            "base" : "/mobile/",
+            "mode" : "history"
         },
         "devServer" : {
             "https" : false

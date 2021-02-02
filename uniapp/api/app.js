@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 import wechatH5 from '@/utils/wechath5'
 
+
 //小程序登录
 export function mnpLogin(data) {
 	return request.post('account/mnpLogin', data);
@@ -29,21 +30,21 @@ export function accountLogin(data) {
 export function getWechatConfig() {
 	return request.get("wechat/config", {
 		url: encodeURIComponent(wechat.signLink())
-	}, {
-		noAuth: true
 	});
 }
 
 
 // 登录
-export function weichatLogin(data) {
+export function wechatLogin(data) {
 	return request.post('account/oalogin', data)
 }
 
 // 获取获取向微信请求code的链接
 export function getCodeUrl() {
 	return request.get('account/codeurl', {
-		url: encodeURIComponent(location.href)
+		params:{
+			url: encodeURIComponent(location.href)
+		}
 	});
 }
 
@@ -70,19 +71,4 @@ export function sendSms(data) {
 // Html5 注册账号
 export function register(data) {
     return request.post('account/register', data)
-}
-
-// 获取服务协议
-export function getServerProto() {
-    return request.get("policy/service")
-}
-
-// 获取隐私政策
-export function getPrivatePolicy() {
-    return request.get("policy/privacy")
-}
-
-// 获取售后保障
-export function getAfterSaleGuar() {
-    return request.get('policy/afterSale')
 }

@@ -158,7 +158,7 @@
 
 
 		onUnload() {
-			this.observeLine.disconnect();
+			this.observeLine && this.observeLine.disconnect();
 		},
 		onPullDownRefresh: function() {
 			this.getUserInfoFun();
@@ -261,22 +261,22 @@
 		background-image: url(../../static/images/my_topbg.png);
 		background-size: 100% 400rpx;
 		background-repeat: no-repeat;
-
+		
 		.header {
 			display: flex;
 			flex-direction: column;
 			height: 300rpx;
-
 			.user-info {
 				padding: 10rpx 30rpx;
-
+				//#ifdef  H5 
+				padding-top: 90rpx;
+				//#endif
 				.avatar {
 					height: 110rpx;
 					width: 110rpx;
 					border-radius: 50%;
 					overflow: hidden;
 				}
-
 				.name {
 					text-align: left;
 					margin-bottom: 5rpx;

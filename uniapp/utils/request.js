@@ -1,7 +1,8 @@
 import axios from '../js_sdk/xtshadow-axios/axios.min'
 import store from '../store'
 import {
-	paramsToStr
+	paramsToStr,
+	currentPage
 } from './tools'
 import Cache from './cache'
 import {
@@ -10,7 +11,8 @@ import {
 
 import {
 	wxAutoLogin,
-	isAuthorize
+	isAuthorize,
+	toLogin
 } from './login'
 
 let index = 0;
@@ -73,23 +75,29 @@ service.interceptors.response.use(
 				} else if (code == -1) {
 					store.commit('LOGOUT')
 					//#ifdef  MP-WEIXIN
+					let num = store.getters.loginNum
 					let isAuth = await isAuthorize();
 					if (!isAuth) return;
-					if (index <= 0) {
-						index++;
+					if (num == 0) {
 						uni.showLoading({
 							title: "登录中..."
 						})
+						store.commit('SETLOGINNUM', ++num)
 						const {
 							code: loginCode,
 							data: loginData
 						} = await wxAutoLogin()
 						if (loginCode == 1) {
-							index = 0;
 							uni.hideLoading()
 							store.commit('LOGIN', loginData)
+							const {options, onLoad, onShow} = currentPage()
+							onLoad && onLoad(options)
+							onShow && onShow()
 						}
 					}
+					// #endif
+					//#ifdef H5
+					toLogin()
 					// #endif
 				}
 			}

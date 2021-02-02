@@ -2,21 +2,17 @@ import {
 	mnpLogin
 } from '@/api/app'; //用户是否已经授权
 import {
-	isWeixinClient
+	isWeixinClient,
+	currentPage
 } from './tools'
 import store from '@/store'
 import Cache from './cache'
-import {BACK_URL} from '@/config/cachekey'
+import {
+	BACK_URL
+} from '@/config/cachekey'
 import wechatH5 from './wechath5'
 
 
-
-
-function prePage() {
-	let pages = getCurrentPages();
-	let prePage = pages[pages.length - 1];
-	return prePage.route;
-}
 
 
 export function isAuthorize() {
@@ -107,21 +103,24 @@ const loginWhite = ["login", "index", "all_comments", "goods_details", "news_lis
 //去登录
 export function toLogin() {
 	const pathLogin = 'login'
-	let path = prePage()
-	
+	let path = currentPage().route
 	let name = path.split("/")[1];
-	if(loginWhite.includes(name)) {
-		return 
+	if (loginWhite.includes(name)) {
+		return
 	}
-	store.commit("LOGOUT");
-	if (isWeixinClient()) {
-		wechatH5.getWxUrl()
-		//微信登录
-	} else {
-		if (name !=pathLogin) {
-			uni.redirectTo({
-				url: '/pages/login/login'
-			})
+	let num = store.getters.loginNum
+	if (num == 0) {
+		store.commit("LOGOUT");
+		store.commit('SETLOGINNUM', ++num)
+		if (isWeixinClient()) {
+			wechatH5.getWxUrl()
+			//微信登录
+		} else {
+			if (name != pathLogin) {
+				uni.redirectTo({
+					url: '/pages/login/login'
+				})
+			}
 		}
 	}
 }

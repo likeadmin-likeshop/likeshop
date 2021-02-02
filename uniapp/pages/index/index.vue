@@ -150,7 +150,6 @@
 					this.hotGoods = host_goods
 					this.coupon = coupon
 					this.newGoods = new_goods
-					this.remainTime = remainTime
 					this.activityArea = activity_area
 				}
 			},

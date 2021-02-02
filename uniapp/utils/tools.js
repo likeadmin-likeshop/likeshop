@@ -262,3 +262,11 @@ export function uploadFile(path) {
     });
   });
 }
+
+//当前页面
+
+export function currentPage() {
+	let pages = getCurrentPages();
+	let currentPage = pages[pages.length - 1];
+	return currentPage;
+}

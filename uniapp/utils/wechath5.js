@@ -55,9 +55,11 @@ class WechatH5 {
 					code
 				})
 				.then(res => {
-					store.commit("LOGIN", {
-						token: data.token
-					});
+					if(res.code == 1) {
+						store.commit("LOGIN", {
+							token: res.data.token
+						});
+					}
 					resolve();
 				})
 		});

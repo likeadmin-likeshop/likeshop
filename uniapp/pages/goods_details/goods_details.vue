@@ -158,7 +158,6 @@
 			};
 		},
 		onLoad(options) {
-			console.log(this.isLogin)
 			if (!options.id) {
 				return this.$toast({
 					title: "缺少参数，无法查看商品"

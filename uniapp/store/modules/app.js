@@ -6,13 +6,16 @@ import {
 } from '@/api/store';
 import {
 	USER_INFO,
-	TOKEN
+	TOKEN,
+	LOGIN_NUM
 } from '@/config/cachekey';
 import Cache from '@/utils/cache'
 const state = {
 	userInfo: null,
 	token: Cache.get(TOKEN) || null,
-	cartNum: ""
+	cartNum: "",
+	//记录登录次数
+	loginNum: Cache.get(LOGIN_NUM) || 0
 };
 
 const mutations = {
@@ -26,6 +29,11 @@ const mutations = {
 	},
 	SETCARTNUM(state, num) {
 		state.cartNum = num
+	},
+	SETLOGINNUM(state, num) {
+		state.loginNum = num
+		Cache.set(LOGIN_NUM, num);
+		
 	}
 };
 
@@ -34,7 +42,6 @@ const actions = {
 		state,
 		commit
 	}) {
-		console.log(111)
 		if (!state.token) return
 		getCartNum().then(res => {
 			if (res.code == 1) {

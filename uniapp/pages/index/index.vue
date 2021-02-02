@@ -144,7 +144,6 @@
 						new_goods,
 						activity_area
 					} = data;
-					let remainTime = Math.abs(seckill.end_time - Date.parse(new Date()) / 1000) * 1000;
 					this.logo = shop_logo
 					this.news = news
 					this.seckill = seckill

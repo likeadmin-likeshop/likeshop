@@ -29,7 +29,7 @@ function checkParams(params) {
 
 
 const service = axios.create({
-	baseURL: 'http://likeshopv2.yixiangonline.com/api/',
+	baseURL: 'http://likeshop.yixiangonline.com/api/',
 	timeout: 10000,
 	header: {
 		'content-type': 'application/json'
@@ -72,6 +72,7 @@ service.interceptors.response.use(
 					})
 				} else if (code == -1) {
 					store.commit('LOGOUT')
+					//#ifdef  MP-WEIXIN
 					let isAuth = await isAuthorize();
 					if (!isAuth) return;
 					if (index <= 0) {
@@ -89,6 +90,7 @@ service.interceptors.response.use(
 							store.commit('LOGIN', loginData)
 						}
 					}
+					// #endif
 				}
 			}
 

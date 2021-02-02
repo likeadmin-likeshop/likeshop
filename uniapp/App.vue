@@ -7,15 +7,7 @@
 			this.getSystemInfo()
 		},
 		onShow: function() {
-			// #ifdef H5
-			uni.getSystemInfo({
-				success(e) {
-					if (e.windowWidth > 420 && !window.top.isPC && !/iOS|Android/i.test(e.system)) {
-						window.location.pathname = '/static/html/pc.html';
-					}
-				}
-			})
-			// #endif
+			
 		},
 		onHide: function() {
 			console.log('App Hide')

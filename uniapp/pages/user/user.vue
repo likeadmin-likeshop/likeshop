@@ -1,9 +1,11 @@
 <template>
 	<view class="user">
 		<view class="header">
+			<!-- #ifndef  H5 -->
 			<view class="header-line" :style="{height: '1px','background-color': navBg}"></view>
 			<uni-nav-bar title="个人中心" :shadow="false" :border="false" :status-bar="true" :fixed="true" :background-color="navBg"
 			 :color="navC"></uni-nav-bar>
+			 <!-- #endif -->
 			<view class="user-info row-between">
 				<view class="info row">
 					<image class="avatar mr20" @tap="goLogin" :src="isLogin ? userInfo.avatar : require('static/images/my_portrait_empty.png')"></image>

@@ -45,7 +45,7 @@
             </view>
             <view class="bg-primary white save-btn row-center lg" @click="logout" v-show="!isWechat">退出登录</view>
         </view>
-        <uni-popup type="center" :show="showMobile" :animation="true" @close="showMobile = false">
+        <uni-popup type="center" closeable :show="showMobile" :animation="true" @close="showMobile = false">
             <view class="modify-container column-center bg-white" v-show="showMobile">
                 <view class="title xl">{{userInfo.mobile ? '更换手机号' : '绑定手机号'}}</view>
                 <view class="modify-row row" v-if="userInfo.mobile">
@@ -81,6 +81,52 @@
                 <view class="btn bg-primary white row-center" @click="$changeUserMobile">确定</view>
             </view>
         </uni-popup>
+        <uni-popup :show="showNickName" :closeable="true" round @close="showNickName = false">
+            <view class="modify-container column-center bg-white" v-show="showNickName">
+                <view class="title xl">修改用户名</view>
+                <view class="modify-row row">
+                    <view style="width: 71px;">新昵称</view>
+                    <input v-model="newNickname" placeholder="请输入新的昵称" />
+                </view>
+                <view class="btn bg-primary white row-center" @click="changeNameConfirm">确定</view>
+            </view>
+        </uni-popup>
+        <uni-popup :show="showPwd" :closeable="canSendSms" round @close="showPwd = false">
+            <view class="modify-container column-center bg-white" v-show="showPwd">
+                <view class="title xl">设置密码</view>
+                <view class="modify-row row">
+                    <view style="width: 56px;border-right: 1px solid #E5E5E5">+86</view>
+                    <view style="margin-left: 15px">{{userInfo.mobile}}</view>
+                </view>
+                <view class="modify-row row">
+                    <view style="width: 142rpx;">验证码</view>
+                    <input v-model="smsCode" style="padding-left: 10rpx;width: 260rpx;" placeholder="请输入验证码" />
+                    <view class="send-code-btn nr row-center" @click="$sendSms" v-show="canSendSms">发送验证码</view>
+                    <uni-countdown
+                        ref="countDown"
+                        :showDay="false"
+                        :timestamp="time"
+                        :showColon="false"
+                        splitorColor="#FF2C3C"
+                        color="#FF2C3C"
+                        :showHour="false"
+                        :showMinute="false"
+                        v-show="!canSendSms" 
+                        @timeup="countDownFinish">
+                    </uni-countdown>
+                </view>
+                <view class="modify-row row">
+                    <view style="width: 71px;">设置密码</view>
+                    <input type="password" v-model="pwd" placeholder="请输入新密码" />
+                </view>
+                <view class="modify-row row">
+                    <view style="width: 71px;">确认密码</view>
+                    <input type="password" v-model="comfirmPwd" placeholder="再次输入新密码确认" />
+                </view>
+                <view class="btn bg-primary white row-center" @click="$forgetPwd">确定</view>
+            </view>
+        </uni-popup>
+        <u-picker mode="selector" v-model="showPicker"  :default-selector="[0]" :range="sexList" @confirm="onConfirm" />
     </view>
 </template>
 
@@ -91,6 +137,7 @@ import {sendSms, forgetPwd, isWeixinClient} from '@/api/app.js'
 import {SMSType} from '@/utils/type.js'
 import {mapState} from 'vuex'
 import {uploadFile} from '@/utils/tools.js'
+
 const FieldType = {
     NONE: '',
     SEX: 'sex',
@@ -216,11 +263,11 @@ export default {
             })
         },
         // end
-        onConfirm(value, index) {
-            this.$setUserInfo(index + 1);
+        onConfirm(value) {
+            this.$setUserInfo(value[0] + 1);
             this.showPicker = false;
         },
-        changeSex() {
+        changeSex(e) {
             this.showPicker = true;
             this.fieldType = FieldType.SEX;
         },
@@ -295,69 +342,71 @@ export default {
 <style lang="scss">
     .user-profile-container {
         .user-profile {
-            border-top-left-radius: 14px;
-            border-top-right-radius: 14px;
+            border-top-left-radius: 28rpx;
+            border-top-right-radius: 28rpx;
             .user-avatar-box {
-                padding: 15px;
+                padding: 30rpx;
                 background-color: white;
-                border-top-left-radius: 14px;
-                border-top-right-radius: 14px;
+                border-top-left-radius: 28rpx;
+                border-top-right-radius: 28rpx;
                 .user-avatar {
-                    width: 60px;
-                    height: 60px;
+                    width: 120rpx;
+                    height: 120rpx;
                     border-radius: 50%;
                 }
             }
             .row-info {
-                padding: 15px 10px;
+                padding: 30rpx 20rpx;
                 background-color: white;
                 .label {
-                    width: 90px;
+                    width: 180rpx;
                 }
                 .bd-btn {
-                    padding: 4px 12px;
-                    border: 1px solid $-color-primary;
+                    padding: 8rpx 24rpx;
+                    border: 1rpx solid $-color-primary;
                     color: $-color-primary;
                 }
             }
             .bdb-line {
-                border-bottom: 1px solid #E5E5E5;
+                border-bottom: 1rpx solid #E5E5E5;
             }
             .save-btn {
-                margin-top: 20px;
-                height: 44px;
-                margin-left: 27px;
-                margin-right: 27px;
-                border-radius: 5px;
+                margin-top: 40rpx;
+                height: 88rpx;
+                margin-left: 54rpx;
+                margin-right: 54rpx;
+                border-radius: 10rpx;
                 box-sizing: border-box;
             }
         }
         .modify-container {
-            padding-left: 15px;
-            padding-right: 15px;
-            padding-bottom: 15px;
-            width: 290px;
+            padding-left: 30rpx;
+            padding-right: 30rpx;
+            padding-bottom: 30rpx;
+            width: 580rpx;
             border-radius: 30rpx;
             .title {
-                padding: 13px 0px;
+                padding: 26rpx 0rpx;
             }
             .modify-row {
-                padding: 16px 0px;
+                padding: 32rpx 0rpx;
                 width: 100%;
-                border-bottom: 1px solid #E5E5E5;
+                border-bottom: 1rpx solid #E5E5E5;
                 .send-code-btn {
-                    border: 1px solid $-color-primary;
-                    width: 92px;
-                    height: 31px;
+                    border: 1rpx solid $-color-primary;
+                    width: 184rpx;
+                    height: 62rpx;
                     color: $-color-primary;
                 }
             }
             .btn {
-                height: 40px;
-                padding: 0 90px;
-                border-radius: 10px;
-                margin-top: 30px;
+                height: 80rpx;
+                padding: 0 180rpx;
+                border-radius: 20rpx;
+                margin-top: 60rpx;
             }
         }
+
     }
+    
 </style>

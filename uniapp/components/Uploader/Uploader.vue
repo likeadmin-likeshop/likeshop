@@ -17,7 +17,7 @@
             <view type="image" accept="image/*" class="uploader-input" />
         </view>
         <view
-        class="uplader-upload row-center"
+        class="uplader-upload-slot row-center"
         :style="{width: previewSize, height: previewSize}"
         @click="handleImage"
         v-show="fileList.length == 0 || mutiple"
@@ -110,6 +110,22 @@
             width: 160rpx;
             height: 160rpx;
             background-color: #f7f8fa;
+            .uploader-input {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                opacity: 0;
+                top: 0;
+                left: 0;
+                z-index: 10;
+                cursor: pointer;
+            }
+        }
+        .uplader-upload-slot {
+            position: relative;
+            width: 160rpx;
+            height: 160rpx;
             .uploader-input {
                 position: absolute;
                 width: 100%;

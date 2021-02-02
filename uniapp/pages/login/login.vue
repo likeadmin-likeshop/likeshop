@@ -11,7 +11,7 @@
 			</view>
 			<view class="title xxl mb20 bold">微信授权登录</view>
 			<button size="lg" class="white br60 row-center btn" open-type="getUserInfo" @getuserinfo="getUserInfo">
-				<image class="mr10" class="image" src="/static/images/icon_wechat.png"></image>
+				<image class="mr10 image" src="/static/images/icon_wechat.png"></image>
 				<text>微信一键授权</text>
 			</button>
 			<view class="muted mt20">微信授权登录后才可进行更多操作哦</view>

@@ -248,7 +248,8 @@
 	"easycom": {
 		"autoscan": true,
 		"custom": {
-			"^uni-(.*)": "@/components/uni-ui/uni-$1/uni-$1.vue" // 匹配components目录内的vue文件
+			"^uni-(.*)": "@/components/uni-ui/uni-$1/uni-$1.vue" ,// 匹配components目录内的vue文件
+            "^u-(.*)": "@/components/uview-ui/components/u-$1/u-$1.vue"
 		}
 	}
 }

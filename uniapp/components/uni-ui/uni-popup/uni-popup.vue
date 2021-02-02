@@ -4,6 +4,7 @@
 		 @click="onTap" />
 		<uni-transition :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
 			<view class="uni-popup__wrapper-box" @click.stop="clear">
+                <uni-icons size="20" v-if="closeable" color="#999" type="closeempty" class="popup-close-icon" @click="onTap()" />
 				<slot />
 			</view>
 			<view v-if="showSafeArea" class="uni-popup__safe-area"></view>
@@ -59,6 +60,10 @@
             show: {
                 type: Boolean,
                 default: false,
+            },
+            closeable: {
+                type: Boolean,
+                default: false
             }
 		},
 		provide() {
@@ -291,6 +296,13 @@
 		/* #endif */
 		position: relative;
 	}
+    
+    .uni-popup__wrapper-box .popup-close-icon {
+        position: absolute;
+        top: 20rpx;
+        right: 20rpx;
+    }
+    
 	.uni-popup__safe-area {
 		background-color: #fff;
 		/* iphonex 等安全区设置，底部安全区适配 */

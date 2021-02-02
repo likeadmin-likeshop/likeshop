@@ -44,7 +44,7 @@
         confirmButtonText="狠心删除"
         confirm-button-color="#FF2C3C"
         :useSlot="true"
-        @confirm="$delAddress" 
+        @confirm="delAddressFun" 
         @cancel="hidePop">
             <view class="column-center tips-dialog">
                 <image class="icon-lg" src="/static/images/icon_warning.png"></image>

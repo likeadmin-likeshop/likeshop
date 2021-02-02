@@ -169,7 +169,6 @@ export default {
     },
 
     cancelCollect() {
-      console.log(this.id);
       collectGoods({
         is_collect: CollectType.CANCEL_COLLECTION,
         goods_id: this.id
@@ -179,6 +178,7 @@ export default {
           this.page = 1;
           this.status = loadingType.LOADING;
           this.getCollectGoodsFun();
+          this.deleteSure = false;
         }
       });
     },

@@ -151,4 +151,29 @@ class Order extends AdminBase
         $this->assign('detail', $detail);
         return $this->fetch();
     }
+
+    /**
+     * Notes: 订单备注
+     * @author 张无忌(2021/2/2 9:47)
+     */
+    public function remarks()
+    {
+        // 获取的
+        if ($this->request->isAjax() && $this->request->isGet()){
+            $get = $this->request->get();
+            $detail = OrderLogic::remarks($get, 'get');
+            $this->_success('获取成功', $detail);
+        }
+
+        // 提交的
+        if ($this->request->isAjax() && $this->request->isPost()) {
+            $post = $this->request->post();
+            $result = OrderLogic::remarks($post, 'post');
+            if ($result) {
+                $this->_success('保存成功');
+            }
+            $this->error('保存失败');
+        }
+
+    }
 }

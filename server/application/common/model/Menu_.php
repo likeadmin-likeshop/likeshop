@@ -35,7 +35,6 @@ class Menu_{
      * 个人中心菜单
      */
     const centre_my_wallet        = 10;
-    const centre_generalize       = 11;
     const centre_my_coupon        = 12;
     const centre_level_serve      = 13;
     const centre_store_help       = 14;
@@ -168,16 +167,6 @@ class Menu_{
                     'link1' => '/pages/user_wallet/user_wallet',
                     'link2' => '/user/userWallet',
                     'link3' => 'UserWallet',
-                ],
-                'is_tab'        => 0,
-                'type'          => 1,
-            ],
-            self::centre_generalize        => [
-                'name'          => '分销推广',
-                'link'          => [
-                    'link1' => '/pages/user_spread/user_spread',
-                    'link2' => '/user/userPromote',
-                    'link3' => 'UserPromotion',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,

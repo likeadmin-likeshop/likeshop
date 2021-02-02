@@ -201,7 +201,13 @@
         {
             "path": "pages/user_profile/user_profile",
             "style": {
-                
+                "navigationBarTitleText": "个人设置"
+            }
+        },
+        {
+            "path": "pages/server_explan/server_explan",
+            "style": {
+
             }
         }
     ],

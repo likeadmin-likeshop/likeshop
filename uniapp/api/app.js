@@ -71,3 +71,18 @@ export function sendSms(data) {
 export function register(data) {
     return request.post('account/register', data)
 }
+
+// 获取服务协议
+export function getServerProto() {
+    return request.get("policy/service")
+}
+
+// 获取隐私政策
+export function getPrivatePolicy() {
+    return request.get("policy/privacy")
+}
+
+// 获取售后保障
+export function getAfterSaleGuar() {
+    return request.get('policy/afterSale')
+}

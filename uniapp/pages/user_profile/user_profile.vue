@@ -196,9 +196,9 @@ export default {
             })
         },
         goToExplain(value) {
-            this.$router.push({name: 'serverExplain', query: {
-                type: value
-            }})
+            uni.navigateTo({
+                url: '/pages/server_explan/server_explan?type=' + value
+            })
         },
         // 发送短信
         $sendSms() {

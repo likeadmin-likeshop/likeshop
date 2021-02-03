@@ -62,7 +62,7 @@ export default {
   onLoad: function (options) {
     console.log(options);
     let type = options.type || orderType.ALL;
-    this.changeShow(0);
+    this.changeShow(type);
   },
 
   onPullDownRefresh: function () {
@@ -77,9 +77,13 @@ export default {
 	this.$refs['order' + order[active].type][0].getOrderListFun()
   },
   methods: {
-    changeShow(index) {
-		this.active = index
-		this.order[index].isShow = true
+    changeShow(type) {
+		const{order} = this
+		let index = order.findIndex(item => item.type == type)
+		if(index != -1) {
+			this.active = index
+			this.order[index].isShow = true
+		}
     }
 
   }

@@ -1,7 +1,7 @@
 import {
 	loadingType
 } from './type'
-import baseURL from '@/config/app.js'
+import {baseURL} from '@/config/app.js'
 
 //节流
 export const trottle = (func, time = 1000, context) => {

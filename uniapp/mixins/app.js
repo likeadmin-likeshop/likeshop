@@ -18,10 +18,6 @@ export default {
 		};
 	},
 	async onLoad(option) {
-		const {options, $onLoad, onShow} = currentPage()
-		uni.navigateBack({
-			delta:0
-		})
 		// #ifdef H5
 		if (isWeixinClient()) {
 			const {
@@ -32,10 +28,9 @@ export default {
 			if (code) {
 				await wechatH5.authLogin(code)
 				this.SETLOGINNUM(0)
-				const {options, onLoad, onShow} = currentPage()
-				console.log(options, onLoad, onShow)
-				onLoad && onLoad(options)
-				onShow && onShow()
+				uni.navigateBack({
+					delta:0
+				})
 			}
 		}
 		console.log(this.isLogin)

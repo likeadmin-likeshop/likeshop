@@ -1,14 +1,11 @@
 
 <script>
-	import {
-		mapMutations
-	} from 'vuex'
+	
 	export default {
 		globalData: {
 			navHeight: ""
 		},
 		onLaunch: function() {
-			this.SETLOGINNUM(0)
 			this.getSystemInfo()
 		},
 		onShow: function() {
@@ -18,7 +15,6 @@
 			console.log('App Hide')
 		},
 		methods: {
-			...mapMutations(['SETLOGINNUM']),
 			getSystemInfo() {
 				uni.getSystemInfo({
 					success: res => {

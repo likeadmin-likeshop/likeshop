@@ -102,6 +102,9 @@ export function wxAutoLogin() {
 const loginWhite = ["login", "index", "all_comments", "goods_details", "news_list", "sort"]
 //去登录
 export function toLogin() {
+	
+	const {options, onLoad, onShow} = currentPage()
+	console.log(options, onLoad, onShow, currentPage().created)
 	const pathLogin = 'login'
 	let path = currentPage().route
 	let name = path.split("/")[1];

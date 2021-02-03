@@ -3,9 +3,9 @@ import {
 } from '@/utils/login';
 
 import {
-	mapGetters
+	mapGetters,
+	mapMutations
 } from 'vuex'
-
 import wechatH5 from '@/utils/wechath5'
 
 import {isWeixinClient, currentPage} from '@/utils/tools'
@@ -18,6 +18,10 @@ export default {
 		};
 	},
 	async onLoad(option) {
+		const {options, $onLoad, onShow} = currentPage()
+		uni.navigateBack({
+			delta:0
+		})
 		// #ifdef H5
 		if (isWeixinClient()) {
 			const {
@@ -27,7 +31,9 @@ export default {
 			this.wxShare()
 			if (code) {
 				await wechatH5.authLogin(code)
+				this.SETLOGINNUM(0)
 				const {options, onLoad, onShow} = currentPage()
+				console.log(options, onLoad, onShow)
 				onLoad && onLoad(options)
 				onShow && onShow()
 			}
@@ -38,6 +44,7 @@ export default {
 		// #endif 
 	},
 	methods: {
+		...mapMutations(['SETLOGINNUM']),
 		wxShare() {
 			const option = {
 				shareTitle: "100%开源免费商用电商系统",

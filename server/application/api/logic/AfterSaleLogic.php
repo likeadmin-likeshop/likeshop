@@ -247,7 +247,7 @@ class AfterSaleLogic extends LogicBase
     {
         $goods = Db::name('order_goods')
             ->where(['order_id' => $order_id, 'item_id' => $item_id])
-            ->hidden('id,total_price,spec_value_ids,delivery_id,create_time')
+            ->hidden('id,total_price,spec_value_ids,create_time')
             ->find();
 
         $info = json_decode($goods['goods_info'], true);

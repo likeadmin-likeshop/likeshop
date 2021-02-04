@@ -35,31 +35,31 @@ class QrCodeLogic extends LogicBase {
             ],
             //会员昵称
             'nickname' => [
-                'color' => '#555555', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 19, 'x' => 120, 'y' => 60,
+                'color' => '#555555', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.otf', 'font_size' => 19, 'x' => 120, 'y' => 60,
             ],
             //标题
             'title' => [
-                'color' => '#333333', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Bold.ttf', 'font_size' => 20, 'w' => 360, 'x' => 40, 'y' => 785,
+                'color' => '#333333', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Bold.otf', 'font_size' => 20, 'w' => 360, 'x' => 40, 'y' => 785,
             ],
             //价格符号
             'price_symbol' => [
-                'color' => '#FF2C3C', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 22, 'w' => 140, 'x' => 40, 'y' => 722,
+                'color' => '#FF2C3C', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.otf', 'font_size' => 22, 'w' => 140, 'x' => 40, 'y' => 722,
             ],
             //商品价格
             'price' => [
-                'color' => '#FF2C3C', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Bold.ttf', 'font_size' => 32, 'w' => 140, 'x' => 64, 'y' => 722,
+                'color' => '#FF2C3C', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Bold.otf', 'font_size' => 32, 'w' => 140, 'x' => 64, 'y' => 722,
             ],
             //小数
             'decimal'=> [
-                'color' => '#FF2C3C', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Bold.ttf', 'font_size' => 22, 'w' => 140, 'x' => 114, 'y' => 722,
+                'color' => '#FF2C3C', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Bold.otf', 'font_size' => 22, 'w' => 140, 'x' => 114, 'y' => 722,
             ],
             //市场价
             'market_price_symbol' => [
-                'color' => '#999999', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 22, 'w' => 140, 'x' => 142, 'y' => 722,
+                'color' => '#999999', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.otf', 'font_size' => 22, 'w' => 140, 'x' => 142, 'y' => 722,
             ],
             //市场价符号
             'market_price' => [
-                'color' => '#999999', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 20, 'w' => 140, 'x' => 168, 'y' => 722,
+                'color' => '#999999', 'font_face' => ROOT_PATH .'/font/SourceHanSansCN-Regular.otf', 'font_size' => 20, 'w' => 140, 'x' => 168, 'y' => 722,
             ],
             //推广主图商品主图
             'main_pic' => [
@@ -67,7 +67,7 @@ class QrCodeLogic extends LogicBase {
             ],
             //提醒长按扫码
             'notice' => [
-                'color' => '#888888', 'font_face' =>  ROOT_PATH .'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 18, 'x' => 432, 'y' => 895,
+                'color' => '#888888', 'font_face' =>  ROOT_PATH .'/font/SourceHanSansCN-Regular.otf', 'font_size' => 18, 'x' => 432, 'y' => 895,
             ],
             //二维码
             'qr' => [
@@ -227,19 +227,19 @@ class QrCodeLogic extends LogicBase {
             ],
             //会员昵称
             'nickname' => [
-                'color' => '#333333', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 20, 'x' => 120, 'y' => 730,
+                'color' => '#333333', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.otf', 'font_size' => 20, 'x' => 120, 'y' => 730,
             ],
             //标题
             'title' => [
-                'color' => '#333333', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 20, 'w' => 360, 'x' => 30, 'y' => 810,
+                'color' => '#333333', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.otf', 'font_size' => 20, 'w' => 360, 'x' => 30, 'y' => 810,
             ],
             //提醒长按扫码
             'notice' => [
-                'color' => '#333333', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 20, 'x' => 30, 'y' => 880,
+                'color' => '#333333', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.otf', 'font_size' => 20, 'x' => 30, 'y' => 880,
             ],
             //邀请码文本
             'code_text' => [
-                'color' => '#FF2C3C', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.ttf', 'font_size' => 20, 'x' => 355, 'y' => 930,
+                'color' => '#FF2C3C', 'font_face' => ROOT_PATH.'/font/SourceHanSansCN-Regular.otf', 'font_size' => 20, 'x' => 355, 'y' => 930,
             ],
             //二维码
             'qr' => [

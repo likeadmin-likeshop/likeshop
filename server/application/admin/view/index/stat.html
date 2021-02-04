@@ -1,34 +1,15 @@
 {layout name="layout1" /}
 <style>
+    .layuiadmin-card-list{
+        height: 80px;
+    }
+
     .header-font{
         font-size: 20px
     }
-    .layui-card .data-all {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-    }
-    .layui-card  .text-style {
-        font-size: 16px;
-    }
+
     .header-time{
         margin-left: 20px
-    }
-    .layadmin-shortcut .shortcut-list  {
-        padding: 30px 0;
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .layadmin-shortcut .shortcut-list li {
-        min-width: 100px;
-        margin-bottom: 20px;
-        width: 12.5%;
-    }
-
-    .layadmin-shortcut .shortcut-list .icon{
-        width: 62px;
-        height: 62px;
-        margin-bottom: 5px;
     }
 </style>
 <div class="layui-fluid" style="margin-bottom: 100px">
@@ -46,10 +27,8 @@
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.order_num_today}</p>
-                    <p>昨日：<span class="text-style">{$res.order_num_yesterday}</span>
-                        <span class="text-style" {if condition="$res.order_num_change lt 0" } style="color: #009688" {elseif condition="$res.order_num_change egt 0" } style="color: #FA2828" {/if}>{$res.order_num_change}</span></p>
-
-                    <div class="data-all">成交订单总量（笔）<div class="text-style">{$res.order_num_all}</div></div>
+                    <p>昨日：{$res.order_num_yesterday}
+                        <span {if condition="$res.order_num_change lt 0" } style="color: #009688" {elseif condition="$res.order_num_change egt 0" } style="color: #dd241e" {/if}>{$res.order_num_change}</span></p>
                 </div>
             </div>
         </div>
@@ -61,9 +40,8 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.order_amount_today}</p>
 
-                    <p>昨日：<span class="text-style">{$res.order_amount_yesterday}</span>
-                        <span class="text-style" {if condition="$res.order_amount_change lt 0" } style="color: #009688" {elseif condition="$res.order_amount_change egt 0" } style="color: #FA2828" {/if}>{$res.order_amount_change}</span></p>
-                    <div class="data-all">销售总额（元）<div class="text-style">{$res.order_amount_all}</div></div>
+                    <p>昨日:{$res.order_amount_yesterday}
+                        <span {if condition="$res.order_amount_change lt 0" } style="color: #009688" {elseif condition="$res.order_amount_change egt 0" } style="color: #dd241e" {/if}>{$res.order_amount_change}</span></p>
                 </div>
             </div>
         </div>
@@ -74,9 +52,8 @@
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.add_user_today}</p>
-                    <p >昨日：<span class="text-style">{$res.add_user_yesterday}</span>
-                        <span class="text-style"  {if condition="$res.add_user_change lt 0" } style="color: #009688" {elseif condition="$res.add_user_change egt 0" } style="color: #FA2828" {/if}>{$res.add_user_change}</span></p>
-                    <div class="data-all">会员总量（人）<div class="text-style">{$res.user_all}</div></div>
+                    <p>昨日:{$res.add_user_yesterday}
+                        <span {if condition="$res.add_user_change lt 0" } style="color: #009688" {elseif condition="$res.add_user_change egt 0" } style="color: #dd241e" {/if}>{$res.add_user_change}</span></p>
                 </div>
             </div>
         </div>
@@ -87,14 +64,13 @@
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.today_user_pv}</p>
-                    <p>昨日：<span class="text-style">{$res.yesterday_user_pv}</span>
-                        <span class="text-style" {if condition="$res.pv_change lt 0" } style="color: #009688" {elseif condition="$res.pv_change egt 0" } style="color: #FA2828" {/if}>{$res.pv_change}</span></p>
-                    <div class="data-all">总用户访问量（人）<div class="text-style">{$res.total_user_pv}</div></div>
+                    <p>昨日:{$res.yesterday_user_pv}
+                        <span {if condition="$res.pv_change lt 0" } style="color: #009688" {elseif condition="$res.pv_change egt 0" } style="color: #dd241e" {/if}>{$res.pv_change}</span></p>
                 </div>
             </div>
         </div>
 
-        <!-- <div class="layui-col-sm3 ">
+        <div class="layui-col-sm3 ">
             <div class="layui-card">
                 <div class="layui-card-header">
                     成交订单总量（笔）
@@ -133,7 +109,7 @@
                     <p class="layuiadmin-big-font">{$res.total_user_pv}</p>
                 </div>
             </div>
-        </div> -->
+        </div>
 
 
         <!--快捷功能-->
@@ -142,53 +118,47 @@
                 <div class="layui-card-header">快捷功能</div>
                 <div class="layui-card-body">
                     <div class="layadmin-shortcut">
-                        <ul class="shortcut-list">
-                            <li class="shop-item">
+                        <ul class="layui-row layui-col-space10">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('goods/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/goods.png" alt="">
-                                    <cite>商品管理</cite>
+                                    <i class="layui-icon layui-icon-cart-simple"></i>
+                                    <cite>商品</cite>
                                 </a>
                             </li>
-                            <li class="shop-item">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('user/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/user.png" alt="">
-                                    <cite>会员管理</cite>
+                                    <i class="layui-icon layui-icon-username"></i>
+                                    <cite>会员</cite>
                                 </a>
                             </li>
-                            <li class="shop-item">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('order/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/order.png" alt="">
-                                    <cite>订单管理</cite>
+                                    <i class="layui-icon layui-icon-form"></i>
+                                    <cite>订单</cite>
                                 </a>
                             </li>
-                            <li class="shop-item">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('coupon/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/coupon.png" alt="">
+                                    <i class="layui-icon layui-icon-gift"></i>
                                     <cite>优惠券</cite>
                                 </a>
                             </li>
-                            <li class="shop-item">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('seckill/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/seckill.png" alt="">
+                                    <i class="layui-icon layui-icon-star"></i>
                                     <cite>限时秒杀</cite>
                                 </a>
                             </li>
-                            <li class="shop-item">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('distributionMember/index')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/distribution.png" alt="">
+                                    <i class="layui-icon layui-icon-group"></i>
                                     <cite>分销管理</cite>
                                 </a>
                             </li>
-                            <li class="shop-item">
+                            <li class="layui-col-xs3">
                                 <a lay-href="{:url('article/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/content.png" alt="">
+                                    <i class="layui-icon layui-icon-file"></i>
                                     <cite>内容管理</cite>
-                                </a>
-                            </li>
-                            <li class="shop-item">
-                                <a lay-href="{:url('recharge_log/lists')}">
-                                    <img class="icon" src="__PUBLIC__/static/common/image/workbench/finance.png" alt="">
-                                    <cite>财务</cite>
                                 </a>
                             </li>
                         </ul>
@@ -197,14 +167,15 @@
             </div>
         </div>
 
+
+
         <!--表格-->
         <div class="layui-col-sm12">
             <div class="layui-card">
                 <div class="layui-card-body">
                     <div class="layui-row">
-                        近15天销售金额（元）
-                        <div class="layadmin-dataview">
-                            <div id="sale-charts" style="width: 100%;height: 100%">
+                        <div class="layadmin-dataview" data-anim="fade" lay-filter="sale-amount-change" >
+                            <div carousel-item id="sale-amount-change" style="width: 100%;height: 100%">
                                 <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
                             </div>
                         </div>
@@ -218,9 +189,8 @@
             <div class="layui-card">
                 <div class="layui-card-body">
                     <div class="layui-row">
-                        近15天用户访问量UV（人）
-                        <div class="layadmin-dataview">
-                            <div id="user-charts" style="width: 100%;height: 100%;">
+                        <div class="layadmin-dataview" data-anim="fade" lay-filter="user-virst-change" >
+                            <div carousel-item id="user-virst-change" style="width: 100%;height: 100%;">
                                 <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
                             </div>
                         </div>
@@ -232,7 +202,7 @@
     </div>
 </div>
 <footer class="info_footer">
-    Copyright © 2019-{:date('Y')} {$company_name}&nbsp;&nbsp;|&nbsp;&nbsp;LikeShopV2-{$version}
+    Copyright © 2019-2020 广州好象科技有限公司&nbsp;&nbsp;|&nbsp;&nbsp;LikeShopV2-{$version}
     <br><br>
 </footer>
 <script>
@@ -243,280 +213,149 @@
     }).use(['index', 'like','echarts','form','element'], function () {
         var $ = layui.$
             ,like = layui.like
-            ,echarts = layui.echarts;
-
-        let bgColor = "#fff";
-        let color = [
-            "#0090FF",
-            "#36CE9E",
-            "#FFC005",
-            "#FF515A",
-            "#8B5CFF",
-            "#00CA69"
-        ];
-        const hexToRgba = (hex, opacity) => {
-            let rgbaColor = "";
-            let reg = /^#[\da-f]{6}$/i;
-            if (reg.test(hex)) {
-                rgbaColor = `rgba(${parseInt("0x" + hex.slice(1, 3))},${parseInt(
-                    "0x" + hex.slice(3, 5)
-                )},${parseInt("0x" + hex.slice(5, 7))},${opacity})`;
-            }
-            return rgbaColor;
-        }
-
-
+            ,echarts = layui.echarts
+            ,element = layui.element;
 
         like.ajax({
             url: '{:url("index/stat")}',
             type: "post",
             success: function (res) {
-                var dates = res.data.dates,
-                    echarts_order_amount  = res.data.echarts_order_amount,
-                    echarts_user_visit = res.data.echarts_user_visit;
 
-                var sale_option = {
-                    backgroundColor: bgColor,
-                    color: color,
-                    legend: {
-                        right: 10,
-                        top: 10
+                var option_amount = {
+                    title: {
+                        text: '销售金额'
                     },
                     tooltip: {
-                        trigger: "axis",
-                        formatter: function(params) {
-                            let html = '';
-                            params.forEach(v => {
-                                html += `<div style="color: #666;font-size: 14px;line-height: 24px">
-                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${color[v.componentIndex]};"></span>
-                ${v.name}
-                <span style="color:${color[v.componentIndex]};font-weight:700;font-size: 18px">${v.value}</span>
-                元`;
-                            })
-                            return html
-                        },
-                        extraCssText: 'background: #fff; border-radius: 0;box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);color: #333;',
+                        trigger: 'axis',
                         axisPointer: {
-                            type: 'shadow',
-                            shadowStyle: {
-                                color: '#ffffff',
-                                shadowColor: 'rgba(225,225,225,1)',
-                                shadowBlur: 5
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985',
                             }
+                        }
+                    },
+                    legend: {
+                        data: ['销售金额']
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
                         }
                     },
                     grid: {
-                        top: 100,
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
                         containLabel: true
                     },
-                    xAxis: [{
-                        type: "category",
-                        boundaryGap: false,
-                        axisLabel: {
-                            formatter: '{value}',
-                            textStyle: {
-                                color: "#333"
-                            }
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: "#D9D9D9"
-                            }
-                        },
-                        data: dates
-                    }],
-                    yAxis: [{
-                        type: "value",
-                        name: '销售金额',
-                        axisLabel: {
-                            textStyle: {
-                                color: "#666"
-                            }
-                        },
-                        nameTextStyle: {
-                            color: "#666",
-                            fontSize: 12,
-                            lineHeight: 40
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                type: "dashed",
-                                color: "#E9E9E9"
-                            }
-                        },
-                        axisLine: {
-                            show: false
-                        },
-                        axisTick: {
-                            show: false
+                    xAxis: [
+                        {
+                            name:'(天)',
+                            type: 'category',
+                            boundaryGap: false,
+                            data: res.data.number
                         }
-                    }],
-                    series: [{
-                        type: "line",
-                        smooth: true,
-                        symbolSize: 8,
-                        zlevel: 3,
-                        lineStyle: {
-                            normal: {
-                                color: color[0],
-                                shadowBlur: 3,
-                                shadowColor: hexToRgba(color[0], 0.5),
-                                shadowOffsetY: 8
-                            }
-                        },
-                        areaStyle: {
-                            normal: {
-                                color: new echarts.graphic.LinearGradient(
-                                    0,
-                                    0,
-                                    0,
-                                    1,
-                                    [{
-                                        offset: 0,
-                                        color: hexToRgba(color[0], 0.3)
+                    ],
+                    yAxis: [
+                        {
+                            name:'(元)',
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '销售金额',
+                            type: 'line',
+
+                            areaStyle: {},
+                            data: res.data.echarts_order_amount,
+                            itemStyle: {
+                                normal: {
+                                    areaStyle: {
+                                        color: 'rgba(255,182,193,0.5)'
                                     },
-                                        {
-                                            offset: 1,
-                                            color: hexToRgba(color[0], 0.1)
-                                        }
-                                    ],
-                                    false
-                                ),
-                                shadowColor: hexToRgba(color[0], 0.1),
-                                shadowBlur: 10
+
+                                },
                             }
                         },
-                        data: echarts_order_amount
-                    }]
+
+                    ]
                 };
 
-                var user_option = {
-                    backgroundColor: bgColor,
-                    color: color,
-                    legend: {
-                        right: 10,
-                        top: 10
+                var option_member = {
+                    title: {
+                        text: '用户访问量'
                     },
                     tooltip: {
-                        trigger: "axis",
-                        formatter: function(params) {
-                            let html = '';
-                            params.forEach(v => {
-                                html += `<div style="color: #666;font-size: 14px;line-height: 24px">
-                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${color[v.componentIndex]};"></span>
-                ${v.name}
-                <span style="color:${color[v.componentIndex]};font-weight:700;font-size: 18px">${v.value}</span>
-                人`;
-                            })
-                            return html
-                        },
-                        extraCssText: 'background: #fff; border-radius: 0;box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);color: #333;',
+                        trigger: 'axis',
                         axisPointer: {
-                            type: 'shadow',
-                            shadowStyle: {
-                                color: '#ffffff',
-                                shadowColor: 'rgba(225,225,225,1)',
-                                shadowBlur: 5
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985',
                             }
+                        }
+                    },
+                    legend: {
+                        data: ['用户访问量']
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
                         }
                     },
                     grid: {
-                        top: 100,
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
                         containLabel: true
                     },
-                    xAxis: [{
-                        type: "category",
-                        boundaryGap: false,
-                        axisLabel: {
-                            formatter: '{value}',
-                            textStyle: {
-                                color: "#333"
-                            }
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: "#D9D9D9"
-                            }
-                        },
-                        data: dates
-                    }],
-                    yAxis: [{
-                        type: "value",
-                        name: '用户访问量',
-                        axisLabel: {
-                            textStyle: {
-                                color: "#666"
-                            }
-                        },
-                        nameTextStyle: {
-                            color: "#666",
-                            fontSize: 12,
-                            lineHeight: 40
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                type: "dashed",
-                                color: "#E9E9E9"
-                            }
-                        },
-                        axisLine: {
-                            show: false
-                        },
-                        axisTick: {
-                            show: false
+                    xAxis: [
+                        {
+                            name:'(天)',
+                            type: 'category',
+                            boundaryGap: false,
+                            data: res.data.number
                         }
-                    }],
-                    series: [{
-                        type: "line",
-                        smooth: true,
-                        symbolSize: 8,
-                        zlevel: 3,
-                        lineStyle: {
-                            normal: {
-                                color: color[0],
-                                shadowBlur: 3,
-                                shadowColor: hexToRgba(color[0], 0.5),
-                                shadowOffsetY: 8
-                            }
-                        },
-                        areaStyle: {
-                            normal: {
-                                color: new echarts.graphic.LinearGradient(
-                                    0,
-                                    0,
-                                    0,
-                                    1,
-                                    [{
-                                        offset: 0,
-                                        color: hexToRgba(color[0], 0.3)
+                    ],
+                    yAxis: [
+                        {
+                            name:'(人)',
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '用户访问量',
+                            type: 'line',
+
+                            areaStyle: {},
+                            data: res.data.echarts_user_visit,
+                            itemStyle: {
+                                normal: {
+                                    areaStyle: {
+                                        color: 'rgba(255,182,193,0.5)'
                                     },
-                                        {
-                                            offset: 1,
-                                            color: hexToRgba(color[0], 0.1)
-                                        }
-                                    ],
-                                    false
-                                ),
-                                shadowColor: hexToRgba(color[0], 0.1),
-                                shadowBlur: 10
+
+                                },
                             }
                         },
-                        data: echarts_user_visit
-                    }]
+
+                    ]
                 };
 
+                //准备好dom元素 创建Echart实例
+                var chartZhe_amount = echarts.init(document.getElementById('sale-amount-change'));
+                chartZhe_amount.setOption(option_amount, true);
 
-                var sale_charts= echarts.init(document.getElementById('sale-charts'));
-                sale_charts.setOption(sale_option, true);
-
-                var user_charts = echarts.init(document.getElementById('user-charts'));
-                user_charts.setOption(user_option, true);
-
+                //准备好dom元素 创建Echart实例
+                var chartZhe_member = echarts.init(document.getElementById('user-virst-change'));
+                chartZhe_member.setOption(option_member, true);
+                window.addEventListener('resize', function () {
+                    chartZhe_amount.resize();
+                    chartZhe_member.resize()
+                });
             }
         });
-
-
-
 
     });
 </script>

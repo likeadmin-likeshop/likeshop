@@ -132,34 +132,40 @@ class StatLogic
     public static function graphData()
     {
         //今天时间戳
-        list($start_t, $end_t) = Time::dayToNow(30);
-
+        list($start_t, $end_t) = Time::dayToNow(15);
         //echarts图表数据
-        for ($i = 1; $i <= 30; $i++) {
+
+        $echarts_order_amount = [];
+        $echarts_user_pv = [];
+        $dates = [];
+        for ($i = 1; $i <= 15; $i++) {
             $where_start = strtotime("+ ".$i."day", $start_t);
             $where_end = strtotime("+ ".$i."day", $start_t) + 86399;
+            $dates[] = date('m-d',$where_end);
 
             //每天订单金额
-            $echarts_order_amount[] = Db::name('order')
+            $order_amount = Db::name('order')
                 ->where('create_time', '<=', $where_end)
                 ->where('create_time', '>=', $where_start)
                 ->where(['del' => 0, 'pay_status' => Pay::ISPAID])
-                ->sum('order_amount') ?? 0;
+                ->sum('order_amount');
 
             //每天用户访问量
-            $echarts_user_pv[] = Db::name('stat')
+            $user_pv = Db::name('stat')
                 ->where('create_time', '<=', $where_end)
                 ->where('create_time', '>=', $where_start)
-                ->value('today_user_pv') ?? 0;
+                ->value('today_user_pv');
+
+            $echarts_order_amount[] = $order_amount ?:0;
+            $echarts_user_pv[] = $user_pv ?:0;
+
         }
 
-        $echarts_order_amount_all = array_reverse($echarts_order_amount);
-        $echarts_user_pv_all = array_reverse($echarts_user_pv);
 
         return [
-            'echarts_order_amount' => $echarts_order_amount_all,
-            'echarts_user_visit' => $echarts_user_pv_all,
-            'number' => range(1, 30),
+            'echarts_order_amount'  => $echarts_order_amount,
+            'echarts_user_visit'    => $echarts_user_pv,
+            'dates'                 => $dates,
         ];
     }
 }

@@ -78,6 +78,7 @@ class Index extends AdminBase
             $this->_success('', StatLogic::graphData());
         }
         $this->assign('res', StatLogic::stat());
+        $this->assign('company_name',ConfigServer::get('copyright', 'company_name'));
         return $this->fetch();
     }
 }

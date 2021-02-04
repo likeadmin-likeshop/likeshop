@@ -869,6 +869,18 @@ layui.define('view', function(exports){
     //移除resize事件
     admin.delResize();
   });
+
+  // 三级菜单收缩
+  $body.on("click", ".second-nav .layui-nav-tree .layui-nav-itemed a", function () {
+    var spanElem = $(this).children('i');
+    if (spanElem.hasClass('up')) {
+      spanElem.removeClass('up');
+      $(this).next().show();
+    } else {
+      spanElem.addClass('up');
+      $(this).next().hide();
+    }
+  });
   
   //页面跳转
   $body.on('click', '*[lay-href]', function(){

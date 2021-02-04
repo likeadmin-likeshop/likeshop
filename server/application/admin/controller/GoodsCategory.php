@@ -108,8 +108,8 @@ class GoodsCategory extends AdminBase
      * note 修改品牌的显示状态
      */
     public function switchStatus(){
-        $get = $this->request->get();
-        $result =GoodsCategoryLogic::switchStatus($get);
+        $post = $this->request->post();
+        $result =GoodsCategoryLogic::switchStatus($post);
         if ($result) {
             $this->_success('修改成功');
         }

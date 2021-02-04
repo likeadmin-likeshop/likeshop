@@ -216,10 +216,10 @@ class Goods extends AdminBase
         $table = $this->request->controller();
 
         $pk_name = 'id';
-        $pk_value = $this->request->get('id');
+        $pk_value = $this->request->post('id');
 
-        $field = $this->request->get('field');
-        $field_value = $this->request->get('value');
+        $field = $this->request->post('field');
+        $field_value = $this->request->post('value');
         $result = CommonLogic::changeTableValue($table,$pk_name,$pk_value,$field,$field_value);
         if($result){
             $this->_success('修改成功');

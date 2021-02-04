@@ -249,13 +249,13 @@ class AdLogic
      * @throws Exception
      * @throws \think\exception\PDOException
      */
-    public static function switchStatus($get)
+    public static function switchStatus($post)
     {
         $data = [
-            'status' => $get['status'],
+            'status' => $post['status'],
             'update_time' => time(),
         ];
-        return Db::name('ad')->where(['client' => $get['client'], 'del' => 0, 'id' => $get['id']])->update($data);
+        return Db::name('ad')->where(['client' => $post['client'], 'del' => 0, 'id' => $post['id']])->update($data);
     }
 
 

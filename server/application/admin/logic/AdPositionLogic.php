@@ -217,14 +217,14 @@ class AdPositionLogic
      * @throws Exception
      * @throws \think\exception\PDOException
      */
-    public static function switchStatus($get)
+    public static function switchStatus($post)
     {
         $data = [
-            'status' => $get['status'],
+            'status' => $post['status'],
             'update_time' => time(),
         ];
         return Db::name('ad_position')
-            ->where(['client' => $get['client'], 'id' => $get['id'], 'del' => 0])
+            ->where(['client' => $post['client'], 'id' => $post['id'], 'del' => 0])
             ->update($data);
     }
 

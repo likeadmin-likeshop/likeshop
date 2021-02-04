@@ -124,8 +124,8 @@ class AdPosition extends AdminBase
      */
     public function switchStatus()
     {
-        $get = $this->request->get();
-        $result = AdPositionLogic::switchStatus($get);
+        $post = $this->request->post();
+        $result = AdPositionLogic::switchStatus($post);
         if ($result) {
             $this->_success('修改成功');
         }

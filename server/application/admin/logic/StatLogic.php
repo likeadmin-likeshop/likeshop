@@ -90,19 +90,18 @@ class StatLogic
             $add_change = '+' . $add_change;
         }
 
-        $today_pv = Db::name('stat')
+
+        $today_ip = Db::name('stat')
             ->whereTime('create_time', 'today')
-            ->value('today_user_pv');
-        $yesterday_pv = Db::name('stat')
+            ->count();
+        $yesterday_ip = Db::name('stat')
             ->whereTime('create_time', 'yesterday')
             ->value('today_user_pv');
-
-        $pv_change = $today_pv - $yesterday_pv;
-        if ($pv_change >= 0) {
-            $pv_change = '+' . $pv_change;
+        $ip_change = $today_ip - $yesterday_ip;
+        if ($ip_change >= 0) {
+            $ip_change = '+' . $ip_change;
         }
-
-        $total_pv = Db::name('stat')->sum('today_user_pv');
+        $total_ip = Db::name('stat')->count();
 
         return [
             'time' => $time,
@@ -120,10 +119,11 @@ class StatLogic
             'order_num_all' => $order_num_all,
             'order_amount_all' => $order_amount_all,
             'user_all' => $user_all,
-            'today_user_pv' => $today_pv ?? 0,
-            'yesterday_user_pv' => $yesterday_pv ?? 0,
-            'pv_change' => $pv_change,
-            'total_user_pv' => $total_pv ?? 0,
+
+            'today_user_ip'     => $today_ip ?? 0,
+            'yesterday_user_ip' => $yesterday_ip ?? 0,
+            'ip_change'         => $ip_change,
+            'total_user_ip'     => $total_ip ?? 0,
         ];
     }
 

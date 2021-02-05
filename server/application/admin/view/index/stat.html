@@ -30,6 +30,20 @@
         height: 62px;
         margin-bottom: 5px;
     }
+
+    .tips {
+        float: right;
+        padding: 0 10px;
+        margin-top: 10px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+        color: #3A91FB;
+        border-radius: 30px;
+        border: 1px #3A91FB solid;
+        background: #eaf3ff;
+    }
+
 </style>
 <div class="layui-fluid" style="margin-bottom: 100px">
     <div class="layui-card" >
@@ -42,7 +56,8 @@
         <div class="layui-col-sm3">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    今日成交订单（笔）
+                    成交订单（笔）
+                    <span class="tips">今日</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.order_num_today}</p>
@@ -56,7 +71,8 @@
         <div class="layui-col-sm3 ">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    今日销售金额（元）
+                    销售金额（元）
+                    <span class="tips">今日</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.order_amount_today}</p>
@@ -70,7 +86,8 @@
         <div class="layui-col-sm3 ">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    今日新增会员（人）
+                    新增会员（人）
+                    <span class="tips">今日</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">{$res.add_user_today}</p>
@@ -83,13 +100,14 @@
         <div class="layui-col-sm3 ">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    今日用户访问量（人）
+                    用户访问量（人）
+                    <span class="tips">今日</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
-                    <p class="layuiadmin-big-font">{$res.today_user_pv}</p>
-                    <p>昨日：<span class="text-style">{$res.yesterday_user_pv}</span>
-                        <span class="text-style" {if condition="$res.pv_change lt 0" } style="color: #009688" {elseif condition="$res.pv_change egt 0" } style="color: #FA2828" {/if}>{$res.pv_change}</span></p>
-                    <div class="data-all">总用户访问量（人）<div class="text-style">{$res.total_user_pv}</div></div>
+                    <p class="layuiadmin-big-font">{$res.today_user_ip}</p>
+                    <p>昨日：<span class="text-style">{$res.yesterday_user_ip}</span>
+                        <span class="text-style" {if condition="$res.ip_change lt 0" } style="color: #009688" {elseif condition="$res.ip_change egt 0" } style="color: #FA2828" {/if}>{$res.ip_change}</span></p>
+                    <div class="data-all">总用户访问量（人）<div class="text-style">{$res.total_user_ip}</div></div>
                 </div>
             </div>
         </div>

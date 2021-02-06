@@ -48,10 +48,10 @@ class FinanceLogic
             ->find();
 
         return [
-            'month_order_amount' => $month_order_amount,
-            'total_amount' => $order['amount'] ?? 0,
+            'month_order_amount' => round($month_order_amount, 2),
+            'total_amount' => round($order['amount'], 2),
             'order_num' => $order['num'] ?? 0,
-            'total_user_money' => $user['money'] ?? 0,
+            'total_user_money' => round($user['money'], 2),
             'total_user_integral' => $user['integral'] ?? 0,
         ];
     }

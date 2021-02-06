@@ -24,13 +24,11 @@ class AdjustAccount extends Validate{
     protected $rule = [
         'id'                => 'require|checkData',
         'money_remark'      => 'max:100',
-        'integral_remark'   => 'max:100',
         'growth_remark'     => 'max:100',
     ];
     protected $message = [
         'id.require'            => '请选择用户',
         'money_remark.max'      => '余额备注不能超过100字',
-        'integral_remark.max'   => '积分备注不能超过100字',
         'growth_remark.max'     => '成长值备注不能超过100字',
     ];
 
@@ -58,24 +56,6 @@ class AdjustAccount extends Validate{
             }
             if(empty($data['money_remark'])){
                 return '请输入调整余额备注';
-            }
-        }
-
-        //积分调整
-        if(isset($data['integral_handle'])){
-            if(empty($data['integral'])){
-                return '请输入调整的积分';
-            }
-            //验证扣减积分操作
-            if($data['integral_handle'] == 0){
-                //用户积分不足
-                if($data['integral'] > $user['user_integral']){
-                    return '用户积分仅剩下'.$user['user_integral'].'分';
-                }
-            }
-
-            if(empty($data['integral_remark'])){
-                return '请输入调整积分备注';
             }
         }
 

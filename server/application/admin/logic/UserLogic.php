@@ -189,26 +189,7 @@ class UserLogic{
                     'remark'        => $post_data['money_remark'],
                 ];
             }
-            //积分调整
-            if (isset($post_data['integral_handle'])) {
-                $number = $post_data['integral'];
-                $change_type = 1;
-                $source_type = AccountLog::admin_add_integral;
-                $integral_sql = Db::raw('user_integral + ' . $post_data['integral']);
 
-                if ($post_data['integral_handle'] == 0) {
-                    $change_type = 2;
-                    $source_type = AccountLog::admin_reduce_integral;
-                    $integral_sql = Db::raw('user_integral - ' . $post_data['integral']);
-                }
-                $update_data['user_integral'] = $integral_sql;
-                $account_log[] = [
-                    'number'        => $number,
-                    'change_type'   => $change_type,
-                    'source_type'   => $source_type,
-                    'remark'        => $post_data['integral_remark'],
-                ];
-            }
             //成长值调整
             if (isset($post_data['growth_handle'])) {
                 $number = $post_data['growth'];

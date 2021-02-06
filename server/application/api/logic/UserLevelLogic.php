@@ -89,11 +89,12 @@ class UserLevelLogic{
         foreach ($sign_daily as $sign){
             if( 1 == $sign['type'] && 0 == $sign['days'] && $sign['growth_status'] && $sign['growth']){
                 $rule.= $tip_id.'.会员连续签到1天，赠送' .$sign['growth']. "成长值。".PHP_EOL;
+                $tip_id++;
             }
             if( 2 == $sign['type'] && $sign['growth_status'] && $sign['growth']){
                 $rule.= $tip_id.'.会员连续签到'.$sign['days'].'天，赠送'.$sign['growth']."成长值。".PHP_EOL;
+                $tip_id++;
             }
-            $tip_id++;
         }
 
         $give_growth  = ConfigServer::get('recharge', 'give_growth', 0);

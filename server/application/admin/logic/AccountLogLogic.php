@@ -23,18 +23,9 @@ use think\helper\Time;
 
 class AccountLogLogic{
     public static function lists($get){
-        $source_type = '';
+        $source_type = AccountLog::growth_change;
         $where = [];
-        switch ($get['type']){//记录类型
-            case 1://余额变动
-                $source_type = AccountLog::money_change;
-                break;
-            case 2://积分变动
-                $source_type = AccountLog::integral_change;
-                break;
-            case 3://成长值变动
-                $source_type = AccountLog::growth_change;
-        }
+       
         if(isset($get['order_source']) && $get['order_source']){
             $source_type = $get['order_source'];
         }

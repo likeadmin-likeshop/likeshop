@@ -8,6 +8,7 @@ import Cache from './cache'
 import {
 	TOKEN
 } from '../config/cachekey'
+import {baseURL} from '@/config/app'
 
 import {
 	wxAutoLogin,
@@ -31,7 +32,7 @@ function checkParams(params) {
 
 
 const service = axios.create({
-	baseURL: 'http://likeshop.yixiangonline.com/api/',
+	baseURL: baseURL,
 	timeout: 10000,
 	header: {
 		'content-type': 'application/json'
@@ -47,7 +48,7 @@ service.interceptors.request.use(
 		if (config.method == 'GET') {
 			config.url += paramsToStr(config.params)
 		}
-		config.header.token = Cache.get(TOKEN) || "ac772e3dfa25352ba70c7779ea2bc7e8"
+		config.header.token = Cache.get(TOKEN)
 		console.log(config)
 		return config
 	},

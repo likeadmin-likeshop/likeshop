@@ -11,13 +11,13 @@
                 <view class="label">联系方式</view>
                 <input class="ml10" name="telephone" v-model="addressObj.telephone" type="number" placeholder="请填写手机号码"></input>
             </view>
-            <pick-regions :defaultRegion="defaultRegionCode" @getRegion="regionChange">
+            <view @click="showRegion = true">
                 <view class="form-item row">
                     <view class="label">所在地区</view>
                     <input class="ml10" name="region" v-model="region" disabled type="text" placeholder="请选择省、市、区"></input>
                     <image class="icon-sm ml10" src="/static/images/arrow_right.png" />
                 </view>
-            </pick-regions>
+            </view>
             <view style="height:200rpx">
                 <view class="form-item row" style="height: 200rpx;">					
                     <view class="label mt20" style="align-self: flex-start;">详细地址</view>
@@ -35,6 +35,7 @@
         </view>
         <button class="my-btn bg-primary white br60" form-type="submit">完成</button>
     </form>
+    <u-select v-model="showRegion" mode="mutil-column-auto" @confirm="regionChange" :list="lists"></u-select>
 </view>
 </template>
 
@@ -55,8 +56,8 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { editAddress, getOneAddress, hasRegionCode, addAddress } from '../../api/user';
-
+import { editAddress, getOneAddress, hasRegionCode, addAddress } from '@/api/user';
+import area from '@/utils/area'
 export default {
   data() {
     return {
@@ -72,7 +73,9 @@ export default {
       region: '',
       addressId: '',
 	  defaultRegion:['广东省','广州市','番禺区'],
-	  defaultRegionCode:'440113'
+	  defaultRegionCode:'440113',
+      showRegion: false,
+      lists: []
     };
   },
   props: {},
@@ -93,6 +96,10 @@ export default {
       });
       this.getWxAddressFun();
     }
+    console.log(area)
+    this.$nextTick(() => {
+        this.lists = area
+    })
   },
 
   /**
@@ -177,7 +184,7 @@ export default {
       this.addressObj.province_id = region[0].value;
       this.addressObj.city_id = region[1].value;
       this.addressObj.district_id = region[2].value;
-      this.region = region[0].name + " " + region[1].name + " " + region[2].name
+      this.region = region[0].label + " " + region[1].label + " " + region[2].label
     },
 
     ChangeIsDefault: function (e) {

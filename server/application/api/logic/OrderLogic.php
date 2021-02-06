@@ -680,7 +680,7 @@ class OrderLogic extends LogicBase
             ->join('order_goods og', 'o.id = og.order_id')
             ->join('goods g','g.id = og.goods_id')
             ->where(['o.id' => $id, 'user_id' => $user_id, 'pay_status' => \app\common\model\Order::STATUS_WAIT_DELIVERY, 'o.del' => 0])
-            ->field('o.id,order_status,total_num,image,consignee,mobile,province,city,district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time,delivery_id')
+            ->field('o.id,order_status,total_num,image,consignee,mobile,province,city,district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time,o.delivery_id')
             ->append(['delivery_address'])
             ->find();
 

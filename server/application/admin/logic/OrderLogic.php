@@ -235,13 +235,11 @@ class OrderLogic
 
         $delivery_id = Db::name('delivery')->insertGetId($delivery_data);
 
-        //更新订单下商品的发货状态
-        Db::name('order_goods')->where(['order_id' => $order_id])->update(['delivery_id' => $delivery_id]);
-
         $order->update_time = time();
         $order->shipping_time = time();
         $order->shipping_status = 1;
         $order->order_status = Order::STATUS_WAIT_RECEIVE;
+        $order->delivery_id = $delivery_id;
         $order->save();
 
         //发货短信通知
@@ -313,53 +311,38 @@ class OrderLogic
 
     public static function getShipping($order_id)
     {
-        $field = 'o.id,order_status,total_num,image,consignee,mobile,province,city,
-        district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time,delivery_id';
-
-        $order = new \app\api\model\Order();
-        $order = $order->alias('o')
-            ->join('order_goods og', 'o.id = og.order_id')
-            ->join('goods g','g.id = og.goods_id')
-            ->where(['o.id' => $order_id,])
-            ->field($field)
-            ->append(['delivery_address'])
+        $orderModel = new Order();
+        $order = $orderModel->alias('o')
+            ->field('invoice_no,shipping_name,shipping_id,o.shipping_status')
+            ->join('delivery d', 'd.order_id = o.id')
+            ->where(['o.id' => $order_id])
             ->find();
-
-        $order_delivery = Db::name('delivery')
-            ->where(['order_id' => $order['id']])
-            ->field('invoice_no,shipping_name,shipping_id')->find();
 
         $express = ConfigServer::get('express', 'way', '', '');
         $app = ConfigServer::get($express, 'appkey', '', '');
         $key = ConfigServer::get($express, 'appsecret', '', '');
 
-        if (!$express || $order['shipping_status'] != 1){
-            return $traces[] = ['暂无物流信息'];
-        }
-
-        if (!$app || !$key){
+        if (empty($express) || $order['shipping_status'] != 1 || empty($app) || empty($key)) {
             return $traces[] = ['暂无物流信息'];
         }
 
         //快递配置设置为快递鸟时
-        if($express === 'kdniao'){
+        if($express === 'kdniao') {
             $expressage = (new Kdniao($app, $key, true));
             $shipping_field = 'codebird';
-        }else{
+        } else {
             $expressage = (new Kd100($app, $key, true));
             $shipping_field = 'code100';
         }
 
         //快递编码
         $shipping_code = Db::name('express')
-            ->where(['id' => $order_delivery['shipping_id']])
+            ->where(['id' => $order['shipping_id']])
             ->value($shipping_field);
 
         //获取物流轨迹
-        $expressage->logistics($shipping_code, $order_delivery['invoice_no']);
+        $expressage->logistics($shipping_code, $order['invoice_no']);
         $traces = $expressage->logisticsFormat();
-
-        //获取不到物流轨迹时
         if ($traces == false) {
             $traces[] = ['暂无物流信息'];
         } else {

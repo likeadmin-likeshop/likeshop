@@ -4,7 +4,6 @@
 <div class="layui-col-md12">
     <div class="layui-fluid">
 
-
         <div class="layui-form" lay-filter="">
             <div class="layui-card" >
                 <div class="layui-card-body">
@@ -12,45 +11,23 @@
                         <div class="layui-card-header" >概况</div>
                     </div>
 
-
                     <div class="layui-input-inline" style="left: 50px">
                         <div class="layui-input-inline">
-                            <select name="city" lay-verify="required" lay-filter="days">
-                                <option value="0" >今日实时</option>
-                                <option value="1" >近7天</option>
-                                <option value="2" >近30天</option>
+                            <select name="day" lay-verify="required" lay-filter="days">
+                                <option value="today" >今日实时</option>
+                                <option value="ago_seven" >近7天</option>
+                                <option value="ago_fifteen" >近15天</option>
                             </select>
                         </div>
-
                     </div>
+
                     <div class="layui-input-inline " id="days" style="white-space: nowrap;left:70px">
                         {$res.start} 至 {$res.end}
                     </div>
                 </div>
             </div>
+
             <div class="layui-row layui-col-space15">
-                <div class="layui-col-sm6 layui-col-md3">
-                    <div class="layui-card">
-                        <div class="layui-card-header">
-                            店铺浏览量
-                        </div>
-                        <div class="layui-card-body layuiadmin-card-list">
-                            <p class="layuiadmin-big-font" id="shop_click">{$res.shop_click}</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-sm6 layui-col-md3">
-                    <div class="layui-card">
-                        <div class="layui-card-header">
-                            店铺收藏量
-                        </div>
-                        <div class="layui-card-body layuiadmin-card-list">
-                            <p class="layuiadmin-big-font" id="shop_collect">{$res.shop_collect}</p>
-
-                        </div>
-                    </div>
-                </div>
                 <div class="layui-col-sm6 layui-col-md3" >
                     <div class="layui-card" >
                         <div class="layui-card-header" >
@@ -58,31 +35,29 @@
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" >
                             <p class="layuiadmin-big-font" id="goods_click">{$res.goods_click}</p>
-
                         </div>
                     </div>
                 </div>
                 <div class="layui-col-sm6 layui-col-md3">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                            商品收藏量
+                            用户浏览量
                         </div>
                         <div class="layui-card-body layuiadmin-card-list">
-                            <p class="layuiadmin-big-font" id="goods_collect">{$res.goods_collect}</p>
-
+                            <p class="layuiadmin-big-font" id="user_click">{$res.user_click}</p>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="layui-card" style="width: 100%;height: 150vh;margin-top:20px">
+
+            <div class="layui-card" style="width: 100%;margin-top:20px">
                 <div class="layui-card-body">
                     <div class="layui-form-item">
                         <div class="layui-input-inline layui-card-header" style="">访问趋势分析</div>
                         <div class="layui-input-inline" style="right: 100px">
                             <select  lay-verify="required"  lay-filter="goods">
-                                <option value="0">近7天</option>
-                                <option value="1">近30天</option>
+                                <option value="ago_seven">近7天</option>
+                                <option value="ago_fifteen">近15天</option>
                             </select>
                         </div>
                         <div class="layui-input-inline" id="goods_days" style="white-space: nowrap;top:8px;right:80px">
@@ -91,22 +66,17 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <div id="EchartZhe" style="width: 80%;height: 80vh;"> </div>
+                        <div id="visitCharts" style="width: 100%;height: 80vh;"> </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
-
-
 
     </div>
 </div>
 
 
 <script>
-
 
     layui.config({
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
@@ -118,271 +88,232 @@
             ,like = layui.like
             ,echarts = layui.echarts;
 
+        const color = ["#FFC005", "#00CA69","#0090FF"];
+        const hexToRgba = (hex, opacity) => {
+            let rgbaColor = "";
+            let reg = /^#[\da-f]{6}$/i;
+            if (reg.test(hex)) {
+                rgbaColor = `rgba(${parseInt("0x" + hex.slice(1, 3))},${parseInt(
+                    "0x" + hex.slice(3, 5)
+                )},${parseInt("0x" + hex.slice(5, 7))},${opacity})`;
+            }
+            return rgbaColor;
+        };
+
         like.ajax({
-            url: '{:url("statistics/default")}',
-            data: {},
+            url: '{:url("statistics/visit")}',
+            data: {'goods':'ago_seven'},
             type: "post",
             success: function (res) {
-                console.log(res);
-                var option = {
-                    //title: {
-                    //   text: '堆叠区域图'
-                    // },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            label: {
-                                backgroundColor: '#6a7985',
-                            }
-                        }
-                    },
-                    legend: {
-                        data: ['店铺浏览量', '店铺收藏量','商品浏览量', '商品收藏量']
-                    },
-                    toolbox: {
-                        feature: {
-                            saveAsImage: {}
-                        }
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: [
-                        {
-                            name:'(天)',
-                            type: 'category',
-                            boundaryGap: false,
-                            data: ['1', '2', '3', '4', '5', '6', '7']
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            name:'(个)',
-                            type: 'value'
-                        }
-                    ],
-                    series: [
-                        {
-                            name: '店铺浏览量',
-                            type: 'line',
+                var xData = res.data.days;
+                var pvData = res.data.echarts_goods_click;
+                var collectData = res.data.echarts_user_click;
 
-                            areaStyle: {},
-                            data: res.data.echarts_shop_click,
-                            itemStyle: {
-                                normal: {
-                                    areaStyle: {
-                                        color: 'rgba(255,182,193,0.5)'
-                                    },
-
-                                },
-                            }
-                        },
-                        {
-                            name: '店铺收藏量',
-                            type: 'line',
-
-                            areaStyle: {},
-                            itemStyle: {
-                                normal: {
-                                    areaStyle: {
-                                        color: 'rgba(225,255,255,0.5)'
-                                    },
-
-                                },
-                            },
-                            data: res.data.echarts_shop_collect
-                        },
-                        {
-                            name: '商品浏览量',
-                            type: 'line',
-
-                            areaStyle: {},
-                            itemStyle: {
-                                normal: {
-                                    areaStyle: {
-                                        color: 'rgba(218,112,214,0.5)'
-                                    },
-
-                                },
-                            },
-                            data: res.data.echarts_goods_click
-                        },
-                        {
-                            name: '商品收藏量',
-                            type: 'line',
-
-                            areaStyle: {},
-                            itemStyle: {
-                                normal: {
-                                    areaStyle: {
-                                        color: 'rgba(127,255,170,0.5)'
-                                    },
-
-                                },
-                            },
-                            data: res.data.echarts_goods_collect
-                        }
-
-                    ]
-                }
-                //准备好dom元素 创建Echart实例
-                var chartZhe = echarts.init(document.getElementById('EchartZhe'));
-                chartZhe.setOption(option, true);
+                var option = setOption(xData, pvData, collectData);
+                var visitCharts = echarts.init(document.getElementById('visitCharts'));
+                visitCharts.setOption(option, true);
                 window.addEventListener('resize', function () {
-                    chartZhe.resize()
+                    visitCharts.resize()
                 });
             }
         });
 
-        form.on('select(days)', function(data){
-
-            console.log(data.value); //得到被选中的值
-            like.ajax({
-                url:'{:url("statistics/visit")}',
-                data:{id:data.value},
-                type:"post",
-                success:function(res)
-                {
-                    console.log(res.data);
-                    $('#days').html(res.data.start+  ' 至 ' +res.data.end );
-                    $('#goods_click').html(res.data.goods_click);
-                    $('#goods_collect').html(res.data.goods_collect);
-                    $('#shop_click').html(res.data.shop_click);
-                    $('#shop_collect').html(res.data.shop_collect);
-
-
-                }
-            });
-        });
 
         form.on('select(goods)', function(data){
             like.ajax({
                 url: '{:url("statistics/visit")}',
-                data: {goods:data.value},
+                data: {'goods':data.value},
                 type: "post",
                 success: function (res) {
-                    // console.log(Array(res.data.days).fill(1).map((v,k)=>k+1));
                     $('#goods_days').html(res.data.start+  ' 至 ' +res.data.end );
-                    var option = {
-                        //title: {
-                        //   text: '堆叠区域图'
-                        // },
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'cross',
-                                label: {
-                                    backgroundColor: '#6a7985',
-                                }
-                            }
-                        },
-                        legend: {
-                            data: ['店铺浏览量', '店铺收藏量','商品浏览量', '商品收藏量']
-                        },
-                        toolbox: {
-                            feature: {
-                                saveAsImage: {}
-                            }
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: [
-                            {
-                                name:'(天)',
-                                type: 'category',
-                                boundaryGap: false,
-                                data: Array(res.data.days).fill(1).map((v,k)=>k+1) //填充数组
-                            }
-                        ],
-                        yAxis: [
-                            {
-                                name:'(个)',
-                                type: 'value'
-                            }
-                        ],
-                        series: [
-                            {
-                                name: '店铺浏览量',
-                                type: 'line',
-
-                                areaStyle: {},
-                                data: res.data.echarts_shop_click,
-                                itemStyle: {
-                                    normal: {
-                                        areaStyle: {
-                                            color: 'rgba(255,182,193,0.5)'
-                                        },
-
-                                    },
-                                }
-                            },
-                            {
-                                name: '店铺收藏量',
-                                type: 'line',
-
-                                areaStyle: {},
-                                itemStyle: {
-                                    normal: {
-                                        areaStyle: {
-                                            color: 'rgba(225,255,255,0.5)'
-                                        },
-
-                                    },
-                                },
-                                data: res.data.echarts_shop_collect
-                            },
-                            {
-                                name: '商品浏览量',
-                                type: 'line',
-
-                                areaStyle: {},
-                                itemStyle: {
-                                    normal: {
-                                        areaStyle: {
-                                            color: 'rgba(218,112,214,0.5)'
-                                        },
-
-                                    },
-                                },
-                                data: res.data.echarts_goods_click
-                            },
-                            {
-                                name: '商品收藏量',
-                                type: 'line',
-
-                                areaStyle: {},
-                                itemStyle: {
-                                    normal: {
-                                        areaStyle: {
-                                            color: 'rgba(127,255,170,0.5)'
-                                        },
-
-                                    },
-                                },
-                                data: res.data.echarts_goods_collect
-                            }
-
-                        ]
-                    }
-                    //准备好dom元素 创建Echart实例
-                    var chartZhe = echarts.init(document.getElementById('EchartZhe'));
-                    chartZhe.setOption(option, true);
+                    var xData = res.data.days;
+                    var pvData = res.data.echarts_goods_click;
+                    var collectData = res.data.echarts_user_click;
+                    var saleData = res.data.echarts_goods_sale;
+                    var option = setOption(xData, pvData, collectData, saleData);
+                    var visitCharts = echarts.init(document.getElementById('visitCharts'));
+                    visitCharts.setOption(option, true);
                     window.addEventListener('resize', function () {
-                        chartZhe.resize()
+                        visitCharts.resize()
                     });
                 }
             });
-        })
+        });
 
 
+
+        form.on('select(days)', function(data){
+            like.ajax({
+                url:'{:url("statistics/visit")}',
+                data:{'days':data.value},
+                type:"post",
+                success:function(res)
+                {
+                    $('#days').html(res.data.start+  ' 至 ' +res.data.end );
+                    $('#goods_click').html(res.data.goods_click);
+                    $('#user_click').html(res.data.user_click);
+                }
+            });
+        });
+
+        //图表设置
+        function setOption(xData, pvData, collectData) {
+            option = {
+                backgroundColor: '#fff',
+                color: color,
+                legend: {
+                    top: 20,
+                },
+                tooltip: {
+                    trigger: "axis",
+                    formatter: function(params) {
+                        let html = '';
+                        params.forEach(v => {
+                            html += `<div style="color: #666;font-size: 14px;line-height: 24px">
+                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${color[v.componentIndex]};"></span>
+                ${v.seriesName}${v.name}
+                <span style="color:${color[v.componentIndex]};font-weight:700;font-size: 18px;margin-left:5px">${v.value}</span>
+                次`;
+                        })
+                        return html
+                    },
+                    extraCssText: 'background: #fff; border-radius: 0;box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);color: #333;',
+                    axisPointer: {
+                        type: 'shadow',
+                        shadowStyle: {
+                            color: '#ffffff',
+                            shadowColor: 'rgba(225,225,225,1)',
+                            shadowBlur: 5
+                        }
+                    }
+                },
+                grid: {
+                    top: 100,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: "category",
+                    name: '(日期)',
+                    boundaryGap: false,
+                    axisLabel: {
+                        textStyle: {
+                            color: "#333"
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#D9D9D9"
+                        }
+                    },
+                    data: xData,
+                }],
+                yAxis: [{
+                    type: "value",
+                    name: '(次)',
+                    axisLabel: {
+                        textStyle: {
+                            color: "#666"
+                        }
+                    },
+                    nameTextStyle: {
+                        color: "#666",
+                        fontSize: 12,
+                        lineHeight: 40
+                    },
+                    // 分割线
+                    splitLine: {
+                        lineStyle: {
+                            type: "dashed",
+                            color: "#E9E9E9"
+                        }
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                }],
+                series: [{
+                    name: "商品浏览量",
+                    type: "line",
+                    smooth: true,
+                    symbolSize: 8,
+                    zlevel: 3,
+                    lineStyle: {
+                        normal: {
+                            color: color[0],
+                            shadowBlur: 3,
+                            shadowColor: hexToRgba(color[0], 0.5),
+                            shadowOffsetY: 8
+                        }
+                    },
+                    symbol: 'circle',//数据交叉点样式
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [{
+                                    offset: 0,
+                                    color: hexToRgba(color[0], 0.3)
+                                },
+                                    {
+                                        offset: 1,
+                                        color: hexToRgba(color[0], 0.1)
+                                    }
+                                ],
+                                false
+                            ),
+                            shadowColor: hexToRgba(color[0], 0.1),
+                            shadowBlur: 10
+                        }
+                    },
+                    data: pvData
+                }, {
+                    name: "用户浏览量",
+                    type: "line",
+                    smooth: true,
+                    symbolSize: 8,
+                    zlevel: 3,
+                    lineStyle: {
+                        normal: {
+                            color: color[1],
+                            shadowBlur: 3,
+                            shadowColor: hexToRgba(color[1], 0.5),
+                            shadowOffsetY: 8
+                        }
+                    },
+                    symbol: 'circle',
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [{
+                                    offset: 0,
+                                    color: hexToRgba(color[1], 0.3)
+                                },
+                                    {
+                                        offset: 1,
+                                        color: hexToRgba(color[1], 0.1)
+                                    }
+                                ],
+                                false
+                            ),
+                            shadowColor: hexToRgba(color[1], 0.1),
+                            shadowBlur: 10
+                        }
+                    },
+                    data: collectData
+                }]
+            };
+            return option;
+        }
 
     });
 

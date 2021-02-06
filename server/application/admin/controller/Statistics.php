@@ -15,7 +15,7 @@ class Statistics extends AdminBase
             $post = $this->request->post();
             $this->_success('', StatisticsLogic::member($post));
         }
-        $this->assign('res', StatisticsLogic::default());
+        $this->assign('res', StatisticsLogic::member(['days' => 'today']));
         return $this->fetch();
     }
 
@@ -28,7 +28,7 @@ class Statistics extends AdminBase
             $post = $this->request->post();
             $this->_success('', StatisticsLogic::goods($post));
         }
-        $this->assign('res', StatisticsLogic::default());
+        $this->assign('res', StatisticsLogic::goods(['days' => 'today']));
         return $this->fetch();
     }
 
@@ -41,7 +41,7 @@ class Statistics extends AdminBase
             $post = $this->request->post();
             $this->_success('', StatisticsLogic::visit($post));
         }
-        $this->assign('res', StatisticsLogic::default());
+        $this->assign('res', StatisticsLogic::visit(['days' => 'today']));
         return $this->fetch();
     }
 
@@ -54,17 +54,7 @@ class Statistics extends AdminBase
             $post = $this->request->post();
             $this->_success('', StatisticsLogic::deal($post));
         }
-        $this->assign('res', StatisticsLogic::default());
-        return $this->fetch();
-    }
-
-
-    /**
-     * 起始默认值
-     */
-    public function default()
-    {
-        $this->_success('', StatisticsLogic::default());
+        $this->assign('res', StatisticsLogic::deal(['days' => 'today']));
         return $this->fetch();
     }
 }

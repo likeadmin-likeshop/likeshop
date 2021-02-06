@@ -62,9 +62,9 @@ class Menu_{
             self::index_team_activity      => [
                 'name'          => '拼团活动',
                 'link'          => [
-                    'link1' => '/pages/goods_combination/goods_combination',
-                    'link2' => '/home/goodsCombination',
-                    'link3' => 'GoodsCombin',
+                    'link1' => '/pages/bundle/goods_combination/goods_combination',
+                    'link2' => '/pages/bundle/goods_combination/goods_combination',
+                    'link3' => '/pages/bundle/goods_combination/goods_combination',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -72,9 +72,9 @@ class Menu_{
             self::index_hot_sell           => [
                 'name'          => '热销榜单',
                 'link'          => [
-                    'link1' => '/pages/hot_list/hot_list',
-                    'link2' => '/home/hotList',
-                    'link3' => 'HotList',
+                    'link1' => '/pages/bundle/hot_list/hot_list',
+                    'link2' => '/pages/bundle/hot_list/hot_list',
+                    'link3' => '/pages/bundle/hot_list/hot_list',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -83,8 +83,8 @@ class Menu_{
                 'name'          => '领券中心',
                 'link'          => [
                     'link1' => '/pages/user_getcoupon/user_getcoupon',
-                    'link2' => '/home/couponCenter',
-                    'link3' => 'CouponCenter',
+                    'link2' => '/pages/user_getcoupon/user_getcoupon',
+                    'link3' => '/pages/user_getcoupon/user_getcoupon',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -92,9 +92,9 @@ class Menu_{
             self::index_sign_in            => [
                 'name'          => '积分签到',
                 'link'          => [
-                    'link1' => '/pages/user_sign/user_sign',
-                    'link2' => '/common/signUp',
-                    'link3' => 'UserSign',
+                    'link1' => '/pages/bundle/user_sign/user_sign',
+                    'link2' => '/pages/bundle/user_sign/user_sign',
+                    'link3' => '/pages/bundle/user_sign/user_sign',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -103,8 +103,8 @@ class Menu_{
                 'name'          => '会员中心',
                 'link'          => [
                     'link1' => '/pages/user_vip/user_vip',
-                    'link2' => '/user/userVip',
-                    'link3' => 'UserMember',
+                    'link2' => '/pages/user_vip/user_vip',
+                    'link3' => '/pages/user_vip/user_vip',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -113,8 +113,8 @@ class Menu_{
                 'name'          => '我的收藏',
                 'link'          => [
                     'link1' => '/pages/user_collection/user_collection',
-                    'link2' => '/user/userCollection',
-                    'link3' => 'UserCollection',
+                    'link2' => '/pages/user_collection/user_collection',
+                    'link3' => '/pages/user_collection/user_collection',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -123,8 +123,8 @@ class Menu_{
                 'name'          => '商城资讯',
                 'link'          => [
                     'link1' => '/pages/news_list/news_list',
-                    'link2' => '/common/newsCenter',
-                    'link3' => 'NewsList',
+                    'link2' => '/pages/news_list/news_list',
+                    'link3' => '/pages/news_list/news_list',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -133,8 +133,8 @@ class Menu_{
                 'name'          => '帮助中心',
                 'link'          => [
                     'link1' => '/pages/news_list/news_list?type=1',
-                    'link2' => '/common/newsCenter?type=1',
-                    'link3' => 'NewsList?type=1',
+                    'link2' => '/pages/news_list/news_list?type=1',
+                    'link3' => '/pages/news_list/news_list?type=1',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -143,8 +143,8 @@ class Menu_{
                 'name'          => '收货地址',
                 'link'          => [
                     'link1' => '/pages/user_address/user_address',
-                    'link2' => '/user/userAddress',
-                    'link3' => 'UserAddress',
+                    'link2' => '/pages/user_address/user_address',
+                    'link3' => '/pages/user_address/user_address',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -153,8 +153,8 @@ class Menu_{
                 'name'          => '商品分类',
                 'link'          => [
                     'link1' => '/pages/sort/sort',
-                    'link2' => '/index/sort',
-                    'link3' => 'Classify',
+                    'link2' => '/pages/sort/sort',
+                    'link3' => '/pages/sort/sort',
                 ],
                 'is_tab'        => 1,
                 'type'          => 1,
@@ -164,9 +164,9 @@ class Menu_{
             self::centre_my_wallet         => [
                 'name'          => '我的钱包',
                 'link'          => [
-                    'link1' => '/pages/user_wallet/user_wallet',
-                    'link2' => '/user/userWallet',
-                    'link3' => 'UserWallet',
+                    'link1' => '/pages/bundle/user_wallet/user_wallet',
+                    'link2' => '/pages/bundle/user_wallet/user_wallet',
+                    'link3' => '/pages/bundle/user_wallet/user_wallet',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -175,8 +175,8 @@ class Menu_{
                 'name'          => '我的优惠券',
                 'link'          => [
                     'link1' => '/pages/user_coupon/user_coupon',
-                    'link2' => '/user/userCoupon',
-                    'link3' => 'UserCoupon',
+                    'link2' => '/pages/user_coupon/user_coupon',
+                    'link3' => '/pages/user_coupon/user_coupon',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -185,8 +185,8 @@ class Menu_{
                 'name'          => '等级服务',
                 'link'          => [
                     'link1' => '/pages/user_vip/user_vip',
-                    'link2' => '/user/userVip',
-                    'link3' => 'UserMember',
+                    'link2' => '/pages/user_vip/user_vip',
+                    'link3' => '/pages/user_vip/user_vip',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -195,8 +195,8 @@ class Menu_{
                 'name'          => '帮助中心',
                 'link'          => [
                     'link1' => '/pages/news_list/news_list?type=1',
-                    'link2' => '/common/newsCenter?type=1',
-                    'link3' => 'NewsList?type=1',
+                    'link2' => '/pages/news_list/news_list?type=1',
+                    'link3' => '/pages/news_list/news_list?type=1',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -205,8 +205,8 @@ class Menu_{
                 'name'          => '收货地址',
                 'link'          => [
                     'link1' => '/pages/user_address/user_address',
-                    'link2' => '/user/userAddress',
-                    'link3' => 'UserAddress',
+                    'link2' => '/pages/user_address/user_address',
+                    'link3' => '/pages/user_address/user_address',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -215,8 +215,8 @@ class Menu_{
                 'name'          => '我的收藏',
                 'link'          => [
                     'link1' => '/pages/user_collection/user_collection',
-                    'link2' => '/user/userCollection',
-                    'link3' => 'UserCollection',
+                    'link2' => '/pages/user_collection/user_collection',
+                    'link3' => '/pages/user_collection/user_collection',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,
@@ -224,12 +224,12 @@ class Menu_{
             self::centre_service            => [
                 'name'          => '联系客服',
                 'link'          => [
-                    'link1' => '',
-                    'link2' => '/user/contactOffical',
-                    'link3' => 'ContactService',
+                    'link1' => '/pages/bundle/contact_offical/contact_offical',
+                    'link2' => '/pages/bundle/contact_offical/contact_offical',
+                    'link3' => '/pages/bundle/contact_offical/contact_offical',
                 ],
                 'is_tab'        => 0,
-                'type'          => 3,
+                'type'          => 1,
             ],
         ];//个人中心
         $config_name = 'config'.$scene;

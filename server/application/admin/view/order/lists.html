@@ -22,6 +22,9 @@
         white-space:nowrap;
         text-overflow: ellipsis;
     }
+    .operation-btn {
+        margin: 5px;
+    }
 </style>
 <div class="layui-fluid">
     <div class="layui-card">
@@ -157,30 +160,30 @@
                         <script type="text/html" id="order-operation">
                             <div style="text-align: left;margin-left: 10px">
 
-                            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">订单详情</a>
+                            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="detail">订单详情</a>
 
                             {{#  if(d.order_status == 0){ }}
-                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="cancel">取消订单</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm operation-btn" lay-event="cancel">取消订单</a>
                             {{#  } }}
 
 
                             {{#  if(d.order_status == 1){ }}
-                            <a class="layui-btn layui-btn-normal layui-btn-sm " lay-event="delivery">发货</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="delivery">发货</a>
                             {{#  } }}
 
                             {{#  if(d.order_status == 2){ }}
-                            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="express">物流查询</a>
-                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="confirm">确认收货</a>
+                            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="express">物流查询</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="confirm">确认收货</a>
                             {{#  } }}
 
                             {{#  if(d.order_status == 3){ }}
-                            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="express">物流查询</a>
+                            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="express">物流查询</a>
                             {{#  } }}
 
                             {{#  if(d.order_status == 4){ }}
-                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除订单</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm operation-btn" lay-event="del">删除订单</a>
                             {{#  } }}
-                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="remarks">备注</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="remarks">备注</a>
                             </div>
                         </script>
 

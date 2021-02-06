@@ -1,6 +1,9 @@
 <?php
+
 namespace app\admin\controller;
+
 use app\admin\logic\FinanceLogic;
+
 // +----------------------------------------------------------------------
 // | LikeShop100%开源免费商用电商系统
 // +----------------------------------------------------------------------
@@ -19,10 +22,12 @@ use app\admin\logic\FinanceLogic;
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
-class Finance extends AdminBase{
-    public function lists(){
+class Finance extends AdminBase
+{
+    public function lists()
+    {
         $data = FinanceLogic::lists();
-        $this->assign('data',$data);
+        $this->assign('data', $data);
         return $this->fetch();
     }
 }

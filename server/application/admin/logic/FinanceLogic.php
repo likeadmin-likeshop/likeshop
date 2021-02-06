@@ -1,9 +1,4 @@
 <?php
-namespace app\admin\logic;
-
-
-use app\common\model\Pay;
-use think\Db;
 
 // +----------------------------------------------------------------------
 // | LikeShop100%开源免费商用电商系统
@@ -22,34 +17,42 @@ use think\Db;
 
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-class FinanceLogic{
-    public static function lists(){
+namespace app\admin\logic;
+
+
+use app\common\model\OrderGoods;
+use app\common\model\Pay;
+use think\Db;
+
+
+class FinanceLogic
+{
+    public static function lists()
+    {
         //本月订单金额
         $month_order_amount = Db::name('order')
-            ->where(['pay_status'=>Pay::ISPAID,'refund_status'=>\app\common\model\OrderGoods::REFUND_STATUS_NO])
-            ->whereTime('create_time','month')
+            ->where(['pay_status' => Pay::ISPAID, 'refund_status' => OrderGoods::REFUND_STATUS_NO])
+            ->whereTime('create_time', 'month')
             ->sum('order_amount');
 
         //订单总金额
-        $total_amount = Db::name('order')
-            ->where(['pay_status'=>Pay::ISPAID,'refund_status'=>\app\common\model\OrderGoods::REFUND_STATUS_NO])
-            ->sum('total_amount');
+        $order = Db::name('order')
+            ->field('sum(total_amount) as amount, count(id) as num')
+            ->where(['pay_status' => Pay::ISPAID, 'refund_status' => OrderGoods::REFUND_STATUS_NO])
+            ->find();
 
-        //会员余额
-        $total_user_money = Db::name('user')
-            ->where(['del'=>0])
-            ->sum('user_money');
-
-        //会员积分
-        $total_user_integral = Db::name('user')
-            ->where(['del'=>0])
-            ->sum('user_integral');
+        //会员相关
+        $user = Db::name('user')
+            ->field('sum(user_money) as money, sum(user_integral) as integral')
+            ->where(['del' => 0])
+            ->find();
 
         return [
-            'month_order_amount'    => $month_order_amount,
-            'total_amount'          => $total_amount,
-            'total_user_money'      => $total_user_money,
-            'total_user_integral'   => $total_user_integral,
+            'month_order_amount' => $month_order_amount,
+            'total_amount' => $order['amount'] ?? 0,
+            'order_num' => $order['num'] ?? 0,
+            'total_user_money' => $user['money'] ?? 0,
+            'total_user_integral' => $user['integral'] ?? 0,
         ];
     }
 }

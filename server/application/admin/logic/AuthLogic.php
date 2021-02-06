@@ -118,9 +118,17 @@ class AuthLogic
      * 添加菜单
      * @param $post
      * @return int|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public static function addMenu($post)
     {
+        $level = self::getParent($post['pid']);
+        if ($level >= 3) {
+            return '菜单不允许超出三级';
+        }
+
         $data = [
             'pid' => $post['pid'],
             'type' => $post['type'],
@@ -135,6 +143,29 @@ class AuthLogic
     }
 
     /**
+     * Notes: 查找层级
+     * @param $pid
+     * @author 张无忌(2021/2/6 11:08)
+     * @return int
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public static function getParent($pid)
+    {
+        static $count = 0;
+        $auth = Db::name('dev_auth')->where(['id' => $pid])->find();
+        if ($auth) {
+            $count += 1;
+            if ($count < 3) {
+                self::getParent($auth['pid']);
+            }
+            return $count;
+        }
+        return $count;
+    }
+
+    /**
      * 更新菜单
      * @param $post
      * @return int|string
@@ -143,6 +174,11 @@ class AuthLogic
      */
     public static function updateMenu($post)
     {
+        $level = self::getParent($post['pid']);
+        if ($level >= 3) {
+            return '菜单不允许超出三级';
+        }
+
         $data = [
             'pid' => $post['pid'],
             'type' => $post['type'],

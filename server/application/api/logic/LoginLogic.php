@@ -111,6 +111,8 @@ class LoginLogic extends LogicBase
             }
         } catch (Exception $e) {
             return self::dataError('登录失败:' . $e->getMessage());
+        }catch (\think\Exception $e){
+            return self::dataError('登录失败:' . $e->getMessage());
         }
 
         //添加或更新用户
@@ -198,6 +200,8 @@ class LoginLogic extends LogicBase
             $user = $user->getOriginal();
         } catch (Exception $e) {
             return self::dataError('登录失败:' . $e->getMessage());
+        }catch (\think\Exception $e){
+            return self::dataError('登录失败:' . $e->getMessage());
         }
 
         //添加或更新用户
@@ -266,6 +270,8 @@ class LoginLogic extends LogicBase
             );
             $user = json_decode($requests->body, true);
         } catch (Exception $e) {
+            return self::dataError('登录失败:' . $e->getMessage());
+        }catch (\think\Exception $e){
             return self::dataError('登录失败:' . $e->getMessage());
         }
 

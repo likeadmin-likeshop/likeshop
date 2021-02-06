@@ -59,10 +59,10 @@
                     <td class='area_name area_name{$k}' style="text-align: left">
                         {$item.region_name}
                     </td>
-                    <td><input type='text' name='first_unit[]' lay-verify='required' value="{$item.first_unit}" autocomplete='off' class='layui-input'></td>
-                    <td><input type='text' name='first_money[]' lay-verify='required' value="{$item.first_money}" autocomplete='off' class='layui-input'></td>
-                    <td><input type='text' name='continue_unit[]' lay-verify='required' value="{$item.continue_unit}" autocomplete='off' class='layui-input'></td>
-                    <td><input type='text' name='continue_money[]' lay-verify='required' value="{$item.continue_money}" autocomplete='off' class='layui-input'></td>
+                    <td><input type='number' name='first_unit[]' lay-verify='required' value="{$item.first_unit}" autocomplete='off' class='layui-input'></td>
+                    <td><input type='number' name='first_money[]' lay-verify='required' value="{$item.first_money}" autocomplete='off' class='layui-input'></td>
+                    <td><input type='number' name='continue_unit[]' lay-verify='required' value="{$item.continue_unit}" autocomplete='off' class='layui-input'></td>
+                    <td><input type='number' name='continue_money[]' lay-verify='required' value="{$item.continue_money}" autocomplete='off' class='layui-input'></td>
 
                     {if condition =" $item.region neq 'all' "}
                     <td  style="text-align: center">
@@ -166,10 +166,10 @@
         var str = "<tr class='area_tr area_tr"+v+"' data-id='" + v + "'>" +
             "<td><span class=' area_name area_name"+v+" '>"+data+"</span></td>" +
             "<input type='hidden' class='region region"+v+" ' name='region["+v+"]' value=''>" +
-            "<td><input type='text' name='first_unit["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
-            "<td><input type='text' name='first_money["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
-            "<td><input type='text' name='continue_unit["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
-            "<td><input type='text' name='continue_money["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
+            "<td><input type='number' name='first_unit["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
+            "<td><input type='number' name='first_money["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
+            "<td><input type='number' name='continue_unit["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
+            "<td><input type='number' name='continue_money["+v+"]' lay-verify='required' autocomplete='off' class='layui-input'></td>" +
             "<td style='text-align:center'>" +
             "<button class='layui-btn layui-btn-sm layui-btn-normal' type='button' onclick='editArea(" + v + ")'>" +
             "<i class='layui-icon layui-icon-edit'></i>" +

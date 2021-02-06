@@ -32,17 +32,12 @@ use think\Validate;
 class SignDaily extends Validate
 {
     protected $rule = [
-        'integral'      =>'require|integer|gt:0',   //积分
         'growth'      =>'require|integer|gt:0',   //成长值
-//        'coupon'        =>'require',
         'days'          =>'require|integer|gt:0|checkDays|editDays',   //连续签到天数
         'instructions'  =>'require'
     ];
 
     protected $message = [
-        'integral.require'      =>'积分不能为空',
-        'integral.integer'      =>'积分必须为整数',
-        'integral.gt'          =>'积分必须大于0',
 
         'growth.require'      =>'成长值不能为空',
         'growth.integer'      =>'成长值必须为整数',

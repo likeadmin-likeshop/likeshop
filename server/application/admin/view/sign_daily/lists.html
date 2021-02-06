@@ -56,10 +56,7 @@
             <!--每天签到奖励-->
             <div class="layui-form-item sigh">
                 <label class="layui-form-label " style="margin-left: 20px;width: 100px">每天签到奖励：</label>
-                <div class="layui-input-inline " style="margin-right: 0px;width: 110px">
-                    <input type="checkbox" name="integral_status" title="赠送积分" lay-skin="primary" {if
-                           condition="$config['dailySign']['integral_status'] eq 1" }checked{/if}>
-                </div>
+
                 <div class="layui-input-inline">
                     <input type="number" name="integral" value="{$config.dailySign.integral}" lay-verify="required"
                            lay-verType="tips" placeholder="请输入积分"

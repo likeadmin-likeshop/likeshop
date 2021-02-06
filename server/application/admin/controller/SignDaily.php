@@ -76,7 +76,6 @@ class SignDaily extends AdminBase
             $post = $this->request->post();
             $result =$this->validate($post,'app\admin\validate\SignDaily.add');
             if ($result === true){
-            $post['integral_status'] = isset($post['integral_status']) && $post['integral_status'] =='on'?1:0;
             $post['growth_status'] = isset($post['growth_status']) && $post['growth_status'] =='on'?1:0;
             SignDailyLogic::add($post);
             $this ->success('添加成功');
@@ -98,7 +97,6 @@ class SignDaily extends AdminBase
             $post = $this->request->post();
             $result = $this->validate($post,'app\admin\validate\SignDaily.edit');
             if ($result === true){
-            $post['integral_status'] = isset($post['integral_status']) && $post['integral_status'] == 'on'?1:0;
             $post['growth_status'] = isset($post['growth_status']) && $post['growth_status'] == 'on'?1:0;
             SignDailyLogic::edit($post,$id);
             $this->_success('修改成功');

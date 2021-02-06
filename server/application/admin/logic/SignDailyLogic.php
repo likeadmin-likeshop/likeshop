@@ -101,8 +101,6 @@ class SignDailyLogic
         $data = [
             'type'                =>'2',
             'days'                => $post['days'],
-            'integral'            => $post['integral'],
-            'integral_status'     => $post['integral_status'],
             'growth'              => $post['growth'],
             'growth_status'       => $post['growth_status'],
             'del'                 =>0,
@@ -138,8 +136,6 @@ class SignDailyLogic
         $data = [
             'type'                =>'2',
             'days'                => $post['days'],
-            'integral'            => $post['integral'],
-            'integral_status'     => $post['integral_status'],
             'growth'              => $post['growth'],
             'growth_status'       => $post['growth_status'],
             'del'                 =>0,
@@ -182,9 +178,7 @@ class SignDailyLogic
         $data = [
             'type'             =>1,
             'days'             => 0,
-            'integral'         =>$post['integral'],
             'growth'           =>$post['growth'],
-            'integral_status'  =>$post['integral_status'],
             'growth_status'    =>$post['growth_status'],
             'create_time'      =>time(),
             'del'              =>0,
@@ -194,9 +188,7 @@ class SignDailyLogic
         $info = [
             'type'             =>1,
             'days'             => 0,
-            'integral'         =>$post['integral'],
             'growth'           =>$post['growth'],
-            'integral_status'  =>$post['integral_status'],
             'growth_status'    =>$post['growth_status'],
             'update_time'      =>time(),
             'del'              =>0,

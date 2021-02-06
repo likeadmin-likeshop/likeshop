@@ -15,21 +15,6 @@
         </div>
         <!--签到奖励-->
         <div class="layui-form-item">
-            <label class="layui-form-label">签到奖励：</label>
-            <div class="layui-input-inline " style="margin-right: 0px;width: 110px">
-                <input type="checkbox" name="integral_status" title="赠送积分" lay-skin="primary" {if condition="$info['integral_status'] eq 1" }checked{/if}>
-            </div>
-            <div class="layui-input-inline">
-                <input type="number" name="integral" value="{$info.integral}" lay-verify="required" lay-verType="tips" placeholder="请输入积分"
-                       autocomplete="off" class="layui-input">
-            </div>
-            <div class="layui-input-inline">
-                <label class="layui-form-mid">积分</label>
-            </div>
-
-        </div>
-
-        <div class="layui-form-item">
             <label class="layui-form-label"></label>
             <div class="layui-input-inline" style="margin-right: 0px;width: 110px">
                 <input type="checkbox" name="growth_status"  title="赠送成长值" lay-skin="primary" {if condition="$info['growth_status'] eq 1" }checked{/if}>

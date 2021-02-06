@@ -19,7 +19,7 @@ layui.extend({
   ,view = layui.view
   
   //打开标签页
-  ,openTabsPage = function(url, text){
+  ,openTabsPage = function(url, text, menus_id){
     //遍历页签选项卡
     var matchTo
     ,tabs = $('#LAY_app_tabsheader>li')
@@ -37,6 +37,9 @@ layui.extend({
 
     // 获取一级菜单ID
     var first_id = $(".first-nav .layui-nav .layui-nav-item.activate").attr("data-id");
+        //如果是控制台的快捷方式点进来 那么应该使用 menus_id, 否则就是从菜单点击 使用一级菜单绑定的ID
+        //值得注意的是 menus_id是在页面固定写死的, 如果你改变了菜单id  也要注意修改才行, 不然找不到菜单哦 FZR
+        first_id = menus_id === undefined ? first_id : menus_id;
     
     text = text || '新标签页';
     

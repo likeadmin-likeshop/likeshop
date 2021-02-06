@@ -881,12 +881,13 @@ layui.define('view', function(exports){
       $(this).next().hide();
     }
   });
-  
+
   //页面跳转
   $body.on('click', '*[lay-href]', function(){
     var othis = $(this)
     ,href = othis.attr('lay-href')
     ,text = othis.attr('lay-text')
+    ,menus_id = othis.attr('data-id')
     ,router = layui.router();
     
     admin.tabsPage.elem = othis;
@@ -897,10 +898,9 @@ layui.define('view', function(exports){
     $(".second-nav .layui-nav .layui-nav-item").removeClass('layui-this');
     $(this).parent().addClass('layui-this');
 
-
     //执行跳转
     var topLayui = parent === self ? layui : top.layui;
-    topLayui.index.openTabsPage(href, text || othis.text());
+    topLayui.index.openTabsPage(href, text || othis.text(), menus_id);
     
     //如果为当前页，则执行刷新
     if(href === admin.tabsBody(admin.tabsPage.index).find('iframe').attr('src')){

@@ -24,7 +24,6 @@ class Menu_{
     const index_team_activity       = 2;
     const index_hot_sell            = 3;
     const index_coupon_list         = 4;
-    const index_sign_in             = 5;
     const index_member_centre       = 6;
     const index_my_collect          = 7;
     const index_store_news          = 8;
@@ -85,16 +84,6 @@ class Menu_{
                     'link1' => '/pages/user_getcoupon/user_getcoupon',
                     'link2' => '/pages/user_getcoupon/user_getcoupon',
                     'link3' => '/pages/user_getcoupon/user_getcoupon',
-                ],
-                'is_tab'        => 0,
-                'type'          => 1,
-            ],
-            self::index_sign_in            => [
-                'name'          => '积分签到',
-                'link'          => [
-                    'link1' => '/pages/bundle/user_sign/user_sign',
-                    'link2' => '/pages/bundle/user_sign/user_sign',
-                    'link3' => '/pages/bundle/user_sign/user_sign',
                 ],
                 'is_tab'        => 0,
                 'type'          => 1,

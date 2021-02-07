@@ -70,67 +70,16 @@ class AccountLogLogic{
      * create_time 2020/11/23 9:55
      */
     public static function orderSourceList($type){
-        $list = [];
-        switch ($type){
-            case 1:
-                $list = [
-                    [
-                        'source'     => AccountLog::balance_pay_order,
-                        'name'       => '订单支付',
-                    ],
-                    [
-                        'source'     => AccountLog::admin_add_money.','.AccountLog::recharge_money,
-                        'name'       => '钱包充值',
-                    ],
-                    [
-                        'source'     => AccountLog::withdraw_to_balance,
-                        'name'       => '佣金提现',
-                    ],
-
-                ];
-                break;
-            case 2:
-                $list = [
-                    [
-                        'source'     => AccountLog::register_add_integral,
-                        'name'       => '关注赠送积分',
-                    ],
-                    [
-                        'source'     => AccountLog::invite_add_integral,
-                        'name'       => '邀请赠送积分',
-                    ],
-                    [
-                        'source'     => AccountLog::sign_in_integral,
-                        'name'       => '签到赠送积分',
-                    ],
-                    [
-                        'source'     => AccountLog::recharge_give_integral,
-                        'name'       => '充值赠送积分',
-                    ],
-                    [
-                        'source'     => AccountLog::order_add_integral,
-                        'name'       => '消费赠送积分',
-                    ],
-                    [
-                        'source'     => AccountLog::order_deduction_integral,
-                        'name'       => '订单抵扣积分',
-                    ],
-
-                ];
-                break;
-            case 3:
-                $list = [
-                    [
-                        'source'     => AccountLog::sign_give_growth,
-                        'name'       => '签到赠送成长值',
-                    ],
-                    [
-                        'source'     => AccountLog::recharge_give_growth,
-                        'name'       => '充值赠送成长值',
-                    ],
-                ];
-                break;
-        }
+        $list = [
+            [
+                'source'     => AccountLog::sign_give_growth,
+                'name'       => '签到赠送成长值',
+            ],
+            [
+                'source'     => AccountLog::recharge_give_growth,
+                'name'       => '充值赠送成长值',
+            ],
+        ];
         return $list;
 
     }

@@ -43,7 +43,7 @@ class FinanceLogic
 
         //会员相关
         $user = Db::name('user')
-            ->field('sum(user_money) as money, sum(user_integral) as integral')
+            ->field('sum(user_money) as money')
             ->where(['del' => 0])
             ->find();
 
@@ -52,7 +52,6 @@ class FinanceLogic
             'total_amount' => round($order['amount'], 2),
             'order_num' => $order['num'] ?? 0,
             'total_user_money' => round($user['money'], 2),
-            'total_user_integral' => $user['integral'] ?? 0,
         ];
     }
 }

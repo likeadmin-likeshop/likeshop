@@ -84,10 +84,6 @@
         <div class="layui-input-inline">
             <label class="layui-form-mid">{$detail.user_money}</label>
         </div>
-        <label class="layui-form-label">积分：</label>
-        <div class="layui-input-inline">
-            <label class="layui-form-mid">{$detail.user_integral}</label>
-        </div>
         <label class="layui-form-label">成长值：</label>
         <div class="layui-input-inline">
             <label class="layui-form-mid">{$detail.user_growth}</label>
@@ -130,10 +126,8 @@
             <div class="layui-tab layui-tab-card" lay-filter="tab-all">
                 <ul class="layui-tab-title">
                     <li class="layui-this">下单明细</li>
-                    <li >积分明细</li>
                     <li >签到明细</li>
                     <li >余额明细</li>
-                    <li >推广明细</li>
                     <li >收货地址</li>
                 </ul>
             </div>
@@ -152,8 +146,6 @@
             <script type="text/html" id="account">
                 <div class="layui-input-inline">
                     <label>余额：{{d.user_money}}</label>
-                    <br/>
-                    <label>积分：{{d.user_integral}}</label>
                 </div>
             </script>
             <script type="text/html" id="address">
@@ -222,22 +214,12 @@
                     break;
                 case 1:
                     var cols = [
-                        {field: 'source_type', title: '来源用途',}
-                        ,{field: 'change_amount', title: '变动积分',}
-                        ,{field: 'left_amount', title: '剩余积分',}
+                        {field: 'source_type', title: '动作',}
                         ,{field: 'remark', title: '备注',}
                         ,{field: 'create_time', title: '变动时间',}
                     ];
                     break;
                 case 2:
-                    var cols = [
-                        {field: 'source_type', title: '动作',}
-                        ,{field: 'change_amount', title: '获得积分',}
-                        ,{field: 'remark', title: '备注',}
-                        ,{field: 'create_time', title: '变动时间',}
-                    ];
-                    break;
-                case 3:
                     var cols = [
                         {field: 'source_type', title: '来源用途',}
                         ,{field: 'change_amount', title: '变动金额',}
@@ -246,15 +228,7 @@
                         ,{field: 'create_time', title: '变动时间',}
                     ];
                     break;
-                case 4:
-                    var cols = [
-                        {field: 'referrer', title: '直推会员信息',toolbar: '#referrer'}
-                        ,{field: 'level_name', title: '会员等级',}
-                        ,{field: 'total_order_amount', title: '消费金额',}
-                        ,{field: 'account', title: '账户金额',toolbar: '#account'}
-                    ];
-                    break;
-                case 5:
+                case 3:
                     var cols = [
                         {field: 'contact', title: '联系人',}
                         ,{field: 'telephone', title: '联系手机',}

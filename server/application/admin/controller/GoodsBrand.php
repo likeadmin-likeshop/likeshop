@@ -44,7 +44,7 @@ class GoodsBrand extends AdminBase {
         if ($this->request->isAjax()){
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post,'app\admin\validate\GoodsBrand.add');
+            $result = $this->validate($post,'react_native\admin\validate\GoodsBrand.add');
             if ($result === true){
                 GoodsBrandLogic::add($post);
                 $this->_success('添加成功！');
@@ -66,7 +66,7 @@ class GoodsBrand extends AdminBase {
         if ($this->request->isAjax()){
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post,'app\admin\validate\GoodsBrand.edit');
+            $result = $this->validate($post,'react_native\admin\validate\GoodsBrand.edit');
             if ($result === true){
                 GoodsBrandLogic::edit($post,$id);
                 $this->_success('修改成功');

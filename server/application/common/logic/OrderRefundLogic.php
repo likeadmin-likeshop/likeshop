@@ -33,7 +33,7 @@ use think\facade\Hook;
 /**
  * 订单退款逻辑
  * Class OrderRefundLogic
- * @package app\common\logic
+ * @package react_native\common\logic
  */
 class OrderRefundLogic
 {

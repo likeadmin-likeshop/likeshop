@@ -35,7 +35,7 @@ class Autoload extends Command
 return [
 
 EOF;
-        $app              = Container::get('app');
+        $app              = Container::get('react_native');
         $namespacesToScan = [
             $app->getNamespace() . '\\' => realpath(rtrim($app->getAppPath())),
             'think\\'                   => $app->getThinkPath() . 'library/think',
@@ -93,7 +93,7 @@ EOF;
     protected function getPathCode($path)
     {
         $baseDir    = '';
-        $app        = Container::get('app');
+        $app        = Container::get('react_native');
         $appPath    = $this->normalizePath(realpath($app->getAppPath()));
         $libPath    = $this->normalizePath(realpath($app->getThinkPath() . 'library'));
         $extendPath = $this->normalizePath(realpath($app->getRootPath() . 'extend'));

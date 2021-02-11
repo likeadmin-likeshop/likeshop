@@ -44,8 +44,8 @@
 </template>
 
 <script>
-    import {register, sendSms} from '@/api/app.js'
-    import { ACCESS_TOKEN } from '@/config/app.js'
+    import {register, sendSms} from '@/api/react_native.js'
+    import { ACCESS_TOKEN } from '@/config/react_native.js'
     import {SMSType} from '@/utils/type.js'
     
     export default {

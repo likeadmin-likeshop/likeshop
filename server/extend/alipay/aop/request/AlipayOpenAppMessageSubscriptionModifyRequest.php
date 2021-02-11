@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.message.subscription.modify request
+ * ALIPAY API: alipay.open.react_native.message.subscription.modify request
  *
  * @author auto create
  * @since 1.0, 2019-10-12 14:10:43
@@ -35,7 +35,7 @@ class AlipayOpenAppMessageSubscriptionModifyRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.message.subscription.modify";
+		return "alipay.open.react_native.message.subscription.modify";
 	}
 
 	public function setNotifyUrl($notifyUrl)

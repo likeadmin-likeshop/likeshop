@@ -24,7 +24,7 @@ use app\api\logic\CartLogic;
 /**
  * 购物车
  * Class Cart
- * @package app\api\controller
+ * @package react_native\api\controller
  */
 class Cart extends ApiBase
 {
@@ -38,7 +38,7 @@ class Cart extends ApiBase
     public function add()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'app\api\validate\Cart.add');
+        $check = $this->validate($post, 'react_native\api\validate\Cart.add');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -53,7 +53,7 @@ class Cart extends ApiBase
     public function change()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'app\api\validate\Cart.change');
+        $check = $this->validate($post, 'react_native\api\validate\Cart.change');
         if ($check !== true) {
             $this->_error($check);
         }
@@ -68,7 +68,7 @@ class Cart extends ApiBase
     public function del()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'app\api\validate\Cart.del');
+        $check = $this->validate($post, 'react_native\api\validate\Cart.del');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -82,7 +82,7 @@ class Cart extends ApiBase
     public function selected()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'app\api\validate\Cart.selected');
+        $check = $this->validate($post, 'react_native\api\validate\Cart.selected');
         if (true !== $check) {
             $this->_error($check);
         }

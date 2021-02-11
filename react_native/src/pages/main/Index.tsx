@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import RNExitApp from 'react-native-exit-app';
+import RNExitApp from 'react-native-exit-react_native';
 import SInfo from "react-native-sensitive-info";
 import { EmitterSubscription, Text, View } from 'react-native';
 import { BottomTabParamList } from '../../typing/routeConfig';

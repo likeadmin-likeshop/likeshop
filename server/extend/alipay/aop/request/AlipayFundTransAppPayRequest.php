@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.fund.trans.app.pay request
+ * ALIPAY API: alipay.fund.trans.react_native.pay request
  *
  * @author auto create
  * @since 1.0, 2020-03-05 09:45:08
@@ -35,7 +35,7 @@ class AlipayFundTransAppPayRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.fund.trans.app.pay";
+		return "alipay.fund.trans.react_native.pay";
 	}
 
 	public function setNotifyUrl($notifyUrl)

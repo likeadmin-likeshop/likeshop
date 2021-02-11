@@ -13,7 +13,7 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
-import { weichatLogin, getCodeUrl} from '@/api/app'
+import { weichatLogin, getCodeUrl} from '@/api/react_native'
 import Vue from 'vue'
 import store from "../store";
 import router from "../router";

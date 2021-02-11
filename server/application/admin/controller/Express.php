@@ -50,7 +50,7 @@ class Express extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'app\admin\validate\Express.add');
+            $result = $this->validate($post, 'react_native\admin\validate\Express.add');
             if ($result === true) {
                 $result = ExpressLogic::addExpress($post);
                 if ($result) {
@@ -72,7 +72,7 @@ class Express extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'app\admin\validate\Express.edit');
+            $result = $this->validate($post, 'react_native\admin\validate\Express.edit');
             if ($result === true) {
                 $result = ExpressLogic::editExpress($post);
                 if ($result) {

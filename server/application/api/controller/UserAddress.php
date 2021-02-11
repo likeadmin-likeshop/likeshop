@@ -42,7 +42,7 @@ class UserAddress extends ApiBase
     public function detail()
     {
         $get = $this->request->get();
-        $result = $this->validate($get, 'app\api\validate\UserAddress.one');
+        $result = $this->validate($get, 'react_native\api\validate\UserAddress.one');
         if ($result === true) {
             $user_id = $this->user_id;
             $result = UserAddressLogic::getOneAddress($user_id, $get);
@@ -71,7 +71,7 @@ class UserAddress extends ApiBase
     public function setDefault()
     {
         $post = $this->request->post();
-        $result = $this->validate($post, 'app\api\validate\UserAddress.set');
+        $result = $this->validate($post, 'react_native\api\validate\UserAddress.set');
         if ($result === true) {
             $user_id = $this->user_id;
             $result = UserAddressLogic::setDefaultAddress($user_id, $post);
@@ -89,7 +89,7 @@ class UserAddress extends ApiBase
     public function add()
     {
         $post = $this->request->post();
-        $result = $this->validate($post, 'app\api\validate\UserAddress.add');
+        $result = $this->validate($post, 'react_native\api\validate\UserAddress.add');
         if ($result === true) {
             $user_id = $this->user_id;
             $result = UserAddressLogic::addUserAddress($user_id, $post);
@@ -106,7 +106,7 @@ class UserAddress extends ApiBase
     public function update()
     {
         $post = $this->request->post();
-        $result = $this->validate($post, 'app\api\validate\UserAddress.edit');
+        $result = $this->validate($post, 'react_native\api\validate\UserAddress.edit');
         if ($result === true) {
             $user_id = $this->user_id;
             $result = UserAddressLogic::editUserAddress($user_id, $post);
@@ -123,7 +123,7 @@ class UserAddress extends ApiBase
     public function del()
     {
         $post = $this->request->post();
-        $result = $this->validate($post, 'app\api\validate\UserAddress.del');
+        $result = $this->validate($post, 'react_native\api\validate\UserAddress.del');
         if ($result === true) {
             $user_id = $this->user_id;
             $result = UserAddressLogic::delUserAddress($user_id, $post);
@@ -140,7 +140,7 @@ class UserAddress extends ApiBase
     public function handleRegion()
     {
         $post = $this->request->post();
-        $result = $this->validate($post, 'app\api\validate\UserAddress.handleRegion');
+        $result = $this->validate($post, 'react_native\api\validate\UserAddress.handleRegion');
         if ($result === true) {
             $province = $this->request->post('province');
             $city = $this->request->post('city');

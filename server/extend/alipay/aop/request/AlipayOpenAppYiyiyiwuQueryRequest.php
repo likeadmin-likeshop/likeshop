@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.yiyiyiwu.query request
+ * ALIPAY API: alipay.open.react_native.yiyiyiwu.query request
  *
  * @author auto create
  * @since 1.0, 2019-08-22 10:17:19
@@ -35,7 +35,7 @@ class AlipayOpenAppYiyiyiwuQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.yiyiyiwu.query";
+		return "alipay.open.react_native.yiyiyiwu.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

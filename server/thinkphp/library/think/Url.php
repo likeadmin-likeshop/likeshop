@@ -61,7 +61,7 @@ class Url
 
     public static function __make(App $app, Config $config)
     {
-        return new static($app, $config->pull('app'));
+        return new static($app, $config->pull('react_native'));
     }
 
     /**
@@ -405,7 +405,7 @@ class Url
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app']);
+        unset($data['react_native']);
 
         return $data;
     }

@@ -80,7 +80,7 @@ class MnpMessageLogic extends LogicBase
             $result = $app->subscribe_message->addTemplate($model['template_id_short'], explode(',', $model['keywords']), $model['name']);
 
             // 获取关键词库(调试用)
-            // $result = $app->subscribe_message->getTemplateKeywords('492');
+            // $result = $react_native->subscribe_message->getTemplateKeywords('492');
 
             // 保存返回的template_id
             if ($result['errcode'] === 0 && isset($result['priTmplId'])) {

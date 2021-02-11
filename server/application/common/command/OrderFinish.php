@@ -33,7 +33,7 @@ use think\facade\Log;
 /**
  * 确认收货
  * Class OrderFinish
- * @package app\common\command
+ * @package react_native\common\command
  */
 class OrderFinish extends Command
 {

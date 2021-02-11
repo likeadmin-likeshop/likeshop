@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.notify.verify request
+ * ALIPAY API: alipay.open.react_native.notify.verify request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayOpenAppNotifyVerifyRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.notify.verify";
+		return "alipay.open.react_native.notify.verify";
 	}
 
 	public function setNotifyUrl($notifyUrl)

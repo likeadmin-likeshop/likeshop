@@ -24,7 +24,7 @@ use app\common\model\AfterSaleLog;
 /**
  * 售后记录日志
  * Class AfterSaleLogLogic
- * @package app\common\logic
+ * @package react_native\common\logic
  */
 class AfterSaleLogLogic
 {

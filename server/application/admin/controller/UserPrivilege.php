@@ -40,7 +40,7 @@ class UserPrivilege extends AdminBase{
     public function add(){
         if($this->request->isAjax()){
             $post = $this->request->post();
-            $result = $this->validate($post,'app\admin\validate\UserPrivilege.add');
+            $result = $this->validate($post,'react_native\admin\validate\UserPrivilege.add');
             if($result === true){
                 UserPrivilegeLogic::add($post);
                 $this->_success('添加成功',[]);
@@ -57,7 +57,7 @@ class UserPrivilege extends AdminBase{
     public function edit($id){
         if($this->request->isAjax()){
             $post = $this->request->post();
-            $result = $this->validate($post,'app\admin\validate\UserPrivilege.edit');
+            $result = $this->validate($post,'react_native\admin\validate\UserPrivilege.edit');
             if($result === true){
                 UserPrivilegeLogic::edit($post);
                 $this->_success('添加成功',[]);
@@ -76,7 +76,7 @@ class UserPrivilege extends AdminBase{
      */
     public function del($id){
         if($this->request->isAjax()){
-            $result = $this->validate(['id'=>$id],'app\admin\validate\UserPrivilege.del');
+            $result = $this->validate(['id'=>$id],'react_native\admin\validate\UserPrivilege.del');
             if($result === true){
                 UserPrivilegeLogic::del($id);
                 $this->_success('删除成功','');

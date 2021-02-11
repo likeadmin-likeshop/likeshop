@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.message.subscription.query request
+ * ALIPAY API: alipay.open.react_native.message.subscription.query request
  *
  * @author auto create
  * @since 1.0, 2019-10-12 14:10:51
@@ -35,7 +35,7 @@ class AlipayOpenAppMessageSubscriptionQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.message.subscription.query";
+		return "alipay.open.react_native.message.subscription.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

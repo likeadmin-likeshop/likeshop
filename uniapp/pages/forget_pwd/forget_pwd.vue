@@ -40,8 +40,8 @@
 </template>
 
 <script>
-    import {forgetPwd, sendSms} from '@/api/app.js'
-    import { ACCESS_TOKEN } from '@/config/app.js'
+    import {forgetPwd, sendSms} from '@/api/react_native.js'
+    import { ACCESS_TOKEN } from '@/config/react_native.js'
     import {SMSType} from '@/utils/type.js'
     export default {
         name: 'forgetPwd',

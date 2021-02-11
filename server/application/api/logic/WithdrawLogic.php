@@ -30,7 +30,7 @@ use think\Exception;
 /**
  * 提现
  * Class WithdrawLogic
- * @package app\api\logic
+ * @package react_native\api\logic
  */
 class WithdrawLogic extends LogicBase
 {

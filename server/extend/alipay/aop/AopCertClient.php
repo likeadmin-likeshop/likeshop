@@ -999,14 +999,14 @@ class AopCertClient
                 if (!$checkResult) {
 
                     //请求网关下载新的支付宝公钥证书
-                    if(!$respObject->alipay_cert_sn && ($request->getApiMethodName()=="alipay.open.app.alipaycert.download")){
+                    if(!$respObject->alipay_cert_sn && ($request->getApiMethodName()=="alipay.open.react_native.alipaycert.download")){
                         throw new Exception(" check sign Fail! The reason : alipay_cert_sn is Empty");
                     }
                     //组装系统参数
                     $sysParams["app_id"] = $this->appId;
                     $sysParams["format"] = $this->format;
                     $sysParams["sign_type"] = $this->signType;
-                    $sysParams["method"] = "alipay.open.app.alipaycert.download";
+                    $sysParams["method"] = "alipay.open.react_native.alipaycert.download";
                     $sysParams["timestamp"] = date("Y-m-d H:i:s");
                     $sysParams["alipay_sdk"] = $this->alipaySdkVersion;
                     $sysParams["terminal_type"] = $request->getTerminalType();

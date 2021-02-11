@@ -36,7 +36,7 @@ class WechatReply extends AdminBase{
     public function add(){
         if($this->request->isAjax()){
             $post = $this->request->post();
-            $result = $this->validate($post,'app\admin\validate\WeChatReply.'.$post['reply_type']);
+            $result = $this->validate($post,'react_native\admin\validate\WeChatReply.'.$post['reply_type']);
 
             if ($result === true){
                  WechatReplyLogic::add($post);
@@ -53,7 +53,7 @@ class WechatReply extends AdminBase{
     public function edit($id){
         if($this->request->isAjax()){
             $post = $this->request->post();
-            $result = $this->validate($post,'app\admin\validate\WeChatReply.'.$post['reply_type']);
+            $result = $this->validate($post,'react_native\admin\validate\WeChatReply.'.$post['reply_type']);
 
             if ($result === true){
                 WechatReplyLogic::edit($post);
@@ -69,7 +69,7 @@ class WechatReply extends AdminBase{
 
     }
     public function del($id){
-        $result = $this->validate(['id'=>$id],'app\admin\validate\WeChatReply.del');
+        $result = $this->validate(['id'=>$id],'react_native\admin\validate\WeChatReply.del');
         if ($result === true) {
             WechatReplyLogic::del($id);
             $this->_success('删除成功');

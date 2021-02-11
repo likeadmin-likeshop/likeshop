@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.system.newcontextupiduoid.transfer request
+ * ALIPAY API: alipay.open.react_native.system.newcontextupiduoid.transfer request
  *
  * @author auto create
  * @since 1.0, 2020-07-20 19:42:23
@@ -35,7 +35,7 @@ class AlipayOpenAppSystemNewcontextupiduoidTransferRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.system.newcontextupiduoid.transfer";
+		return "alipay.open.react_native.system.newcontextupiduoid.transfer";
 	}
 
 	public function setNotifyUrl($notifyUrl)

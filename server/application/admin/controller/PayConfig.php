@@ -57,7 +57,7 @@ class PayConfig extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post(); //获取post请求
-            $result = $this->validate($post, 'app\admin\validate\PayConfig.editHand'); //验证信息
+            $result = $this->validate($post, 'react_native\admin\validate\PayConfig.editHand'); //验证信息
             if ($result === true) { //是否验证成功
                 $post['pay_use'] = isset($post['pay_use']) && $post['pay_use'] == 'on' ? 1 : 0;
                 $post['refund_use'] = isset($post['refund_use']) && $post['refund_use'] == 'on' ? 1 : 0;

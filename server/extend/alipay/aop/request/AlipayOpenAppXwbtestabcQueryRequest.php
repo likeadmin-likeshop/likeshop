@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.xwbtestabc.query request
+ * ALIPAY API: alipay.open.react_native.xwbtestabc.query request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayOpenAppXwbtestabcQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.xwbtestabc.query";
+		return "alipay.open.react_native.xwbtestabc.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

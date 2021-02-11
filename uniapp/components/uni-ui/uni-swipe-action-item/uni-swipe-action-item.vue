@@ -1,5 +1,5 @@
 <template>
-	<!-- 在微信小程序 app vue端 h5 使用wxs 实现-->
+	<!-- 在微信小程序 react_native vue端 h5 使用wxs 实现-->
 	<!-- #ifdef APP-VUE || MP-WEIXIN || H5 -->
 	<view class="uni-swipe">
 		<view
@@ -12,7 +12,7 @@
 		    @touchmove="swipe.touchmove"
 		    @touchend="swipe.touchend"
 		>
-			<!-- 在微信小程序 app vue端 h5 使用wxs 实现-->
+			<!-- 在微信小程序 react_native vue端 h5 使用wxs 实现-->
 			<view class="uni-swipe_button-group button-group--left">
 				<slot name="left">
 					<view
@@ -55,7 +55,7 @@
 		</view>
 	</view>
 	<!-- #endif -->
-	<!-- app nvue端 使用 bindingx -->
+	<!-- react_native nvue端 使用 bindingx -->
 	<!-- #ifdef APP-NVUE -->
 	<view
 	    ref="selector-box--hock"

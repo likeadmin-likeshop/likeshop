@@ -24,7 +24,7 @@ use think\Db;
 /**
  * 通知消息
  * Class Notice_
- * @package app\common\model
+ * @package react_native\common\model
  */
 class Notice_
 {

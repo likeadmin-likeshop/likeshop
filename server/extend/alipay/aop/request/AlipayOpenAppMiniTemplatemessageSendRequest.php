@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.mini.templatemessage.send request
+ * ALIPAY API: alipay.open.react_native.mini.templatemessage.send request
  *
  * @author auto create
  * @since 1.0, 2020-08-15 22:07:25
@@ -35,7 +35,7 @@ class AlipayOpenAppMiniTemplatemessageSendRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.mini.templatemessage.send";
+		return "alipay.open.react_native.mini.templatemessage.send";
 	}
 
 	public function setNotifyUrl($notifyUrl)

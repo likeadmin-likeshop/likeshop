@@ -58,7 +58,7 @@ class ArticleCategory extends AdminBase {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'app\admin\validate\ArticleCategory.edit');
+            $result = $this->validate($post, 'react_native\admin\validate\ArticleCategory.edit');
             if($result === true){
                 ArticleCategoryLogic::editArticleCategory($post);
                 $this->_success('编辑成功！');
@@ -77,7 +77,7 @@ class ArticleCategory extends AdminBase {
     public function del($id)
     {
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id' => $id], 'app\admin\validate\ArticleCategory.del');
+            $result = $this->validate(['id' => $id], 'react_native\admin\validate\ArticleCategory.del');
             if ($result === true) {
                 ArticleCategoryLogic::delArticleCategory($id);
                 $this->_success('删除成功');

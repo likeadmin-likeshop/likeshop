@@ -73,7 +73,7 @@ class Goods extends AdminBase
             $post['del'] = 0;
 
             //主表验证
-            $result = $this->validate($post, 'app\admin\validate\Goods.add');
+            $result = $this->validate($post, 'react_native\admin\validate\Goods.add');
             if ($result !== true) {
                 $this->_error($result);
             }

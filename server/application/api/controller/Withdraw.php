@@ -29,7 +29,7 @@ class Withdraw extends ApiBase
     {
         $post = $this->request->post();
         $post['user_id'] = $this->user_id;
-        $check = $this->validate($post, 'app\api\validate\Withdraw.apply');
+        $check = $this->validate($post, 'react_native\api\validate\Withdraw.apply');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -59,7 +59,7 @@ class Withdraw extends ApiBase
     public function info()
     {
         $get = $this->request->get('');
-        $check = $this->validate($get, 'app\api\validate\Withdraw.info');
+        $check = $this->validate($get, 'react_native\api\validate\Withdraw.info');
         if (true !== $check) {
             $this->_error($check);
         }

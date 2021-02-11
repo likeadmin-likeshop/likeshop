@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.appcontent.item.query request
+ * ALIPAY API: alipay.open.react_native.appcontent.item.query request
  *
  * @author auto create
  * @since 1.0, 2020-07-27 09:40:13
@@ -35,7 +35,7 @@ class AlipayOpenAppAppcontentItemQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.appcontent.item.query";
+		return "alipay.open.react_native.appcontent.item.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

@@ -3493,7 +3493,7 @@ class Query
         $column  = $column ?: $this->getPk($options);
 
         if (isset($options['order'])) {
-            if (Container::get('app')->isDebug()) {
+            if (Container::get('react_native')->isDebug()) {
                 throw new DbException('chunk not support call order');
             }
             unset($options['order']);

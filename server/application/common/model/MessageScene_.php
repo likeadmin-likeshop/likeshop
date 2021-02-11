@@ -22,7 +22,7 @@ namespace app\common\model;
 /**
  * 微信/公众号的消息模板场景
  * Class MessageScene_
- * @package app\common\model
+ * @package react_native\common\model
  */
 class MessageScene_
 {

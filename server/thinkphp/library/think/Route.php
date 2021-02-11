@@ -164,7 +164,7 @@ class Route
 
     public static function __make(App $app, Config $config)
     {
-        $config = $config->pull('app');
+        $config = $config->pull('react_native');
         $route  = new static($app, $config);
 
         $route->lazy($config['url_lazy_route'])
@@ -983,7 +983,7 @@ class Route
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app'], $data['request']);
+        unset($data['react_native'], $data['request']);
 
         return $data;
     }

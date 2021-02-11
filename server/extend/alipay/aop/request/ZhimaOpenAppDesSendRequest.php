@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: zhima.open.app.des.send request
+ * ALIPAY API: zhima.open.react_native.des.send request
  *
  * @author auto create
  * @since 1.0, 2019-06-05 22:19:55
@@ -35,7 +35,7 @@ class ZhimaOpenAppDesSendRequest
 
 	public function getApiMethodName()
 	{
-		return "zhima.open.app.des.send";
+		return "zhima.open.react_native.des.send";
 	}
 
 	public function setNotifyUrl($notifyUrl)

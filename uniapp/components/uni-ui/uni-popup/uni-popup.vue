@@ -149,7 +149,7 @@
 						clearTimeout(this.timer)
 						this.timer = setTimeout(() => {
 							this.showTrans = true
-							// fixed by mehaotian 兼容 app 端
+							// fixed by mehaotian 兼容 react_native 端
 							this.$nextTick(() => {
 								resolve();
 							})

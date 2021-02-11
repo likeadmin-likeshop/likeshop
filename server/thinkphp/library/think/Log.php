@@ -382,7 +382,7 @@ class Log implements LoggerInterface
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app']);
+        unset($data['react_native']);
 
         return $data;
     }

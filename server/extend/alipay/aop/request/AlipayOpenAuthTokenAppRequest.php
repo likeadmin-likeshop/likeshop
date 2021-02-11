@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.auth.token.app request
+ * ALIPAY API: alipay.open.auth.token.react_native request
  *
  * @author auto create
  * @since 1.0, 2020-07-03 10:27:40
@@ -35,7 +35,7 @@ class AlipayOpenAuthTokenAppRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.auth.token.app";
+		return "alipay.open.auth.token.react_native";
 	}
 
 	public function setNotifyUrl($notifyUrl)

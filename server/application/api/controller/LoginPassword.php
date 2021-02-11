@@ -45,7 +45,7 @@ class LoginPassword extends ApiBase
     public function check()
     {
         $post = $this->request->post();
-        $result = $this->validate($post, 'app\api\validate\LoginPassword.add');
+        $result = $this->validate($post, 'react_native\api\validate\LoginPassword.add');
         if ($result === true) {
             $check = LoginPasswordLogic::check($post);
             if ($check) {
@@ -76,7 +76,7 @@ class LoginPassword extends ApiBase
     {
         $post = $this->request->post();
         $post['message_key'] = 'YZMDL';
-        $result = $this->validate($post, 'app\api\validate\LoginPassword.code');
+        $result = $this->validate($post, 'react_native\api\validate\LoginPassword.code');
         if ($result === true) {
             $check = LoginPasswordLogic::checkCode($post);
             if ($check) {

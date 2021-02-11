@@ -151,7 +151,7 @@
 <script>
 import { userLogout, getUserInfo, changeUserMobile, setUserInfo } from "@/api/user";
 import {HTTP_URL, ACCESS_TOKEN} from '@/configs';
-import {sendSms, forgetPwd, isWeixinClient} from '@API/app'
+import {sendSms, forgetPwd, isWeixinClient} from '@API/react_native'
 import {SMSType} from '@U/type'
 import axios from "axios";
 import {mapState} from 'vuex'

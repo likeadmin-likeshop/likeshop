@@ -100,7 +100,7 @@ class MenuDecorate extends AdminBase{
         if($this->request->isAjax()){
             $post_data = $this->request->post();
             $post_data['del'] = 0;
-            $result = $this->validate($post_data, 'app\admin\validate\MenuDecorate.add');
+            $result = $this->validate($post_data, 'react_native\admin\validate\MenuDecorate.add');
             if($result === true){
                 MenuDecorateLogic::add($post_data); //逻辑层处理添加数据
                 $this->_success('修改成功');
@@ -121,7 +121,7 @@ class MenuDecorate extends AdminBase{
         if($this->request->isAjax()){
             $post_data = $this->request->post();
             $post_data['del'] = 0;
-            $result = $this->validate($post_data, 'app\admin\validate\MenuDecorate.edit');
+            $result = $this->validate($post_data, 'react_native\admin\validate\MenuDecorate.edit');
             if($result === true){
                 MenuDecorateLogic::edit($post_data); //逻辑层处理添加数据
                 $this->_success('修改成功');
@@ -142,7 +142,7 @@ class MenuDecorate extends AdminBase{
     */
     public function del($id){
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id' => $id], 'app\admin\validate\MenuDecorate.del');
+            $result = $this->validate(['id' => $id], 'react_native\admin\validate\MenuDecorate.del');
             if ($result === true) {
                 MenuDecorateLogic::del($id);
                 $this->_success('删除成功');
@@ -156,7 +156,7 @@ class MenuDecorate extends AdminBase{
     public function batchDel(){
         if ($this->request->isAjax()) {
             $ids = $this->request->post('id');
-            $result = $this->validate(['id' => $ids], 'app\admin\validate\MenuDecorate.del');
+            $result = $this->validate(['id' => $ids], 'react_native\admin\validate\MenuDecorate.del');
             if ($result === true) {
                 MenuDecorateLogic::batchDelMenuDecorate($ids);
                 $this->_success('删除成功');

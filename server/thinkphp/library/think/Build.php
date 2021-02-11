@@ -39,7 +39,7 @@ class Build
      * @param  bool   $suffix 类库后缀
      * @return void
      */
-    public function run(array $build = [], $namespace = 'app', $suffix = false)
+    public function run(array $build = [], $namespace = 'react_native', $suffix = false)
     {
         // 锁定
         $lockfile = $this->basePath . 'build.lock';
@@ -109,7 +109,7 @@ class Build
      * @param  bool   $suffix 类库后缀
      * @return void
      */
-    public function module($module = '', $list = [], $namespace = 'app', $suffix = false)
+    public function module($module = '', $list = [], $namespace = 'react_native', $suffix = false)
     {
         $module = $module ? $module : '';
 
@@ -193,16 +193,16 @@ class Build
         $content   = '<?php ' . PHP_EOL . '//根据 Annotation 自动生成的路由规则';
 
         if (!$layer) {
-            $layer = $this->app->config('app.url_controller_layer');
+            $layer = $this->app->config('react_native.url_controller_layer');
         }
 
-        if ($this->app->config('app.app_multi_module')) {
+        if ($this->app->config('react_native.app_multi_module')) {
             $modules = glob($this->basePath . '*', GLOB_ONLYDIR);
 
             foreach ($modules as $module) {
                 $module = basename($module);
 
-                if (in_array($module, $this->app->config('app.deny_module_list'))) {
+                if (in_array($module, $this->app->config('react_native.deny_module_list'))) {
                     continue;
                 }
 
@@ -346,7 +346,7 @@ class Build
             $comment = $this->parseRouteComment($comment);
             $action  = $reflectMethod->getName();
 
-            if ($suffix = $this->app->config('app.action_suffix')) {
+            if ($suffix = $this->app->config('react_native.action_suffix')) {
                 $action = substr($action, 0, -strlen($suffix));
             }
 
@@ -371,7 +371,7 @@ class Build
         $filename = $this->basePath . ($module ? $module . DIRECTORY_SEPARATOR : '') . 'controller' . DIRECTORY_SEPARATOR . 'Index' . ($suffix ? 'Controller' : '') . '.php';
         if (!is_file($filename)) {
             $content = file_get_contents($this->app->getThinkPath() . 'tpl' . DIRECTORY_SEPARATOR . 'default_index.tpl');
-            $content = str_replace(['{$app}', '{$module}', '{layer}', '{$suffix}'], [$namespace, $module ? $module . '\\' : '', 'controller', $suffix ? 'Controller' : ''], $content);
+            $content = str_replace(['{$react_native}', '{$module}', '{layer}', '{$suffix}'], [$namespace, $module ? $module . '\\' : '', 'controller', $suffix ? 'Controller' : ''], $content);
             $this->checkDirBuild(dirname($filename));
 
             file_put_contents($filename, $content);
@@ -386,7 +386,7 @@ class Build
      */
     protected function buildCommon($module)
     {
-        $filename = $this->app->getConfigPath() . ($module ? $module . DIRECTORY_SEPARATOR : '') . 'app.php';
+        $filename = $this->app->getConfigPath() . ($module ? $module . DIRECTORY_SEPARATOR : '') . 'react_native.php';
         $this->checkDirBuild(dirname($filename));
 
         if (!is_file($filename)) {

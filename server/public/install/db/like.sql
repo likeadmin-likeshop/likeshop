@@ -535,7 +535,7 @@ INSERT INTO `yx_dev_auth` VALUES (103, 1, 0, 102, '会员', '', 'statistics/memb
 INSERT INTO `yx_dev_auth` VALUES (104, 1, 0, 102, '商品', '', 'statistics/goods', 90, 0, 1606449713, 1608719471, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (105, 1, 0, 102, '交易', '', 'statistics/deal', 80, 0, 1606449733, 1608719534, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (108, 1, 0, 18, '系统任务', '', 'crontab/lists', 50, 0, 1606816642, NULL, 0, 0);
-INSERT INTO `yx_dev_auth` VALUES (109, 1, 0, 17, 'APP设置', '', 'basic/app', 50, 0, 1606819436, NULL, 0, 0);
+INSERT INTO `yx_dev_auth` VALUES (109, 1, 0, 17, 'APP设置', '', 'basic/react_native', 50, 0, 1606819436, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (110, 1, 0, 33, '会员权益', '', 'UserPrivilege/lists', 50, 0, 1606891617, NULL, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (111, 1, 0, 50, '模板消息管理', '', 'oaMessage/lists', 50, 0, 1606960631, 1606964829, 0, 0);
 INSERT INTO `yx_dev_auth` VALUES (115, 1, 0, 53, '订阅消息管理', '', 'mnpMessage/lists', 50, 0, 1607066949, NULL, 0, 0);

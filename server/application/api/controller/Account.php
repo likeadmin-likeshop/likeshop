@@ -64,7 +64,7 @@ class Account extends ApiBase
     public function login()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'app\api\validate\Login.password');
+        $check = $this->validate($post, 'react_native\api\validate\Login.password');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -83,7 +83,7 @@ class Account extends ApiBase
      public function smsLogin(){
          $post = $this->request->post();
          $post['message_key'] = 'YZMDL';
-         $check = $this->validate($post, 'app\api\validate\Login.code');
+         $check = $this->validate($post, 'react_native\api\validate\Login.code');
          if (true !== $check) {
              $this->_error($check);
          }

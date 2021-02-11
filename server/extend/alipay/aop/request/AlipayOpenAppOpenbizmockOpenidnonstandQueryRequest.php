@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.openbizmock.openidnonstand.query request
+ * ALIPAY API: alipay.open.react_native.openbizmock.openidnonstand.query request
  *
  * @author auto create
  * @since 1.0, 2020-08-03 20:34:11
@@ -35,7 +35,7 @@ class AlipayOpenAppOpenbizmockOpenidnonstandQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.openbizmock.openidnonstand.query";
+		return "alipay.open.react_native.openbizmock.openidnonstand.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

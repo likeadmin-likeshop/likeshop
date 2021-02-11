@@ -24,4 +24,4 @@ if (!file_exists(__DIR__ . '/../config/install.lock')) {
 define('ROOT_PATH', __DIR__);
 
 // 执行应用并响应
-Container::get('app')->run()->send();
+Container::get('react_native')->run()->send();

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import {getService} from "@/api/app"
+import {getService} from "@/api/react_native"
 export default {
     name: 'contactOffical',
     data() {

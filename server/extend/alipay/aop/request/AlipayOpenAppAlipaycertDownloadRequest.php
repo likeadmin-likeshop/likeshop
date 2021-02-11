@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.alipaycert.download request
+ * ALIPAY API: alipay.open.react_native.alipaycert.download request
  *
  * @author auto create
  * @since 1.0, 2019-08-20 18:15:01
@@ -35,7 +35,7 @@ class AlipayOpenAppAlipaycertDownloadRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.alipaycert.download";
+		return "alipay.open.react_native.alipaycert.download";
 	}
 
 	public function setNotifyUrl($notifyUrl)

@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.members.delete request
+ * ALIPAY API: alipay.open.react_native.members.delete request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayOpenAppMembersDeleteRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.members.delete";
+		return "alipay.open.react_native.members.delete";
 	}
 
 	public function setNotifyUrl($notifyUrl)

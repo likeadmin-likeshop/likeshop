@@ -112,7 +112,7 @@
 	import {
 		prepay,
 		getMnpNotice
-	} from '@/api/app';
+	} from '@/api/react_native';
 	import {
 		payWay
 	} from '@/utils/type'

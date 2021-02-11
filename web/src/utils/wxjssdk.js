@@ -17,7 +17,7 @@
 
 import wx from "weixin-js-sdk"
 import { urlencode, getUrlparams } from '@/utils/relUrl'
-import { jsconfig, getCodeUrl } from '@/api/app'
+import { jsconfig, getCodeUrl } from '@/api/react_native'
 import { getGoodsDetail } from "@API/store"
 import { Toast } from "vant";
 //  获取wxjssdk配置参数

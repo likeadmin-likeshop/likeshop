@@ -88,7 +88,7 @@ class Response
         $this->contentType($this->contentType, $this->charset);
 
         $this->code   = $code;
-        $this->app    = Container::get('app');
+        $this->app    = Container::get('react_native');
         $this->header = array_merge($this->header, $header);
     }
 
@@ -128,7 +128,7 @@ class Response
         $data = $this->getContent();
 
         // Trace调试注入
-        if ('cli' != PHP_SAPI && $this->app['env']->get('app_trace', $this->app->config('app.app_trace'))) {
+        if ('cli' != PHP_SAPI && $this->app['env']->get('app_trace', $this->app->config('react_native.app_trace'))) {
             $this->app['debug']->inject($this, $data);
         }
 
@@ -422,7 +422,7 @@ class Response
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app']);
+        unset($data['react_native']);
 
         return $data;
     }

@@ -60,7 +60,7 @@ class Controller
      */
     public function __construct(App $app = null)
     {
-        $this->app     = $app ?: Container::get('app');
+        $this->app     = $app ?: Container::get('react_native');
         $this->request = $this->app['request'];
         $this->view    = $this->app['view'];
 
@@ -280,7 +280,7 @@ class Controller
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app'], $data['request']);
+        unset($data['react_native'], $data['request']);
 
         return $data;
     }

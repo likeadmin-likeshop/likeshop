@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.appcontent.item.create request
+ * ALIPAY API: alipay.open.react_native.appcontent.item.create request
  *
  * @author auto create
  * @since 1.0, 2020-07-27 09:40:13
@@ -35,7 +35,7 @@ class AlipayOpenAppAppcontentItemCreateRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.appcontent.item.create";
+		return "alipay.open.react_native.appcontent.item.create";
 	}
 
 	public function setNotifyUrl($notifyUrl)

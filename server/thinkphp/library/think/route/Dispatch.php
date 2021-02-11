@@ -65,7 +65,7 @@ abstract class Dispatch
     {
         $this->request  = $request;
         $this->rule     = $rule;
-        $this->app      = Container::get('app');
+        $this->app      = Container::get('react_native');
         $this->dispatch = $dispatch;
         $this->param    = $param;
         $this->code     = $code;
@@ -352,14 +352,14 @@ abstract class Dispatch
 
     public function __wakeup()
     {
-        $this->app     = Container::get('app');
+        $this->app     = Container::get('react_native');
         $this->request = $this->app['request'];
     }
 
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app'], $data['request'], $data['rule']);
+        unset($data['react_native'], $data['request'], $data['rule']);
 
         return $data;
     }

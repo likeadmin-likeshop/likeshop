@@ -51,7 +51,7 @@ class AdPosition extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'app\admin\validate\AdPosition.add');
+            $result = $this->validate($post, 'react_native\admin\validate\AdPosition.add');
             if ($result === true) {
                 $result = AdPositionLogic::addAdPosition($post);
                 if ($result) {
@@ -77,7 +77,7 @@ class AdPosition extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'app\admin\validate\AdPosition.edit');
+            $result = $this->validate($post, 'react_native\admin\validate\AdPosition.edit');
             if ($result === true) {
                 $result = AdPositionLogic::editAdPosition($post);
                 if ($result) {
@@ -105,7 +105,7 @@ class AdPosition extends AdminBase
             $delData = $this->request->post('delData');
             $attr = $this->request->post('attr');
             $client = $this->request->post('client');
-            $result = $this->validate($post, 'app\admin\validate\AdPosition.del');
+            $result = $this->validate($post, 'react_native\admin\validate\AdPosition.del');
 
             if ($result === true) {
 //            dd($result);

@@ -50,7 +50,7 @@ class App extends Container
      * 应用类库命名空间
      * @var string
      */
-    protected $namespace = 'app';
+    protected $namespace = 'react_native';
 
     /**
      * 应用类库后缀
@@ -177,7 +177,7 @@ class App extends Container
 
         static::setInstance($this);
 
-        $this->instance('app', $this);
+        $this->instance('react_native', $this);
 
         // 加载环境变量配置文件
         if (is_file($this->rootPath . '.env')) {
@@ -211,10 +211,10 @@ class App extends Container
         $this->init();
 
         // 开启类名后缀
-        $this->suffix = $this->config('app.class_suffix');
+        $this->suffix = $this->config('react_native.class_suffix');
 
         // 应用调试模式
-        $this->appDebug = $this->env->get('app_debug', $this->config('app.app_debug'));
+        $this->appDebug = $this->env->get('app_debug', $this->config('react_native.app_debug'));
         $this->env->set('app_debug', $this->appDebug);
 
         if (!$this->appDebug) {
@@ -231,13 +231,13 @@ class App extends Container
         }
 
         // 注册异常处理类
-        if ($this->config('app.exception_handle')) {
-            Error::setExceptionHandler($this->config('app.exception_handle'));
+        if ($this->config('react_native.exception_handle')) {
+            Error::setExceptionHandler($this->config('react_native.exception_handle'));
         }
 
         // 注册根命名空间
-        if (!empty($this->config('app.root_namespace'))) {
-            Loader::addNamespace($this->config('app.root_namespace'));
+        if (!empty($this->config('react_native.root_namespace'))) {
+            Loader::addNamespace($this->config('react_native.root_namespace'));
         }
 
         // 加载composer autofile文件
@@ -250,7 +250,7 @@ class App extends Container
         Db::init($this->config->pull('database'));
 
         // 设置系统时区
-        date_default_timezone_set($this->config('app.default_timezone'));
+        date_default_timezone_set($this->config('react_native.default_timezone'));
 
         // 读取语言包
         $this->loadLangPack();
@@ -340,14 +340,14 @@ class App extends Container
         $config = $this->config->get();
 
         // 注册异常处理类
-        if ($config['app']['exception_handle']) {
-            Error::setExceptionHandler($config['app']['exception_handle']);
+        if ($config['react_native']['exception_handle']) {
+            Error::setExceptionHandler($config['react_native']['exception_handle']);
         }
 
         Db::init($config['database']);
         $this->middleware->setConfig($config['middleware']);
-        $this->route->setConfig($config['app']);
-        $this->request->init($config['app']);
+        $this->route->setConfig($config['react_native']);
+        $this->request->init($config['react_native']);
         $this->cookie->init($config['cookie']);
         $this->view->init($config['template']);
         $this->log->init($config['log']);
@@ -360,9 +360,9 @@ class App extends Container
 
         // 模块请求缓存检查
         $this->checkRequestCache(
-            $config['app']['request_cache'],
-            $config['app']['request_cache_expire'],
-            $config['app']['request_cache_except']
+            $config['react_native']['request_cache'],
+            $config['react_native']['request_cache_expire'],
+            $config['react_native']['request_cache_except']
         );
     }
 
@@ -384,7 +384,7 @@ class App extends Container
             if ($this->bindModule) {
                 // 模块/控制器绑定
                 $this->route->bind($this->bindModule);
-            } elseif ($this->config('app.auto_bind_module')) {
+            } elseif ($this->config('react_native.auto_bind_module')) {
                 // 入口自动绑定
                 $name = pathinfo($this->request->baseFile(), PATHINFO_FILENAME);
                 if ($name && 'index' != $name && is_dir($this->appPath . $name)) {
@@ -455,9 +455,9 @@ class App extends Container
     protected function loadLangPack()
     {
         // 读取默认语言
-        $this->lang->range($this->config('app.default_lang'));
+        $this->lang->range($this->config('react_native.default_lang'));
 
-        if ($this->config('app.lang_switch_on')) {
+        if ($this->config('react_native.lang_switch_on')) {
             // 开启多语言机制 检测当前语言
             $this->lang->detect();
         }

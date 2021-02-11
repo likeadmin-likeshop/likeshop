@@ -138,7 +138,7 @@
 					var UIApplication = plus.ios.import("UIApplication");
 					var application2 = UIApplication.sharedApplication();
 					var NSURL2 = plus.ios.import("NSURL");
-					var setting2 = NSURL2.URLWithString("app-settings:");
+					var setting2 = NSURL2.URLWithString("react_native-settings:");
 					application2.openURL(setting2);
 					plus.ios.deleteObject(setting2);
 					plus.ios.deleteObject(NSURL2);

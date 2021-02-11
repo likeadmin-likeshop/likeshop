@@ -21,9 +21,9 @@ return [
     // 应用地址
     'app_host' => '',
     // 应用调试模式
-    'app_debug' => Env::get('app.app_debug', true),
+    'app_debug' => Env::get('react_native.app_debug', true),
     // 应用Trace
-    'app_trace' => Env::get('app.app_trace', true),
+    'app_trace' => Env::get('react_native.app_trace', true),
     // 是否支持多模块
     'app_multi_module' => true,
     // 入口自动绑定模块

@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.app.codetesttest request
+ * ALIPAY API: alipay.open.react_native.codetesttest request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayOpenAppCodetesttestRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.app.codetesttest";
+		return "alipay.open.react_native.codetesttest";
 	}
 
 	public function setNotifyUrl($notifyUrl)

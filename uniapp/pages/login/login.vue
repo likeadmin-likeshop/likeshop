@@ -58,7 +58,7 @@
 		codeLogin,
 		sendSms,
 		wxpLogin
-	} from '@/api/app';
+	} from '@/api/react_native';
 	import {
 		BACK_URL
 	} from '@/config/cachekey'

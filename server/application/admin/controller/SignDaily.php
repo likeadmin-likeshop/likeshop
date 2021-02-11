@@ -24,7 +24,7 @@ use app\admin\logic\SignDailyLogic;
 /**
  * 天天签到
  * Class SignDaily
- * @package app\admin\controller
+ * @package react_native\admin\controller
  */
 class SignDaily extends AdminBase
 {
@@ -74,7 +74,7 @@ class SignDaily extends AdminBase
     {
         if ($this->request->isAjax()){
             $post = $this->request->post();
-            $result =$this->validate($post,'app\admin\validate\SignDaily.add');
+            $result =$this->validate($post,'react_native\admin\validate\SignDaily.add');
             if ($result === true){
             $post['growth_status'] = isset($post['growth_status']) && $post['growth_status'] =='on'?1:0;
             SignDailyLogic::add($post);
@@ -95,7 +95,7 @@ class SignDaily extends AdminBase
     {
         if ($this->request->isAjax()){
             $post = $this->request->post();
-            $result = $this->validate($post,'app\admin\validate\SignDaily.edit');
+            $result = $this->validate($post,'react_native\admin\validate\SignDaily.edit');
             if ($result === true){
             $post['growth_status'] = isset($post['growth_status']) && $post['growth_status'] == 'on'?1:0;
             SignDailyLogic::edit($post,$id);
@@ -134,7 +134,7 @@ class SignDaily extends AdminBase
     {
         if ($this->request->isAjax()){
             $post = $this->request->post();
-            $result = $this->validate($post,'app\admin\validate\SignDaily.sign');
+            $result = $this->validate($post,'react_native\admin\validate\SignDaily.sign');
             if ($result === true){
             $post['integral_status'] = isset($post['integral_status']) && $post['integral_status'] =='on'?1:0;
             $post['growth_status'] = isset($post['growth_status']) && $post['growth_status'] =='on'?1:0;

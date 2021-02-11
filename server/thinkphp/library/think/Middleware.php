@@ -20,7 +20,7 @@ class Middleware
     protected $queue = [];
     protected $app;
     protected $config = [
-        'default_namespace' => 'app\\http\\middleware\\',
+        'default_namespace' => 'react_native\\http\\middleware\\',
     ];
 
     public function __construct(App $app, array $config = [])
@@ -198,7 +198,7 @@ class Middleware
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['app']);
+        unset($data['react_native']);
 
         return $data;
     }

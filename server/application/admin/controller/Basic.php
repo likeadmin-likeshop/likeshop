@@ -175,10 +175,10 @@ class Basic extends AdminBase
     public function app()
     {
         $config = [
-            'line_ios' => ConfigServer::get('app', 'line_ios', ''),
-            'line_android' => ConfigServer::get('app', 'line_android', ''),
-            'agreement' => ConfigServer::get('app', 'agreement', '', 0),
-            'wechat_login'  => ConfigServer::get('app', 'wechat_login', '', 0),
+            'line_ios' => ConfigServer::get('react_native', 'line_ios', ''),
+            'line_android' => ConfigServer::get('react_native', 'line_android', ''),
+            'agreement' => ConfigServer::get('react_native', 'agreement', '', 0),
+            'wechat_login'  => ConfigServer::get('react_native', 'wechat_login', '', 0),
         ];
         $this->assign('config',$config);
         return $this->fetch();
@@ -189,10 +189,10 @@ class Basic extends AdminBase
         $post = $this->request->post();
         $post['agreement'] = isset($post['agreement']) && $post['agreement'] == 'on' ? 1 : 0;
         $post['wechat_login'] = isset($post['wechat_login']) && $post['wechat_login'] == 'on' ? 1 : 0;
-        ConfigServer::set('app', 'line_ios',$post['line_ios']);
-        ConfigServer::set('app', 'line_android',$post['line_android']);
-        ConfigServer::set('app', 'agreement',$post['agreement']);
-        ConfigServer::set('app', 'wechat_login',$post['wechat_login']);
+        ConfigServer::set('react_native', 'line_ios',$post['line_ios']);
+        ConfigServer::set('react_native', 'line_android',$post['line_android']);
+        ConfigServer::set('react_native', 'agreement',$post['agreement']);
+        ConfigServer::set('react_native', 'wechat_login',$post['wechat_login']);
         $this->_success('修改成功');
     }
 }

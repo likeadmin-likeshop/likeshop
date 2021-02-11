@@ -1,4 +1,0 @@
-<view class="progress" style="height: {{progressHeight}}; width: {{progressWidth}};background-color: {{progressColor}}">
-	<view class="progress-bar" style="background-color: {{progressBarColor}};left: {{barLeft}}rpx; width:{{barWidth}}rpx">
-  </view>
-</view>

@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "van-dialog": "/components/weapp/dialog/index"
-  },
-  "navigationBarTitleText": "收货地址"
-}

@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "van-image": "/components/weapp/image/index"
-  },
-  "component": true
-}

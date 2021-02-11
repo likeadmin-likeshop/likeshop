@@ -1,8 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "van-popup": "/components/weapp/popup/index",
-    "van-stepper": "/components/weapp/stepper/index",
-    "price-slice": "/components/price-slice/price-slice"
-  }
-}

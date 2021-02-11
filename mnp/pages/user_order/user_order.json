@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "van-tab": "/components/weapp/tab/index",
-    "van-tabs": "/components/weapp/tabs/index",
-    "order-list": "/components/order-list/order-list"
-  },
-  "navigationBarTitleText": "我的订单"
-}

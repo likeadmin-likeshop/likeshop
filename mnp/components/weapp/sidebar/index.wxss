@@ -1,6 +1,0 @@
-@import '../common/index.wxss';
-
-.van-sidebar {
-  width: 170rpx;
-  width: var(--sidebar-width,170rpx);
-}

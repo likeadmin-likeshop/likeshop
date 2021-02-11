@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "my-coupons": "/components/my-coupons/my-coupons",
-    "van-tab": "/components/weapp/tab/index",
-    "van-tabs": "/components/weapp/tabs/index"
-  },
-  "navigationBarTitleText": "我的优惠券"
-}

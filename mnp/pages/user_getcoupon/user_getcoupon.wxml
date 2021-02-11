@@ -1,8 +1,0 @@
-<!-- pages/user_getcoupon/user_getcoupon.wxml -->
-<view class="user-getcoupon">
-    <coupon-list wx:if="{{!showNull}}" list="{{couponList}}" btn-type="{{3}}" bind:reflash="$getCouponList"></coupon-list>
-    <view wx:else class="~column-center" style="padding-top: 200rpx">
-        <image class="~img-null" src="/images/coupon_null.png" />
-        <text class="~muted">暂无优惠券可领～</text>
-    </view>
-</view>

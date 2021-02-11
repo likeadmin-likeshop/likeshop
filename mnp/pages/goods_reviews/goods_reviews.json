@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "order-goods": "/components/order-goods/order-goods",
-    "van-rate": "/components/weapp/rate/index",
-    "van-uploader": "/components/weapp/uploader/index"
-  },
-  "navigationBarTitleText": "商品评价"
-}

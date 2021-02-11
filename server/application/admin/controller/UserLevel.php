@@ -42,7 +42,7 @@ class UserLevel extends AdminBase{
         if($this->request->isAjax()){
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post,'react_native\admin\validate\UserLevel.add');
+            $result = $this->validate($post,'app\admin\validate\UserLevel.add');
             if($result === true){
                 $result =  UserLevelLogic::add($post);
                 if($result){
@@ -88,7 +88,7 @@ class UserLevel extends AdminBase{
      */
     public function del($id){
         if($this->request->isAjax()){
-            $result = $this->validate(['id'=>$id],'react_native\admin\validate\UserLevel.del');
+            $result = $this->validate(['id'=>$id],'app\admin\validate\UserLevel.del');
             if($result === true){
                 UserLevelLogic::del($id);
                 $this->_success('删除成功','');

@@ -25,7 +25,7 @@ use think\Db;
 /**
  * 运费逻辑
  * Class FreightLogic
- * @package react_native\api\logic
+ * @package app\api\logic
  */
 class FreightLogic
 {

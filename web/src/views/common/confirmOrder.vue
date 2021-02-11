@@ -170,7 +170,7 @@
 <script>
 import wx from "weixin-js-sdk";
 import { orderBuy, getOrderCoupon } from "@/api/store";
-import { prepay } from "@/api/react_native";
+import { prepay } from "@/api/app";
 import OrderGoods from "@C/OrderGoods";
 import CouponPopup from "@C/CouponPopup";
 import { payWayType } from "@/utils/type";

@@ -155,7 +155,7 @@ trait Jump
     protected function getResponseType()
     {
         if (!$this->app) {
-            $this->app = Container::get('react_native');
+            $this->app = Container::get('app');
         }
 
         $isAjax = $this->app['request']->isAjax();

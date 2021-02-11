@@ -25,7 +25,7 @@ class Config implements \ArrayAccess
      * 配置前缀
      * @var string
      */
-    protected $prefix = 'react_native';
+    protected $prefix = 'app';
 
     /**
      * 配置文件目录

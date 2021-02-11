@@ -218,9 +218,9 @@
 				this.top.$emit('linkpress', attrs);
 				if (jump) {
 					// #ifdef MP
-					if (attrs['react_native-id']) {
+					if (attrs['app-id']) {
 						return uni.navigateToMiniProgram({
-							appId: attrs['react_native-id'],
+							appId: attrs['app-id'],
 							path: attrs.path
 						})
 					}

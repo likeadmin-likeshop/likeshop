@@ -48,7 +48,7 @@ class UserGroup extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\UserGroup.add');
+            $result = $this->validate($post, 'app\admin\validate\UserGroup.add');
             if ($result === true) {
                 UserGroupLogic::addUserGroup($post);
                 $this->_success('添加成功');
@@ -70,7 +70,7 @@ class UserGroup extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\UserGroup.edit');
+            $result = $this->validate($post, 'app\admin\validate\UserGroup.edit');
             if ($result === true) {
                 UserGroupLogic::editUserGroup($post);
                 $this->_success('修改成功');
@@ -89,7 +89,7 @@ class UserGroup extends AdminBase
     public function del($id)
     {
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id'=>$id], 'react_native\admin\validate\UserGroup.del');
+            $result = $this->validate(['id'=>$id], 'app\admin\validate\UserGroup.del');
             if($result === true) {
                 UserGroupLogic::delUserGroup($id);
                 $this->_success('删除成功');

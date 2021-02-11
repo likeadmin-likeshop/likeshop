@@ -193,7 +193,7 @@
 
 <script>
 import OrderGoods from "@C/OrderGoods";
-import { prepay } from "@/api/react_native";
+import { prepay } from "@/api/app";
 import {
     getOrderDetail,
     cancelOrder,

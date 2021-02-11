@@ -978,7 +978,7 @@ class Template
                                 $params = '';
                             }
 
-                            $parseStr = 'react_native(\'request\')->' . $method . '(' . $params . ')';
+                            $parseStr = 'app(\'request\')->' . $method . '(' . $params . ')';
                         } else {
                             switch ($this->config['tpl_var_identify']) {
                                 case 'array': // 识别为数组
@@ -1113,34 +1113,34 @@ class Template
         if ($vars) {
             switch ($type) {
                 case 'SERVER':
-                    $parseStr = 'react_native(\'request\')->server(\'' . $param . '\')';
+                    $parseStr = 'app(\'request\')->server(\'' . $param . '\')';
                     break;
                 case 'GET':
-                    $parseStr = 'react_native(\'request\')->get(\'' . $param . '\')';
+                    $parseStr = 'app(\'request\')->get(\'' . $param . '\')';
                     break;
                 case 'POST':
-                    $parseStr = 'react_native(\'request\')->post(\'' . $param . '\')';
+                    $parseStr = 'app(\'request\')->post(\'' . $param . '\')';
                     break;
                 case 'COOKIE':
-                    $parseStr = 'react_native(\'cookie\')->get(\'' . $param . '\')';
+                    $parseStr = 'app(\'cookie\')->get(\'' . $param . '\')';
                     break;
                 case 'SESSION':
-                    $parseStr = 'react_native(\'session\')->get(\'' . $param . '\')';
+                    $parseStr = 'app(\'session\')->get(\'' . $param . '\')';
                     break;
                 case 'ENV':
-                    $parseStr = 'react_native(\'request\')->env(\'' . $param . '\')';
+                    $parseStr = 'app(\'request\')->env(\'' . $param . '\')';
                     break;
                 case 'REQUEST':
-                    $parseStr = 'react_native(\'request\')->request(\'' . $param . '\')';
+                    $parseStr = 'app(\'request\')->request(\'' . $param . '\')';
                     break;
                 case 'CONST':
                     $parseStr = strtoupper($param);
                     break;
                 case 'LANG':
-                    $parseStr = 'react_native(\'lang\')->get(\'' . $param . '\')';
+                    $parseStr = 'app(\'lang\')->get(\'' . $param . '\')';
                     break;
                 case 'CONFIG':
-                    $parseStr = 'react_native(\'config\')->get(\'' . $param . '\')';
+                    $parseStr = 'app(\'config\')->get(\'' . $param . '\')';
                     break;
                 default:
                     $parseStr = '\'\'';
@@ -1152,7 +1152,7 @@ class Template
                     $parseStr = "date('Y-m-d g:i a',time())";
                     break;
                 case 'VERSION':
-                    $parseStr = 'react_native()->version()';
+                    $parseStr = 'app()->version()';
                     break;
                 case 'LDELIM':
                     $parseStr = '\'' . ltrim($this->config['tpl_begin'], '\\') . '\'';
@@ -1311,7 +1311,7 @@ class Template
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['react_native'], $data['storage']);
+        unset($data['app'], $data['storage']);
 
         return $data;
     }

@@ -27,7 +27,7 @@ use think\Db;
 /**
  * 订单商品逻辑
  * Class OrderGoodsLogic
- * @package react_native\common\logic
+ * @package app\common\logic
  */
 class OrderGoodsLogic
 {

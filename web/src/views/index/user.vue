@@ -253,7 +253,7 @@
 <script>
 import Recommend from "@C/Recommend";
 import { getUser } from "@/api/user";
-import { getMenu } from "@API/react_native";
+import { getMenu } from "@API/app";
 import { getUrlparams } from "@U/relUrl";
 export default {
     name: "user",

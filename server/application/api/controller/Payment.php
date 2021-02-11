@@ -32,7 +32,7 @@ use think\Db;
 /**
  * 支付逻辑
  * Class Payment
- * @package react_native\api\controller
+ * @package app\api\controller
  */
 class Payment extends ApiBase
 {

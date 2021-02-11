@@ -46,9 +46,9 @@ class Index extends ApiBase
             $this->_error($check);
         }
         if(isset($get['client']) && $get['client'] == Client_::ios){
-            $this->_success('', ['line' => ConfigServer::get('react_native', 'line_ios', '')]);
+            $this->_success('', ['line' => ConfigServer::get('app', 'line_ios', '')]);
         }else{
-            $this->_success('', ['line' => ConfigServer::get('react_native', 'line_android', '')]);
+            $this->_success('', ['line' => ConfigServer::get('app', 'line_android', '')]);
         }
     }
     /**
@@ -58,9 +58,9 @@ class Index extends ApiBase
     public function appInit()
     {
         $data = [
-            'wechat_login' =>  ConfigServer::get('react_native', 'wechat_login', '',0),//微信登录
+            'wechat_login' =>  ConfigServer::get('app', 'wechat_login', '',0),//微信登录
             //弹出协议
-            'agreement' => ConfigServer::get('react_native', 'agreement', '',1)
+            'agreement' => ConfigServer::get('app', 'agreement', '',1)
         ];
         $this->_success('', $data);
     }
@@ -92,7 +92,7 @@ class Index extends ApiBase
                 break;
             case Client_::android:
             case Client_::ios:
-                $config = ConfigServer::get('share', 'react_native', [
+                $config = ConfigServer::get('share', 'app', [
                     'app_share_title' => 'LikeShop——100%开源免费商用电商系统',
                     'app_share_intro' => 'likeshop已经把小程序、安卓APP、苹果APP都免费开源出来了！',
                     'app_share_image' => ''

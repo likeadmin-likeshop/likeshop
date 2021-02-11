@@ -50,7 +50,7 @@ class Crontab extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['status'] = isset($post['status']) && $post['status'] == 'on' ? 1 : 2;
-            $result = $this->validate($post, 'react_native\admin\validate\Crontab.add');
+            $result = $this->validate($post, 'app\admin\validate\Crontab.add');
             if ($result === true) {
                 CrontabLogic::add($post);
                 $this->_success('添加成功');

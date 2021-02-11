@@ -84,7 +84,7 @@
 	} from '@/api/order';
 	import {
 		prepay
-	} from '@/api/react_native';
+	} from '@/api/app';
 	import {
 		loadingType
 	} from '@/utils/type';

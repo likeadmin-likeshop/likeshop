@@ -24,7 +24,7 @@ use app\common\logic\NoticeLogic;
 /**
  * 通知信息
  * Class Notice
- * @package react_native\common\behavior
+ * @package app\common\behavior
  */
 class Notice
 {

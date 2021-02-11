@@ -56,7 +56,7 @@ class Admin extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['disable'] = isset($post['disable']) && $post['disable'] == 'on' ? 0 : 1;
-            $result = $this->validate($post, 'react_native\admin\validate\Admin.add');
+            $result = $this->validate($post, 'app\admin\validate\Admin.add');
             if ($result === true) {
                 AdminLogic::addAdmin($post);
                 $this->_success('修改成功');
@@ -81,7 +81,7 @@ class Admin extends AdminBase
             $post = $this->request->post();
             $post['disable'] = isset($post['disable']) && $post['disable'] == 'on' ? 0 : 1;
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\Admin.edit');
+            $result = $this->validate($post, 'app\admin\validate\Admin.edit');
             if ($result === true) {
                 AdminLogic::editAdmin($post);
                 $this->_success('修改成功');

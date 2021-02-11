@@ -132,8 +132,8 @@
 
 <script>
 import { userLogout, getUserInfo, changeUserMobile, setUserInfo } from "@/api/user.js";
-import {HTTP_URL, ACCESS_TOKEN} from '@/config/react_native.js';
-import {sendSms, forgetPwd, isWeixinClient} from '@/api/react_native.js'
+import {HTTP_URL, ACCESS_TOKEN} from '@/config/app.js';
+import {sendSms, forgetPwd, isWeixinClient} from '@/api/app.js'
 import {SMSType} from '@/utils/type.js'
 import {mapState} from 'vuex'
 import {uploadFile} from '@/utils/tools.js'

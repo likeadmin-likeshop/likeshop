@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.lingjiuyiwu.batchquery request
+ * ALIPAY API: alipay.open.app.lingjiuyiwu.batchquery request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -20,7 +20,7 @@ class AlipayOpenAppLingjiuyiwuBatchqueryRequest
 	
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.lingjiuyiwu.batchquery";
+		return "alipay.open.app.lingjiuyiwu.batchquery";
 	}
 
 	public function setNotifyUrl($notifyUrl)

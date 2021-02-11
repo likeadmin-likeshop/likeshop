@@ -25,7 +25,7 @@ use app\common\cache\CacheBase;
 /**
  * 登录控制
  * Class LoginCtrlCache
- * @package react_native\admin\cache
+ * @package app\admin\cache
  */
 class LoginStateCache extends CacheBase
 {

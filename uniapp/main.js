@@ -3,7 +3,7 @@ import App from './App'
 import store from './store'
 import {toast} from './utils/tools'
 import Cache from './utils/cache'
-import minxinsApp from '@/mixins/react_native'
+import minxinsApp from '@/mixins/app'
 import uView from "@/components/uview-ui";
 Vue.prototype.$toast = toast
 Vue.prototype.$Cache = Cache

@@ -34,9 +34,9 @@ class Index extends Controller
     {
 
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
-            $url = ConfigServer::get('react_native', 'line_ios', '');
+            $url = ConfigServer::get('app', 'line_ios', '');
         } else{
-            $url = ConfigServer::get('react_native', 'line_android', '');
+            $url = ConfigServer::get('app', 'line_android', '');
         }
 
         if (empty($url)) {

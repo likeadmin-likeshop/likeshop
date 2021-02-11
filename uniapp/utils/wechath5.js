@@ -7,7 +7,7 @@ import {
 	getJsconfig,
 	getCodeUrl,
 	wechatLogin
-} from '@/api/react_native'
+} from '@/api/app'
 import store from '../store'
 
 class WechatH5 {

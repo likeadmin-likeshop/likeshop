@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.fund.auth.order.react_native.freeze request
+ * ALIPAY API: alipay.fund.auth.order.app.freeze request
  *
  * @author auto create
  * @since 1.0, 2020-05-15 15:18:37
@@ -35,7 +35,7 @@ class AlipayFundAuthOrderAppFreezeRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.fund.auth.order.react_native.freeze";
+		return "alipay.fund.auth.order.app.freeze";
 	}
 
 	public function setNotifyUrl($notifyUrl)

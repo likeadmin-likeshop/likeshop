@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {pwdLogin, smsCodeLogin, sendSms, weichatLogin, getCodeUrl, isWeixinClient} from '@API/react_native'
+import {pwdLogin, smsCodeLogin, sendSms, weichatLogin, getCodeUrl, isWeixinClient} from '@API/app'
 import { ACCESS_TOKEN } from '@/configs'
 import {inputInviteCode} from "@API/user"
 import {SMSType} from '@U/type'

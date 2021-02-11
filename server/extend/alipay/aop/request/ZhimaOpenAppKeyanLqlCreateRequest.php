@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: zhima.open.react_native.keyan.lql.create request
+ * ALIPAY API: zhima.open.app.keyan.lql.create request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class ZhimaOpenAppKeyanLqlCreateRequest
 
 	public function getApiMethodName()
 	{
-		return "zhima.open.react_native.keyan.lql.create";
+		return "zhima.open.app.keyan.lql.create";
 	}
 
 	public function setNotifyUrl($notifyUrl)

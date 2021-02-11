@@ -50,7 +50,7 @@ class GoodsCategory extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\GoodsCategory.add');
+            $result = $this->validate($post, 'app\admin\validate\GoodsCategory.add');
             if ($result === true) {
                 GoodsCategoryLogic::add($post);
                 $this->_success('添加成功！');
@@ -74,7 +74,7 @@ class GoodsCategory extends AdminBase
             $post = $this->request->post();
 
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\GoodsCategory.edit');
+            $result = $this->validate($post, 'app\admin\validate\GoodsCategory.edit');
             if ($result === true) {
                 GoodsCategoryLogic::edit($post);
                 $this->_success('修改成功');
@@ -97,7 +97,7 @@ class GoodsCategory extends AdminBase
      */
     public function del(){
         $id = $this->request->get('ids');
-        $result = $this->validate(['id'=>[$id]], 'react_native\admin\validate\GoodsCategory.del');
+        $result = $this->validate(['id'=>[$id]], 'app\admin\validate\GoodsCategory.del');
         if ($result === true) {
             GoodsCategoryLogic::del($id);
             $this->_success('删除成功！');

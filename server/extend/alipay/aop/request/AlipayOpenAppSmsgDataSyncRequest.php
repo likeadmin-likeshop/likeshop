@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.smsg.data.sync request
+ * ALIPAY API: alipay.open.app.smsg.data.sync request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayOpenAppSmsgDataSyncRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.smsg.data.sync";
+		return "alipay.open.app.smsg.data.sync";
 	}
 
 	public function setNotifyUrl($notifyUrl)

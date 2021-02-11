@@ -59,7 +59,7 @@ class AfterSale extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\AfterSale.agree');
+            $check = $this->validate($post, 'app\admin\validate\AfterSale.agree');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -76,7 +76,7 @@ class AfterSale extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\AfterSale.refuse');
+            $check = $this->validate($post, 'app\admin\validate\AfterSale.refuse');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -93,7 +93,7 @@ class AfterSale extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\AfterSale.take');
+            $check = $this->validate($post, 'app\admin\validate\AfterSale.take');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -110,7 +110,7 @@ class AfterSale extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\AfterSale.refuse_goods');
+            $check = $this->validate($post, 'app\admin\validate\AfterSale.refuse_goods');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -128,7 +128,7 @@ class AfterSale extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\AfterSale.confirm');
+            $check = $this->validate($post, 'app\admin\validate\AfterSale.confirm');
             if (true !== $check) {
                 $this->_error($check);
             }

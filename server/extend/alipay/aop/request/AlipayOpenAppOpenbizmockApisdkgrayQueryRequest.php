@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.openbizmock.apisdkgray.query request
+ * ALIPAY API: alipay.open.app.openbizmock.apisdkgray.query request
  *
  * @author auto create
  * @since 1.0, 2020-04-20 14:06:14
@@ -35,7 +35,7 @@ class AlipayOpenAppOpenbizmockApisdkgrayQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.openbizmock.apisdkgray.query";
+		return "alipay.open.app.openbizmock.apisdkgray.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

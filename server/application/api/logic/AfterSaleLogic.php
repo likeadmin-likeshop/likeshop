@@ -31,7 +31,7 @@ use think\facade\Hook;
 /**
  * 售后
  * Class AfterSaleLogic
- * @package react_native\api\logic
+ * @package app\api\logic
  */
 class AfterSaleLogic extends LogicBase
 {

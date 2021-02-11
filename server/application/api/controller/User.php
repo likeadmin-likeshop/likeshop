@@ -46,7 +46,7 @@ class User extends ApiBase{
     public function setInfo()
     {
         $data = $this->request->post();
-        $check = $this->validate($data, 'react_native\api\validate\UpdateUser.set');
+        $check = $this->validate($data, 'app\api\validate\UpdateUser.set');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -74,7 +74,7 @@ class User extends ApiBase{
         $data = $this->request->post();
         $data['message_key'] = 'BGSJHM';
         $data['user_id'] = $this->user_id;
-        $check = $this->validate($data, 'react_native\api\validate\ChangeMobile.change');
+        $check = $this->validate($data, 'app\api\validate\ChangeMobile.change');
         if (true !== $check) {
             $this->_error($check);
         }

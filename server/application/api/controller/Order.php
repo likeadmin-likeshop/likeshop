@@ -25,7 +25,7 @@ use think\Db;
 /**
  * 订单
  * Class Order
- * @package react_native\api\controller
+ * @package app\api\controller
  */
 class Order extends ApiBase
 {
@@ -46,7 +46,7 @@ class Order extends ApiBase
     {
         $post = $this->request->post();
         $post['user_id'] = $this->user_id;
-        $check = $this->validate($post, 'react_native\api\validate\Order.buy');
+        $check = $this->validate($post, 'app\api\validate\Order.buy');
         if (true !== $check) {
             $this->_error($check);
         }

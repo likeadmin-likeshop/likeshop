@@ -316,7 +316,7 @@ class Request
 
     public static function __make(App $app, Config $config)
     {
-        $request = new static($config->pull('react_native'));
+        $request = new static($config->pull('app'));
 
         $request->server = $_SERVER;
         $request->env    = $app['env']->get();

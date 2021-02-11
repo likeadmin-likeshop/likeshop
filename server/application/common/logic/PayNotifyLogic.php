@@ -29,7 +29,7 @@ use think\facade\Log;
 /**
  * 支付成功后处理订单状态
  * Class PayNotifyLogic
- * @package react_native\api\logic
+ * @package app\api\logic
  */
 class PayNotifyLogic
 {

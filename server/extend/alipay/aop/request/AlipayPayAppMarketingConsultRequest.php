@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.pay.react_native.marketing.consult request
+ * ALIPAY API: alipay.pay.app.marketing.consult request
  *
  * @author auto create
  * @since 1.0, 2020-08-17 11:27:27
@@ -35,7 +35,7 @@ class AlipayPayAppMarketingConsultRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.pay.react_native.marketing.consult";
+		return "alipay.pay.app.marketing.consult";
 	}
 
 	public function setNotifyUrl($notifyUrl)

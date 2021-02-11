@@ -48,7 +48,7 @@ class Ad extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\Ad.add');
+            $result = $this->validate($post, 'app\admin\validate\Ad.add');
             if ($result === true) {
                 $result = AdLogic::add($post);
                 if ($result) {
@@ -75,7 +75,7 @@ class Ad extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\Ad.edit');
+            $result = $this->validate($post, 'app\admin\validate\Ad.edit');
             if ($result === true) {
                 $result = AdLogic::edit($post);
                 if ($result) {

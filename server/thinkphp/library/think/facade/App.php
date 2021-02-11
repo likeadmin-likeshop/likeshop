@@ -58,6 +58,6 @@ class App extends Facade
      */
     protected static function getFacadeClass()
     {
-        return 'react_native';
+        return 'app';
     }
 }

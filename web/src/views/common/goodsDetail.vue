@@ -273,7 +273,7 @@ import {
     addCart,
 } from "@/api/store";
 import { handleCollectGoods, getCoupon } from "@API/user";
-import { getAppDownload } from "@API/react_native";
+import { getAppDownload } from "@API/app";
 import { appSource } from "@U/utils";
 import { mapState, mapActions } from "vuex";
 const CollectType = {

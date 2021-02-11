@@ -48,7 +48,7 @@ class Help extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Help.add');
+            $result = $this->validate($post, 'app\admin\validate\Help.add');
             if ($result === true) {
                 HelpLogic::addHelp($post);
                 $this->_success('添加成功！');
@@ -67,7 +67,7 @@ class Help extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Help.edit');
+            $result = $this->validate($post, 'app\admin\validate\Help.edit');
             if ($result === true) {
                 HelpLogic::editHelp($post);
                 $this->_success('编辑成功！');
@@ -87,7 +87,7 @@ class Help extends AdminBase
     public function del($id)
     {
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id' => $id], 'react_native\admin\validate\Help.del');
+            $result = $this->validate(['id' => $id], 'app\admin\validate\Help.del');
             if ($result === true) {
                 HelpLogic::delHelp($id);
                 $this->_success('删除成功');

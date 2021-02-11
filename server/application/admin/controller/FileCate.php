@@ -24,7 +24,7 @@ use app\common\logic\FileCateLogic;
 /**
  * 图片分类
  * Class FileCate
- * @package react_native\admin\controller
+ * @package app\admin\controller
  */
 class FileCate extends AdminBase
 {
@@ -33,7 +33,7 @@ class FileCate extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\FileCate.add');
+            $result = $this->validate($post, 'app\admin\validate\FileCate.add');
             if ($result !== true) {
                 $this->_error($result);
             }
@@ -53,7 +53,7 @@ class FileCate extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\FileCate.edit');
+            $result = $this->validate($post, 'app\admin\validate\FileCate.edit');
             if ($result !== true) {
                 $this->_error($result);
             }
@@ -74,7 +74,7 @@ class FileCate extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\FileCate.del');
+            $result = $this->validate($post, 'app\admin\validate\FileCate.del');
             if ($result !== true) {
                 $this->_error($result);
             }

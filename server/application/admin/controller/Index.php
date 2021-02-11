@@ -45,7 +45,7 @@ class Index extends AdminBase
         $this->assign('menu', $menu);
 
         //开启右上角前端示例
-        $app_trace = Config::get('react_native.app_trace');
+        $app_trace = Config::get('app.app_trace');
         $this->assign('view_app_trace', $app_trace);
 
         //管理员名称

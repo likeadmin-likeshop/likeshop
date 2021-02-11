@@ -56,7 +56,7 @@ class Auth extends Validate
         }
 
         list($controller, $function) = explode('/', $uri);
-        $controller = 'react_native\admin\controller\\' . ucfirst($controller);
+        $controller = 'app\admin\controller\\' . ucfirst($controller);
         if (!class_exists($controller)) {
             return false;
         }

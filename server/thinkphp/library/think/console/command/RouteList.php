@@ -39,7 +39,7 @@ class RouteList extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $filename = Container::get('react_native')->getRuntimePath() . 'route_list.php';
+        $filename = Container::get('app')->getRuntimePath() . 'route_list.php';
 
         if (is_file($filename)) {
             unlink($filename);
@@ -53,7 +53,7 @@ class RouteList extends Command
     {
         Container::get('route')->setTestMode(true);
         // 路由检测
-        $path = Container::get('react_native')->getRoutePath();
+        $path = Container::get('app')->getRoutePath();
 
         $files = is_dir($path) ? scandir($path) : [];
 

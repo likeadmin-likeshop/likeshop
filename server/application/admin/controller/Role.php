@@ -42,7 +42,7 @@ class Role extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Role.add');
+            $result = $this->validate($post, 'app\admin\validate\Role.add');
             if ($result !== true) {
                 $this->_error($result);
             }
@@ -68,7 +68,7 @@ class Role extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Role.edit');
+            $result = $this->validate($post, 'app\admin\validate\Role.edit');
             if ($result !== true) {
                 $this->_error($result);
             }
@@ -94,7 +94,7 @@ class Role extends AdminBase
     public function del($role_id)
     {
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id' => $role_id], 'react_native\admin\validate\Role.del');
+            $result = $this->validate(['id' => $role_id], 'app\admin\validate\Role.del');
             if ($result === true) {
                 RoleLogic::delRole($role_id);
                 Hook::listen('menu_auth');

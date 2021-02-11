@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.fund.coupon.order.react_native.pay request
+ * ALIPAY API: alipay.fund.coupon.order.app.pay request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayFundCouponOrderAppPayRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.fund.coupon.order.react_native.pay";
+		return "alipay.fund.coupon.order.app.pay";
 	}
 
 	public function setNotifyUrl($notifyUrl)

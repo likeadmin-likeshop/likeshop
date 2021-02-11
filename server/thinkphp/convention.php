@@ -4,7 +4,7 @@ return [
     // +----------------------------------------------------------------------
     // | 应用设置
     // +----------------------------------------------------------------------
-    'react_native'        => [
+    'app'        => [
         // 应用名称
         'app_name'               => '',
         // 应用地址
@@ -322,6 +322,6 @@ return [
 
     // 中间件配置
     'middleware' => [
-        'default_namespace' => 'react_native\\http\\middleware\\',
+        'default_namespace' => 'app\\http\\middleware\\',
     ],
 ];

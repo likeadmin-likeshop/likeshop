@@ -50,9 +50,9 @@ class Console
             return false;
         }
         // 获取基本信息
-        $runtime = number_format(microtime(true) - Container::get('react_native')->getBeginTime(), 10);
+        $runtime = number_format(microtime(true) - Container::get('app')->getBeginTime(), 10);
         $reqs    = $runtime > 0 ? number_format(1 / $runtime, 2) : '∞';
-        $mem     = number_format((memory_get_usage() - Container::get('react_native')->getBeginMem()) / 1024, 2);
+        $mem     = number_format((memory_get_usage() - Container::get('app')->getBeginMem()) / 1024, 2);
 
         if ($request->host()) {
             $uri = $request->protocol() . ' ' . $request->method() . ' : ' . $request->url(true);

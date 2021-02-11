@@ -66,7 +66,7 @@ class Order extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\Order.cancel');
+            $check = $this->validate($post, 'app\admin\validate\Order.cancel');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -83,7 +83,7 @@ class Order extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\Order.del');
+            $check = $this->validate($post, 'app\admin\validate\Order.del');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -113,7 +113,7 @@ class Order extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\Order.delivery');
+            $check = $this->validate($post, 'app\admin\validate\Order.delivery');
             if (true !== $check) {
                 $this->_error($check);
             }
@@ -130,7 +130,7 @@ class Order extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post('');
-            $check = $this->validate($post, 'react_native\admin\validate\Order.confirm');
+            $check = $this->validate($post, 'app\admin\validate\Order.confirm');
             if (true !== $check) {
                 $this->_error($check);
             }

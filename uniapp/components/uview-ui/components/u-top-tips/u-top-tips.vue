@@ -88,7 +88,7 @@
 		align-items: center;
 		justify-content: center;
 		opacity: 0;
-		// 此处为最核心点，translateY(-100%)意味着将其从Y轴隐藏（隐藏到顶部(h5)或者说导航栏(react_native)下面）
+		// 此处为最核心点，translateY(-100%)意味着将其从Y轴隐藏（隐藏到顶部(h5)或者说导航栏(app)下面）
 		transform: translateY(-100%);
 		transition: all 0.35s linear;
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.message.topic.unsubscribe request
+ * ALIPAY API: alipay.open.app.message.topic.unsubscribe request
  *
  * @author auto create
  * @since 1.0, 2019-10-12 14:11:00
@@ -35,7 +35,7 @@ class AlipayOpenAppMessageTopicUnsubscribeRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.message.topic.unsubscribe";
+		return "alipay.open.app.message.topic.unsubscribe";
 	}
 
 	public function setNotifyUrl($notifyUrl)

@@ -150,7 +150,7 @@
 	} from '@/api/order';
 	import {
 		prepay
-	} from '@/api/react_native';
+	} from '@/api/app';
 	import {
 		wxpay
 	} from '@/utils/wxutil'

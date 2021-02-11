@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {getServerProto, getPrivatePolicy, getAfterSaleGuar} from "@API/react_native"
+import {getServerProto, getPrivatePolicy, getAfterSaleGuar} from "@API/app"
 export default {
     name: 'serverExplain',
     data() {

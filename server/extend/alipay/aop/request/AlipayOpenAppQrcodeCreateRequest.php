@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.qrcode.create request
+ * ALIPAY API: alipay.open.app.qrcode.create request
  *
  * @author auto create
  * @since 1.0, 2019-12-25 13:10:54
@@ -35,7 +35,7 @@ class AlipayOpenAppQrcodeCreateRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.qrcode.create";
+		return "alipay.open.app.qrcode.create";
 	}
 
 	public function setNotifyUrl($notifyUrl)

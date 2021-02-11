@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.members.create request
+ * ALIPAY API: alipay.open.app.members.create request
  *
  * @author auto create
  * @since 1.0, 2020-04-27 10:00:49
@@ -35,7 +35,7 @@ class AlipayOpenAppMembersCreateRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.members.create";
+		return "alipay.open.app.members.create";
 	}
 
 	public function setNotifyUrl($notifyUrl)

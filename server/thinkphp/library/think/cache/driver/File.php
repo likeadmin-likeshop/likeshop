@@ -43,7 +43,7 @@ class File extends Driver
         }
 
         if (empty($this->options['path'])) {
-            $this->options['path'] = Container::get('react_native')->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR;
+            $this->options['path'] = Container::get('app')->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR;
         } elseif (substr($this->options['path'], -1) != DIRECTORY_SEPARATOR) {
             $this->options['path'] .= DIRECTORY_SEPARATOR;
         }

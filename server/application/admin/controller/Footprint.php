@@ -23,7 +23,7 @@ use app\common\server\ConfigServer;
 /**
  * 访问足迹(气泡足迹)
  * Class Footprint
- * @package react_native\admin\controller
+ * @package app\admin\controller
  */
 class Footprint extends AdminBase
 {

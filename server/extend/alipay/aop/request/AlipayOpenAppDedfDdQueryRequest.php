@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.dedf.dd.query request
+ * ALIPAY API: alipay.open.app.dedf.dd.query request
  *
  * @author auto create
  * @since 1.0, 2020-02-18 14:45:05
@@ -35,7 +35,7 @@ class AlipayOpenAppDedfDdQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.dedf.dd.query";
+		return "alipay.open.app.dedf.dd.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

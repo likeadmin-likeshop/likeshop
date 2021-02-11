@@ -31,7 +31,7 @@ use app\common\model\OrderLog;
 /**
  * 取消订单后的操作
  * Class CancelOrder
- * @package react_native\common\behavior
+ * @package app\common\behavior
  */
 class CancelOrder
 {

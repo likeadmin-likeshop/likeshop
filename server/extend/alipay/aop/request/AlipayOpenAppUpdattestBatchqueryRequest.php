@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.updattest.batchquery request
+ * ALIPAY API: alipay.open.app.updattest.batchquery request
  *
  * @author auto create
  * @since 1.0, 2019-04-03 13:20:00
@@ -35,7 +35,7 @@ class AlipayOpenAppUpdattestBatchqueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.updattest.batchquery";
+		return "alipay.open.app.updattest.batchquery";
 	}
 
 	public function setNotifyUrl($notifyUrl)

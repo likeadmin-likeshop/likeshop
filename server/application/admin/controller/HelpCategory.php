@@ -62,7 +62,7 @@ class HelpCategory extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\HelpCategory.edit');
+            $result = $this->validate($post, 'app\admin\validate\HelpCategory.edit');
             if ($result === true) {
                 HelpCategoryLogic::editHelpCategory($post);
                 $this->_success('编辑成功！');
@@ -81,7 +81,7 @@ class HelpCategory extends AdminBase
     public function del($id)
     {
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id' => $id], 'react_native\admin\validate\HelpCategory.del');
+            $result = $this->validate(['id' => $id], 'app\admin\validate\HelpCategory.del');
             if ($result === true) {
                 HelpCategoryLogic::delHelpCategory($id);
                 $this->_success('删除成功');

@@ -1,6 +1,6 @@
 import {
 	mnpLogin
-} from '@/api/react_native'; //用户是否已经授权
+} from '@/api/app'; //用户是否已经授权
 import {
 	isWeixinClient,
 	currentPage

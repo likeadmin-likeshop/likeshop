@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.appcontent.function.offline request
+ * ALIPAY API: alipay.open.app.appcontent.function.offline request
  *
  * @author auto create
  * @since 1.0, 2020-07-17 17:05:10
@@ -35,7 +35,7 @@ class AlipayOpenAppAppcontentFunctionOfflineRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.appcontent.function.offline";
+		return "alipay.open.app.appcontent.function.offline";
 	}
 
 	public function setNotifyUrl($notifyUrl)

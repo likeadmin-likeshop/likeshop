@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.lingbalingliu.query request
+ * ALIPAY API: alipay.open.app.lingbalingliu.query request
  *
  * @author auto create
  * @since 1.0, 2019-01-07 20:51:15
@@ -35,7 +35,7 @@ class AlipayOpenAppLingbalingliuQueryRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.lingbalingliu.query";
+		return "alipay.open.app.lingbalingliu.query";
 	}
 
 	public function setNotifyUrl($notifyUrl)

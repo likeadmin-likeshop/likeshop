@@ -162,7 +162,7 @@
   }, {
     "name": "app"
     ,"title": "应用"
-    ,"icon": "layui-icon-react_native"
+    ,"icon": "layui-icon-app"
     ,"list": [{
       "name": "message"
       ,"title": "消息中心"

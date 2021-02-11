@@ -66,7 +66,7 @@ class Freight extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Freight.add');
+            $result = $this->validate($post, 'app\admin\validate\Freight.add');
             if ($result === true) {
                 FreightLogic::add($post);
                 $this->_success('添加成功！');
@@ -84,7 +84,7 @@ class Freight extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Freight.del');
+            $result = $this->validate($post, 'app\admin\validate\Freight.del');
             if ($result === true) {
                 FreightLogic::del($post);
                 $this->_success('删除成功！');
@@ -115,7 +115,7 @@ class Freight extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $result = $this->validate($post, 'react_native\admin\validate\Freight.edit');
+            $result = $this->validate($post, 'app\admin\validate\Freight.edit');
             if ($result !== true) {
                 $this->_error($result);
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.openbizmock.message.send request
+ * ALIPAY API: alipay.open.app.openbizmock.message.send request
  *
  * @author auto create
  * @since 1.0, 2019-01-11 18:35:00
@@ -35,7 +35,7 @@ class AlipayOpenAppOpenbizmockMessageSendRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.openbizmock.message.send";
+		return "alipay.open.app.openbizmock.message.send";
 	}
 
 	public function setNotifyUrl($notifyUrl)

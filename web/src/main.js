@@ -83,4 +83,4 @@ new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#react_native')
+}).$mount('#app')

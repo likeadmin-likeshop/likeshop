@@ -24,7 +24,7 @@ use app\api\logic\AfterSaleLogic;
 /**
  * 售后
  * Class Order
- * @package react_native\api\controller
+ * @package app\api\controller
  */
 class AfterSale extends ApiBase
 {
@@ -40,7 +40,7 @@ class AfterSale extends ApiBase
     {
         $post = $this->request->post();
         $post['user_id'] = $this->user_id;
-        $check = $this->validate($post, 'react_native\api\validate\AfterSale.add');
+        $check = $this->validate($post, 'app\api\validate\AfterSale.add');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -52,7 +52,7 @@ class AfterSale extends ApiBase
     public function goodsInfo()
     {
         $get = $this->request->get();
-        $check = $this->validate($get, 'react_native\api\validate\AfterSale.info');
+        $check = $this->validate($get, 'app\api\validate\AfterSale.info');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -63,7 +63,7 @@ class AfterSale extends ApiBase
     public function express()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'react_native\api\validate\AfterSale.express');
+        $check = $this->validate($post, 'app\api\validate\AfterSale.express');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -74,7 +74,7 @@ class AfterSale extends ApiBase
     public function cancel()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'react_native\api\validate\AfterSale.cancel');
+        $check = $this->validate($post, 'app\api\validate\AfterSale.cancel');
         if (true !== $check) {
             $this->_error($check);
         }
@@ -95,7 +95,7 @@ class AfterSale extends ApiBase
     public function again()
     {
         $post = $this->request->post();
-        $check = $this->validate($post, 'react_native\api\validate\AfterSale.again');
+        $check = $this->validate($post, 'app\api\validate\AfterSale.again');
         if (true !== $check) {
             $this->_error($check);
         }

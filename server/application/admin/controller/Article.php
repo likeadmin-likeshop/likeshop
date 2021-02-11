@@ -49,7 +49,7 @@ class Article extends AdminBase
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\Article.add');
+            $result = $this->validate($post, 'app\admin\validate\Article.add');
             if ($result === true) {
                 ArticleLogic::addArticle($post);
                 $this->_success('添加成功！');
@@ -71,7 +71,7 @@ class Article extends AdminBase
 
             $post = $this->request->post();
             $post['del'] = 0;
-            $result = $this->validate($post, 'react_native\admin\validate\Article.edit');
+            $result = $this->validate($post, 'app\admin\validate\Article.edit');
 
             if ($result === true) {
                 ArticleLogic::editArticle($post);
@@ -93,7 +93,7 @@ class Article extends AdminBase
     public function del($id)
     {
         if ($this->request->isAjax()) {
-            $result = $this->validate(['id' => $id], 'react_native\admin\validate\Article.del');
+            $result = $this->validate(['id' => $id], 'app\admin\validate\Article.del');
             if ($result === true) {
                 ArticleLogic::delArticle($id);
                 $this->_success('删除成功');

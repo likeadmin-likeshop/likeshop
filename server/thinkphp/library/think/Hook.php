@@ -213,7 +213,7 @@ class Hook
     public function __debugInfo()
     {
         $data = get_object_vars($this);
-        unset($data['react_native']);
+        unset($data['app']);
 
         return $data;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.react_native.notify.modify request
+ * ALIPAY API: alipay.open.app.notify.modify request
  *
  * @author auto create
  * @since 1.0, 2020-01-04 11:05:01
@@ -20,7 +20,7 @@ class AlipayOpenAppNotifyModifyRequest
 	
 	public function getApiMethodName()
 	{
-		return "alipay.open.react_native.notify.modify";
+		return "alipay.open.app.notify.modify";
 	}
 
 	public function setNotifyUrl($notifyUrl)

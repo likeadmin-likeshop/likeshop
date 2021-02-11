@@ -24,7 +24,7 @@ use app\common\model\OrderLog;
 /**
  * 订单记录日志
  * Class OrderLogLogic
- * @package react_native\common\logic
+ * @package app\common\logic
  */
 class OrderLogLogic
 {

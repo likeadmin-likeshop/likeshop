@@ -64,7 +64,7 @@ class Container implements ArrayAccess, IteratorAggregate, Countable
      * @var array
      */
     protected $bind = [
-        'react_native'                   => App::class,
+        'app'                   => App::class,
         'build'                 => Build::class,
         'cache'                 => Cache::class,
         'config'                => Config::class,

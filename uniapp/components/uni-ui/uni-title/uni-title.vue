@@ -7,7 +7,7 @@
 <script>
 	/**
 	 * Title 章节标题
-	 * @description 章节标题，通常用于记录页面标题，使用当前组件，uni-react_native 如果开启统计，将会自动统计页面标题
+	 * @description 章节标题，通常用于记录页面标题，使用当前组件，uni-app 如果开启统计，将会自动统计页面标题
 	 * @tutorial https://ext.dcloud.net.cn/plugin?id=1066
 	 * @property {String} type = [h1|h2|h3|h4|h5] 标题类型
 	 * 	@value h1 一级标题

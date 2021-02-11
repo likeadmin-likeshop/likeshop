@@ -999,7 +999,7 @@ class Validate
             $db = new $rule[0];
         } else {
             try {
-                $db = Container::get('react_native')->model($rule[0]);
+                $db = Container::get('app')->model($rule[0]);
             } catch (ClassNotFoundException $e) {
                 $db = Db::name($rule[0]);
             }

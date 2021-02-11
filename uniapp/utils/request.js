@@ -8,7 +8,7 @@ import Cache from './cache'
 import {
 	TOKEN
 } from '../config/cachekey'
-import {baseURL} from '@/config/react_native'
+import {baseURL} from '@/config/app'
 
 import {
 	wxAutoLogin,

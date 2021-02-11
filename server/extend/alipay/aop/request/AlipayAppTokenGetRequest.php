@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.react_native.token.get request
+ * ALIPAY API: alipay.app.token.get request
  *
  * @author auto create
  * @since 1.0, 2019-03-26 17:00:00
@@ -35,7 +35,7 @@ class AlipayAppTokenGetRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.react_native.token.get";
+		return "alipay.app.token.get";
 	}
 
 	public function setNotifyUrl($notifyUrl)

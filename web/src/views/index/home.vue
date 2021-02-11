@@ -203,7 +203,7 @@
 <script>
 import Recommend from "@C/Recommend";
 import { getHome, getBestList } from "@API/store";
-import {getMenu, getCouponPopList} from '@API/react_native'
+import {getMenu, getCouponPopList} from '@API/app'
 import {getCoupon} from "@API/user"
 import GoodsList from "@C/GoodsList";
 import AdSwiper from '../../components/AdSwiper/AdSwiper.vue';

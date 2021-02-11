@@ -1,6 +1,6 @@
 <?php
 /**
- * ALIPAY API: alipay.open.auth.react_native.aes.set request
+ * ALIPAY API: alipay.open.auth.app.aes.set request
  *
  * @author auto create
  * @since 1.0, 2020-08-25 17:11:36
@@ -35,7 +35,7 @@ class AlipayOpenAuthAppAesSetRequest
 
 	public function getApiMethodName()
 	{
-		return "alipay.open.auth.react_native.aes.set";
+		return "alipay.open.auth.app.aes.set";
 	}
 
 	public function setNotifyUrl($notifyUrl)

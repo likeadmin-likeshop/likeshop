@@ -157,7 +157,7 @@
 import wx from "weixin-js-sdk";
 import { getOrderList, cancelOrder, delOrder, confirmOrder } from "@/api/user";
 import OrderGoods from "@C/OrderGoods";
-import { prepay } from "@/api/react_native";
+import { prepay } from "@/api/app";
 import { wxPay } from "@/utils/wxjssdk";
 export default {
     name: "OrderList",

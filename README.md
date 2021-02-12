@@ -17,6 +17,11 @@
     如果项目对您起到一定的帮助，点右上角 "Star" 支持一下，干一杯，谢谢！ 
 </p>
 
+<p align="center">    
+    <a href="https://gitee.com/likemarket/likeshopv2/tree/2.0.9/">点击这里切换为原生小程序、原生vue手机页面、ReactNative苹果安卓app版本</a>
+</p>
+
+
 ### ⚽ chapter one 《欢迎朋友》
 > 我们始终追求：让商城开发更简单，安全稳定的落地，降低99%的项目成本甚至0成本。真诚欢迎朋友们使用并且前往知识社区提问、反馈及宝贵建议：https://home.likemarket.net/
 

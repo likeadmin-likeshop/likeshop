@@ -10,18 +10,18 @@
                 <input v-model="smsCode" placeholder="请输入" style="width: 3.8rem"/>
                 <button class="bd-primary sm primary br60 row-center" @click="sendSmsFun()">
                     <view v-show="canSendSms" style="flex: none">获取验证码</view>
-                    <uni-countdown
+                    <u-count-down
                     ref="countDown"
-                    :showDay="false"
+                    :show-days="false"
                     :timestamp="time"
                     :showColon="false"
-                    splitorColor="#FF2C3C"
                     color="#FF2C3C"
-                    :showHour="false"
-                    :showMinute="false"
-                    v-show="!canSendSms" 
-                    @timeup="countDownFinish">
-                    </uni-countdown>
+                    :show-hours="false"
+                    :show-minutes="false"
+                    v-show="!canSendSms"
+                    :autoplay="false"
+                    @end="countDownFinish"
+                    />
                 </button>
             </view>
             <view class="input-item row">
@@ -43,6 +43,9 @@
     import {forgetPwd, sendSms} from '@/api/app.js'
     import { ACCESS_TOKEN } from '@/config/app.js'
     import {SMSType} from '@/utils/type.js'
+    import {
+    	mapMutations
+    } from 'vuex'
     export default {
         name: 'forgetPwd',
         data() {
@@ -51,7 +54,7 @@
                 smsCode: '',
                 resetPwd: '',
                 comfirmPwd: '',
-                time: 60 * 1000,
+                time: 60,
                 canSendSms: true,
             }
         },
@@ -59,6 +62,7 @@
             
         },
         methods: {
+            ...mapMutations(['LOGIN']),
             goPage(name) {
                uni.navigateTo({
                    url: name
@@ -95,7 +99,7 @@
                 };
                 forgetPwd(data).then(res => {
                     if(res.code == 1) {
-                        this.$ls.set(ACCESS_TOKEN, res.data.token);
+                        this.LOGIN(data);
                         this.$toast({message: res.msg});
                         //  跳转到登录页
                         setTimeout(() => {
@@ -105,7 +109,6 @@
                 })
             },
             countDownFinish() {
-                this.$refs.countDown.reset()
                 this.canSendSms = true;
             },
             sendSmsFun() {

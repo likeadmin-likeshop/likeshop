@@ -18,28 +18,53 @@
 		</view>
 		<!--  #endif -->
 		<!-- #ifdef H5 || APP-PLUS -->
-		<view class="h5-login">
-			<view>
-				<image class="logo" src="/static/images/shop_logo.png"></image>
+		<view class="h5-login" v-if="!isWeixin">
+			<image class="logo" src="/static/images/shop_logo.png"></image>
+			<view v-if="loginType == 0">
 				<view class="input">
-					<uni-easyinput v-model="account" style="width: 100%;" placeholder="请输入账户/手机号" :input-border="false"></uni-easyinput>
+					<u-input v-model="account" style="width: 100%;" placeholder="请输入账户" :input-border="false" />
 				</view>
-				<view class="input row">
-					<uni-easyinput v-model="password" type="password" style="flex: 1;" placeholder="请输入密码" :input-border="false"></uni-easyinput>
-					<view>忘记密码</view>
+				<view class="input row" style="padding: 15rpx 0;">
+					<u-input v-model="password" type="password" style="flex: 1;" :password-icon="false" placeholder="请输入密码" :input-border="false" />
+					<navigator style="width: 132rpx;border-left: 1rpx solid #CCC;" url="/pages/forget_pwd/forget_pwd" hover-class="none">忘记密码</navigator>
 				</view>
-				<button style="margin: 80rpx 0 50rpx;" size="lg" class="br60" type="primary" @click="loginFun">登录</button>
-				<view class="row-between">
-					<view class="lighter">短信验证码登录</view>
-					<view class="lighter">注册账号</view>
+			</view>
+			<view v-if="loginType == 1">
+				<view class="input">
+					<u-input v-model="telephone" style="width: 100%;" placeholder="手机号" :input-border="false" />
 				</view>
+				<view class="input row" style="padding: 15rpx 0;">
+					<u-input v-model="smsCode" style="flex: 1;" placeholder="请输入验证码" :input-border="false" />
+					<view class="row">
+						<view class="sms-btn primary sm row-center br60" @click="$sendSms">
+							<view v-show="canSendSms">获取验证码</view>
+							<u-count-down
+							ref="countDown"
+							:show-days="false"
+							:timestamp="time"
+							:showColon="false"
+							color="#FF2C3C"
+							:show-hours="false"
+							:show-minutes="false"
+                            :autoplay="false"
+							v-show="!canSendSms" 
+							@end="countDownFinish()"
+							/>
+						</view>
+					</view>
+				</view>
+			</view>
+			<button style="margin: 80rpx 0 50rpx;width: 680rpx;" size="lg" class="br60" type="primary" @click="loginFun">登录</button>
+			<view class="row-between" style="width: 680rpx;">
+				<view class="lighter" @click="changeLoginType">{{loginType == 0 ? "短信验证码登录" : "账号登录"}}</view>
+				<navigator class="lighter" url="/pages/register/register" hover-class="none">注册账号</navigator>
 			</view>
 			<view class="flex1"></view>
 			<view class="mb20 sm row">
 				已阅读并同意LikeShop
-				<navigator class="primary" hover-class="none">《服务协议》</navigator>
+				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=0">《服务协议》</navigator>
 				和
-				<navigator class="primary" hover-class="none">《隐私协议》</navigator>
+				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=1">《隐私协议》</navigator>
 			</view>
 		</view>
 		<!--  #endif -->
@@ -51,30 +76,57 @@
 		wxLogin
 	} from '@/utils/login';
 	import {
-		mapMutations
+		mapMutations,
+		mapActions
 	} from 'vuex'
 	import {
 		accountLogin,
 		codeLogin,
 		sendSms,
-		wxpLogin
+		wxpLogin,
+		smsCodeLogin
 	} from '@/api/app';
-	import {
-		BACK_URL
-	} from '@/config/cachekey'
+	import  wechath5 from '@/utils/wechath5'
+	import {isWeixinClient} from '@/utils/tools'
+	import{client} from '@/utils/tools'
+	import {SMSType} from "@/utils/type"
+	const loginType = {
+	    ACCOUNT_LOGIN: 0,
+	    SMS_CODE_LOGIN: 1,
+	}
 	export default {
 		data() {
 			return {
 				password: '',
 				account: '',
 				code: '',
+				isWeixin: isWeixinClient(),
+				loginType: 0,
+				smsCode: '',
+				time: 60,
+				canSendSms: true,
+				telephone: ""
 			};
 		},
 
-		components: {},
-		props: {},
+		async onLoad(option) {
+			// #ifdef H5
+			if (isWeixinClient()) {
+				const {
+					code
+				} = option
+				if (code) {
+					await wechath5.authLogin(code)
+					this.loginHandle()
+				}else {
+					wechath5.getWxUrl()
+				}
+			}
+			// #endif 
+		},
 		methods: {
 			...mapMutations(['LOGIN']),
+			...mapActions(['getUser']),
 			async getUserInfo(e) {
 				if (!e.detail.userInfo) return;
 				uni.showLoading({
@@ -95,6 +147,7 @@
 				uni.hideLoading()
 				if (code == 1) {
 					this.LOGIN(data)
+					this.getUser()
 					uni.navigateBack();
 				} else {
 					this.$toast({
@@ -102,33 +155,90 @@
 					});
 				}
 			},
+            countDownFinish() {
+                this.canSendSms = true;
+            },
 			async loginFun() {
 				const {
 					account,
-					password
-				} = this
-				const {
-					code,
-					data
-				} = await accountLogin({
-					account,
 					password,
-					client: 2
-				})
-				if (code == 1) {
-					this.LOGIN(data)
-					const pages = getCurrentPages();
-					const prevPage = pages[pages.length - 2]
-					if (prevPage) {
-						uni.navigateBack()
-					} else {
-						uni.reLaunch({
-							url: '/pages/index/index'
-						})
+					telephone,
+					smsCode
+				} = this
+				if(this.loginType == 0) {
+					const {
+						code,
+						data
+					} = await accountLogin({
+						account,
+						password,
+						client: client
+					})
+					if (code == 1) {
+						this.LOGIN(data)
+						this.loginHandle()
 					}
 				}
-			}
-
+				else {
+					if(!telephone) {
+						this.$toast({title: '请填写手机号'});
+						return;
+					}
+					if(!smsCode) {
+						this.$toast({title: '请填写手机验证码'});
+						return;
+					}
+					smsCodeLogin({
+						account: telephone, 
+						code: smsCode,
+					}).then(res => {
+						 if(res.code == 1) {
+							this.LOGIN(res.data)
+							this.loginHandle()
+						}
+					})
+				}
+			},
+			loginHandle() {
+				this.getUser()
+				const pages = getCurrentPages();
+				const prevPage = pages[pages.length - 2]
+				if (prevPage) {
+					uni.navigateBack()
+				} else {
+					uni.switchTab({
+						url: '/pages/index/index'
+					})
+				}
+			},
+			changeLoginType() {
+				if(this.loginType == loginType.ACCOUNT_LOGIN) {
+					this.loginType = loginType.SMS_CODE_LOGIN
+				}
+				else if(this.loginType == loginType.SMS_CODE_LOGIN) {
+					this.loginType = loginType.ACCOUNT_LOGIN
+				}
+			},
+			$sendSms() {
+				if(this.canSendSms == false) {
+					return;
+				}
+				if(!this.telephone) {
+					this.$toast({title: '请填写手机号信息～'})
+					return; 
+				}
+				
+				sendSms({
+					mobile: this.telephone, 
+					key: SMSType.LOGIN
+				}).then(res => {
+					if(res.code == 1) {
+						this.canSendSms = false;
+						this.$refs.countDown.start();
+						this.$toast({title: res.msg});
+					}
+				})
+			},
 		}
 	};
 </script>
@@ -189,6 +299,12 @@
 					width: 670rpx;
 					border-bottom: $-solid-border;
 					margin-top: 30rpx;
+				}
+				.sms-btn {
+					border: 1rpx solid $-color-primary;
+					width: 176rpx;
+					height: 60rpx;
+					box-sizing: border-box;
 				}
 			}
 		}

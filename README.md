@@ -153,13 +153,13 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
 <img src="https://www.likemarket.net/images/yszx.png" />
 
 #### 管理后台
-可操作后台：
+不可操作后台演示：
+http://likeshop.likemarket.net/admin      
+<br/>账号：test  密码：123456
+
+可操作后台演示：
 http://likeshop2.likemarket.net/admin       
 <br/>账号：admin  密码：123456
-
-不可操作后台：
-https://likeshop.likemarket.net/admin      
-<br/>账号：test  密码：123456
 
 
 #### PC管理后台截图

@@ -102,7 +102,7 @@
                 data:{id:id,status:status},
                 type:'get',
                 success:function (res) {
-                    if(res.code == 1) {
+                    if(res.code === 1) {
                         layui.layer.msg(res.msg, {
                             offset: '15px'
                             , icon: 1
@@ -126,7 +126,8 @@
                         type: 'post',
                         dataType: 'json',
                         success: function (res) {
-                            if (res.code == 400) {
+                            if (res.code === 1) {
+                                obj.del();
                                 layui.layer.msg(res.msg, {
                                     offset: '15px'
                                     , icon: 1
@@ -135,7 +136,7 @@
                             } else {
                                 layui.layer.msg(res.msg, {
                                     offset: '15px'
-                                    , icon: 1
+                                    , icon: 2
                                     , time: 1000
                                 },function () {
                                     window.location.href = window.location.href;

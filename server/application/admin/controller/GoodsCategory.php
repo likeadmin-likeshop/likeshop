@@ -96,7 +96,7 @@ class GoodsCategory extends AdminBase
      * @throws \think\exception\DbException
      */
     public function del(){
-        $id = $this->request->get('ids');
+        $id = $this->request->post('ids');
         $result = $this->validate(['id'=>[$id]], 'app\admin\validate\GoodsCategory.del');
         if ($result === true) {
             GoodsCategoryLogic::del($id);

@@ -276,7 +276,8 @@ layui.define('view', function(exports){
 
       // 如果是控制台 关闭菜单那状态
       var id = $(TABS_HEADER).eq(index).find('span').attr('data-id');
-      if (id === undefined) {
+      var text = $(TABS_HEADER).eq(index).find('span').html();
+      if (id === undefined || text === "修改密码") {
 
         $(".first-nav .layui-nav-tree .layui-nav-item").removeClass("activate");
         $("#LAY_app_body").addClass("hide-second-nav");

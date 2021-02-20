@@ -125,11 +125,13 @@
 <!--    领取方式-->
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="tips">*</span>领取方式：</label>
-        <div class="layui-input-inline">
-            <input type="radio" name="get_type" value="1" title="直接领取"  >
+        <div class="layui-input-inline" >
+            <input type="radio" name="get_type" value="1" title="直接领取" checked >
             <div style="color: #a3a3a3;font-size: 9px;">用户可在首页、每日领券直接领取</div>
-            <input type="radio" name="get_type" value="2" title="平台赠送" >
-            <div style="color: #a3a3a3;font-size: 9px;">平台后台直接赠送</div>
+        </div>
+        <div class="layui-input-inline">
+            <input type="radio" name="get_type" value="2" title="指定发放" >
+            <div style="color: #a3a3a3;font-size: 9px;">后台指定会员赠送优惠券</div>
         </div>
     </div>
 <!--    领取次数-->

@@ -39,9 +39,8 @@ class CouponLogic{
             $where[] = ['get_type','=',2];
 
         }
-        if(isset($get['type']) && $get['type'] !== ''){
+        if(isset($get['type']) && $get['type'] !== 'send' && $get['type'] !== ''){
             $where[] = ['status','=',$get['type']];
-
         }
 
         $coupon = new Coupon();

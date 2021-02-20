@@ -64,10 +64,8 @@ class GoodsCategory extends Validate
             $where[] = ['id','<>',$data['id']];
         }
         $where[] = ['name','=',$data['name']];
-        if($data['pid']){
-            $level = Db::name('goods_category')->where(['id' => $data['pid']], ['del' => 0])->value('level');
-            $where[] = ['level','=',$level+1];
-        }
+        $where[] = ['pid','=',$data['pid']];
+
         $name = Db::name('goods_category')->where($where)->value('name');
         if($name){
             return '分类名称已存在';

@@ -8,3 +8,6 @@
 /server/runtime/*
 !/server/runtime/index.html
 /server/.env
+
+
+node_modules/

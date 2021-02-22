@@ -1,0 +1,44 @@
+{layout name="layout2" /}
+
+<style>
+    .layui-form-label { width: 160px; }
+    .layui-input-block { margin-left: 190px; }
+    .engine_method { line-height: 36px; }
+</style>
+
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <input type="hidden" name="engine" value="{$engine}">
+    {if $engine == 'local'}
+        <div class="layui-form-item" style=" margin-bottom: 0; ">
+            <label class="layui-form-label">存储方式：</label>
+            <div class="layui-input-block">
+                <span class="engine_method">本地存储</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">本地存储方式不需要配置其他参数</div>
+            </div>
+        </div>
+    {/if}
+
+    <div class="layui-form-item" >
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+    })
+</script>

@@ -470,6 +470,7 @@
                 layer.msg('最多最能选中8张图片');
                 return;
             }
+            uris = uris.reverse();
             for(var i in uris){
                 var uri = uris[i];
                 var template_goods_image = $('#template-goods-image').html();

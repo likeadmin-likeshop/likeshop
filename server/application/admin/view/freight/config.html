@@ -15,10 +15,10 @@
 
         <!--快递100-->
         <div class="layui-form-item " id="kd100_appkey" {if condition="$config.way eq 'kdniao'"} style="display: none"{/if}>
-            <label class="layui-form-label label-width">APPKEY:</label>
+            <label class="layui-form-label label-width">授权KEY:</label>
             <div class="layui-input-inline" >
                 <input type="text" name="kd100_appkey" value="{$config.kd100_appkey | default =''}" lay-vertype="tips" placeholder="请输入APPKEY" autocomplete="off" class="layui-input">
-                <div class=" layui-form-mid layui-word-aux" >快递100分配的应用秘钥</div>
+                <div class=" layui-form-mid layui-word-aux" >快递100分配的授权KEY</div>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
             <label class="layui-form-label label-width">CUSTOMER:</label>
             <div class="layui-input-inline" >
                 <input type="text" name="kd100_customer" value="{$config.kd100_customer | default =''}" lay-vertype="tips" placeholder="请输入CUSTOMER" autocomplete="off" class="layui-input">
-                <div class=" layui-form-mid layui-word-aux">快递100分配的公司编号</div>
+                <div class=" layui-form-mid layui-word-aux">快递100分配的customer</div>
             </div>
         </div>
 

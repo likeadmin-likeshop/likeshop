@@ -331,7 +331,7 @@ class OrderLogic
             $expressage = (new Kdniao($app, $key, true));
             $shipping_field = 'codebird';
         } else {
-            $expressage = (new Kd100($app, $key, true));
+            $expressage = (new Kd100($key, $app, true));
             $shipping_field = 'code100';
         }
 

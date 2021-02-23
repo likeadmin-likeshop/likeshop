@@ -72,9 +72,16 @@ class User extends ApiBase{
     public function changeMobile()
     {
         $data = $this->request->post();
-        $data['message_key'] = 'BGSJHM';
+        //默认绑定手机号码
+        $data['message_key'] = 'BDSJHM';
+        $validate = 'app\api\validate\ChangeMobile.binding';
+        //更换手机号码、替换短信key、验证规则
+        if(isset($data['action']) && 'change' == $data['action']){
+            $data['message_key'] = 'BGSJHM';
+            $validate = 'app\api\validate\ChangeMobile';
+        }
         $data['user_id'] = $this->user_id;
-        $check = $this->validate($data, 'app\api\validate\ChangeMobile.change');
+        $check = $this->validate($data, $validate);
         if (true !== $check) {
             $this->_error($check);
         }
@@ -84,6 +91,7 @@ class User extends ApiBase{
         }
         $this->_error('操作失败');
     }
+
 
 
     //获取微信手机号

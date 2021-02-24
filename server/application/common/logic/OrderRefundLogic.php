@@ -25,6 +25,7 @@ use app\common\model\OrderGoods;
 use app\common\model\OrderLog;
 use app\common\model\Pay;
 use app\common\model\User;
+use app\common\server\WeChatPayServer;
 use app\common\server\WeChatServer;
 use think\Db;
 use think\Exception;
@@ -104,7 +105,7 @@ class OrderRefundLogic
      */
     public static function wechatPayRefund($order, $refund_id)
     {
-        $config = WeChatServer::getPayConfigBySource($order['order_source']);
+        $config = WeChatServer::getPayConfigBySource($order['order_source'])['config'];
 
         if (empty($config)) {
             throw new Exception('请联系管理员设置微信相关配置!');
@@ -126,7 +127,7 @@ class OrderRefundLogic
             'total_fee' => $refund_log['order_amount'] * 100,//订单金额,单位为分
             'refund_fee' => intval($refund_log['refund_amount'] * 100),//退款金额
         ];
-        $result = PaymentLogic::refund($config, $data);
+        $result = WeChatPayServer::refund($config, $data);
 
         if (isset($result['return_code']) && $result['return_code'] == 'FAIL') {
             throw new Exception($result['return_msg']);

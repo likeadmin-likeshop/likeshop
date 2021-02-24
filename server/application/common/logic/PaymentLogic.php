@@ -20,6 +20,7 @@
 namespace app\common\logic;
 
 use app\common\server\AliPayServer;
+use app\common\server\WeChatPayServer;
 use app\common\server\WeChatServer;
 use app\common\model\{Client_, Pay};
 use EasyWeChat\Factory;
@@ -65,7 +66,7 @@ class PaymentLogic extends LogicBase
     {
         switch ($order['pay_way']) {
             case Pay::WECHAT_PAY:
-                $res = self::unifiedOrder($from, $order, $order_source);
+                $res = WeChatPayServer::unifiedOrder($from, $order, $order_source);
                 break;
             case Pay::ALI_PAY:
                 $res = self::appAlipay($from, $order, $order_source);
@@ -78,156 +79,21 @@ class PaymentLogic extends LogicBase
     }
 
 
-
     /**
-     * Notes: 微信统一下单
-     * @param $from
-     * @param $order
-     * @param $order_source
-     * @author 段誉(2021/2/1 11:58)
-     * @return array|bool|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * Notes: 是否在白名单内支付
+     * @param $user_id
+     * @author 段誉(2021/2/24 10:01)
+     * @return bool
      */
-    public static function unifiedOrder($from, $order, $order_source)
+    public static function isPayWhiteList($user_id)
     {
-        try {
-            $wechat_config = self::getWeChatConfig($order, $order_source);
-            $auth = $wechat_config['auth'];
-            $config = $wechat_config['config'];
-
-            if (empty($config) || empty($config['key']) || empty($config['mch_id']) || empty($config['app_id']) || empty($config['secret'])) {
-                throw new Exception('请在后台配置好微信支付');
-            }
-
-            //app支付不需要openid
-            $app_source = [Client_::ios, Client_::android];
-            if (!$auth && !in_array($order_source, $app_source)) {
-                throw new Exception('授权信息失效');
-            }
-
-            $app = Factory::payment($config);
-            switch ($from) {
-                case 'order':
-                    $attributes = [
-                        'trade_type' => 'JSAPI',
-                        'body' => '商品',
-                        'out_trade_no' => $order['order_sn'],
-                        'total_fee' => $order['order_amount'] * 100, // 单位：分
-                        'notify_url' => url('payment/notify', '', '', true),
-                        'openid' => $auth['openid'],
-                        'attach' => 'order'
-                    ];
-                    break;
-                case 'recharge':
-                    $attributes = [
-                        'trade_type' => 'JSAPI',
-                        'body' => '充值',
-                        'out_trade_no' => $order['order_sn'],
-                        'total_fee' => $order['order_amount'] * 100, // 单位：分
-                        'notify_url' => url('payment/notify', '', '', true),
-                        'openid' => $auth['openid'],
-                        'attach' => 'recharge'
-                    ];
-                    break;
-            }
-
-            //app支付类型
-            if ($order_source == Client_::android || $order_source == Client_::ios){
-                $attributes['trade_type'] = 'APP';
-            }
-            //在白名单内,一分钱
-            $white_list = Env::get('wechat.white_list', '');
-            $white_list = explode(',', $white_list);
-            if (in_array($order['user_id'], $white_list)) {
-                $attributes['total_fee'] = 1;
-            }
-
-            $result = $app->order->unify($attributes);
-
-            $data = [];
-            if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
-                $prepayId = $result['prepay_id'];
-                $jssdk = $app->jssdk;
-
-                if (in_array($order_source, $app_source)){
-                    $data = $jssdk->appConfig($prepayId, false);
-                }else{
-                    $data = $jssdk->bridgeConfig($prepayId, false);
-                }
-
-            } else {
-                if (isset($result['return_code']) && $result['return_code'] == 'FAIL'){
-                    throw new Exception($result['return_msg']);
-                }
-                if (isset($result['err_code_des'])){
-                    throw new Exception($result['err_code_des']);
-                }
-                throw new Exception('未知原因');
-            }
-
-            return $data;
-        } catch (Exception $e) {
-            self::$error = '支付失败:' . $e->getMessage();
-            return false;
+        $white_list = Env::get('wechat.white_list', '');
+        $white_list = explode(',', $white_list);
+        if (in_array($user_id, $white_list)) {
+            return true;
         }
+        return false;
     }
-
-
-    /**
-     * Notes: 退款
-     * @param $config
-     * @param $data
-     * @author 段誉(2021/2/1 11:58)
-     * @return array|bool|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public static function refund($config, $data)
-    {
-        if (!empty($data["transaction_id"])) {
-            $app = Factory::payment($config);
-            $result = $app->refund->byTransactionId(
-                $data['transaction_id'],
-                $data['refund_sn'],
-                $data['total_fee'],
-                $data['refund_fee']
-            );
-            return $result;
-        } else {
-            return false;
-        }
-    }
-
-
-
-    /**
-     * Notes: 获取微信配置
-     * @param $order
-     * @param $order_source
-     * @author 段誉(2021/2/1 11:58)
-     * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public static function getWeChatConfig($order, $order_source)
-    {
-        $where[] = ['user_id', '=', $order['user_id']];
-        $where[] = ['client', '=', $order_source];
-
-        $config = WeChatServer::getPayConfigBySource($order_source);
-
-        $auth = Db::name('user_auth')->where($where)->find();
-        $data = [
-            'auth' => $auth,
-            'config' => $config,
-            'order_source' => $order_source,
-        ];
-        return $data;
-    }
-
-
 
 
     /**

@@ -25,6 +25,7 @@ namespace app\common\server;
 
 use app\common\model\Client_;
 use think\Db;
+use think\Exception;
 
 class WeChatServer
 {
@@ -183,20 +184,35 @@ class WeChatServer
     public static function getPayConfigBySource($order_source)
     {
         $config = [];
+        $notify_url = '';
         switch ($order_source) {
             case Client_::mnp:
                 $config = self::getMnpPayConfig();
+                $notify_url = url('payment/notifyMnp', '', '', true);
                 break;
             case Client_::h5:
                 $config = self::getOaPayConfig();
+                $notify_url = url('payment/notifyOp', '', '', true);
                 break;
             case Client_::android:
-                $config = self::getOpPayConfig();
-                break;
             case Client_::ios:
                 $config = self::getOpPayConfig();
+                $notify_url = url('payment/notifyApp', '', '', true);
                 break;
         }
-        return $config;
+
+        if (empty($config) ||
+            empty($config['key']) ||
+            empty($config['mch_id']) ||
+            empty($config['app_id']) ||
+            empty($config['secret'])
+        ) {
+            throw new Exception('请在后台配置好微信支付');
+        }
+
+        return [
+            'config'        => $config,
+            'notify_url'    => $notify_url,
+        ];
     }
 }

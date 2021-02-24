@@ -22,10 +22,10 @@ namespace app\api\controller;
 use alipay\aop\AopClient;
 use app\api\model\{Order};
 use app\common\server\AliPayServer;
+use app\common\server\WeChatPayServer;
 use app\common\server\WeChatServer;
-use app\common\logic\{PaymentLogic, PayNotifyLogic};
+use app\common\logic\PaymentLogic;
 use app\common\model\Pay;
-use EasyWeChat\Payment\Application;
 use think\Db;
 
 
@@ -37,7 +37,7 @@ use think\Db;
 class Payment extends ApiBase
 {
 
-    public $like_not_need_login = ['notify', 'aliNotify'];
+    public $like_not_need_login = ['notifyMnp', 'notifyOp', 'notifyApp', 'aliNotify'];
 
     /**
      * Notes: 预支付
@@ -77,53 +77,37 @@ class Payment extends ApiBase
     }
 
 
+
     /**
-     * Notes: 微信支付回调
-     * @author 段誉(2021/2/1 11:57)
-     * @throws \EasyWeChat\Kernel\Exceptions\Exception
+     * Notes: 小程序回调
+     * @author 段誉(2021/2/23 14:34)
      */
-    public function notify()
+    public function notifyMnp()
     {
         $config = WeChatServer::getMnpPayConfig();
-        $app = new Application($config);
+        return WeChatPayServer::notify($config);
+    }
 
-        $response = $app->handlePaidNotify(function ($message, $fail) {
 
-            if ($message['return_code'] !== 'SUCCESS') {
-                return $fail('通信失败');
-            }
+    /**
+     * Notes: 公众号回调
+     * @author 段誉(2021/2/23 14:34)
+     */
+    public function notifyOp()
+    {
+        $config = WeChatServer::getOpPayConfig();
+        return WeChatPayServer::notify($config);
+    }
 
-            // 用户是否支付成功
-            if ($message['result_code'] === 'SUCCESS') {
-                $extra['transaction_id'] = $message['transaction_id'];
-                $attach = $message['attach'];
-                switch ($attach) {
-                    case 'order':
-                        $order = Db::name('order')->where(['order_sn' => $message['out_trade_no']])->find();
 
-                        if (!$order || $order['pay_status'] >= Pay::ISPAID) {
-                            return true;
-                        }
-                        PayNotifyLogic::handle('order', $message['out_trade_no'], $extra);
-                        break;
-                    case 'recharge':
-                        $order = Db::name('recharge_order')->where(['order_sn' => $message['out_trade_no']])->find();
-
-                        if (!$order || $order['pay_status'] >= Pay::ISPAID) {
-                            return true;
-                        }
-                        PayNotifyLogic::handle('recharge', $message['out_trade_no'], $extra);
-                        break;
-                }
-
-            } elseif ($message['result_code'] === 'FAIL') {
-                // 用户支付失败
-            }
-
-            return true; // 返回处理完成
-
-        });
-        $response->send();
+    /**
+     * Notes: APP回调
+     * @author 段誉(2021/2/23 14:34)
+     */
+    public function notifyApp()
+    {
+        $config = WeChatServer::getOpPayConfig();
+        return WeChatPayServer::notify($config);
     }
 
 

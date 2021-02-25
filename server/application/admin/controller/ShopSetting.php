@@ -93,4 +93,26 @@ class ShopSetting extends AdminBase
         }
     }
 
+    /**
+     * Notes: 注册设置
+     * @author 段誉(2021/2/25 15:14)
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function setRegister()
+    {
+        if ($this->request->isAjax()){
+            $post = $this->request->post();
+            ConfigServer::set('register_setting', 'open', $post['open']);
+            $this->_success('操作成功');
+        }
+        $config = ConfigServer::get('register_setting', 'open', 0);
+        $this->assign('config', $config);
+        return $this->fetch('register');
+    }
+
 }

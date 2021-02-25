@@ -28,18 +28,19 @@ class Register extends Validate
     protected $rule = [
         'mobile'    =>'require|mobile',
         'password'  =>'require|confirm:password|regex:password',
-        'code'      =>'require|checkCode',
+        'code'      => 'requireIf:check_code,1|checkCode',
     ];
 
     protected $message = [
-        'mobile.require'=>'请输入手机号',
-        'password.require'=>'请输入密码',
-        'password.regex'=>'密码格式错误',
-        'code.require'=>'请输入验证码',
-        'mobile.mobile'=>'非有效手机号码'
+        'mobile.require'    => '请输入手机号',
+        'password.require'  => '请输入密码',
+        'password.regex'    => '密码格式错误',
+        'code.requireIf'    => '请输入验证码',
+        'mobile.mobile'     => '非有效手机号码'
     ];
 
-    public function checkCode($value,$rule,$data){
+    public function checkCode($value,$rule,$data)
+    {
         $sms_logic = new SmsLogic('ZCYZ',$data['mobile'],$value);
         $check = $sms_logic->checkCode();
         //检查验证码是否正确
@@ -49,7 +50,6 @@ class Register extends Validate
         //标记验证码已验证
         $sms_logic->cancelCode();
         return true;
-
     }
 
 

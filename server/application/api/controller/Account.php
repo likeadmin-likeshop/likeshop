@@ -21,6 +21,7 @@
 namespace app\api\controller;
 use app\api\logic\LoginLogic;
 use app\api\logic\WechatLogin;
+use app\common\server\ConfigServer;
 
 class Account extends ApiBase
 {
@@ -34,6 +35,7 @@ class Account extends ApiBase
      */
     public function register(){
         $post  = $this->request->post();
+        $post['check_code'] = ConfigServer::get('register_setting', 'open', 0);
         $result = $this->validate($post,'app\api\validate\Register');
         if($result ===true){
             $data = LoginLogic::register($post);

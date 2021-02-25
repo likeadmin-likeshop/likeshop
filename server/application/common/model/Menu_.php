@@ -45,169 +45,89 @@ class Menu_{
      * @param bool $scene 场景：1-首页导航；2-个人中心
      * @param bool $from 菜单来源：获取具体的某个菜单
      * @return array
-     * name => '菜单名称'
-     * link =>[
-     *      'link1' => 小程序链接
-     *      'link2' => H5
-     *      'link3' => APP
-     * ]
+     * name      => '菜单名称'
+     * link      =>  '菜单链接'
      * is_tab    => 是否的tab页
-     * type      => 菜单类型：1-跳转；3-按钮（微信小程序可调用客服）
      *
      */
     public static function getMenuContent($scene = true,$from = true){
         $config1 = [
             self::index_hot_sell           => [
                 'name'          => '热销榜单',
-                'link'          => [
-                    'link1' => '/pages/bundle/hot_list/hot_list',
-                    'link2' => '/pages/bundle/hot_list/hot_list',
-                    'link3' => '/pages/bundle/hot_list/hot_list',
-                ],
+                'link'          => '/pages/bundle/hot_list/hot_list',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_coupon_list        => [
                 'name'          => '领券中心',
-                'link'          => [
-                    'link1' => '/pages/user_getcoupon/user_getcoupon',
-                    'link2' => '/pages/user_getcoupon/user_getcoupon',
-                    'link3' => '/pages/user_getcoupon/user_getcoupon',
-                ],
+                'link'          => '/pages/user_getcoupon/user_getcoupon',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_member_centre      => [
                 'name'          => '会员中心',
-                'link'          => [
-                    'link1' => '/pages/user_vip/user_vip',
-                    'link2' => '/pages/user_vip/user_vip',
-                    'link3' => '/pages/user_vip/user_vip',
-                ],
+                'link'          => '/pages/user_vip/user_vip',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_my_collect         => [
                 'name'          => '我的收藏',
-                'link'          => [
-                    'link1' => '/pages/user_collection/user_collection',
-                    'link2' => '/pages/user_collection/user_collection',
-                    'link3' => '/pages/user_collection/user_collection',
-                ],
+                'link'          => '/pages/user_collection/user_collection',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_store_news         => [
                 'name'          => '商城资讯',
-                'link'          => [
-                    'link1' => '/pages/news_list/news_list',
-                    'link2' => '/pages/news_list/news_list',
-                    'link3' => '/pages/news_list/news_list',
-                ],
+                'link'          =>'/pages/news_list/news_list',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_store_help         => [
                 'name'          => '帮助中心',
-                'link'          => [
-                    'link1' => '/pages/news_list/news_list?type=1',
-                    'link2' => '/pages/news_list/news_list?type=1',
-                    'link3' => '/pages/news_list/news_list?type=1',
-                ],
+                'link'          => '/pages/news_list/news_list?type=1',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_delivery_address   => [
                 'name'          => '收货地址',
-                'link'          => [
-                    'link1' => '/pages/user_address/user_address',
-                    'link2' => '/pages/user_address/user_address',
-                    'link3' => '/pages/user_address/user_address',
-                ],
+                'link'          => '/pages/user_address/user_address',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::index_goods_category     => [
                 'name'          => '商品分类',
-                'link'          => [
-                    'link1' => '/pages/sort/sort',
-                    'link2' => '/pages/sort/sort',
-                    'link3' => '/pages/sort/sort',
-                ],
+                'link'          => '/pages/sort/sort',
                 'is_tab'        => 1,
-                'type'          => 1,
             ],
         ];//首页菜单
         $config2 = [
             self::centre_my_wallet         => [
                 'name'          => '我的钱包',
-                'link'          => [
-                    'link1' => '/pages/bundle/user_wallet/user_wallet',
-                    'link2' => '/pages/bundle/user_wallet/user_wallet',
-                    'link3' => '/pages/bundle/user_wallet/user_wallet',
-                ],
+                'link'          => '/pages/bundle/user_wallet/user_wallet',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::centre_my_coupon         => [
                 'name'          => '我的优惠券',
-                'link'          => [
-                    'link1' => '/pages/user_coupon/user_coupon',
-                    'link2' => '/pages/user_coupon/user_coupon',
-                    'link3' => '/pages/user_coupon/user_coupon',
-                ],
+                'link'          => '/pages/user_coupon/user_coupon',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::centre_level_serve        => [
                 'name'          => '等级服务',
-                'link'          => [
-                    'link1' => '/pages/user_vip/user_vip',
-                    'link2' => '/pages/user_vip/user_vip',
-                    'link3' => '/pages/user_vip/user_vip',
-                ],
+                'link'          => '/pages/user_vip/user_vip',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::centre_store_help         => [
                 'name'          => '帮助中心',
-                'link'          => [
-                    'link1' => '/pages/news_list/news_list?type=1',
-                    'link2' => '/pages/news_list/news_list?type=1',
-                    'link3' => '/pages/news_list/news_list?type=1',
-                ],
+                'link'          => '/pages/news_list/news_list?type=1',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::centre_delivery_address   => [
                 'name'          => '收货地址',
-                'link'          => [
-                    'link1' => '/pages/user_address/user_address',
-                    'link2' => '/pages/user_address/user_address',
-                    'link3' => '/pages/user_address/user_address',
-                ],
+                'link'          => '/pages/user_address/user_address',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::centre_my_collect         => [
                 'name'          => '我的收藏',
-                'link'          => [
-                    'link1' => '/pages/user_collection/user_collection',
-                    'link2' => '/pages/user_collection/user_collection',
-                    'link3' => '/pages/user_collection/user_collection',
-                ],
+                'link'          => '/pages/user_collection/user_collection',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
             self::centre_service            => [
                 'name'          => '联系客服',
-                'link'          => [
-                    'link1' => '/pages/bundle/contact_offical/contact_offical',
-                    'link2' => '/pages/bundle/contact_offical/contact_offical',
-                    'link3' => '/pages/bundle/contact_offical/contact_offical',
-                ],
+                'link'          => '/pages/bundle/contact_offical/contact_offical',
                 'is_tab'        => 0,
-                'type'          => 1,
             ],
         ];//个人中心
         $config_name = 'config'.$scene;

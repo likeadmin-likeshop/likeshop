@@ -48,6 +48,7 @@ class Menu_{
      * name      => '菜单名称'
      * link      =>  '菜单链接'
      * is_tab    => 是否的tab页
+     * link_type    => 菜单类型：1-跳转；2-web-view；3-按钮（微信小程序可调用客服）
      *
      */
     public static function getMenuContent($scene = true,$from = true){
@@ -56,6 +57,7 @@ class Menu_{
                 'name'          => '热销榜单',
                 'link'          => '/pages/bundle/hot_list/hot_list',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_coupon_list        => [
                 'name'          => '领券中心',
@@ -71,26 +73,31 @@ class Menu_{
                 'name'          => '我的收藏',
                 'link'          => '/pages/user_collection/user_collection',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_store_news         => [
                 'name'          => '商城资讯',
                 'link'          =>'/pages/news_list/news_list',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_store_help         => [
                 'name'          => '帮助中心',
                 'link'          => '/pages/news_list/news_list?type=1',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_delivery_address   => [
                 'name'          => '收货地址',
                 'link'          => '/pages/user_address/user_address',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_goods_category     => [
                 'name'          => '商品分类',
                 'link'          => '/pages/sort/sort',
                 'is_tab'        => 1,
+                'link_type'     => 1,
             ],
         ];//首页菜单
         $config2 = [
@@ -98,36 +105,43 @@ class Menu_{
                 'name'          => '我的钱包',
                 'link'          => '/pages/bundle/user_wallet/user_wallet',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::centre_my_coupon         => [
                 'name'          => '我的优惠券',
                 'link'          => '/pages/user_coupon/user_coupon',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::centre_level_serve        => [
                 'name'          => '等级服务',
                 'link'          => '/pages/user_vip/user_vip',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::centre_store_help         => [
                 'name'          => '帮助中心',
                 'link'          => '/pages/news_list/news_list?type=1',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::centre_delivery_address   => [
                 'name'          => '收货地址',
                 'link'          => '/pages/user_address/user_address',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::centre_my_collect         => [
                 'name'          => '我的收藏',
                 'link'          => '/pages/user_collection/user_collection',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::centre_service            => [
                 'name'          => '联系客服',
                 'link'          => '/pages/bundle/contact_offical/contact_offical',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
         ];//个人中心
         $config_name = 'config'.$scene;

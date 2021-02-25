@@ -19,6 +19,7 @@
 
 
 namespace app\api\validate;
+use think\Db;
 use think\Validate;
 use app\common\logic\SmsLogic;
 
@@ -26,7 +27,7 @@ class Register extends Validate
 {
     protected $regex = [ 'password' => '^(?=.*[a-zA-Z0-9].*)(?=.*[a-zA-Z\\W].*)(?=.*[0-9\\W].*).{6,20}$'];
     protected $rule = [
-        'mobile'    =>'require|mobile',
+        'mobile'    =>'require|mobile|checkMobile',
         'password'  =>'require|confirm:password|regex:password',
         'code'      => 'requireIf:check_code,1|checkCode',
     ];
@@ -70,4 +71,18 @@ class Register extends Validate
 
     }
 
+
+    public function checkMobile($value, $data, $rule)
+    {
+        //检查手机号是否已存在
+        $user = Db::name('user')
+            ->where('mobile', '=', $value)
+            ->find();
+
+        if ($user) {
+            return '此手机号已被使用';
+        }
+
+        return true;
+    }
 }

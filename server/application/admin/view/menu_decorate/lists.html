@@ -47,31 +47,14 @@
             ,table = layui.table
             ,like = layui.like
             ,type = {$type}
-            ,client = {$client}
             ,tips = '';
-        switch (client) {
-            case 1:
-                if(type === 1){
-                    tips = '*设置小程序商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
-                }else{
-                    tips = '*设置小程序商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
-                }
-                break;
-            case 2:
-                if(type === 1){
-                    tips = '*设置H5商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
-                }else{
-                    tips = '*设置H5商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
-                }
-                break;
-            case 3:
-                if(type === 1){
-                    tips = '*设置APP商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
-                }else{
-                    tips = '*设置APP商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
-                }
-                break;
+
+        if(type === 1){
+            tips = '*设置商城首页导航区的菜单，支持选择系统模块、填写自定义链接';
+        }else{
+            tips = '*设置商城个人中心我的服务模块菜单，支持选择系统模块、填写自定义链接';
         }
+
         $('.tips').text(tips);
 
         //图片放大
@@ -119,7 +102,6 @@
                         iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                             var field = data.field;
                             field['decorate_type'] = type,
-                            field['client'] = client,
                             $.ajax({
                                 url:'{:url("menu_decorate/add")}',
                                 data:field,
@@ -159,14 +141,14 @@
         //管理员管理
         table.render({
             elem: '#menu_decorate-lists'
-            ,url: '{:url("menu_decorate/lists")}?client='+client+'&type='+type //模拟接口
+            ,url: '{:url("menu_decorate/lists")}?type='+type //模拟接口
             ,cols: [[
                 {field: 'name', title: '菜单名称',width: 200,}
                 ,{field: 'image', title: '菜单图标', width: 160,style:'height:100px;',toolbar: '#image'}
                 ,{field: 'link_address', title: '链接地址',width: 180}
                 ,{field: 'sort', title: '排序',width: 100,event: 'tips',edit:'text'}
                 ,{field: 'is_show', title:'显示', templet: '#status', width: 100, align: 'center'}
-                ,{fixed: 'right', title: '操作', align: 'center', width: 150, toolbar: '#menu_decorate-operation'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#menu_decorate-operation'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -309,7 +291,6 @@
                         iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                             var field = data.field;
                             field['decorate_type'] = type,
-                                field['client_type'] = client,
                                 $.ajax({
                                     url:'{:url("menu_decorate/add")}',
                                     data:field,

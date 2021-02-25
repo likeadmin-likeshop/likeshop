@@ -18,30 +18,37 @@
 // +----------------------------------------------------------------------
 namespace app\admin\logic;
 use app\common\model\Menu_;
+use app\common\server\UrlServer;
 use think\Db;
 
 class MenuDecorateLogic{
     /*
      * 获取列表
      */
-    public static function lists($client,$type){
+    public static function lists($get)
+    {
+        $type = $get['type'] ?? 1;
         $where[] = ['del','=',0];
-        $where[] = ['client','=',$client];
-        $where[] = ['decorate_type','=',$type];
+        $where[] = ['decorate_type', '=', $type];
 
         $count = Db::name('menu_decorate')->where($where)->count();
-        $lists = Db::name('menu_decorate')->where($where)->select();
-        $link_scene = 'link'.$client;
+        $lists = Db::name('menu_decorate')
+            ->where($where)
+            ->page($get['page'], $get['limit'])
+            ->order('id desc')
+            ->select();
 
         foreach ($lists as &$item){
+            $item['image'] = UrlServer::getFileUrl($item['image']);
             if($item['link_type'] == 1){
                 $content = Menu_::getMenuContent($type,$item['link_address']);
-                $item['link_address'] = $content['link'][$link_scene] ?? '';
+                $item['link_address'] = $content['link'] ?? '';
 
             }
         }
         return ['count' => $count, 'lists' => $lists];
     }
+
     /*
      * 新增
      */
@@ -54,13 +61,13 @@ class MenuDecorateLogic{
         $data = [
             'name'          => $post['name'],
             'image'         => $post['image'],
-            'client'        => $post['client'],
             'decorate_type' => $post['decorate_type'],
             'link_type'     => $post['link_type'],
             'link_address'  => $link_address,
             'sort'          => $post['sort']?:0,
             'update_time'   => $time,
             'create_time'   => $time,
+            'is_show'       => $post['is_show'],
         ];
         return Db::name('menu_decorate')->insert($data);
     }
@@ -82,6 +89,7 @@ class MenuDecorateLogic{
             'link_address'  => $link_address,
             'sort'          => $post['sort']?:0,
             'update_time'   => $time,
+            'is_show'       => $post['is_show'],
         ];
         return Db::name('menu_decorate')->where(['id'=>$post['id']])->update($data);
     }

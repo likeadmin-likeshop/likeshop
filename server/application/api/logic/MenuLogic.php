@@ -22,23 +22,23 @@ use app\common\server\UrlServer;
 use think\Db;
 
 class MenuLogic{
-    public static function getMenu($client,$type){
+    public static function getMenu($type){
 
         $list = Db::name('menu_decorate')
-                ->where(['client'=>$client,'decorate_type'=>$type,'del'=>0,'is_show'=>1])
+                ->where(['decorate_type'=>$type,'del'=>0,'is_show'=>1])
                 ->field('name,image,link_type,link_address')
                 ->order('sort desc')
                 ->select();
 
         $menu_list = [];
-        $link_scene = 'link'.$client;
+
         foreach ($list as $key => $menu){
             //处理图标
             $menu_content = Menu_::getMenuContent($type,$menu['link_address']);
             $menu_list[] = [
                 'name'       => $menu['name'],
                 'image'      => UrlServer::getFileUrl($menu['image']),
-                'link'       => $menu_content['link'][$link_scene] ?? $menu['link_address'],
+                'link'       => $menu_content['link'] ?: $menu['link_address'],
                 'is_tab'     => $menu_content['is_tab'] ?? '',
                 'link_type'  => $menu_content['type'] ?? $menu['link_type'],
             ];

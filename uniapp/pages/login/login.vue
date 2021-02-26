@@ -210,7 +210,7 @@
 				this.LOGIN(data)
 				this.getUser()
 				// #ifdef H5
-				location.replace('/mobile' + Cache.get(BACK_URL))
+				location.replace('/mobile' + (Cache.get(BACK_URL) || '/'))
 				//#endif
 				// #ifdef MP-WEIXIN
 				uni.navigateBack();

@@ -35,7 +35,8 @@ class MenuLogic{
         foreach ($list as $key => $menu){
             //处理图标
             $menu_content = Menu_::getMenuContent($type,$menu['link_address']);
-            $menu_list[] = [
+
+            $menu_content && $menu_list[] = [
                 'name'       => $menu['name'],
                 'image'      => UrlServer::getFileUrl($menu['image']),
                 'link'       => $menu_content['link'] ?: $menu['link_address'],

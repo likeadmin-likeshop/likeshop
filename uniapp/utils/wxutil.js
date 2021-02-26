@@ -46,11 +46,10 @@ export function showLoginDialog() {
 	});
 	// #endif
 	//#ifdef  H5
-	const pathLogin = 'login'
+	const pathLogin = 'pages/login/login'
 	let path = currentPage().route
-	let name = path.split("/")[1];
-	if (name != pathLogin) {
-		uni.redirectTo({
+	if (path != pathLogin) {
+		uni.navigateTo({
 			url: '/pages/login/login'
 		})
 	}

@@ -63,11 +63,13 @@ class Menu_{
                 'name'          => '领券中心',
                 'link'          => '/pages/user_getcoupon/user_getcoupon',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_member_centre      => [
                 'name'          => '会员中心',
                 'link'          => '/pages/user_vip/user_vip',
                 'is_tab'        => 0,
+                'link_type'     => 1,
             ],
             self::index_my_collect         => [
                 'name'          => '我的收藏',

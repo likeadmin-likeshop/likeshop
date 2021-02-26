@@ -2,5 +2,5 @@ module.exports = {
     HEADER: {
         'content-type': 'application/json'
     },
-    baseURL: 'http://likeshop.yixiangonline.com/api/',
+    baseURL: 'http://likeshopv2.yixiangonline.com/api/',
 }

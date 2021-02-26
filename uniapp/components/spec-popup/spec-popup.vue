@@ -1,9 +1,6 @@
 <template>
-	<uni-popup ref="popup" type="bottom" :mask-click="false">
+	<u-popup v-model="showPop" mode="bottom" border-radius="14" :closeable="true" @close="onClose" :safe-area-inset-bottom="true">
 		<view class="bg-white spec-contain">
-			<view class="close" @tap="close">
-				<image class="icon-lg" src="/static/images/icon_close.png"></image>
-			</view>
 			<view class="header row">
 				<custom-image class="goods-img mr20" radius="10rpx" @tap="previewImage(checkedGoods.image)" :src="checkedGoods.image"></custom-image>
 				<view class="goods-info">
@@ -34,7 +31,7 @@
 				</scroll-view>
 				<view class="good-num row-between ml20 mr20">
 					<view class="label">数量</view>
-					<uni-number-box :value="goodsNum" :min="1" :max="checkedGoods.stock" @change="onChange"></uni-number-box>
+					<u-number-box v-model="goodsNum" :min="1" :max="checkedGoods.stock"></u-number-box>
 				</view>
 			</view>
 			<view class="btns row-between bg-white">
@@ -42,7 +39,7 @@
 				<button v-if="showBuy" class="bg-primary br60 white btn" size="lg" @tap="onClick('buynow')">{{redBtnText}}</button>
 			</view>
 		</view>
-	</uni-popup>
+	</u-popup>
 </template>
 
 <script>
@@ -51,7 +48,8 @@
 			return {
 				checkedGoods: {},
 				specList: [],
-				goodsNum: 1
+				goodsNum: 1,
+				showPop: false
 			};
 		},
 
@@ -125,23 +123,13 @@
 					detail: goods_item[index]
 				});
 			},
-			show: {
-				handler(val) {
-					if(val) {
-						this.open()
-					}else {
-						this.close()
-					}
-				}
+			show(val) {
+				this.showPop = val
 			}
 
 		},
 		methods: {
-			open() {
-				this.$refs.popup.open()
-			},
-			close() {
-				this.$refs.popup.close()
+			onClose() {
 				this.$emit('close')
 			},
 			onClick(type) {
@@ -153,10 +141,6 @@
 				this.$emit(type, {
 					detail: checkedGoods
 				});
-			},
-
-			onChange(e) {
-				this.goodsNum = e
 			},
 
 			choseSpecItem(id, specid) {
@@ -230,15 +214,16 @@
 			}
 
 		}
+
 		.btns {
 			height: 120rpx;
 			padding: 0 30rpx;
 			margin-top: 80rpx;
-		
+
 			.add-cart {
 				background-color: #FF9E1E;
 			}
-		
+
 			.btn {
 				margin: 0 10rpx;
 				flex: 1;

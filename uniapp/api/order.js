@@ -35,3 +35,10 @@ export function orderTraces(id) {
 export function confirmOrder(id) {
     return request.post("order/confirm", {id})
 }
+
+
+//下单获取优惠券
+
+export function getOrderCoupon(data) {
+  return request.post("coupon/orderCoupon", data);
+} 

@@ -138,7 +138,7 @@
 				.go-back-btn {
 					width: 650rpx;
 					height: 84rpx;
-					border: solid 1rpx $-color-primary;
+					border:1px solid  $-color-primary;
 					box-sizing: border-box;
 				}
 			}

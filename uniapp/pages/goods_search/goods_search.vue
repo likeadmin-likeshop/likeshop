@@ -2,9 +2,9 @@
 	<view class="goods-search">
 
 		<view class="header-wrap">
-			<sticky :offset-top="0">
+			<u-sticky offset-top="0" h5-nav-height="0">
 				<view class="search">
-					<uni-search-bar v-model="keyword" :radius="60" @focus="showHistory = true"  @confirm="onSearch" @input="onChange" bg-color="#F4F4F4" cancel-button="none"></uni-search-bar>
+					 <u-search v-model="keyword" @focus="showHistory = true" @search="onSearch" bg-color="#F4F4F4"></u-search>
 				</view>
 				<view v-show="!showHistory" class="header row bg-white">
 					<view :class="'tag row-center ' + (comprehensive ? 'primary' : '')" @tap="onNormal">综合</view>
@@ -25,17 +25,16 @@
 						</view>
 					</view>
 					<view class="tag row-center" @tap="changeType">
-						<image class="icon-sm" :src=" type === 'one' ? '/static/images/icon_double.png' : '/static/images/icon_one.png'"></image>
+						<image class="icon-sm" :src=" goodsType === 'one' ? '/static/images/icon_double.png' : '/static/images/icon_one.png'"></image>
 					</view>
 				</view>
-			</sticky>
+			</u-sticky>
 		</view>
 		<view v-show="showHistory" class="content bg-white">
 			<view v-if="hotList.length" class="search-words">
 				<view class="title">热门搜索</view>
 				<view class="words row wrap">
-					<view v-for="(item, index) in hotList" :key="index" class="item br60 bg-gray mr20 mb20 lighter sm line1"
-					 @tap="onChangeKeyword(item)">{{item}}</view>
+					<view v-for="(item, index) in hotList" :key="index" class="item br60 bg-gray mr20 mb20 lighter sm line1" @tap="onChangeKeyword(item)">{{item}}</view>
 				</view>
 			</view>
 			<view v-if="historyList.length" class="search-words">
@@ -44,8 +43,7 @@
 					<view class="xs muted mr20" style="padding: 10rpx 20rpx" @tap="clearSearchFun">清空</view>
 				</view>
 				<view class="words row wrap">
-					<view v-for="(item, index) in historyList" :key="index" class="item br60 bg-gray mr20 mb20 lighter sm line1"
-					  @tap="onChangeKeyword(item)">{{item}}</view>
+					<view v-for="(item, index) in historyList" :key="index" class="item br60 bg-gray mr20 mb20 lighter sm line1" @tap="onChangeKeyword(item)">{{item}}</view>
 				</view>
 			</view>
 		</view>
@@ -169,7 +167,7 @@
 			},
 
 			onNormal() {
-				this.priceSort =  ''
+				this.priceSort = ''
 				this.saleSort = ''
 				this.onRefresh();
 			},

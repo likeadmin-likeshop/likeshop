@@ -1,27 +1,25 @@
 <template>
-<!-- pages/goods_reviews/goods_reviews.wxml -->
 <view class="goods-reviews">
     <order-goods :list="goods"></order-goods>
     <view class="goods-evaluate row">
         <view class="lable">商品评价</view>
-        <uni-rate name="goodsRate" activeColor="#FF2C3C" :value="goodsRate" @change="goodsRateChange" />
+        <u-rate name="goodsRate" :count="5" active-color="#FF2C3C" v-model="goodsRate" @change="goodsRateChange" />
         <view :class="'desc ' + ((goodsRate<=2)? 'muted': 'primary') + ' '" :hidden="goodsRate == 0">
             {{goodsRateDesc}}
         </view>
     </view>
         <view class="rate bg-white">
-            <view class="item nr lighter mb20">{{goods[0].name}}</view>
             <view class="item row mb20">
                 <view class="lable">描述相符</view>
-                <uni-rate name="descRate" activeColor="#FF2C3C" data-type="descRate" :value="descRate" @change="onChange" />
+                <u-rate name="descRate" active-color="#FF2C3C" v-model="descRate" />
             </view>
             <view class="item row mb20">
                 <view class="lable">服务态度</view>
-                <uni-rate name="serverRate" activeColor="#FF2C3C" data-type="serverRate" :value="serverRate" @change="onChange" />
+                <u-rate name="serverRate" active-color="#FF2C3C" v-model="serverRate" />
             </view>
             <view class="item row">
                 <view class="lable">配送服务</view>
-                <uni-rate name="deliveryRate" activeColor="#FF2C3C" data-type="deliveryRate" :value="deliveryRate" @change="onChange" />
+                <u-rate name="deliveryRate" active-color="#FF2C3C" v-model="deliveryRate" />
             </view>
         </view>
         <view class="goods-dec bg-white mt20">
@@ -29,7 +27,7 @@
             <view class="textarea bg-gray mb20">
                 <textarea name="comment" placeholder="宝贝收到还满意吗，说说你的使用心得。分享给想买的他们吧！！" :value="comment" @input="onInput"></textarea>
             </view>
-            <van-uploader preview-size="180rpx" image-fit="aspectFill" multiple="true" max-count="5" :file-list="fileList" @after-read="afterRead" @delete="onDelete"></van-uploader>
+            <uploader preview-size="180rpx" :mutiple="true" :maxUpload="5" :file-list="fileList" @after-read="afterRead" :deletable="true" @delete="onDelete" />
         </view>
         <button form-type="submit" class="btn br60" type="primary" size="lg" @tap="onSubmit">立即评价</button>
 </view>
@@ -52,10 +50,10 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { baseURL } from '../../config/app.js';
-import { goodsComment, getCommentInfo } from '../../api/user';
-import orderGoods from "../../components/order-goods/order-goods";
-
+import { baseURL } from '@/config/app.js';
+import { goodsComment, getCommentInfo } from '@/api/user';
+import orderGoods from "@/components/order-goods/order-goods";
+import { uploadFile } from '@/utils/tools.js';
 export default {
   data() {
     return {
@@ -84,57 +82,22 @@ export default {
     this.getCommentInfoFun();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {},
+  
   methods: {
     onChange(e) {
       this.type = e.value
     },
 
     goodsRateChange: function (e) {
-      let num = e.value;
       let goodsRateDesc = "";
 
-      if (e.value <= 2) {
+      if (e <= 2) {
         goodsRateDesc = "差评";
-      } else if (e.value == 3) {
+      } else if (e == 3) {
         goodsRateDesc = "中评";
       } else {
         goodsRateDesc = "好评";
       }
-      this.goodsRate = num;
       this.goodsRateDesc = goodsRateDesc;
     },
 
@@ -195,70 +158,34 @@ export default {
     },
 
     afterRead(e) {
-      const {
-        file
-      } = e.detail;
+      const file = e
       uni.showLoading({
         title: '正在上传中...',
         mask: true
       });
-      let uploadArr = file.map(item => {
-        return this.uploadFile(item.path);
-      });
-      Promise.all(uploadArr).then(res => {
-        const {
-          fileList = []
-        } = this;
-        fileList.push(...res);
-        uni.hideLoading();
-        this.fileList = fileList
-      });
-    },
-
-    uploadFile(path) {
-      return new Promise(resolve => {
-        uni.uploadFile({
-          url: baseURL + 'file/formimage',
-          filePath: path,
-          name: 'file',
-          success: res => {
-            const {
-              fileList = []
-            } = this;
-            let data = JSON.parse(res.data);
-
-            if (data.code == 1) {
-              resolve(data.data); // fileList.push(data.data);
-              // console.log(fileList)
-              // this.setData({ fileList });
-            }
-          },
-          fail: () => {
+      file.map(item => {
+        uploadFile(item.path).then(res => {
             uni.hideLoading();
-            this.$toast({
-              title: '上传失败，请重新上传'
-            });
-          }
-        });
-      });
+            this.fileList.push(res)
+        }).catch(() => {
+			uni.hideLoading();
+			this.$toast({
+				title: "上传失败"
+			})
+			
+		})
+      })
     },
 
-    onDelete(e) {
-      const {
-        index
-      } = e.detail;
-      const {
-        fileList
-      } = this;
-      fileList.splice(index, 1);
-      this.fileList = fileList
+    onDelete(index) {
+      this.fileList.splice(index, 1)
     }
 
   }
 };
 </script>
 <style>
-/* pages/goods_reviews/goods_reviews.wxss */
+
 .goods-reviews {
     padding: 20rpx 0 40rpx;
 }

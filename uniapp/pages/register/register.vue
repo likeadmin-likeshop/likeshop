@@ -5,24 +5,26 @@
                 <view class="input-label row md normal">手机号</view>
                 <input v-model="mobile" class="input" placeholder="请输入手机号码" />
             </view>
-            <view class="input-item row">
+            <view class="input-item row" v-if="appConfig.register_setting">
                 <view class="input-label row md normal">短信验证码</view>
                 <input v-model="smsCode" style="width: 3.8rem" placeholder="请输入" />
                 <button class="bd-primary sm primary br60 row-center" @click="sendSmsFun()">
                     <!-- 获取验证码 -->
-                    <view v-show="canSendSms">获取验证码</view>
-                    <uni-countdown
+                    <view v-show="canSendSms" class="sm">获取验证码</view>
+                    <u-count-down
                     ref="countDown"
-                    :showDay="false"
+                    :show-days="false"
                     :timestamp="time"
-                    :showColon="false"
-                    splitorColor="#FF2C3C"
+                    separator="zh"
                     color="#FF2C3C"
-                    :showHour="false"
-                    :showMinute="false"
+                    separatorColor="#FF2C3C"
+                    bg-color="rgba(0, 0, 0, 0)"
+                    :show-hours="false"
+                    :show-minutes="false"
+                    :autoplay="false"
                     v-show="!canSendSms" 
-                    @timeup="countDownFinish">
-                    </uni-countdown>
+                    @end="countDownFinish()"
+                    />
                 </button>
             </view>
             <view class="input-item row">
@@ -47,6 +49,10 @@
     import {register, sendSms} from '@/api/app.js'
     import { ACCESS_TOKEN } from '@/config/app.js'
     import {SMSType} from '@/utils/type.js'
+    import {
+    	mapMutations,
+		mapGetters
+    } from 'vuex'
     
     export default {
         name: 'register',
@@ -61,13 +67,16 @@
                 password: '',
                 passwordConfirm: "",
                 canSendSms: true,
-                time: 60 * 1000,
+                time: 59,
                 primaryColor: '#FF2C3C'
             }
         },
-        mounted() {
+        onLoad() {
+			console.log(this.appConfig)
         },
         methods: {
+           
+            ...mapMutations(['LOGIN']),
             changeChecked() {
                 this.isAgree = !this.isAgree
             },
@@ -75,10 +84,6 @@
                 let {isAgree, mobile, password, smsCode, passwordConfirm} = this;
                 if(!mobile) {
                     this.$toast({title: '请填写手机号'});
-                    return;
-                }
-                if(!smsCode) {
-                    this.$toast({title: "请填写短信验证码"})
                     return;
                 }
                 if(!password) {
@@ -96,24 +101,21 @@
                 let data = {mobile: mobile, password: password, code: smsCode, client: 2}
                 register(data).then(res => {
                     if(res.code == 1) {
-                        this.$ls.set(ACCESS_TOKEN, res.data.token);
+                        this.LOGIN(data)
                         this.$toast({title: res.msg});
                         //  跳转到登录页
                         setTimeout(() => {
-                            this.goPage("login");
+                            uni.navigateBack()
                         }, 1000)
                     }
                 })
             },
     
             countDownFinish() {
-                this.$refs.countDown.reset()
                 this.canSendSms = true;
             },
     
-            goPage(name) {
-                this.$router.push(name)
-            },
+ 
     
             sendSmsFun() {
                 if(this.canSendSms == false) {
@@ -131,7 +133,10 @@
                     }
                 })
             }
-        }
+        },
+		computed: {
+			...mapGetters(['appConfig']),
+		}
     }
 </script>
 

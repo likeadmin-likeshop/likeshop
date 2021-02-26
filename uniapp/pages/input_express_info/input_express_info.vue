@@ -22,7 +22,7 @@
         <view class="sm muted ml20">(请上传快递单号凭证）</view>
       </view>
       <view class="upload">
-        <Uploader :deletable="true" @delete="handleImage" preview-size="160rpx" max-count="1" :file-list="fileList" @after-read="afterRead" />
+        <uploader :deletable="true" @delete="handleImage" preview-size="160rpx" max-count="1" :file-list="fileList" @after-read="afterRead" />
       </view>
     </view>
     <view class="submit-btn">

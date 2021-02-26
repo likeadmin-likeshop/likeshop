@@ -8,13 +8,14 @@ import Cache from './cache'
 import {
 	TOKEN
 } from '../config/cachekey'
-
+import {baseURL} from '../config/app'
 import {
 	wxAutoLogin,
 	isAuthorize,
-	toLogin
 } from './login'
-
+import {
+	showLoginDialog
+} from './wxutil'
 let index = 0;
 
 function checkParams(params) {
@@ -31,11 +32,12 @@ function checkParams(params) {
 
 
 const service = axios.create({
-	baseURL: 'http://likeshop.yixiangonline.com/api/',
+	baseURL: baseURL,
 	timeout: 10000,
 	header: {
 		'content-type': 'application/json'
-	}
+	},
+
 });
 
 
@@ -47,8 +49,7 @@ service.interceptors.request.use(
 		if (config.method == 'GET') {
 			config.url += paramsToStr(config.params)
 		}
-		config.header.token = Cache.get(TOKEN) || "ac772e3dfa25352ba70c7779ea2bc7e8"
-		console.log(config)
+		config.header.token = Cache.get(TOKEN)
 		return config
 	},
 	error => {
@@ -69,36 +70,41 @@ service.interceptors.response.use(
 				} = response.data;
 				if (code == 0 && show && msg) {
 					uni.showToast({
-						title:msg,
-						icon:"none"
+						title: msg,
+						icon: "none"
 					})
 				} else if (code == -1) {
 					store.commit('LOGOUT')
-					//#ifdef  MP-WEIXIN
 					let num = store.getters.loginNum
+					//#ifdef  MP-WEIXIN
 					let isAuth = await isAuthorize();
-					if (!isAuth) return;
+					if (!isAuth) return Promise.resolve(response.data)
 					if (num == 0) {
-						uni.showLoading({
-							title: "登录中..."
-						})
 						store.commit('SETLOGINNUM', ++num)
 						const {
 							code: loginCode,
 							data: loginData
 						} = await wxAutoLogin()
 						if (loginCode == 1) {
+							store.commit('SETLOGINNUM', 0)
 							uni.hideLoading()
 							store.commit('LOGIN', loginData)
-							const {options, onLoad, onShow} = currentPage()
+							const {
+								options,
+								onLoad,
+								onShow
+							} = currentPage()
 							onLoad && onLoad(options)
 							onShow && onShow()
 						}
 					}
 					// #endif
 					//#ifdef H5
-					toLogin()
+					if (num == 0) {
+						showLoginDialog()
+					}
 					// #endif
+
 				}
 			}
 
@@ -113,3 +119,4 @@ service.interceptors.response.use(
 )
 
 export default service
+

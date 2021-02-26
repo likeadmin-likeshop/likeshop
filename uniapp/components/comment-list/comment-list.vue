@@ -1,19 +1,20 @@
 <template>
 <!-- components/comment_list/comment_list.wxml -->
 <view  height="calc(100vh - 80rpx)">
-	<view slot="content" class="comment-list">
+	<view class="comment-list">
 		<view v-for="(item, index) in list" :key="index" class="comment-item bg-white mt20">
+			<view class="xs muted ml20" style="padding-top: 20rpx;" v-if="item.create_time">评价时间：{{item.create_time}}</view>
 			<navigator class="comment-goods row" :url="'/pages/goods_details/goods_details?id=' + item.goods_id" hover-class="none">
 				<custom-image width="160rpx" height="160rpx" radius="6rpx" lazy-load :src="item.image" />
 				<view class="goods-desc">
 					<view class="goods-name line2 nr">{{item.goods_name}}</view>
 					<view class="row-between mt20" v-show="!(type == 2)">
-						<price-format :price="item.goods_price" showSubscript="true" :subscriptSize="26" :firstSize="30" :secondSize="30" />
+						<price-format :price="item.goods_price" :showSubscript="true" :subscriptSize="26" :firstSize="30" :secondSize="30" />
 						<view class="nr">x{{item.goods_num}}</view>
 					</view>
 					<view v-show="!(type == 1)" class="row mt20">
 						<view class="sm mr10">评分</view>
-                        <uni-rate :readonly="true" :value="item.goods_comment" activeColor="#FF2C3C" :size="17" />
+                        <u-rate :disabled="true" v-model="item.goods_comment" active-color="#FF2C3C" :size="24" />
 					</view>
 				</view>
 			</navigator>
@@ -23,6 +24,11 @@
 			<view v-show="!(type == 1 || !item.comment)" class="evaluate-footer">
 				<view class="preview-evaluate">{{item.comment}}</view>
 			</view>
+            <view v-show="item.comment_image && !(type == 1 || !item.comment_image.length)" class="row wrap" style="padding: 20rpx 10rpx;">
+                <view v-for="(item, idx) in item.comment_image" :key="idx" class="comment-img" >
+                    <custom-image width="160rpx" height="160rpx" radius="6rpx" :src="item" />
+                </view>
+            </view>
 		</view>
 	</view>
     <loading-footer :status="status" slotEmpty>
@@ -53,6 +59,7 @@
 // +----------------------------------------------------------------------
 import { loadingType } from '../../utils/type';
 import { getOrderCommentList } from "../../api/store";
+import {loadingFun} from "@/utils/tools"
 
 export default {
   data() {
@@ -67,7 +74,7 @@ export default {
   },
   props: {
     type: {
-      type: Number
+      type: Number | String
     }
   },
 
@@ -84,29 +91,14 @@ export default {
         status,
         list
       } = this;
-      if (status == loadingType.FINISHED) return;
-      getOrderCommentList({
-        page_no: page,
-        type: type
-      }).then(res => {
-        if (res.code == 1) {
-          let {
-            list: lists,
-            more
-          } = res.data;
-          list.push(...lists);
-          this.list = list;
-          this.page ++;
-
-          if (!more) {
-              this.status = loadingType.FINISHED
+      
+      loadingFun(getOrderCommentList, page, list, status, {type: type}).then(res => {
+          if(res) {
+              this.page = res.page;
+              this.list = res.dataList
+              this.status = res.status
           }
-
-          if (list.length <= 0) {
-              this.status = loadingType.EMPTY
-          }
-        }
-      });
+      })
     },
 
     goPage(e) {
@@ -124,29 +116,36 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 /* components/comment_list/comment_list.wxss */
-.comment-list .comment-goods {
-  padding: 20rpx 24rpx;
-}
-.comment-list .comment-goods .goods-desc {
-  margin-left: 24rpx;
-  flex: 1;
-}
-
-.comment-list .comment-goods .btn {
-  padding: 6rpx 34rpx;
-  border: 1rpx solid var(--primary-color);
-}
-
-.comment-item .evaluate-footer {
-  padding: 0 24rpx 28rpx;
+.comment-list {
+    .comment-goods {
+      padding: 20rpx 24rpx;
+      .goods-desc {
+        margin-left: 24rpx;
+        flex: 1;
+      }
+      .btn {
+        padding: 6rpx 34rpx;
+        border: 1px solid $-color-primary;
+      }
+    }
 }
 
-.comment-item .evaluate-footer .btn {
-  width: 178rpx;
-  height: 52rpx;
-  border: 1rpx solid var(--primary-color);
+.comment-item {
+    .comment-img {
+        &:not(:nth-last-of-type(4n+1)) {
+            margin-right:20rpx;
+        }
+    }
+    .evaluate-footer {
+      padding: 0 24rpx 28rpx;
+      .btn {
+        width: 178rpx;
+        height: 52rpx;
+        border: 1px solid $-color-primary;
+      }
+    }
 }
 
 .data-null {

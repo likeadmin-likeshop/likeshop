@@ -6,7 +6,7 @@
 					<image mode="heightFix" class="logo ml20" :src="logo"></image>
 				</view>
 				<navigator class="search" hover-class="none" url="/pages/goods_search/goods_search">
-					<uni-search-bar :disabled="true" :radius="60" @confirm="search" @input="input" bg-color="#FFF" cancel-button="none" wrap-bg-color="#FF2C3C"></uni-search-bar>
+					<u-search bg-color="#fff" wrap-bg-color="#FF2C3C" :disabled="true"></u-search>
 				</navigator>
 			</sticky>
 		</view>
@@ -16,7 +16,7 @@
 				<swipers :pid="2" height="284rpx" padding="20rpx"></swipers>
 				<!-- 导航入口 -->
 				<view class="nav bg-white" v-if="navList.length">
-					<swiper style="height: 374rpx;" @change="swiperChange">
+					<swiper :style="'height:' + navSwiperH + 'rpx;'" @change="swiperChange">
 						<swiper-item v-for="(items, index) in navList" :key="index">
 							<view class="nav-list row wrap">
 								<view v-for="(item, index2) in items" :key="index2" @tap="tapMenu(item)" class="nav-item column-center">
@@ -38,7 +38,7 @@
 						<view class="shade"></view>
 						<swiper autoplay="true" style="height: 76rpx; flex: 1" vertical="true" circular="true" :interval="3000">
 							<swiper-item v-for="(item, index) in news" :key="index" class="row">
-								<uni-tag v-if="item.is_new" text="最新" type="error" circle size="small" inverted></uni-tag>
+								<u-tag v-if="item.is_new" shape="circle" text="最新" size="mini" type="primary" mode="plain" />
 								<view class="text-swiper ml10 line1">{{item.title}}</view>
 							</swiper-item>
 						</swiper>
@@ -76,7 +76,10 @@
 </template>
 
 <script>
-	import {mapGetters} from 'vuex'
+	import {
+		mapGetters,
+		mapActions
+	} from 'vuex'
 	import {
 		getHome,
 		getMenu,
@@ -85,8 +88,13 @@
 	import {
 		arraySlice
 	} from '@/utils/tools'
-	import {loadingType} from '@/utils/type'
-	import {loadingFun, menuJump} from '@/utils/tools'
+	import {
+		loadingType
+	} from '@/utils/type'
+	import {
+		loadingFun,
+		menuJump
+	} from '@/utils/tools'
 	import {
 		showLoginDialog
 	} from '@/utils/wxutil'
@@ -94,6 +102,7 @@
 	export default {
 		data() {
 			return {
+				navSwiperH: 374,
 				logo: "",
 				navHeight: 0,
 				currentSwiper: 0,
@@ -120,6 +129,9 @@
 			this.getMenuFun()
 			this.getBestListFun()
 		},
+		onShow() {
+			this.getCartNum()
+		},
 		onReachBottom() {
 			this.getBestListFun()
 		},
@@ -128,6 +140,7 @@
 			this.getMenuFun()
 		},
 		methods: {
+			...mapActions(['getCartNum']),
 			async getHomeFun() {
 				const {
 					code,
@@ -163,20 +176,33 @@
 				uni.stopPullDownRefresh()
 				if (code == 1) {
 					//   截取数组
+					if (data.length <= 5) {
+						this.navSwiperH = 200
+					} else {
+						this.navSwiperH = 374
+					}
+					//   截取数组
 					this.navList = arraySlice(data);
 				}
 			},
 			async getBestListFun() {
-				let { page, goodsList, status } = this
-				const data = await loadingFun(getBestList,page, goodsList,status)
-				if(!data) return
+				let {
+					page,
+					goodsList,
+					status
+				} = this
+				const data = await loadingFun(getBestList, page, goodsList, status)
+				if (!data) return
 				this.page = data.page
 				this.goodsList = data.dataList
 				this.status = data.status
 			},
 			tapMenu(item) {
-				if(!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return showLoginDialog()
 				menuJump(item)
+			},
+			swiperChange(e) {
+				this.currentSwiper = e.detail.current
 			}
 		},
 		computed: {
@@ -214,6 +240,7 @@
 				z-index: 9;
 
 				.nav {
+					position: relative;
 					.nav-item {
 						width: 20%;
 						margin-top: 30rpx;
@@ -224,6 +251,28 @@
 							margin-bottom: 15rpx;
 						}
 					}
+
+					.dots {
+						position: absolute;
+						left: 50%;
+						transform: translateX(-50%);
+						bottom: 20rpx;
+						display: flex;
+
+						.dot {
+							width: 10rpx;
+							height: 6rpx;
+							border-radius: 6rpx;
+							margin-right: 10rpx;
+							background-color: rgba(255, 44, 60, 0.4);
+
+							&.active {
+								width: 20rpx;
+								background-color: $-color-primary;
+							}
+						}
+
+					}
 				}
 
 				.information {
@@ -232,8 +281,10 @@
 					padding: 0 20rpx;
 					border-top: $-solid-border;
 					box-sizing: border-box;
+
 					.news {
 						position: relative;
+
 						.shade {
 							position: absolute;
 							width: 100%;
@@ -241,7 +292,7 @@
 							z-index: 100;
 						}
 					}
-					
+
 					.icon-toutiao {
 						width: 114rpx;
 						height: 34rpx;

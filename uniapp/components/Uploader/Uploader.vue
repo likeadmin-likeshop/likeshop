@@ -1,26 +1,25 @@
 <template>
     <view class="uploader-container row wrap">
         <view class="upload-image-box" v-for="(item, index) in fileList" :key="index" :style="{width: previewSize, height: previewSize}">
-            <custom-image class="img-preview" radius="10rpx" :src="item.url" :width="previewSize" :height="previewSize" />
+            <custom-image mode="aspectFit" class="img-preview" radius="10rpx" :src="item.url" :width="previewSize" :height="previewSize" />
             <view class="close-icon row-center" @click="deleteImage($event, index)">
-                <uni-icons type="closeempty" size="15" color="white"></uni-icons>
+                <u-icon name="close" size="30" color="white" />
             </view>
         </view>
         <view 
             class="uplader-upload row-center"
             :style="{width: previewSize, height: previewSize}"
             @click="handleImage"
-            v-show="fileList.length == 0 || mutiple"
+            v-show="(fileList.length == 0 || mutiple) && fileList.length < maxUpload"
             v-if="!useSlot"
         >
-            <uni-icons size="24" color="#dcdee0" type="camera" />
+            <u-icon size="48" color="#dcdee0" name="camera" />
             <view type="image" accept="image/*" class="uploader-input" />
         </view>
         <view
         class="uplader-upload-slot row-center"
-        :style="{width: previewSize, height: previewSize}"
         @click="handleImage"
-        v-show="fileList.length == 0 || mutiple"
+        v-show="(fileList.length == 0 || mutiple) && fileList.length < maxUpload"
         v-else
         >
             <slot></slot>
@@ -30,7 +29,7 @@
 
 <script>
     export default {
-        name: "Uploader",
+        name: "uploader",
         props: {
             fileList: {
                 type: Array,
@@ -103,6 +102,7 @@
                 height: 40rpx;
                 background-color: red;
                 border-radius: 50%;
+                z-index: 20;
             }
         }
         .uplader-upload {
@@ -124,8 +124,8 @@
         }
         .uplader-upload-slot {
             position: relative;
-            width: 160rpx;
-            height: 160rpx;
+            min-width: 160rpx;
+            min-height: 160rpx;
             .uploader-input {
                 position: absolute;
                 width: 100%;

@@ -1,9 +1,5 @@
 <template>
-	<uni-popup id="confirmPop" ref="confirmPop" type="dialog">
-		<uni-popup-dialog type="msgType" :content="getTipsText" use-slot id="delete-dialog" :show="deleteSure"
-		 confirmButtonText="确认" confirm-button-color="#FF2C3C" @confirm="onConfirm" @cancel="close">
-		</uni-popup-dialog>
-	</uni-popup>
+	<u-modal v-model="show" :show-cancel-button	="true" :content="getTipsText" @confirm="onConfirm" confirm-color="#ff2c3c"></u-modal>
 </template>
 
 <script>
@@ -15,19 +11,19 @@
 	export default {
 		props: {
 			type: Number,
-			orderId: Number
+			orderId: [Number, String]
 		},
 		data() {
 			return {
-
+				show: false
 			};
 		},
 		methods: {
 			open() {
-				this.$refs.confirmPop.open()
+				this.show = true
 			},
 			close() {
-				this.$refs.confirmPop.close()
+				this.show = false
 			},
 			async onConfirm() {
 				const {

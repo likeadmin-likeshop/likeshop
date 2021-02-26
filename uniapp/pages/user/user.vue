@@ -3,9 +3,9 @@
 		<view class="header">
 			<!-- #ifndef  H5 -->
 			<view class="header-line" :style="{height: '1px','background-color': navBg}"></view>
-			<uni-nav-bar title="个人中心" :shadow="false" :border="false" :status-bar="true" :fixed="true" :background-color="navBg"
-			 :color="navC"></uni-nav-bar>
-			 <!-- #endif -->
+			<u-navbar :is-back="false" title="个人中心" :title-bold="true" :border-bottom="false" :background="{ background: navBg }"
+			 :title-color="navC"></u-navbar>
+			<!-- #endif -->
 			<view class="user-info row-between">
 				<view class="info row">
 					<image class="avatar mr20" @tap="goLogin" :src="isLogin ? userInfo.avatar : require('static/images/my_portrait_empty.png')"></image>
@@ -29,10 +29,6 @@
 				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_wallet/user_wallet')">
 					<view class="xl primary">{{userInfo.user_money}}</view>
 					<view class="sm">余额</view>
-				</view>
-				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_sign/user_sign')">
-					<view class="xl primary">{{userInfo.user_integral}}</view>
-					<view class="sm">积分</view>
 				</view>
 				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_coupon/user_coupon')">
 					<view class="xl primary">{{userInfo.coupon}}</view>
@@ -110,7 +106,7 @@
 				</button>
 			</view>
 		</view>
-        <recommend/>
+		<recommend />
 	</view>
 </template>
 
@@ -127,7 +123,10 @@
 	import {
 		showLoginDialog
 	} from '@/utils/wxutil'
-	import {menuJump} from '@/utils/tools'
+	import {
+		menuJump,
+		copy
+	} from '@/utils/tools'
 	const app = getApp()
 	export default {
 		data() {
@@ -182,13 +181,13 @@
 			},
 
 			goPage(url) {
-				if(!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return showLoginDialog()
 				uni.navigateTo({
 					url
 				});
 			},
 			tapMenu(item) {
-				if(!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return showLoginDialog()
 				menuJump(item)
 			},
 			async getMenuFun() {
@@ -196,8 +195,7 @@
 					data,
 					code
 				} = await getMenu({
-					type: 2,
-					client: 1
+					type: 2
 				})
 				if (code == 1) {
 					this.menuList = data
@@ -242,10 +240,8 @@
 				});
 			},
 
-			onCopy(e) {
-				uni.setClipboardData({
-					data: this.userInfo.sn
-				});
+			onCopy() {
+				copy(this.userInfo.sn)
 			},
 
 
@@ -261,15 +257,17 @@
 		background-image: url(../../static/images/my_topbg.png);
 		background-size: 100% 400rpx;
 		background-repeat: no-repeat;
-		
+
 		.header {
 			display: flex;
 			flex-direction: column;
 			height: 300rpx;
+
 			.user-info {
 				padding: 10rpx 30rpx;
 				//#ifdef  H5 
 				padding-top: 90rpx;
+
 				//#endif
 				.avatar {
 					height: 110rpx;
@@ -277,6 +275,7 @@
 					border-radius: 50%;
 					overflow: hidden;
 				}
+
 				.name {
 					text-align: left;
 					margin-bottom: 5rpx;
@@ -329,7 +328,7 @@
 
 		.order-nav,
 		.my-assets {
-			margin: 20rpx 20rpx 0;
+			margin: 30rpx 20rpx 0;
 			border-radius: 8rpx;
 		}
 

@@ -45,20 +45,20 @@
         </view>
         <view class="refund-info row">
             <view class="label">备注说明</view>
-            <textarea v-show="!showPop" class="bg-body" placeholder="请描述申请售后的具体原因，100字以内" :value="remark" name="textarea" @input="onInput"></textarea> 
+            <textarea v-show="!showPop" class="bg-body" placeholder="请描述申请售后的具体原因，100字以内" v-model="remark" name="textarea" ></textarea> 
         </view>
         <view class="upload bg-white">
             <view class="title row-between">
                 <view>上传凭证</view>
                 <view class="muted">（选填，最多可上传1张）</view>
             </view>
-            <van-uploader deletable="true" preview-size="160rpx" max-count="1" :file-list="fileList" @after-read="afterRead" @delete="deleteImage" image-fit="aspectFill"></van-uploader>
+            <uploader :deletable="true" preview-size="160rpx" :file-list="fileList" @after-read="afterRead" @delete="deleteImage" image-fit="aspectFill" />
         </view>
         <button class="btn br60" type="primary" size="lg" @tap="onSubmit">申请退款</button>
     </view>
 </view>
 
-    <uni-popup id="popup" ref="popup"  :animation="true" type="bottom" @close="hidePopup">
+    <u-popup id="popup" v-model="showPop" mode="bottom">
         <view class="pop-container bg-white">
             <view class="pop-header row-center md normal">
                 退款原因
@@ -76,7 +76,7 @@
                 </view>
             </scroll-view>
         </view>
-    </uni-popup>
+    </u-popup>
 </view>
 </template>
 
@@ -97,11 +97,11 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { refundOptType } from "../../utils/type";
-import { baseURL } from '../../config/app.js';
-import { getGoodsInfo, applyAfterSale, applyAgain } from "../../api/user";
-import { Tips } from '../../utils/tools.js';
-import orderGoods from "../../components/order-goods/order-goods";
+import { refundOptType } from "@/utils/type";
+import { baseURL } from '@/config/app';
+import { getGoodsInfo, applyAfterSale, applyAgain } from "@/api/user";
+import { uploadFile } from '@/utils/tools.js';
+import orderGoods from "@/components/order-goods/order-goods";
 
 export default {
   data() {
@@ -137,44 +137,9 @@ export default {
     this.getGoodsInfoFun();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {},
   methods: {
     showPopup() {
       this.showPop = true
-      this.$refs.popup.open()
     },
 
     radioChange(e) {
@@ -182,7 +147,7 @@ export default {
     },
 
     hidePopup() {
-      this.$refs.popup.close()
+      this.showPop = false
     },
 
     onlyRefund: function () {
@@ -216,7 +181,7 @@ export default {
       } = this;
 
       if (!reason[reasonIndex]) {
-        return Tips({
+        return this.$toast({
           title: '请选择退款原因'
         });
       }
@@ -231,11 +196,11 @@ export default {
       applyAgain(data).then(res => {
         if (res.code == 1) {
           this.$emit('RESET_LIST');
-          Tips({
+          this.$toast({
             title: res.msg
           }, {
             tab: 5,
-            url: '/pages/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
+            url: '/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
           });
         }
       });
@@ -245,6 +210,7 @@ export default {
       this.setData({
         remark: e.detail.value
       });
+      this.remark = e.detail.value
     },
 
     applyAfterSaleFun() {
@@ -257,7 +223,7 @@ export default {
       } = this;
 
       if (!reason[reasonIndex]) {
-        return Tips({
+        return this.$toast({
           title: '请选择退款原因'
         });
       }
@@ -273,62 +239,32 @@ export default {
       applyAfterSale(data).then(res => {
         if (res.code == 1) {
           this.$emit('RESET_LIST');
-          Tips({
+          this.$toast({
             title: '提交成功'
           });
           uni.redirectTo({
-            url: '/pages/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
+            url: '/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
           });
         }
       });
     },
 
     afterRead(e) {
-      const {
-        file
-      } = e.detail;
+      const file = e
       uni.showLoading({
         title: '正在上传中...',
         mask: true
       });
-      this.uploadFile(file.path).then(res => {
-        uni.hideLoading();
-        this.fileList = [res]
-      });
-    },
-
-    uploadFile(path) {
-      return new Promise(resolve => {
-        uni.uploadFile({
-          url: baseURL + 'file/formimage',
-          filePath: path,
-          name: 'file',
-          success: res => {
-            const {
-              fileList
-            } = this;
-            let data = JSON.parse(res.data);
-
-            if (data.code == 1) {
-              resolve(data.data);
-            }
-          }
+      file.map(item => {
+        uploadFile(item.path).then(res => {
+            uni.hideLoading();
+            this.fileList.push(res)
         });
-      });
+      })
     },
 
-    deleteImage(e) {
-      let {
-        index
-      } = e.detail;
-      let {
-        fileList
-      } = this;
-      fileList.splice(index, 1);
-      this.setData({
-        fileList: fileList
-      });
-      this.fileList = fileList
+    deleteImage(index) {
+      this.fileList.splice(index, 1);
     },
 
     getGoodsInfoFun() {
@@ -351,7 +287,6 @@ export default {
 };
 </script>
 <style lang="scss">
-/* pages/apply_refund/apply_refund.wxss */
 .apply-refund {
     padding-bottom: 50rpx;
     .goods{
@@ -375,7 +310,7 @@ export default {
 
 
 .border-line {
-    border: 1rpx solid #F2F2F2;
+    border: 1px solid #F2F2F2;
 }
 
 .apply-refund  {

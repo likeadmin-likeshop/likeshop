@@ -17,14 +17,17 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 namespace app\api\controller;
+
 use app\api\logic\MenuLogic;
 
-class Menu extends ApiBase{
+class Menu extends ApiBase
+{
     public $like_not_need_login = ['lists'];
-    public function lists(){
-        $client = $this->request->get('client',1);
-        $type = $this->request->get('type',1);
-        $list = MenuLogic::getMenu($client,$type);
-        return $this->_success('获取成功',$list);
+
+    public function lists()
+    {
+        $type = $this->request->get('type', 1);
+        $list = MenuLogic::getMenu($type);
+        return $this->_success('获取成功', $list);
     }
 }

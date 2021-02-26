@@ -39,9 +39,8 @@ class CouponLogic{
             $where[] = ['get_type','=',2];
 
         }
-        if(isset($get['type']) && $get['type'] !== ''){
+        if(isset($get['type']) && $get['type'] !== 'send' && $get['type'] !== ''){
             $where[] = ['status','=',$get['type']];
-
         }
 
         $coupon = new Coupon();
@@ -230,13 +229,13 @@ class CouponLogic{
         $log_list =  Db::name('coupon_list cl')
             ->join('user u','cl.user_id = u.id')
             ->where($where)
-            ->field('coupon_id,status,coupon_code,cl.create_time as create_time,cl.use_time,u.nickname,u.avatar,u.mobile,u.sex,u.create_time as u_create_time')
+            ->field('coupon_id,status,coupon_code,cl.create_time as create_time,cl.use_time,u.nickname,u.avatar,u.mobile,u.sex,u.sn,u.level,u.create_time as u_create_time')
+            ->page($get['page'], $get['limit'])
             ->select();
         $coupon_list = Db::name('coupon')->where(['del'=>0])->column('name','id');
-
+        $level_name = Db::name('user_level')->where(['del'=>0])->column('name','id');
         foreach ($log_list as &$item)
         {
-            $item['coupon_name'] = '';
             $item['use_time_desc'] = '-';
             $item['status_desc'] = '已使用';
             $item['create_time_desc'] = '';
@@ -248,10 +247,11 @@ class CouponLogic{
             if($item['status']){
                 $item['status'] = '已使用';
             }
-            if(isset($coupon_list[$item['coupon_id']])){
-                $item['coupon_name'] = $coupon_list[$item['coupon_id']];
-            }
+
+            $item['coupon_name'] = $coupon_list[$item['coupon_id']] ?? '';
             $item['create_time_desc'] = date('Y-m-d H:i:s',$item['create_time']);
+
+            $item['level_name'] = $level_name[$item['level']] ?? '';
             switch ($item['sex']){
                 case 1:
                     $item['sex_desc'] = '男';

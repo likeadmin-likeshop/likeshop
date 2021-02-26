@@ -189,26 +189,7 @@ class UserLogic{
                     'remark'        => $post_data['money_remark'],
                 ];
             }
-            //积分调整
-            if (isset($post_data['integral_handle'])) {
-                $number = $post_data['integral'];
-                $change_type = 1;
-                $source_type = AccountLog::admin_add_integral;
-                $integral_sql = Db::raw('user_integral + ' . $post_data['integral']);
 
-                if ($post_data['integral_handle'] == 0) {
-                    $change_type = 2;
-                    $source_type = AccountLog::admin_reduce_integral;
-                    $integral_sql = Db::raw('user_integral - ' . $post_data['integral']);
-                }
-                $update_data['user_integral'] = $integral_sql;
-                $account_log[] = [
-                    'number'        => $number,
-                    'change_type'   => $change_type,
-                    'source_type'   => $source_type,
-                    'remark'        => $post_data['integral_remark'],
-                ];
-            }
             //成长值调整
             if (isset($post_data['growth_handle'])) {
                 $number = $post_data['growth'];
@@ -298,24 +279,14 @@ class UserLogic{
             case 1:
                 $account_log =new AccountLog();
                 $count = $account_log
-                        ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::integral_change])
+                        ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::sign_in_integral])
                         ->count();
                 $list = $account_log
-                        ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::integral_change])
+                        ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::sign_in_integral])
                         ->page($get['page'],$get['limit'])
                         ->select();
                 break;
             case 2:
-                $account_log =new AccountLog();
-                $count = $account_log
-                        ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::sign_in_integral])
-                        ->count();
-                $list = $account_log
-                        ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::sign_in_integral])
-                        ->page($get['page'],$get['limit'])
-                        ->select();
-                break;
-            case 3:
                 $account_log = new AccountLog();
                 $count = $account_log
                     ->where(['user_id'=>$get['user_id'],'source_type'=>AccountLog::money_change])
@@ -325,26 +296,7 @@ class UserLogic{
                     ->page($get['page'],$get['limit'])
                     ->select();
                 break;
-            case 4:
-                $count = 1;
-                $first_leader = Db::name('user')->where(['id'=>$get['user_id']])->value('first_leader');
-                $list = [];
-                if($first_leader){
-                    $user = new User();
-                    $list = $user
-                            ->where(['id'=>$first_leader])
-                            ->field('id,sn,nickname,mobile,avatar,level,sex,create_time,total_order_amount,user_money,user_integral')
-                            ->select();
-                    $level_list = Db::name('user_level')->where(['del'=>0])->column('name','id');
-                    foreach ($list as &$item) {
-                        $item['level_name'] = '-';
-                        if(isset($level_list[$item['level']])){
-                            $item['level_name'] = $level_list[$item['level']];
-                        }
-                    }
-                }
-                break;
-            case 5:
+            case 3:
                 $count = Db::name('user_address')
                             ->where(['user_id'=>$get['user_id'],'del'=>0])
                             ->count();

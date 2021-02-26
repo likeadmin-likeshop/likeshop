@@ -1,5 +1,0 @@
-/* pages/server_explan/server_explan.wxss */
-
-.main {
-  padding: 20rpx;
-}

@@ -1,7 +1,6 @@
 <p align="center">
 <a target="_blank" href="https://www.likemarket.net">
     <img src="https://www.likemarket.net/images/gitee_head.png" />
-    
 </a>
 </p> 
 
@@ -10,13 +9,18 @@
 
 [![star](https://gitee.com/likemarket/likeshopv2/badge/star.svg?theme=dark)](https://www.likemarket.net)
 [![fork](https://gitee.com/likemarket/likeshopv2/badge/fork.svg?theme=gray)](https://www.likemarket.net)
-[![PHP Version](https://img.shields.io/badge/php-%3E%3D7.1-8892BF.svg)](https://www.likemarket.net)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D7.2-8892BF.svg)](https://www.likemarket.net)
 [![License](https://img.shields.io/badge/license-Apache2.0-success.svg)](https://www.likemarket.net)
 
 </div>
 <p align="center">    
     如果项目对您起到一定的帮助，点右上角 "Star" 支持一下，干一杯，谢谢！ 
 </p>
+
+<p align="center">    
+    <a href="https://gitee.com/likemarket/likeshopv2/tree/2.0.9/">点击这里切换为原生小程序、原生vue手机页面、ReactNative苹果安卓app版本</a>
+</p>
+
 
 ### ⚽ chapter one 《欢迎朋友》
 > 我们始终追求：让商城开发更简单，安全稳定的落地，降低99%的项目成本甚至0成本。真诚欢迎朋友们使用并且前往知识社区提问、反馈及宝贵建议：https://home.likemarket.net/
@@ -149,8 +153,13 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
 <img src="https://www.likemarket.net/images/yszx.png" />
 
 #### 管理后台
-https://likeshop.likemarket.net/admin      
+后台演示（不可操作）：
+<a  target="_blank" href="http://likeshop.likemarket.net/admin">http://likeshop.likemarket.net/admin</a>      
 <br/>账号：test  密码：123456
+
+后台演示（可操作）：
+<a  target="_blank" href="http://likeshop2.likemarket.net/admin">http://likeshop2.likemarket.net/admin</a>       
+<br/>账号：admin  密码：123456
 
 
 #### PC管理后台截图

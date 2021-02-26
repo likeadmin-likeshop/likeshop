@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "price-slice": "/components/price-slice/price-slice",
-    "van-popup": "/components/weapp/popup/index"
-  },
-  "navigationBarTitleText": "余额充值"
-}

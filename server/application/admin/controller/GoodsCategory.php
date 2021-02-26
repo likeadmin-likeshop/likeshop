@@ -96,7 +96,7 @@ class GoodsCategory extends AdminBase
      * @throws \think\exception\DbException
      */
     public function del(){
-        $id = $this->request->get('ids');
+        $id = $this->request->post('ids');
         $result = $this->validate(['id'=>[$id]], 'app\admin\validate\GoodsCategory.del');
         if ($result === true) {
             GoodsCategoryLogic::del($id);
@@ -108,8 +108,8 @@ class GoodsCategory extends AdminBase
      * note 修改品牌的显示状态
      */
     public function switchStatus(){
-        $get = $this->request->get();
-        $result =GoodsCategoryLogic::switchStatus($get);
+        $post = $this->request->post();
+        $result =GoodsCategoryLogic::switchStatus($post);
         if ($result) {
             $this->_success('修改成功');
         }

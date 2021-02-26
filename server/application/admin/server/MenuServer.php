@@ -29,11 +29,39 @@ use think\facade\Url;
 class MenuServer
 {
 
+    /**
+     * 获取菜单树
+     * @param $role_id (角色ID)
+     * @author FZR
+     * @return array
+     */
+    public static function getMenuTree($role_id)
+    {
+        try {
+            // 获取所有菜单
+            $lists = Db::name('dev_auth')
+                ->where(['type' => 1, 'del' => 0, 'disable' => 0])
+                ->order(['sort' => 'desc'])
+                ->withAttr('uri', function ($value) {
+                    return self::uri($value);
+                })->select();
 
+            // 处理返回数据
+            $none_auth = AuthServer::getRoleNoneAuthIds($role_id);
+            $lists = self::setRoleMenu($none_auth, $lists);
+            return linear_to_tree($lists);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+    
     /**
      * 获取菜单
      * @param $role_id
      * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public static function getMenuHtml($role_id)
     {

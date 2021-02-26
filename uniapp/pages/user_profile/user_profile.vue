@@ -3,7 +3,7 @@
 		<view class="user-profile">
 			<view class="user-avatar-box row-center">
 				<uploader @after-read="afterRead" useSlot>
-					<image class="user-avatar" :src="userInfo.avatar || require('@/static/images/default_avatar.png')" />
+					<image class="user-avatar" :src="userInfo.avatar || require('../../../static/images/default_avatar.png')" />
 				</uploader>
 			</view>
 			<view class="row-info row bdb-line" @click="changeName">

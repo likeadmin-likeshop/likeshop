@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "van-cell-group": "/components/weapp/cell-group/index",
-    "van-field": "/components/weapp/field/index"
-  }
-}

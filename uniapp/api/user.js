@@ -215,7 +215,12 @@ export function setUserInfo(data) {
 
 // 更换手机号
 export function changeUserMobile(data) {
-    return request.post('user/getMobile', {...data, client: 2});
+    // #ifdef MP-WEIXIN
+    return request.post('user/getMobile', {...data, client: client});
+    // #endif
+    // #ifdef H5
+    return request.post("user/changeMobile", {...data, client: client})
+    // #endif
 }
 
 //会员中心

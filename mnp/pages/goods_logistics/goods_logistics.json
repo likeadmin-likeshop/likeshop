@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "van-steps": "/components/weapp/steps/index",
-    "loading-view": "/components/loading-view/loading-view",
-    "recommend": "/components/recommend/recommend"
-  },
-  "navigationBarTitleText": "物流信息"
-}

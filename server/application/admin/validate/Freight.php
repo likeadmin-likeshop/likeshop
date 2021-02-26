@@ -67,12 +67,21 @@ class Freight extends Validate
 
         foreach ($configs as $config) {
             if (
-                empty($config['first_unit']) ||
-                empty($config['first_money']) ||
-                empty($config['continue_unit']) ||
-                empty($config['continue_money'])
+                !isset($config['first_unit']) ||
+                !isset($config['first_money']) ||
+                !isset($config['continue_unit']) ||
+                !isset($config['continue_money'])
             ) {
-                return '请填写完整';
+                return '请填写完整设置参数';
+            }
+
+            if (
+                ($config['first_unit'] < 0) ||
+                ($config['first_money'] < 0) ||
+                ($config['continue_unit'] < 0) ||
+                ($config['continue_money'] < 0)
+            ){
+                return '所填设置参数不能小于0';
             }
         }
         return true;

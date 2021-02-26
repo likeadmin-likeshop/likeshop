@@ -75,14 +75,20 @@ class GoodsCommentLogic{
                 ])->column('uri');
             })
             ->field('u.id as user_id,u.nickname,u.mobile,u.sex,u.create_time,g.name,gi.spec_value_str
-            ,gc.goods_comment,gc.comment,gc.create_time as comment_time,gc.status,u.avatar,g.image,gc.reply
+            ,gc.goods_comment,gc.comment,gc.create_time as comment_time,gc.status,u.avatar,g.image,gc.reply,u.sn,u.level
             ,gc.id')
             ->order('gc.create_time','desc')
             ->append(['comment_image']);;
         $count = $res->count();
         $lists = $res->page($get['page'],$get['limit'])->select();
 
+        $user_level = Db::name('user_level')
+            ->where(['del'=>0])
+            ->column('name','id');
+
+
         foreach ($lists as &$item){
+            $item['level_name'] = $user_level[$item['level']] ?? '无等级';
             switch($item['sex']){
                 case 0:
                     $item['sex'] ='未知';

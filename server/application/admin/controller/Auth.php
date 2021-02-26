@@ -55,9 +55,12 @@ class Auth extends AdminBase
             $post['disable'] = isset($post['disable']) && $post['disable'] == 'on' ? 0 : 1;
             $result = $this->validate($post, 'app\admin\validate\Auth');
             if ($result === true) {
-                AuthLogic::addMenu($post);
-                Hook::listen('menu_auth');
-                $this->_success('添加成功');
+                $result = AuthLogic::addMenu($post);
+                if (!is_string($result)) {
+                    $this->_success('添加成功');
+                } else {
+                    $this->_error($result);
+                }
             }
             $this->_error($result);
         }
@@ -80,9 +83,12 @@ class Auth extends AdminBase
             $post['disable'] = isset($post['disable']) && $post['disable'] == 'on' ? 0 : 1;
             $result = $this->validate($post, 'app\admin\validate\Auth');
             if ($result === true) {
-                AuthLogic::updateMenu($post);
-                Hook::listen('menu_auth');
-                $this->_success('修改成功');
+                $result = AuthLogic::updateMenu($post);
+                if (!is_string($result)) {
+                    $this->_success('修改成功');
+                } else {
+                    $this->_error($result);
+                }
             }
             $this->_error($result);
         }

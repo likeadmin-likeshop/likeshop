@@ -100,9 +100,7 @@
                 <div class="layui-input-inline" style="text-align:left">
                     <p>会员编号：{{d.sn}}</p>
                     <p>昵称：{{d.nickname}}</p>
-                    <p>手机号码：{{d.mobile}}</p>
-                    <p>性别：{{d.sex}}</p>
-                    <p>注册时间：{{d.create_time}}</p>
+                    <p>会员等级：{{d.level_name}}</p>
                 </div>
             </script>
 
@@ -110,8 +108,6 @@
             <script type="text/html" id="account">
                 <div class="layui-input-inline">
                     <label>余额：{{d.user_money}}</label>
-                    <br/>
-                    <label>积分：{{d.user_integral}}</label>
                 </div>
             </script>
 
@@ -320,7 +316,6 @@
                 {type: 'checkbox'}
                 ,{field: 'id', width: 80, title: 'ID', sort: true, hide:true}
                 ,{field: 'avatar', title: '会员信息',width: 350,align: 'center', toolbar: '#user-info'}
-                ,{field: 'level_name', title: '会员等级',width: 100,}
                 ,{field: 'group_name', title: '会员分组',width: 100,}
                 ,{field: 'total_order_amount', title: '消费金额',width: 90,}
                 ,{field: 'money', title: '账户余额',width: 120,toolbar: '#account'}

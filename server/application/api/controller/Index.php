@@ -25,7 +25,7 @@ use app\common\server\UrlServer;
 
 class Index extends ApiBase
 {
-   public $like_not_need_login = ['lists', 'appInit', 'downLine', 'share'];
+   public $like_not_need_login = ['lists', 'appInit', 'downLine', 'share', 'config'];
     /**
      * note 首页接口
      * create_time 2020/10/21 19:05
@@ -103,5 +103,17 @@ class Index extends ApiBase
                 break;
         }
         return $config;
+    }
+
+    /**
+     * Notes: 设置
+     * @author 段誉(2021/2/25 15:39)
+     */
+    public function config()
+    {
+        $config = [
+            'register_setting' => ConfigServer::get('register_setting', 'open', 0),
+        ];
+        $this->_success('', $config);
     }
 }

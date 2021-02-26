@@ -222,6 +222,13 @@ html{background-color: #f8f8f8;; color: #666;}
 .layadmin-pagetabs .layui-tab-title li.layui-this{background-color: #f6f6f6;}
 .layadmin-pagetabs .layui-tab-title li.layui-this:after{width: 100%; border: none; height: 2px; background-color: #292B34;}
 
+
+#LAY_app_tabsheader li:hover,
+#LAY_app_tabsheader li.layui-this{ background-color: #EBF4FF; }
+#LAY_app_tabsheader li.layui-this:after{width: 100%; border: none; height: 2px; background-color: #3A91FB !important;}
+#LAY_app_tabsheader .layui-this { color: #3A91FB !important; }
+.layui-tab #LAY_app_tabsheader li:after { background-color: #3A91FB !important; }
+
 /* 不开启页面标签时 */
 .layadmin-tabspage-none .layui-layout-admin .layui-header{border-bottom: none; box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);}
 .layadmin-tabspage-none .layui-layout-admin .layui-body{top: 50px;}

@@ -68,11 +68,6 @@ class Ad extends Model{
                     'is_tab'    => 0,
                 ],
                 [
-                    'name'      => '店铺街',
-                    'path'      => '/pages/shop_street/shop_street',
-                    'is_tab'    => 0,
-                ],
-                [
                     'name'      => '个人中心',
                     'path'      => '/pages/user/user',
                     'is_tab'    => 1,

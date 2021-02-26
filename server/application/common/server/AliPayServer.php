@@ -37,7 +37,7 @@ class AliPayServer
     {
         $config = [
             'gatewayUrl' => ConfigServer::get('alipay', 'gatewayUrl','https://openapi.alipaydev.com/gateway.do'),
-            'appId' => ConfigServer::get('alipay', 'appId', '2016091500517906'),
+            'appId' => ConfigServer::get('alipay', 'appId', ''),
             'rsaPrivateKey' => ConfigServer::get('alipay', 'rsaPrivateKey',''),
             'alipayrsaPublicKey' => ConfigServer::get('alipay', 'alipayrsaPublicKey','')
         ];
@@ -46,10 +46,10 @@ class AliPayServer
 
 
     /**
-     * Desc: 支付宝app支付
-     * User: 意象信息科技 mjf
+     * Notes: 支付宝支付
      * @param $data
      * @param $notify_url
+     * @author 段誉(2021/2/24 17:56)
      * @return string
      */
     public function appAlipay($data, $notify_url)

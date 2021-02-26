@@ -23,6 +23,7 @@ namespace app\admin\controller;
 
 use app\admin\cache\RoleMenuCache;
 use app\admin\logic\StatLogic;
+use app\admin\server\MenuServer;
 use app\common\server\ConfigServer;
 use think\Db;
 use think\facade\Config;
@@ -36,8 +37,11 @@ class Index extends AdminBase
     public function index()
     {
         //菜单渲染
-        $role_menu_cache = new RoleMenuCache($this->admin_info['role_id'], ['role_id' => $this->admin_info['role_id']]);
-        $menu = $role_menu_cache->set();
+//        $role_menu_cache = new RoleMenuCache($this->admin_info['role_id'], ['role_id' => $this->admin_info['role_id']]);
+//        $menu = $role_menu_cache->set();
+//        $this->assign('menu', $menu);
+
+        $menu = MenuServer::getMenuTree($this->admin_info['role_id']);
         $this->assign('menu', $menu);
 
         //开启右上角前端示例
@@ -74,6 +78,7 @@ class Index extends AdminBase
             $this->_success('', StatLogic::graphData());
         }
         $this->assign('res', StatLogic::stat());
+        $this->assign('company_name',ConfigServer::get('copyright', 'company_name'));
         return $this->fetch();
     }
 }

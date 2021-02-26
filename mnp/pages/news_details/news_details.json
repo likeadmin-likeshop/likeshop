@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "loading-view": "/components/loading-view/loading-view"
-  },
-  "navigationBarTitleText": "资讯详情"
-}

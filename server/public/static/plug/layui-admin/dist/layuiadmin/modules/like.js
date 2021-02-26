@@ -1,4 +1,5 @@
 var lock = {};
+var load = {};
 layui.define(["jquery", "form"], function (exports) {
     $ = layui.$;
     var ojb = {
@@ -10,7 +11,7 @@ layui.define(["jquery", "form"], function (exports) {
                 }
                 lock[json.url.replace("/", "_")] = true;
                 json.beforeSend = function () {
-                    load = setTimeout(function () {
+                    load[json.url.replace("/", "_")] = setTimeout(function () {
                         load_index = layer.load(1, {shade: [0.1, "#fff"]})
                     }, 1500)
                 }
@@ -39,7 +40,7 @@ layui.define(["jquery", "form"], function (exports) {
                     });
                     return
                 }
-                clearTimeout(load);
+                clearTimeout(load[json.url.replace("/", "_")]);
                 if (load_index !== undefined) {
                     layer.close(load_index)
                 }

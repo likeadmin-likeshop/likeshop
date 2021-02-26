@@ -323,7 +323,7 @@
                     like.ajax({
                         url:'{:url("AdPosition/switchStatus")}',
                         data:{id:id,status:status,client:client},
-                        type:"get",
+                        type:"post",
                         success:function(res)
                         {
                             if(res.code == 1)

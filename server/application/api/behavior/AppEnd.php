@@ -30,20 +30,27 @@ class AppEnd
      */
     public function run(Request $request)
     {
-        $record = Db::name('stat')
-            ->whereTime('create_time', 'today')
-            ->find();
+        try {
+            $ip = $request->ip();
+            $record = Db::name('stat')
+                ->where('ip', '=', $ip)
+                ->whereTime('create_time', 'today')
+                ->find();
 
-        if ($record){
-            Db::name('stat')
-                ->where('id', $record['id'])
-                ->setInc('today_user_pv', 1);
-        }else{
-            $data = [
-                'today_user_pv' => 1,
-                'create_time' => time()
-            ];
-            Db::name('stat')->insert($data);
+            if ($record) {
+                Db::name('stat')
+                    ->where('id', $record['id'])
+                    ->setInc('count', 1);
+            } else {
+                $data = [
+                    'ip'          => $ip,
+                    'count'       => 1,
+                    'create_time' => time()
+                ];
+                Db::name('stat')->insert($data);
+            }
+        } catch (\Exception $e) {
+
         }
     }
 }

@@ -115,8 +115,8 @@ class Ad extends AdminBase
      */
     public function switchStatus()
     {
-        $get = $this->request->get();
-        $result = AdLogic::switchStatus($get);
+        $post = $this->request->post();
+        $result = AdLogic::switchStatus($post);
         if ($result) {
             $this->_success('修改成功');
         }

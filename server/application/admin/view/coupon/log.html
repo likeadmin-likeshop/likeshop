@@ -23,13 +23,9 @@
             <script type="text/html" id="user-info">
                 <img src="{{d.avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
                 <div class="layui-input-inline">
-                    <label>手机号码：{{d.mobile}}</label>
-                    <br/>
-                    <label>昵称：{{d.nickname}}</label>
-                    <br/>
-                    <label>性别：{{d.sex_desc}}</label>
-                    <br/>
-                    <label>注册时间：{{d.u_create_time}}</label>
+                    <p>会员编号：{{d.sn}}</p>
+                    <p>昵称：{{d.nickname}}</p>
+                    <p>会员等级：{{d.level_name}}</p>
                 </div>
             </script>
         </div>
@@ -91,7 +87,7 @@
             ,cols: [[
                 {type: 'checkbox'}
                 ,{field: 'coupon_name',title: '优惠券名称',}
-                ,{field: 'avatar', title: '会员信息',width: 320,align: 'center',fixed: 'right', toolbar: '#user-info'}
+                ,{field: 'avatar', title: '会员信息',width: 320,align: 'center', toolbar: '#user-info'}
                 ,{field: 'coupon_code', title: '优惠券券码'}
                 ,{field: 'status_desc', title: '使用状态'}
                 ,{field: 'create_time_desc', title: '领取时间'}

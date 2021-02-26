@@ -1,2 +1,0 @@
-<!--components/trigonometry/trigonometry.wxml-->
-<view class="trigonometry {{direction === 'up' ? 'up' : ''}} {{size === 'small' ? 'small' : ''}}"  style="color:{{color}};opacity: {{opacity}}"></view>

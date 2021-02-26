@@ -1,9 +1,0 @@
-{
-  "usingComponents": {
-    "van-dialog": "/components/weapp/dialog/index",
-    "loading-footer": "/components/loading-footer/loading-footer",
-    "price-slice": "/components/price-slice/price-slice",
-    "van-image": "/components/weapp/image/index"
-  },
-  "navigationBarTitleText": "我的收藏"
-}

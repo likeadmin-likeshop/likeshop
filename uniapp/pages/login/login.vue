@@ -77,9 +77,6 @@
 		wxpLogin,
 		smsCodeLogin
 	} from '@/api/app';
-	import {
-		inputInviteCode
-	} from '@/api/user'
 	import wechath5 from '@/utils/wechath5'
 	import {
 		isWeixinClient
@@ -212,12 +209,6 @@
 			loginHandle(data) {
 				this.LOGIN(data)
 				this.getUser()
-				const inviteCode = Cache.get("INVITE_CODE")
-				if (inviteCode) {
-					inputInviteCode({
-						code: inviteCode
-					})
-				}
 				// #ifdef H5
 				location.replace('/mobile' + Cache.get(BACK_URL))
 				//#endif

@@ -1,4 +1,0 @@
-<!--components/loading-view.wxml-->
-<view class="loading {{ type == 'flex' ? 'flex' : '' }}">
-    <van-loading type="spinner" size="45rpx" />
-</view>

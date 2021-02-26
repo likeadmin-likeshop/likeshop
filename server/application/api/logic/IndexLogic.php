@@ -74,7 +74,7 @@ class IndexLogic{
 
 
         //商城logo
-        $shop_logo =UrlServer::getFileUrl(ConfigServer::get('website', 'shop_logo','/static/common/image/default/backstage_logo.png')).'?=v1';
+        $shop_logo =UrlServer::getFileUrl(ConfigServer::get('website', 'shop_logo','/static/common/image/default/shop_logo.png')).'?=v1';
 
         //新品推荐
         $goods = new Goods();

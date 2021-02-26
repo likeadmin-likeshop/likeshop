@@ -144,9 +144,9 @@
                             <div class="layui-input-inline"  style="text-align: left">
                                 <p>会员编号:{{d.user_id}}</p>
                                 <p>昵称:{{d.user.nickname}}</p>
-                                <p>手机号:{{d.user.mobile}}</p>
-                                <p>性别:{{d.user.sex}}</p>
-                                <p>注册时间:{{d.user.create_time}}</p>
+<!--                                <p>手机号:{{d.user.mobile}}</p>-->
+<!--                                <p>性别:{{d.user.sex}}</p>-->
+<!--                                <p>注册时间:{{d.user.create_time}}</p>-->
                             </div>
                         </script>
 
@@ -220,11 +220,13 @@
         laydate.render({
             elem: '#start_time'
             ,type: 'datetime'
+            ,trigger: 'click'
         });
 
         laydate.render({
             elem: '#end_time'
             ,type: 'datetime'
+            ,trigger: 'click'
         });
 
         //获取列表

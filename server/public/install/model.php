@@ -466,8 +466,8 @@ class installModel
             /* Skip sql that is note. */
             if (strpos($table, '--') === 0) continue;
 
-            $table = str_replace('`yx_', $this->name . '.`yx_', $table);
-            $table = str_replace('`yx_', '`' . $this->prefix, $table);
+            $table = str_replace('`ls_', $this->name . '.`ls_', $table);
+            $table = str_replace('`ls_', '`' . $this->prefix, $table);
 
             if (strpos($table, 'CREATE') !== false) {
                 $tableName = explode('`', $table)[1];
@@ -531,8 +531,8 @@ class installModel
             $table = trim($table);
             if (empty($table)) continue;
 
-            $table = str_replace('`yx_', $this->name . '.`yx_', $table);
-            $table = str_replace('`yx_', '`' .$this->prefix, $table);
+            $table = str_replace('`ls_', $this->name . '.`ls_', $table);
+            $table = str_replace('`ls_', '`' .$this->prefix, $table);
             if ( !$this->dbh->query($table)) return false;
         }
 
@@ -695,7 +695,7 @@ class installModel
         $salt = substr(md5($time . $post['admin_user']), 0, 4);//随机4位密码盐
         $password = $this->createPassword($post['admin_password'], $salt);
 
-        $sql = "INSERT INTO `yx_admin` VALUES (1, 1, '{$post['admin_user']}', NULL, '{$post['admin_user']}', 
+        $sql = "INSERT INTO `ls_admin` VALUES (1, 1, '{$post['admin_user']}', NULL, '{$post['admin_user']}', 
                 '{$password}', '{$salt}', 0, '{$time}', '{$time}', '{$time}', '', 0, 0);";
 
         return $sql;

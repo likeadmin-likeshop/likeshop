@@ -1,9 +1,0 @@
-<view class="post-sale">
-  <view class="contain">
-    <van-tabs active="{{active}}" line-width="{{40}}" bind:change="onChange" sticky>
-      <van-tab wx:for="{{afterSale}}" wx:key="index" name="{{item.type}}" title="{{item.name}}">
-        <after-sales-list type="{{item.type}}" wx:if="{{item.isShow}}" id="{{item.type}}"></after-sales-list>
-      </van-tab>
-    </van-tabs>
-  </view>
-</view>

@@ -1,4 +1,0 @@
-/* components/my-coupons/my-coupons.wxss */
-.my-coupons {
-    min-height: calc(100vh - 80rpx);
-}

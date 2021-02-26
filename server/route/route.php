@@ -8,3 +8,8 @@ Route::rule('mobile/:any', function () {
     Config::set('app_trace', false);
     return view(app()->getRootPath() . 'public/mobile/index.html');
 })->pattern(['any' => '\w+']);
+
+Route::rule('umobile/:any', function () {
+    Config::set('app_trace', false);
+    return view(app()->getRootPath() . 'public/umobile/index.html');
+})->pattern(['any' => '\w+']);

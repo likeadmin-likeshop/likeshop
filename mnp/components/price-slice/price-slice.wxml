@@ -1,6 +1,0 @@
-<!--components/price-slice/price-slice.wxml-->
-<text style="color: {{color}}; font-weight: {{weight}};" class="{{lineThrough ? '~line-through' : ''}}">
-    <text wx:if="{{showSubscript}}" style="font-size: {{subscriptSize}}rpx;">¥</text>
-    <text style="font-size: {{firstSize}}rpx; margin-right: 1rpx;">{{priceSlice.first}}</text>
-    <text wx:if="{{priceSlice.second}}" style="font-size: {{secondSize}}rpx;">.{{priceSlice.second}}</text>
-</text>

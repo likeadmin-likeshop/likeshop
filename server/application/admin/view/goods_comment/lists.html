@@ -86,11 +86,9 @@
                         <script type="text/html" id="user">
                             <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
                             <div class="layui-input-inline"  style="text-align: left">
-                                <p>会员编号:{{d.user_id}}</p>
-                                <p>昵称:{{d.nickname}}</p>
-                                <p>手机号:{{d.mobile}}</p>
-                                <p>性别:{{d.sex}}</p>
-                                <p>注册时间:{{d.create_time}}</p>
+                                <p>会员编号：{{d.sn}}</p>
+                                <p>昵称：{{d.nickname}}</p>
+                                <p>会员等级：{{d.level_name}}</p>
                             </div>
                         </script>
 
@@ -105,7 +103,7 @@
 
                         <script type="text/html" id="comment_image">
                             {{#  layui.each(d.comment_image, function(index, item){ }}
-                            <img src="{{item}}" alt="评论图片" style="width:50px;height:50px;float:left;margin-right:5px;">
+                            <img src="{{item}}" alt="评论图片" class="image-show" style="width:50px;height:50px;float:left;margin-right:5px;">
                             {{#  }); }}
                         </script>
 

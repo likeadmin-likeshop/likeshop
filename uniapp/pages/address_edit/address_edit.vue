@@ -9,12 +9,12 @@
             </view>
             <view class="form-item row">
                 <view class="label">联系方式</view>
-                <input class="ml10" name="telephone" v-model="addressObj.telephone" type="number" placeholder="请填写手机号码"></input>
+                <input class="ml10" name="telephone" v-model="addressObj.telephone" type="number" placeholder="请填写手机号码" />
             </view>
             <view @click="showRegion = true">
                 <view class="form-item row">
                     <view class="label">所在地区</view>
-                    <input class="ml10" name="region" v-model="region" disabled type="text" placeholder="请选择省、市、区"></input>
+                    <input class="ml10" name="region" v-model="region" disabled type="text" placeholder="请选择省、市、区" />
                     <image class="icon-sm ml10" src="/static/images/arrow_right.png" />
                 </view>
             </view>

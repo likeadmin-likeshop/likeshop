@@ -215,7 +215,7 @@ class AdLogic
         if ($info['link_type'] == 2) {
             $goods = Db::name('goods g')
                 ->where(['g.id' => $info['link']])
-                ->field('g.name, g.image, min_price, max_price')
+                ->field('g.id, g.name, g.image, min_price, max_price')
                 ->find();
             $price = '￥' . $goods['max_price'];
             if ($goods['max_price'] !== $goods['min_price']) {
@@ -249,13 +249,13 @@ class AdLogic
      * @throws Exception
      * @throws \think\exception\PDOException
      */
-    public static function switchStatus($get)
+    public static function switchStatus($post)
     {
         $data = [
-            'status' => $get['status'],
+            'status' => $post['status'],
             'update_time' => time(),
         ];
-        return Db::name('ad')->where(['client' => $get['client'], 'del' => 0, 'id' => $get['id']])->update($data);
+        return Db::name('ad')->where(['client' => $post['client'], 'del' => 0, 'id' => $post['id']])->update($data);
     }
 
 

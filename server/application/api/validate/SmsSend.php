@@ -34,9 +34,9 @@ class SmsSend extends Validate{
     ];
     protected function checkSms($value,$rule,$data){
         $send_time = Db::name('sms_log')
-                ->where(['message_key'=>$data['key'],'mobile'=>$value,'is_verify'=>0])
-                ->order('id desc')
-                ->value('send_time');
+            ->where(['message_key'=>$data['key'],'mobile'=>$value,'is_verify'=>0])
+            ->order('id desc')
+            ->value('send_time');
         //一分钟内不能频繁发送
         if($send_time && $send_time + 60 > time()){
             return '验证码发送频繁，请稍后在发送';

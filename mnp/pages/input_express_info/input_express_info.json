@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "van-uploader": "/components/weapp/uploader/index"
-  },
-  "navigationBarTitleText": "售后详情"
-}

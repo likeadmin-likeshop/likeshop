@@ -1,6 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "price-slice": "/components/price-slice/price-slice"
-  }
-}

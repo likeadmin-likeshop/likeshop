@@ -22,62 +22,21 @@ use app\admin\logic\MenuDecorateLogic;
 use app\common\model\Menu_;
 class MenuDecorate extends AdminBase{
     /**
-     * note 小程序首页导航装修页面
+     * note 首页导航装修页面
      * create_time 2020/12/1 11:02
      */
-    public function mnpIndexList(){
-        $this->assign('client',1);
+    public function indexList(){
         $this->assign('type',1);
         return $this->fetch('lists');
-
     }
+
     /**
-     * note 小程序个人中心装修页面
+     * note 个人中心装修页面
      * create_time 2020/12/1 11:02
      */
-    public function mnpCenterList(){
-        $this->assign('client',1);
+    public function centerList(){
         $this->assign('type',2);
         return $this->fetch('lists');
-    }
-
-    /**
-     * note H5首页导航装修页面
-     * create_time 2020/12/1 10:59
-     */
-    public function h5IndexList(){
-        $this->assign('client',2);
-        $this->assign('type',1);
-        return $this->fetch('lists');
-    }
-    /**
-     * note H5个人中心装修页面
-     * create_time 2020/12/1 10:59
-     */
-    public function h5CenterList(){
-        $this->assign('client',2);
-        $this->assign('type',2);
-        return $this->fetch('lists');
-    }
-    /**
-     * note App首页导航装修
-     * create_time 2020/12/1 11:04
-     */
-    public function appIndexList(){
-
-        $this->assign('client',3);
-        $this->assign('type',1);
-        return $this->fetch('lists');
-    }
-    /**
-     * note APP个人中心装修页面
-     * create_time 2020/12/1 11:04
-     */
-    public function appCenterList(){
-        $this->assign('client',3);
-        $this->assign('type',2);
-        return $this->fetch('lists');
-
     }
 
     /**
@@ -85,10 +44,9 @@ class MenuDecorate extends AdminBase{
      * create_time 2020/12/1 11:14
      */
     public function lists(){
-        $client = $this->request->get('client');
-        $type = $this->request->get('type');
+        $get = $this->request->get('');
         if($this->request->isAjax()){
-            $this->_success('', MenuDecorateLogic::lists($client,$type));
+            $this->_success('', MenuDecorateLogic::lists($get));
         }
     }
     /**

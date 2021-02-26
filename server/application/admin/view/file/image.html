@@ -425,20 +425,18 @@
 
         //使用选中图片
         $('#used').click(function () {
-            console.log(ids);
             if (ids.length <= 0){
                 layer.msg('请选择图片');
                 return false;
             }
             var index = parent.layer.getFrameIndex(window.name);
             parent.layer.close(index);
-            parent.window.callback && parent.window.callback(paths);
+            parent.window.callback && parent.window.callback(paths.reverse());
         });
 
 
         //删除选中的图片
         $('#del').click(function () {
-            console.log(ids);
             if (ids.length <= 0){
                 layer.msg('请选择图片');
                 return false;

@@ -506,7 +506,7 @@
             $.ajax({
                 url:'{:url("goods/changeFields")}',
                 data:{id:id,field:fields,value:value},
-                type:'get',
+                type:'post',
                 dataType:'json',
                 success:function (res) {
                     if(res.code == 1) {

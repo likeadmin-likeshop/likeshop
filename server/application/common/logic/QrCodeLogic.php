@@ -108,6 +108,7 @@ class QrCodeLogic extends LogicBase {
                 $qrCode->writeFile($poster_url);
 
             }
+
             $user_avatar = file_exists('./'.$user['avatar']) ? ROOT_PATH.$user['avatar'] : ROOT_PATH.ConfigServer::get('website', 'user_image');
             $goods_image = ROOT_PATH.$goods['image']?:ConfigServer::get('website', 'goods_image');
 
@@ -175,9 +176,7 @@ class QrCodeLogic extends LogicBase {
     }
     //写入图片
     public function writeImg($poster, $img_uri, $config, $is_rounded = false){
-        if(strpos($img_uri, '/') === 0){
-            $img_uri = substr($img_uri, 1);
-        }
+       
         $pic_img = imagecreatefromstring(file_get_contents($img_uri));
         $is_rounded?$pic_img = rounded_corner($pic_img):'';//切成圆角返回头像资源
         $pic_w = imagesx($pic_img);

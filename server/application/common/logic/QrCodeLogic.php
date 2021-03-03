@@ -162,7 +162,7 @@ class QrCodeLogic extends LogicBase {
             $app = Factory::miniProgram($config);
 
             $response = $app->app_code->getUnlimit('id='.$goods['id'], [
-                'page'  => $url.'/page',
+                'page'  => $url,
             ]);
 
             if ($response instanceof \EasyWeChat\Kernel\Http\StreamResponse) {

@@ -89,8 +89,8 @@ class GoodsLogic
         if(isset($get['supplier_id']) && $get['supplier_id']){
             $where[] = ['supplier_id','=',$get['supplier_id']];
         }
-        if(isset($get['cid']) && $get['cid']){
-            $where[] = ['first_category_id|second_category_id|third_category_id','=',$get['cid']];
+        if(isset($get['category_id']) && $get['category_id']){
+            $where[] = ['first_category_id|second_category_id|third_category_id','=',$get['category_id']];
         }
 
         $goods_count = Db::name('goods')

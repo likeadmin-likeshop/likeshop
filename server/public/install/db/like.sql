@@ -6,19 +6,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_account_log`;
 CREATE TABLE `ls_account_log`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `log_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流水单号（20位）',
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `source_type` smallint(5) UNSIGNED NOT NULL DEFAULT 100 COMMENT '来源类型',
-  `source_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '来源id',
-  `source_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '来源单号',
-  `change_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '变动总数',
-  `left_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '剩余总数',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '说明',
-  `extra` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '额外的字段说明',
-  `change_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1-增加；2-减少',
-  `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(11) NOT NULL AUTO_INCREMENT,
+                                   `log_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '流水单号（20位）',
+                                   `user_id` int(11) NOT NULL COMMENT '用户id',
+                                   `source_type` smallint(5) UNSIGNED NOT NULL DEFAULT 100 COMMENT '来源类型',
+                                   `source_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '来源id',
+                                   `source_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '来源单号',
+                                   `change_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '变动总数',
+                                   `left_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '剩余总数',
+                                   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '说明',
+                                   `extra` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '额外的字段说明',
+                                   `change_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1-增加；2-减少',
+                                   `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员账户流水记录表';
 
 -- ----------------------------
@@ -32,21 +32,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_ad`;
 CREATE TABLE `ls_ad`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '广告id',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
-  `pid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '广告位置ID',
-  `client` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '终端,1-H5,2-小程序,3-APP',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片地址',
-  `link_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '链接类型：0-为空；1-商场页面；2-商品页面；3-自定义类型',
-  `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '链接地址：ad_type为1时，保存商品页面路径id；ad_type为2时，保存商品id；ad_type为3时，保存自定义链接',
-  `status` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '广告状态：1-开启；0-关闭',
-  `start_time` int(10) NULL DEFAULT 0 COMMENT '投放时间',
-  `end_time` int(10) NULL DEFAULT 0 COMMENT '结束时间',
-  `sort` smallint(6) NULL DEFAULT 50 COMMENT '排序',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-  `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  PRIMARY KEY (`id`) USING BTREE
+                          `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '广告id',
+                          `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
+                          `pid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '广告位置ID',
+                          `client` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '终端,1-H5,2-小程序,3-APP',
+                          `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片地址',
+                          `link_type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '链接类型：0-为空；1-商场页面；2-商品页面；3-自定义类型',
+                          `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '链接地址：ad_type为1时，保存商品页面路径id；ad_type为2时，保存商品id；ad_type为3时，保存自定义链接',
+                          `status` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '广告状态：1-开启；0-关闭',
+                          `start_time` int(10) NULL DEFAULT 0 COMMENT '投放时间',
+                          `end_time` int(10) NULL DEFAULT 0 COMMENT '结束时间',
+                          `sort` smallint(6) NULL DEFAULT 50 COMMENT '排序',
+                          `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
+                          `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+                          `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
+                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '广告表';
 
 -- ----------------------------
@@ -60,18 +60,18 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_ad_position`;
 CREATE TABLE `ls_ad_position`  (
-  `id` int(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告位置名称',
-  `attr` tinyint(2) NOT NULL COMMENT '广告位属性,1-系统默认,0-自定义',
-  `client` tinyint(3) UNSIGNED NOT NULL COMMENT '终端,1-小程序,2-H5,3-APP',
-  `width` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议宽度',
-  `height` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议高度',
-  `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '广告描述',
-  `status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1上架,0下架',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-  `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                   `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告位置名称',
+                                   `attr` tinyint(2) NOT NULL COMMENT '广告位属性,1-系统默认,0-自定义',
+                                   `client` tinyint(3) UNSIGNED NOT NULL COMMENT '终端,1-小程序,2-H5,3-APP',
+                                   `width` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议宽度',
+                                   `height` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '广告位建议高度',
+                                   `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '广告描述',
+                                   `status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '1上架,0下架',
+                                   `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
+                                   `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+                                   `del` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '广告位置表';
 
 -- ----------------------------
@@ -86,22 +86,22 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_admin`;
 CREATE TABLE `ls_admin`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `root` tinyint(1) NULL DEFAULT 1 COMMENT '0-非超级管理员；1-超级管理；',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '名称',
-  `type` tinyint(4) NULL DEFAULT 0 COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
-  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '账号',
-  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
-  `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-  `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '角色id',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-  `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-  `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-  `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `account`(`account`) USING BTREE
+                             `id` int(11) NOT NULL AUTO_INCREMENT,
+                             `root` tinyint(1) NULL DEFAULT 1 COMMENT '0-非超级管理员；1-超级管理；',
+                             `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '名称',
+                             `type` tinyint(4) NULL DEFAULT 0 COMMENT '账号类型：0-默认管理后台；其他根据业务再定',
+                             `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '账号',
+                             `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+                             `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
+                             `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '角色id',
+                             `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                             `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
+                             `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
+                             `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
+                             `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
+                             `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
+                             PRIMARY KEY (`id`) USING BTREE,
+                             UNIQUE INDEX `account`(`account`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台管理员表';
 
 -- ----------------------------
@@ -115,32 +115,32 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_after_sale`;
 CREATE TABLE `ls_after_sale`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '退款单号',
-  `user_id` int(10) NOT NULL COMMENT '用户id',
-  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-  `order_goods_id` int(10) NULL DEFAULT NULL COMMENT '订单商品关联表id',
-  `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
-  `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
-  `goods_num` int(10) NULL DEFAULT NULL COMMENT '商品数量',
-  `refund_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款原因',
-  `refund_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款说明',
-  `refund_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款图片',
-  `refund_type` tinyint(1) NULL DEFAULT NULL COMMENT '退款类型;0-仅退款;1-退款退货',
-  `refund_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
-  `express_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递公司名称',
-  `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递单号',
-  `express_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流备注说明',
-  `express_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流凭证',
-  `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
-  `status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-申请退款;1-商家拒绝;2-商品待退货;3-商家待收货;4-商家拒收货;5-等待退款;6-退款成功',
-  `audit_time` int(10) NULL DEFAULT NULL COMMENT '审核时间',
-  `admin_id` int(10) NULL DEFAULT NULL COMMENT '门店管理员id',
-  `admin_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '售后说明',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '撤销状态;0-正常;1-已撤销',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(10) NOT NULL AUTO_INCREMENT,
+                                  `sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '退款单号',
+                                  `user_id` int(10) NOT NULL COMMENT '用户id',
+                                  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
+                                  `order_goods_id` int(10) NULL DEFAULT NULL COMMENT '订单商品关联表id',
+                                  `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
+                                  `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
+                                  `goods_num` int(10) NULL DEFAULT NULL COMMENT '商品数量',
+                                  `refund_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款原因',
+                                  `refund_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款说明',
+                                  `refund_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退款图片',
+                                  `refund_type` tinyint(1) NULL DEFAULT NULL COMMENT '退款类型;0-仅退款;1-退款退货',
+                                  `refund_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
+                                  `express_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递公司名称',
+                                  `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递单号',
+                                  `express_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流备注说明',
+                                  `express_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流凭证',
+                                  `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
+                                  `status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-申请退款;1-商家拒绝;2-商品待退货;3-商家待收货;4-商家拒收货;5-等待退款;6-退款成功',
+                                  `audit_time` int(10) NULL DEFAULT NULL COMMENT '审核时间',
+                                  `admin_id` int(10) NULL DEFAULT NULL COMMENT '门店管理员id',
+                                  `admin_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '售后说明',
+                                  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                  `del` tinyint(1) NULL DEFAULT 0 COMMENT '撤销状态;0-正常;1-已撤销',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '售后表';
 
 -- ----------------------------
@@ -154,15 +154,15 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_after_sale_log`;
 CREATE TABLE `ls_after_sale_log`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
-  `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
-  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-  `after_sale_id` int(11) NULL DEFAULT NULL COMMENT '售后订单id',
-  `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                      `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
+                                      `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
+                                      `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
+                                      `after_sale_id` int(11) NULL DEFAULT NULL COMMENT '售后订单id',
+                                      `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
+                                      `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
+                                      `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '售后日志表';
 
 -- ----------------------------
@@ -176,21 +176,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_article`;
 CREATE TABLE `ls_article`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
-  `cid` int(11) NULL DEFAULT NULL COMMENT '文章分类',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',
-  `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文字简介',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章图片',
-  `is_notice` tinyint(1) NULL DEFAULT 0 COMMENT '是否公告:1-是.0-否',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
-  `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
-  `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
+                               `cid` int(11) NULL DEFAULT NULL COMMENT '文章分类',
+                               `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',
+                               `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文字简介',
+                               `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章图片',
+                               `is_notice` tinyint(1) NULL DEFAULT 0 COMMENT '是否公告:1-是.0-否',
+                               `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
+                               `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
+                               `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+                               `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
+                               `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                               `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+                               `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
+                               `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -205,14 +205,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_article_category`;
 CREATE TABLE `ls_article_category`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
-  `sort` tinyint(1) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
+                                        `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
+                                        `sort` tinyint(1) NULL DEFAULT 0 COMMENT '排序',
+                                        `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
+                                        `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                        `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                        `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -227,17 +227,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_cart`;
 CREATE TABLE `ls_cart`  (
-  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '购物车表',
-  `user_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
-  `goods_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品id',
-  `goods_num` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '购买数量',
-  `item_id` int(11) NULL DEFAULT 0 COMMENT '规格ID',
-  `selected` tinyint(1) NULL DEFAULT 1 COMMENT '选中状态;1-选中;0-未选中',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE,
-  INDEX `goods_id`(`goods_id`) USING BTREE
+                            `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '购物车表',
+                            `user_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+                            `goods_id` int(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品id',
+                            `goods_num` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '购买数量',
+                            `item_id` int(11) NULL DEFAULT 0 COMMENT '规格ID',
+                            `selected` tinyint(1) NULL DEFAULT 1 COMMENT '选中状态;1-选中;0-未选中',
+                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                            `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            INDEX `user_id`(`user_id`) USING BTREE,
+                            INDEX `goods_id`(`goods_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表';
 
 -- ----------------------------
@@ -251,12 +251,12 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_config`;
 CREATE TABLE `ls_config`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '值',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+                              `id` int(11) NOT NULL AUTO_INCREMENT,
+                              `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
+                              `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
+                              `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '值',
+                              `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置表';
 
 -- ----------------------------
@@ -271,28 +271,28 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_coupon`;
 CREATE TABLE `ls_coupon`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '优惠券名称',
-  `send_time_start` int(10) NOT NULL COMMENT '发放开始时间',
-  `send_time_end` int(10) NOT NULL COMMENT '发放结束时间',
-  `money` decimal(10, 2) NOT NULL COMMENT '优惠券面额(元)',
-  `condition_type` tinyint(1) NULL DEFAULT NULL COMMENT '使用条件类型：1-无门槛；2-订单满足金额',
-  `condition_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '使用条件类型为2时：该字段为订单满足金额可使用',
-  `send_total_type` tinyint(1) NULL DEFAULT NULL COMMENT '发送总量类型：1-不限制；2-限制张数',
-  `send_total` int(10) NULL DEFAULT NULL COMMENT '发送总量类型为2时：该字段为限制的张数',
-  `use_time_type` tinyint(1) NULL DEFAULT NULL COMMENT '用券时间类型：1-固定时间；2-领券当天起；3-领券次日起',
-  `use_time_start` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用开始时间；',
-  `use_time_end` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用结束时间；',
-  `use_time` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为2、3时：该字段为多少天内可用；',
-  `get_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取类型：1-直接领取；2-平台赠送；3-活动赠送',
-  `get_num_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取次数类型：1-不限制领取传次数；2-限制次数；3-每天限制数量',
-  `get_num` int(10) NULL DEFAULT NULL COMMENT '领取次数类型为：2、3时：该字段为领取限制的数量',
-  `use_goods_type` tinyint(1) NULL DEFAULT NULL COMMENT '适用商品类型:1-全部商品；2-指定商品；3-指定商品不可用',
-  `status` tinyint(255) NOT NULL DEFAULT 0 COMMENT '优惠券状态：1-进行中；0-关闭',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                              `id` int(11) NOT NULL AUTO_INCREMENT,
+                              `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '优惠券名称',
+                              `send_time_start` int(10) NOT NULL COMMENT '发放开始时间',
+                              `send_time_end` int(10) NOT NULL COMMENT '发放结束时间',
+                              `money` decimal(10, 2) NOT NULL COMMENT '优惠券面额(元)',
+                              `condition_type` tinyint(1) NULL DEFAULT NULL COMMENT '使用条件类型：1-无门槛；2-订单满足金额',
+                              `condition_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '使用条件类型为2时：该字段为订单满足金额可使用',
+                              `send_total_type` tinyint(1) NULL DEFAULT NULL COMMENT '发送总量类型：1-不限制；2-限制张数',
+                              `send_total` int(10) NULL DEFAULT NULL COMMENT '发送总量类型为2时：该字段为限制的张数',
+                              `use_time_type` tinyint(1) NULL DEFAULT NULL COMMENT '用券时间类型：1-固定时间；2-领券当天起；3-领券次日起',
+                              `use_time_start` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用开始时间；',
+                              `use_time_end` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为1时：该字段为使用结束时间；',
+                              `use_time` int(10) NULL DEFAULT NULL COMMENT '用券时间类型为2、3时：该字段为多少天内可用；',
+                              `get_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取类型：1-直接领取；2-平台赠送；3-活动赠送',
+                              `get_num_type` tinyint(1) NULL DEFAULT NULL COMMENT '领取次数类型：1-不限制领取传次数；2-限制次数；3-每天限制数量',
+                              `get_num` int(10) NULL DEFAULT NULL COMMENT '领取次数类型为：2、3时：该字段为领取限制的数量',
+                              `use_goods_type` tinyint(1) NULL DEFAULT NULL COMMENT '适用商品类型:1-全部商品；2-指定商品；3-指定商品不可用',
+                              `status` tinyint(255) NOT NULL DEFAULT 0 COMMENT '优惠券状态：1-进行中；0-关闭',
+                              `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                              `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                              `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
+                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券表';
 
 -- ----------------------------
@@ -306,11 +306,11 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_coupon_goods`;
 CREATE TABLE `ls_coupon_goods`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
-  `goods_id` int(10) NOT NULL COMMENT '商品id',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                                    `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
+                                    `goods_id` int(10) NOT NULL COMMENT '商品id',
+                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券商品管理表';
 
 -- ----------------------------
@@ -324,17 +324,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_coupon_list`;
 CREATE TABLE `ls_coupon_list`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NOT NULL COMMENT '用户id',
-  `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
-  `coupon_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '优惠券券码',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态；0-未使用;1-已使用',
-  `order_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '优惠券使用的订单id',
-  `use_time` int(10) NULL DEFAULT NULL COMMENT '使用时间',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(10) NOT NULL AUTO_INCREMENT,
+                                   `user_id` int(10) NOT NULL COMMENT '用户id',
+                                   `coupon_id` int(10) NOT NULL COMMENT '优惠券id',
+                                   `coupon_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '优惠券券码',
+                                   `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态；0-未使用;1-已使用',
+                                   `order_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '优惠券使用的订单id',
+                                   `use_time` int(10) NULL DEFAULT NULL COMMENT '使用时间',
+                                   `create_time` int(10) NOT NULL COMMENT '创建时间',
+                                   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户优惠券';
 
 -- ----------------------------
@@ -348,27 +348,27 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_delivery`;
 CREATE TABLE `ls_delivery`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '发货单ID',
-  `order_id` int(11) UNSIGNED NOT NULL COMMENT '订单ID',
-  `order_sn` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '订单编号',
-  `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
-  `admin_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '管理员ID',
-  `consignee` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '收货人',
-  `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '联系手机',
-  `province` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '省ID',
-  `city` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '市ID',
-  `district` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '区ID',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
-  `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态;0-未发货;1-已发货',
-  `shipping_id` int(10) NULL DEFAULT NULL COMMENT '物流公司id',
-  `shipping_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递名称',
-  `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '物流单号',
-  `send_type` tinyint(1) NULL DEFAULT 0 COMMENT '配送方式:1-快递配送;2-无需快递',
-  `create_time` int(11) NOT NULL COMMENT '创建时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `order_id`(`order_id`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE
+                                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '发货单ID',
+                                `order_id` int(11) UNSIGNED NOT NULL COMMENT '订单ID',
+                                `order_sn` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '订单编号',
+                                `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
+                                `admin_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '管理员ID',
+                                `consignee` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '收货人',
+                                `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '联系手机',
+                                `province` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '省ID',
+                                `city` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '市ID',
+                                `district` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '区ID',
+                                `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
+                                `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态;0-未发货;1-已发货',
+                                `shipping_id` int(10) NULL DEFAULT NULL COMMENT '物流公司id',
+                                `shipping_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递名称',
+                                `invoice_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '物流单号',
+                                `send_type` tinyint(1) NULL DEFAULT 0 COMMENT '配送方式:1-快递配送;2-无需快递',
+                                `create_time` int(11) NOT NULL COMMENT '创建时间',
+                                `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除',
+                                PRIMARY KEY (`id`) USING BTREE,
+                                INDEX `order_id`(`order_id`) USING BTREE,
+                                INDEX `user_id`(`user_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '发货单表';
 
 -- ----------------------------
@@ -382,27 +382,27 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_auth`;
 CREATE TABLE `ls_dev_auth`  (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-菜单；2-权限',
-  `system` tinyint(1) NULL DEFAULT 0 COMMENT '是否为系统级菜单',
-  `pid` int(4) NOT NULL DEFAULT 0 COMMENT '分级id',
-  `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `uri` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '后台uri',
-  `sort` int(4) NULL DEFAULT 50 COMMENT '排序',
-  `disable` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-启用；1-禁用；',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-  PRIMARY KEY (`id`) USING BTREE
+                                `id` int(4) NOT NULL AUTO_INCREMENT,
+                                `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-菜单；2-权限',
+                                `system` tinyint(1) NULL DEFAULT 0 COMMENT '是否为系统级菜单',
+                                `pid` int(4) NOT NULL DEFAULT 0 COMMENT '分级id',
+                                `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
+                                `icon` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
+                                `uri` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '后台uri',
+                                `sort` int(4) NULL DEFAULT 50 COMMENT '排序',
+                                `disable` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-启用；1-禁用；',
+                                `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
+                                `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
+                                `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
+                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 126 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
 
 -- ----------------------------
 -- Records of ls_dev_auth
 -- ----------------------------
 BEGIN;
-INSERT INTO `ls_dev_auth` VALUES (1, 1, 1, 18, '权限管理', '', '', 95, 0, 1597593692, 1608102122, 0, 0), (2, 1, 0, 1, '菜单权限', '', 'auth/lists', 50, 0, 1597593762, 1597636524, 0, 0), (3, 2, 0, 2, '添加菜单', '', 'auth/add', 50, 0, 1597593846, 1597636533, 0, 0), (4, 2, 0, 2, '编辑菜单', '', 'auth/edit', 50, 0, 1597593909, 1597636533, 0, 0), (5, 2, 0, 2, '删除', '', 'auth/del', 50, 0, 1597594342, NULL, 0, 0), (6, 1, 0, 1, '管理员', '', 'admin/lists', 51, 0, 1597594526, 1597636523, 0, 0), (7, 2, 0, 6, '添加管理员', '', 'admin/add', 50, 0, 1597594556, NULL, 0, 0), (8, 2, 0, 6, '编辑管理员', '', 'admin/edit', 50, 0, 1597594595, 1597594610, 0, 0), (9, 2, 0, 6, '删除管理员', '', 'admin/del', 50, 0, 1597594639, NULL, 0, 0), (10, 1, 0, 1, '角色', '', 'role/lists', 50, 0, 1597596178, 1597635420, 0, 0), (12, 2, 0, 6, '管理员列表', '', 'admin/lists', 51, 0, 1597631850, 1597636529, 0, 0), (13, 2, 0, 2, '菜单列表', '', 'menu/lists', 51, 0, 1597632028, 1597632039, 0, 0), (14, 2, 0, 10, '角色列表', '', 'role/lists', 50, 0, 1597632555, NULL, 0, 0), (15, 2, 0, 10, '添加角色', '', 'role/add', 50, 0, 1597632944, NULL, 0, 0), (16, 2, 0, 10, '编辑角色', '', 'role/edit', 50, 0, 1597632999, NULL, 0, 0), (17, 1, 0, 18, '基础设置', '', '', 99, 0, 1597633276, 1608102098, 0, 0), (18, 1, 0, 0, '设置', 'layui-icon-set', '', 79, 0, 1597633295, 1608102027, 0, 0), (19, 1, 0, 0, '个人', 'layui-icon-friends', 'my/password', 50, 0, 1597633558, 1608102250, 0, 0), (20, 1, 0, 19, '修改密码', '', 'my/password', 100, 0, 1597633582, 1606442853, 0, 0), (21, 1, 0, 17, '网站设置', '', 'basic/website', 99, 0, 1597658026, 1608467331, 0, 0), (22, 1, 0, 17, '版权备案', '', 'basic/copyright', 97, 0, 1597658101, 1608467338, 0, 0), (23, 2, 0, 21, '查看网站设置', '', 'basic/copyright', 51, 0, 1597658275, 1597663235, 0, 0), (24, 2, 0, 21, '修改网站设置', '', 'basic/setWebsite', 50, 0, 1597663008, NULL, 0, 0), (25, 2, 0, 22, '查看版权备案', '', 'basic/copyright', 51, 0, 1597663176, 1597663223, 0, 0), (26, 2, 0, 22, '修改版权备案', '', 'basic/setCopyright', 50, 0, 1597663205, NULL, 0, 0), (27, 2, 0, 2, '设置菜单权限状态', '', 'auth/status', 50, 0, 1597663631, NULL, 0, 0), (28, 2, 0, 20, '修改密码', '', 'my/password', 50, 0, 1597668756, NULL, 0, 0), (29, 1, 0, 0, '商品', 'layui-icon-cart-simple', '', 100, 0, 1602555146, 1608721714, 0, 0), (30, 1, 0, 29, '品牌管理', '', 'goodsBrand/lists', 95, 0, 1602555190, 1608256821, 0, 0), (31, 1, 0, 29, '分类管理', '', 'goodsCategory/lists', 97, 0, 1602555225, 1608102166, 0, 0), (32, 1, 0, 29, '供货商', '', 'supplier/lists', 93, 0, 1602559943, 1608102224, 0, 0), (33, 1, 0, 0, '会员', 'layui-icon-username', '', 95, 0, 1602570345, 1608101864, 0, 0), (34, 1, 0, 33, '会员管理', '', 'user/lists', 99, 0, 1602570372, 1608262169, 0, 0), (35, 1, 0, 33, '会员等级', '', 'userLevel/lists', 97, 0, 1602570437, 1608262182, 0, 0), (36, 1, 0, 33, '会员分组', '', 'userGroup/lists', 95, 0, 1602570466, 1608262193, 0, 0), (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 97, 0, 1602576261, 1608101850, 0, 0), (38, 1, 0, 37, '订单列表', '', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0), (39, 1, 0, 0, '营销', 'layui-icon-component', '', 93, 0, 1602579530, 1608101924, 0, 0), (40, 1, 0, 39, '会员签到', '', 'signDaily/lists', 50, 0, 1602647177, 1606963046, 0, 0), (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, 1608102230, 0, 0), (43, 1, 0, 56, '配送管理', '', 'freight/lists', 50, 0, 1602666008, 1603525668, 0, 0), (44, 1, 0, 29, '商品管理', '', 'goods/lists', 99, 0, 1603159926, 1608102157, 0, 0), (45, 1, 0, 37, '售后退款', '', 'afterSale/lists', 50, 0, 1603160367, 1605522422, 0, 0), (46, 1, 0, 0, '系统', 'layui-icon-util', '', 77, 0, 1603176542, 1608102244, 0, 0), (47, 1, 0, 46, '系统日志', '', 'log/lists', 49, 0, 1603176576, 1608344566, 0, 0), (48, 1, 0, 39, '优惠券', '', 'coupon/lists', 50, 0, 1603338116, NULL, 0, 0), (49, 1, 0, 0, '微信', 'layui-icon-login-wechat', '', 85, 0, 1603417725, 1608101989, 0, 0), (50, 1, 0, 49, '微信公众号', '', '', 99, 0, 1603417748, 1608193993, 0, 0), (51, 1, 0, 50, '公众号设置', '', 'oa/setoa', 99, 0, 1603417764, 1612581755, 0, 0), (52, 1, 0, 50, '菜单管理', '', 'oa/oamenu', 97, 0, 1603417789, 1608193168, 0, 0), (53, 1, 0, 49, '微信小程序', '', '', 97, 0, 1603417800, 1608194002, 0, 0), (54, 1, 0, 53, '小程序设置', '', 'mnp/setmnp', 99, 0, 1603417818, 1608193191, 0, 0), (56, 1, 0, 18, '商城设置', '', '', 97, 0, 1603524640, 1608102112, 0, 0), (57, 1, 0, 56, '交易设置', '', 'shopSetting/trading', 99, 0, 1603524686, 1608467395, 0, 0), (58, 1, 0, 56, '政策协议', '', 'shopSetting/policy', 50, 0, 1603524707, NULL, 0, 0), (59, 1, 0, 17, '支付设置', '', 'payConfig/lists', 95, 0, 1603779401, 1608467354, 0, 0), (60, 2, 0, 59, '支付设置列表', '', 'payConfig/lists', 50, 0, 1603779630, NULL, 0, 0), (61, 2, 0, 59, '编辑余额支付', '', 'payConfig/editBalance', 50, 0, 1603779649, NULL, 0, 0), (62, 2, 0, 59, '编辑公众号', '', 'payConfig/editOfficial', 50, 0, 1603779679, NULL, 0, 0), (63, 2, 0, 59, '编辑小程序', '', 'payConfig/editApplet', 50, 0, 1603779768, NULL, 0, 0), (64, 2, 0, 59, '编辑支付宝', '', 'payConfig/editAlipay', 50, 0, 1603779802, NULL, 0, 0), (65, 1, 0, 0, '内容', 'layui-icon-read', '', 89, 0, 1605172316, 1608101965, 0, 0), (66, 1, 0, 65, '广告', '', '', 50, 0, 1605172328, 1605522463, 0, 0), (67, 1, 0, 66, '广告管理', '', 'ad/lists', 50, 0, 1605172346, 1612581947, 0, 0), (68, 1, 0, 66, '广告位管理', '', 'adPosition/lists', 50, 0, 1605172428, NULL, 0, 0), (69, 1, 0, 65, '帮助', '', '', 50, 0, 1605177392, 1605522474, 0, 0), (70, 1, 0, 69, '帮助管理', '', 'help/lists', 50, 0, 1605177427, 1612581705, 0, 0), (71, 1, 0, 69, '帮助分类', '', 'helpCategory/lists', 50, 0, 1605177450, NULL, 0, 0), (73, 1, 0, 65, '文章', '', '', 50, 0, 1605250150, 1605522487, 0, 0), (74, 1, 0, 73, '文章管理', '', 'article/lists', 50, 0, 1605250172, NULL, 0, 0), (75, 1, 0, 73, '文章分类', '', 'articleCategory/lists', 50, 0, 1605250217, NULL, 0, 0), (79, 1, 0, 17, '消息管理', '', 'message/config', 93, 0, 1605602385, 1608467368, 0, 0), (80, 1, 0, 17, '短信管理', '', 'sms/lists', 91, 0, 1605603890, 1608467380, 0, 0), (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0),(88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0), (90, 1, 0, 56, '会员提现', '', 'shopSetting/withdraw', 50, 0, 1606357500, 1606361192, 1, 0), (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0), (93, 1, 0, 92, 'H5装修', '', '', 100, 0, 1606449177, 1606792239, 0, 0), (94, 1, 0, 92, '小程序装修', '', '', 90, 0, 1606449275, 1606792694, 0, 0), (95, 1, 0, 92, 'APP装修', '', '', 80, 0, 1606449294, 1606792704, 0, 0), (96, 1, 0, 93, '首页导航', '', 'MenuDecorate/h5IndexList', 100, 0, 1606449403, 1613012591, 0, 0), (97, 1, 0, 93, '个人中心', '', 'MenuDecorate/h5CenterList', 90, 0, 1606449425, 1613012600, 0, 0), (98, 1, 0, 94, '首页导航', '', 'MenuDecorate/mnpIndexList', 100, 0, 1606449451, 1613012610, 0, 0), (99, 1, 0, 94, '个人中心', '', 'MenuDecorate/mnpCenterList', 90, 0, 1606449483, 1613012622, 0, 0), (100, 1, 0, 95, '首页导航', '', 'MenuDecorate/appIndexList', 100, 0, 1606449508, 1613012636, 0, 0), (101, 1, 0, 95, '个人中心', '', 'MenuDecorate/appCenterList', 90, 0, 1606449534, 1613012646, 0, 0), (102, 1, 0, 0, '数据', 'layui-icon-website', '', 81, 0, 1606449677, 1608102018, 0, 0), (103, 1, 0, 102, '会员', '', 'statistics/member', 100, 0, 1606449697, 1608719516, 0, 0), (104, 1, 0, 102, '商品', '', 'statistics/goods', 90, 0, 1606449713, 1608719471, 0, 0), (105, 1, 0, 102, '交易', '', 'statistics/deal', 80, 0, 1606449733, 1608719534, 0, 0), (108, 1, 0, 46, '计划任务', '', 'crontab/lists', 51, 0, 1606816642, 1612600756, 0, 0), (109, 1, 0, 17, 'APP设置', '', 'basic/app', 50, 0, 1606819436, NULL, 0, 0), (110, 1, 0, 33, '会员权益', '', 'UserPrivilege/lists', 50, 0, 1606891617, NULL, 0, 0), (111, 1, 0, 50, '模板消息', '', 'oaMessage/lists', 50, 0, 1606960631, 1613013224, 0, 0), (115, 1, 0, 53, '订阅消息', '', 'mnpMessage/lists', 50, 0, 1607066949, 1613013234, 0, 0), (116, 1, 0, 50, '回复管理', '', 'WechatReply/lists', 95, 0, 1607139107, 1608193178, 0, 0), (120, 1, 0, 49, ' 开放平台', '', '', 50, 0, 1608200356, 1613013303, 0, 0), (121, 1, 0, 120, '开放平台', '', 'Op/config', 50, 0, 1608200416, 1613013312, 0, 0), (122, 1, 0, 81, '财务概况', '', 'finance/lists', 99, 0, 1608363142, 1608455635, 0, 0), (123, 1, 0, 56, '热门搜索', '', 'hotSearch/index', 50, 0, 1608607023, NULL, 0, 0), (124, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608972991, NULL, 0, 0), (125, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608974504, NULL, 0, 0);
+INSERT INTO `ls_dev_auth` VALUES (1, 1, 1, 18, '权限管理', '', '', 95, 0, 1597593692, 1608102122, 0, 0), (2, 1, 0, 1, '菜单权限', '', 'auth/lists', 50, 0, 1597593762, 1597636524, 0, 0), (3, 2, 0, 2, '添加菜单', '', 'auth/add', 50, 0, 1597593846, 1597636533, 0, 0), (4, 2, 0, 2, '编辑菜单', '', 'auth/edit', 50, 0, 1597593909, 1597636533, 0, 0), (5, 2, 0, 2, '删除', '', 'auth/del', 50, 0, 1597594342, NULL, 0, 0), (6, 1, 0, 1, '管理员', '', 'admin/lists', 51, 0, 1597594526, 1597636523, 0, 0), (7, 2, 0, 6, '添加管理员', '', 'admin/add', 50, 0, 1597594556, NULL, 0, 0), (8, 2, 0, 6, '编辑管理员', '', 'admin/edit', 50, 0, 1597594595, 1597594610, 0, 0), (9, 2, 0, 6, '删除管理员', '', 'admin/del', 50, 0, 1597594639, NULL, 0, 0), (10, 1, 0, 1, '角色', '', 'role/lists', 50, 0, 1597596178, 1597635420, 0, 0), (12, 2, 0, 6, '管理员列表', '', 'admin/lists', 51, 0, 1597631850, 1597636529, 0, 0), (13, 2, 0, 2, '菜单列表', '', 'menu/lists', 51, 0, 1597632028, 1597632039, 0, 0), (14, 2, 0, 10, '角色列表', '', 'role/lists', 50, 0, 1597632555, NULL, 0, 0), (15, 2, 0, 10, '添加角色', '', 'role/add', 50, 0, 1597632944, NULL, 0, 0), (16, 2, 0, 10, '编辑角色', '', 'role/edit', 50, 0, 1597632999, NULL, 0, 0), (17, 1, 0, 18, '基础设置', '', '', 99, 0, 1597633276, 1608102098, 0, 0), (18, 1, 0, 0, '设置', 'layui-icon-set', '', 79, 0, 1597633295, 1608102027, 0, 0), (19, 1, 0, 0, '个人', 'layui-icon-friends', 'my/password', 50, 0, 1597633558, 1608102250, 0, 0), (20, 1, 0, 19, '修改密码', '', 'my/password', 100, 0, 1597633582, 1606442853, 0, 0), (21, 1, 0, 17, '网站设置', '', 'basic/website', 99, 0, 1597658026, 1608467331, 0, 0), (22, 1, 0, 17, '版权备案', '', 'basic/copyright', 97, 0, 1597658101, 1608467338, 0, 0), (23, 2, 0, 21, '查看网站设置', '', 'basic/copyright', 51, 0, 1597658275, 1597663235, 0, 0), (24, 2, 0, 21, '修改网站设置', '', 'basic/setWebsite', 50, 0, 1597663008, NULL, 0, 0), (25, 2, 0, 22, '查看版权备案', '', 'basic/copyright', 51, 0, 1597663176, 1597663223, 0, 0), (26, 2, 0, 22, '修改版权备案', '', 'basic/setCopyright', 50, 0, 1597663205, NULL, 0, 0), (27, 2, 0, 2, '设置菜单权限状态', '', 'auth/status', 50, 0, 1597663631, NULL, 0, 0), (28, 2, 0, 20, '修改密码', '', 'my/password', 50, 0, 1597668756, NULL, 0, 0), (29, 1, 0, 0, '商品', 'layui-icon-cart-simple', '', 100, 0, 1602555146, 1608721714, 0, 0), (30, 1, 0, 29, '品牌管理', '', 'goodsBrand/lists', 95, 0, 1602555190, 1608256821, 0, 0), (31, 1, 0, 29, '分类管理', '', 'goodsCategory/lists', 97, 0, 1602555225, 1608102166, 0, 0), (32, 1, 0, 29, '供货商', '', 'supplier/lists', 93, 0, 1602559943, 1608102224, 0, 0), (33, 1, 0, 0, '会员', 'layui-icon-username', '', 95, 0, 1602570345, 1608101864, 0, 0), (34, 1, 0, 33, '会员管理', '', 'user/lists', 99, 0, 1602570372, 1608262169, 0, 0), (35, 1, 0, 33, '会员等级', '', 'userLevel/lists', 97, 0, 1602570437, 1608262182, 0, 0), (36, 1, 0, 33, '会员分组', '', 'userGroup/lists', 95, 0, 1602570466, 1608262193, 0, 0), (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 97, 0, 1602576261, 1608101850, 0, 0), (38, 1, 0, 37, '订单列表', '', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0), (39, 1, 0, 0, '营销', 'layui-icon-component', '', 93, 0, 1602579530, 1608101924, 0, 0), (40, 1, 0, 39, '会员签到', '', 'signDaily/lists', 50, 0, 1602647177, 1606963046, 0, 0), (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, 1608102230, 0, 0), (43, 1, 0, 56, '配送管理', '', 'freight/lists', 50, 0, 1602666008, 1603525668, 0, 0), (44, 1, 0, 29, '商品管理', '', 'goods/lists', 99, 0, 1603159926, 1608102157, 0, 0), (45, 1, 0, 37, '售后退款', '', 'afterSale/lists', 50, 0, 1603160367, 1605522422, 0, 0), (46, 1, 0, 0, '系统', 'layui-icon-util', '', 77, 0, 1603176542, 1608102244, 0, 0), (47, 1, 0, 46, '系统日志', '', 'log/lists', 49, 0, 1603176576, 1608344566, 0, 0), (48, 1, 0, 39, '优惠券', '', 'coupon/lists', 50, 0, 1603338116, NULL, 0, 0), (49, 1, 0, 0, '微信', 'layui-icon-login-wechat', '', 85, 0, 1603417725, 1608101989, 0, 0), (50, 1, 0, 49, '微信公众号', '', '', 99, 0, 1603417748, 1608193993, 0, 0), (51, 1, 0, 50, '公众号设置', '', 'oa/setoa', 99, 0, 1603417764, 1612581755, 0, 0), (52, 1, 0, 50, '菜单管理', '', 'oa/oamenu', 97, 0, 1603417789, 1608193168, 0, 0), (53, 1, 0, 49, '微信小程序', '', '', 97, 0, 1603417800, 1608194002, 0, 0), (54, 1, 0, 53, '小程序设置', '', 'mnp/setmnp', 99, 0, 1603417818, 1608193191, 0, 0), (56, 1, 0, 18, '商城设置', '', '', 97, 0, 1603524640, 1608102112, 0, 0), (57, 1, 0, 56, '交易设置', '', 'shopSetting/trading', 99, 0, 1603524686, 1608467395, 0, 0), (58, 1, 0, 56, '政策协议', '', 'shopSetting/policy', 50, 0, 1603524707, NULL, 0, 0), (59, 1, 0, 17, '支付设置', '', 'payConfig/lists', 95, 0, 1603779401, 1608467354, 0, 0), (60, 2, 0, 59, '支付设置列表', '', 'payConfig/lists', 50, 0, 1603779630, NULL, 0, 0), (61, 2, 0, 59, '编辑余额支付', '', 'payConfig/editBalance', 50, 0, 1603779649, NULL, 0, 0), (62, 2, 0, 59, '编辑公众号', '', 'payConfig/editOfficial', 50, 0, 1603779679, NULL, 0, 0), (63, 2, 0, 59, '编辑小程序', '', 'payConfig/editApplet', 50, 0, 1603779768, NULL, 0, 0), (64, 2, 0, 59, '编辑支付宝', '', 'payConfig/editAlipay', 50, 0, 1603779802, NULL, 0, 0), (65, 1, 0, 0, '内容', 'layui-icon-read', '', 89, 0, 1605172316, 1608101965, 0, 0), (66, 1, 0, 65, '广告', '', '', 50, 0, 1605172328, 1605522463, 0, 0), (67, 1, 0, 66, '广告管理', '', 'ad/lists', 50, 0, 1605172346, 1612581947, 0, 0), (68, 1, 0, 66, '广告位管理', '', 'adPosition/lists', 50, 0, 1605172428, NULL, 0, 0), (69, 1, 0, 65, '帮助', '', '', 50, 0, 1605177392, 1605522474, 0, 0), (70, 1, 0, 69, '帮助管理', '', 'help/lists', 50, 0, 1605177427, 1612581705, 0, 0), (71, 1, 0, 69, '帮助分类', '', 'helpCategory/lists', 50, 0, 1605177450, NULL, 0, 0), (73, 1, 0, 65, '文章', '', '', 50, 0, 1605250150, 1605522487, 0, 0), (74, 1, 0, 73, '文章管理', '', 'article/lists', 50, 0, 1605250172, NULL, 0, 0), (75, 1, 0, 73, '文章分类', '', 'articleCategory/lists', 50, 0, 1605250217, NULL, 0, 0), (79, 1, 0, 17, '消息管理', '', 'message/config', 93, 0, 1605602385, 1608467368, 0, 0), (80, 1, 0, 17, '短信管理', '', 'sms/lists', 91, 0, 1605603890, 1608467380, 0, 0), (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0), (87, 1, 0, 81, '积分记录', '', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0), (88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0), (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0), (94, 1, 0, 92, '手机装修', '', '', 90, 0, 1606449275, 1614241761, 0, 0), (98, 1, 0, 94, '首页导航', '', 'MenuDecorate/indexList', 100, 0, 1606449451, 1614241773, 0, 0), (99, 1, 0, 94, '个人中心', '', 'MenuDecorate/centerList', 90, 0, 1606449483, 1614241782, 0, 0), (102, 1, 0, 0, '数据', 'layui-icon-website', '', 81, 0, 1606449677, 1608102018, 0, 0), (103, 1, 0, 102, '会员', '', 'statistics/member', 100, 0, 1606449697, 1608719516, 0, 0), (104, 1, 0, 102, '商品', '', 'statistics/goods', 90, 0, 1606449713, 1608719471, 0, 0), (105, 1, 0, 102, '交易', '', 'statistics/deal', 80, 0, 1606449733, 1608719534, 0, 0), (108, 1, 0, 46, '计划任务', '', 'crontab/lists', 51, 0, 1606816642, 1612600756, 0, 0), (109, 1, 0, 17, 'APP设置', '', 'basic/app', 50, 0, 1606819436, NULL, 0, 0), (110, 1, 0, 33, '会员权益', '', 'UserPrivilege/lists', 50, 0, 1606891617, NULL, 0, 0), (111, 1, 0, 50, '模板消息', '', 'oaMessage/lists', 50, 0, 1606960631, 1613013224, 0, 0), (115, 1, 0, 53, '订阅消息', '', 'mnpMessage/lists', 50, 0, 1607066949, 1613013234, 0, 0), (116, 1, 0, 50, '回复管理', '', 'WechatReply/lists', 95, 0, 1607139107, 1608193178, 0, 0), (120, 1, 0, 49, ' 开放平台', '', '', 50, 0, 1608200356, 1613013303, 0, 0), (121, 1, 0, 120, '开放平台', '', 'Op/config', 50, 0, 1608200416, 1613013312, 0, 0), (122, 1, 0, 81, '财务概况', '', 'finance/lists', 99, 0, 1608363142, 1608455635, 0, 0), (123, 1, 0, 56, '热门搜索', '', 'hotSearch/index', 50, 0, 1608607023, NULL, 0, 0), (124, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608972991, NULL, 0, 0), (125, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608974504, NULL, 0, 0);
 COMMIT;
 
 -- ----------------------------
@@ -410,23 +410,23 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_crontab`;
 CREATE TABLE `ls_dev_crontab`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `type` tinyint(1) NULL DEFAULT NULL COMMENT '类型：1-定时任务；2-守护进程',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `command` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '命令内容',
-  `parameter` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：1-运行；2-停止；3-错误；',
-  `expression` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '运行规则',
-  `error` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行失败原因',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
-  `last_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
-  `time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '实时执行时长',
-  `max_time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '最大执行时长',
-  `system` tinyint(4) NULL DEFAULT 0 COMMENT '是否系统任务：0-否；1-是；',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+                                   `id` int(11) NOT NULL AUTO_INCREMENT,
+                                   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                                   `type` tinyint(1) NULL DEFAULT NULL COMMENT '类型：1-定时任务；2-守护进程',
+                                   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                   `command` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '命令内容',
+                                   `parameter` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数',
+                                   `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：1-运行；2-停止；3-错误；',
+                                   `expression` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '运行规则',
+                                   `error` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运行失败原因',
+                                   `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                                   `update_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
+                                   `last_time` int(11) NULL DEFAULT NULL COMMENT '最后执行时间',
+                                   `time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '实时执行时长',
+                                   `max_time` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '最大执行时长',
+                                   `system` tinyint(4) NULL DEFAULT 0 COMMENT '是否系统任务：0-否；1-是；',
+                                   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
 -- Records of ls_dev_crontab
@@ -440,13 +440,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_message`;
 CREATE TABLE `ls_dev_message`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息名称',
-  `key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
-  `dev_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-会员消息；2-店铺消息',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `key`(`key`) USING BTREE COMMENT '消息唯一标识'
+                                   `id` int(11) NOT NULL AUTO_INCREMENT,
+                                   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息名称',
+                                   `key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
+                                   `dev_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-会员消息；2-店铺消息',
+                                   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   UNIQUE INDEX `key`(`key`) USING BTREE COMMENT '消息唯一标识'
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消息管理表';
 
 -- ----------------------------
@@ -461,15 +461,15 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_message_extend`;
 CREATE TABLE `ls_dev_message_extend`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message_id` int(11) NOT NULL COMMENT '信息管理id',
-  `message_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-短信',
-  `template_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板',
-  `variable` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '变量',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '内容',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                          `id` int(11) NOT NULL AUTO_INCREMENT,
+                                          `message_id` int(11) NOT NULL COMMENT '信息管理id',
+                                          `message_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型：1-短信',
+                                          `template_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板',
+                                          `variable` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '变量',
+                                          `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '内容',
+                                          `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
+                                          `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+                                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -484,17 +484,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_message_template`;
 CREATE TABLE `ls_dev_message_template`  (
-  `id` int(4) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-公众号；2-小程序',
-  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板名称',
-  `template_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息模板ID',
-  `template_id_short` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板库ID',
-  `keywords` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '关键词库(小程序端使用)',
-  `msg_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息类型',
-  `scene` tinyint(1) NOT NULL DEFAULT 1 COMMENT '消息场景',
-  `disable` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态: 0-启用; 1-禁用;',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板内容',
-  PRIMARY KEY (`id`) USING BTREE
+                                            `id` int(4) NOT NULL AUTO_INCREMENT,
+                                            `type` tinyint(1) NULL DEFAULT 1 COMMENT '1-公众号；2-小程序',
+                                            `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板名称',
+                                            `template_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息模板ID',
+                                            `template_id_short` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板库ID',
+                                            `keywords` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '关键词库(小程序端使用)',
+                                            `msg_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '消息类型',
+                                            `scene` tinyint(1) NOT NULL DEFAULT 1 COMMENT '消息场景',
+                                            `disable` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态: 0-启用; 1-禁用;',
+                                            `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模板内容',
+                                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -509,26 +509,26 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_pay`;
 CREATE TABLE `ls_dev_pay`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付方式',
-  `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '使用场景',
-  `commission` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手续费',
-  `pay_use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '启用状态',
-  `abbreviation` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '简称',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `app_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `app_secrect` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pay_sign_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mch_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `apiclient_cert` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `apiclient_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `api_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `private_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `alipay_public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `type` tinyint(2) NULL DEFAULT NULL COMMENT '1-余额 2-公众号 3-小程序 4-支付宝',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` int(10) NOT NULL AUTO_INCREMENT,
+                               `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付方式',
+                               `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
+                               `use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '使用场景',
+                               `commission` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手续费',
+                               `pay_use` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '启用状态',
+                               `abbreviation` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '简称',
+                               `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+                               `app_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `app_secrect` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `pay_sign_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `mch_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `apiclient_cert` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `apiclient_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `api_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `private_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `alipay_public_key` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                               `type` tinyint(2) NULL DEFAULT NULL COMMENT '1-余额 2-公众号 3-小程序 4-支付宝',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '支付配置';
 
 -- ----------------------------
@@ -543,20 +543,20 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_region`;
 CREATE TABLE `ls_dev_region`  (
-  `id` int(10) NOT NULL DEFAULT 0 COMMENT '地区编号',
-  `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '父级地区编码',
-  `level` tinyint(1) NOT NULL DEFAULT 0 COMMENT '等级 0-国家；1-省份；2-地级市；3-县区',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `short` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '简称',
-  `city_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区编码',
-  `zip_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮政编码',
-  `gcj02_lng` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-  `gcj02_lat` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-  `db09_lng` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
-  `db09_lat` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
-  `remark1` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `remark2` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(10) NOT NULL DEFAULT 0 COMMENT '地区编号',
+                                  `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '父级地区编码',
+                                  `level` tinyint(1) NOT NULL DEFAULT 0 COMMENT '等级 0-国家；1-省份；2-地级市；3-县区',
+                                  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
+                                  `short` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '简称',
+                                  `city_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区编码',
+                                  `zip_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮政编码',
+                                  `gcj02_lng` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
+                                  `gcj02_lat` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
+                                  `db09_lng` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纬度',
+                                  `db09_lat` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '经度',
+                                  `remark1` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+                                  `remark2` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地区表';
 
 -- ----------------------------
@@ -579,18 +579,18 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_express`;
 CREATE TABLE `ls_express`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递公司',
-  `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递图标',
-  `website` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公司网址',
-  `code` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递编码',
-  `code100` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递100编码',
-  `sort` int(10) NOT NULL DEFAULT 0 COMMENT '排序',
-  `codebird` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递鸟编码',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` int(11) NOT NULL AUTO_INCREMENT,
+                               `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递公司',
+                               `icon` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递图标',
+                               `website` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公司网址',
+                               `code` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递编码',
+                               `code100` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递100编码',
+                               `sort` int(10) NOT NULL DEFAULT 0 COMMENT '排序',
+                               `codebird` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '快递鸟编码',
+                               `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
+                               `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                               `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -604,15 +604,15 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_file`;
 CREATE TABLE `ls_file`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
-  `cate_id` int(10) NULL DEFAULT 0 COMMENT '分类id',
-  `type` tinyint(1) NOT NULL COMMENT '类型',
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
-  PRIMARY KEY (`id`) USING BTREE
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
+                            `cate_id` int(10) NULL DEFAULT 0 COMMENT '分类id',
+                            `type` tinyint(1) NOT NULL COMMENT '类型',
+                            `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
+                            `create_time` int(10) NOT NULL COMMENT '创建时间',
+                            `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
+                            `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
+                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件表';
 
 -- ----------------------------
@@ -626,16 +626,16 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_file_cate`;
 CREATE TABLE `ls_file_cate`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '店铺id',
-  `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
-  `pid` int(11) NOT NULL COMMENT '父级id',
-  `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '0-未删除;1-已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                 `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                 `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '店铺id',
+                                 `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
+                                 `pid` int(11) NOT NULL COMMENT '父级id',
+                                 `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
+                                 `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+                                 `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                 `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                 `del` tinyint(1) NULL DEFAULT 0 COMMENT '0-未删除;1-已删除',
+                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件分类表';
 
 -- ----------------------------
@@ -649,13 +649,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_freight`;
 CREATE TABLE `ls_freight`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板名称',
-  `charge_way` tinyint(1) NULL DEFAULT 0 COMMENT '计费方式:1-重量计费;2-体积计费;3-件数计费',
-  `remark` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
+                               `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板名称',
+                               `charge_way` tinyint(1) NULL DEFAULT 0 COMMENT '计费方式:1-重量计费;2-体积计费;3-件数计费',
+                               `remark` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
+                               `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '添加时间',
+                               `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板表';
 
 -- ----------------------------
@@ -669,15 +669,15 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_freight_config`;
 CREATE TABLE `ls_freight_config`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
-  `freight_id` int(11) NULL DEFAULT NULL COMMENT '模板id',
-  `first_unit` int(10) NULL DEFAULT NULL COMMENT '首重/件',
-  `first_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
-  `continue_unit` int(10) NULL DEFAULT NULL COMMENT '续重/件',
-  `continue_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
-  `region` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '地区id',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '表id',
+                                      `freight_id` int(11) NULL DEFAULT NULL COMMENT '模板id',
+                                      `first_unit` int(10) NULL DEFAULT NULL COMMENT '首重/件',
+                                      `first_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
+                                      `continue_unit` int(10) NULL DEFAULT NULL COMMENT '续重/件',
+                                      `continue_money` decimal(10, 0) NULL DEFAULT NULL COMMENT '首重/件价格',
+                                      `region` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '地区id',
+                                      `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板配置表';
 
 -- ----------------------------
@@ -691,46 +691,46 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods`;
 CREATE TABLE `ls_goods`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品状态；；0-下架1-上架',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
-  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
-  `first_category_id` int(11) NOT NULL COMMENT '一级分类id',
-  `second_category_id` int(11) NOT NULL COMMENT '二级分类id',
-  `third_category_id` int(11) NOT NULL COMMENT '三级分类id',
-  `brand_id` int(11) NULL DEFAULT NULL COMMENT '品牌id',
-  `supplier_id` int(11) NULL DEFAULT NULL COMMENT '供应商id',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '商品状态:-1-回收站；0-下架；1-上架',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品简介',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品详细描述',
-  `sort` int(10) NULL DEFAULT 0 COMMENT '排序',
-  `sales_sum` int(10) NULL DEFAULT 0 COMMENT '商品销量',
-  `virtual_sales_sum` int(10) NULL DEFAULT 0 COMMENT '虚拟销量',
-  `click_count` int(10) NULL DEFAULT 0 COMMENT '商品点击量',
-  `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
-  `max_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最高价格',
-  `min_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最低价格',
-  `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价（sku中最高的市场价）',
-  `stock` int(10) NULL DEFAULT 0 COMMENT '总库存',
-  `stock_warn` int(10) NULL DEFAULT 0 COMMENT '库存预警',
-  `is_show_stock` tinyint(1) NOT NULL COMMENT '是否显示库存：1-是；0-否',
-  `free_shipping_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '运费类型：1-包邮；2-统一运费；3-运费模板',
-  `free_shipping` decimal(10, 2) NULL DEFAULT NULL COMMENT '统一运费金额',
-  `free_shipping_template_id` int(11) NULL DEFAULT NULL COMMENT '运费模板',
-  `is_commission` tinyint(1) NOT NULL DEFAULT 0 COMMENT '分销佣金：1-开启；0-不开启',
-  `first_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '一级分销比例',
-  `second_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二级分销比例',
-  `three_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '三级分销比例',
-  `is_share_bouns` tinyint(1) NOT NULL DEFAULT 0 COMMENT '区域股东分红：1-开启；0-不开启',
-  `region_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区域分红比例',
-  `shareholder_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '股东分红比例',
-  `is_new` tinyint(1) NULL DEFAULT 0 COMMENT '新品推荐：1-是；0-否',
-  `is_best` tinyint(1) NULL DEFAULT 0 COMMENT '好物优选：1-是；0-否',
-  `is_like` tinyint(1) NULL DEFAULT 0 COMMENT '猜你喜欢：1-是；0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '商品创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '商品更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                             `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品状态；；0-下架1-上架',
+                             `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
+                             `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品编码',
+                             `first_category_id` int(11) NOT NULL COMMENT '一级分类id',
+                             `second_category_id` int(11) NOT NULL COMMENT '二级分类id',
+                             `third_category_id` int(11) NOT NULL COMMENT '三级分类id',
+                             `brand_id` int(11) NULL DEFAULT NULL COMMENT '品牌id',
+                             `supplier_id` int(11) NULL DEFAULT NULL COMMENT '供应商id',
+                             `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '商品状态:-1-回收站；0-下架；1-上架',
+                             `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图',
+                             `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品简介',
+                             `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品详细描述',
+                             `sort` int(10) NULL DEFAULT 0 COMMENT '排序',
+                             `sales_sum` int(10) NULL DEFAULT 0 COMMENT '商品销量',
+                             `virtual_sales_sum` int(10) NULL DEFAULT 0 COMMENT '虚拟销量',
+                             `click_count` int(10) NULL DEFAULT 0 COMMENT '商品点击量',
+                             `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
+                             `max_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最高价格',
+                             `min_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最低价格',
+                             `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价（sku中最高的市场价）',
+                             `stock` int(10) NULL DEFAULT 0 COMMENT '总库存',
+                             `stock_warn` int(10) NULL DEFAULT 0 COMMENT '库存预警',
+                             `is_show_stock` tinyint(1) NOT NULL COMMENT '是否显示库存：1-是；0-否',
+                             `free_shipping_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '运费类型：1-包邮；2-统一运费；3-运费模板',
+                             `free_shipping` decimal(10, 2) NULL DEFAULT NULL COMMENT '统一运费金额',
+                             `free_shipping_template_id` int(11) NULL DEFAULT NULL COMMENT '运费模板',
+                             `is_commission` tinyint(1) NOT NULL DEFAULT 0 COMMENT '分销佣金：1-开启；0-不开启',
+                             `first_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '一级分销比例',
+                             `second_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二级分销比例',
+                             `three_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '三级分销比例',
+                             `is_share_bouns` tinyint(1) NOT NULL DEFAULT 0 COMMENT '区域股东分红：1-开启；0-不开启',
+                             `region_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区域分红比例',
+                             `shareholder_ratio` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '股东分红比例',
+                             `is_new` tinyint(1) NULL DEFAULT 0 COMMENT '新品推荐：1-是；0-否',
+                             `is_best` tinyint(1) NULL DEFAULT 0 COMMENT '好物优选：1-是；0-否',
+                             `is_like` tinyint(1) NULL DEFAULT 0 COMMENT '猜你喜欢：1-是；0-否',
+                             `create_time` int(10) NULL DEFAULT NULL COMMENT '商品创建时间',
+                             `update_time` int(10) NULL DEFAULT NULL COMMENT '商品更新时间',
+                             `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品主表';
 
 -- ----------------------------
@@ -744,17 +744,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_brand`;
 CREATE TABLE `ls_goods_brand`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌名称',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌图片',
-  `initial` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌首字母',
-  `is_show` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
-  `sort` int(5) NULL DEFAULT 0 COMMENT '排序',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌描述',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(10) NOT NULL AUTO_INCREMENT,
+                                   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌名称',
+                                   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌图片',
+                                   `initial` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '品牌首字母',
+                                   `is_show` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
+                                   `sort` int(5) NULL DEFAULT 0 COMMENT '排序',
+                                   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌描述',
+                                   `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                   `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
+                                   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品品牌';
 
 -- ----------------------------
@@ -768,18 +768,18 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_category`;
 CREATE TABLE `ls_goods_category`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
-  `pid` int(11) NOT NULL COMMENT '父级id',
-  `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分类图片',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类描述',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(10) NULL DEFAULT 0 COMMENT '删除标志:1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                      `name` varchar(90) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
+                                      `pid` int(11) NOT NULL COMMENT '父级id',
+                                      `level` tinyint(1) NULL DEFAULT NULL COMMENT '等级',
+                                      `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+                                      `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
+                                      `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分类图片',
+                                      `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类描述',
+                                      `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                      `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                      `del` tinyint(10) NULL DEFAULT 0 COMMENT '删除标志:1-是；0-否',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类';
 
 -- ----------------------------
@@ -793,11 +793,11 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_click`;
 CREATE TABLE `ls_goods_click`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户id',
-  `goods_id` int(11) NOT NULL COMMENT '产品id',
-  `create_time` int(11) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(11) NOT NULL AUTO_INCREMENT,
+                                   `user_id` int(11) NULL DEFAULT NULL COMMENT '用户id',
+                                   `goods_id` int(11) NOT NULL COMMENT '产品id',
+                                   `create_time` int(11) NOT NULL COMMENT '创建时间',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -811,11 +811,11 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_collect`;
 CREATE TABLE `ls_goods_collect`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `goods_id` int(11) NOT NULL COMMENT '产品id',
-  `create_time` int(11) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` int(11) NOT NULL AUTO_INCREMENT,
+                                     `user_id` int(11) NOT NULL COMMENT '用户id',
+                                     `goods_id` int(11) NOT NULL COMMENT '产品id',
+                                     `create_time` int(11) NOT NULL COMMENT '创建时间',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -829,22 +829,22 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_comment`;
 CREATE TABLE `ls_goods_comment`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品评论id',
-  `goods_id` int(128) NULL DEFAULT NULL COMMENT '商品id',
-  `item_id` int(128) NULL DEFAULT NULL COMMENT '规格id',
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `order_goods_id` int(11) NOT NULL COMMENT '订单商品表id',
-  `goods_comment` tinyint(1) NULL DEFAULT NULL COMMENT '商品评论星级 1 一星 2 二星 3三星 4四星 5五星',
-  `service_comment` tinyint(1) NULL DEFAULT NULL COMMENT '服务评论星级 1 一星 2 二星 3三星 4四星 5五星',
-  `express_comment` tinyint(1) NULL DEFAULT NULL COMMENT '物流评论星级 1 一星 2 二星 3三星 4四星 5五星',
-  `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品评论',
-  `create_time` int(11) NOT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-删除',
-  `description_comment` tinyint(1) NULL DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
-  `status` tinyint(2) NULL DEFAULT 1 COMMENT '显示状态 0-隐藏 1-显示 ',
-  `reply` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商家回复',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品评论id',
+                                     `goods_id` int(128) NULL DEFAULT NULL COMMENT '商品id',
+                                     `item_id` int(128) NULL DEFAULT NULL COMMENT '规格id',
+                                     `user_id` int(11) NOT NULL COMMENT '用户id',
+                                     `order_goods_id` int(11) NOT NULL COMMENT '订单商品表id',
+                                     `goods_comment` tinyint(1) NULL DEFAULT NULL COMMENT '商品评论星级 1 一星 2 二星 3三星 4四星 5五星',
+                                     `service_comment` tinyint(1) NULL DEFAULT NULL COMMENT '服务评论星级 1 一星 2 二星 3三星 4四星 5五星',
+                                     `express_comment` tinyint(1) NULL DEFAULT NULL COMMENT '物流评论星级 1 一星 2 二星 3三星 4四星 5五星',
+                                     `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品评论',
+                                     `create_time` int(11) NOT NULL COMMENT '创建时间',
+                                     `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+                                     `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-删除',
+                                     `description_comment` tinyint(1) NULL DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
+                                     `status` tinyint(2) NULL DEFAULT 1 COMMENT '显示状态 0-隐藏 1-显示 ',
+                                     `reply` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商家回复',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品评论表';
 
 -- ----------------------------
@@ -858,10 +858,10 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_comment_image`;
 CREATE TABLE `ls_goods_comment_image`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `goods_comment_id` int(10) NOT NULL COMMENT '商品评价id',
-  `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
-  PRIMARY KEY (`id`) USING BTREE
+                                           `id` int(10) NOT NULL AUTO_INCREMENT,
+                                           `goods_comment_id` int(10) NOT NULL COMMENT '商品评价id',
+                                           `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
+                                           PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -875,10 +875,10 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_image`;
 CREATE TABLE `ls_goods_image`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
-  `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(10) NOT NULL AUTO_INCREMENT,
+                                   `goods_id` int(10) NULL DEFAULT NULL COMMENT '商品id',
+                                   `uri` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品轮播图表';
 
 -- ----------------------------
@@ -892,19 +892,19 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_item`;
 CREATE TABLE `ls_goods_item`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图',
-  `goods_id` int(11) NOT NULL COMMENT '商品主表id',
-  `spec_value_ids` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格id，隔开',
-  `spec_value_str` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格名称，隔开',
-  `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
-  `cost_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '成本价',
-  `stock` int(10) NULL DEFAULT NULL COMMENT '库存',
-  `volume` decimal(10, 3) NULL DEFAULT NULL COMMENT '体积',
-  `weight` decimal(10, 3) NULL DEFAULT NULL COMMENT '重量',
-  `bar_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '条码',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图',
+                                  `goods_id` int(11) NOT NULL COMMENT '商品主表id',
+                                  `spec_value_ids` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格id，隔开',
+                                  `spec_value_str` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '多个规格名称，隔开',
+                                  `market_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '市场价',
+                                  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
+                                  `cost_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '成本价',
+                                  `stock` int(10) NULL DEFAULT NULL COMMENT '库存',
+                                  `volume` decimal(10, 3) NULL DEFAULT NULL COMMENT '体积',
+                                  `weight` decimal(10, 3) NULL DEFAULT NULL COMMENT '重量',
+                                  `bar_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '条码',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品的SKU';
 
 -- ----------------------------
@@ -918,12 +918,12 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_sale`;
 CREATE TABLE `ls_goods_sale`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `goods_id` int(11) NOT NULL COMMENT '产品id',
-  `goods_num` int(11) NULL DEFAULT 1 COMMENT '商品购买数量',
-  `create_time` int(11) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `user_id` int(11) NOT NULL COMMENT '用户id',
+                                  `goods_id` int(11) NOT NULL COMMENT '产品id',
+                                  `goods_num` int(11) NULL DEFAULT 1 COMMENT '商品购买数量',
+                                  `create_time` int(11) NOT NULL COMMENT '创建时间',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -937,10 +937,10 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_spec`;
 CREATE TABLE `ls_goods_spec`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `goods_id` int(11) NOT NULL COMMENT '商品主表id',
-  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格名称',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `goods_id` int(11) NOT NULL COMMENT '商品主表id',
+                                  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格名称',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规格';
 
 -- ----------------------------
@@ -954,11 +954,11 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_spec_value`;
 CREATE TABLE `ls_goods_spec_value`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `goods_id` int(11) NOT NULL COMMENT '商品id',
-  `spec_id` int(11) NOT NULL COMMENT '规格id',
-  `value` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格属性值',
-  PRIMARY KEY (`id`) USING BTREE
+                                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                                        `goods_id` int(11) NOT NULL COMMENT '商品id',
+                                        `spec_id` int(11) NOT NULL COMMENT '规格id',
+                                        `value` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规格属性值',
+                                        PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规格属性值表';
 
 -- ----------------------------
@@ -972,20 +972,20 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_help`;
 CREATE TABLE `ls_help`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助id',
-  `cid` int(11) NULL DEFAULT NULL COMMENT '帮助分类',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助标题',
-  `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助简介',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助封面图',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '帮助内容',
-  `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '帮助状态:1-显示.0-否',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
-  `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
-  PRIMARY KEY (`id`) USING BTREE
+                            `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助id',
+                            `cid` int(11) NULL DEFAULT NULL COMMENT '帮助分类',
+                            `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助标题',
+                            `synopsis` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助简介',
+                            `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '帮助封面图',
+                            `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '帮助内容',
+                            `visit` int(11) NULL DEFAULT 0 COMMENT '浏览人数',
+                            `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+                            `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '帮助状态:1-显示.0-否',
+                            `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                            `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+                            `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
+                            `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
+                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帮助表';
 
 -- ----------------------------
@@ -1000,13 +1000,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_help_category`;
 CREATE TABLE `ls_help_category`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助分类id',
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '帮助分类id',
+                                     `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
+                                     `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示:1-是;0-否',
+                                     `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                     `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                     `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帮助分类表';
 
 -- ----------------------------
@@ -1021,26 +1021,25 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_menu_decorate`;
 CREATE TABLE `ls_menu_decorate`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
-  `client` tinyint(1) NOT NULL DEFAULT 1 COMMENT '终端类型：1-小程序；2-H5；3-APP',
-  `decorate_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '菜单类型：1-首页导航；2-个人中心',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
-  `link_type` tinyint(1) NOT NULL COMMENT '链接类型：1-商场模块；2-自定义链接',
-  `link_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接地址',
-  `sort` int(10) NULL DEFAULT 0 COMMENT '菜单排序',
-  `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示；1-是；0-否',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
+                                     `id` int(10) NOT NULL AUTO_INCREMENT,
+                                     `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
+                                     `decorate_type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '菜单类型：1-首页导航；2-个人中心',
+                                     `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+                                     `link_type` tinyint(1) NOT NULL COMMENT '链接类型：1-商场模块；2-自定义链接',
+                                     `link_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '链接地址',
+                                     `sort` int(10) NULL DEFAULT 0 COMMENT '菜单排序',
+                                     `is_show` tinyint(1) NULL DEFAULT 1 COMMENT '是否显示；1-是；0-否',
+                                     `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                     `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                     `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
+                                     PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
 
 -- ----------------------------
 -- Records of ls_menu_decorate
 -- ----------------------------
 BEGIN;
-INSERT INTO `ls_menu_decorate` VALUES (3, '热销榜单', 2, 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607567497, 1607567497, 0), (4, '领券中心', 2, 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607567532, 1607583577, 0), (5, '积分签到', 2, 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607567561, 1607567561, 0), (6, '会员中心', 2, 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607567590, 1607567590, 0), (7, '我的收藏', 2, 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607567628, 1607567628, 0), (8, '商城资讯', 2, 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607567666, 1607567666, 0), (9, '帮助中心', 2, 1, '/images/menu/news_center1.png', 1, '9', 0, 1, 1607567709, 1607567709, 0), (10, '我的钱包', 2, 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607567843, 1607567843, 0), (11, '分销推广', 2, 2, '/images/menu/centre_user_promote.png', 1, '11', 0, 1, 1607567879, 1607567879, 0), (12, '我的优惠券', 2, 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607567908, 1607583921, 0), (13, '等级服务', 2, 2, '/images/menu/centre_user_vip.png', 1, '13', 6, 1, 1607567939, 1607583947, 0), (14, '我的收藏', 2, 2, '/images/menu/centre_user_collection.png', 1, '16', 5, 1, 1607567969, 1607567973, 0), (15, '收货地址', 2, 2, '/images/menu/centre_user_address.png', 1, '15', 4, 1, 1607568004, 1607568004, 0), (16, '帮助中心', 2, 2, '/images/menu/centre_news_center.png', 1, '14', 3, 1, 1607568054, 1607568054, 0), (17, '联系客服', 2, 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1607568089, 1607568089, 0),(20, '热销榜单', 1, 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607568204, 1607568204, 0), (21, '领券中心', 1, 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568224, 1607568224, 0), (22, '积分签到', 1, 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607568273, 1607568273, 0), (23, '会员中心', 1, 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607568298, 1607568298, 0), (24, '我的收藏', 1, 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607568323, 1607568323, 0), (25, '商城资讯', 1, 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607568348, 1607568348, 0), (26, '帮助中心', 1, 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607568367, 1607568367, 0), (27, '我的钱包', 1, 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607568422, 1607568422, 0), (28, '分销推广', 1, 2, '/images/menu/centre_user_promote.png', 1, '11', 9, 1, 1607568455, 1607568455, 0), (29, '我的优惠券', 1, 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607568476, 1607568476, 0), (30, '等级服务', 1, 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607568509, 1607568509, 0), (31, '我的收藏', 1, 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607568546, 1607568546, 0), (32, '收货地址', 1, 2, '/images/menu/centre_user_address.png', 1, '15', 5, 1, 1607568575, 1607568575, 0), (34, '帮助中心', 1, 2, '/images/menu/centre_news_center.png', 1, '14', 4, 1, 1607568784, 1607568820, 0), (35, '联系客服', 1, 2, '/images/menu/centre_contact_offical.png', 1, '17', 3, 1, 1607568849, 1607568854, 0),(38, '热销榜单', 3, 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607568931, 1607584068, 0), (39, '领券中心', 3, 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568962, 1607568973, 0), (40, '积分签到', 3, 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607568997, 1607568997, 0), (41, '会员中心', 3, 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607569016, 1607569016, 0), (42, '我的收藏', 3, 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607569036, 1607569036, 0), (43, '商城资讯', 3, 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607569059, 1607569059, 0), (44, '帮助中心', 3, 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607569092, 1607569092, 0), (45, '我的钱包', 3, 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607569147, 1607569147, 0), (46, '分销推广', 3, 2, '/images/menu/centre_user_promote.png', 1, '11', 9, 1, 1607569190, 1607569190, 0), (47, '我的优惠券', 3, 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607569216, 1607569216, 0), (48, '等级服务', 3, 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607569235, 1607569235, 0), (49, '我的收藏', 3, 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607569253, 1607584928, 0), (50, '收货地址', 3, 2, '/images/menu/centre_user_address.png', 1, '15', 5, 1, 1607569271, 1607569271, 0), (51, '帮助中心', 3, 2, '/images/menu/centre_news_center.png', 1, '14', 3, 1, 1607569293, 1607569293, 0), (52, '联系客服', 3, 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1607569317, 1607569317, 0);
+INSERT INTO `ls_menu_decorate` VALUES (17, '联系客服', 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1607568089, 1607568089, 0), (21, '领券中心', 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568224, 1607568224, 0), (41, '会员中心', 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607569016, 1607569016, 0), (42, '我的收藏', 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607569036, 1607569036, 0), (43, '商城资讯', 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607569059, 1607569059, 0), (44, '帮助中心', 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607569092, 1607569092, 0), (45, '我的钱包', 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607569147, 1607569147, 0), (47, '我的优惠券', 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607569216, 1607569216, 0), (48, '等级服务', 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607569235, 1607569235, 0), (49, '我的收藏', 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607569253, 1607584928, 0), (51, '帮助中心', 2, '/images/menu/centre_news_center.png', 1, '14', 3, 1, 1607569293, 1607569293, 0);
 COMMIT;
 
 -- ----------------------------
@@ -1048,14 +1047,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_notice`;
 CREATE TABLE `ls_notice`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户id',
-  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '标题',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
-  `type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '类型,0,系统通知,1,收益通知',
-  `read` tinyint(1) NULL DEFAULT 0 COMMENT '已读状态;0-未读,1-已读',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                              `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                              `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户id',
+                              `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '标题',
+                              `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
+                              `type` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '类型,0,系统通知,1,收益通知',
+                              `read` tinyint(1) NULL DEFAULT 0 COMMENT '已读状态;0-未读,1-已读',
+                              `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1069,49 +1068,49 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_order`;
 CREATE TABLE `ls_order`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '订单id',
-  `order_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单编号',
-  `user_id` int(8) UNSIGNED NULL DEFAULT 0 COMMENT '用户id',
-  `order_type` tinyint(1) NULL DEFAULT 0 COMMENT '订单类型;0-普通订单;1-秒杀订单;2-拼团订单;3-砍价订单',
-  `order_source` tinyint(1) NULL DEFAULT 1 COMMENT '订单来源;1-小程序;2-h5;3-ios;4-安卓',
-  `order_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单状态;0-待付款;1-待发货;2-待收货;3-已完成;4-已关闭',
-  `pay_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付状态;0-待支付;1-已支付;2-已退款;3-拒绝退款',
-  `pay_way` tinyint(2) NULL DEFAULT 1 COMMENT '1-微信支付  2-支付宝支付 3-余额支付',
-  `pay_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '支付时间',
-  `consignee` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '收货人',
-  `province` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '省份',
-  `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
-  `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
-  `mobile` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机',
-  `delivery_type` tinyint(1) NULL DEFAULT 1 COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
-  `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单商品总价',
-  `order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '应付款金额',
-  `discount_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
-  `integral_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣金额',
-  `total_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单总价',
-  `total_num` int(10) NULL DEFAULT 0 COMMENT '订单商品数量',
-  `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态',
-  `shipping_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '运费',
-  `shipping_time` int(11) NULL DEFAULT 0 COMMENT '最后新发货时间',
-  `transaction_id` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-  `user_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户备注',
-  `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
-  `cancel_time` int(10) NULL DEFAULT NULL COMMENT '订单取消时间',
-  `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '退款状态：0-未退款；1-部分退款；2-全部退款',
-  `settle_id` int(11) NULL DEFAULT 0 COMMENT '结算id；0-未结算',
-  `settle_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '结算金额',
-  `use_integral` int(10) NULL DEFAULT 0 COMMENT '使用的积分',
-  `refund_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
-  `order_remarks` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单备注',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除标识;1-删除;0-未删除',
-  `create_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '下单时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
-  `coupon_list_id` int(10) NULL DEFAULT NULL COMMENT '用户优惠券id',
-  `delivery_id` int(11) NULL DEFAULT 0 COMMENT '发货单ID',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `order_sn`(`order_sn`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE
+                             `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '订单id',
+                             `order_sn` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单编号',
+                             `user_id` int(8) UNSIGNED NULL DEFAULT 0 COMMENT '用户id',
+                             `order_type` tinyint(1) NULL DEFAULT 0 COMMENT '订单类型;0-普通订单;1-秒杀订单;2-拼团订单;3-砍价订单',
+                             `order_source` tinyint(1) NULL DEFAULT 1 COMMENT '订单来源;1-小程序;2-h5;3-ios;4-安卓',
+                             `order_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单状态;0-待付款;1-待发货;2-待收货;3-已完成;4-已关闭',
+                             `pay_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付状态;0-待支付;1-已支付;2-已退款;3-拒绝退款',
+                             `pay_way` tinyint(2) NULL DEFAULT 1 COMMENT '1-微信支付  2-支付宝支付 3-余额支付',
+                             `pay_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '支付时间',
+                             `consignee` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '收货人',
+                             `province` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '省份',
+                             `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
+                             `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
+                             `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '地址',
+                             `mobile` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机',
+                             `delivery_type` tinyint(1) NULL DEFAULT 1 COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
+                             `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单商品总价',
+                             `order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '应付款金额',
+                             `discount_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
+                             `integral_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣金额',
+                             `total_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单总价',
+                             `total_num` int(10) NULL DEFAULT 0 COMMENT '订单商品数量',
+                             `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态',
+                             `shipping_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '运费',
+                             `shipping_time` int(11) NULL DEFAULT 0 COMMENT '最后新发货时间',
+                             `transaction_id` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
+                             `user_remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户备注',
+                             `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
+                             `cancel_time` int(10) NULL DEFAULT NULL COMMENT '订单取消时间',
+                             `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '退款状态：0-未退款；1-部分退款；2-全部退款',
+                             `settle_id` int(11) NULL DEFAULT 0 COMMENT '结算id；0-未结算',
+                             `settle_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '结算金额',
+                             `use_integral` int(10) NULL DEFAULT 0 COMMENT '使用的积分',
+                             `refund_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款金额',
+                             `order_remarks` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '订单备注',
+                             `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除标识;1-删除;0-未删除',
+                             `create_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '下单时间',
+                             `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
+                             `coupon_list_id` int(10) NULL DEFAULT NULL COMMENT '用户优惠券id',
+                             `delivery_id` int(11) NULL DEFAULT 0 COMMENT '发货单ID',
+                             PRIMARY KEY (`id`) USING BTREE,
+                             UNIQUE INDEX `order_sn`(`order_sn`) USING BTREE,
+                             INDEX `user_id`(`user_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表';
 
 -- ----------------------------
@@ -1125,24 +1124,24 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_order_goods`;
 CREATE TABLE `ls_order_goods`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_id` int(10) NULL DEFAULT 0 COMMENT '订单id',
-  `goods_id` int(10) NULL DEFAULT 0 COMMENT '商品id',
-  `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
-  `goods_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
-  `goods_num` int(10) NULL DEFAULT 0 COMMENT '商品数量',
-  `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品价格',
-  `total_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品总价',
-  `total_pay_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '实际支付商品金额',
-  `discount_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
-  `integral_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣的金额',
-  `spec_value_ids` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品规格id',
-  `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
-  `is_comment` tinyint(1) NULL DEFAULT 0 COMMENT '是否已评论；0-否；1-是',
-  `is_seckill` tinyint(1) NULL DEFAULT 0 COMMENT '秒杀商品;0-不是;1-是',
-  `goods_info` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品信息',
-  `create_time` int(10) NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                   `order_id` int(10) NULL DEFAULT 0 COMMENT '订单id',
+                                   `goods_id` int(10) NULL DEFAULT 0 COMMENT '商品id',
+                                   `item_id` int(10) NULL DEFAULT 0 COMMENT '规格id',
+                                   `goods_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+                                   `goods_num` int(10) NULL DEFAULT 0 COMMENT '商品数量',
+                                   `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品价格',
+                                   `total_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '商品总价',
+                                   `total_pay_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '实际支付商品金额',
+                                   `discount_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
+                                   `integral_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '积分抵扣的金额',
+                                   `spec_value_ids` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品规格id',
+                                   `refund_status` tinyint(1) NULL DEFAULT 0 COMMENT '售后状态;0-未申请退款;1-申请退款;2-等待退款;3-退款成功;',
+                                   `is_comment` tinyint(1) NULL DEFAULT 0 COMMENT '是否已评论；0-否；1-是',
+                                   `is_seckill` tinyint(1) NULL DEFAULT 0 COMMENT '秒杀商品;0-不是;1-是',
+                                   `goods_info` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '商品信息',
+                                   `create_time` int(10) NULL DEFAULT 0 COMMENT '创建时间',
+                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单商品表';
 
 -- ----------------------------
@@ -1156,14 +1155,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_order_log`;
 CREATE TABLE `ls_order_log`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
-  `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
-  `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
-  `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                 `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                 `type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类型;0-会员;1-门店',
+                                 `channel` smallint(5) UNSIGNED NULL DEFAULT 0 COMMENT '渠道编号。变动方式。',
+                                 `order_id` int(10) NULL DEFAULT NULL COMMENT '订单id',
+                                 `handle_id` int(10) NULL DEFAULT NULL COMMENT '操作人id',
+                                 `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志内容',
+                                 `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单日志表';
 
 -- ----------------------------
@@ -1177,21 +1176,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_order_refund`;
 CREATE TABLE `ls_order_refund`  (
-  `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `order_id` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '订单id',
-  `user_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '下单用户id，冗余字段',
-  `refund_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款单号，一个订单分多次退款则有多个退款单号',
-  `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '订单总的应付款金额，冗余字段',
-  `refund_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '本次退款金额',
-  `transaction_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
-  `refund_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款状态，0退款中，1完成退款，2退款失败，3退款异常（人工去后台查询）',
-  `refund_way` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款方式，0原路退',
-  `refund_at` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款时间',
-  `wechat_refund_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信返回退款id',
-  `refund_msg` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '微信返回信息',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                    `order_id` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '订单id',
+                                    `user_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '下单用户id，冗余字段',
+                                    `refund_sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款单号，一个订单分多次退款则有多个退款单号',
+                                    `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '订单总的应付款金额，冗余字段',
+                                    `refund_amount` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '本次退款金额',
+                                    `transaction_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
+                                    `refund_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款状态，0退款中，1完成退款，2退款失败，3退款异常（人工去后台查询）',
+                                    `refund_way` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款方式，0原路退',
+                                    `refund_at` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '退款时间',
+                                    `wechat_refund_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信返回退款id',
+                                    `refund_msg` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '微信返回信息',
+                                    `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单退款表';
 
 -- ----------------------------
@@ -1205,14 +1204,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_role`;
 CREATE TABLE `ls_role`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '父级id',
-  `auth_ids` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '权限',
-  `desc` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`, `del`) USING BTREE
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `name` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '父级id',
+                            `auth_ids` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '权限',
+                            `desc` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
+                            `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
+                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                            `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                            PRIMARY KEY (`id`, `del`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表';
 
 -- ----------------------------
@@ -1226,9 +1225,9 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_role_dev_auth_index`;
 CREATE TABLE `ls_role_dev_auth_index`  (
-  `role_id` int(11) NOT NULL,
-  `menu_auth_id` int(11) NOT NULL,
-  PRIMARY KEY (`role_id`, `menu_auth_id`) USING BTREE
+                                           `role_id` int(11) NOT NULL,
+                                           `menu_auth_id` int(11) NOT NULL,
+                                           PRIMARY KEY (`role_id`, `menu_auth_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1242,13 +1241,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_search_record`;
 CREATE TABLE `ls_search_record`  (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT 0 COMMENT '用户id',
-  `keyword` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '关键字',
-  `update_time` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-  `count` int(11) NULL DEFAULT 1 COMMENT '次数',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否已删除,0-未删除,1-已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                     `id` int(20) NOT NULL AUTO_INCREMENT,
+                                     `user_id` int(11) NULL DEFAULT 0 COMMENT '用户id',
+                                     `keyword` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '关键字',
+                                     `update_time` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+                                     `count` int(11) NULL DEFAULT 1 COMMENT '次数',
+                                     `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否已删除,0-未删除,1-已删除',
+                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户热门搜索';
 
 -- ----------------------------
@@ -1262,14 +1261,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_session`;
 CREATE TABLE `ls_session`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `token` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '令牌',
-  `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
-  `update_time` int(10) NOT NULL COMMENT '更新时间',
-  `expire_time` int(10) NOT NULL COMMENT '到期时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `user_id_client`(`user_id`, `client`) USING BTREE
+                               `id` int(11) NOT NULL AUTO_INCREMENT,
+                               `user_id` int(11) NOT NULL COMMENT '用户id',
+                               `token` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '令牌',
+                               `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
+                               `update_time` int(10) NOT NULL COMMENT '更新时间',
+                               `expire_time` int(10) NOT NULL COMMENT '到期时间',
+                               PRIMARY KEY (`id`) USING BTREE,
+                               UNIQUE INDEX `user_id_client`(`user_id`, `client`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会话表';
 
 -- ----------------------------
@@ -1283,17 +1282,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_sign_daily`;
 CREATE TABLE `ls_sign_daily`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
-  `integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
-  `integral_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送积分状态：1-是；0-否；',
-  `growth_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送优惠劵状态：1-是；0-否；',
-  `days` int(24) NULL DEFAULT 1 COMMENT '连续签到天数',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
-  `growth` int(16) NULL DEFAULT NULL COMMENT '成长值',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(10) NOT NULL AUTO_INCREMENT,
+                                  `type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型',
+                                  `integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
+                                  `integral_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送积分状态：1-是；0-否；',
+                                  `growth_status` tinyint(1) NULL DEFAULT NULL COMMENT '赠送优惠劵状态：1-是；0-否；',
+                                  `days` int(24) NULL DEFAULT 1 COMMENT '连续签到天数',
+                                  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                  `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
+                                  `growth` int(16) NULL DEFAULT NULL COMMENT '成长值',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1307,15 +1306,15 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_sms_config`;
 CREATE TABLE `ls_sms_config`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '短信通道',
-  `describe` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `sign` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '签名',
-  `app_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'app_key',
-  `secret_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'secret_key',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '短信通道',
+                                  `describe` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+                                  `sign` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '签名',
+                                  `app_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'app_key',
+                                  `secret_key` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'secret_key',
+                                  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
+                                  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1330,18 +1329,18 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_sms_log`;
 CREATE TABLE `ls_sms_log`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
-  `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号码',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发送内容',
-  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送关键字（注册、找回密码）',
-  `is_verify` tinyint(1) NULL DEFAULT 0 COMMENT '是否已验证；0-否；1-是',
-  `send_status` tinyint(1) NOT NULL COMMENT '发送状态：0-发送中；1-发送成功；2-发送失败',
-  `send_time` int(10) NOT NULL COMMENT '发送时间',
-  `results` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '短信结果',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+                               `id` int(11) NOT NULL AUTO_INCREMENT,
+                               `message_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息key',
+                               `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号码',
+                               `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发送内容',
+                               `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送关键字（注册、找回密码）',
+                               `is_verify` tinyint(1) NULL DEFAULT 0 COMMENT '是否已验证；0-否；1-是',
+                               `send_status` tinyint(1) NOT NULL COMMENT '发送状态：0-发送中；1-发送成功；2-发送失败',
+                               `send_time` int(10) NOT NULL COMMENT '发送时间',
+                               `results` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '短信结果',
+                               `create_time` int(10) NOT NULL COMMENT '创建时间',
+                               `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '短信发送记录表';
 
 -- ----------------------------
@@ -1355,12 +1354,12 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_stat`;
 CREATE TABLE `ls_stat`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `ip` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'IP',
-  `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '次数',
-  `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
-  `today_user_pv` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '今日PV',
-  PRIMARY KEY (`id`) USING BTREE
+                            `id` int(10) NOT NULL AUTO_INCREMENT,
+                            `ip` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'IP',
+                            `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '次数',
+                            `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
+                            `today_user_pv` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '今日PV',
+                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '统计表';
 
 -- ----------------------------
@@ -1374,19 +1373,19 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_supplier`;
 CREATE TABLE `ls_supplier`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `del` tinyint(2) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
-  `contact` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备注',
-  `province_id` int(11) NULL DEFAULT NULL COMMENT '省',
-  `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
-  `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
-  PRIMARY KEY (`id`) USING BTREE
+                                `id` int(11) NOT NULL AUTO_INCREMENT,
+                                `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
+                                `del` tinyint(2) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
+                                `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                                `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+                                `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+                                `contact` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
+                                `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备注',
+                                `province_id` int(11) NULL DEFAULT NULL COMMENT '省',
+                                `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
+                                `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
+                                `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
+                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供货商表';
 
 -- ----------------------------
@@ -1400,16 +1399,16 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_system_log`;
 CREATE TABLE `ls_system_log`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `admin_id` int(11) NOT NULL COMMENT '管理员',
-  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员名称',
-  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员账号',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '访问链接',
-  `type` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '请求方式',
-  `param` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '请求数据',
-  `ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'Ip地址',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `admin_id` int(11) NOT NULL COMMENT '管理员',
+                                  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员名称',
+                                  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '管理员账号',
+                                  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '访问链接',
+                                  `type` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '请求方式',
+                                  `param` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '请求数据',
+                                  `ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'Ip地址',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1423,9 +1422,9 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_temp`;
 CREATE TABLE `ls_temp`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1439,42 +1438,42 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user`;
 CREATE TABLE `ls_user`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会员码',
-  `root` tinyint(255) NULL DEFAULT 0 COMMENT '是否为超级管理：0-否；1-是；',
-  `nickname` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户昵称',
-  `avatar` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
-  `mobile` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
-  `level` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '等级',
-  `group_id` int(11) NULL DEFAULT NULL COMMENT '所属分组id',
-  `sex` tinyint(1) NULL DEFAULT 0 COMMENT '性别:0-未知；1-男；2-女',
-  `birthday` int(11) NULL DEFAULT NULL COMMENT '生日',
-  `user_money` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '用户余额',
-  `user_integral` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '用户积分',
-  `total_order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '消费累计额度',
-  `total_recharge_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '累计充值金额',
-  `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
-  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `pay_password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付密码',
-  `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
-  `first_leader` int(11) NULL DEFAULT 0 COMMENT '第一个上级',
-  `second_leader` int(11) NULL DEFAULT 0 COMMENT '第二个上级',
-  `third_leader` int(11) NULL DEFAULT 0 COMMENT '第三个上级',
-  `ancestor_relation` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '所有的上级关系链',
-  `is_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '是否分销会员：1-是；0-否；',
-  `freeze_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '冻结分销资格: 1-冻结; 0-正常',
-  `distribution_h5_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销h5二维码\n',
-  `distribution_mnp_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销小程序二维码\n',
-  `distribution_app_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销app二维码\n',
-  `distribution_code` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分销码',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
-  `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
-  `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
-  `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
-  `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
-  `user_growth` int(128) NULL DEFAULT 0 COMMENT '用户成长值',
-  `earnings` float(10, 2) NULL DEFAULT 0.00 COMMENT '佣金收益',
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `sn` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会员码',
+                            `root` tinyint(255) NULL DEFAULT 0 COMMENT '是否为超级管理：0-否；1-是；',
+                            `nickname` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户昵称',
+                            `avatar` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户头像',
+                            `mobile` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
+                            `level` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '等级',
+                            `group_id` int(11) NULL DEFAULT NULL COMMENT '所属分组id',
+                            `sex` tinyint(1) NULL DEFAULT 0 COMMENT '性别:0-未知；1-男；2-女',
+                            `birthday` int(11) NULL DEFAULT NULL COMMENT '生日',
+                            `user_money` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '用户余额',
+                            `user_integral` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '用户积分',
+                            `total_order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '消费累计额度',
+                            `total_recharge_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '累计充值金额',
+                            `account` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
+                            `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+                            `pay_password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付密码',
+                            `salt` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码盐',
+                            `first_leader` int(11) NULL DEFAULT 0 COMMENT '第一个上级',
+                            `second_leader` int(11) NULL DEFAULT 0 COMMENT '第二个上级',
+                            `third_leader` int(11) NULL DEFAULT 0 COMMENT '第三个上级',
+                            `ancestor_relation` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '所有的上级关系链',
+                            `is_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '是否分销会员：1-是；0-否；',
+                            `freeze_distribution` tinyint(1) NULL DEFAULT 0 COMMENT '冻结分销资格: 1-冻结; 0-正常',
+                            `distribution_h5_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销h5二维码\n',
+                            `distribution_mnp_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销小程序二维码\n',
+                            `distribution_app_qr_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '分销app二维码\n',
+                            `distribution_code` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分销码',
+                            `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                            `update_time` int(10) NULL DEFAULT NULL COMMENT '修改时间',
+                            `login_time` int(10) NULL DEFAULT NULL COMMENT '最后登录时间',
+                            `login_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录ip',
+                            `disable` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否禁用：0-否；1-是；',
+                            `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
+                            `user_growth` int(128) NULL DEFAULT 0 COMMENT '用户成长值',
+                            `earnings` float(10, 2) NULL DEFAULT 0.00 COMMENT '佣金收益',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `distribution_code`(`distribution_code`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表';
@@ -1490,22 +1489,22 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_address`;
 CREATE TABLE `ls_user_address`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户id',
-  `contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货人',
-  `telephone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '联系方式',
-  `province_id` int(11) NOT NULL COMMENT '省',
-  `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
-  `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
-  `address` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
-  `post_code` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '邮编',
-  `longitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '经度',
-  `latitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '纬度',
-  `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否默认(1为默认)',
-  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                                    `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户id',
+                                    `contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货人',
+                                    `telephone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '联系方式',
+                                    `province_id` int(11) NOT NULL COMMENT '省',
+                                    `city_id` int(11) NULL DEFAULT NULL COMMENT '市',
+                                    `district_id` int(11) NULL DEFAULT NULL COMMENT '区',
+                                    `address` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
+                                    `post_code` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '邮编',
+                                    `longitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '经度',
+                                    `latitude` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '纬度',
+                                    `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否默认(1为默认)',
+                                    `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+                                    `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
+                                    `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除,0-未删除,1-已删除',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表';
 
 -- ----------------------------
@@ -1519,15 +1518,15 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_auth`;
 CREATE TABLE `ls_user_auth`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `openid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '微信openid',
-  `unionid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '微信unionid',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `openid`(`openid`) USING BTREE
+                                 `id` int(11) NOT NULL AUTO_INCREMENT,
+                                 `user_id` int(11) NOT NULL COMMENT '用户id',
+                                 `openid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '微信openid',
+                                 `unionid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '微信unionid',
+                                 `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                 `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                 `client` tinyint(1) NOT NULL COMMENT '客户端类型：1-微信小程序；2-h5；3-ios；4-android',
+                                 PRIMARY KEY (`id`) USING BTREE,
+                                 UNIQUE INDEX `openid`(`openid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户授权表';
 
 -- ----------------------------
@@ -1541,14 +1540,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_file`;
 CREATE TABLE `ls_user_file`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
-  `type` tinyint(1) NOT NULL COMMENT '类型',
-  `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  `user_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
-  PRIMARY KEY (`id`) USING BTREE
+                                 `id` int(11) NOT NULL AUTO_INCREMENT,
+                                 `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件名',
+                                 `type` tinyint(1) NOT NULL COMMENT '类型',
+                                 `uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件相对路径',
+                                 `create_time` int(10) NOT NULL COMMENT '创建时间',
+                                 `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
+                                 `user_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
+                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件表';
 
 -- ----------------------------
@@ -1562,13 +1561,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_group`;
 CREATE TABLE `ls_user_group`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `remark` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                                  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                  `remark` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+                                  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                  `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员分组表';
 
 -- ----------------------------
@@ -1582,17 +1581,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_level`;
 CREATE TABLE `ls_user_level`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `growth_value` int(11) NOT NULL DEFAULT 0 COMMENT '成长值',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级备注',
-  `background_image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景图片',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级图标',
-  `privilege` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '等级权益',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(10) NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                  `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
+                                  `growth_value` int(11) NOT NULL DEFAULT 0 COMMENT '成长值',
+                                  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级备注',
+                                  `background_image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景图片',
+                                  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '等级图标',
+                                  `privilege` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '等级权益',
+                                  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                  `del` tinyint(10) NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
+                                  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员等级表';
 
 -- ----------------------------
@@ -1607,14 +1606,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_privilege`;
 CREATE TABLE `ls_user_privilege`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益名称',
-  `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益图标',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权益说明',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                      `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                      `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益名称',
+                                      `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权益图标',
+                                      `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权益说明',
+                                      `create_time` int(10) NOT NULL COMMENT '创建时间',
+                                      `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                      `del` tinyint(1) NOT NULL COMMENT '是否删除：1-是；0-否',
+                                      PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员权益';
 
 -- ----------------------------
@@ -1629,18 +1628,18 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_sign`;
 CREATE TABLE `ls_user_sign`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `days` int(11) NULL DEFAULT 0 COMMENT '连续签到天数',
-  `integral` int(11) NULL DEFAULT 0 COMMENT '签到奖励积分',
-  `continuous_integral` int(11) NULL DEFAULT 0 COMMENT '连续奖励积分',
-  `sign_time` int(10) NULL DEFAULT NULL COMMENT '签到时间',
-  `user_id` int(10) NULL DEFAULT NULL COMMENT '用户id',
-  `growth` int(11) NULL DEFAULT 0 COMMENT '签到奖励成长值',
-  `continuous_growth` int(11) NULL DEFAULT 0 COMMENT '连续签到奖励成长值',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
-  PRIMARY KEY (`id`) USING BTREE
+                                 `id` int(10) NOT NULL AUTO_INCREMENT,
+                                 `days` int(11) NULL DEFAULT 0 COMMENT '连续签到天数',
+                                 `integral` int(11) NULL DEFAULT 0 COMMENT '签到奖励积分',
+                                 `continuous_integral` int(11) NULL DEFAULT 0 COMMENT '连续奖励积分',
+                                 `sign_time` int(10) NULL DEFAULT NULL COMMENT '签到时间',
+                                 `user_id` int(10) NULL DEFAULT NULL COMMENT '用户id',
+                                 `growth` int(11) NULL DEFAULT 0 COMMENT '签到奖励成长值',
+                                 `continuous_growth` int(11) NULL DEFAULT 0 COMMENT '连续签到奖励成长值',
+                                 `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+                                 `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                 `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
+                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 
 -- ----------------------------
@@ -1654,19 +1653,19 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_wechat_reply`;
 CREATE TABLE `ls_wechat_reply`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则名称',
-  `keyword` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关键词',
-  `reply_type` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复类型',
-  `matching_type` tinyint(1) NULL DEFAULT NULL COMMENT '匹配方式：null-不设置；1-全匹配；2-模糊匹配',
-  `content_type` tinyint(1) NULL DEFAULT NULL COMMENT '内容类型：null-不设置；1-文本；',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复内容',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '启动状态：1-启动；0-关闭',
-  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
-  PRIMARY KEY (`id`) USING BTREE
+                                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                                    `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则名称',
+                                    `keyword` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关键词',
+                                    `reply_type` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复类型',
+                                    `matching_type` tinyint(1) NULL DEFAULT NULL COMMENT '匹配方式：null-不设置；1-全匹配；2-模糊匹配',
+                                    `content_type` tinyint(1) NULL DEFAULT NULL COMMENT '内容类型：null-不设置；1-文本；',
+                                    `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '回复内容',
+                                    `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '启动状态：1-启动；0-关闭',
+                                    `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+                                    `create_time` int(10) NOT NULL COMMENT '创建时间',
+                                    `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+                                    `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信公众号回复';
 
 -- ----------------------------

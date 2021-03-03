@@ -47,7 +47,7 @@
 			</view>
 			<view class="row-info row-between">
 				<view class="label md">关于我们</view>
-				<view>v2.0.1.20210106</view>
+				<view>v2.1.120210228</view>
 			</view>
 			<!-- #ifndef MP-WEIXIN -->
 			<view class="bg-primary white save-btn row-center lg" @click="logout">退出登录</view>

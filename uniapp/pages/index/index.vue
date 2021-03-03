@@ -38,8 +38,8 @@
 						<view class="shade"></view>
 						<swiper autoplay="true" style="height: 76rpx; flex: 1" vertical="true" circular="true" :interval="3000">
 							<swiper-item v-for="(item, index) in news" :key="index" class="row">
-								<u-tag v-if="item.is_new" shape="circle" text="最新" size="mini" type="primary" mode="plain" />
-								<view class="text-swiper ml10 line1">{{item.title}}</view>
+								<view class="flexnone"><u-tag v-if="item.is_new" shape="circle" text="最新" size="mini" type="primary" mode="plain" /></view>
+								<view class="text-swiper ml10 line1">{{item.title }}</view>
 							</swiper-item>
 						</swiper>
 					</view>

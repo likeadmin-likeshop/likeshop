@@ -31,10 +31,16 @@
 				<view class="text muted">优惠</view>
 				<view style="flex: 1">
 					<view class="row">
-						<u-tag text="领券" size="mini" type="primary" mode="plain" />
+						<view class="flexnone">
+							<u-tag text="领券" size="mini" type="primary" mode="plain" />
+						</view>
 						<view class="con row ml20" style="flex: 1">
 							<view v-for="(item, index) in couponList" :key="index" class="coupons-item  mr20">
-								<view v-if="index < 2" class="row xs">{{ item.use_condition }}</view>
+								<view v-if="index < 2" class="row xs">
+									<view class="line1">
+										{{ item.use_condition }}
+									</view>
+								</view>
 							</view>
 						</view>
 						<image class="icon-sm" src="/static/images/arrow_right.png"></image>
@@ -152,7 +158,8 @@
 				goodsLike: [],
 				checkedGoods: {},
 				couponList: [],
-				comment: {}
+				comment: {},
+				id: ""
 			};
 		},
 		onLoad(options) {
@@ -316,8 +323,11 @@
 
 			.text {
 				width: 100rpx;
+				flex: none;
 			}
-
+			.con {
+				width: 400rpx;
+			}
 			.coupons-item {
 				overflow: hidden;
 

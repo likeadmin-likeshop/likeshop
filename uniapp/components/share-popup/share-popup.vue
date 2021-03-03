@@ -82,9 +82,13 @@
 				uni.showLoading({
 					title: '正在生成中...'
 				});
+				let url = 'pages/goods_details/goods_details'
+				// #ifdef H5
+				url = '/mobile/' + url
+				// #endif
 				getPoster({
 					id: this.goodsId,
-					url: 'pages/goods_details/goods_details'
+					url
 				}).then(res => {
 					if (res.code == 1) {
 

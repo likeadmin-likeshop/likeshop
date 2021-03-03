@@ -95,7 +95,7 @@ class QrCodeLogic extends LogicBase {
             $poster_config = self::goodsShareConfig();
             //生成二维码
             if($url_type == 'path'){
-                $result = $this->makeMnpQrcode($goods['id'],$user['distribution_code'],$url,$qr_src,$save_dir);
+                $result = $this->makeMnpQrcode($goods['id'],$url,$qr_src,$save_dir);
                 if(true !== $result){
                     return self::dataError('微信配置错误：'.$result);
                 }
@@ -162,12 +162,14 @@ class QrCodeLogic extends LogicBase {
             $app = Factory::miniProgram($config);
 
             $response = $app->app_code->getUnlimit('id='.$goods['id'], [
-                'page'  => $url,
+                'page'  => $url.'/page',
             ]);
 
             if ($response instanceof \EasyWeChat\Kernel\Http\StreamResponse) {
                 $response->saveAs($save_dir, $img_src);
+                return true;
             }
+            return $response['errmsg'];
         } catch (\EasyWeChat\Kernel\Exceptions\Exception $e){
             return $e->getMessage();
 
@@ -176,7 +178,7 @@ class QrCodeLogic extends LogicBase {
     }
     //写入图片
     public function writeImg($poster, $img_uri, $config, $is_rounded = false){
-       
+
         $pic_img = imagecreatefromstring(file_get_contents($img_uri));
         $is_rounded?$pic_img = rounded_corner($pic_img):'';//切成圆角返回头像资源
         $pic_w = imagesx($pic_img);

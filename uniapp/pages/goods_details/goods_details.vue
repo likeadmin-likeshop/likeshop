@@ -145,6 +145,9 @@
 		mapActions,
 		mapGetters
 	} from 'vuex'
+	import {
+		strToParams
+	} from '@/utils/tools'
 	export default {
 		data() {
 			return {
@@ -163,14 +166,19 @@
 			};
 		},
 		onLoad(options) {
+			if (options && options.scene) {
+				let scene = strToParams(decodeURIComponent(options.scene));
+				console.log(scene, decodeURIComponent(options.scene))
+				options.id = scene.id;
+			}
 			if (!options.id) {
 				return this.$toast({
-					title: "缺少参数，无法查看商品"
+					title: '缺少参数，无法查看商品'
 				}, {
 					tab: 3
-				})
+				});
 			} else {
-				this.id = options.id
+				this.id = options.id;
 			}
 			this.getGoodsDetailFun();
 			this.getGoodsCouponFun()

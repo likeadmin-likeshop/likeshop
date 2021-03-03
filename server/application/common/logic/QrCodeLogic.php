@@ -95,7 +95,8 @@ class QrCodeLogic extends LogicBase {
             $poster_config = self::goodsShareConfig();
             //生成二维码
             if($url_type == 'path'){
-                $result = $this->makeMnpQrcode($goods['id'],$url,$qr_src,$save_dir);
+                $scene = 'id='.$goods['id'];
+                $result = $this->makeMnpQrcode($scene,$url,$qr_src,$save_dir);
                 if(true !== $result){
                     return self::dataError('微信配置错误：'.$result);
                 }
@@ -156,12 +157,12 @@ class QrCodeLogic extends LogicBase {
 
     }
     //小程序生成二维码
-    public function makeMnpQrcode($goods,$url,$img_src,$save_dir){
+    public function makeMnpQrcode($scene,$url,$img_src,$save_dir){
         try {
             $config = WeChatServer::getMnpConfig();
             $app = Factory::miniProgram($config);
 
-            $response = $app->app_code->getUnlimit('id='.$goods['id'], [
+            $response = $app->app_code->getUnlimit($scene, [
                 'page'  => $url,
             ]);
 

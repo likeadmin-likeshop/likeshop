@@ -67,6 +67,9 @@ class PaymentLogic extends LogicBase
         switch ($order['pay_way']) {
             case Pay::WECHAT_PAY:
                 $res = WeChatPayServer::unifiedOrder($from, $order, $order_source);
+                if (false === $res) {
+                    self::$error = WeChatPayServer::getError();
+                }
                 break;
             case Pay::ALI_PAY:
                 $res = self::appAlipay($from, $order, $order_source);

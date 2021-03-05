@@ -255,7 +255,7 @@
 			getOrderDetailFun() {
 				getOrderDetail(this.id).then(res => {
 					if (res.code == 1) {
-						const cancelTime = res.data.order_cancel_time - Date.now() / 1000;
+						this.cancelTime = res.data.order_cancel_time - Date.now() / 1000;
 						this.orderDetail = res.data
 						this.team = res.data.team || {}
 						this.$nextTick(() => {

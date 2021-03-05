@@ -1,14 +1,14 @@
 <template>
 	<view class="index">
 		<view class="header">
-			<sticky :offset-top="0">
+			<u-sticky :enable="enable" offset-top="0" h5-nav-height="0">
 				<view class="navigation-bar bg-primary row" :style="{height: navHeight + 'px'}">
 					<image mode="heightFix" class="logo ml20" :src="logo"></image>
 				</view>
 				<navigator class="search" hover-class="none" url="/pages/goods_search/goods_search">
-					<u-search bg-color="#fff" wrap-bg-color="#FF2C3C" :disabled="true"></u-search>
+					 <u-search bg-color="#fff" wrap-bg-color="#FF2C3C" :disabled="true"></u-search>
 				</navigator>
-			</sticky>
+			</u-sticky>
 		</view>
 		<view class="contain">
 			<view class="top-bg"></view>
@@ -121,6 +121,7 @@
 				showCoupop: false,
 				couponPopList: [],
 				coupon: "",
+				enable: true
 			}
 		},
 		onLoad() {
@@ -130,7 +131,13 @@
 			this.getBestListFun()
 		},
 		onShow() {
+			this.enable = true
 			this.getCartNum()
+		},
+		onHide() {
+			// #ifdef H5
+			this.enable= false
+			// #endif
 		},
 		onReachBottom() {
 			this.getBestListFun()

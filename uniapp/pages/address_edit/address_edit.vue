@@ -18,11 +18,18 @@
                     <image class="icon-sm ml10" src="/static/images/arrow_right.png" />
                 </view>
             </view>
-            <view style="height:200rpx">
-                <view class="form-item row" style="height: 200rpx;">					
-                    <view class="label mt20" style="align-self: flex-start;">详细地址</view>
-                    <textarea name="address" style="height: 160rpx;padding: 20rpx 20rpx 20rpx 30rpx;" v-model="addressObj.address"  @input="textareaChange" placeholder="请填写小区、街道、门牌号等信息" auto-blur />
-                </view>
+            <view>
+                <u-field 
+                v-model="addressObj.address" 
+                type="textarea"
+                label="详细地址" 
+                placeholder="请填写小区、街道、门牌号等信息"
+                :field-style="{flex: 1, 'margin-left': '20rpx', height: '160rpx'}"
+                />
+                <!-- <view class="form-item row" style="height: 200rpx;">					 -->
+                    <!-- <view class="label mt20" style="align-self: flex-start;">详细地址</view> -->
+                    <!-- <textarea name="address" style="height: 160rpx;padding: 20rpx 20rpx 20rpx 30rpx;" v-model="addressObj.address"  @input="textareaChange" placeholder="请填写小区、街道、门牌号等信息" auto-blur /> -->
+                <!-- </view> -->
             </view>
         </view>
         <view class="mt10 mb10 bg-white check-wrap">
@@ -216,14 +223,15 @@ export default {
     getWxAddressFun() {
       let wxAddress = uni.getStorageSync('wxAddress');
       if (!wxAddress) return;
+	  wxAddress = JSON.parse(wxAddress)
       let {
         userName: contact,
         telNumber: telephone,
         provinceName: province,
         cityName: city,
-        countyName: district,
         detailInfo: address
-      } = JSON.parse(wxAddress);
+      } = wxAddress;
+	  let district = wxAddress.countryName || wxAddress.countyName
       hasRegionCode({
         province,
         city,
@@ -257,7 +265,7 @@ export default {
             padding: 0 24rpx;
             height: 80rpx;
             &:not(:nth-of-type(3)) {
-                border-bottom: var(--border);
+                border-bottom: $-solid-border;
             }
             .label {
                 width: 150rpx;

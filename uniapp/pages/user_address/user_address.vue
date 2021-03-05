@@ -37,25 +37,24 @@
                 </view>
             </radio-group>
         </view>
-    <uni-popup id="confirmPop" ref="confirmPop" :show="deleteSure" >
-        <uni-popup-dialog 
+        <u-modal 
         id="delete-dialog"
+        v-model="deleteSure"
         :showCancelButton="true"
-        confirmButtonText="狠心删除"
-        confirm-button-color="#FF2C3C"
-        :useSlot="true"
+        confirm-text="狠心删除"
+        confirm-color="#FF2C3C"
+        :show-title="false"
         @confirm="delAddressFun" 
         @cancel="hidePop">
             <view class="column-center tips-dialog">
                 <image class="icon-lg" src="/static/images/icon_warning.png"></image>
                 <view style="margin-top:30rpx">确认删除该地址吗？</view>
             </view>
-        </uni-popup-dialog>        
-    </uni-popup>
+        </u-modal>        
     <view class="footer row-between fixed bg-white">
-        <view class="btn row-center bg-gray br60" @click="getWxAddress">
+        <view class="btn row-center bg-gray br60 mr20" @click="getWxAddressFun" v-if="isWeixin">
             <image class="icon-lg mr10" src="/static/images/icon_wechat.png"></image>
-            <text class="white md">微信导入</text>
+            <text class="md">微信导入</text>
         </view>
         <view class="btn bg-primary white md row-center br60" @click="addAddress">新增收货地址</view>
     </view>
@@ -79,15 +78,17 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { getAddressLists, delAddress, setDefaultAddress } from '../../api/user';
-
+import { getAddressLists, delAddress, setDefaultAddress } from '@/api/user';
+import wechath5 from '@/utils/wechath5'
+import {isWeixinClient} from '@/utils/tools'
 export default {
   data() {
     return {
       addressList: [],
       hasAddress: true,
       deleteSure: false,
-      currentId: 0
+      currentId: 0,
+	  isWeixin: true
     };
   },
   
@@ -98,12 +99,10 @@ export default {
    */
   onLoad: function (options) {
     this.type = options.type;
+	//#ifdef H5
+	this.isWeixin = isWeixinClient()
+	//#endif
   },
-
-  /**import
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -112,25 +111,6 @@ export default {
     this.getAddressListsFun();
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
   methods: {
     onSelect(e) {
       if (this.type) {
@@ -197,7 +177,18 @@ export default {
       });
     },
 
-    getWxAddress() {
+    getWxAddressFun() {
+		// #ifdef H5
+		wechath5.getWxAddress().then((res) => {
+			uni.setStorageSync('wxAddress', JSON.stringify(res));
+			setTimeout(() => {
+			  uni.navigateTo({
+			    url: `/pages/address_edit/address_edit`
+			  });
+			}, 200);
+		})
+		// #endif
+		// #ifdef MP-WEIXIN
       uni.authorize({
         scope: 'scope.address',
         success: function (res) {
@@ -237,8 +228,9 @@ export default {
           });
         }
       });
+	  // #endif
     },
-
+	
     showSurePop: function (e) {
       this.deleteSure = true;
       this.currentId = e.currentTarget.dataset.id;
@@ -263,7 +255,7 @@ export default {
 		    padding: 0 30rpx;
 			.address {
 			    padding: 20rpx 0;
-			    border-bottom: var(--border);
+			    border-bottom: $-solid-border;
 			}
 			.operation {
 			    height: 80rpx;
@@ -277,8 +269,10 @@ export default {
 	    bottom: 0;
 	    height: 118rpx;
 	    padding: 0 30rpx;
+		box-sizing: content-box;
+		padding-bottom: env(safe-area-inset-bottom);
 		.btn {
-		    width: 336rpx;
+		    flex: 1;
 		    height: 80rpx;
 		}
 	}

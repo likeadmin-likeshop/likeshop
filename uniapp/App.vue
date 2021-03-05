@@ -46,4 +46,5 @@
 <style lang='scss'>
 	@import 'styles/base.scss';
 	/*每个页面公共css */
+    @import "components/uview-ui/index.scss";
 </style>

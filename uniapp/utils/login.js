@@ -10,10 +10,7 @@ import Cache from './cache'
 import {
 	BACK_URL
 } from '@/config/cachekey'
-import wechatH5 from './wechath5'
-
-
-
+import wechath5 from './wechath5'
 
 export function isAuthorize() {
 	return new Promise((resolve, reject) => {
@@ -97,33 +94,4 @@ export function wxAutoLogin() {
 			resolve(res);
 		});
 	});
-}
-//免登录白名单
-const loginWhite = ["login", "index", "all_comments", "goods_details", "news_list", "sort"]
-//去登录
-export function toLogin() {
-	
-	const {options, onLoad, onShow} = currentPage()
-	console.log(options, onLoad, onShow, currentPage().created)
-	const pathLogin = 'login'
-	let path = currentPage().route
-	let name = path.split("/")[1];
-	if (loginWhite.includes(name)) {
-		return
-	}
-	let num = store.getters.loginNum
-	if (num == 0) {
-		store.commit("LOGOUT");
-		store.commit('SETLOGINNUM', ++num)
-		if (isWeixinClient()) {
-			wechatH5.getWxUrl()
-			//微信登录
-		} else {
-			if (name != pathLogin) {
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
-		}
-	}
 }

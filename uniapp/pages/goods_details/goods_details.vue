@@ -15,8 +15,8 @@
 							<price-format :price="checkedGoods.market_price || goodsDetail.market_price"></price-format>
 						</view>
 					</view>
-					
-					 <image class="icon-share" src="/static/images/icon_share.png" @tap="$refs.sharePopup.open()"></image>
+
+					<image class="icon-share" src="/static/images/icon_share.png" @tap="showShareBtn=true"></image>
 				</view>
 				<view class="row">
 					<view class="goods-name lg bold">{{goodsDetail.name}}</view>
@@ -27,14 +27,20 @@
 					<text>浏览量: {{goodsDetail.click_count}}次</text>
 				</view>
 			</view>
-			<view class="coupons row mt20 bg-white" style="align-items: flex-start;" @tap="$refs.couponPopup.open()" v-if="couponList.length">
+			<view class="coupons row mt20 bg-white" style="align-items: flex-start;" @tap="showCoupon=true" v-if="couponList.length">
 				<view class="text muted">优惠</view>
 				<view style="flex: 1">
 					<view class="row">
-						<uni-tag color="#FF2C3C" plain>领券</uni-tag>
-						<view class="con row" style="flex: 1">
+						<view class="flexnone">
+							<u-tag text="领券" size="mini" type="primary" mode="plain" />
+						</view>
+						<view class="con row ml20" style="flex: 1">
 							<view v-for="(item, index) in couponList" :key="index" class="coupons-item  mr20">
-								<view v-if="index < 2" class="row xs">{{item.use_condition}}</view>
+								<view v-if="index < 2" class="row xs">
+									<view class="line1">
+										{{ item.use_condition }}
+									</view>
+								</view>
 							</view>
 						</view>
 						<image class="icon-sm" src="/static/images/arrow_right.png"></image>
@@ -75,14 +81,14 @@
 			<view class="details mt20 bg-white">
 				<view class="title lg">商品详情</view>
 				<view class="content">
-					<jyf-parser :html="goodsDetail.content" ref="article" :tag-style="tagStyle"></jyf-parser>
+					<u-parse :html="goodsDetail.content"></u-parse>
 				</view>
 			</view>
 			<view class="footer row bg-white fixed">
-				<button class="btn column-center" hover-class="none" open-type="contact">
+				<navigator class="btn column-center" hover-class="none" url="/pages/contact_offical/contact_offical">
 					<image class="icon-md" src="/static/images/icon_contact.png"></image>
 					<text class="xxs lighter">客服</text>
-				</button>
+				</navigator>
 				<button class="btn column-center" hover-class="none" @tap="collectGoodsFun">
 					<image class="icon-md" :src="(goodsDetail.is_collect == 1)?'/static/images/icon_collection_s.png' : '/static/images/icon_collection.png'"></image>
 					<text class="xxs lighter">收藏</text>
@@ -90,7 +96,7 @@
 				<navigator class="btn cart column-center" hover-class="none" open-type="switchTab" url="/pages/shop_cart/shop_cart">
 					<image class="icon-md" src="/static/images/icon_cart.png"></image>
 					<text class="xxs lighter">购物车</text>
-					<uni-badge class="cart-num" type="primary" v-if="cartNum" :text="cartNum" color="#FF2C3C"></uni-badge>
+					<u-badge v-if="cartNum" bgColor="#FF2C3C" :offset="[8, 10]" :count="cartNum"></u-badge>
 				</navigator>
 				<view class="add-cart br60 white mr20 md ml20" @tap="showSpecFun(1)">
 					加入购物车
@@ -102,27 +108,23 @@
 		</view>
 		<spec-popup :show="showSpec" :goods="goodsDetail" @close="showSpec = false" :show-add="popupType == 1 || popupType == 0"
 		 :show-buy="popupType == 2 || popupType == 0" @buynow="onBuy" @addcart="onAddCart"></spec-popup>
-		 <!-- 领券 -->
-		 <uni-popup ref="couponPopup" type="bottom" >
-			<view class="bg-white" style="border-radius: 10rpx 10rpx 0 0;">
+		<!-- 领券 -->
+		<u-popup v-model="showCoupon" mode="bottom" border-radius="14">
+			<view>
 				<view class="row-between" style="padding: 30rpx">
 					<view class="title md bold">领券</view>
-					<view class="close" @tap="$refs.couponPopup.close()">
+					<view class="close" @tap="showCoupon = false">
 						<image class="icon-lg" src="/static/images/icon_close.png"></image>
 					</view>
 				</view>
 				<view class="content bg-body">
-				    <scroll-view scroll-y="true" style="height: 700rpx">
-				        <coupon-list :list="couponList" @reflash="getGoodsCouponFun" :btn-type="3"></coupon-list>
-				    </scroll-view>
+					<scroll-view scroll-y="true" style="height: 700rpx">
+						<coupon-list :list="couponList" @reflash="getGoodsCouponFun" :btn-type="3"></coupon-list>
+					</scroll-view>
 				</view>
 			</view>
-		 </uni-popup>
-		 
-		<!-- 分享 -->
-		<uni-popup ref="sharePopup" type="share">
-		    <uni-popup-share title="分享到" @select="select"></uni-popup-share>
-		</uni-popup>
+		</u-popup>
+			<share-popup :show="showShareBtn" @close="showShareBtn = false" :goods-id="id"></share-popup>
 	</view>
 </template>
 
@@ -139,12 +141,20 @@
 	import {
 		getGoodsCoupon
 	} from '@/api/activity';
-	import {mapActions, mapGetters} from 'vuex'
+	import {
+		mapActions,
+		mapGetters
+	} from 'vuex'
+	import {
+		strToParams
+	} from '@/utils/tools'
 	export default {
 		data() {
 			return {
 				isFirstLoading: true,
 				showSpec: false,
+				showShareBtn: false,
+				showCoupon: false,
 				popupType: '',
 				swiperList: [],
 				goodsDetail: {},
@@ -152,20 +162,23 @@
 				checkedGoods: {},
 				couponList: [],
 				comment: {},
-				tagStyle: {
-					img: 'width:100%;'
-				},
+				id: ""
 			};
 		},
 		onLoad(options) {
+			if (options && options.scene) {
+				let scene = strToParams(decodeURIComponent(options.scene));
+				console.log(scene, decodeURIComponent(options.scene))
+				options.id = scene.id;
+			}
 			if (!options.id) {
 				return this.$toast({
-					title: "缺少参数，无法查看商品"
+					title: '缺少参数，无法查看商品'
 				}, {
 					tab: 3
-				})
+				});
 			} else {
-				this.id = options.id
+				this.id = options.id;
 			}
 			this.getGoodsDetailFun();
 			this.getGoodsCouponFun()
@@ -251,7 +264,9 @@
 					num: goodsNum
 				}];
 				uni.navigateTo({
-					url: '/pages/confirm_order/confirm_order?data='+ encodeURIComponent((JSON.stringify({goods}))),
+					url: '/pages/confirm_order/confirm_order?data=' + encodeURIComponent((JSON.stringify({
+						goods
+					}))),
 				})
 			},
 			async onAddCart(e) {
@@ -273,6 +288,8 @@
 						icon: "success"
 					})
 					this.showSpec = false
+					this.getCartNum()
+					
 				}
 			}
 		},
@@ -314,8 +331,11 @@
 
 			.text {
 				width: 100rpx;
+				flex: none;
 			}
-
+			.con {
+				width: 400rpx;
+			}
 			.coupons-item {
 				overflow: hidden;
 
@@ -404,11 +424,13 @@
 				position: relative;
 				line-height: 1.3;
 			}
+
 			.cart-num {
-			    position: absolute;
-			    left: 60rpx;
-			    top: 6rpx;
+				position: absolute;
+				left: 60rpx;
+				top: 6rpx;
 			}
+
 			.add-cart,
 			.right-buy {
 				flex: 1;

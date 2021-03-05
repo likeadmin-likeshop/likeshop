@@ -143,9 +143,9 @@
 
 				.user-vip-info {
 					padding-left: 30rpx;
-
+					padding-bottom: 30rpx;
 					.user-level {
-						border: 1rpx solid white;
+						border: 1px solid white;
 						border-radius: 100rpx;
 						padding: 4rpx 20rpx;
 						line-height: 30rpx;
@@ -159,7 +159,7 @@
 			}
 
 			.content {
-				margin-top: -240rpx;
+				margin-top: -200rpx;
 
 				.vip-card-item {
 					height: 320rpx;

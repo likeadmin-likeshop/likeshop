@@ -23,7 +23,7 @@
 				default: true
 			},
 			address: {
-				type: Object,
+				type: [Object, Array],
 				default: () => {}
 			}
 		},

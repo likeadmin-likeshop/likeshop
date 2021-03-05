@@ -14,13 +14,15 @@
                     ref="countDown"
                     :show-days="false"
                     :timestamp="time"
-                    :showColon="false"
+                    separator="zh"
                     color="#FF2C3C"
+                    separatorColor="#FF2C3C"
+                    bg-color="rgba(0, 0, 0, 0)"
                     :show-hours="false"
                     :show-minutes="false"
-                    v-show="!canSendSms"
                     :autoplay="false"
-                    @end="countDownFinish"
+                    v-show="!canSendSms" 
+                    @end="countDownFinish()"
                     />
                 </button>
             </view>
@@ -54,7 +56,7 @@
                 smsCode: '',
                 resetPwd: '',
                 comfirmPwd: '',
-                time: 60,
+                time: 59,
                 canSendSms: true,
             }
         },

@@ -24,7 +24,7 @@
 	</view> -->
 	<view class="return-address-contain row bg-white mt20" v-show="!(lists.refund_type == 0)">
 		<view class="nr normal address-title">退货地址：</view>
-		<view class="sm normal address line2">{{lists.shop.address}}</view>
+		<view class="sm normal address line2">{{lists.shop && lists.shop.address}}</view>
 		<view class="xs copy-btn row-center" @tap="onCopy">复制</view>
 	</view>
 	<view class="goods-container bg-white mt20">
@@ -38,14 +38,14 @@
 		</view> -->
 		<view class="goods-item row">
 			<view class="goods-img">
-				<custom-image width="100%" height="100%" radius="10rpx" lazy-load :src="lists.order_goods.image" />
+				<custom-image width="100%" height="100%" radius="10rpx" lazy-load :src="lists.order_goods && lists.order_goods.image" />
 			</view>
 			<view class="goods-info">
-				<view class="two-txt-cut nr">{{lists.order_goods.goods_name}}</view>
+				<view class="two-txt-cut nr">{{lists.order_goods && lists.order_goods.goods_name}}</view>
 				<view class="row-between mt20">
 					<!-- <view class="md">￥999.00</view> -->
-					<price-format :price="lists.order_goods.goods_price" :firstSize="30" :secondSize="30" :showSubscript="true" :subscriptSize="30" color="#101010" />
-					<view class="nr">x{{lists.order_goods.goods_num}}</view>
+					<price-format :price="lists.order_goods && lists.order_goods.goods_price" :firstSize="30" :secondSize="30" :showSubscript="true" :subscriptSize="30" color="#101010" />
+					<view class="nr">x{{lists.order_goods && lists.order_goods.goods_num}}</view>
 				</view>
 			</view>
 		</view>
@@ -75,20 +75,24 @@
 	<view class="btn-group fixed bg-white row-end" v-show="!(lists.status == 6)">
 		<view class="mr20 btn br60" @tap="showDialog">撤销申请</view>
 		<view class="mr20 btn br60" @tap="goRefund" v-show="(lists.status == 4 || lists.status == 1)">重新申请</view>
-		<navigator hover-class="none" :url="'/pages/input_express_info/input_express_info?id=' + lists.id" class="mr20 btn br60" v-show="lists.status == 2">填写快递单号</navigator>
+		<navigator hover-class="none" :url="'/pages/bundle/input_express_info/input_express_info?id=' + lists.id" class="mr20 btn br60" v-show="lists.status == 2">填写快递单号</navigator>
 		<view class="btn br60" v-show="false">平台退款</view>
 	</view>
 </view>
-<uni-popup :show="confirmDialog">    
-    <uni-popup-dialog 
-    title="提示"  
-    show-cancel-button 
-    content="是否要撤销申请？" 
-    confirmButtonColor="#FF2C3C" 
-    @confirm="$cancelApply" 
-    @cancel="hideDialog">
-    </uni-popup-dialog>
-</uni-popup>
+    <u-modal 
+        v-model="confirmDialog"
+        confirm-text="确定"
+        :showCancelButton="true"
+        :show-title="false"
+        confirm-color="#FF2C3C"
+        @confirm="cancelApplyFun"
+        @cancel="hideDialog"
+    >
+        <view class="column-center tips-dialog" style="padding: 20rpx 0;">
+            <image class="icon-lg" src="/static/images/icon_warning.png"></image>
+            <view style="margin-top:30rpx">是否要撤销申请？</view>
+        </view>
+    </u-modal>
 </view>
 </template>
 
@@ -109,8 +113,8 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { afterSaleDetail, cancelApply } from "../../api/user";
-import { Tips, trottle } from "../../utils/tools.js";
+import { afterSaleDetail, cancelApply } from "@/api/user";
+import { trottle } from "@/utils/tools.js";
 
 export default {
   data() {
@@ -139,11 +143,7 @@ export default {
     this.orderId = order_id;
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
+  
   /**
    * 生命周期函数--监听页面显示
    */
@@ -151,30 +151,6 @@ export default {
     this.afterSaleDetailFun();
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {},
   methods: {
     onCopy() {
       let {
@@ -195,12 +171,12 @@ export default {
         lists
       } = this;
       uni.navigateTo({
-        url: '/pages/apply_refund/apply_refund?order_id=' + this.orderId + '&afterSaleId=' + this.afterSaleId + '&item_id=' + lists.order_goods.item_id
+        url: '/pages/bundle/apply_refund/apply_refund?order_id=' + this.orderId + '&afterSaleId=' + this.afterSaleId + '&item_id=' + lists.order_goods.item_id
       });
     },
 
     showDialog() {
-        this.comfirmDialog = true
+        this.confirmDialog = true
     },
 
     hideDialog() {
@@ -214,11 +190,11 @@ export default {
         id: this.afterSaleId
       }).then(res => {
         if (res.code == 1) {
-          Tips({
+          this.$toast({
             title: res.msg
           }, {
             tab: 5,
-            url: '/pages/post_sale/post_sale'
+            url: '/pages/bundle/post_sale/post_sale'
           });
           this.$emit('RESET_LIST');
         }
@@ -275,7 +251,7 @@ export default {
         height: 100rpx;
         .btn {
           padding: 10rpx 34rpx;
-          border: 1rpx solid #999999;
+          border: 1px solid #999999;
         }
     }
     .goods-container {
@@ -326,5 +302,10 @@ export default {
     margin-left: 12rpx;
     border-radius: 4rpx;
   }
+}
+
+.tips-dialog {
+    height: 230rpx;
+    width: 100%;
 }
 </style>

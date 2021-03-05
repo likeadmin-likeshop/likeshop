@@ -17,7 +17,7 @@
                     <view class="row">
                         <view class="info">
                             <view class="title lg line2 mb20">{{ item.title }}</view>
-                            <view class="row lighter line2">
+                            <view class="lighter line2">
                                 <view>{{ item.synopsis }}</view>
                             </view>
                         </view>
@@ -33,7 +33,7 @@
                 </view>
             </view>
             <loading-footer :status="status" slotEmpty>
-                <view class="column-center" style="padding-top: 200rpx">
+                <view slot="empty" class="column-center" style="padding-top: 100rpx">
                     <image class="img-null" src="/static/images/news_null.png"></image>
                     <text class="nr muted">暂无数据～</text>
                 </view>
@@ -107,39 +107,10 @@ export default {
     this.getCategoryListFun();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
   onReachBottom: function () {
     this.getArticleListFun();
   },
 
-  onShareAppMessage(res) {},
 
   methods: {
     changeActive(e) {

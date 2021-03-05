@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import{client} from '@/utils/tools'
 //获取首页数据接口
 export function getHome() {
 	return request.get('index/lists')
@@ -8,9 +8,7 @@ export function getHome() {
 //获取菜单
 export function getMenu(data) {
 	return request.get('menu/lists', {
-		params: { ...data,
-			client: 1
-		},
+		params: data,
 	});
 }
 
@@ -120,4 +118,16 @@ export function addCart(data) {
 
 export function getCartNum(data) {
   return request.get("cart/num", data);
+}
+
+
+//商品海报
+
+export function getPoster(data) {
+	return request.get("share/sharegoods", {
+		params: {
+			...data,
+			client: client
+		}
+	});
 }

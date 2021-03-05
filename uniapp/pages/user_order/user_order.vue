@@ -16,7 +16,7 @@
 // +----------------------------------------------------------------------
 <template>
 <view class="user-order">
-    <tabs :active="active" :swipe-threshold="5" @change="changeShow" :config="{itemWidth: 150}">
+    <tabs :active="active" @change="changeShow" :config="{itemWidth: 150}">
         <tab v-for="(item, index) in order" :key="index" :title="item.name" :name="item.type">
             <order-list v-if="item.isShow" :order-type="item.type" :ref="'order' + item.type"></order-list>
         </tab>
@@ -60,9 +60,10 @@ export default {
   },
   props: {},
   onLoad: function (options) {
-    console.log(options);
+    const{order} = this
     let type = options.type || orderType.ALL;
-    this.changeShow(type);
+	let index = order.findIndex(item => item.type == type)
+    this.changeShow(index);
   },
 
   onPullDownRefresh: function () {
@@ -77,15 +78,12 @@ export default {
 	this.$refs['order' + order[active].type][0].getOrderListFun()
   },
   methods: {
-    changeShow(type) {
-		const{order} = this
-		let index = order.findIndex(item => item.type == type)
+    changeShow(index) {
 		if(index != -1) {
 			this.active = index
 			this.order[index].isShow = true
 		}
-    }
-
+    },
   }
 };
 </script>

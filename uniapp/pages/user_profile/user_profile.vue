@@ -2,8 +2,8 @@
 	<view class="user-profile-container mt10">
 		<view class="user-profile">
 			<view class="user-avatar-box row-center">
-				<uploader :after-read="afterRead" useSlot>
-					<image class="user-avatar" :src="userInfo.avatar || require('../../static/images/default_avatar.png')" />
+				<uploader @after-read="afterRead" useSlot>
+					<image class="user-avatar" :src="userInfo.avatar || require('@/static/images/default_avatar.png')" />
 				</uploader>
 			</view>
 			<view class="row-info row bdb-line" @click="changeName">
@@ -19,9 +19,14 @@
 			<view class="row-info row bdb-line">
 				<view class="label md">手机号</view>
 				<view class="md row" :class="{'muted': userInfo.mobile}" style="flex: 1;">{{userInfo.mobile ? userInfo.mobile : "未绑定"}}</view>
-				<view class="bd-btn br60" @click="showModifyMobile">
+                <!-- #ifdef H5 -->
+				<view class="bd-btn br60 row-center" @click="showModifyMobile">
 					{{userInfo.mobile ? '更换手机号' : '绑定手机号'}}
 				</view>
+                <!-- #endif -->
+                <!-- #ifdef MP-WEIXIN -->
+                <button class="bd-btn br60 row-center" size="sm" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">{{userInfo.mobile ? '更换手机号' : '绑定手机号'}}</button>
+                <!-- #endif -->
 			</view>
 			<!-- #ifndef MP-WEIXIN -->
 			<view class="row-info row-between" @click="showPwdPop">
@@ -42,7 +47,7 @@
 			</view>
 			<view class="row-info row-between">
 				<view class="label md">关于我们</view>
-				<view>v2.0.1.20210106</view>
+				<view>v2.1.120210228</view>
 			</view>
 			<!-- #ifndef MP-WEIXIN -->
 			<view class="bg-primary white save-btn row-center lg" @click="logout">退出登录</view>
@@ -136,20 +141,22 @@
 	} from '@/api/app'
 	import {
 		SMSType
-	} from '@/utils/type.js'
+	} from '@/utils/type'
 	import {
 		mapState
 	} from 'vuex'
 	import {
 		uploadFile,
 		isWeixinClient
-	} from '@/utils/tools.js'
+	} from '@/utils/tools'
+    import {getWxCode} from '@/utils/login'
 
 	const FieldType = {
 		NONE: '',
 		SEX: 'sex',
 		NICKNAME: 'nickname',
-		AVATAR: 'avatar'
+		AVATAR: 'avatar',
+        MOBILE: 'mobile'
 	}
 	export default {
 		name: 'userProfile',
@@ -170,13 +177,15 @@
 				canSendSms: true,
 				pwd: '',
 				comfirmPwd: '',
-				smsType: SMSType.FINDPWD
+				smsType: SMSType.FINDPWD,
+                code: ''
 			}
 		},
 		methods: {
 			// 文件上传读取
 			afterRead(e) {
 				const file = e
+				console.log(file)
 				uni.showLoading({
 					title: '正在上传中...',
 					mask: true
@@ -184,7 +193,8 @@
 				file.forEach(item => {
 					uploadFile(item.path).then(res => {
 						uni.hideLoading();
-						this.fileList.push(res);
+						this.fieldType = FieldType.AVATAR
+						this.$setUserInfo(res.base_url)
 					});
 				})
 			},
@@ -200,7 +210,9 @@
 							title: '登出成功'
 						})
 						setTimeout(() => {
-							uni.navigateBack()
+							uni.switchTab({
+								url: "/pages/index/index"
+							})
 						}, 500)
 					}
 				})
@@ -365,11 +377,37 @@
 			changeNameConfirm() {
 				this.$setUserInfo(this.newNickname);
 				this.showNickName = false;
-			}
+			},
 			// end
+            
+            getPhoneNumber(e) {
+                console.log(e, "getPhoneNubmer")
+                // code encryptedData iv
+                const { code } = this;
+                const { encryptedData, iv } = e.detail;
+                let data = {
+                    code,
+                    encrypted_data: encryptedData,
+                    iv
+                }
+                this.fieldType = FieldType.MOBILE
+                if (encryptedData) {
+                    this.$changeUserMobileMP(data)
+                }
+            },
+            $changeUserMobileMP(data) {
+                changeUserMobile(data).then(res => {
+                    if (res.code == 1) {
+                        this.$setUserInfo(res.data.purePhoneNumber)
+                    }
+                })
+            }
 		},
 		mounted() {
 			this.$getUserInfo()
+            getWxCode().then(res => {
+                this.code = res
+            })
 		},
 		computed: {
 			...mapState(['token'])
@@ -406,7 +444,7 @@
 
 				.bd-btn {
 					padding: 8rpx 24rpx;
-					border: 1rpx solid $-color-primary;
+					border: 1px solid $-color-primary;
 					color: $-color-primary;
 				}
 			}
@@ -442,7 +480,7 @@
 				border-bottom: 1rpx solid #E5E5E5;
 
 				.send-code-btn {
-					border: 1rpx solid $-color-primary;
+					border: 1px solid $-color-primary;
 					width: 184rpx;
 					height: 62rpx;
 					color: $-color-primary;

@@ -24,7 +24,7 @@
                     @click="
                         goPage($event, 
                         items.after_sale.able_apply, 
-                        '/pages/apply_refund/apply_refund', 
+                        '/pages/bundle/apply_refund/apply_refund', 
                         items.order_id, 
                         item.item_id)"
                      >
@@ -42,7 +42,7 @@
 				</view>
 				<view class="primary nr">{{items.after_sale.type_text}}</view>
 			</view>
-			<navigator v-for="(item, index2) in items.order_goods" :key="index2" hover-class="none" class="sale-goods-show" :url="'/pages/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id + '&order_id=' + items.order_id">
+			<navigator v-for="(item, index2) in items.order_goods" :key="index2" hover-class="none" class="sale-goods-show" :url="'/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id + '&order_id=' + items.order_id">
 				<view class="row">
 					<view class="goods-img">
 						<custom-image width="100%" height="100%" radius="6rpx" lazy-load :src="item.image" />
@@ -63,13 +63,13 @@
 				</view>
 			</navigator>
 			<view class="sale-footer row-end">
-				<view class="row-center normal br60 mr20 grey-btn nr" @tap="showDialog" :data-id="items.after_sale.after_sale_id">撤销申请</view>
-				<navigator hover-class="none" :url="'/pages/input_express_info/input_express_info?id=' + items.after_sale.after_sale_id" class="row-center normal br60 grey-btn nr" :hidden="items.after_sale.status!=2">填写快递单号</navigator>
+				<view class="row-center normal br60 mr20 grey-btn nr" @tap="showDialog(items.after_sale.after_sale_id)">撤销申请</view>
+				<navigator hover-class="none" :url="'/pages/bundle/input_express_info/input_express_info?id=' + items.after_sale.after_sale_id" class="row-center normal br60 grey-btn nr" :hidden="items.after_sale.status!=2">填写快递单号</navigator>
 			</view>
 		</view>
 	</view>
 	<view class="sale-list" v-else>
-		<navigator v-for="(items, index) in lists" :key="index" hover-class="none" class="sale-item bg-white mt20" :url="'/pages/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id">
+		<navigator v-for="(items, index) in lists" :key="index" hover-class="none" class="sale-item bg-white mt20" :url="'/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id">
 			<view class="sale-header row-between">
 				<view class="row">
 					<!-- <image style="width: 40rpx;height: 40rpx" src="/images/icon_shop.png"></image> -->
@@ -104,16 +104,20 @@
         </view>
     </loading-footer>
 </view>
-    <uni-popup ref="dialogPop" id="dialogPop" :show="confirmDialog" :maskClick="true">
-        <uni-popup-dialog
-        title="提示" 
-        show-cancel-button 
-        content="是否要撤销申请？" 
-        confirm-button-color="#FF2C3C" 
-        @confirm="cancelApplyFun" 
-        @cancel="hideDialog">
-        </uni-popup-dialog>        
-    </uni-popup>
+    <u-modal 
+        v-model="confirmDialog"
+        confirm-text="确定"
+        :showCancelButton="true"
+        :show-title="false"
+        confirm-color="#FF2C3C"
+        @confirm="cancelApplyFun"
+        @cancel="hideDialog"
+    >
+        <view class="column-center tips-dialog" style="padding: 20rpx 0;">
+            <image class="icon-lg" src="/static/images/icon_warning.png"></image>
+            <view style="margin-top:30rpx">是否要撤销申请？</view>
+        </view>
+    </u-modal>
 </view>
 </template>
 
@@ -134,9 +138,9 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { AfterSaleType, loadingType } from "../../utils/type";
-import { getAfterSaleList, cancelApply, afterSaleDetail, applyAgain } from "../../api/user";
-
+import { AfterSaleType, loadingType } from "@/utils/type";
+import { getAfterSaleList, cancelApply, afterSaleDetail, applyAgain } from "@/api/user";
+import {loadingFun} from '@/utils/tools'
 
 export default {
   data() {
@@ -168,6 +172,7 @@ export default {
 
   methods: {
     cancelApplyFun() {
+        console.log(this.id, 'id')
       cancelApply({
         id: this.id
       }).then(res => {
@@ -186,33 +191,16 @@ export default {
         loadingStatus,
         page
       } = this;
-      if (loadingStatus == loadingType.FINISHED) return;
-      getAfterSaleList({
-        type: this.type,
-        page_no: page
+      loadingFun(getAfterSaleList, page, lists, loadingStatus, {
+            type: this.type
       }).then(res => {
-        if (res.code == 1) {
-          let {
-            list,
-            more
-          } = res.data;
-          lists.push(...list);
-          this.lists = lists
-          this.page ++;
-
-          if (!more) {
-              this.loadingStatus = loadingType.FINISHED
+          console.log(res, "res")
+          if(res) {
+              this.page = res.page;
+              this.loadingStatus = res.status;
+              this.lists = res.dataList;
           }
-
-          if (lists.length <= 0) {
-            this.loadingStatus = loadingType.EMPTY
-          }
-
-          return;
-        } else {
-            this.loadingStatus = loadingType.ERROR
-        }
-      });
+      })
     },
 
     goPage(e, able_apply, url, order_id, item_id) {
@@ -232,10 +220,8 @@ export default {
       this.getAfterSaleListFun();
     },
 
-    showDialog(e) {
-      let {
-        id
-      } = e.currentTarget.dataset;
+    showDialog(id) {
+        console.log(id, "showDialog")
       this.id = id;
       this.confirmDialog = true
     },
@@ -279,10 +265,10 @@ export default {
       .btn {
         padding: 9rpx 34rpx;
         font-family: PingFang SC;
-        border: 1rpx solid $-color-primary;
+        border: 1px solid $-color-primary;
       }
       .grey-btn {
-        border: 1rpx solid #CCCCCC;
+        border: 1px solid #CCCCCC;
         padding: 9rpx 34rpx;
         font-family: PingFang SC;
       }
@@ -296,5 +282,10 @@ export default {
 
 .data-null {
   padding-top: 150rpx;
+}
+
+.tips-dialog {
+    height: 230rpx;
+    width: 100%;
 }
 </style>

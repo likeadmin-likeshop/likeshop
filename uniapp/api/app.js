@@ -72,3 +72,19 @@ export function sendSms(data) {
 export function register(data) {
     return request.post('account/register', data)
 }
+
+// 验证码登录
+export function smsCodeLogin(data) {
+    return request.post('account/smsLogin', {...data, client: 2})
+}
+
+export function getConfig() {
+    return request.get("index/config")
+}
+
+
+
+//客服
+export function getService() {
+    return request.get("service/lists")
+}

@@ -209,7 +209,13 @@
             "style": {
 
             }
-        }
+        },
+		{
+		    "path": "pages/contact_offical/contact_offical",
+		    "style": {
+		        "navigationBarTitleText": "联系客服"
+		    }
+		}
     ],
 	"tabBar": {
 		"color": "#666",

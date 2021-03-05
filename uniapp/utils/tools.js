@@ -1,8 +1,11 @@
 import {
 	loadingType
 } from './type'
-import {baseURL} from '@/config/app.js'
+import {
+	baseURL
+} from '@/config/app.js'
 
+import store from '@/store'
 //节流
 export const trottle = (func, time = 1000, context) => {
 	let previous = new Date(0).getTime()
@@ -35,13 +38,9 @@ export function isAndroid() {
 }
 
 //获取url后的参数  以对象返回
-export function getUrlparams(url) {
-	let urlparams = url.split('?')
-	if (urlparams.length === 1) {
-		return ''
-	}
+export function strToParams(str) {
 	var newparams = {}
-	for (let item of urlparams[1].split('&')) {
+	for (let item of str.split('&')) {
 		newparams[item.split('=')[0]] = item.split('=')[1]
 	}
 	return newparams
@@ -64,7 +63,7 @@ export function arraySlice(data, array = [], optNum = 10) {
 		return array;
 	}
 	array.push(data.splice(0, optNum));
-	return handleArray(data, array, optNum);
+	return arraySlice(data, array, optNum);
 }
 
 //对象参数转为以？&拼接的字符
@@ -82,7 +81,8 @@ export function paramsToStr(params) {
 
 //分页加载
 export async function loadingFun(fun, page, dataList = [], status, params) {
-	dataList = JSON.parse(JSON.stringify(dataList))
+	// 拷贝对象
+	dataList = Object.assign([], dataList)
 	if (status == loadingType.FINISHED) return false
 	const {
 		code,
@@ -130,7 +130,6 @@ export function getRect(selector, all, context) {
 			if (all && Array.isArray(rect) && rect.length) {
 				resolve(rect);
 			}
-
 			if (!all && rect) {
 				resolve(rect);
 			}
@@ -189,7 +188,7 @@ export function toast(info = {}, navigateOpt) {
 				case 5:
 					//关闭当前页面跳转至非table页面
 					setTimeout(function() {
-						ini.redirectTo({
+						uni.redirectTo({
 							url: url,
 						})
 					}, endtime);
@@ -238,29 +237,30 @@ export function menuJump(item) {
 }
 
 export function uploadFile(path) {
-  return new Promise(resolve => {
-    uni.uploadFile({
-      url: baseURL + 'file/formimage',
-      filePath: path,
-      name: 'file',
-      fileType: 'image',
-      cloudPath: '',
-      success: res => {
-          console.log('uploadFile res ==> ', res)
-        const {
-          fileList
-        } = this;
-        let data = JSON.parse(res.data);
+	return new Promise((resolve, reject) => {
+		uni.uploadFile({
+			url: baseURL + 'file/formimage',
+			filePath: path,
+			name: 'file',
+			header: {token: store.getters.token},
+			fileType: 'image',
+			cloudPath: '',
+			success: res => {
+				console.log('uploadFile res ==> ', res)
+				let data = JSON.parse(res.data);
 
-        if (data.code == 1) {
-          resolve(data.data);
-        }
-      },
-      fail: (err) => {
-           console.log(err)
-      }
-    });
-  });
+				if (data.code == 1) {
+					resolve(data.data);
+				} else {
+					reject()
+				}
+			},
+			fail: (err) => {
+				console.log(err)
+				reject()
+			}
+		});
+	});
 }
 
 //当前页面
@@ -268,5 +268,32 @@ export function uploadFile(path) {
 export function currentPage() {
 	let pages = getCurrentPages();
 	let currentPage = pages[pages.length - 1];
-	return currentPage;
+	return currentPage || {};
+}
+// #ifdef MP-WEIXIN
+export const client = 1
+// #endif
+
+// #ifdef H5
+export const client = 2
+// #endif
+// H5复制方法
+export function copy(str) {
+	// #ifdef H5
+	let aux = document.createElement("input");
+	aux.setAttribute("value", str);
+	document.body.appendChild(aux);
+	aux.select();
+	document.execCommand("copy");
+	document.body.removeChild(aux);
+	uni.showToast({
+		title: "复制成功",
+	})
+	// #endif
+
+	// #ifndef H5
+	uni.setClipboardData({
+		data: str.toString(),
+	})
+	// #endif
 }

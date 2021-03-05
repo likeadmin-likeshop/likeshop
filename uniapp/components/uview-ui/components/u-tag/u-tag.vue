@@ -167,17 +167,16 @@
 		/* #ifndef APP-NVUE */
 		display: inline-block;
 		/* #endif */
-		line-height: 1;
 	}
 	
 	.u-size-default {
 		font-size: 22rpx;
-		padding: 12rpx 22rpx;
+		padding: 6rpx 12rpx;
 	}
 	
 	.u-size-mini {
 		font-size: 20rpx;
-		padding: 6rpx 12rpx;
+		padding: 1rpx 6rpx;
 	}
 
 	.u-mode-light-primary {

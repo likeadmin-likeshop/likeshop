@@ -75,6 +75,7 @@ class AdminBase extends Controller
         $this->assign('view_theme_color', $app['theme_color']);
         $this->assign('view_theme_button', $app['theme_button']);
         $this->assign('version', $app['version']);
+        $this->assign('front_version', $app['front_version']);
 
         $this->assignJs('image_upload_url', Url::build('file/image'));
     }

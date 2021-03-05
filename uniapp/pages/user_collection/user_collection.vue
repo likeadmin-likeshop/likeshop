@@ -16,26 +16,26 @@
             </view>
         </view>
         <loading-footer :status="status" slotEmpty>
-            <view class="data-null column-center">
+            <view class="data-null column-center" slot="empty">
                 <image src="/static/images/profit_null.png" class="img-null" />
                 <text class="sm muted">暂无收藏～</text>
             </view>
         </loading-footer>
     </view>
-    <uni-popup id="deleteDialog" ref="deleteDialog" :show="deleteSure"  type="dialog">        
-        <uni-popup-dialog
-            confirmButtonText="狠心删除" 
-            confirmButtonColor="#FF2C3C"
-            useSlot
-            @confirm="cancelCollect" 
-            @cancel="deleteCancel"
-        >
-            <view class="column-center tips-dialog">
-                <image class="icon-lg" src="/static/images/icon_warning.png"></image>
-                <view style="margin-top:30rpx">确认删除该收藏吗？</view>
-            </view>
-        </uni-popup-dialog>
-    </uni-popup>
+    <u-modal
+        v-model="deleteSure"
+        confirm-text="狠心删除"
+        confirm-color="#FF2C3C"
+        :showCancelButton="true"
+        :show-title="false"
+        @confirm="cancelCollect" 
+        @cancel="deleteCancel"
+    >
+        <view class="column-center tips-dialog" style="padding: 20rpx 0;">
+            <image class="icon-lg" src="/static/images/icon_warning.png"></image>
+            <view style="margin-top:30rpx">确认删除该收藏吗？</view>
+        </view>
+    </u-modal>
 </view>
 </template>
 
@@ -56,14 +56,15 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { getCollectGoods, collectGoods } from "../../api/user";
-import { CollectType, loadingType } from "../../utils/type";
+import { getCollectGoods, collectGoods } from "@/api/user";
+import { CollectType, loadingType } from "@/utils/type";
+import {loadingFun} from "@/utils/tools"
 
 export default {
   data() {
     return {
       page: 1,
-      status: "loading",
+      status: loadingType.LOADING,
       collectionList: [],
       collectionGoods: CollectType.COLLECTION,
       deleteSure: false,
@@ -78,41 +79,14 @@ export default {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.$on("REFLASH", this.reflesh, this);
     this.getCollectGoodsFun();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
+ 
   onReachBottom: function () {
-    this.getCollectGoodsFun();
+      this.$nextTick(() => {
+        this.getCollectGoodsFun();
+      })
   },
   methods: {
     deleteCancel: function (e) {
@@ -124,41 +98,19 @@ export default {
     },
 
     getCollectGoodsFun() {
-      let {
-        page,
-        collectionList,
-        status
-      } = this;
-
-      if (status == loadingType.FINISHED) {
-        return;
-      }
-
-      getCollectGoods({
-        page_no: page
-      }).then(res => {
-        if (res.code == 1) {
-          let {
-            list,
-            more
-          } = res.data;
-          collectionList.push(...list);
-          this.collectionList = collectionList
-          this.page ++;
-          this.$nextTick(() => {
-            if (!more) {
-                this.status = loadingType.FINISHED
+        let {
+          page,
+          collectionList,
+          status
+        } = this;
+          
+        loadingFun(getCollectGoods, page, collectionList, status).then(res => {
+            if(res) {                  
+                this.page = res.page;
+                this.collectionList = res.dataList
+                this.status = res.status
             }
-
-            if (collectionList.length <= 0) {
-                this.status = loadingType.EMPTY;
-                return;
-            }
-          });
-        } else {
-            this.status = loadingType.ERROR
-        }
-      });
+        })
     },
 
     reflesh() {
@@ -198,12 +150,10 @@ export default {
 
 .user-collection {
     .goods-list {
-        height:  100vh;
-        overflow: hidden;
         .collection-item {
             padding: 20rpx;
             &:not(:last-of-type) {
-                border-bottom: var(--border);
+                border-bottom: $-solid-border;
             }
             .info {
                 flex: 1;
@@ -217,7 +167,7 @@ export default {
                 width: 148rpx;
                 height: 52rpx;
                 right: 20rpx;
-                border: 1rpx solid $-color-primary;
+                border: 1px solid $-color-primary;
                 display: flex;
                 justify-content: center;
                 align-items: center;

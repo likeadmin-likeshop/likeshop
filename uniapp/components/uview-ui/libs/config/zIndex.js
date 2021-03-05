@@ -8,13 +8,13 @@
  */
 
 export default {
-	toast: 10090,
+	toast: 999,
 	noNetwork: 10080,
 	// popup包含popup，actionsheet，keyboard，picker的值
-	popup: 10075,
-	mask: 10070,
-	navbar: 980,
+	popup: 901,
+	mask: 900,
+	navbar: 880,
 	topTips: 975,
-	sticky: 970,
+	sticky: 870,
 	indexListSticky: 965,
 }

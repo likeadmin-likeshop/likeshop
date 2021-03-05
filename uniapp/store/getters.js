@@ -3,5 +3,6 @@ export default {
   token: state => state.app.token,
   isLogin: state => !!state.app.token,
   cartNum: state => state.app.cartNum,
-  loginNum: state => state.app.loginNum
+  loginNum: state => state.app.loginNum,
+   appConfig: state => state.app.config
 };

@@ -1,6 +1,7 @@
 <template>
 	<view class="u-search" @tap="clickHandler" :style="{
 		margin: margin,
+		backgroundColor: wrapBgColor
 	}">
 		<view
 			class="u-content"
@@ -39,7 +40,7 @@
 				<u-icon class="u-clear-icon" name="close-circle-fill" size="34" color="#c0c4cc"></u-icon>
 			</view>
 		</view>
-		<view :style="[actionStyle]" class="u-action" 
+		<view v-if="hideRight" :style="[actionStyle]" class="u-action" 
 			:class="[showActionBtn || show ? 'u-action-active' : '']" 
 			@tap.stop.prevent="custom"
 		>{{ actionText }}</view>
@@ -184,12 +185,19 @@ export default {
 		// 组件与其他上下左右元素之间的距离，带单位的字符串形式，如"30rpx"、"30rpx 20rpx"等写法
 		margin: {
 			type: String,
-			default: '0'
 		},
 		// 左边输入框的图标，可以为uView图标名称或图片路径
 		searchIcon: {
 			type: String,
 			default: 'search'
+		},
+		wrapBgColor: {
+			type: String,
+			default: '#fff'
+		},
+		hideRight: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data() {
@@ -290,6 +298,7 @@ export default {
 	@include vue-flex;
 	align-items: center;
 	flex: 1;
+	padding: 15rpx 20rpx;
 }
 
 .u-content {

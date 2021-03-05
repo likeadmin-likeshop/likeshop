@@ -23,8 +23,9 @@
 				<view class="header">
 					<view class="item" v-if="orderDetail.order_status == 0">
 						<view class="white lg mb10">等待买家付款</view>
-						<!--     <view class="white sm row" v-if="cancelTime">支付剩余
-				    <van-count-down class="count-down" @finish="$getOrderDetail" :time="cancelTime" format="mm分ss秒"></van-count-down> 自动关闭</view> -->
+						<view class="white sm row" v-if="cancelTime ">支付剩余 <u-count-down separator="zh" :show-hours="false"
+							 :show-seconds="false" :timestamp="cancelTime" separator-color="#fff" color="#fff" :separator-size="26"
+							 :font-size="26" bg-color="transparent"></u-count-down> 自动关闭</view>
 					</view>
 					<view class="item" v-if="orderDetail.order_status == 1">
 						<view class="white lg mb10">等待商家发货</view>
@@ -54,7 +55,13 @@
 					</view>
 				</view>
 				<view class="goods contain">
-					<order-goods :show-comment="orderDetail.comment_btn" link="true" :list="orderDetail.order_goods"></order-goods>
+					<view class="status row-between" v-if="team.status != null">
+						<view>拼团状态</view>
+						<view :style="'padding: 6rpx 26rpx; ' + (team.status == 2 && 'background-color: #d7d7d7')" class="bg-primary br60 white sm">
+							{{teamStatus(team.status)}}
+						</view>
+					</view>
+					<order-goods :team="team" :link="true" :list="orderDetail.order_goods"></order-goods>
 				</view>
 				<view class="price contain">
 					<view class="row-between">
@@ -94,6 +101,10 @@
 						<view class="black">{{orderDetail.order_sn}}</view>
 					</view>
 					<view class="item row">
+						<view class="title">订单类型</view>
+						<view class="black">{{getOrderType(orderDetail.order_type)}}</view>
+					</view>
+					<view class="item row">
 						<view class="title">支付方式</view>
 						<view class="black">{{orderDetail.pay_way_text}}</view>
 					</view>
@@ -117,7 +128,7 @@
 						<view class="title">关闭时间</view>
 						<view class="black">{{orderDetail.cancel_time}}</view>
 					</view>
-				
+
 				</view>
 				<view class="footer bg-white row fixed" v-if="orderDetail.cancel_btn || orderDetail.delivery_btn || orderDetail.take_btn || orderDetail.del_btn || orderDetail.pay_btn">
 					<view style="flex: 1"></view>
@@ -141,6 +152,7 @@
 		</view>
 		<loading-view v-if="isFirstLoading"></loading-view>
 		<order-dialog ref="orderDialog" :orderId="orderDetail.id" :type="type" @refresh="onRefresh"></order-dialog>
+		<loading-view v-if="showLoading" background-color="transparent" :size="50"></loading-view>
 	</view>
 </template>
 
@@ -158,11 +170,14 @@
 	export default {
 		data() {
 			return {
-				orderDetail: {},
+				orderDetail: {
+				},
+				team: {},
 				isFirstLoading: true,
 				type: 0,
 				cancelTime: 0,
-				showCancel: ""
+				showCancel: "",
+				showLoading: false
 			};
 		},
 
@@ -179,13 +194,15 @@
 		methods: {
 			onRefresh() {
 				uni.$emit("refreshorder")
-				const {type} = this
+				const {
+					type
+				} = this
 				if ([0, 2].includes(type)) {
-				  this.getOrderDetailFun();
+					this.getOrderDetailFun();
 				} else if (type == 1) {
 					setTimeout(() => {
 						uni.navigateBack()
-					},2000)
+					}, 2000)
 				}
 			},
 			orderDialog() {
@@ -213,29 +230,24 @@
 				});
 			},
 
-
-			payNow(e) {
-				this.toast = Toast.loading({
-					duration: 0,
-					// 持续展示 toast
-					forbidClick: true,
-					message: '请稍等...'
-				});
+			payNow() {
+				this.showLoading = true
 				prepay({
 					from: 'order',
 					order_id: this.id
 				}).then(res => {
-					Toast.clear();
-
 					if (res.code == 1) {
 						let args = res.data;
 						wxpay(args).then(() => {
-							Tips({
-								title: '支付成功'
-							});
+							this.showLoading = false
+							this.$toast({
+								title: "支付成功"
+							})
 							this.getOrderDetailFun();
-							event.emit('RESET_LIST');
-						}).catch(() => {});
+							uni.$emit("refreshorder")
+						}).catch(() => {
+							this.showLoading = false
+						});
 					}
 				});
 			},
@@ -243,21 +255,49 @@
 			getOrderDetailFun() {
 				getOrderDetail(this.id).then(res => {
 					if (res.code == 1) {
-						const cancelTime = res.data.order_cancel_time * 1000 - Date.now();
+						this.cancelTime = res.data.order_cancel_time - Date.now() / 1000;
 						this.orderDetail = res.data
+						this.team = res.data.team || {}
 						this.$nextTick(() => {
 							this.isFirstLoading = false
 						});
+					}else {
+						setTimeout(() => uni.navigateBack(), 1500)
 					}
 				});
 			},
-
-
+		},
+		computed: {
+			teamStatus() {
+				return (status) => {
+					switch (status) {
+						case 0:
+							return '拼团中'
+						case 1:
+							return '拼团成功'
+						case 2:
+							return '拼团失败'
+					}
+				}
+			},
+			getOrderType() {
+				return (type) => {
+					switch (type) {
+						case 0:
+							return '普通订单'
+						case 1:
+							return '秒杀订单'
+						case 2:
+							return '拼团订单'
+						case 3:
+							return '砍价订单'
+					}
+				}
+			},
 		}
 	};
 </script>
 <style lang="scss">
-	/* pages/order_details/order_details.wxss */
 	.order-details {
 		position: relative;
 		padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
@@ -272,10 +312,16 @@
 		z-index: 0;
 	}
 
+	.order-details .goods .status {
+		height: 88rpx;
+		padding: 0 20rpx;
+	}
+
 	.order-details .main {
 		position: relative;
 		z-index: 1;
 	}
+
 	.order-details .contain {
 		margin: 0 20rpx 20rpx;
 		border-radius: 14rpx;
@@ -285,11 +331,6 @@
 	.order-details .header {
 		padding: 24rpx 40rpx;
 		box-sizing: border-box;
-	}
-
-	.order-details .header .van-count-down {
-		color: #fff;
-		margin: 0 10rpx;
 	}
 
 	.order-details .img-line {
@@ -328,6 +369,8 @@
 		right: 0;
 		height: 100rpx;
 		padding: 0 24rpx;
+		box-sizing: content-box;
+		padding-bottom: env(safe-area-inset-bottom);
 	}
 
 	.footer .plain {
@@ -335,7 +378,7 @@
 	}
 
 	.footer .plain.red {
-		border: 1px solid var(--primary-color);
+		border: 1px solid $-color-primary;
 	}
 
 	.tips-dialog {

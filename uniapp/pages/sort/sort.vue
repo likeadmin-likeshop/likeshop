@@ -1,7 +1,7 @@
 <template>
 	<view class="sort">
 		<navigator class="header" hover-class="none" url="/pages/goods_search/goods_search">
-			<uni-search-bar :disabled="true" :radius="60" @confirm="search" @input="input" bg-color="#F4F4F4" cancel-button="none"></uni-search-bar>
+			<u-search bg-color="#F4F4F4" :disabled="true"></u-search>
 		</navigator>
 		<view class="content row">
 			<view class="aside">
@@ -29,7 +29,8 @@
 									<text class="line ml20"></text>
 								</view>
 								<view class="three-list row wrap">
-									<navigator v-for="(titem, tindex) in sitem.sons" :key="tindex" class="three-item column-center mb20" hover-class="none" :url="`/pages/goods_search/goods_search?id=${titem.id}&name=${titem.name}&type=${titem.type}`">
+									<navigator v-for="(titem, tindex) in sitem.sons" :key="tindex" class="three-item column-center mb20"
+									 hover-class="none" :url="`/pages/goods_search/goods_search?id=${titem.id}&name=${titem.name}&type=${titem.type}`">
 										<custom-image mode="aspectFit" width="140rpx" height="140rpx" lazy-load :src="titem.image"></custom-image>
 										<view class="text mt20 xs">{{ titem.name }}</view>
 									</navigator>
@@ -112,11 +113,11 @@
 						...item
 					}))
 					.filter(item => item.top <= scrollTop + this.headerH)
-				
+
 				if (fliterList.length) {
 					let index = fliterList.sort((a, b) => b.top - a.top)[0].index
-					if(this.leftIndex == index) return
-					this.leftScrollTop = parseInt(this.nodeLeftList[index].top / this.asideH) *  this.asideH;
+					if (this.leftIndex == index) return
+					this.leftScrollTop = parseInt(this.nodeLeftList[index].top / this.asideH) * this.asideH;
 					this.leftIndex = index
 				}
 			},
@@ -137,6 +138,7 @@
 </script>
 <style lang="scss">
 	$header-height: 94rpx;
+
 	page {
 		background-color: #fff;
 

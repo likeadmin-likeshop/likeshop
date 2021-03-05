@@ -1,5 +1,5 @@
 <template>
-	<view v-if="visibleSync" :style="[customStyle, {
+	<view v-if="visibleSync" :style="[{
 		zIndex: uZindex - 1
 	}]" class="u-drawer" hover-stop-propagation>
 		<u-mask :duration="duration" :custom-style="maskCustomStyle" :maskClickAble="maskCloseAble" :z-index="uZindex - 2" :show="showDrawer && mask" @click="maskClick"></u-mask>
@@ -14,9 +14,9 @@
 			]"
 			@touchmove.stop.prevent
 			@tap.stop.prevent
-			:style="[style]"
+			:style="[customStyle,style]"
 		>
-			<view class="u-mode-center-box" @tap.stop.prevent @touchmove.stop.prevent v-if="mode == 'center'" :style="[centerStyle]">
+			<view class="u-mode-center-box" @tap.stop.prevent @touchmove.stop.prevent v-if="mode == 'center'" :style="[customStyle,centerStyle]">
 				<u-icon
 					@click="close"
 					v-if="closeable"
@@ -356,7 +356,7 @@ export default {
 	display: block;
 	/* #endif */
 	position: absolute;
-	z-index: 1003;
+	z-index: 888;
 	transition: all 0.25s linear;
 }
 
@@ -413,7 +413,6 @@ export default {
 	display: block;
 	/* #endif */
 	position: relative;
-	background-color: #ffffff;
 }
 
 .u-drawer-content-visible.u-drawer-center {

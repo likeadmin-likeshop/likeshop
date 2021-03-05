@@ -30,27 +30,20 @@
 					</view>
 					<view class="item row-between">
 						<view>买家留言</view>
-						<uni-easyinput v-model="userRemark" class="flex1" :input-border="false" placeholder="请添加备注（150字以内）"></uni-easyinput>
+						<u-input v-model="userRemark" class="flex1 ml20" :clearable="false" placeholder="请添加备注（150字以内）"></u-input>
 					</view>
 				</view>
-				<view class="contain benefit">
-					<view class="item row-between" @tap="showCouponPop">
+				<view class="contain benefit" v-if="orderInfo.order_type == 0">
+					<view class="item row-between" @tap="showCoupon = true">
 						<view>优惠券</view>
 						<view class="row">
 							<text class="primary" v-if="orderInfo.discount_amount">-￥{{orderInfo.discount_amount }}</text>
-							<text v-else class="muted">请选择</text>
+							<text v-else-if="usableCoupon.length" class="primary">{{usableCoupon.length + '张可用'}}</text>
+							<text v-else class="muted">无优惠券可用</text>
 							<image class="icon-sm ml20" src="/static/images/arrow_right.png"></image>
 						</view>
 					</view>
-					<view class="item row" @tap="changeIntegral" v-if="orderInfo.integral_switch">
-						<view>积分抵扣</view>
-						<view class="ml20 muted xs row" style="flex:1">
-							共{{orderInfo.user_integral}}积分{{orderInfo.user_integral < orderInfo.integral_limit ? "，满" + orderInfo.integral_limit + "可用" : "" }}
-							<uni-icons class="ml10" color="#999" @tap.stop="showDialog" size="15" type="help"></uni-icons>
-						</view>
-						<checkbox :disabled="orderInfo.user_integral < orderInfo.integral_limit" :checked="Boolean(useIntegral)">
-						</checkbox>
-					</view>
+					
 				</view>
 
 				<view class="pay-way contain">
@@ -81,10 +74,6 @@
 						<view>优惠券</view>
 						<view class="primary">-¥{{orderInfo.discount_amount}}</view>
 					</view>
-					<view class="item row-between" v-if="orderInfo.integral_amount">
-						<view>积分抵扣</view>
-						<view class="primary">-¥{{orderInfo.integral_amount}}</view>
-					</view>
 				</view>
 			</view>
 			<view class="footer bg-white row-between fixed">
@@ -99,8 +88,23 @@
 				</button>
 			</view>
 		</view>
-		<loading-view v-if="showLoading" background-color="transparent" :size="50" color="#FF2C3C"></loading-view>
+		<loading-view v-if="showLoading" background-color="transparent" :size="50"></loading-view>
 		<loading-view v-if="isFirstLoading"></loading-view>
+		<u-popup v-model="showCoupon" border-radius="14" mode="bottom" closeable>
+		    <view class="pop-title row-between">
+		        <view class="title">优惠券</view>
+		    </view>
+		    <view v-if="showCoupon">
+		       <tabs :active="popActive" :config="{underLineWidth: 100}">
+		            <tab :title="'可使用优惠券 (' + usableCoupon.length + ')'">
+		                <coupon-obj :list="usableCoupon" :type="0" @change="onSelectCoupon" :coupon-id="couponId"></coupon-obj>
+		            </tab>
+		            <tab :title="'不可用优惠券 (' + unusableCoupon.length + ')'">
+		                <coupon-obj :list="unusableCoupon" :type="1" @change="onSelectCoupon"></coupon-obj>
+		            </tab>
+		        </tabs>
+		    </view>
+		</u-popup>
 	</view>
 </template>
 
@@ -109,6 +113,7 @@
 		orderBuy,
 		getOrderCoupon
 	} from '@/api/order';
+	import {teamBuy} from '@/api/activity'
 	import {
 		prepay,
 		getMnpNotice
@@ -124,12 +129,17 @@
 			return {
 				isFirstLoading: true,
 				showLoading: false,
+				showCoupon: false,
 				address: {},
 				orderInfo: {},
 				goodsLists: [],
 				addressId: '',
 				useIntegral: 0,
+				popActive: 0,
 				userRemark: '',
+				usableCoupon: [],
+				unusableCoupon: [],
+				couponId: "",
 				payWayArr: [{
 					icon: "/static/images/icon_wechat.png",
 					name: '微信支付',
@@ -148,7 +158,6 @@
 		components: {
 
 		},
-		props: {},
 
 		onLoad(options) {
 			uni.$on("selectaddress", (e) => {
@@ -156,10 +165,13 @@
 			})
 			const data = JSON.parse(decodeURIComponent(options.data));
 			this.goods = data.goods
+			this.type = data.type
+			this.teamId = data.teamId
+			this.foundId = data.foundId || 0
 		},
 
 		onShow: async function() {
-			// await this.getOrderCouponFun();
+			await this.getOrderCouponFun();
 			if (this.payStatus) return;
 			setTimeout(() => {
 				this.orderBuyFun();
@@ -169,45 +181,15 @@
 			uni.$off("selectaddress")
 		},
 		methods: {
-			changeIntegral() {
-				const {
-					useIntegral,
-					orderInfo: {
-						integral_limit,
-						user_integral
-					}
-				} = this;
-				if (integral_limit > user_integral) return this.$toast({
-					title: "未满足使用条件"
-				});
-				this.useIntegral = useIntegral ? 0 : 1
-				this.$nextTick(() => {
-					this.orderBuyFun();
-				});
-			},
-
+			
 			radioChange(e) {
 				this.payWay = Number(e.detail.value)
 			},
-
 			onSelectCoupon(e) {
-				this.couponId = e.detail;
+				this.couponId = e
+				this.showCoupon = false
+				this.orderBuyFun()
 			},
-
-			showCouponPop: function(e) {
-				this.setData({
-					showCoupon: !this.showCoupon
-				});
-			},
-			hideCouponPop: function(e) {
-				this.setData({
-					showCoupon: !this.showCoupon
-				});
-				this.orderBuyFun();
-			},
-
-		
-
 
 			getAuthMsg() {
 				return new Promise(resolve => {
@@ -234,18 +216,19 @@
 				});
 			},
 
-
-
 			onSubmitOrder() {
 				uni.showModal({
 					title: '温馨提示',
-					content: '是否确认下单',
+					content: '是否确认下单?',
+					confirmColor: '#FF2C3C',
 					success: async res => {
 						let {
 							confirm
 						} = res;
 						if (confirm) {
+							// #ifndef H5
 							await this.getAuthMsg();
+							//#endif
 							this.showLoading = true
 							this.orderBuyFun('submit');
 						}
@@ -263,10 +246,8 @@
 								usable,
 								unusable
 							} = res.data;
-							this.setData({
-								usableCoupon: usable,
-								unusableCoupon: unusable
-							});
+							this.usableCoupon = usable,
+							this.unusableCoupon = unusable
 							resolve();
 						}
 					});
@@ -285,17 +266,18 @@
 					goods: this.goods,
 					pay_way: payWay,
 					use_integral:useIntegral,
-					address_id: this.addressId
+					address_id: this.addressId,
+					coupon_id: this.couponId
 				};
-
+				
 				if (action == 'submit') {
 					submitObj.remark = userRemark;
-					submitObj.type = this.confirmType;
+					submitObj.type = this.type;
 				}
 				const {
 					data: orderData,
 					code: orderCode
-				} = await orderBuy(submitObj)
+				} =  await orderBuy(submitObj)
 				if (orderCode != 1) return this.showLoading = false
 				if (action == 'info') {
 					let {
@@ -391,6 +373,8 @@
 		right: 0;
 		height: 100rpx;
 		padding: 0 30rpx;
+		box-sizing: content-box;
+		padding-bottom: env(safe-area-inset-bottom);
 	}
 
 

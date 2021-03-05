@@ -1,16 +1,13 @@
 <template>
 	<view class="u-countdown">
-		<view class="u-countdown-item" :style="[itemStyle]" v-if="showDays && (hideZeroDay || (!hideZeroDay && d != '00'))">
-			<view class="u-countdown-time" :style="[letterStyle]">
-				{{ d }}
-			</view>
+		<view v-if="showDays && (hideZeroDay || (!hideZeroDay && d != '00'))" :style="{ fontSize: fontSize + 'rpx'}">
+			{{ d }}
 		</view>
 		<view
-			class="u-countdown-colon"
-			:style="{fontSize: separatorSize + 'rpx', color: separatorColor, paddingBottom: separator == 'colon' ? '4rpx' : 0}"
+			:style="{fontSize: separatorSize + 'rpx', 'margin-right': '6rpx' }"
 			v-if="showDays && (hideZeroDay || (!hideZeroDay && d != '00'))"
 		>
-			{{ separator == 'colon' ? ':' : '天' }}
+			天
 		</view>
 		<view class="u-countdown-item" :style="[itemStyle]" v-if="showHours">
 			<view class="u-countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">
@@ -260,6 +257,13 @@ export default {
 			this.clearTimer();
 			this.$emit('end', {});
 		},
+        reset() {
+            this.clearTimer();
+            this.seconds = Number(this.timestamp);
+			
+            this.s = this.timestamp;
+			console.log(this.s)
+        },
 		// 清除定时器
 		clearTimer() {
 			if(this.timer) {
@@ -299,7 +303,6 @@ export default {
 	.u-countdown-time {
 		margin: 0;
 		padding: 0;
-		line-height: 1;
 	}
 
 	.u-countdown-colon {

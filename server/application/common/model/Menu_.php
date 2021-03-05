@@ -105,7 +105,7 @@ class Menu_{
         $config2 = [
             self::centre_my_wallet         => [
                 'name'          => '我的钱包',
-                'link'          => '/pages/bundle/user_wallet/user_wallet',
+                'link'          => '/pages/user_wallet/user_wallet',
                 'is_tab'        => 0,
                 'link_type'     => 1,
             ],
@@ -141,7 +141,7 @@ class Menu_{
             ],
             self::centre_service            => [
                 'name'          => '联系客服',
-                'link'          => '/pages/bundle/contact_offical/contact_offical',
+                'link'          => '/pages/contact_offical/contact_offical',
                 'is_tab'        => 0,
                 'link_type'     => 1,
             ],

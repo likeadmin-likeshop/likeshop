@@ -69,7 +69,7 @@ class Payment extends ApiBase
         }
 
         $result = PaymentLogic::pay($post['from'], $order, $post['order_source']);
-        if ($result === false){
+        if (false === $result) {
             $this->_error(PaymentLogic::getError(), ['order_id' => $order['id']], PaymentLogic::getReturnCode());
         }
 

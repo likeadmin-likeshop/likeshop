@@ -1,7 +1,6 @@
 <template>
-<!--pages/all_comments/all_comments.wxml-->
-<view height="100vh">
-    <view slot="header" class="all_comments">
+<view>
+    <view class="all_comments">
         <view class="header bg-white" v-if="!isEmpty">
             <view class="title xs">
                 <text class="lighter mr10">商品好评率</text>
@@ -15,13 +14,13 @@
                 </block>
             </view>
         </view>
-        <view slot="content" class="main bg-white">
+        <view class="main bg-white">
             <view class="evaluation-list">
                 <view v-for="(item, index) in commentList" :key="index" class="evaluation-item">
                     <view class="user-info row">
                         <image class="avatar mr20" :src="item.avatar"></image>
                         <view class="user-name md mr10">{{item.nickname}}</view>
-                        <van-rate readonly size="26rpx" color="#FF2C3C" :value="item.goods_comment"></van-rate>
+                        <u-rate disabled size="26rpx" color="#FF2C3C" v-model="item.goods_comment"></u-rate>
                     </view>
                     <view class="muted xs mt10">
                         <text class="mr20">{{item.create_time}}</text>
@@ -30,7 +29,7 @@
                     <view v-if="item.comment" class="dec mt20">{{item.comment}}</view>
                     <view class="img mt20 row" style="flex-wrap: wrap;" v-if="item.image.length">
                         <view v-for="(imgitem, imgindex) in item.image" :key="imgindex" class="img-item mr20 mb20" :data-current="imgitem" :data-uri="item.image" @tap="previewImage">
-                            <van-image width="160rpx" fit="cover" height="160rpx" radius="6rpx" lazy-load class="goods-img" :src="imgitem"></van-image>
+                            <custom-image width="160rpx" fit="cover" height="160rpx" radius="6rpx" lazy-load class="goods-img" :src="imgitem" />
                         </view>
                     </view>
                     <view class="seller-recall-container bg-gray mt10" v-if="item.reply">
@@ -43,7 +42,7 @@
         </view>
     </view>
     <loading-footer :status="status" slotEmpty>        
-        <view class="column-center" style="padding-top: 200rpx">
+        <view slot="empty" class="column-center" style="padding-top: 200rpx">
             <image class="img-null" src="/static/images/goods_null.png"></image>
             <text class="lighter">暂无评价</text>
         </view>

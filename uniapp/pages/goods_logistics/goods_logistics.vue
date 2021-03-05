@@ -123,7 +123,7 @@
 	import {
 		orderTraces
 	} from '@/api/order';
-
+	import {copy} from '@/utils/tools'
 	export default {
 		data() {
 			return {
@@ -172,9 +172,7 @@
 			},
 
 			onCopy() {
-				uni.setClipboardData({
-					data: this.order.invoice_no
-				});
+				copy(this.order.invoice_no)
 			}
 
 		}

@@ -1,20 +1,44 @@
-
 <script>
-	
+	import {
+		mapMutations,
+		mapActions
+	} from 'vuex'
+	import {
+		userShare,
+		getConfig
+	} from '@/api/app'
+	import Cache from '@/utils/cache'
+	import {
+		strToParams
+	} from '@/utils/tools'
 	export default {
 		globalData: {
 			navHeight: ""
 		},
-		onLaunch: function() {
+		onLaunch: function(options) {
+			console.log("onLaunch:####", options);
+			// 获取配置
+			this.getConfigFun()
+			if (this.isLogin) {
+				this.getUser()
+			}
+			//更新登录次数
+			//#ifdef MP-WEIXIN
+			this.SETLOGINNUM(0)
+			//#endif
+			//获取系统信息
 			this.getSystemInfo()
+
 		},
 		onShow: function() {
-			
+
 		},
 		onHide: function() {
 			console.log('App Hide')
 		},
 		methods: {
+			...mapMutations(['SETLOGINNUM', 'SETCONFIG']),
+			...mapActions(['getUser']),
 			getSystemInfo() {
 				uni.getSystemInfo({
 					success: res => {
@@ -38,7 +62,15 @@
 
 				});
 			},
-			
+			async getConfigFun() {
+				const {
+					code,
+					data
+				} = await getConfig()
+				if (code == 1) {
+					this.SETCONFIG(data)
+				}
+			},
 		}
 	}
 </script>

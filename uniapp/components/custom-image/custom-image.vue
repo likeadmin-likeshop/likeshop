@@ -1,14 +1,14 @@
 <template>
 	<view :style="[viewStyle]" :class="{'custom-image': true, 'image-round': round}" @click="onClick">
 		<image v-if="!error" :src="src" :mode="mode" :lazy-load="lazyLoad" class="image" :show-menu-by-longpress="showMenuByLongpress"
-		 @load="onLoaded" @error="onError"></image>
+		 @load="onLoaded" @error="onErrored"></image>
 		<view v-if="loading && showLoading" class="loading-wrap image">
 			<slot v-if="useLoadingSlot" name="loading"></slot>
-			<uni-icons color="#999" v-else type="image" size="22"></uni-icons>
+			<u-icon color="#aaa" v-else name="photo-fill" size="45"></u-icon>
 		</view>
 		<view v-if="error && showError" class="error-wrap image">
 			<slot v-if="useErrorSlot" name="error"></slot>
-			<uni-icons color="#999" v-else type="image" size="22"></uni-icons>
+			<u-icon color="#aaa" v-else name="error-circle-fill" size="45"></u-icon>
 			<text class="sm">加载失败</text>
 		</view>
 	</view>
@@ -35,7 +35,7 @@
 			showMenuByLongpress: Boolean,
 			mode: {
 				type: String,
-				default: 'fill'
+				default: 'scaleToFill'
 			},
 			showError: {
 				type: Boolean,
@@ -84,7 +84,7 @@
 				this.loading = false
 				this.$emit('load', event.detail);
 			},
-			onError(event) {
+			onErrored(event) {
 				this.error = false
 				this.loading = true
 				this.$emit('error', event.detail);

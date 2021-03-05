@@ -16,6 +16,13 @@
 // +----------------------------------------------------------------------
 
 
+
+
+import wechath5 from './wechath5'
+import {
+	currentPage,
+	isWeixinClient
+} from './tools'
 //登录提示弹窗
 
 export function showLoginDialog() {
@@ -24,6 +31,7 @@ export function showLoginDialog() {
 		title: '提示',
 		content: '不授权则无法进行更多操作，点击去授权按钮前往授权',
 		confirmText: '去授权',
+		confirmColor: '#FF2C3C',
 		success: res => {
 			let {
 				confirm
@@ -37,9 +45,22 @@ export function showLoginDialog() {
 		}
 	});
 	// #endif
+	//#ifdef  H5
+	const pathLogin = 'pages/login/login'
+	let path = currentPage().route
+	if (path != pathLogin) {
+		uni.navigateTo({
+			url: '/pages/login/login'
+		})
+	}
+	// #endif
 } // 微信支付
 
 export function wxpay(opt) {
+	//#ifdef  H5
+	return wechath5.wxPay(opt)
+	// #endif
+	//#ifdef  MP-WEIXIN
 	return new Promise((resolve, reject) => {
 		uni.requestPayment({
 			timeStamp: opt.timeStamp,
@@ -63,4 +84,8 @@ export function wxpay(opt) {
 			}
 		});
 	});
+	// #endif
 }
+
+
+

@@ -75,7 +75,7 @@
 > LikeShop。Like有好像，喜欢的意思，与团队名称好象科技有一丝巧合的呼应。所以名字就是这样简单取的，不需要过分深思。
 
 #### 可以这样联系我们
-<img src = "https://www.likemarket.net/images/lxwm.png">
+<img src = "https://www.likemarket.net/images/lxwm.png?v=1">
 <br/>
 <br/>官方网站：<a target="_blank" href="https://www.likemarket.net">https://www.likemarket.net</a>
 <br/>知识社区：<a  target="_blank" href="https://home.likemarket.net">https://home.likemarket.net/</a>

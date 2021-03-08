@@ -39,7 +39,7 @@ class MenuLogic{
             $menu_content && $menu_list[] = [
                 'name'       => $menu['name'],
                 'image'      => UrlServer::getFileUrl($menu['image']),
-                'link'       => $menu_content['link'] ?: $menu['link_address'],
+                'link'       => $menu_content['link'] ?? $menu['link_address'],
                 'is_tab'     => $menu_content['is_tab'] ?? '',
                 'link_type'  => $menu_content['link_type'] ?? $menu['link_type'],
             ];

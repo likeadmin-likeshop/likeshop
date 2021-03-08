@@ -84,10 +84,10 @@ class GoodsBrand extends AdminBase {
     /**
      * note 删除品牌
      */
-    public function del($id)
+    public function del($delData)
     {
         if ($this->request->isAjax()) {
-            $result = GoodsBrandLogic::del($id);
+            $result = GoodsBrandLogic::del($delData);
             if ($result) {
                 $this->_success('删除成功');
             }

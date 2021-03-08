@@ -46,28 +46,26 @@ class GetCoupon extends Validate{
             }
         }
         //限制每人领取次数
-        if($coupon['get_num_type'] == 2 || $coupon['get_num_type'] == 3){
-            if($coupon['get_num_type'] == 2){
+        if($coupon['get_num_type'] == 2){
 
-                $total_coupon = Db::name('coupon_list')->where(['user_id'=>$data['user_id'],'coupon_id'=>$value,'del'=>0])->count();
-                if($total_coupon >= $coupon['get_num']) {
-                    return '您已达到领取次数了';
-                }
-
-            }
-            if($coupon['get_num_type'] == 3){
-                $today = date("Y-m-d");
-                $tomorrow = date("Y-m-d",strtotime("+1 day"));
-                $total_coupon = Db::name('coupon_list')->where(['user_id'=>$data['user_id'],'coupon_id'=>$value,'del'=>0])
-                    ->whereTime('create_time', 'between',[$today,$tomorrow])
-                    ->count();
-
-                if($total_coupon >= $coupon['get_num']) {
-                    return '您已达到领取次数了';
-                }
+            $total_coupon = Db::name('coupon_list')->where(['user_id'=>$data['user_id'],'coupon_id'=>$value,'del'=>0])->count();
+            if($total_coupon >= $coupon['get_num']) {
+                return '您已达到领取次数了';
             }
 
         }
+        if($coupon['get_num_type'] == 3){
+            $today = date("Y-m-d");
+            $tomorrow = date("Y-m-d",strtotime("+1 day"));
+            $total_coupon = Db::name('coupon_list')->where(['user_id'=>$data['user_id'],'coupon_id'=>$value,'del'=>0])
+                ->whereTime('create_time', 'between',[$today,$tomorrow])
+                ->count();
+
+            if($total_coupon >= $coupon['get_num']) {
+                return '您已达到领取次数了';
+            }
+        }
+
 
         return true;
 

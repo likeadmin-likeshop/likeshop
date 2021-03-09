@@ -907,6 +907,7 @@
                     specs += table_data[i].replace(',', '') + ',';
                 }
                 specs = specs.substring(0, specs.lastIndexOf(','));
+                spec_table_data["spec_value_str[]"+spec_value_temp_ids] = specs;
                 spec_tr_html += '<td style="display: none"><input type="hidden" name="spec_value_str[]" value="' + specs + '"><input type="hidden" name="item_id[]" value=""></td>';
                 table_html += tr_html.replace('{spec_td}', spec_tr_html);
 
@@ -1264,6 +1265,7 @@
                         spec_table_data["weight[]"+spec_value_temp_ids] = goods_info['item'][i]['weight'];
                         spec_table_data["bar_code[]"+spec_value_temp_ids] = goods_info['item'][i]['bar_code'];
                         spec_table_data["item_id[]"+spec_value_temp_ids] = goods_info['item'][i]['id'];
+                        spec_table_data["spec_value_str[]"+spec_value_temp_ids] = goods_info['item'][i]['spec_value_str'];
                         return false;
                     }
                 });

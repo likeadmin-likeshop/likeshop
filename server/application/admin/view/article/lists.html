@@ -236,11 +236,16 @@
                 };
             }
             ,done: function(res, curr, count){
-                // 解决操作栏因为内容过多换行问题
-                $(".layui-table-main tr").each(function (index, val) {
-                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
-                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
-                });
+                setTimeout(function () {
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-fixed-l .layui-table-body").removeAttr("style");
+                    $(".layui-table-fixed-r .layui-table-body").removeAttr("style");
+                    $(".layui-table-main tr").each(function (index, val) {
+                        console.log($(val).height());
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }, 100)
             }
         });
 

@@ -67,7 +67,8 @@ class OrderLogic extends LogicBase
                 $goods_info = $infos[$good['item_id']];
 
                 $goods_info['goods_num'] = $good['num'];
-                $goods_info['image_str'] = empty($goods_info['spec_image']) ? UrlServer::getFileUrl($goods_info['image']) : UrlServer::getFileUrl($goods_info['spec_image']);
+                $image_str = empty($goods_info['spec_image']) ? $goods_info['image'] : $goods_info['spec_image'];
+                $goods_info['image_str'] = UrlServer::getFileUrl($image_str);
 
                 unset($goods_info['id']);
                 $goods_info['discount_price'] = 0;
@@ -141,7 +142,9 @@ class OrderLogic extends LogicBase
         }
 
         //与优惠券关联的商品id
-        $coupon_goods = Db::name('coupon_goods')->where(['coupon_id' => $coupon['id']])->column('goods_id');
+        $coupon_goods = Db::name('coupon_goods')
+            ->where(['coupon_id' => $coupon['id']])
+            ->column('goods_id');
 
         $coupon_goods_data = self::discountGoods($goods, $coupon, $coupon_goods);
         $goods_count = $coupon_goods_data['count'];//可以优惠的商品数量
@@ -165,7 +168,7 @@ class OrderLogic extends LogicBase
             $good['discount_price'] = $discount;//每个商品优惠的金额
 
             //用于判断当前是否为最后一个商品
-            if ($check_num == ($goods_count + 1)){
+            if (($check_num + 1) == $goods_count){
                 $discount = $coupon['money'] - $total_discount;
             }
 

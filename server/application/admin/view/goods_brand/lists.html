@@ -116,71 +116,6 @@
         })
 
 
-
-        //事件
-        var active = {
-            add: function(){
-                layer.open({
-                    type: 2
-                    ,title: '添加品牌'
-                    ,content: '{:url("goods_brand/add")}'
-                    ,area: ['90%','90%']
-                    ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
-                        var iframeWindow = window['layui-layer-iframe'+ index]
-                            ,submitID = 'add-goods_brand-submit'
-                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
-                        //监听提交
-                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-                            var field = data.field;
-                            like.ajax({
-                                url:'{:url("goods_brand/add")}',
-                                data:field,
-                                type:"post",
-                                success:function(res)
-                                {
-                                    if(res.code == 1)
-                                    {
-                                        layui.layer.msg(res.msg, {
-                                            offset: '15px'
-                                            , icon: 1
-                                            , time: 1000
-                                        });
-                                        layer.close(index); //关闭弹层
-                                        table.reload('goods_brand-lists'); //数据刷新
-                                    }
-
-                                }
-                            });
-                        });
-
-                        submit.trigger('click');
-                    }
-                });
-            },
-
-        }
-        $('.layui-btn.layuiadmin-btn-goods_brand').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
-        });
-        $(document).on('click', '.image-show', function () {
-            var img = $(this);
-            var src = img.attr('src');
-            like.showImg(src,600);
-        });
-    });
-
-    layui.config({
-        version:"{$front_version}",
-        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
-    }).extend({
-    }).use(['index','table', 'form','like'], function(exports){
-        var $ = layui.$
-            ,table = layui.table
-            ,form = layui.form
-            ,like = layui.like;
-
         //管理员管理
         table.render({
             elem: '#goods_brand-lists'
@@ -285,6 +220,59 @@
                     }
                 })
             }
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加品牌'
+                    ,content: '{:url("goods_brand/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-goods_brand-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("goods_brand/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('goods_brand-lists'); //数据刷新
+                                    }
+
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            },
+
+        }
+        $('.layui-btn.layuiadmin-btn-goods_brand').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $(document).on('click', '.image-show', function () {
+            var img = $(this);
+            var src = img.attr('src');
+            like.showImg(src,600);
         });
     });
 </script>

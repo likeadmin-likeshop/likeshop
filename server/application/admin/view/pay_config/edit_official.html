@@ -47,12 +47,13 @@
         background: hsla(0, 0%, 60%, .6);
         border-radius: 10px;
     }
-    .label-dir{
-        color: #0C0C0C;
-    }
     .copy{
         margin-left: 10px;
         margin-top: 5px;
+    }
+
+    .layui-form-label{
+        width: 120px;
     }
 
 
@@ -61,8 +62,10 @@
     <input type="hidden" value="" name="id">
     <div class="layui-form-item">
         <label class="layui-form-label">APPID:</label>
-        <div class="layui-input-inline" style="width: 400px">
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
             <input type="text" name="app_id" value="{$res.app_id}" lay-verify="" lay-verType="tips"  placeholder="请输入APPID" autocomplete="off" class="layui-input">
+            </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"></label>
@@ -71,8 +74,10 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">AppSecrect:</label>
-        <div class="layui-input-inline" style="width: 400px">
+        <div class="layui-input-block" >
+            <div class="layui-col-md4">
             <input type="text" name="app_secrect" value="{$res.app_secrect}" lay-verify="" lay-verType="tips"  placeholder="请输入AppSecrect" autocomplete="off" class="layui-input">
+            </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"></label>
@@ -81,8 +86,10 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">paySignKey:</label>
-        <div class="layui-input-inline" style="width: 400px">
+        <div class="layui-input-block" >
+            <div class="layui-col-md4">
             <input type="text" name="pay_sign_key" value="{$res.pay_sign_key}" lay-verify="" lay-verType="tips"  placeholder="请输入paySignKey" autocomplete="off" class="layui-input">
+            </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"></label>
@@ -91,8 +98,10 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">MCHID:</label>
-        <div class="layui-input-inline" style="width: 400px">
+        <div class="layui-input-block" >
+            <div class="layui-col-md4">
             <input type="text" name="mch_id" value="{$res.mch_id}" lay-verify="" lay-verType="tips"  placeholder="请输入MCHID" autocomplete="off" class="layui-input">
+            </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"></label>
@@ -100,9 +109,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 90px;">支付授权目录:</label>
+        <label class="layui-form-label">支付授权目录:</label>
         <div class="layui-input-block">
-            <div class="layui-col-md3">
+            <div class="layui-col-md4">
                 <input type="text"   value="{$domain}/" autocomplete="off" class="layui-input">
             </div>
             <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
@@ -112,7 +121,7 @@
         <label class="layui-form-label">apiclient_cert.pem:</label>
         <div class="layui-inline" id="icon">
 
-            <div class="cc" style="margin-left:30px">
+            <div class="cc" >
                 <div class="layui-input-inline" style="width: 120px;" >
                     <input class="hid" name="apiclient_cert" type="hidden"  value="{$res.apiclient_cert}" >
                 </div>
@@ -130,7 +139,7 @@
                 </div>
                 {/if}
             </div>
-            <div class=" layui-form-mid layui-word-aux" style="left:30px">微信支付证书,在微信商家平台可以下载!文件名一般为apiclient_cert.pem.</div>
+            <div class=" layui-form-mid layui-word-aux" >微信支付证书,在微信商家平台可以下载!文件名一般为apiclient_cert.pem.</div>
 
         </div>
     </div>
@@ -139,7 +148,7 @@
         <label class="layui-form-label">apiclient_key.pem:</label>
         <div class="layui-inline" >
 
-            <div class="dd" style="margin-left:30px">
+            <div class="dd" >
                 <div class="layui-input-inline" style="width: 120px;" >
                     <input class="hid" name="apiclient_key" type="hidden"  value="{$res.apiclient_key}" >
                 </div>
@@ -157,7 +166,7 @@
                 </div>
                 {/if}
             </div>
-            <div class=" layui-form-mid layui-word-aux" style="left:30px">微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem</div>
+            <div class=" layui-form-mid layui-word-aux" >微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem</div>
 
         </div>
     </div>

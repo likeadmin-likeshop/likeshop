@@ -45,25 +45,24 @@ class OrderFinish extends Command
 
     protected function execute(Input $input, Output $output)
     {
+        $now = time();
+        $config = ConfigServer::get('trading', 'order_finish', 0);
+        if($config == 0){
+            return true;
+        }
+
+        $finish_limit = $config * 24 * 60 * 60;
+        $orders = Db::name('order')
+            ->where(['order_status' => Order::STATUS_WAIT_RECEIVE, 'pay_status' =>Pay::ISPAID, 'del' => 0])
+            ->where(Db::raw("shipping_time+$finish_limit < $now"))
+            ->select();
+
+        if (empty($orders)){
+            return true;
+        }
+
         Db::startTrans();
         try{
-            $now = time();
-            $config = ConfigServer::get('trading', 'order_finish', 0);
-            if($config == 0){
-                return true;
-            }
-
-            $finish_limit = $config * 24 * 60 * 60;
-
-            $orders = Db::name('order')
-                ->where(['order_status' => Order::STATUS_WAIT_RECEIVE, 'pay_status' =>Pay::ISPAID, 'del' => 0])
-                ->where(Db::raw("shipping_time+$finish_limit < $now"))
-                ->select();
-
-            if (empty($orders)){
-                return true;
-            }
-
             foreach ($orders as $order){
                 Db::name('order')
                     ->where(['id' => $order['id']])

@@ -27,7 +27,7 @@ class FileCate extends Validate
 
     protected $rule = [
         'id' => 'require',
-        'name' => 'require|unique:FileCate|length:0,5',
+        'name' => 'require|length:0,5|checkName',
         'pid' => 'checkAdd|checkEdit',
         'sort' => 'require|integer'
     ];
@@ -118,6 +118,25 @@ class FileCate extends Validate
             return '分类下有子分类,不可删除';
         }
 
+        return true;
+    }
+
+
+    protected function checkName($value, $rule, $data)
+    {
+        $where= [];
+        if (!empty($data['id']) && $data['id'] != 0){
+            $where[] = ['id', '<>', $data['id']];
+        }
+
+        $check = Db::name('file_cate')
+            ->where(['name' => $value, 'del' => 0])
+            ->where($where)
+            ->find();
+
+        if ($check){
+            return '分类名称已存在';
+        }
         return true;
     }
 

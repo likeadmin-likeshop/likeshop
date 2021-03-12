@@ -23,7 +23,7 @@
 
 
 ### ⚽ chapter one 《欢迎朋友》
-> 我们始终追求：让商城开发更简单，安全稳定的落地，降低99%的项目成本甚至0成本。真诚欢迎朋友们使用并且前往知识社区提问、反馈及宝贵建议：<a target="_blank" href="https://www.likemarket.net/">https://www.likemarket.net/</a>
+> 我们始终追求：让商城开发更简单，安全稳定的落地，降低99%的项目成本甚至0成本。真诚欢迎朋友们使用并且前往知识社区提问、反馈及宝贵建议：<a target="_blank" href="https://www.likemarket.net/">前往查看</a>
 
 ### 🏀 chapter two 《自我介绍》
 

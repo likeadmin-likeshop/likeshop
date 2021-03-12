@@ -39,7 +39,7 @@
 
 - 电商公司：需要用到电商系统时，一键部署商城，快速实现私有流量交易闭环，免费商用，0成本【真的可去版权】。
 - 软件公司：电商项目二次开发时，100%开源，放心的做改动，免费商用，0成本【真的可去版权】。
-- 个人开发者：学习如何用ThinkPHP、Vue、React Native、MySQL、uni-app等”前沿技术“开发企业级电商项目，以及无忧无虑0成本接活儿增加收入【好吧，这可能是主要目的】。
+- 个人开发者：学习如何用ThinkPHP、Vue、React Native、MySQL、uni-app、Nuxt.js等”前沿技术“开发企业级电商项目，以及无忧无虑0成本接活儿增加收入【好吧，这可能是主要目的】。
 - 学生群体：纸上得来终觉浅，绝知此事要躬行，看了再多不如下载一套代码改一改，学一学。
 - 收藏爱好者：也不知道暂时的用处，点个star，先收藏吧。
 
@@ -50,7 +50,7 @@
 >
 > 开源的版本是基础的电商功能，能够满足大部分基本场景的使用，甚至开源版本也有优惠券、会员积分、每日签到功能。
 >
-> 我们也有付费的企业版本，包括了以下几方面的服务：
+> 我们也有付费的企业源码版本，包括了以下几方面的服务：
 >
 >  - 高级营销功能，如三级分销、拼团、秒杀、砍价等模块，并且会不断丰富
 >
@@ -58,8 +58,9 @@
 >
 >  - 微信1V1企业会员群，可以近距离和团队技术沟通问题、建议和反馈
 >
+>  - 企业源码版本非常实惠，极致性价比，极易二次开发。另外还有限时20元抵扣券活动喔~ <a target="_blank" href="https://www.likemarket.net/product-price.html">查看价格</a>
 >
-> 最后我们也接受定制需求，我们需要定制的原因是：
+> 最后我们也接受定制需求，我们接受定制的原因是：
 >
 >  - 定制能解决需求多样性的问题，我们可以得到收入
 >
@@ -151,15 +152,15 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
 #### 公众号和小程序
 <img src="https://www.likemarket.net/images/yszx.png" />
 
-#### 管理后台
-后台演示（不可操作）：
-<a  target="_blank" href="http://likeshop.likemarket.net/admin">http://likeshop.likemarket.net/admin</a>      
-<br/>账号：test  密码：123456
+#### PC端商城（企业用户优先体验）
+PC端商城演示：
+<a  target="_blank" href="http://likeshop.likemarket.net">http://likeshop.likemarket.net</a>       
+<br/>账号：自行注册  密码：自行注册
 
-后台演示（可操作）：
+#### 管理后台
+PC管理后台演示：
 <a  target="_blank" href="http://likeshop2.likemarket.net/admin">http://likeshop2.likemarket.net/admin</a>       
 <br/>账号：admin  密码：123456
-
 
 #### PC管理后台截图
 <img src="https://www.likemarket.net/images/index/index__houtai_01.png" />

@@ -228,7 +228,7 @@
 
         like.ajax({
             url: '{:url("index/stat")}',
-            type: "post",
+            type: "get",
             success: function (res) {
                 var dates = res.data.dates,
                     echarts_order_amount  = res.data.echarts_order_amount,

@@ -154,12 +154,12 @@ LikeShop在电商通用组件基础上丰富了大量的营销功能，具体如
 
 #### PC端商城（企业用户优先体验）
 PC端商城演示：
-<a  target="_blank" href="http://likeshop.likemarket.net">http://likeshop.likemarket.net</a>       
+<a  target="_blank" href="http://likeshop.likemarket.net/pc">http://likeshop.likemarket.net/pc</a>       
 <br/>账号：自行注册  密码：自行注册
 
 #### 管理后台
 PC管理后台演示：
-<a  target="_blank" href="http://likeshop2.likemarket.net/admin">http://likeshop2.likemarket.net/admin</a>       
+<a  target="_blank" href="http://likeshop-demo.likemarket.net/admin">http://likeshop-demo.likemarket.net/admin</a>       
 <br/>账号：admin  密码：123456
 
 #### PC管理后台截图

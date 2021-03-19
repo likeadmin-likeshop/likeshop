@@ -43,7 +43,6 @@ export default {
 				shareDesc: "likeshop已经把小程序、安卓APP、苹果APP都免费开源出来了"
 			}
 			wechath5.share(option)
-			wechath5.share(options)
 		}
 	},
 	computed: {

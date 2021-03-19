@@ -71,6 +71,7 @@
 			</loading-footer>
 		</view>
 		<order-dialog ref="orderDialog" :order-id="orderId" :type="type" @refresh="reflesh"></order-dialog>
+		<loading-view v-if="showLoading" backgroundColor="transparent" :size="50"></loading-view>
 	</view>
 </template>
 
@@ -103,7 +104,8 @@
 				status: loadingType.LOADING,
 				showCancel: false,
 				type: 0,
-				orderId: ""
+				orderId: "",
+				showLoading: false
 			};
 		},
 
@@ -169,16 +171,13 @@
 				});
 			},
 
-			payNow(e) {
-
-				let {
-					id
-				} = e.currentTarget.dataset;
+			payNow(id) {
+				this.showLoading = true
 				prepay({
 					from: 'order',
 					order_id: id
 				}).then(res => {
-					Toast.clear();
+					this.showLoading = false
 
 					if (res.code == 1) {
 						let args = res.data;

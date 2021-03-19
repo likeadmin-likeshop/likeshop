@@ -18,6 +18,7 @@ export default {
 		
 	backgroundColor: {
 		type: String,
+		default: '#fff'
 	},
 	color: {
 		type: String,
@@ -41,7 +42,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
 }
 
 .loading.flex {

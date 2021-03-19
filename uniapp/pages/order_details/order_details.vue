@@ -23,7 +23,7 @@
 				<view class="header">
 					<view class="item" v-if="orderDetail.order_status == 0">
 						<view class="white lg mb10">等待买家付款</view>
-						<view class="white sm row" v-if="cancelTime ">支付剩余 <u-count-down separator="zh" :show-hours="false"
+						<view class="white sm row" v-if="cancelTime > 0">支付剩余 <u-count-down separator="zh" :show-hours="false"
 							 :show-seconds="false" :timestamp="cancelTime" separator-color="#fff" color="#fff" :separator-size="26"
 							 :font-size="26" bg-color="transparent"></u-count-down> 自动关闭</view>
 					</view>
@@ -237,9 +237,9 @@
 					order_id: this.id
 				}).then(res => {
 					if (res.code == 1) {
+						this.showLoading = false
 						let args = res.data;
 						wxpay(args).then(() => {
-							this.showLoading = false
 							this.$toast({
 								title: "支付成功"
 							})

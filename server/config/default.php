@@ -1,7 +1,7 @@
 <?php
 return [
     'copyright' => [
-        'company_name' => '广州好象科技有限公司',
+        'company_name' => 'Copyright © 2019-2020 广州好象科技有限公司',
         'number'=>'京ICP证000000号',
         'link'=>'http://www.beian.gov.cn/portal/index.do'
     ],

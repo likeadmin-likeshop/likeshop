@@ -459,4 +459,66 @@ class LoginLogic extends LogicBase
         }
     }
 
+
+
+    /**
+     * Notes: uniApp微信登录
+     * @param $post
+     * @author 段誉(2021/3/16 16:17)
+     * @return array
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public static function uinAppLogin($post)
+    {
+        //微信调用
+        try {
+            if (empty($post['openid']) || empty($post['access_token']) || empty($post['client'])){
+                throw new \think\Exception('参数缺失');
+            }
+
+            //sdk不支持app登录，直接调用微信接口
+            $requests = Requests::get('https://api.weixin.qq.com/sns/userinfo?openid=' . 'openid=' . $post['openid'] . '&access_token=' . $post['access_token']);
+            $user = json_decode($requests->body, true);
+        } catch (Exception $e) {
+            return self::dataError('登录失败:' . $e->getMessage());
+        }catch (\think\Exception $e){
+            return self::dataError('登录失败:' . $e->getMessage());
+        }
+
+        //添加或更新用户
+        $user_id = Db::name('user_auth au')
+            ->join('user u', 'au.user_id=u.id')
+            ->where(['u.del' => 0])
+            ->where(function ($query) use ($user) {
+                $query->whereOr(['au.openid' => $user['openid']])
+                    ->whereOr(['au.unionid' => $user['unionid']]);
+            })
+            ->value('user_id');
+
+        if (empty($user_id)) {
+            $user_info = UserServer::createUser($user, $post['client']);
+        } else {
+            $user_info = UserServer::updateUser($user, $post['client'], $user_id);
+        }
+
+        if (empty($user_info)) {
+            return self::dataError('登录失败:user');
+        }
+
+        if ($user_info['disable']) {
+            return self::dataError('该用户被禁用');
+        }
+
+        //创建会话
+        $user_info['token'] = self::createSession($user_info['id'], $post['client']);
+
+        unset($user_info['id']);
+        unset($user_info['disable']);
+        return self::dataSuccess('登录成功', $user_info);
+    }
+
 }

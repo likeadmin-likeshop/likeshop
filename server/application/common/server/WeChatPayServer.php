@@ -274,6 +274,7 @@ class WeChatPayServer
             if ($message['result_code'] === 'SUCCESS') {
                 $extra['transaction_id'] = $message['transaction_id'];
                 $attach = $message['attach'];
+                $message['out_trade_no'] = mb_substr($message['out_trade_no'], 0, 18);
                 switch ($attach) {
                     case 'order':
                         $order = Db::name('order')->where(['order_sn' => $message['out_trade_no']])->find();

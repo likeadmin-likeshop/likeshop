@@ -16,9 +16,9 @@
 // +----------------------------------------------------------------------
 
 <template>
-	<view class="pay-result">
+	<view class="pay-result column-center">
 		<view class="contain bg-white">
-			<view class="header  column-center">
+			<view class="header column-center">
 				<view>
 					<image class="tips-icon" src="/static/images/icon_paySuccess.png"></image>
 				</view>

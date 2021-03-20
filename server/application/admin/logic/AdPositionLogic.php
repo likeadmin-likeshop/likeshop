@@ -68,24 +68,7 @@ class AdPositionLogic
 
         foreach ($ad_position_list as $item) {
             $item['client_name'] =  Ad::getAdTypeDesc($item['client']);
-            if ($item['attr'] == 1) {
-                $item['attr_show'] = '系统默认';
 
-            } else {
-                $item['attr_show'] = '自定义';
-            }
-
-            if ($item['status'] == 1) {
-                $item['status_show'] = '启用';
-                $item['status_switch'] = '停用';
-
-            } else if ($item['status'] == 0) {
-                $item['status'] = 0;
-                $item['status_show'] = '停用';
-                $item['status_switch'] = '启用';
-            } else {
-                $item['status_show'] = '';
-            }
         }
         return ['count' => $ad_position_count, 'list' => $ad_position_list];
     }

@@ -7,7 +7,7 @@
                 <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
                 <div class="layui-colla-content layui-show">
                     <p>*平台管理广告信息，系统默认了部分广告位，允许新建广告位。</p>
-                    <p>*广告区分不同的终端，H5商城，微信小程序商城，APP商城。</p>
+                    <p>*广告区分不同的终端，移动端商城（含H5、小程序、APP）和PC端商城。</p>
                     <p>*广告链接可以选择商城页面，商品页面，自定义链接，用户点击广告后跳转到相应的页面。</p>
                     <p>*广告停用之后，商城不展示该广告。</p>
                 </div>
@@ -57,9 +57,20 @@
                         <script type="text/html" id="show">
                             <input type="checkbox"  name="status" lay-filter="switch-show" id={{d.id}}  lay-skin="switch" lay-text="显示|隐藏" {{#  if(d.status){ }} checked  {{#  } }}>
                         </script>
+                        <script type="text/html" id="status-info">
+                            {{# if(d.status == 1){ }}
+                            启动
+                            {{# }else{}}
+                            停用
+                            {{#}}}
+                        </script>
                         <script type="text/html" id="ad-operation">
                             <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
-                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">{{d.status_switch}}</a>
+                            {{# if(d.status == 1){ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">停用</a>
+                            {{# }else{ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">启用</a>
+                            {{#} }}
                             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
                         </script>
 
@@ -208,7 +219,7 @@
                     , {field: 'position_name', title: '广告位置',width:200}
                     , {field: 'image', title: '广告图片', templet: '#image',width:200}
                     , {field: 'link', title: '广告链接',width:300}
-                    , {field: 'status_info', title: '广告状态',width:100}
+                    , {field: 'status', title: '广告状态',width:100,toolbar: '#status-info'}
                     , {fixed: 'right', title: '操作' ,toolbar: '#ad-operation',width:250}
                 ]]
                 , page: true

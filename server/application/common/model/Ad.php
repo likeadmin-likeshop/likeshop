@@ -20,15 +20,12 @@ namespace app\common\model;
 use think\Model;
 
 class Ad extends Model{
-    const H5 = 1;
-    const MNP = 2;
-    const APP = 3;
+    const mobile = 1;
+    const pc     = 2;
 
     public static function getAdTypeDesc($from){
         $desc = [
-            self::H5    => 'H5商城',
-            self::MNP   => '微信小程序',
-            self::APP   => 'APP商城',
+            self::mobile    => '移动端商城',
         ];
         if($from === true){
             return $desc;
@@ -36,27 +33,9 @@ class Ad extends Model{
         return $desc[$from] ?? '';
     }
 
-    public static function getLinkPage($type){
+    public static function getLinkPage($type = true,$from = true){
         $page = [
-            self::H5    => [
-                [
-                    'name'      => '商品分类',
-                    'path'      => '/index/sort',
-                ],
-                [
-                    'name'      => '领券中心',
-                    'path'      => '/home/couponcenter',
-                ],
-                [
-                    'name'      => '店铺街',
-                    'path'      => '/home/shopstreet',
-                ],
-                [
-                    'name'      => '个人中心',
-                    'path'      => '/index/user',
-                ],
-            ],
-            self::MNP   => [
+            self::mobile    => [
                 [
                     'name'      => '商品分类',
                     'path'      => '/pages/sort/sort',
@@ -73,47 +52,40 @@ class Ad extends Model{
                     'is_tab'    => 1,
                 ],
             ],
-            self::APP   => [
+            self::pc        => [
                 [
                     'name'      => '商品分类',
-                    'path'      => 'Classify',
+                    'path'      => '/category',
+                    'is_tab'    => 0,
                 ],
                 [
                     'name'      => '领券中心',
-                    'path'      => 'CouponCenter',
-                ],
-                [
-                    'name'      => '店铺街',
-                    'path'      => 'ShopStreet',
+                    'path'      => '/get_coupons',
+                    'is_tab'    => 0,
                 ],
                 [
                     'name'      => '个人中心',
-                    'path'      => 'Mine',
+                    'path'      => '/user/profile',
+                    'is_tab'    => 0,
                 ],
             ],
         ];
-        if($type === true){
-            return $page[$type];
+        if(true !== $type){
+            $page = $page[$type] ?? [];
         }
-        return $page[$type] ?? [];
+        if(true === $from){
+            return $page;
+        }
+        return $page[$from] ?? [];
     }
 
-    /*
-     * @notes 获取页面路径
-     * @param 广告类型
-     * @param 链接类型
-     */
-    public static function getLinkPath($ad_type,$link_type){
-        $link_list = self::getLinkPage($ad_type);
-        return $link_list[$link_type] ?? '';
-    }
-    public static function getGoodsPath($from){
+
+    public static function getGoodsPath($from = true){
         $desc = [
-            self::H5    => '/common/goodsdetail',
-            self::MNP   => '/pages/goods_details/goods_details',
-            self::APP   => 'GoodsDetail',
+            self::mobile    => '/pages/goods_details/goods_details',
+            self::pc        => '/goods_details',
         ];
-        if($from === true){
+        if(true === $from){
             return $desc;
         }
         return $desc[$from] ?? '';

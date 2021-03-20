@@ -35,30 +35,31 @@ class AdLogic
             ->select();
 
         $list = [];
-        foreach ($ad_list as &$item) {
-            $url = $item['link'];
+        foreach ($ad_list as $key => $ad) {
+            $url = $ad['link'];
             $is_tab = 0;
             $params = [];
-            switch ($item['link_type']) {
+            switch ($ad['link_type']) {
                 case 1:
-                    $page = Ad::getLinkPath($item['client'], $item['link']);
+
+                    $page = Ad::getLinkPage($ad['client'], $ad['link']);
                     $url = $page['path'];
                     $is_tab = $page['is_tab'] ?? 0;
                     break;
                 case 2:
-                    $goods_path = Ad::getGoodsPath($item['client']);
+                    $goods_path = Ad::getGoodsPath($ad['client']);
                     $url = $goods_path;
                     $params = [
-                        'id' => $item['link'],
+                        'id' => $ad['link'],
                     ];
                     break;
             }
             $list[] = [
-                'image' => UrlServer::getFileUrl($item['image']),
-                'link' => $url,
-                'link_type' => $item['link_type'],
-                'params' => $params,
-                'is_tab' => $is_tab,
+                'image'     => UrlServer::getFileUrl($ad['image']),
+                'link'      => $url,
+                'link_type' => $ad['link_type'],
+                'params'    => $params,
+                'is_tab'    => $is_tab,
             ];
         }
         return $list;

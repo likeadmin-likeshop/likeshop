@@ -27,6 +27,7 @@ use app\common\model\Client_;
 use app\common\model\Pay;
 use EasyWeChat\Factory;
 use EasyWeChat\Payment\Application;
+use Endroid\QrCode\QrCode;
 use think\Db;
 use think\Exception;
 
@@ -76,9 +77,9 @@ class WeChatPayServer
             $config = $wechat_config['config'];
             $notify_url = $wechat_config['notify_url'];
 
-            //app支付不需要openid,其他需要openID
-            $app_source = [Client_::ios, Client_::android];
-            if (!$auth && !in_array($order_source, $app_source)) {
+            //jsapi需要验证openID
+            $check_source = [Client_::mnp, Client_::oa];
+            if (!$auth && in_array($order_source, $check_source)) {
                 throw new Exception('授权信息失效');
             }
 
@@ -87,11 +88,27 @@ class WeChatPayServer
             $result = $app->order->unify($attributes);
 
             if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
-                if (in_array($order_source, $app_source)) {
-                    $data = $app->jssdk->appConfig($result['prepay_id'], false);
-                } else {
+
+                //小程序,公众号
+                if (in_array($order_source, [Client_::mnp, Client_::oa])) {
                     $data = $app->jssdk->bridgeConfig($result['prepay_id'], false);
                 }
+
+                //app客户端
+                if (in_array($order_source, [Client_::ios, Client_::android])) {
+                    $data = $app->jssdk->appConfig($result['prepay_id'], false);
+                }
+
+                //pc端
+                if ($order_source == Client_::pc) {
+                    $data = self::getNativeCode($result, $order);
+                }
+
+                //h5(非微信环境)
+                if ($order_source == Client_::h5) {
+                    $data = $result;
+                }
+
                 return $data;
             } else {
                 if (isset($result['return_code']) && $result['return_code'] == 'FAIL') {
@@ -107,6 +124,42 @@ class WeChatPayServer
             self::$error = '支付失败:' . $e->getMessage();
             return false;
         }
+    }
+
+
+    /**
+     * Notes: NATIVE 支付二维码
+     * @param $result
+     * @param $order
+     * @author 段誉(2021/3/17 14:41)
+     * @return string
+     * @throws \Endroid\QrCode\Exception\InvalidWriterException
+     */
+    public static function getNativeCode($result, $order)
+    {
+        $save_dir = 'uploads/pay_code/';
+        $qr_src = md5($order['order_sn'].mt_rand(10000, 99999)) . '.png';
+        $code_url = ROOT_PATH.'/'.$save_dir . $qr_src;
+
+        $qrCode = new QrCode();
+        $qrCode->setText($result['code_url']);
+        $qrCode->setSize(200);
+        $qrCode->setWriterByName('png');
+        !file_exists($save_dir) && mkdir($save_dir, 777, true);
+        $qrCode->writeFile($code_url);
+
+        //生成base64临时图片
+        if ($fp = fopen($code_url, "rb", 0)) {
+            $gambar = fread($fp, filesize($code_url));
+            fclose($fp);
+            $base64 = chunk_split(base64_encode($gambar));
+            $base64 = 'data:image/png;base64,' . $base64;
+        }
+        //删除文件
+        if (strstr($code_url, $save_dir)) {
+            unlink($code_url);
+        }
+        return $base64;
     }
 
 
@@ -127,7 +180,6 @@ class WeChatPayServer
                 $attributes = [
                     'trade_type' => 'JSAPI',
                     'body' => '商品',
-                    'out_trade_no' => $order['order_sn'],
                     'total_fee' => $order['order_amount'] * 100, // 单位：分
                     'notify_url' => $notify_url,
                     'openid' => $auth['openid'],
@@ -138,7 +190,6 @@ class WeChatPayServer
                 $attributes = [
                     'trade_type' => 'JSAPI',
                     'body' => '充值',
-                    'out_trade_no' => $order['order_sn'],
                     'total_fee' => $order['order_amount'] * 100, // 单位：分
                     'notify_url' => $notify_url,
                     'openid' => $auth['openid'],
@@ -152,10 +203,24 @@ class WeChatPayServer
             $attributes['trade_type'] = 'APP';
         }
 
+        //NATIVE模式设置
+        if ($order_source == Client_::pc) {
+            $attributes['trade_type'] = 'NATIVE';
+            $attributes['product_id'] = $order['order_sn'];
+        }
+
+        //h5支付类型
+        if ($order_source == Client_::h5) {
+            $attributes['trade_type'] = 'MWEB';
+        }
+
         //在白名单内,一分钱
-        if (PaymentLogic::isPayWhiteList($order['user_id'])){
+        if (PaymentLogic::isPayWhiteList($order['user_id'])) {
             $attributes['total_fee'] = 1;
         }
+
+        //修改订单编号 -> 支付回调时截取前面的单号 18个
+        $attributes['out_trade_no'] = $order['order_sn'].$attributes['trade_type'].$order_source;
 
         return $attributes;
     }

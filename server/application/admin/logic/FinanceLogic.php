@@ -37,8 +37,8 @@ class FinanceLogic
 
         //订单总金额
         $order = Db::name('order')
-            ->field('sum(total_amount) as amount, count(id) as num')
-            ->where(['pay_status' => Pay::ISPAID, 'refund_status' => OrderGoods::REFUND_STATUS_NO])
+            ->field('sum(order_amount) as amount, count(id) as num')
+            ->where('pay_status' , 'in', [Pay::ISPAID, Pay::REFUNDED])
             ->find();
 
         //会员相关

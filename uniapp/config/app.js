@@ -4,8 +4,9 @@ module.exports = {
     },
 	// #ifdef H5
     baseURL: process.env.NODE_ENV == 'production' ? '/api/' : '/api/',
+    // baseURL: process.env.NODE_ENV == 'production' ? '/api/' : '/api/',
 	// #endif
-	// #ifdef MP-WEIXIN
+	// #ifndef H5
 	baseURL: 'http://likeshopv2.yixiangonline.com/api/'
 	// #endif
 }

@@ -19,7 +19,7 @@
 		<!--  #endif -->
 		<!-- #ifdef H5 || APP-PLUS -->
 		<view class="h5-login" v-if="!isWeixin">
-			<image class="logo" src="/static/images/shop_logo.png"></image>
+			<image class="logo" :src="appConfig.shop_login_logo"></image>
 			<view v-if="loginType == 0">
 				<view class="input">
 					<u-input v-model="account" style="width: 100%;" placeholder="请输入账户" :input-border="false" />
@@ -50,9 +50,20 @@
 				<view class="lighter" @click="changeLoginType">{{loginType == 0 ? "短信验证码登录" : "账号登录"}}</view>
 				<navigator class="lighter" url="/pages/register/register" hover-class="none">注册账号</navigator>
 			</view>
-			<view class="flex1"></view>
+			<view class="flex1 wx-login">
+				<!-- #ifdef APP-PLUS -->
+				<view v-if="appConfig.app_wechat_login">
+					<u-divider>其他登录方式</u-divider>
+					<view @click="appWxLogin">
+						<image class="image" src="/static/images/icon_wechat.png"></image>
+						<view class="sm">微信登录</view>
+						<text selectable>{{text}}</text>
+					</view>
+				</view>
+				<!-- #endif -->
+			</view>
 			<view class="mb20 sm row">
-				已阅读并同意LikeShop
+				已阅读并同意
 				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=0">《服务协议》</navigator>
 				和
 				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=1">《隐私协议》</navigator>
@@ -64,19 +75,25 @@
 
 <script>
 	import {
-		wxLogin
+		wxLogin,
+		getWxCode
 	} from '@/utils/login';
 	import {
 		mapMutations,
-		mapActions
+		mapActions,
+		mapGetters
 	} from 'vuex'
 	import {
 		accountLogin,
 		codeLogin,
 		sendSms,
 		wxpLogin,
-		smsCodeLogin
+		smsCodeLogin,
+		opLogin
 	} from '@/api/app';
+	import {
+		inputInviteCode
+	} from '@/api/user'
 	import wechath5 from '@/utils/wechath5'
 	import {
 		isWeixinClient
@@ -106,11 +123,13 @@
 				smsCode: '',
 				time: 59,
 				canSendSms: true,
-				telephone: ""
+				telephone: "",
+				text: ''
 			};
 		},
 
 		async onLoad(option) {
+			
 			// #ifdef H5
 			this.isWeixin = isWeixinClient()
 			if (this.isLogin) {
@@ -130,7 +149,8 @@
 					wechath5.getWxUrl()
 				}
 			}
-			// #endif 
+			// #endif
+            console.log(client, 'client')
 		},
 		methods: {
 			...mapMutations(['LOGIN']),
@@ -160,6 +180,19 @@
 						title: '登录失败，请稍后再试'
 					});
 				}
+			},
+			getUserProfile() {
+				uni.login({
+					success(res) {
+						console.log(res)
+					}
+				})
+				uni.getUserProfile({
+					desc: '获取用户信息, 用于登录',
+					success(res) {
+						console.log(res)
+					}
+				})
 			},
 			countDownFinish() {
 				this.canSendSms = true;
@@ -209,13 +242,20 @@
 			loginHandle(data) {
 				this.LOGIN(data)
 				this.getUser()
+				const inviteCode = Cache.get("INVITE_CODE")
+				if (inviteCode) {
+					inputInviteCode({
+						code: inviteCode
+					})
+				}
 				// #ifdef H5
 				location.replace('/mobile' + (Cache.get(BACK_URL) || '/'))
+				Cache.remove(BACK_URL)
 				//#endif
-				// #ifdef MP-WEIXIN
+				// #ifdef MP-WEIXIN  || APP-PLUS
 				uni.navigateBack();
 				//#endif
-
+				
 			},
 			changeLoginType() {
 				if (this.loginType == loginType.ACCOUNT_LOGIN) {
@@ -248,6 +288,27 @@
 					}
 				})
 			},
+			async appWxLogin() {
+				uni.login({
+					provider:'weixin',
+					success: (res) => {
+						const {openid,access_token,} = res.authResult
+						opLogin({
+							openid,
+							access_token
+						}).then(res => {
+							if(res.code == 1) {
+								this.loginHandle(res.data)
+							}
+						})
+					}
+				})
+				
+				
+			}
+		},
+		computed: {
+			...mapGetters(['appConfig'])
 		}
 	};
 </script>
@@ -292,7 +353,7 @@
 
 
 			.h5-login {
-				padding-top: 160rpx;
+				padding-top: 100rpx;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -302,7 +363,7 @@
 				.logo {
 					width: 280rpx;
 					height: 80rpx;
-					margin-bottom: 70rpx;
+					margin-bottom: 50rpx;
 				}
 
 				.input {
@@ -312,10 +373,20 @@
 				}
 
 				.sms-btn {
-					border: 1rpx solid $-color-primary;
+					border: 1px solid $-color-primary;
 					width: 176rpx;
 					height: 60rpx;
 					box-sizing: border-box;
+				}
+
+				.wx-login {
+					margin-top: 60rpx;
+
+					.image {
+						margin-top: 40rpx;
+						width: 80rpx;
+						height: 80rpx;
+					}
 				}
 			}
 		}

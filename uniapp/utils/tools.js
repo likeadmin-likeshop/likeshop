@@ -270,13 +270,29 @@ export function currentPage() {
 	let currentPage = pages[pages.length - 1];
 	return currentPage || {};
 }
+//所在环境
+let client = null
 // #ifdef MP-WEIXIN
-export const client = 1
+client = 1
 // #endif
 
 // #ifdef H5
-export const client = 2
+client = isWeixinClient() ? 2 : 6
 // #endif
+
+// #ifdef APP-PLUS
+client = 3;
+uni.getSystemInfo({
+    success: res => {
+        client = res.platform == 'ios' ? 3 : 4;
+    },
+    fail: res => {
+        client = 3
+    }
+})
+// #endif
+export {client}
+
 // H5复制方法
 export function copy(str) {
 	// #ifdef H5

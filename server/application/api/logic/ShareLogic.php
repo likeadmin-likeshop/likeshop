@@ -36,10 +36,14 @@ class ShareLogic extends LogicBase {
                     break;
                 case Client_::oa: //公众号
                 case Client_::h5: //H5
+                    $url_type = 'url';
+                    $url = url($url,'','',true).'?'.http_build_query(['id'=>$goods_id]);
+                    break;
                 case Client_::android:
                 case Client_::ios:
                     $url_type = 'url';
-                    $url = UrlServer::getFileUrl($url);
+                    $url = url($url,'','',true).'?'.http_build_query(['id'=>$goods_id,'isapp'=>1]);
+
             }
             $result = $qr_code_logic->makeGoodsPoster($user,$goods,$url,$url_type);
         }

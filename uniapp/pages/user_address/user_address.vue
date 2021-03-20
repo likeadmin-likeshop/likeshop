@@ -52,10 +52,12 @@
             </view>
         </u-modal>        
     <view class="footer row-between fixed bg-white">
+		<!-- #ifdef H5 || MP-WEIXIN -->
         <view class="btn row-center bg-gray br60 mr20" @click="getWxAddressFun" v-if="isWeixin">
             <image class="icon-lg mr10" src="/static/images/icon_wechat.png"></image>
             <text class="md">微信导入</text>
         </view>
+		<!-- #endif -->
         <view class="btn bg-primary white md row-center br60" @click="addAddress">新增收货地址</view>
     </view>
 </view>

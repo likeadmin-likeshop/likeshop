@@ -47,6 +47,10 @@
 
 <script>
 	import {
+		mapGetters,
+		mapActions
+	} from 'vuex'
+	import {
 		getCatrgory
 	} from '@/api/store';
 	import {
@@ -71,8 +75,11 @@
 		onLoad: function(options) {
 			this.getCatrgoryFun();
 		},
-		onShow: function() {},
+		onShow: function() {
+			this.getCartNum()
+		},
 		methods: {
+			...mapActions(['getCartNum']),
 			onTouchStart() {
 				this.isTouchScrollView = true
 			},

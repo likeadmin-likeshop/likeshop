@@ -35,7 +35,7 @@
 			</view>
 			<view v-if="!isLogin" class="login column-center">
 				<image class="img-null" src="/static/images/cart_null.png"></image>
-				<view class="muted mt20">微信授权登录后才能查看购物车哦</view>
+				<view class="muted mt20">登录后才能查看购物车哦</view>
 				<navigator class="white br60 row-center btn" url="/pages/login/login">
 					<!-- <image class="mr10" src="/static/images/icon_wechat.png"></image> -->
 					<text>去登录</text>
@@ -142,17 +142,6 @@
 					}
 				});
 			},
-			getCartNumFun() {
-				this.getCartNum().then(() => {
-					if (!this.cartNum) return uni.removeTabBarBadge({
-						index: 2
-					})
-					uni.setTabBarBadge({
-						index: 2,
-						text: String(this.cartNum)
-					})
-				})
-			},
 			changeDelPopup(cartId) {
 				if (cartId) {
 					this.cartId = cartId;
@@ -184,7 +173,7 @@
 						this.cartType = cartType;
 						this.totalPrice = total_amount;
 						this.isShow = true
-						this.getCartNumFun()
+						this.getCartNum()
 					}
 				});
 			},

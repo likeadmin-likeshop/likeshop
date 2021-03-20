@@ -112,7 +112,8 @@
 
 <script>
 	import {
-		mapGetters
+		mapGetters,
+		mapActions
 	} from 'vuex'
 	import {
 		getUser
@@ -153,6 +154,7 @@
 
 		onShow() {
 			this.getUserInfoFun();
+			this.getCartNum()
 		},
 
 
@@ -164,6 +166,7 @@
 			this.getMenuFun();
 		},
 		methods: {
+			...mapActions(['getCartNum']),
 			goLogin() {
 				console.log(this)
 				let {
@@ -248,7 +251,7 @@
 
 		},
 		computed: {
-			...mapGetters(['isLogin']),
+			...mapGetters(['isLogin', ]),
 		}
 	};
 </script>

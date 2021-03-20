@@ -54,7 +54,9 @@ const actions = {
 		commit
 	}) {
 		return new Promise(resolve => {
-			if (!state.token) return
+			if (!state.token) return  uni.removeTabBarBadge({
+				index: 2
+			})
 			getCartNum().then(res => {
 				if (res.code == 1) {
 					commit('SETCARTNUM', res.data.num)

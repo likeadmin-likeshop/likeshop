@@ -54,7 +54,7 @@
 								<image class="icon-lg mr20" :src="item.icon"></image>
 								<view class>
 									<view class="balck bt10">{{item.name}}</view>
-									<view class="muted xs">{{item.desc}}{{ item.type == 3 ? orderInfo.user_money : ''}}</view>
+									<view class="muted xs">{{item.desc}}</view>
 								</view>
 							</view>
 							<radio class="radio" :value="String(item.type)" :checked="item.type == payWay"></radio>
@@ -145,11 +145,6 @@
 					name: '微信支付',
 					type: payWay.WECHAT,
 					desc: '微信快捷支付'
-				}, {
-					icon: "/static/images/icon_balance.png",
-					name: '余额支付',
-					type: payWay.BALANCE,
-					desc: '可用余额：'
 				}],
 				payWay: payWay.WECHAT,
 			};
@@ -315,12 +310,7 @@
 								url: `/pages/user_order/user_order`
 							});
 						});
-					} else if (prepayCode == 10001) {
-						//余额支付成功
-						uni.redirectTo({
-							url: `/pages/pay_result/pay_result?id=${order_id}`
-						});
-					} else {
+					}else {
 						this.showLoading = false
 					}
 				}

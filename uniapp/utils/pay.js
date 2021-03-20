@@ -18,22 +18,20 @@
 
 
 
+
 import wechath5 from './wechath5'
 import {
 	currentPage,
 	isWeixinClient
 } from './tools'
-
-
-// 微信支付
-
 export function wxpay(opt) {
 	//#ifdef  H5
 	return wechath5.wxPay(opt)
 	// #endif
-	//#ifdef  MP-WEIXIN
+	//#ifndef H5
 	return new Promise((resolve, reject) => {
-		uni.requestPayment({
+		// #ifdef MP-WEIXIN
+		const params = {
 			timeStamp: opt.timeStamp,
 			// 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
 			nonceStr: opt.nonceStr,
@@ -43,7 +41,17 @@ export function wxpay(opt) {
 			signType: opt.signType,
 			// 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 			paySign: opt.paySign,
-			// 支付签名
+		}
+		// #endif
+		// #ifdef APP-PLUS
+		const params = {
+			orderInfo: opt
+		}
+		// #endif
+		console.log(params)
+		uni.requestPayment({
+			provider: 'wxpay',
+			...params,
 			success: res => {
 				resolve();
 			},
@@ -57,6 +65,3 @@ export function wxpay(opt) {
 	});
 	// #endif
 }
-
-
-

@@ -284,6 +284,7 @@
 							openid,
 							access_token
 						}).then(res => {
+							
 							if(res.code == 1) {
 								this.loginHandle(res.data)
 							}

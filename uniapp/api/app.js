@@ -7,6 +7,11 @@ export function mnpLogin(data) {
 	return request.post('account/mnpLogin', data);
 }
 
+// app登录
+export function opLogin(data) {
+	return request.post('account/uinAppLogin', {...data, client});
+}
+
 //预支付接口
 export function prepay(data) {
 	return request.post('payment/prepay', { ...data,

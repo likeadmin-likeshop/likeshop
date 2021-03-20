@@ -3,7 +3,7 @@
 		<view class="user-profile">
 			<view class="user-avatar-box row-center">
 				<uploader @after-read="afterRead" useSlot>
-					<image class="user-avatar" :src="userInfo.avatar || require('@/static/images/default_avatar.png')" />
+					<image class="user-avatar" :src="userInfo.avatar || require('../../static/images/default_avatar.png')" />
 				</uploader>
 			</view>
 			<view class="row-info row bdb-line" @click="changeName">
@@ -19,7 +19,7 @@
 			<view class="row-info row bdb-line">
 				<view class="label md">手机号</view>
 				<view class="md row" :class="{'muted': userInfo.mobile}" style="flex: 1;">{{userInfo.mobile ? userInfo.mobile : "未绑定"}}</view>
-                <!-- #ifdef H5 -->
+                <!-- #ifdef H5 || APP-PLUS -->
 				<view class="bd-btn br60 row-center" @click="showModifyMobile">
 					{{userInfo.mobile ? '更换手机号' : '绑定手机号'}}
 				</view>
@@ -47,7 +47,7 @@
 			</view>
 			<view class="row-info row-between">
 				<view class="label md">关于我们</view>
-				<view>v2.1.120210228</view>
+				<view>v2.1.5.20210319</view>
 			</view>
 			<!-- #ifndef MP-WEIXIN -->
 			<view class="bg-primary white save-btn row-center lg" @click="logout">退出登录</view>
@@ -210,7 +210,7 @@
 							title: '登出成功'
 						})
 						setTimeout(() => {
-							uni.switchTab({
+							uni.reLaunch({
 								url: "/pages/index/index"
 							})
 						}, 500)
@@ -219,7 +219,7 @@
 			},
 			goToExplain(value) {
 				uni.navigateTo({
-					url: '/pages/bundle/server_explan/server_explan?type=' + value
+					url: '/pages/server_explan/server_explan?type=' + value
 				})
 			},
 			// 发送短信
@@ -249,7 +249,7 @@
 				this.smsCode = '';
 				this.new_mobile = '';
 				this.showMobile = true
-				this.smsType = SMSType.CHANGE_MOBILE
+				this.smsType = this.userInfo.mobile ? SMSType.CHANGE_MOBILE : SMSType.BIND
 			},
 			$changeUserMobile() {
 				if (!this.smsCode) {
@@ -314,6 +314,12 @@
 			},
 			// 修改密码
 			showPwdPop() {
+                if(!this.userInfo.mobile) {
+                    this.$toast({
+                        title: '请绑定手机后再设置密码'
+                    })
+                    return;
+                }
 				this.smsCode = '';
 				this.smsType = SMSType.FINDPWD
 				this.showPwd = true
@@ -352,8 +358,7 @@
 					mobile: this.userInfo.mobile,
 					code: smsCode,
 					password: pwd,
-					repassword: comfirmPwd,
-					client: 2
+					repassword: comfirmPwd
 				};
 				forgetPwd(data).then(res => {
 					if (res.code == 1) {
@@ -405,9 +410,11 @@
 		},
 		mounted() {
 			this.$getUserInfo()
+            // #ifdef MP-WEIXIN
             getWxCode().then(res => {
                 this.code = res
             })
+            // #endif
 		},
 		computed: {
 			...mapState(['token'])
@@ -469,7 +476,7 @@
 			padding-bottom: 30rpx;
 			width: 580rpx;
 			border-radius: 30rpx;
-
+            background-color: $-color-white;
 			.title {
 				padding: 26rpx 0rpx;
 			}

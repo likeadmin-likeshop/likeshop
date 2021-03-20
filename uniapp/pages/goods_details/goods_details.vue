@@ -124,7 +124,7 @@
 				</view>
 			</view>
 		</u-popup>
-			<share-popup :show="showShareBtn" @close="showShareBtn = false" :goods-id="id"></share-popup>
+			<share-popup :show="showShareBtn" @close="showShareBtn = false" :goods-id="id" :img-url="goodsDetail.image" :summary="goodsDetail.remark" :share-title="goodsDetail.name"></share-popup>
 	</view>
 </template>
 

@@ -23,38 +23,9 @@ import {
 	currentPage,
 	isWeixinClient
 } from './tools'
-//登录提示弹窗
 
-export function showLoginDialog() {
-	//#ifdef  MP-WEIXIN
-	uni.showModal({
-		title: '提示',
-		content: '不授权则无法进行更多操作，点击去授权按钮前往授权',
-		confirmText: '去授权',
-		confirmColor: '#FF2C3C',
-		success: res => {
-			let {
-				confirm
-			} = res;
 
-			if (confirm) {
-				uni.navigateTo({
-					url: '/pages/login/login'
-				});
-			}
-		}
-	});
-	// #endif
-	//#ifdef  H5
-	const pathLogin = 'pages/login/login'
-	let path = currentPage().route
-	if (path != pathLogin) {
-		uni.navigateTo({
-			url: '/pages/login/login'
-		})
-	}
-	// #endif
-} // 微信支付
+// 微信支付
 
 export function wxpay(opt) {
 	//#ifdef  H5

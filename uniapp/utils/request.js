@@ -14,8 +14,8 @@ import {
 	isAuthorize,
 } from './login'
 import {
-	showLoginDialog
-} from './wxutil'
+	toLogin
+} from './login'
 let index = 0;
 
 function checkParams(params) {
@@ -68,6 +68,12 @@ service.interceptors.response.use(
 					show,
 					msg
 				} = response.data;
+				const {
+					options,
+					onLoad,
+					onShow,
+					route
+				} = currentPage()
 				if (code == 0 && show && msg) {
 					uni.showToast({
 						title: msg,
@@ -89,19 +95,14 @@ service.interceptors.response.use(
 							store.commit('SETLOGINNUM', 0)
 							uni.hideLoading()
 							store.commit('LOGIN', loginData)
-							const {
-								options,
-								onLoad,
-								onShow
-							} = currentPage()
 							onLoad && onLoad(options)
 							onShow && onShow()
 						}
 					}
 					// #endif
-					//#ifdef H5
-					if (num == 0) {
-						showLoginDialog()
+					//#ifdef H5 || APP-PLUS
+					if (!['pages/shop_cart/shop_cart', 'pages/user/user'].includes(route)) {
+						toLogin()
 					}
 					// #endif
 
@@ -119,3 +120,4 @@ service.interceptors.response.use(
 )
 
 export default service
+

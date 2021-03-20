@@ -121,8 +121,8 @@
 		getMenu
 	} from '@/api/store'
 	import {
-		showLoginDialog
-	} from '@/utils/wxutil'
+		toLogin
+	} from '@/utils/login'
 	import {
 		menuJump,
 		copy
@@ -181,13 +181,13 @@
 			},
 
 			goPage(url) {
-				if (!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return toLogin()
 				uni.navigateTo({
 					url
 				});
 			},
 			tapMenu(item) {
-				if (!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return toLogin()
 				menuJump(item)
 			},
 			async getMenuFun() {

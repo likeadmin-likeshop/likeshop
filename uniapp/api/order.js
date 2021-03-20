@@ -1,11 +1,12 @@
 import request from '@/utils/request'
 
+import {client} from '@/utils/tools'
 
 //下单
 export function orderBuy(data, isGroup) {
   let url =  "order/buy";
   return request.post(url, { ...data,
-    order_source: 1
+    order_source: client
   });
 } 
 //删除订单

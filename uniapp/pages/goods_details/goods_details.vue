@@ -149,8 +149,8 @@
 		strToParams
 	} from '@/utils/tools'
 	import {
-		showLoginDialog
-	} from '@/utils/wxutil';
+		toLogin
+	} from '@/utils/login';
 	export default {
 		data() {
 			return {
@@ -228,7 +228,7 @@
 				}
 			},
 			async collectGoodsFun() {
-				if (!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return toLogin()
 				const {
 					goodsDetail: {
 						is_collect
@@ -255,7 +255,7 @@
 				}
 			},
 			showSpecFun(type) {
-				if (!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return toLogin()
 				this.popupType = type
 				this.showSpec = true
 			},

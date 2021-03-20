@@ -95,3 +95,41 @@ export function wxAutoLogin() {
 		});
 	});
 }
+
+
+// 去登录
+export function toLogin() {
+	//#ifndef  H5 || APP-PLUS
+	uni.showModal({
+		title: '提示',
+		content: '不登录则无法进行更多操作，点击去登录按钮前往登录',
+		confirmText: '去登录',
+		confirmColor: '#FF2C3C',
+		success: res => {
+			let {
+				confirm
+			} = res;
+			if (confirm) {
+				uni.navigateTo({
+					url: '/pages/login/login'
+				});
+			}
+		}
+	});
+	// #endif
+	//#ifdef APP-PLUS
+	uni.navigateTo({
+		url: '/pages/login/login'
+	});
+	//#endif
+	//#ifdef  H5
+	const pathLogin = 'pages/login/login'
+	let path = currentPage().route
+	console.log(pathLogin)
+	if (path != pathLogin) {
+		uni.navigateTo({
+			url: '/pages/login/login'
+		})
+	}
+	// #endif
+} 

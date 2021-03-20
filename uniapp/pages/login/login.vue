@@ -181,19 +181,6 @@
 					});
 				}
 			},
-			getUserProfile() {
-				uni.login({
-					success(res) {
-						console.log(res)
-					}
-				})
-				uni.getUserProfile({
-					desc: '获取用户信息, 用于登录',
-					success(res) {
-						console.log(res)
-					}
-				})
-			},
 			countDownFinish() {
 				this.canSendSms = true;
 			},

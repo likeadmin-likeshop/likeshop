@@ -92,7 +92,7 @@
 
 	import {
 		wxpay
-	} from '@/utils/wxutil';
+	} from '@/utils/pay';
 	import {
 		loadingFun
 	} from '@/utils/tools'

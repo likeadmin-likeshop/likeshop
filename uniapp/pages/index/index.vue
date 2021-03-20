@@ -96,8 +96,8 @@
 		menuJump
 	} from '@/utils/tools'
 	import {
-		showLoginDialog
-	} from '@/utils/wxutil'
+		toLogin
+	} from '@/utils/login'
 	const app = getApp()
 	export default {
 		data() {
@@ -205,7 +205,7 @@
 				this.status = data.status
 			},
 			tapMenu(item) {
-				if (!this.isLogin) return showLoginDialog()
+				if (!this.isLogin) return toLogin()
 				menuJump(item)
 			},
 			swiperChange(e) {

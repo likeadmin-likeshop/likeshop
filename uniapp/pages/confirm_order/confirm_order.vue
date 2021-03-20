@@ -123,7 +123,7 @@
 	} from '@/utils/type'
 	import {
 		wxpay
-	} from '@/utils/wxutil'
+	} from '@/utils/pay'
 	export default {
 		data() {
 			return {
@@ -226,7 +226,7 @@
 							confirm
 						} = res;
 						if (confirm) {
-							// #ifndef H5
+							// #ifdef MP-WEIXIN
 							await this.getAuthMsg();
 							//#endif
 							this.showLoading = true

@@ -49,7 +49,7 @@
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 import { getCoupon } from '../../api/user';
-import { showLoginDialog } from '@/utils/wxutil';
+import { toLogin } from '@/utils/login';
 export default {
   data() {
     return {
@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     onHandle(id) {
-      if (!this.isLogin) return showLoginDialog()
+      if (!this.isLogin) return toLogin()
       this.id = id;
       const {
         btnType

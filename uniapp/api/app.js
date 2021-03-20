@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import wechatH5 from '@/utils/wechath5'
-
+import {client} from '@/utils/tools'
 
 //小程序登录
 export function mnpLogin(data) {
@@ -10,7 +10,7 @@ export function mnpLogin(data) {
 //预支付接口
 export function prepay(data) {
 	return request.post('payment/prepay', { ...data,
-		order_source: 1
+		order_source: client
 	});
 }
 
@@ -23,7 +23,7 @@ export function getMnpNotice(data) {
 
 //账号登录
 export function accountLogin(data) {
-    return request.post("account/login", {...data, client: 2})
+    return request.post("account/login", {...data, client})
 }
 
 
@@ -65,17 +65,17 @@ export function forgetPwd(data) {
 
 // 发送短信
 export function sendSms(data) {
-    return request.post('sms/send', {...data, client: 2})
+    return request.post('sms/send', {...data, client})
 }
 
-// Html5 注册账号
+// 注册账号
 export function register(data) {
-    return request.post('account/register', data)
+    return request.post('account/register', {...data, client})
 }
 
 // 验证码登录
 export function smsCodeLogin(data) {
-    return request.post('account/smsLogin', {...data, client: 2})
+    return request.post('account/smsLogin', {...data, client})
 }
 
 export function getConfig() {

@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-
 //文章分类
 export function getCategoryList(data) {
     let {type} = data

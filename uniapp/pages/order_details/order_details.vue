@@ -165,7 +165,7 @@
 	} from '@/api/app';
 	import {
 		wxpay
-	} from '@/utils/wxutil'
+	} from '@/utils/pay'
 
 	export default {
 		data() {

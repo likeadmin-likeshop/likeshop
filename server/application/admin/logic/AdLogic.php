@@ -21,6 +21,7 @@ namespace app\admin\logic;
 
 use app\common\model\Ad;
 use app\admin\model\AdPosition;
+use app\common\server\UrlServer;
 use think\Db;
 use think\Exception;
 
@@ -62,16 +63,16 @@ class AdLogic
         $position = AdPosition::where('del', 0)->column('id,name', 'id');
 
         foreach ($ad_list as $item) {
+            $item['image'] = UrlServer::getFileUrl($item['image']);
+
             $url = '';
-            $item['status_info'] = '停用';
-            $item['status_switch'] = '启用';
             $item['client_name'] = Ad::getAdTypeDesc($item['client']);
             if (isset($position[$item['pid']])) {
                 $item['position_name'] = $position[$item['pid']];
             }
             switch ($item['link_type']) {
                 case 1:
-                    $page = Ad::getLinkPath($item['client'], $item['link']);
+                    $page = Ad::getLinkPage($item['client'], $item['link']);
                     $url = '商城页面：' . $page['name'];
                     break;
                 case 2:
@@ -91,10 +92,8 @@ class AdLogic
                     $url = '自定义链接：' . $item['link'];
             }
             $item['link'] = $url;
-            if ($item['status'] == 1) {
-                $item['status_info'] = '启用';
-                $item['status_switch'] = '停用';
-            }
+
+
         }
         return ['count' => $ad_count, 'list' => $ad_list];
     }

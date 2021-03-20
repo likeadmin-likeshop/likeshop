@@ -42,8 +42,11 @@ class Basic extends AdminBase
             'partner_image' => ConfigServer::get('website', 'partner_image'),
             'partner_title' => ConfigServer::get('website', 'partner_title'),
             'shop_logo' => ConfigServer::get('website', 'shop_logo'),
+            'shop_login_logo'   =>ConfigServer::get('website', 'shop_login_logo'),
+            'pc_logo' => ConfigServer::get('website', 'pc_logo'),
             'user_image' => ConfigServer::get('website', 'user_image'),
             'goods_image'   =>ConfigServer::get('website', 'goods_image'),
+            'web_favicon'   =>ConfigServer::get('website', 'web_favicon'),
         ];
 
         $this->assign('config', $config);
@@ -68,11 +71,14 @@ class Basic extends AdminBase
 
             ConfigServer::set('website', 'name', $post['name']);
             ConfigServer::set('website', 'login_logo', $post['login_logo']);
+            ConfigServer::set('website', 'web_favicon', $post['web_favicon']);
 
             ConfigServer::set('website', 'backstage_logo', $post['backstage_logo']);
             ConfigServer::set('website', 'admin_image', $post['admin_image']);
             ConfigServer::set('website', 'admin_title', $post['admin_title']);
             ConfigServer::set('website', 'shop_logo', $post['shop_logo']);
+            ConfigServer::set('website', 'shop_login_logo', $post['shop_login_logo']);
+            ConfigServer::set('website', 'pc_logo', $post['pc_logo']);
             ConfigServer::set('website', 'user_image', $post['user_image']);
             ConfigServer::set('website', 'goods_image', $post['goods_image']);
 

@@ -21,5 +21,8 @@ return [
         'goods_image'=>'/static/common/image/default/main.png',//商品主图
         'system_notice' => '/static/common/image/default/system_notice.png',//系统通知图标
         'earning_notice' => '/static/common/image/default/earning_notice.png',//收益通知图标
+        'web_favicon' => '/static/common/ico/default.ico', //浏览器图标
+        'shop_login_logo' => '/static/common/image/default/login_logo_mall.png',//移动端登录logo
+        'pc_logo' => '/static/common/image/default/backstage_logo.png',
     ],
 ];

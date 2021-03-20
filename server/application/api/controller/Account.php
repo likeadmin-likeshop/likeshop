@@ -26,7 +26,7 @@ use app\common\server\ConfigServer;
 class Account extends ApiBase
 {
 
-    public $like_not_need_login = ['register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin'];
+    public $like_not_need_login = ['register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin'];
 
 
     /**
@@ -210,5 +210,16 @@ class Account extends ApiBase
         $this->_success();
     }
 
+
+    /**
+     * Notes: uniapp微信登录
+     * @author 段誉(2021/3/16 16:00)
+     */
+    public function uinAppLogin()
+    {
+        $post = $this->request->post();
+        $data = LoginLogic::uinAppLogin($post);
+        $this->_success($data['msg'], $data['data'], $data['code']);
+    }
 
 }

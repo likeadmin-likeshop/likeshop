@@ -7,7 +7,7 @@
                 <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
                 <div class="layui-colla-content layui-show">
                     <p>*平台管理广告位信息，系统默认了部分广告位，允许新建广告位。</p>
-                    <p>*广告位区分不同的终端，H5商城，微信小程序商城，APP商城。</p>
+                    <p>*广告位区分不同的终端，移动端商城（含移动端商城、小程序、APP）和PC端商城。</p>
                     <p>*广告位停用时，该广告位所有广告都会隐藏。</p>
                 </div>
             </div>
@@ -59,12 +59,29 @@
                         </div>
                         <table id="ad_position-lists" lay-filter="ad_position-lists"></table>
 
+                        <script type="text/html" id="attr-info">
+                            {{# if(d.attr == 1){ }}
+                            系统默认
+                            {{# }else{}}
+                            自定义
+                            {{#}}}
+                        </script>
+                        <script type="text/html" id="status-info">
+                            {{# if(d.status == 1){ }}
+                            启动
+                            {{# }else{}}
+                            停用
+                            {{#}}}
+                        </script>
                         <script type="text/html" id="ad_position-operation">
                             <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
-                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">{{d.status_switch}}</a>
+                            {{# if(d.status == 1){ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">停用</a>
+                            {{# }else{ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">启用</a>
+                            {{#} }}
                             <a class="layui-btn layui-btn-danger layui-btn-sm"  lay-event="del"{{#  if(d.attr=='1'){ }} style="display: none" {{#  } }} >删除</a>
                         </script>
-
                         <script type="text/html" id="image">
                             <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">
                         </script>
@@ -215,10 +232,11 @@
                     elem: '#ad_position-lists'
                     , url: '{:url("AdPosition/lists")}?client='+client  //模拟接口
                     , cols: [[
-                        {field: 'client_name', title: '终端',width:200}
+                        {field: 'id', title: 'id',width:60}
+                        ,{field: 'client_name', title: '终端',width:200}
                         , {field: 'name', title: '广告位', align: 'center'}
-                        , {field: 'attr_show', title: '广告位属性', align: 'center'}
-                        , {field: 'status_show', title: '广告位状态', align: 'center'}
+                        , {field: 'attr_show', title: '广告位属性', align: 'center',toolbar: '#attr-info'}
+                        , {field: 'status', title: '广告位状态', align: 'center',toolbar: '#status-info'}
                         , {fixed: 'right', title: '操作',  align: 'center', toolbar: '#ad_position-operation', width: 200}
                     ]]
                     , page: true

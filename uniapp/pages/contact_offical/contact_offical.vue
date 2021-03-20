@@ -12,12 +12,12 @@
                     微信扫码添加
                 </view>
                 <view class="mt20 normal xs" style="line-height: 35px">{{server.time}}</view>
-                <!-- #ifndef H5 -->
+                <!-- #ifdef MP-WEIXIN -->
                 <button open-type="contact" class="sm row-center contact-btn br60">
                     <text style="line-height: 50px;color: white;">在线客服</text>
                 </button>
                 <!-- #endif -->
-                <!-- #ifdef H5 -->
+                <!-- #ifndef MP-WEIXIN -->
                 <view class="sm row-center contact-btn br60" @click="tipsShow()">
                     <text style="line-height: 50px;color: white;">在线客服</text>
                 </view>
@@ -28,10 +28,24 @@
             </view>
             <view class="row white">
                 <view class="xs" style="line-height: 49px;">{{server.phone}}</view>
+                <!-- #ifdef H5 -->
                 <a class="ml10 phone-btn xs row-center white" :href="'tel:' + server.phone">拨打</a>
+                <!-- #endif -->
+                <!-- #ifdef MP-WEIXIN -->
+                <a class="ml10 phone-btn xs row-center white" @click="showTelTips">拨打</a>
+                <!-- #endif -->
                 <view class="ml5 copy-phone-btn xs row-center" @click="onCopy(server.phone)">复制</view>
             </view>
         </view>
+        <u-modal 
+        :content="content"
+        v-model="showPhoneCall"
+        show-cancel-button
+        confirm-text='呼叫'
+        :confirm-color="primaryColor"
+        @confirm="onCall"
+        >
+        </u-modal>
     </view>
 </template>
 
@@ -42,7 +56,9 @@
         name: 'contactOffical',
         data() {
             return {
-                server: {} 
+                server: {},
+                showPhoneCall: false,
+                content: '即将打电话给'
             }
         },
         
@@ -62,8 +78,23 @@
                 this.$toast({title: "该功能暂未开放"})       
             },
             onCopy(str) {
-                copy(str)
+                copy(str);
             },
+            showTelTips() {
+                this.showPhoneCall = true;
+                this.content = '即将打电话给' + this.server.phone
+            },
+            onCall() {
+                wx.makePhoneCall({
+                    phoneNumber: this.server.phone.toString(),
+                    success(e) {
+                        console.log('成功', e)
+                    },
+                    fail(err) {
+                        console.log('失败', err)
+                    }
+                })
+            }
         }
     }
 </script>

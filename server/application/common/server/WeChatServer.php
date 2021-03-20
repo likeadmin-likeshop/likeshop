@@ -190,9 +190,11 @@ class WeChatServer
                 $config = self::getMnpPayConfig();
                 $notify_url = url('payment/notifyMnp', '', '', true);
                 break;
+            case Client_::oa:
+            case Client_::pc:
             case Client_::h5:
                 $config = self::getOaPayConfig();
-                $notify_url = url('payment/notifyOp', '', '', true);
+                $notify_url = url('payment/notifyOa', '', '', true);
                 break;
             case Client_::android:
             case Client_::ios:

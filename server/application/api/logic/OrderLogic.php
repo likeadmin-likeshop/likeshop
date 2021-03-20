@@ -265,7 +265,7 @@ class OrderLogic extends LogicBase
         Db::startTrans();
         try {
             $type = $post['type'] ?? '';
-            $order_source = $post['client'] ?? Client_::mnp;
+            $order_source = $post['client'];
             $goods_lists = $data['goods_lists'];
             $user_address = $data['address'];
             $user = User::get($user_id);

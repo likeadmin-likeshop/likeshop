@@ -46,6 +46,7 @@ class Order extends ApiBase
     {
         $post = $this->request->post();
         $post['user_id'] = $this->user_id;
+        $post['client'] = $this->client;
         $check = $this->validate($post, 'app\api\validate\Order.buy');
         if (true !== $check) {
             $this->_error($check);

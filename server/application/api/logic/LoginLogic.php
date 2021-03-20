@@ -45,13 +45,19 @@ class LoginLogic extends LogicBase
         $client =Client_::mnp;
         switch ($post['client']){
             case 2:
-                $client = Client_::h5;
+                $client = Client_::oa;
                 break;
             case 3:
                 $client = Client_::ios;
                 break;
             case 4:
                 $client = Client_::android;
+                break;
+            case 5:
+                $client = Client_::pc;
+                break;
+            case 6:
+                $client = Client_::h5;
                 break;
         }
         $time = time();
@@ -217,9 +223,9 @@ class LoginLogic extends LogicBase
             ->value('user_id');
 
         if (empty($user_id)) {
-            $user_info = UserServer::createUser($user, Client_::h5);
+            $user_info = UserServer::createUser($user, Client_::oa);
         } else {
-            $user_info = UserServer::updateUser($user, Client_::h5, $user_id);
+            $user_info = UserServer::updateUser($user, Client_::oa, $user_id);
         }
 
         if (empty($user_info)) {
@@ -231,7 +237,7 @@ class LoginLogic extends LogicBase
         }
 
         //创建会话
-        $user_info['token'] = self::createSession($user_info['id'], Client_::h5);
+        $user_info['token'] = self::createSession($user_info['id'], Client_::oa);
 
 
         unset($user_info['id']);

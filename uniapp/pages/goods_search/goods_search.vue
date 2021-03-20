@@ -4,7 +4,7 @@
 		<view class="header-wrap">
 			<u-sticky offset-top="0" h5-nav-height="0">
 				<view class="search">
-					 <u-search v-model="keyword" @focus="showHistory = true" @search="onSearch" bg-color="#F4F4F4"></u-search>
+					 <u-search v-model="keyword" @focus="showHistory = true" :focus="showHistory" @search="onSearch" bg-color="#F4F4F4"></u-search>
 				</view>
 				<view v-show="!showHistory" class="header row bg-white">
 					<view :class="'tag row-center ' + (comprehensive ? 'primary' : '')" @tap="onNormal">综合</view>
@@ -31,19 +31,19 @@
 			</u-sticky>
 		</view>
 		<view v-show="showHistory" class="content bg-white">
-			<view v-if="hotList.length" class="search-words">
+			<view v-if="hotList && hotList.length" class="search-words">
 				<view class="title">热门搜索</view>
 				<view class="words row wrap">
-					<view v-for="(item, index) in hotList" :key="index" class="item br60 bg-gray mr20 mb20 lighter sm line1" @tap="onChangeKeyword(item)">{{item}}</view>
+					<view v-for="(item, index) in hotList" :key="index" class="item br60  mr20 mb20 lighter sm line1" @tap="onChangeKeyword(item)">{{item}}</view>
 				</view>
 			</view>
-			<view v-if="historyList.length" class="search-words">
+			<view v-if="historyList && historyList.length" class="search-words">
 				<view class="title row-between">
 					<view>历史搜索</view>
 					<view class="xs muted mr20" style="padding: 10rpx 20rpx" @tap="clearSearchFun">清空</view>
 				</view>
 				<view class="words row wrap">
-					<view v-for="(item, index) in historyList" :key="index" class="item br60 bg-gray mr20 mb20 lighter sm line1" @tap="onChangeKeyword(item)">{{item}}</view>
+					<view v-for="(item, index) in historyList" :key="index" class="item br60  mr20 mb20 lighter sm line1" @tap="onChangeKeyword(item)">{{item}}</view>
 				</view>
 			</view>
 		</view>
@@ -56,7 +56,7 @@
 					<goods-list :list="goodsList" type="one"></goods-list>
 				</view>
 			</view>
-			<loading-footer :status="status" :slot-empty="true" @refresh="reload">
+			<loading-footer :status="status" :slot-empty="true">
 				<view slot="empty" class="column-center" style="padding-top: 200rpx">
 					<image class="img-null" src="/static/images/goods_null.png"></image>
 					<text class="lighter">暂无商品</text>
@@ -73,18 +73,11 @@
 		clearSearch
 	} from '@/api/store';
 	import {
-		trottle
+		trottle, loadingFun, getRect
 	} from '@/utils/tools';
 	import {
 		loadingType
 	} from '@/utils/type';
-	import {
-		getRect
-	} from '@/utils/tools';
-	import {
-		loadingFun
-	} from '@/utils/tools'
-	const app = getApp();
 
 	export default {
 		data() {
@@ -272,13 +265,10 @@
 				}
 				const data = await loadingFun(getGoodsSearch, page, goodsList, status, params)
 				if (!data) return
-				console.log(data)
 				this.page = data.page
 				this.goodsList = data.dataList
 				this.status = data.status
-				console.log(this)
-			}
-
+			},
 		}
 	};
 </script>
@@ -316,6 +306,7 @@
 						line-height: 52rpx;
 						height: 52rpx;
 						padding: 0 24rpx;
+						background-color: #F5F5F5;
 					}
 				}
 			}

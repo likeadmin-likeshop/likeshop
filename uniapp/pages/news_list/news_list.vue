@@ -4,8 +4,8 @@
 <view class="news_list">
     <view class="contain">
         <view class="banner">
-            <!-- 存在就是10 不存在为7 -->
-            <swipers :pid="type ? 11 : 8" height="300rpx" radius="0rpx"></swipers>
+            <!-- 存在就是10 不存在为8 -->
+            <swipers :pid="type ? 10 : 8" height="300rpx" radius="0rpx"></swipers>
         </view>
         <tabs :active="active" @change="changeActive" v-if="categoryList.length">
             <tab title="全部"></tab>
@@ -62,9 +62,10 @@
 // +----------------------------------------------------------------------
 // | Author: LikeShopTeam
 // +----------------------------------------------------------------------
-import { getCategoryList, getArticleList } from '../../api/new';
-import { loadingType } from '../../utils/type';
-import swipers from "../../components/swipers/swipers";
+import { getCategoryList, getArticleList } from '@/api/new';
+import { loadingType } from '@/utils/type';
+import swipers from "@/components/swipers/swipers";
+import {loadingFun} from '@/utils/tools'
 
 export default {
   data() {
@@ -129,7 +130,6 @@ export default {
       }).then(res => {
         if (res.code == 1) {
             this.categoryList = res.data
-            console.log(this.categoryList)
             this.getArticleListFun();
         }
       });
@@ -142,34 +142,16 @@ export default {
         newsList,
         status
       } = this;
-      if (status == loadingType.FINISHED) return;
-      getArticleList({
+      loadingFun(getArticleList, page, newsList, status, {
         type: this.type,
         id: active ? active.toString() : '',
-        page_no: page
-      }).then(res => {
-        if (res.code == 1) {
-          let {
-            list,
-            more
-          } = res.data;
-          newsList.push(...list);
-          this.newsList = newsList
-          this.page ++;
-          this.showLoading = false
-          
-          this.$nextTick(() => {
-            if (!more) {
-                this.status = loadingType.FINISHED
+        page_no: page}).then(res => {
+            if(res) {
+                this.page = res.page;
+                this.newsList = res.dataList
+                this.status = res.status
             }
-
-            if (newsList.length <= 0) {
-                this.status = loadingType.EMPTY;
-                return;
-            }
-          });
-        }
-      });
+        })
     },
 
     goPage(e) {

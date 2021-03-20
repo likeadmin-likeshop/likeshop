@@ -7,14 +7,14 @@
 					<image class="share-icon" src="/static/images/icon_generate_poster.png"></image>
 					<view class="mt10">生成海报</view>
 				</view>
-				<!-- #ifdef MP-WEIXIN -->
+				<!-- #ifdef MP-WEIXIN-->
 				<button open-type="share" class="column-center" hover-class="none">
 					<image class="share-icon" src="/static/images/icon_wechat.png"></image>
 					<view class="mt10">微信好友</view>
 				</button>
 				<!-- #endif -->
-				<!-- #ifdef H5 -->
-				<view oclass="column-center" @tap="showTips = true">
+				<!-- #ifdef H5 || APP-PLUS -->
+				<view oclass="column-center" @tap="shareWx">
 					<image class="share-icon" src="/static/images/icon_wechat.png"></image>
 					<view class="mt10">微信好友</view>
 				</view>
@@ -22,7 +22,8 @@
 			</view>
 			<view class="row-center bg-body cancel xl" @tap="onClose">取消</view>
 		</u-popup>
-		<u-popup class="share-poster" v-model="showPoster" mode="center" :closeable="true" :custom-style="{background: 'rgba(0, 0, 0, 0)'}" :safe-area-inset-bottom="true">
+		<u-popup class="share-poster" v-model="showPoster" mode="center" :closeable="true" :custom-style="{background: 'rgba(0, 0, 0, 0)'}"
+		 :safe-area-inset-bottom="true">
 			<image class="share-img mb20" :src="sharePoster"></image>
 			<button class="row-center" type="primary" style="height: 84rpx" @tap="savePoster">
 				<!-- #ifndef H5 -->
@@ -34,9 +35,9 @@
 			</button>
 		</u-popup>
 		<!-- #ifdef H5 -->
-		<u-popup class="share-tips" v-model="showTips" mode="top"  :custom-style="{background: 'rgba(0, 0, 0, 0)'}">
+		<u-popup class="share-tips" v-model="showTips" mode="top" :custom-style="{background: 'rgba(0, 0, 0, 0)'}">
 			<view style="overflow: hidden;">
-				<image src="/static/images/share_arrow.png" class="share-arrow"/>
+				<image src="/static/images/share_arrow.png" class="share-arrow" />
 				<view class="white" style="text-align: center;margin-top: 280rpx;">
 					<view class="bold lg">立即分享给好友吧</view>
 					<view class="sm mt10">点击屏幕右上角将本页面分享给好友</view>
@@ -48,16 +49,32 @@
 </template>
 
 <script>
+	// @event close 弹窗关闭事件
 	import {
 		getPoster
 	} from "@/api/store"
-	import {showLoginDialog} from '@/utils/wxutil'
+	import {
+		toLogin
+	} from '@/utils/login'
+    import config from '@/config/app'
 	export default {
 		props: {
 			show: {
 				type: Boolean
 			},
-			goodsId: String
+			goodsId: String,
+            imgUrl: {
+                type: String,
+                default: ''
+            },
+            shareTitle: {
+                type: String,
+                default: ''
+            },
+            summary: {
+                type: String,
+                default: ''
+            }
 		},
 		data() {
 			return {
@@ -77,34 +94,88 @@
 			onClose() {
 				this.$emit('close')
 			},
-			getPosterFun() {
-				if (!this.isLogin) return showLoginDialog()
+			async getPosterFun() {
+				if (!this.isLogin) return toLogin()
+				let url = 'pages/goods_details/goods_details'
+				// #ifdef H5 || APP-PLUS
+				url = '/mobile/' + url
+				// #endif
 				uni.showLoading({
 					title: '正在生成中...'
 				});
-				let url = 'pages/goods_details/goods_details'
-				// #ifdef H5
-				url = '/mobile/' + url
-				// #endif
-				getPoster({
+				const params = {
 					id: this.goodsId,
-					url
-				}).then(res => {
-					if (res.code == 1) {
+					url: url
+				}
+				const {
+					data,
+					code,
+					msg
+				} = await getPoster(params)
+				if (code == 1) {
+					uni.hideLoading();
+					this.sharePoster = data.replace(/[\r\n]/g, "");
+					this.showPoster = true
+				} else {
+					uni.hideLoading({
+						success: () => {
+							this.$toast({
+								title: msg
+							});
+						}
+					});
+				}
+			},
+			shareWx() {
+                // #ifdef H5
+				this.showTips = true
+                // #endif
+                // #ifdef APP-PLUS
+                // console.log('shareWx')
+                // uni.share({
+                //     provider: "weixin",
+                //     scene: "WXSceneSession",
+                //     type: 5,
+                //     summary: this.summary,
+                //     imageUrl: this.imgUrl,
+                //     title: this.shareTitle,
+                //     miniProgram: {
+                //         id: 'gh_abcdefg',
+                //         path: this.isBargain ? "pages/bundle/bargain_process/bargain_process?bargainId=" + this.goodsId : 'pages/goods_details/goods_details?id=' + this.goodsId,
+                //         type: 0,
+                //         webUrl: 'http://likeshop.yixiangonline.com'
+                //     },
+                //     success: (res) => {
+                //         this.$toast({
+                //             title: '分享成功'
+                //         })
+                //     }, 
+                //     fail: (err) => {
+                //         this.$toast({
+                //             title: err.errMsg
+                //         })
+                //     }
+                // })
+                let url = config.baseURL.replace(/\/api\//g, "/mobile/")
+                console.log(url, 'config: ',config)
+                uni.share({
+                    provider: "weixin",
+                    scene: "WXSceneSession",
+                    type: 0,
+                    href: url + 'pages/goods_details/goods_details?id=' + this.goodsId,
+                    title:  this.shareTitle,
+                    summary: this.summary,
+                    imageUrl: this.imgUrl,
+                    success: (res) => {
 
-						uni.hideLoading();
-						this.sharePoster = res.data.replace(/[\r\n]/g, "");
-						this.showPoster = true
-					} else {
-						uni.hideLoading({
-							success: () => {
-								this.$toast({
-									title: res.msg
-								});
-							}
-						});
-					}
-				});
+                    },
+                    fail: (err) => {
+                        this.$toast({
+                            title: err.errMsg
+                        })
+                    }
+                });
+                // #endif
 			},
 			async savePoster() {
 				const {
@@ -112,8 +183,44 @@
 				} = this;
 				//#ifdef MP-WEIXIN
 				await this.getWriteAuth();
+				//#endif
+
+				// #ifdef APP-PLUS 
+				let bitmap = new plus.nativeObj.Bitmap("goods_poster");
+				bitmap.loadBase64Data(
+					sharePoster,
+					(res) => {
+						bitmap.save('share.png', {
+							overwrite: true, //是否覆盖已有图片， true 是
+							quality: 100 //图片质量，1-100 默认50， 100质量最高
+						}, (e) => {
+							console.log(e)
+							uni.saveImageToPhotosAlbum({
+								filePath: e.target,
+								success: res => {
+									this.showPoster = false
+									this.$toast({
+										title: '保存成功',
+										icon: 'success'
+									});
+								},
+
+								fail: (err) => {
+									this.$toast({
+										title: '保存失败: ' + err.message
+									});
+								}
+							})
+						});
+					},
+					(e) => {
+						console.log("加载Base64图片数据失败：" + JSON.stringify(e));
+						bitmap.clear();
+					}
+				);
+				// #endif
+				// #ifdef MP-WEIXIN
 				let file = uni.getFileSystemManager();
-				console.log(file, wx.env.USER_DATA_PATH)
 				file.writeFile({
 					filePath: wx.env.USER_DATA_PATH + "/share.png",
 					data: sharePoster.slice(22),
@@ -138,8 +245,7 @@
 						});
 					}
 				});
-				//#endif
-
+				// #endif
 			},
 
 			getWriteAuth() {
@@ -175,10 +281,9 @@
 									}
 								});
 							} else {
-								resolve(true);
+                                resolve(true);
 							}
 						}
-
 					});
 				});
 			},
@@ -207,11 +312,11 @@
 		height: 940rpx;
 		border-radius: 12rpx;
 	}
-	
+
 	.share-tips .share-arrow {
-		 width: 140rpx;
-		 height: 250rpx;
-		 float: right;
-		 margin: 15rpx 31rpx 0 0;
+		width: 140rpx;
+		height: 250rpx;
+		float: right;
+		margin: 15rpx 31rpx 0 0;
 	}
 </style>

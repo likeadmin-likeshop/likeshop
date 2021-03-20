@@ -227,44 +227,10 @@ export function changeUserMobile(data) {
 export function getLevelList() {
     return request.get('user_level/lists');
 }
-// 我的粉丝
-export function getUserFans(data) {
-    return request.get("user/fans", {params: data})
-}
 
 // 获取活动专区商品列表
 export function getActivityGoodsLists(data) {
     return request.get("activity_area/activityGoodsList", {params: data})
-}
-
-// 佣金提现
-export function applyWithdraw(data) {
-    return request.post("withdraw/apply", data);
-}
-
-// 提现记录列表
-export function getWithdrawRecords(params) {
-    return request.get("withdraw/records", {params})
-}
-
-// 提现详情
-export function getWithdrawDetail(params) {
-    return request.get("withdraw/info", {params})
-}
-
-// 提现页信息
-export function getWithdrawConfig() {
-    return request.get("withdraw/config")
-}
-
-// 月度账单
-export function getMonthBill(params) {
-    return request.get("distribution/monthbill", {params})
-}
-
-// 月度账单明细
-export function getMonthOrderDetail(params) {
-    return request.get("distribution/monthDetail", {params})
 }
 
 // 邀请海报
@@ -275,4 +241,9 @@ export function getInviteBanner(data) {
 // 用户钱包
 export function getWallet() {
     return request.get("user/myWallet")
+}
+
+// 退出登录
+export function userLogout(data) {
+    return request.post('account/logout', data)
 }

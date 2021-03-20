@@ -51,7 +51,7 @@ class UserServer
                     $avatar_url = $response['avatarUrl'];
                     $nickname = $response['nickName'];
                     break;
-                case Client_::h5:
+                case Client_::oa:
                 case Client_::ios:
                 case Client_::android:
                     $openid = $response['openid'];
@@ -129,7 +129,7 @@ class UserServer
                     $avatar_url = $response['avatarUrl'];
                     $nickname = $response['nickName'];
                     break;
-                case Client_::h5:
+                case Client_::oa:
                 case Client_::ios:
                 case Client_::android:
                     $openid = $response['openid'];

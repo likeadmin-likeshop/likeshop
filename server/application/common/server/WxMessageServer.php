@@ -41,7 +41,7 @@ class WxMessageServer
         $this->openid = $user_model['openid'];
         $this->platform = $user_model['client'];
 
-        if ($this->platform === Client_::h5) {
+        if ($this->platform === Client_::oa) {
             $this->config = WeChatServer::getOaConfig();
             $this->app = Factory::officialAccount($this->config);
         } else if ($this->platform === Client_::mnp) {
@@ -63,7 +63,7 @@ class WxMessageServer
         }
         // 发送消息
         try {
-            if ($this->platform  === Client_::h5) {
+            if ($this->platform  === Client_::oa) {
                 $this->app->template_message->send($this->oaTemplate($params));  // 公众号场景
             } else if ($this->platform === Client_::mnp) {
                 $this->app->subscribe_message->send($this->mnpTemplate($params));

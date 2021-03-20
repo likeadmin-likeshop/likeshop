@@ -26,7 +26,7 @@ class Share extends ApiBase
     {
         $id = $this->request->get('id');
         $url = $this->request->get('url');
-        $client = $this->request->get('client', 1);
+        $client = $this->client;
         if($id && $url){
             $result = ShareLogic::shareGoods($this->user_id,$id,$url,$client);
             $this->_success($result['msg'], $result['data'], $result['code']);

@@ -35,7 +35,7 @@ class LoginPasswordLogic extends LogicBase
         if (isset($post['client']) && $post['client'] == 1) {
             $client = Client_::mnp;
         } elseif (isset($post['client']) && $post['client'] == 2) {
-            $client = Client_::h5;
+            $client = Client_::oa;
         } elseif (isset($post['client']) && $post['client'] == 3) {
             $client = Client_::ios;
         } elseif (isset($post['client']) && $post['client'] == 4) {
@@ -68,7 +68,7 @@ class LoginPasswordLogic extends LogicBase
         if (isset($post['client']) && $post['client'] == 1) {
             $client = Client_::mnp;
         } elseif (isset($post['client']) && $post['client'] == 2) {
-            $client = Client_::h5;
+            $client = Client_::oa;
         } elseif (isset($post['client']) && $post['client'] == 3) {
             $client = Client_::ios;
         } elseif (isset($post['client']) && $post['client'] == 4) {

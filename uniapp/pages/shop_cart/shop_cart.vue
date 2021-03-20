@@ -37,7 +37,7 @@
 				<image class="img-null" src="/static/images/cart_null.png"></image>
 				<view class="muted mt20">微信授权登录后才能查看购物车哦</view>
 				<navigator class="white br60 row-center btn" url="/pages/login/login">
-					<image class="mr10" src="/static/images/icon_wechat.png"></image>
+					<!-- <image class="mr10" src="/static/images/icon_wechat.png"></image> -->
 					<text>去登录</text>
 				</navigator>
 			</view>

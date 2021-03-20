@@ -10,9 +10,6 @@ import {
 } from '@/api/app'
 import store from '../store'
 import Cache from './cache'
-import {
-	inputInviteCode
-} from "@/api/user"
 class Wechath5 {
 
 	//获取微信配置url

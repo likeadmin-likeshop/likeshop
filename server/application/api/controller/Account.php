@@ -26,7 +26,7 @@ use app\common\server\ConfigServer;
 class Account extends ApiBase
 {
 
-    public $like_not_need_login = ['register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin'];
+    public $like_not_need_login = ['register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin'];
 
 
     /**

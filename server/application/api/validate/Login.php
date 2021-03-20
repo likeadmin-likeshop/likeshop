@@ -39,7 +39,7 @@ class Login extends Validate
     protected $rule = [
         'account' => 'require',
         'password' => 'require|password',
-        'client' => 'require|in:' . Client_::h5 . ',' . Client_::ios . ',' . Client_::android,
+        'client' => 'require|in:' . Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
         'code'=>'require|checkCode',
     ];
 

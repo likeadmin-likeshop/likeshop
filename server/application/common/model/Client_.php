@@ -23,10 +23,12 @@ namespace app\common\model;
 
 class Client_
 {
-    const mnp = 1;
-    const h5 = 2;
+    const mnp = 1;//小程序
+    const oa = 2;//公众号
     const ios = 3;
     const android = 4;
+    const pc = 5;
+    const h5 = 6;//h5(非微信环境h5)
 
     function getName($value)
     {
@@ -43,6 +45,9 @@ class Client_
             case self::android:
                 $name = '安卓';
                 break;
+            case self::oa:
+                $name = '公众号';
+                break;
         }
         return $name;
     }
@@ -50,10 +55,12 @@ class Client_
     public static function getClient($type = true)
     {
         $desc = [
-            self::mnp => '小程序商城',
-            self::h5 => 'h5商城',
-            self::ios => '苹果APP',
+            self::mnp     => '小程序商城',
+            self::h5      => 'h5商城',
+            self::ios     => '苹果APP',
             self::android => '安卓APP',
+            self::pc      => 'PC',
+            self::oa      => '公众号',
         ];
         if ($type === true) {
             return $desc;

@@ -37,7 +37,7 @@ use think\Db;
 class Payment extends ApiBase
 {
 
-    public $like_not_need_login = ['notifyMnp', 'notifyOp', 'notifyApp', 'aliNotify'];
+    public $like_not_need_login = ['notifyMnp', 'notifyOa', 'notifyApp', 'aliNotify'];
 
     /**
      * Notes: 预支付
@@ -93,9 +93,9 @@ class Payment extends ApiBase
      * Notes: 公众号回调
      * @author 段誉(2021/2/23 14:34)
      */
-    public function notifyOp()
+    public function notifyOa()
     {
-        $config = WeChatServer::getOpPayConfig();
+        $config = WeChatServer::getOaPayConfig();
         return WeChatPayServer::notify($config);
     }
 

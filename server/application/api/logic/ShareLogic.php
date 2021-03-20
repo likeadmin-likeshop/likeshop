@@ -34,6 +34,7 @@ class ShareLogic extends LogicBase {
                 case Client_::mnp: //小程序
                     $url_type = 'path';
                     break;
+                case Client_::oa: //公众号
                 case Client_::h5: //H5
                 case Client_::android:
                 case Client_::ios:

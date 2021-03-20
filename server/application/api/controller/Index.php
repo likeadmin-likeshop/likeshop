@@ -80,7 +80,7 @@ class Index extends ApiBase
                     'mnp_share_title' => 'LikeShop——100%开源免费商用电商系统'
                 ]);
                 break;
-            case Client_::h5:
+            case Client_::oa:
                 $config = ConfigServer::get('share', 'h5', [
                     'h5_share_title' => 'LikeShop——100%开源免费商用电商系统',
                     'h5_share_intro' => 'likeshop已经把小程序、安卓APP、苹果APP都免费开源出来了！',

@@ -74,6 +74,7 @@ class User extends ApiBase{
         $data = $this->request->post();
         //默认绑定手机号码
         $data['message_key'] = 'BDSJHM';
+        $data['client'] = $this->client;
         $validate = 'app\api\validate\ChangeMobile.binding';
         //更换手机号码、替换短信key、验证规则
         if(isset($data['action']) && 'change' == $data['action']){

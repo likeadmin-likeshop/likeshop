@@ -294,7 +294,10 @@
             var field = data.field;
             //执行重载
             table.reload('order-lists', {
-                where: field
+                where: field,
+                page: {
+                    curr: 1
+                }
             });
         });
         //清空查询
@@ -310,7 +313,10 @@
             form.render('select');
             //刷新列表
             table.reload('order-lists', {
-                where: []
+                where: [],
+                page: {
+                    curr: 1
+                }
             });
         });
 

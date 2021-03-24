@@ -13,7 +13,7 @@
 		<view class="contain">
 			<view class="top-bg"></view>
 			<view class="main">
-				<swipers :pid="2" height="284rpx" padding="20rpx"></swipers>
+				<swipers :pid="1" height="284rpx" padding="20rpx"></swipers>
 				<!-- 导航入口 -->
 				<view class="nav bg-white" v-if="navList.length">
 					<swiper :style="'height:' + navSwiperH + 'rpx;'" @change="swiperChange">

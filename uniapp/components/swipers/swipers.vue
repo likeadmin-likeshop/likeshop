@@ -66,7 +66,6 @@
 					code,
 					data
 				} = await getAdList({
-					client: 2,
 					pid: this.pid
 				})
 				if (code == 1) {

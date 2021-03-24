@@ -5,7 +5,7 @@
     <view class="contain">
         <view class="banner">
             <!-- 存在就是10 不存在为8 -->
-            <swipers :pid="type ? 10 : 8" height="300rpx" radius="0rpx"></swipers>
+            <swipers :pid="type ? 10 : 7" height="300rpx" radius="0rpx"></swipers>
         </view>
         <tabs :active="active" @change="changeActive" v-if="categoryList.length">
             <tab title="全部"></tab>

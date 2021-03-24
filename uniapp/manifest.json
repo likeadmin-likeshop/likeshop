@@ -103,17 +103,17 @@
         },
         "devServer" : {
             "https" : false,
-            "port" : 8080,
-            "proxy" : {
-                "/api" : {
-                    "target" : "http://likeshopv2.yixiangonline.com",
-                    "changeOrigin" : true,
-                    "secure" : false,
-                    "pathRewrite" : {
-                        "^/api" : "/api/"
-                    }
-                }
-            }
+            "port" : 8080
+            // "proxy" : {
+            //     "/api" : {
+            //         "target" : "http://likeshopv2.yixiangonline.com",
+            //         "changeOrigin" : true,
+            //         "secure" : false,
+            //         "pathRewrite" : {
+            //             "^/api" : "/api/"
+            //         }
+            //     }
+            // }
         },
         "publicPath" : "/mobile/"
     }

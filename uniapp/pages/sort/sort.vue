@@ -19,7 +19,7 @@
 				 @touchstart="onTouchStart" scroll-with-animation="true">
 					<view class="main-wrap">
 						<view class="mb20" style="border-radius: 10rpx;">
-							<swipers :pid="5" height="160rpx" padding="20rpx 0 0" radius="5rpx"></swipers>
+							<swipers :pid="4" height="160rpx" padding="20rpx 0 0" radius="5rpx"></swipers>
 						</view>
 						<view v-for="(item, index) in sortList" :key="index" class="one-item-wrap" :id="'scroll-item-' + index">
 							<view v-for="(sitem, sindex) in item.sons" :key="sindex" class="two-item bg-white mb20">

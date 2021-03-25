@@ -270,6 +270,11 @@ class OrderLogic extends LogicBase
             $user_address = $data['address'];
             $user = User::get($user_id);
 
+
+            if ($data['pay_way'] == Pay::BALANCE_PAY) {
+                throw  new Exception('暂不支持余额支付');
+            }
+
             if (empty($data['address'])) {
                 throw  new Exception('请选择收货地址');
             }

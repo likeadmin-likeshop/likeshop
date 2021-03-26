@@ -29,6 +29,7 @@ use app\common\server\ConfigServer;
 use expressage\Kd100;
 use expressage\Kdniao;
 use think\Db;
+use think\facade\Env;
 use think\facade\Hook;
 
 class OrderLogic
@@ -328,10 +329,10 @@ class OrderLogic
 
         //快递配置设置为快递鸟时
         if($express === 'kdniao') {
-            $expressage = (new Kdniao($app, $key, true));
+            $expressage = (new Kdniao($app, $key, Env::get('app.app_debug', true)));
             $shipping_field = 'codebird';
         } else {
-            $expressage = (new Kd100($key, $app, true));
+            $expressage = (new Kd100($key, $app, Env::get('app.app_debug', true)));
             $shipping_field = 'code100';
         }
 

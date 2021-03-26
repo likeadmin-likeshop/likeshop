@@ -545,7 +545,7 @@ class StatisticsLogic
 
 
         if (isset($post['goods']) && $post['goods'] == 'ago_seven') {
-            $echarts_data = self::getVisitData($timeData['end_s'], 7);
+            $echarts_data = self::getVisitData($timeData['start_s'], 7);
             return [
                 'echarts_goods_click'   => $echarts_data['goods'],
                 'echarts_user_click'    => $echarts_data['user'],
@@ -556,7 +556,7 @@ class StatisticsLogic
         }
 
         if (isset($post['goods']) && $post['goods'] == 'ago_fifteen') {
-            $echarts_data = self::getVisitData($timeData['end_f'], 15);
+            $echarts_data = self::getVisitData($timeData['start_f'], 15);
             return [
                 'echarts_goods_click'   => $echarts_data['goods'],
                 'echarts_user_click'    => $echarts_data['user'],

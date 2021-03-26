@@ -746,7 +746,12 @@
         //批量填充规格图片
         like.imageUpload('.batch-spec-image',function(uri,element){
             var temp_id = element.prev().attr('spec-value-temp-id');
-            $('input[name="spec_image[]"]').each(function(){
+            if($('input[name="spec_type"]:checked').val() == 1){
+                spec_images = $('#one-spec-lists-table input[name="spec_image[]"]');
+            }else{
+                spec_images = $('#more-spec-lists-table input[name="spec_image[]"]');
+            }
+            spec_images.each(function(){
                 var temp_ids = $(this).parent().parent().parent().attr('spec-value-temp-ids');
                 temp_ids_arr = temp_ids.split(',');
                 var key = $(this).attr('name') + temp_ids;

@@ -200,7 +200,7 @@ export default {
             title: res.msg
           }, {
             tab: 5,
-            url: '/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
+            url: '/pages/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
           });
         }
       });
@@ -243,7 +243,7 @@ export default {
             title: '提交成功'
           });
           uni.redirectTo({
-            url: '/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
+            url: '/pages/after_sales_detail/after_sales_detail?afterSaleId=' + res.data.after_sale_id
           });
         }
       });

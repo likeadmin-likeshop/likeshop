@@ -24,7 +24,7 @@
                     @click="
                         goPage($event, 
                         items.after_sale.able_apply, 
-                        '/pages/bundle/apply_refund/apply_refund', 
+                        '/pages/apply_refund/apply_refund', 
                         items.order_id, 
                         item.item_id)"
                      >
@@ -42,7 +42,7 @@
 				</view>
 				<view class="primary nr">{{items.after_sale.type_text}}</view>
 			</view>
-			<navigator v-for="(item, index2) in items.order_goods" :key="index2" hover-class="none" class="sale-goods-show" :url="'/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id + '&order_id=' + items.order_id">
+			<navigator v-for="(item, index2) in items.order_goods" :key="index2" hover-class="none" class="sale-goods-show" :url="'/pages/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id + '&order_id=' + items.order_id">
 				<view class="row">
 					<view class="goods-img">
 						<custom-image width="100%" height="100%" radius="6rpx" lazy-load :src="item.image" />
@@ -64,12 +64,12 @@
 			</navigator>
 			<view class="sale-footer row-end">
 				<view class="row-center normal br60 mr20 grey-btn nr" @tap="showDialog(items.after_sale.after_sale_id)">撤销申请</view>
-				<navigator hover-class="none" :url="'/pages/bundle/input_express_info/input_express_info?id=' + items.after_sale.after_sale_id" class="row-center normal br60 grey-btn nr" :hidden="items.after_sale.status!=2">填写快递单号</navigator>
+				<navigator hover-class="none" :url="'/pages/input_express_info/input_express_info?id=' + items.after_sale.after_sale_id" class="row-center normal br60 grey-btn nr" :hidden="items.after_sale.status!=2">填写快递单号</navigator>
 			</view>
 		</view>
 	</view>
 	<view class="sale-list" v-else>
-		<navigator v-for="(items, index) in lists" :key="index" hover-class="none" class="sale-item bg-white mt20" :url="'/pages/bundle/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id">
+		<navigator v-for="(items, index) in lists" :key="index" hover-class="none" class="sale-item bg-white mt20" :url="'/pages/after_sales_detail/after_sales_detail?afterSaleId=' + items.after_sale.after_sale_id">
 			<view class="sale-header row-between">
 				<view class="row">
 					<!-- <image style="width: 40rpx;height: 40rpx" src="/images/icon_shop.png"></image> -->

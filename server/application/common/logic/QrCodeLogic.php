@@ -81,6 +81,7 @@ class QrCodeLogic extends LogicBase {
         try {
             $save_dir = ROOT_PATH .'/uploads/qr_code/goods_share/';
             $background_img = ROOT_PATH .'/images/share/share_goods_bg.png';
+            !file_exists($save_dir) && mkdir($save_dir, 0777, true);
 
             $cache_key = 'gid' . $goods['id'].'uid'.$user['id'].$url_type;
             $qr_src = md5($cache_key) . '.png';
@@ -105,7 +106,6 @@ class QrCodeLogic extends LogicBase {
                 $qrCode->setText($url);
                 $qrCode->setSize(1000);
                 $qrCode->setWriterByName('png');
-                !file_exists($save_dir) && mkdir($save_dir, 777, true);
                 $qrCode->writeFile($poster_url);
 
             }

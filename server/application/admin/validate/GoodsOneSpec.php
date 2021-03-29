@@ -25,8 +25,8 @@ class GoodsOneSpec extends Validate
 {
     protected $rule = [
 //        'one_market_price' => 'require|egt:0.01',
-        'one_price'        => 'require|gt:0',
-        'one_cost_price'   => 'require|gt:0',
+        'one_price'        => 'require|egt:0',
+        'one_cost_price'   => 'require|egt:0',
         'one_stock'        => 'require|integer',
         'one_volume'       => 'require|egt:0',
         'one_weight'       => 'require|egt:0',
@@ -40,9 +40,9 @@ class GoodsOneSpec extends Validate
 //        'one_market_price.require'  => '请输入市场价',
 //        'one_market_price.gt'       => '市场价必须大于或等于0.01',
         'one_price.require'         => '请输入价格',
-        'one_price.gt'              => '价格必须大于或等于0.01',
+        'one_price.egt'             => '价格必须大于或等于0.01',
         'one_cost_price.require'    => '请输入成本价',
-        'one_cost_price.gt'         => '成本价必须大于0.1',
+        'one_cost_price.egt'        => '成本价必须大于0.1',
         'one_stock.require'         => '请输入库存',
         'one_stock.integer'         => '库存必须为整型',
     ];

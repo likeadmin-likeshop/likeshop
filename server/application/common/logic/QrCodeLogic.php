@@ -121,7 +121,8 @@ class QrCodeLogic extends LogicBase {
             //合并商品主图
             $qr_code_logic->writeImg($share_background_img, $goods_image, $poster_config['main_pic'],false);
             //合成昵称
-            $nickname = '来自'.$user['nickname'].'的分享';
+            $nickname = filterEmoji($user['nickname']);
+            $nickname = '来自'.$nickname.'的分享';
             $qr_code_logic->writeText($share_background_img, $nickname, $poster_config['nickname']);
             //长按识别
             $notice = '长按识别二维码';

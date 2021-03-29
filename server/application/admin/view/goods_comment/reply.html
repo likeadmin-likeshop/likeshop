@@ -4,20 +4,20 @@
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">会员评论：</label>
-        </div>
-        <div class="layui-inline" style="margin-left: -12px;">
-            {if condition = "$res.comment == ''"}
-            未填写评价
-            {else}
-            {$res.comment}
-            {/if}
+            <div class="layui-input-block" style="margin-left: -12px;">
+                {if condition = "$res.comment == ''"}
+                    未填写评价
+                {else}
+                    {$res.comment}
+                {/if}
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline" style="display:block;">
             <label class="layui-form-label" style="padding-top: 0px"><font color="red">*</font>商家回复：</label>
         </div>
-        <div class="layui-inline">
+        <div class="layui-input-block">
             <textarea name="reply" placeholder="" class="layui-textarea">{$res.reply}</textarea>
         </div>
     </div>

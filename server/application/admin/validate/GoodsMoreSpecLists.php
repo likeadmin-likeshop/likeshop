@@ -25,8 +25,8 @@ class GoodsMoreSpecLists extends Validate
 {
     protected $rule = [
 //        'market_price'  => 'require|gt:0.1',
-        'price'         => 'require|gt:0.1',
-        'cost_price'    => 'require|gt:0.1',
+        'price'         => 'require|gt:0',
+        'cost_price'    => 'require|gt:0',
         'stock'         => 'require|integer',
         'weight'        => 'require|egt:0',
         'volume'        => 'require|egt:0',

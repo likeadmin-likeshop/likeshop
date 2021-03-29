@@ -25,8 +25,8 @@ class GoodsOneSpec extends Validate
 {
     protected $rule = [
 //        'one_market_price' => 'require|egt:0.01',
-        'one_price'        => 'require|gt:0.01',
-        'one_cost_price'   => 'require|gt:0.01',
+        'one_price'        => 'require|gt:0',
+        'one_cost_price'   => 'require|gt:0',
         'one_stock'        => 'require|integer',
         'one_volume'       => 'require|egt:0',
         'one_weight'       => 'require|egt:0',

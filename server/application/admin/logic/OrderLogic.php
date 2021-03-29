@@ -38,8 +38,8 @@ class OrderLogic
     public static function lists($get)
     {
         $order = new Order();
-        $where = [];
 
+        $where = [];
         $where[] = ['o.del', '=', 0];
 
         //订单状态
@@ -52,22 +52,22 @@ class OrderLogic
             $keyword = $get['keyword'];
             switch ($get['search_key']) {
                 case 'order_sn':
-                    $where[] = ['o.order_sn', '=', $keyword];
+                    $where[] = ['o.order_sn', 'like', '%' . $keyword . '%'];
                     break;
                 case 'user_sn':
-                    $where[] = ['u.sn', '=', $keyword];
+                    $where[] = ['u.sn', 'like', '%' . $keyword . '%'];
                     break;
                 case 'nickname':
                     $where[] = ['nickname', 'like', '%' . $keyword . '%'];
                     break;
                 case 'user_mobile':
-                    $where[] = ['u.mobile', '=', $keyword];
+                    $where[] = ['u.mobile', 'like', '%' . $keyword . '%'];
                     break;
                 case 'consignee':
-                    $where[] = ['consignee', '=', $keyword];
+                    $where[] = ['consignee', 'like', '%' . $keyword . '%'];
                     break;
                 case 'consignee_mobile':
-                    $where[] = ['o.mobile', '=', $keyword];
+                    $where[] = ['o.mobile', 'like', '%' . $keyword . '%'];
                     break;
             }
         }

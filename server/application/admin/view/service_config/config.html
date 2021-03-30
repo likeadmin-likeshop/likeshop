@@ -60,7 +60,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">客服电话：</label>
                     <div class="layui-input-inline">
-                        <input type="text"  name="phone"  lay-verify="phone"   lay-verType="tips"  value="{$config.phone}" autocomplete="off" class="layui-input">
+                        <input type="text"  name="phone"  lay-verify="tellphone"   lay-verType="tips"  value="{$config.phone}" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label"></label>
@@ -157,5 +157,19 @@
                 }
             });
         });
+
+
+        // //验证手机或座机
+        var mobile = /^1[3|5|7|8]\d{9}$/,phone = /^0\d{2,3}-?\d{7,8}$/, other = /^400-[016789]\d{2}-\d{4}$/;
+        form.verify({
+            tellphone: function(value){
+                var flag = mobile.test(value) || phone.test(value) || other.test(value);
+                if(!flag){
+                    return '请输入正确座机号码或手机号';
+                }
+            }
+        });
+
+
     });
 </script>

@@ -183,7 +183,6 @@ class Basic extends AdminBase
         $config = [
             'line_ios' => ConfigServer::get('app', 'line_ios', ''),
             'line_android' => ConfigServer::get('app', 'line_android', ''),
-            'download_doc' => ConfigServer::get('app', 'download_doc', ''),
             'agreement' => ConfigServer::get('app', 'agreement', '', 0),
             'wechat_login'  => ConfigServer::get('app', 'wechat_login', '', 0),
         ];
@@ -198,7 +197,6 @@ class Basic extends AdminBase
         $post['wechat_login'] = isset($post['wechat_login']) && $post['wechat_login'] == 'on' ? 1 : 0;
         ConfigServer::set('app', 'line_ios',$post['line_ios']);
         ConfigServer::set('app', 'line_android',$post['line_android']);
-        ConfigServer::set('app', 'download_doc',$post['download_doc']);
         ConfigServer::set('app', 'agreement',$post['agreement']);
         ConfigServer::set('app', 'wechat_login',$post['wechat_login']);
         $this->_success('修改成功');

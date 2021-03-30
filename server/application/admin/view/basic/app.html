@@ -34,15 +34,6 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label" style="white-space: nowrap">APP下载引导文案：</label>
-                        <div class="layui-input-inline"  style="width: 300px;left: 30px">
-                            <input type="text" name="download_doc"  lay-verType="tips" autocomplete="off" value="{$config.download_doc}" class="layui-input">
-                            <label class="layui-form-mid layui-word-aux" style="white-space: nowrap">APP下载引导文案，默认文案：欢迎点击下载APP~</label>
-                        </div>
-                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
-                    </div>
-
-                    <div class="layui-form-item">
                         <label class="layui-form-label" style="white-space: nowrap;left: 45px">弹出协议：</label>
                         <div class="layui-input-block" style="left: 30px">
                             <input type="checkbox" name="agreement" lay-skin="switch" lay-text="是|否" {if condition="$config.agreement eq 1" }checked{/if}>

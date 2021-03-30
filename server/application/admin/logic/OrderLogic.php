@@ -92,6 +92,11 @@ class OrderLogic
             $where[] = ['o.order_type', '=', $get['order_type']];
         }
 
+        //订单来源
+        if (isset($get['order_source']) && $get['order_source'] != '') {
+            $where[] = ['o.order_source', '=', $get['order_source']];
+        }
+
         //下单时间
         if (isset($get['start_time']) && $get['start_time'] != '') {
             $where[] = ['o.create_time', '>=', strtotime($get['start_time'])];

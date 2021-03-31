@@ -125,7 +125,7 @@ class OrderLogic
             ->join('order_goods g', 'g.order_id = o.id')
             ->with(['order_goods', 'user.level'])
             ->where($where)
-            ->append(['delivery_address', 'pay_status_text', 'order_type_text', 'user.base_avatar'])
+            ->append(['delivery_address', 'pay_status_text', 'order_type_text', 'user.base_avatar', 'order_source_text'])
             ->page($get['page'], $get['limit'])
             ->order('o.id desc')
             ->group('o.id')

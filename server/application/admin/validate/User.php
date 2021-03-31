@@ -48,7 +48,7 @@ class User extends Validate{
         ])->find();
 
         if ($user) {
-            return '手机号已被使用了喔';
+            return '手机号已被使用';
         }
         return true;
     }

@@ -23,6 +23,20 @@
 
                 <div class="layui-form-item">
                     <fieldset class="layui-elem-field layui-field-title">
+                        <legend>成长值设置</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;">成长值赠送比例：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"name="growth_ratio"   lay-verType="tips" autocomplete="off" value="{$config.growth_ratio}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">填写消费多少元可以赠送1成长值，为空或填0表示消费不送成长值</div>
+                    </div>
+                    <div  class="layui-form-mid" >元可赠送1成长值</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
                         <legend>订单设置</legend>
                     </fieldset>
                 </div>

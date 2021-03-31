@@ -66,6 +66,19 @@
             <input class="layui-input" value="{$info.mobile}" name="mobile" type="text" placeholder="请输入手机号码" >
         </div>
     </div>
+
+    <!--登录密码-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录密码：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" value="" name="password" type="password" autocomplete="off">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class=" layui-form-mid layui-word-aux">设置会员登录商城的密码，留空表示不修改登录密码</div>
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">性别：</label>
         <div class="layui-input-block">
@@ -98,6 +111,7 @@
         laydate.render({
             elem: '#birthday'
             ,format: 'yyyy-MM-dd'
+            ,trigger: 'click'
         });
         like.imageUpload('.img-add', function (uris, element) {
             if(uris.length>1){

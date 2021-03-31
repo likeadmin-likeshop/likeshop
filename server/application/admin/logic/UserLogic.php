@@ -251,10 +251,14 @@ class UserLogic{
      * 编辑会员
      */
     public static function edit($post){
-        $user = new User();
+        $user = User::get($post['id']);
+        if (!empty($post['password'])) {
+            //生成密码
+            $post['password'] = create_password($post['password'], $user->salt);
+        }
         $post['update_time'] = time();
         $post['birthday'] = strtotime($post['birthday']);
-        return $user->save($post,['id'=>$post['id']]);
+        return $user->allowField(true)->save($post);
     }
 
     public static function getList($get){

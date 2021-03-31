@@ -110,7 +110,7 @@ class User extends AdminBase
                 UserLogic::edit($post);
                 $this->_success('保存成功');
             }
-            return $this->_error('保存失败');
+            return $this->_error($result);
         }
         $detail = UserLogic::getUser($id,true);
         $this->assign('info',$detail);

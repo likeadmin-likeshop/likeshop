@@ -101,7 +101,7 @@
             like.ajax({
                 url:'{:url("goods_category/switchStatus")}',
                 data:{id:id,status:status},
-                type:'get',
+                type:'post',
                 success:function (res) {
                     if(res.code === 1) {
                         layui.layer.msg(res.msg, {

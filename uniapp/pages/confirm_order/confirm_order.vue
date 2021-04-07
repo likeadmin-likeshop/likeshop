@@ -310,6 +310,10 @@
 								url: `/pages/user_order/user_order`
 							});
 						});
+					}else if (prepayCode == 10001) {
+						uni.redirectTo({
+							url: `/pages/pay_result/pay_result?id=${order_id}`
+						});
 					}else {
 						this.showLoading = false
 					}

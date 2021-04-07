@@ -53,22 +53,23 @@
                     "weixin" : {
                         "__platform__" : [ "ios", "android" ],
                         "appid" : "wxe900e56d8f36b6c0",
-                        "UniversalLinks" : "https://likeshopv2.yixiangonline.com/ulink/"
+                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
                     }
                 },
                 "share" : {
                     "weixin" : {
                         "appid" : "wxe900e56d8f36b6c0",
-                        "UniversalLinks" : "https://likeshopv2.yixiangonline.com/ulink/"
+                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
                     }
                 },
                 "oauth" : {
                     "weixin" : {
                         "appid" : "wxe900e56d8f36b6c0",
                         "appsecret" : "6685551b554315efeb6573d82dd074c3",
-                        "UniversalLinks" : "https://likeshopv2.yixiangonline.com/ulink/"
+                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
                     }
-                }
+                },
+                "ad" : {}
             }
         }
     },
@@ -104,17 +105,17 @@
         "devServer" : {
             "https" : false,
             "port" : 8080
-            // "proxy" : {
-            //     "/api" : {
-            //         "target" : "http://likeshopv2.yixiangonline.com",
-            //         "changeOrigin" : true,
-            //         "secure" : false,
-            //         "pathRewrite" : {
-            //             "^/api" : "/api/"
-            //         }
-            //     }
-            // }
         },
+        // "proxy" : {
+        //     "/api" : {
+        //         "target" : "http://likeshopv2.yixiangonline.com",
+        //         "changeOrigin" : true,
+        //         "secure" : false,
+        //         "pathRewrite" : {
+        //             "^/api" : "/api/"
+        //         }
+        //     }
+        // }
         "publicPath" : "/mobile/"
     }
 }

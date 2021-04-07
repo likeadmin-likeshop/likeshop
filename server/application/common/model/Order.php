@@ -160,6 +160,12 @@ class Order extends Model
         return Pay::getPayStatus($data['pay_status']);
     }
 
+    //订单来源
+    public function getOrderSourceTextAttr($value, $data)
+    {
+        return Client_::getClient($data['order_source']);
+    }
+
     //订单商品数量
     public function getGoodsCountAttr($value, $data)
     {

@@ -85,13 +85,24 @@
                             </div>
 
                             <div class="layui-row">
-                                <!--todo-->
                                 <div class="layui-inline">
                                     <label class="layui-form-label">订单类型:</label>
                                     <div class="layui-input-block">
                                         <select name="order_type" id="order_type">
                                             <option value="">全部</option>
                                             {foreach $order_type as $item => $val}
+                                            <option value="{$item}">{$val}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">订单来源:</label>
+                                    <div class="layui-input-block">
+                                        <select name="order_source" id="order_source">
+                                            <option value="">全部</option>
+                                            {foreach $order_source as $item => $val}
                                             <option value="{$item}">{$val}</option>
                                             {/foreach}
                                         </select>
@@ -109,6 +120,9 @@
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="layui-row">
 
                                 <div class="layui-inline">
                                     <label class="layui-form-label">配送方式:</label>
@@ -122,9 +136,6 @@
                                     </div>
                                 </div>
 
-                            </div>
-
-                            <div class="layui-row">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">下单时间:</label>
                                     <div class="layui-input-inline">
@@ -203,6 +214,7 @@
                                 <p>订单类型:{{d.order_type_text}}</p>
                                 <p>下单时间:{{d.create_time}}</p>
                                 <p>支付时间:{{d.pay_time}}</p>
+                                <p>订单来源:{{d.order_source_text}}</p>
                             </div>
                         </script>
 
@@ -307,6 +319,7 @@
             $('#goods_name').val('');
             $('#pay_way').val('');
             $('#order_type').val('');
+            $('#order_source').val('');
             $('#start_time').val('');
             $('#end_time').val('');
             $('#delivery_type').val('');

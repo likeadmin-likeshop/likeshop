@@ -81,6 +81,7 @@ class QrCodeLogic extends LogicBase {
         try {
             $save_dir = ROOT_PATH .'/uploads/qr_code/goods_share/';
             $background_img = ROOT_PATH .'/images/share/share_goods_bg.png';
+            !file_exists($save_dir) && mkdir($save_dir, 0777, true);
 
             $cache_key = 'gid' . $goods['id'].'uid'.$user['id'].$url_type;
             $qr_src = md5($cache_key) . '.png';
@@ -105,7 +106,6 @@ class QrCodeLogic extends LogicBase {
                 $qrCode->setText($url);
                 $qrCode->setSize(1000);
                 $qrCode->setWriterByName('png');
-                !file_exists($save_dir) && mkdir($save_dir, 777, true);
                 $qrCode->writeFile($poster_url);
 
             }
@@ -121,7 +121,8 @@ class QrCodeLogic extends LogicBase {
             //合并商品主图
             $qr_code_logic->writeImg($share_background_img, $goods_image, $poster_config['main_pic'],false);
             //合成昵称
-            $nickname = '来自'.$user['nickname'].'的分享';
+            $nickname = filterEmoji($user['nickname']);
+            $nickname = '来自'.$nickname.'的分享';
             $qr_code_logic->writeText($share_background_img, $nickname, $poster_config['nickname']);
             //长按识别
             $notice = '长按识别二维码';

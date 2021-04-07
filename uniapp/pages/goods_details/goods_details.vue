@@ -421,6 +421,7 @@
 			bottom: 0;
 			left: 0;
 			right: 0;
+            box-sizing: content-box;
 			padding-bottom: env(safe-area-inset-bottom);
 
 			.btn {

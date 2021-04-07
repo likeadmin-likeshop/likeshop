@@ -64,6 +64,12 @@ class PayNotifyLogic
         //增加会员消费累计额度
         $user = User::get($order['user_id']);
         $user->total_order_amount = ['inc', $order['order_amount']];
+        //赠送成长值
+        $growth_ratio = ConfigServer::get('trading', 'growth_ratio', 0);
+        if ($growth_ratio > 0) {
+            $able_get_growth = floor($order['order_amount'] / $growth_ratio);
+            $user->user_growth = ['inc', $able_get_growth];
+        }
         $user->save();
 
         $order->pay_status = Pay::ISPAID;

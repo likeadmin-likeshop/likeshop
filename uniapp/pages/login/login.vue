@@ -64,9 +64,9 @@
 			</view>
 			<view class="mb20 sm row">
 				已阅读并同意
-				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=0">《服务协议》</navigator>
+				<navigator class="primary" hover-class="none" url="/pages/server_explan/server_explan?type=0">《服务协议》</navigator>
 				和
-				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=1">《隐私协议》</navigator>
+				<navigator class="primary" hover-class="none" url="/pages/server_explan/server_explan?type=1">《隐私协议》</navigator>
 			</view>
 		</view>
 		<!--  #endif -->

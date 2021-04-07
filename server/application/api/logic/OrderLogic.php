@@ -34,6 +34,7 @@ use expressage\{
     Kdniao,
     Kd100
 };
+use think\facade\Env;
 use think\facade\Hook;
 
 
@@ -269,6 +270,11 @@ class OrderLogic extends LogicBase
             $goods_lists = $data['goods_lists'];
             $user_address = $data['address'];
             $user = User::get($user_id);
+
+
+            if ($data['pay_way'] == Pay::BALANCE_PAY) {
+                throw  new Exception('暂不支持余额支付');
+            }
 
             if (empty($data['address'])) {
                 throw  new Exception('请选择收货地址');
@@ -717,10 +723,10 @@ class OrderLogic extends LogicBase
                 if ($app && $key) {
                     //快递配置设置为快递鸟时
                     if($express === 'kdniao'){
-                        $expressage = (new Kdniao($app, $key, true));
+                        $expressage = (new Kdniao($app, $key, Env::get('app.app_debug', true) ));
                         $shipping_field = 'codebird';
                     }else{
-                        $expressage = (new Kd100($key, $app, true));
+                        $expressage = (new Kd100($key, $app, Env::get('app.app_debug', true) ));
                         $shipping_field = 'code100';
                     }
                     //快递编码

@@ -403,7 +403,7 @@ class AfterSaleLogic extends LogicBase
     public static function checkAfterSaleDate($order)
     {
         $now = time();
-        $refund_days = ConfigServer::get('after_sale', 'refund_days', 0, 0);
+        $refund_days = ConfigServer::get('after_sale', 'refund_days', 0);
         if ($refund_days == 0) {
             return true;
         }

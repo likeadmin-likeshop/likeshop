@@ -499,3 +499,19 @@ function real_path()
     }
     return $real_path;
 }
+/**
+ * Notes:去掉名称中的表情
+ * @param $str
+ * @return string|string[]|null
+ * @author: cjhao 2021/3/29 15:56
+ */
+function filterEmoji($str)
+{
+    $str = preg_replace_callback(
+        '/./u',
+        function (array $match) {
+            return strlen($match[0]) >= 4 ? '' : $match[0];
+        },
+        $str);
+    return $str;
+}

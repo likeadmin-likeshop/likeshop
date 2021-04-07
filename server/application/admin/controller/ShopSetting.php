@@ -36,6 +36,7 @@ class ShopSetting extends AdminBase
             'order_finish' => ConfigServer::get('trading', 'order_finish', 7),
             'refund_days' => ConfigServer::get('after_sale', 'refund_days', 7),
             'deduct_type' => ConfigServer::get('trading', 'deduct_type', 1),//订单库存扣减方式
+            'growth_ratio' => ConfigServer::get('trading', 'growth_ratio', 0),//成长值比例
             'contact' => ConfigServer::get('shop', 'contact' ),//联系人
             'mobile' => ConfigServer::get('shop', 'mobile'),//联系手机号
             'province_id' => ConfigServer::get('shop', 'province_id'),//省份id
@@ -55,6 +56,7 @@ class ShopSetting extends AdminBase
             ConfigServer::set('trading', 'order_finish', $post['order_finish']);
             ConfigServer::set('after_sale', 'refund_days', $post['refund_days']);
             ConfigServer::set('trading', 'deduct_type', $post['deduct_type']);//订单库存扣减方式
+            ConfigServer::set('trading', 'growth_ratio', $post['growth_ratio']);//成长值比例
             ConfigServer::set('shop', 'contact', $post['contact']);//店铺联系人
             ConfigServer::set('shop', 'mobile', $post['mobile']);//店铺联系手机号
             ConfigServer::set('shop', 'province_id', $post['province_id']);//店铺省份id

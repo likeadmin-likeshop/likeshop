@@ -75,7 +75,7 @@
 	<view class="btn-group fixed bg-white row-end" v-show="!(lists.status == 6)">
 		<view class="mr20 btn br60" @tap="showDialog">撤销申请</view>
 		<view class="mr20 btn br60" @tap="goRefund" v-show="(lists.status == 4 || lists.status == 1)">重新申请</view>
-		<navigator hover-class="none" :url="'/pages/bundle/input_express_info/input_express_info?id=' + lists.id" class="mr20 btn br60" v-show="lists.status == 2">填写快递单号</navigator>
+		<navigator hover-class="none" :url="'/pages/input_express_info/input_express_info?id=' + lists.id" class="mr20 btn br60" v-show="lists.status == 2">填写快递单号</navigator>
 		<view class="btn br60" v-show="false">平台退款</view>
 	</view>
 </view>
@@ -171,7 +171,7 @@ export default {
         lists
       } = this;
       uni.navigateTo({
-        url: '/pages/bundle/apply_refund/apply_refund?order_id=' + this.orderId + '&afterSaleId=' + this.afterSaleId + '&item_id=' + lists.order_goods.item_id
+        url: '/pages/apply_refund/apply_refund?order_id=' + this.orderId + '&afterSaleId=' + this.afterSaleId + '&item_id=' + lists.order_goods.item_id
       });
     },
 
@@ -194,7 +194,7 @@ export default {
             title: res.msg
           }, {
             tab: 5,
-            url: '/pages/bundle/post_sale/post_sale'
+            url: '/pages/post_sale/post_sale'
           });
           this.$emit('RESET_LIST');
         }

@@ -29,6 +29,7 @@ use app\common\server\ConfigServer;
 use expressage\Kd100;
 use expressage\Kdniao;
 use think\Db;
+use think\facade\Env;
 use think\facade\Hook;
 
 class OrderLogic
@@ -37,8 +38,8 @@ class OrderLogic
     public static function lists($get)
     {
         $order = new Order();
-        $where = [];
 
+        $where = [];
         $where[] = ['o.del', '=', 0];
 
         //订单状态
@@ -51,22 +52,22 @@ class OrderLogic
             $keyword = $get['keyword'];
             switch ($get['search_key']) {
                 case 'order_sn':
-                    $where[] = ['o.order_sn', '=', $keyword];
+                    $where[] = ['o.order_sn', 'like', '%' . $keyword . '%'];
                     break;
                 case 'user_sn':
-                    $where[] = ['u.sn', '=', $keyword];
+                    $where[] = ['u.sn', 'like', '%' . $keyword . '%'];
                     break;
                 case 'nickname':
                     $where[] = ['nickname', 'like', '%' . $keyword . '%'];
                     break;
                 case 'user_mobile':
-                    $where[] = ['u.mobile', '=', $keyword];
+                    $where[] = ['u.mobile', 'like', '%' . $keyword . '%'];
                     break;
                 case 'consignee':
-                    $where[] = ['consignee', '=', $keyword];
+                    $where[] = ['consignee', 'like', '%' . $keyword . '%'];
                     break;
                 case 'consignee_mobile':
-                    $where[] = ['o.mobile', '=', $keyword];
+                    $where[] = ['o.mobile', 'like', '%' . $keyword . '%'];
                     break;
             }
         }
@@ -89,6 +90,11 @@ class OrderLogic
         //订单类型
         if (isset($get['order_type']) && $get['order_type'] != '') {
             $where[] = ['o.order_type', '=', $get['order_type']];
+        }
+
+        //订单来源
+        if (isset($get['order_source']) && $get['order_source'] != '') {
+            $where[] = ['o.order_source', '=', $get['order_source']];
         }
 
         //下单时间
@@ -119,7 +125,7 @@ class OrderLogic
             ->join('order_goods g', 'g.order_id = o.id')
             ->with(['order_goods', 'user.level'])
             ->where($where)
-            ->append(['delivery_address', 'pay_status_text', 'order_type_text', 'user.base_avatar'])
+            ->append(['delivery_address', 'pay_status_text', 'order_type_text', 'user.base_avatar', 'order_source_text'])
             ->page($get['page'], $get['limit'])
             ->order('o.id desc')
             ->group('o.id')
@@ -328,10 +334,10 @@ class OrderLogic
 
         //快递配置设置为快递鸟时
         if($express === 'kdniao') {
-            $expressage = (new Kdniao($app, $key, true));
+            $expressage = (new Kdniao($app, $key, Env::get('app.app_debug', true)));
             $shipping_field = 'codebird';
         } else {
-            $expressage = (new Kd100($key, $app, true));
+            $expressage = (new Kd100($key, $app, Env::get('app.app_debug', true)));
             $shipping_field = 'code100';
         }
 

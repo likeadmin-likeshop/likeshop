@@ -25,8 +25,8 @@ class GoodsMoreSpecLists extends Validate
 {
     protected $rule = [
 //        'market_price'  => 'require|gt:0.1',
-        'price'         => 'require|gt:0.1',
-        'cost_price'    => 'require|gt:0.1',
+        'price'         => 'require|egt::0.1',
+        'cost_price'    => 'require|egt::0.1',
         'stock'         => 'require|integer',
         'weight'        => 'require|egt:0',
         'volume'        => 'require|egt:0',
@@ -40,9 +40,9 @@ class GoodsMoreSpecLists extends Validate
         'market_price.require'  => '请输入市场价',
         'market_price.gt'       => '市场价必须大于0.1',
         'price.require'         => '请输入价格',
-        'price.gt'              => '价格必须大于0.1',
+        'price.egt:'            => '价格必须大于0.1',
         'cost_price.require'    => '请输入成本价',
-        'cost_price.gt'         => '成本价必须大于0.1',
+        'cost_price.egt'        => '成本价必须大于0.1',
         'stock.require'         => '请输入库存',
         'stock.integer'         => '库存必须为整型',
     ];

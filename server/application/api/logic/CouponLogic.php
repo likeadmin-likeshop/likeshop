@@ -154,11 +154,11 @@ class CouponLogic{
             switch ($item['use_time_type']){
                 case 2:
                     $coupons['use_time'] = time()+86400*$item['use_time'];
-                    $coupons['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$item['use_time']);
+                    $coupons['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$coupons['use_time']);
                     break;
                 case 3:
                     $coupons['use_time'] = time() + 86400 * $item['use_time']+86400;
-                    $coupons['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$item['use_time']);
+                    $coupons['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$coupons['use_time']);
                     break;
                 default:
                     $coupons['use_time_tips'] = date('Y.m.d H:i',$item['use_time_start']).'-'.date('Y.m.d H:i',$item['use_time_end']);

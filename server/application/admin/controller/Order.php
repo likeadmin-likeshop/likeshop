@@ -19,12 +19,11 @@
 
 namespace app\admin\controller;
 
+use app\common\model\Client_;
 use app\common\model\OrderLog;
 use app\admin\logic\OrderLogic;
-use app\common\model\Client_;
 use app\common\model\Order as CommonOrder;
 use app\common\model\Pay;
-use think\Db;
 
 class Order extends AdminBase
 {
@@ -42,6 +41,7 @@ class Order extends AdminBase
         $this->assign('order_type', CommonOrder::getOrderType(true));
         $this->assign('pay_way', Pay::getPayWay(true));
         $this->assign('delivery_type', CommonOrder::getDeliveryType(true));
+        $this->assign('order_source', Client_::getClient(true));
         return $this->fetch();
     }
 

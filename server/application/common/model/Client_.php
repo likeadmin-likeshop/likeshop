@@ -55,12 +55,12 @@ class Client_
     public static function getClient($type = true)
     {
         $desc = [
-            self::mnp     => '小程序商城',
+            self::pc      => 'PC商城',
             self::h5      => 'h5商城',
-            self::ios     => '苹果APP',
-            self::android => '安卓APP',
-            self::pc      => 'PC',
-            self::oa      => '公众号',
+            self::oa      => '公众号商城',
+            self::mnp     => '小程序商城',
+            self::ios     => '苹果APP商城',
+            self::android => '安卓APP商城',
         ];
         if ($type === true) {
             return $desc;

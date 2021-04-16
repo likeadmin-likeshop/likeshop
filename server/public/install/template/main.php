@@ -5,9 +5,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>安装</title>
+        <title>LikeShop单商户安装</title>
         <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
         <link rel="stylesheet" type="text/css" href="./css/mounted.css"/>
+        <link rel="shortcut icon" href="./favicon.ico"/>
     </head>
     <body>
     <div class="header">
@@ -184,7 +185,7 @@
                                             <tbody>
                                             <tr>
                                                 <td>PHP版本</td>
-                                                <td>大于7.1</td>
+                                                <td>大于7.2</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkPHP()) ?>
                                                 <td>建议使用PHP7.2.4版本</td>
                                             </tr>

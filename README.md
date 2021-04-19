@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">    
-    <a target="_blank" href="https://gitee.com/likemarket/likeshopv2/tree/2.0.9/">点击这里切换为原生小程序、原生vue手机页面、ReactNative苹果安卓app版本</a>
+    <a target="_blank" href="https://gitee.com/likemarket/likeshopv2/tree/2.0.9/">点击这里切换为历史版本-原生小程序、原生vue H5页面、React Native苹果安卓app版本</a>
 </p>
 
 
@@ -58,7 +58,7 @@
 >
 >  - 微信1V1企业会员群，可以近距离和团队技术沟通问题、建议和反馈
 >
->  - 企业源码版本非常实惠，极致性价比，极易二次开发。另外还有限时20元抵扣券活动喔~ <a target="_blank" href="https://www.likemarket.net/product-price.html">查看价格</a>
+>  - 企业源码版本非常实惠，极致性价比，极易二次开发。另外还有限时200元抵扣券活动喔~ <a target="_blank" href="https://www.likemarket.net/product-price.html">查看价格</a>
 >
 > 最后我们也接受定制需求，我们接受定制的原因是：
 >
@@ -180,4 +180,4 @@ PC管理后台演示：
 
 ### 🎮 chapter eight 《通用结尾》
 
-好象科技团队，版权所有。好象科技团队拥有最终解释权。
+likeshop团队，版权所有。likeshop团队拥有最终解释权。

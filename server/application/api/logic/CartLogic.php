@@ -190,8 +190,10 @@ class CartLogic
     //获取购物车数量
     public static function cartNum($user_id)
     {
-        $num = Db::name('cart')
-            ->where('user_id', $user_id)
+        $num = Db::name('cart')->alias('c')
+            ->join('goods g', 'g.id = c.goods_id')
+            ->join('goods_item i', 'i.id = c.item_id')
+            ->where('c.user_id', $user_id)
             ->sum('goods_num');
         return ['num' => $num ?? 0];
     }

@@ -1,4 +1,4 @@
-#  likeshop开源商城系统-单商户（B2C）
+#  🔥🔥🔥 likeshop单商户开源商城系统（B2C）🔥🔥🔥
 
 ![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/toutu.png)
 
@@ -42,6 +42,7 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 
 ### 联系微信客服（专业解答、获取功能清单）
 ![联系微信客服.png](https://resource.likeshop.cn/gitee/lxkf.gif)
+
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 
 ###  官方公众号 | 官方商城
@@ -49,45 +50,55 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 
 ### 开发文档
 http://doc.likeshop.cn/
+
 运营文档、开发文档、API文档一应俱全。
 
 ### 技术社区
 https://home.likeshop.cn/
+
 查看官方动态、更新计划、下载单商户和多商户等产品付费企业版代码。
 
 ### 官方网站
 https://www.likeshop.cn/
+
 更多产品介绍，欢迎访问likeshop官方网站。
 
 ## likeshop单商户商城系统「产品说明」
 ### 产品定位
-likeshop单商户商城系统，产品定位为B2C模式，类似京东自营商城。
-免费企业版和付费企业版功能基本相同，不再赘述之间的区别。
+likeshop单商户商城系统，产品定位为B2C模式，类似京东自营商城。免费企业版和付费企业版功能基本相同，不再赘述之间的区别。
 ### 产品终端
 ![产品终端.png](https://resource.likeshop.cn/gitee/cpzd.png?v=2)
 ### 产品功能
 likeshop单商户商城系统具备PC商城、H5商城、微信小程序商城、APP商城，各商城终端数据打通，使用PC管理后台进行统一的数据管理。
-单商户商城系统包含分销裂变，限时秒杀，拼团活动，砍价活动，优惠券，大转盘抽奖，每日签到，小票打印，积分商城，会员价，微信零钱到账，系统通知/短信通知/APP推送/微信模板消息/小程序消息提醒等常用丰富的营销模块。
+
+likeshop单商户商城系统包含分销裂变，限时秒杀，拼团活动，砍价活动，优惠券，大转盘抽奖，每日签到，小票打印，积分商城，会员价，微信零钱到账，系统通知/短信通知/APP推送/微信模板消息/小程序消息提醒等常用丰富的营销模块。
+
 ![功能清单缩略图.png](https://resource.likeshop.cn/gitee/cpjs.png?v=2)
+
 联系客服获取完整PDF、Excel版本产品功能对照表。
 
 ### 产品手册
 likeshop开源团队深知手册的重要性，为此我们会一直投入充足的时间为大家提供更详尽的手册，支持高效运营，支持二次开发。
+
 小提示：likeshop开源团队后续将会为付费用户准备更专业的手册。
 
 ![帮助文档.png](https://resource.likeshop.cn/gitee/doc.png?v=2)
+
 [点击阅读全部手册；](http://doc.likeshop.cn)
 
 ## likeshop单商户 「技术架构」
 ### 技术架构
-likeshop服务端基于国内最流行php框架thinkphp5.1（即将升级为6.0），遵循thinkphp开发规范，代码逻辑清晰，方便二次开发。管理后台使用php渲染页面模式，让开发更简单。
+likeshop服务端基于国内最流行php框架thinkphp5.1（后续会升级为6.0），遵循thinkphp开发规范，代码逻辑清晰，方便二次开发。管理后台使用php渲染页面模式，让开发更简单。
+
 商城端使用业界标准方式：前端分离，由服务端提供标准数据接口；并且基于uni-app前端框架，一套代码，可以发布微信小程序、手机h5网页、安卓app、苹果app等10个应用平台。
 
 ## 推荐环境
 ### 服务器推荐
 #### 配置推荐
 服务器镜像（系统）推荐：CentOS7.2~7.9
+
 配置推荐：内存2G以上、带宽4M以上、其他配置项根据项目规模选择。
+
 服务器型号：根据需求选择，所有ECS服务器型号都适合常规项目使用。
 
 #### 阿里云服务器
@@ -101,21 +112,22 @@ likeshop服务端基于国内最流行php框架thinkphp5.1（即将升级为6.0�
 |:--- | :--- | :--- |
 |CPU：2核<br>内存：4G<br>带宽：1~10M <br>云盘：50GB <br>1年价格：￥803<br>3年价格：￥2067 |  CPU：4核<br>内存：8G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥1350<br>3年价格：￥3471 | CPU：8核<br>内存：16G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥2511 <br>3年价格：￥6457
 |[新客专属福利](https://curl.qcloud.com/pD62VbaW)|[爆款特惠](https://curl.qcloud.com/mkwiZjsW) |[企业特惠](https://curl.qcloud.com/8liI3Cyx)|
-<br>具体配置，打开链接获取。
+<br>
+具体配置，打开链接获取。
 
 ### 功能特性
-代码逻辑注释清晰，非常方便二次开发。
-支持PHP7，执行效率翻倍，遵循PSR-4开发规范。
-支持composer，内置优秀php开发sdk，方便二次开发。
-支持docker部署，内置docker-compose容器编排，一句命令自动配置项目运行环境。
-支持管理后台配置定时任务，并记录定时任务运行日志。
-支持七牛云、阿里云、腾讯云多种OSS对象存储，提升项目访问速度，降低服务器成本。
-支持CDN配置，加快各地方访问速度。
-支持商城多种场景的足迹气泡，让商城跟用户有更强的互动性。
-支持商城首页、商城分类页、用户个人中心页、底部导航装修。
-支持广告位，可在商城多个地方编辑添加广告。
-支持5种佣金提现方式，更有微信零钱到账，零钱可直接到用户微信钱包。
-下载体验更多功能！
+    代码逻辑注释清晰，非常方便二次开发。
+    支持PHP7，执行效率翻倍，遵循PSR-4开发规范。
+    支持composer，内置优秀php开发sdk，方便二次开发。
+    支持docker部署，内置docker-compose容器编排，一句命令自动配置项目运行环境。
+    支持管理后台配置定时任务，并记录定时任务运行日志。
+    支持七牛云、阿里云、腾讯云多种OSS对象存储，提升项目访问速度，降低服务器成本。
+    支持CDN配置，加快各地方访问速度。
+    支持商城多种场景的足迹气泡，让商城跟用户有更强的互动性。
+    支持商城首页、商城分类页、用户个人中心页、底部导航装修。
+    支持广告位，可在商城多个地方编辑添加广告。
+    支持5种佣金提现方式，更有微信零钱到账，零钱可直接到用户微信钱包。
+    下载体验更多功能！
 
 
 
@@ -138,11 +150,12 @@ PC端访问链接：[https://likeshop.likemarket.net/](https://likeshop.likemark
 
 ### PC管理后台
 PC管理后台演示： [http://likeshop-demo.likemarket.net/admin ](http://likeshop-demo.likemarket.net/admin )
+
 账号：admin 密码：123456
 
 ## likeshop单商户 「界面预览」
 
-### 移动端商城界面
+### 《移动端商城界面》
 ![step01.png](https://resource.likeshop.cn/gitee/m1.png?v=2)
 ![step02.png](https://resource.likeshop.cn/gitee/m2.png)
 ![step03.png](https://resource.likeshop.cn/gitee/m3.png)
@@ -154,11 +167,11 @@ PC管理后台演示： [http://likeshop-demo.likemarket.net/admin ](http://like
 ![step09.png](https://resource.likeshop.cn/gitee/m9.png)
 ![step10.png](https://resource.likeshop.cn/gitee/m10.png)
 ![step11.png](https://resource.likeshop.cn/gitee/m11.png)
-### PC端商城界面
+### 《PC端商城界面》
 ![pc_step01.png](https://resource.likeshop.cn/gitee/pc1.png)
 ![pc_step03.png](https://resource.likeshop.cn/gitee/pc2.png)
 ![pc_step04.png](https://resource.likeshop.cn/gitee/pc3.png)
-### PC端管理后台
+### 《PC端管理后台》
 ![ht_step01.png](https://resource.likeshop.cn/gitee/admin1.png)
 ![ht_step02.png](https://resource.likeshop.cn/gitee/admin2.png)
 ![ht_step03.png](https://resource.likeshop.cn/gitee/admin3.png)
@@ -172,6 +185,9 @@ PC管理后台演示： [http://likeshop-demo.likemarket.net/admin ](http://like
 
 ## likeshop单商户 「版权证书」
 ![版权.png](https://resource.likeshop.cn/gitee/csbq.png)
+
+本项目包含的第三方源码和二进制文件之版权信息另行标注。
+
 likeshop系列产品版权归likeshop团队所有且原创研发。本文档最终解释权归likeshop团队所有。
 
 

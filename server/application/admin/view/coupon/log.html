@@ -1,0 +1,111 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员信息：</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="keyword" name="keyword" placeholder="请输入昵称、编号、手机号码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-user {$view_theme_color}" lay-submit lay-filter="log-search">查询</button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-user layui-btn-primary }" lay-submit lay-filter="log-clear-search">清空查询</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+
+            <table id="log-lists" lay-filter="log-lists"></table>
+
+            <script type="text/html" id="user-info">
+                <img src="{{d.avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
+                <div class="layui-input-inline" style="text-align:left;width: 180px">
+                    <p>会员编号：{{d.sn}}</p>
+                    <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.nickname}}</p>
+                    <p>会员等级：{{d.level_name}}</p>
+                </div>
+            </script>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        //监听搜索
+        form.on('submit(log-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('log-lists', {
+                where: field
+            });
+        });
+
+        //清空查询
+        form.on('submit(log-clear-search)', function(){
+            $('#keyword').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('log-lists', {
+                where: []
+            });
+        });
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+    });
+
+
+
+    layui.define(['table', 'form'], function(exports){
+        var $ = layui.$
+            ,table = layui.table
+            ,form = layui.form
+            id = {$id};
+
+        //管理员管理
+        table.render({
+            id:'log-lists'
+            ,elem: '#log-lists'
+            ,url: '{:url("coupon/log")}?id='+id //模拟接口
+            ,cols: [[
+                {type: 'checkbox'}
+                ,{field: 'coupon_name',title: '优惠券名称',}
+                ,{field: 'avatar', title: '会员信息',width: 320,align: 'center',toolbar: '#user-info'}
+                ,{field: 'coupon_code', title: '优惠券券码'}
+                ,{field: 'status_desc', title: '使用状态'}
+                ,{field: 'create_time_desc', title: '领取时间'}
+                ,{field: 'use_time_desc', title: '使用时间'}
+
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            }
+        });
+
+    });
+</script>

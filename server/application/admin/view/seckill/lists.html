@@ -1,0 +1,426 @@
+{layout name="layout1" /}
+<style>
+    .seckill-time{
+        display: none;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*设置好秒杀时间段后，需要选择参与秒杀的商品。</p>
+                        <p>*秒杀商品的所有规格都要填写秒杀价，如果移除正在秒杀的规格则表示按规格设定的销售价出售。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type=1 class="layui-this">秒杀商品</li>
+                <li data-type=2 >秒杀时间段</li>
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item seach">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品名称:</label>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="name" name="name" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">秒杀时段:</label>
+                                <div class="layui-input-inline">
+
+                                    <select id="seckill_id" name="seckill_id"   style="height:80px;width: 80px" >
+                                        <option value="">全部</option>
+                                        {foreach $seckill as $item}
+                                        <option value="{$item.id}">{$item.time}</option>
+                                        {/foreach}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-seckill {$view_theme_color}" lay-submit lay-filter="seckill-search">查询</button>
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-seckill layui-btn-primary" lay-submit lay-filter="seckill-clear-search">清空查询</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-seckill seckill-time {$view_theme_color}" data-type="add_time">新增秒杀时间段</button>
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-seckill seckill-goods {$view_theme_color}" data-type="add_goods">新增秒杀商品</button>
+                        </div>
+                        <table id="seckill-lists" lay-filter="seckill-lists"></table>
+                        <script type="text/html" id="goods-info">
+                            <img src="{{d.image}}" style="height:60px;width: 60px" class="image-show"> {{d.name}}
+                        </script>
+                        <script type="text/html" id="seckill_time-info">
+                            <p>开始时间:{{d.start_time}}</p>
+                            <p>结束时间:{{d.end_time}}</p>
+                        </script>
+                        <script type="text/html" id="goods-operation">
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit_goods">编辑商品</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del_goods">删除商品</a>
+                        </script>
+                        <script type="text/html" id="time-operation">
+                            <a class="layui-btn {$view_theme_color} layui-btn-sm" lay-event="edit_time">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del_time">删除时段</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+
+        //监听搜索
+        form.on('submit(seckill-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('seckill-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        $('.layui-btn.layuiadmin-btn-seckill').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        //事件
+        var active = {
+            add_time: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '新增秒杀时间段'
+                    ,content: '{:url("seckill/addTime")}'
+                    ,area: ['60%', '60%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("seckill/addTime")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('seckill-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            },
+            add_goods:function () {
+                var index = layer.open({
+                    type: 2
+                    ,title: '新增秒杀商品'
+                    ,content: '{:url("seckill/addGoods")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-seckill-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("seckill/addGoods")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('seckill-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+
+            }
+        }
+
+
+
+        //清空查询
+        form.on('submit(seckill-clear-search)', function(){
+            $('#name').val('');  //清空输入框
+            $('#seckill_id').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('seckill-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //获取列表
+        getList('')
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            $('.seckill-time').hide();
+            $('.seckill-goods').show();
+            $('.seach').show();
+            var type = $(this).attr('data-type');
+            if(type == 2){
+                $('.seach').hide();
+                $('.seckill-time').show();
+                $('.seckill-goods').hide();
+            }
+            getList(type)
+        });
+
+        //监听工具条
+        table.on('tool(seckill-lists)', function(obj){
+            var id = obj.data.id;
+            if(obj.event === 'del_time'){
+                var time = obj.data.time;
+                layer.confirm('确定删除秒杀时段：'+'<span style="color: red">'+time+'</span>'+'。该秒杀时段的商品将会全部移除，请谨慎操作。', function(index){
+                    like.ajax({
+                        url:'{:url("seckill/delTime")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('seckill-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+            if(obj.event === 'del_goods'){
+                var goods_id = obj.data.goods_id;
+                var goods_name = obj.data.name;
+                var seckill_id = obj.data.seckill_id;
+                layer.confirm('确定删除秒杀商品：'+'<span style="color: red">'+goods_name+'</span>', function(index) {
+                    like.ajax({
+                        url: '{:url("seckill/delGoods")}',
+                        data: {id: goods_id,seckill_id:seckill_id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code == 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('seckill-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+
+            }
+            if(obj.event === 'edit_time'){
+                layer.open({
+                    type: 2
+                    ,title: '编辑秒杀时间段'
+                    ,content: '{:url("seckill/editTime")}?id='+id
+                    ,area: ['60%', '60%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("seckill/editTime")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('seckill-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+            if(obj.event === 'edit_goods'){
+                var id = obj.data.goods_id;
+                var seckill_id = obj.data.seckill_id;
+                var index = layer.open({
+                    type: 2
+                    , title: '编辑秒杀商品'
+                    , content: '{:url("seckill/editGoods")}?id=' + id+'&seckill_id='+seckill_id
+                    , area: ['90%', '90%']
+                    , btn: ['保存', '取消']
+                    , maxmin: true
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'edit-seckill-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field;
+                            like.ajax({
+                                url: '{:url("seckill/editGoods")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('seckill-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+
+        });
+
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form
+                    ,url = '{:url("seckill/goodsLists")}';
+
+                var cols  = [
+                    {type: 'checkbox'}
+                    ,{field: 'name', title: '商品',width:320,toolbar: '#goods-info'}
+                    ,{field: 'goods_price',width:160, title: '商品价格'}
+                    ,{field: 'seckill_price',width:160, title:'秒杀价格'}
+                    ,{field: 'sales_sum',width:160, title:'销量'}
+                    ,{field: 'time',width:160,align: 'center',  title:'秒杀时段',toolbar: '#seckill_time-info'}
+                    ,{fixed: 'right', title: '操作',width:320, align: 'center',  toolbar: '#goods-operation'}
+                ];
+                if(type == 2){
+                    url = url = '{:url("seckill/timeLists")}';
+                    cols = [
+                        {type: 'checkbox'}
+                        ,{field: 'time',align: 'center',title: '秒杀时段'}
+                        ,{field: 'start_time',align: 'center', title:'开始时间'}
+                        ,{field: 'end_time',align: 'center', title:'结束时间'}
+                        ,{fixed: 'right', title: '操作',width:320, align: 'center',  toolbar: '#time-operation'}
+                    ];
+                }
+                //管理员管理
+                table.render({
+                    id:'seckill-lists'
+                    ,elem: '#seckill-lists'
+                    ,url: url  //模拟接口
+                    ,cols: [cols]
+                    ,page:true
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code":res.code,
+                            "msg":res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+
+            });
+        }
+
+    });
+</script>

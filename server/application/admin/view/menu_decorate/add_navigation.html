@@ -1,0 +1,86 @@
+{layout name="layout1" /}
+<style>
+  .layui-form {
+    margin-top: 15px;
+  }
+  .reqRed::before {
+    content: '*';
+    color: red;
+  }
+</style>
+<div class="layui-form">
+  <div class="layui-form-item">
+    <label class="layui-form-label reqRed">导航名称</label>
+    <div class="layui-input-block" style="width: 200px;">
+      <input type="text" name="name" required lay-verify="required" class="layui-input" />
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">选中图标</label>
+    <div class="layui-input-block" style="width: 200px;">
+      <div class="img-content">
+        <input name="selected_icon" type="hidden" value="">
+        <div class="img-add"></div>
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item"><label class="layui-form-label"></label>
+    <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽100像素*高100像素的jpg，jpeg，png，gif图片。不传则使用默认图标</span>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">未选中图标</label>
+    <div class="layui-input-block" style="width: 200px;">
+      <input name="un_selected_icon" type="hidden" value="">
+        <div class="img-add"></div>
+    </div>
+  </div>
+  <div class="layui-form-item"><label class="layui-form-label"></label>
+    <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽100像素*高100像素的jpg，jpeg，png，gif图片。不传则使用默认图标</span>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block" style="width: 200px;">
+      <button class="layui-btn layui-hide" lay-submit id="add-navigation_decorate-submit" lay-filter="add-navigation_decorate-submit">确定</button>
+    </div>
+  </div>
+</div>
+<script>
+  layui.config({
+    version:"{$front_version}",
+    base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+  }).extend({
+      index: 'lib/index' //主入口模块
+  }).use(['index','table','like'], function(){
+    var $ = layui.$
+      ,form = layui.form
+      ,table = layui.table
+      ,like = layui.like;
+
+      // 图片上传
+      like.imageUpload('.img-add', function (uris, element) {
+      if(uris.length>1){
+          layer.msg('最多最能选中1张图片');
+          return;
+      }
+      var html = '<div class="img-container">\n' +
+          '<img style="width: 100px;" class="img-src" ' +
+          'src="' + uris[0] + '">' +
+          '<a class="img-del-x">x</a>' +
+          '</div>';
+          element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+          element.parent().append(html);
+          element.css('display','none');
+      }, true);
+      //删除图片
+      $(document).on('click', '.img-del-x', function () {
+          $(this).parent().siblings('input').val('');
+          $(this).parent().prev().css('display','block');
+          $(this).parent().remove();
+      });
+      //显示图片
+      $(document).on('click', '.img-src', function () {
+          var image = $(this).attr('src');
+          like.showImg(image,600);
+      });
+  });
+</script>

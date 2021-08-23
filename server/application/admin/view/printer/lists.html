@@ -1,0 +1,508 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 150px;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*小票打印设置，全自动接单打印机，可自定义模板。</p>
+                        <p>*小票打印机是更加方便打印订单，在订单中未处理的订单、配送中的订单、已完成的订单和订单查询中都可使用打印小票功能来打印出来</p>
+                        <p>*小票打印需提前添加配置好打印机类型方可使用。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type="1" class="layui-this">打印机列表</li>
+                <li data-type="2" >打印设置</li>
+                <li data-type="3" >模板设置</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <div style="padding-bottom: 10px;" class="add">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-printer {$view_theme_color}" data-type="add">新增打印机</button>
+                            </div>
+                            <table id="printer-lists" lay-filter="printer-lists"></table>
+                            <script type="text/html" id="printer-operation">
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="test_print">测试打印</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                            </script>
+                            <script type="text/html" id="recommend">
+                                <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='is_recommend'   lay-skin="switch"
+                                       lay-text="是|否" {{#  if(d.is_recommend){ }} checked  {{#  } }} />
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <table id="printer_config-lists" lay-filter="printer_config-lists"></table>
+                    <script type="text/html" id="printer_config-operation">
+                        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="set_config">配置</a>
+
+                    </script>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-form" lay-filter="">
+                        <input type="hidden" name="type">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">小票logo：</label>
+                            <div class="layui-input-block">
+                                <div class="img-content">
+                                    <input name="logo" type="hidden">
+                                    <div class="img-add" ></div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">logo最大宽度为350px，文件大小不能超过38kb，格式为jpg、jpeg</span>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">小票标题：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" lay-verify="required" lay-verType="tips" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">二维码链接：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="qr_code_link" lay-verify="required" lay-verType="tips" placeholder="请输入二维码链接" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">生成二维码的链接</span>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">小票说明：</label>
+                            <div class="layui-col-md4">
+                                <textarea name="remark"  placeholder="请输入小票说明" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">小票尾部文字</span>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set_template">确定</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+
+        $('.layui-btn.layuiadmin-btn-printer').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '添加打印机'
+                    ,content: '{:url("printer/add")}'
+                    ,area: ['60%', '60%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-printer-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("printer/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('printer-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+
+
+
+
+        //获取列表
+        getList(1)
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            var type = $(this).attr('data-type');
+            getList(type)
+        });
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var fields = obj.elem.attributes['data-field'].nodeValue
+            var status = 0;
+            if(this.checked){
+                status = 1;
+            }
+
+        })
+        //监听打印机配置工具条
+        table.on('tool(printer_config-lists)', function(obj){
+            if(obj.event === 'set_config'){
+                var id = obj.data.id;
+                var type = obj.data.type;
+                layer.open({
+                    type: 2
+                    ,title: '打印机设置'
+                    ,content: '{:url("printer/setConfig")}?id='+id+'&type='+type
+                    ,area: ['60%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'set_config-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("printer/setConfig")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('printer_config-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'tips'){
+                layer.tips('数字越大，越靠前', $(this), {tips: [1, '#FF5722'],time:1500});
+            }
+
+
+        });
+        //监听打印机列表工具条
+        table.on('tool(printer-lists)', function(obj){
+            var id = obj.data.id;
+            var name = obj.data.name;
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑打印机'
+                    ,content: '{:url("printer/edit")}?id='+id
+                    ,area: ['60%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-printer-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("printer/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('printer-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+            //测试打印
+            if(obj.event === 'test_print'){
+                layer.confirm('确定要测试：'+'<span style="color: red">'+name+'</span>'+'的打印吗?', function(index){
+                    var type = obj.data.type;
+                    layui.like.ajax({
+                        url: '{:url("printer/testPrint")}'
+                        , data: {id:id,type:type}
+                        , type: 'post'
+                        , success: function (res) {
+                            if (res.code == 1) {
+                                layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                            }
+
+                        }
+                    });
+                })
+
+            }
+            if(obj.event === 'del'){
+                var name = obj.data.name;
+                layer.confirm('确定删除打印机：'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("printer/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('printer-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+
+                })
+
+            }
+            if(obj.event === 'tips'){
+                layer.tips('数字越大，越靠前', $(this), {tips: [1, '#FF5722'],time:1500});
+            }
+
+
+        });
+
+        //设置模板
+        form.on('submit(set_template)', function (data) {
+            layui.like.ajax({
+                url: '{:url("printer/setTemplate")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+
+                }
+            });
+        });
+
+
+
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form;
+                var cols = [];
+                var elem_id = 'printer-lists';
+                if(1 == type){
+                    var cols  = [
+                        {type: 'checkbox'}
+                        ,{field: 'type_name', title: '类型',width:100,}
+                        ,{field: 'name',width:160, title: '打印机名称'}
+                        ,{field: 'machine_code',width:160, title: '终端号'}
+                        ,{field: 'private_key',width: 80, title:'密钥'}
+                        ,{field: 'print_number',width:160, title: '打印联数'}
+                        ,{field: 'auto_print',width:160, title: '自动打印'}
+                        ,{field: 'status',width:160, title: '状态'}
+                        ,{fixed: 'right', title: '操作', align: 'center', width:300, toolbar: '#printer-operation'}
+                    ];
+                }else if(2 == type){
+                    var elem_id = 'printer_config-lists';
+                    var cols  = [
+                        {field: 'name', title: '打印机类型'}
+                        ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#printer_config-operation'}
+                    ];
+                }
+
+                //管理员管理
+                table.render({
+                    id:elem_id
+                    ,elem: '#'+elem_id
+                    ,url: '{:url("printer/lists")}?type='+type  //模拟接口
+                    ,cols: [cols]
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        var data = res.data.lists;
+
+                        if(3 != type){
+                            return {
+                                "code":res.code,
+                                "msg":res.msg,
+                                "count": 1,             //解析数据长度
+                                "data": data, //解析数据列表
+                            }
+                        }
+
+                        var logo = data.logo !== undefined ? data.logo : '';
+                        var file_url = data.file_url;
+                        var title = data.title !== undefined ? data.title : '';
+                        var qr_code_link = data.qr_code_link !== undefined ? data.qr_code_link : '';
+                        var remark = data.remark !== undefined ? data.remark : '';
+
+                        //渲染logo
+                        $("input[name='logo']").val(logo);
+                        if(logo){
+                            if(0 === $('.img-src').length){
+                                var html = ' <div class="img-container">\n' +
+                                    '                            <img class="img-src" src="'+file_url+logo+'">\n' +
+                                    '                            <a class="img-del-x">x</a>\n' +
+                                    '                        </div>';
+                                $('.img-add').after(html);
+                            }
+                            $('.img-add').hide();
+                        }
+                        $("input[name='title']").val(title);
+                        $("input[name='qr_code_link']").val(qr_code_link);
+                        $("input[name='type']").val(1);
+                        $("textarea[name='remark']").val(remark);
+
+
+
+
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+
+                });
+
+            });
+        }
+
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+
+    });
+</script>

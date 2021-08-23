@@ -1,0 +1,102 @@
+{layout name="layout1" /}
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*分销相关的参数设置</p>
+                        <p>*分销佣金设置在商品管理中的添加商品时设置</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type='distribution' class="layui-this">分销</li>
+            </ul>
+            <div class="layui-tab-content">
+
+                <!--分销设置-->
+                <div class="layui-tab-item layui-show ">
+                    <div class="layui-card">
+                        <div class="layui-card-body" >
+
+                            <div class="layui-form" lay-filter="">
+                                <div class="layui-form-item ">
+                                    <label class="layui-form-label" style="white-space: nowrap; " >分销：</label>
+                                    <div class="layui-input-inline" >
+                                        <input type="radio" name="is_open" value="0" title="关闭" {if condition="$config.is_open eq 0"}checked{/if}>
+                                        <input type="radio" name="is_open" value="1" title="开启" {if condition="$config.is_open eq 1"}checked{/if}>
+                                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">分销开关，关闭后不发放分销佣金，隐藏分销相关功能及界面。</div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item ">
+                                    <label class="layui-form-label" style="white-space: nowrap; " >分销会员申请：</label>
+                                    <div class="layui-input-block" >
+                                        <input type="radio" name="member_apply" value="1" title="申请分销" {if condition="$config.member_apply eq 1"}checked{/if}>
+                                        <input type="radio" name="member_apply" value="2" title="全员分销" {if condition="$config.member_apply eq 2"}checked{/if}>
+                                        <input type="radio" name="member_apply" value="3" title="后台指定" {if condition="$config.member_apply eq 3"}checked{/if}>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label"></label>
+                                    <div class="layui-word-aux">选择申请分销时，成为分销员需要申请并审核通过；选择全员分销时，会员注册账号即成为分销会员；选择后台指定时，通过后台开通指定会员分销权限；</div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="confirm">确认</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'element', 'like', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , element = layui.element
+            , like = layui.like;
+
+        form.on('submit(confirm)',function (data) {
+            like.ajax({
+                url: '{:url("distribution/setDistribution")}'
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        location.href = location.href;
+                    });
+                },
+            });
+        });
+
+    });
+
+
+</script>

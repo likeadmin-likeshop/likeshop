@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{$view_env_name}{$config.name}</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" href="{$storageUrl}{$config.web_favicon}" />
+    <link rel="stylesheet" href="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/style/admin.css" media="all">
+    {$js_code|raw}
+    <style>
+        .layui-layout .first-nav {
+            width: 110px;
+            box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1003;
+        }
+        .layui-layout .layui-side,
+        .layui-layout .first-nav  .layui-logo {
+            background-color: #fff !important;
+        }
+
+        .layui-layout .second-nav {
+            width: 120px;
+            overflow: hidden;
+            box-sizing: border-box;
+            left: 110px;
+            top: 92px;
+        }
+
+        .layui-layout-admin .layui-logo {
+            width: 110px;
+            height: 50px;
+        }
+
+        .layui-layout-admin .layui-layout-left,
+        .layui-layout-body .layadmin-pagetabs {
+            left: 110px;
+        }
+
+        .layui-layout-body .layui-body {
+            left: 230px;
+            top: 90px;
+        }
+
+        .first-nav .layui-nav {
+            width: 110px;
+        }
+
+        .second-nav .layui-nav {
+            width: 120px;
+        }
+
+        .layui-side-menu .layui-nav .layui-nav-item a {
+            color: #666;
+            padding-left: 37px;
+            padding-right: 10px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+        .layui-side-menu.second-nav .layui-nav  *  {
+            font-size: 13px;
+        }
+        .layui-side-menu .layui-nav .layui-nav-item.layui-this >a,
+        .layui-nav .layui-nav-itemed .layui-nav-child .layui-this a,
+        .layui-nav .layui-nav-item:hover>a,
+        .layui-nav .layui-nav-itemed .layui-nav-child dd:hover a  {
+            color: #3A91FB;
+            /*color: #666;*/
+            
+        }
+
+        .layui-side-menu .layui-nav .layui-nav-item.layui-this a,
+        .layui-nav .layui-nav-itemed .layui-nav-child .layui-this a {
+            background-color: #fff !important;
+        }
+
+        .layui-side-menu .layui-nav .layui-nav-item.layui-this,
+        .layui-nav .layui-nav-itemed .layui-nav-child .layui-this {
+            background-color: #fff !important;
+        }
+
+        .layui-side-menu .layui-nav .layui-nav-item .layui-icon {
+            left: 14px;
+        }
+
+        .second-nav .layui-nav .layui-nav-item a {
+            padding: 0 20px;
+        }
+        .second-nav .layui-nav .layui-nav-item dd a  {
+            padding: 0 20px 0 20px;
+        }
+        .layui-side-menu .layui-nav-tree .layui-nav-bar {
+            display: none;
+        }
+
+        .layui-nav-itemed>a {
+            color: #666 !important;
+        }
+
+        .layui-side-menu .layui-nav-tree .layui-nav-item .layui-icon.second-icon {
+            position: absolute;
+            top: 50%;
+            right: 6px;
+            font-size: 11px;
+            width: 15px;
+            height: 15px;
+            left: auto;
+            transform: rotateZ(180deg);
+            margin-top: 3px;
+        } 
+        .layui-side-menu .layui-nav-tree .layui-nav-item .layui-icon.second-icon.up {
+            transform: rotateZ(0deg);
+            margin-top: -19px;
+            right: 4px;
+        }
+
+        .layui-side-menu .layui-nav-tree .layui-nav-item .layui-nav-more.down {
+            border-color: transparent transparent #666;
+        } 
+
+        .layui-nav .layui-nav-itemed>.layui-nav-child {
+            background-color: #fff !important;
+        }
+
+        .layui-side .second-title {
+            color: #333;
+            position: absolute;
+            line-height: 48px;
+            padding-left: 20px;
+            font-weight: bold;
+            width: 140px;
+            border-bottom: 1px solid #E5E5E5;
+            box-sizing: border-box;
+        }
+
+        .layui-layout-body .layui-body.hide-second-nav {
+            left: 110px;
+        }
+
+        .layui-side.layui-side-menu .activate a {
+            color: #3A91FB;
+        }
+        .layui-side-menu .layui-nav .layui-nav-item.activate {
+            background-color: #EBF4FF !important;
+        }
+        @media screen and (max-width: 992px) {
+            .layui-layout-admin .layui-side {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+    <div id="LAY_app">
+        <div class="layui-layout layui-layout-admin">
+            <div class="layui-header">
+                <!-- 头部区域 -->
+                <ul class="layui-nav layui-layout-left">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:" layadmin-event="refresh" title="刷新">
+                            <i class="layui-icon layui-icon-refresh-3"></i>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+<!--                    <li class="layui-nav-item layui-hide-xs" lay-unselect>-->
+<!--                        <a href="javascript:" layadmin-event="theme">-->
+<!--                            <i class="layui-icon layui-icon-theme"></i>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                    <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                        <a href="javascript:" layadmin-event="note">
+                            <i class="layui-icon layui-icon-note"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                        <a href="javascript:" layadmin-event="fullscreen">
+                            <i class="layui-icon layui-icon-screen-full"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:">
+                            <cite>{$admin_name}（{$role_name}）</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a lay-href="{:url('my/password')}">修改密码</a></dd>
+                            <hr>
+                            <dd style="text-align: center;"><a href="{:url('account/logout')}">退出</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                        <a href="javascript:" layadmin-event="more">
+                            <i class="layui-icon layui-icon-more-vertical"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 侧边菜单 (一级)-->
+            <div class="layui-side layui-side-menu first-nav">
+                <div class="layui-side-scroll">
+                    <div class="layui-logo">
+                        <img style="height:20px;width: 77px" src="{$storageUrl}{$config.backstage_logo}">
+                    </div>
+                    <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+                        {volist name="menu" id="vo"}
+                            <li data-id="{$vo.id}" class="layui-nav-item">
+                                <a href="javascript:" lay-tips="{$vo.name}">
+                                    <i class="layui-icon {$vo.icon}"></i>
+                                    <cite>{$vo.name}</cite>
+                                </a>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+            <!-- 子级菜单 -->
+            <script id="subMenu" type="text/html">
+                {{#  if(d) { }}
+                    <div class="layui-side layui-side-menu second-nav ">
+                        <div class="layui-side-scroll">
+                            <div class="second-title">
+                                <div>{{d.name}}</div>
+                            </div>
+                            <ul class="layui-nav layui-nav-tree">
+                                {{#  layui.each(d.sub, function(index, item){ }}
+                                    {{#  if(item.sub.length <= 0) { }}
+                                        <li  class="layui-nav-item  {{#  if(index == 0) { }}layui-this{{# } }}">
+                                            <a href="javascript:" lay-href='{{item.uri}}' lay-tips="{{ item.name }}">
+                                                <cite>{{ item.name }}</cite>
+                                            </a>
+                                        </li>
+                                    {{# } else { }}
+                                        <li class="layui-nav-item layui-nav-itemed">
+                                            <a href="javascript:" lay-tips="{{ item.name }}">
+                                                <cite>{{ item.name }}</cite>
+                                                <i class="layui-icon second-icon layui-icon-triangle-d"></i>
+                                            </a>
+                                            <dl class="layui-nav-child">
+                                                {{#  layui.each(item.sub, function(i, itemSub){ }}
+                                                    <dd class="{{#  if(index == 0 && i==0) { }}layui-this{{# } }}">
+                                                        <a href="javascript:" lay-href="{{itemSub.uri}}">{{itemSub.name}}</a>
+                                                    </dd>
+                                                {{#  }); }}
+                                            </dl>
+                                        </li>
+                                    {{# } }}
+                                {{#  }); }}
+                            </ul>
+                        </div>
+                    </div>
+                {{#  } }}
+            </script>
+            <div id="view"></div>
+        </div>
+
+        <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                    <li lay-id="" lay-attr="{:url('index/stat')}" class="layui-this">工作台</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 主体内容 -->
+        <div class="layui-body hide-second-nav" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <iframe src="{:url('index/stat')}" frameborder="0" class="layadmin-iframe"></iframe>
+            </div>
+        </div>
+
+        <!-- 辅助元素 -->
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+
+    <script src="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+        version:"{$front_version}",
+            base: '__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'element', 'laytpl'], function () {
+            var element = layui.element;
+            var $ = layui.$;
+            var laytpl = layui.laytpl;
+            element.init();
+            element.render('nav');
+            $('#think_page_trace_open').remove();
+
+            // 展示二级菜单 fzr
+            localStorage.setItem("menus", '{$menu|json_encode|raw}');
+            $('.layui-nav-tree .layui-nav-item').click(function () {
+                // 一级菜单的样式切换
+                $(this).siblings().removeClass('activate');
+                $(this).addClass('activate');
+                // 获取一级菜单ID, 找出二级三级菜单那数据
+                var id = parseInt($(this).attr('data-id'));
+                var menus = JSON.parse('{$menu|json_encode|raw}');
+                var data = [];
+                menus.forEach(function (item) {
+                    if (id === item['id']) {
+                        data = item;
+                    }
+                });
+                // 是否存在二级菜单,不存在则隐藏
+                if (data) {
+                    $("#LAY_app_body").removeClass('hide-second-nav');
+                } else {
+                    $("#LAY_app_body").addClass('hide-second-nav');
+                }
+                // 使用模板引擎, 渲染二三级菜单
+                var getTpl =  document.getElementById('subMenu').innerHTML;
+                var view = document.getElementById('view');
+                laytpl(getTpl).render(data, function(html){
+                    view.innerHTML = html;
+                });
+
+                // 触发点击事件
+                $('.second-nav .layui-this a').trigger("click");
+
+                // 二级菜单切换
+                $(".second-nav .layui-nav-tree .layui-nav-item").click(function () {
+                    if (!$(this).hasClass("layui-nav-itemed")) {
+                        $(".second-nav .layui-nav .layui-nav-itemed dl dd").removeClass('layui-this');
+                        $(this).siblings().removeClass('layui-this');
+                        $(this).addClass('layui-this');
+                    }
+                });
+
+                // 三级菜单样式切换
+                $(".second-nav .layui-nav-tree .layui-nav-itemed dd").click(function () {
+                    $(".second-nav .layui-nav .layui-nav-item").removeClass('layui-this');
+                    $(".second-nav .layui-nav .layui-nav-item dl dd").removeClass('layui-this');
+                    $(this).siblings().removeClass('layui-this');
+                    $(this).addClass('layui-this');
+                });
+
+            });
+
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+{layout name="layout1" /}
+<style>
+    .layui-text-top{
+        font-size: 18px;
+    }
+    .config-name{
+        display: inline-block;
+        height: 22px;
+        width: 36px;
+        margin-top: 8px;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+    .config-name:hover{
+        cursor:pointer
+    }
+    .config-tips{
+        color: #777;
+        display: inline-block;
+        height: 22px;
+        width: 36px;
+        margin-top: 8px;
+        font-size: 12px;
+        margin-right: 10px;
+    }
+</style>
+<form class="layui-form" action="">
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                    <div class="layui-colla-item">
+                        <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                        <div class="layui-colla-content layui-show">
+                            <p>*平台配置在各个场景下的消息发送方式和内容模板。</p>
+                            <p>*短信消息需要先在设置->基础设置->短信管理开启阿里云短信。</p>
+                            <p>*短信消息的内容定义好之后，需在阿里云短信申请对应的模板ID。</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="layui-card-header" style="margin-top: 20px">
+                    会员消息
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space10">
+                        {foreach $config.member as $item}
+                        <div class="layui-col-xs12 layui-col-sm4">
+                            <div class="layuiadmin-card-text">
+                                <div class="layui-text-top">
+                                    <i class="layui-icon layui-icon-notice"></i>
+                                    {$item.name}</div>
+                                <div class="layui-text-bottom">
+                                    <div class="config-name" data-value="{$item.id}" >短信
+                                    </div>
+                                    <div class="config-tips">
+                                        {if $item.status}
+                                        开启
+                                        {else /}
+                                        关闭
+                                        {/if}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        平台消息
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space10">
+                            {foreach $config.platform as $item}
+                            <div class="layui-col-xs12 layui-col-sm4">
+                                <div class="layuiadmin-card-text">
+                                    <div class="layui-text-top">
+                                        <i class="layui-icon layui-icon-notice"></i>
+                                        {$item.name}
+                                    </div>
+                                    <div class="layui-text-bottom">
+                                        <div class="config-name" data-value="{$item.id}">短信
+                                        </div>
+                                        <div class="config-tips">
+                                            {if $item.status}
+                                            开启
+                                            {else /}
+                                            关闭
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</form>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+        $(document).on('click','.config-name' ,function () {
+            var value = $(this).attr('data-value');
+            layer.open({
+                type: 2
+                ,title: '消息设置'
+                ,content: '{:url("message/set")}?id='+value
+                ,area: ['90%', '90%']
+                ,btn: ['保存', '取消']
+                ,yes: function(index, layero){
+
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submitID = 'message-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                    //监听提交
+                    iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                        var field = data.field;
+                        like.ajax({
+                            url:'{:url("message/set")}',
+                            data:field,
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    },function () {
+                                        window.location.href = window.location.href;
+                                    });
+                                    layer.close(index); //关闭弹层
+                                }
+
+                            }
+                        });
+                    });
+                    submit.trigger('click');
+                }
+
+            })
+        })
+    })
+</script>

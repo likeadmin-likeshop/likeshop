@@ -1,0 +1,175 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card layui-form">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*商城图片存储方式设置。</p>
+                        <p>*只能有一种存储方式处于启用状态, 不要随意切换存储引擎以免图片失效。</p>
+                        <p>*如果所有存储方式都停用或设置错误都会导致图片上传失败。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <h1 class="site-h1">上传设置</h1>
+        </div>
+
+        <div class="layui-card-body" id="card-body">
+            <table id="storage-lists" lay-filter="storage-lists"></table>
+            <script type="text/html" id="table-status">
+                <input type="checkbox"  lay-filter="switch-status" data-engine='{{d.engine}}' lay-skin="switch"
+                       lay-text="是|否" {{#  if(d.status){ }} checked  {{#  } }} />
+            </script>
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">配置</a>
+            </script>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        table.render({
+            id: 'storage-lists',
+            elem: '#storage-lists'
+            ,url: '{:url("storage_config/lists")}'
+            ,cols: [[
+                {field: 'name', width: 150, title: '存储方式'}
+                ,{field: 'path', width: 320, title: '存储位置'}
+                ,{field: 'status', title: '状态', width: 100, templet: '#table-status', align: 'center'}
+                ,{fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#operation'}
+            ]]
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data
+                };
+            }
+            ,done: function(){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        table.on('tool(storage-lists)', function(obj){
+            if(obj.event === 'edit'){
+                layer.open({
+                    type: 2
+                    ,title: '编辑' + obj.data.name
+                    ,content: '{:url("storage_config/edit")}?engine=' + obj.data.engine
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index];
+                        var submit = layero.find('iframe').contents().find('#pay_config-submit-edit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(pay_config-submit-edit)', function(data){
+                            var field = data.field;
+                            if (field['engine'] === 'local') {
+                                layer.close(index);
+                                return true;
+                            }
+                            like.ajax({
+                                url:'{:url("storage_config/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index);
+                                        table.reload('storage-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+
+        form.on('switch(switch-status)',function (obj) {
+            var engine = obj.elem.attributes['data-engine'].nodeValue;
+            if(!this.checked) {
+                engine = '';
+                layer.confirm('您确定要停用吗？停用后请尽快开启其他存储方式', {
+                    btn: ['确定','取消']
+                }, function(){
+                    $.ajax({
+                        url: '{:url("storage_config/changeEngine")}',
+                        data: {engine: engine},
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code === 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                table.reload('storage-lists');
+                            } else {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 2
+                                    , time: 1000
+                                });
+                            }
+                        }
+                    })
+                }, function(){
+                    table.reload('storage-lists');
+                });
+            } else {
+                $.ajax({
+                    url: '{:url("storage_config/changeEngine")}',
+                    data: {engine: engine},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.code === 1) {
+                            layui.layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                            table.reload('storage-lists');
+                        } else {
+                            layui.layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 2
+                                , time: 1000
+                            });
+                        }
+                    }
+                })
+            }
+        })
+    });
+
+</script>

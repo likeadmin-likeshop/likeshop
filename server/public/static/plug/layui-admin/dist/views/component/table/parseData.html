@@ -1,0 +1,83 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>解析任意数据格式 - 数据表格</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+  <div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+      <a lay-href="">主页</a>
+      <a><cite>组件</cite></a>
+      <a><cite>数据表格</cite></a>
+      <a><cite>解析任意数据格式</cite></a>
+    </div>
+  </div>
+  
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">解析任意数据格式</div>
+          <div class="layui-card-body">
+            <blockquote class="layui-elem-quote layui-text">
+              尽管本示例中的原始数据：<a href="../../../layuiadmin/json/table/demo3.js" target="_blank">demo3.js</a>，并不符合 table 组件默认规定的数据格式，但从 layui 2.4.0 开始，新增的 parseData 回调可以将原始的任意格式的数据重新解析成 table 组件规定的数据格式。具体可以点击上方查看代码。
+            </blockquote>
+            
+            <table class="layui-hide" id="test-table-parseData" lay-filter="test-table-parseData"></table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../../../layuiadmin/layui/layui.js"></script>  
+  <script>
+  layui.config({
+    base: '../../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'table'], function(){
+    var admin = layui.admin
+    ,table = layui.table;
+  
+    table.render({
+      elem: '#test-table-parseData'
+      ,url: layui.setter.base + '/json/table/demo3.js'
+      ,toolbar: true
+      ,title: '用户数据表'
+      ,totalRow: true
+      ,cellMinWidth: 120
+      ,cols: [[
+        {field:'id', title:'ID', width:80, sort: true, totalRowText: '合计行'}
+        ,{field:'username', title:'用户名', edit: 'text'}
+        ,{field:'experience', title:'积分', sort: true, totalRow: true}
+        ,{field:'logins', title:'登入次数', sort: true, totalRow: true}
+      ]]
+      ,page: true
+      ,response: {
+        statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+      }
+      ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+        return {
+          "code": res.status, //解析接口状态
+          "msg": res.message, //解析提示文本
+          "count": res.total, //解析数据长度
+          "data": res.rows.item //解析数据列表
+        };
+      }
+    });
+  
+  });
+  </script>
+</body>
+</html>

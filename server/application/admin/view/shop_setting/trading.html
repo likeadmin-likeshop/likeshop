@@ -1,0 +1,199 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 160px;
+    }
+</style>
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*设置订单自动取消、完成时间，订单售后退款时长。具体看各配置描述信息；</p>
+                    <p>*退货地址设置，售后退款时显示的退货地址。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-card-body" >
+            <div class="layui-form" lay-filter="">
+
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>成长值设置</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;">成长值赠送比例：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"name="growth_ratio"   lay-verType="tips" autocomplete="off" value="{$config.growth_ratio}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">填写消费多少元可以赠送1成长值，为空或填0表示消费不送成长值</div>
+                    </div>
+                    <div  class="layui-form-mid" >元可赠送1成长值</div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>订单设置</legend>
+                    </fieldset>
+                </div>
+
+                <!--订单扣减库存方式(下单扣减,支付后扣减)-->
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;">订单库存扣减方式：</label>
+                    <div class="layui-input-block ">
+                        <input type="radio" name="deduct_type" value="1" title="下单扣库存" {if condition="$config.deduct_type eq 1"}checked{/if}>
+                        <input type="radio" name="deduct_type" value="0" title="支付扣库存" {if condition="$config.deduct_type eq 0"}checked{/if}>
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">下单扣库存:提交订单就扣库存,支付扣库存:下单后支付成功才扣库存.</div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;">订单自动取消时长：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="order_cancel"   lay-verType="tips" autocomplete="off" value="{$config.order_cancel}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">未付款订单多久时间后自动关闭，为0或不填表示订单不自动关闭</div>
+                    </div>
+                    <div  class="layui-form-mid" > 分钟</div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;">客户允许取消订单时长：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="customer_cancel_limit"   lay-verType="tips" autocomplete="off" value="{$config.customer_cancel_limit}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">已支付订单多长时间内允许客户主动取消订单，为0或不填表示不允许取消订单</div>
+                    </div>
+                    <div  class="layui-form-mid" > 分钟</div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;">订单自动完成时长：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"name="order_finish"   lay-verType="tips" autocomplete="off" value="{$config.order_finish}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">已发货订单多久时间后自动收货完成订单，为0或不填表示订单不自动收货完成订单</div>
+                    </div>
+                    <div  class="layui-form-mid" > 天</div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap; " >订单售后退款时长：</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" name="refund_days"   lay-verType="tips" autocomplete="off" value="{$config.refund_days}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">已完成订单多久时间内允许售后退款，为0或不填表示订单不限制售后退款时长</div>
+                    </div>
+                    <div  class="layui-form-mid" > 天</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>订单管理</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;" >订单管理联系人：</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" name="order_contact"   lay-verType="tips" autocomplete="off" value="{$config.order_contact}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">平台订单管理联系人</div>
+                    </div>
+                </div>
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;" >订单管理联系人手机：</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" name="order_contact_mobile"  lay-verify="phone"   lay-verType="tips" autocomplete="off" value="{$config.order_contact_mobile}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">平台订单管理联系人手机，当商城有订单时通知订单联系人</div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>退货地址</legend>
+                    </fieldset>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;" >联系人：</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" name="contact"   lay-verType="tips" autocomplete="off" value="{$config.contact}" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="white-space: nowrap; " >联系手机：</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" name="mobile" lay-verify="phone"   lay-verType="tips" autocomplete="off" value="{$config.mobile}" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item company">
+                    <label class="layui-form-label weak" >退货地址：</label>
+                    <div class="layui-input-inline" >
+                        <select name="province_id" lay-filter="province" lay-verify="">
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width: 120px;">
+                        <select name="city_id" lay-filter="city" lay-verify="">
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width: 120px;">
+                        <select name="district_id" lay-verify="">
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="address" lay-verify="" value="{$config.address}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/static/common/js/area.js"></script>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like_area', 'like'], function(){
+        var $ = layui.$
+            ,like_area = layui.like_area
+            ,like = layui.like
+            ,form = layui.form;
+
+
+        //三级联动
+        like_area.init('province','city','district','province_id','city_id','district_id', '{$config.province_id}','{$config.city_id}','{$config.district_id}');
+
+        form.on('submit(setmnp)',function (data) {
+            like.ajax({
+                url: '{:url("ShopSetting/setTrading")}'//实际使用请改成服务端真实接口
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        location.href = location.href; //后台主页
+                    });
+                }
+            });
+        });
+    });
+
+</script>

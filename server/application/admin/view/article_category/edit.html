@@ -1,0 +1,31 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$category.id}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章分类</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value="{$category.name}" lay-verType="tips"  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类状态</label>
+        <div class="layui-input-inline" id="" >
+            <input type="radio" name="is_show" lay-filter="is_show" style="width: 500px" value=1 title="启用" {if condition="$category.is_show eq 1" }checked{/if}>
+            <input type="radio" name="is_show" lay-filter="is_show" style="width: 500px" value=0 title="停用" {if condition="$category.is_show eq 0" }checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-article_category-submit" id="edit-article_category-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+    })
+</script>

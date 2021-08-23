@@ -1,0 +1,464 @@
+{layout name="layout1" /}
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*设置快递配送的运费模板。</p>
+                    <p>*需要开启快递发货的配送方式，运费模板才能生效。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type='freight' class="layui-this">运费模板</li>
+                <li data-type='express'>快递公司</li>
+                <li data-type='express'>查询配置</li>
+            </ul>
+            <div class="layui-tab-content">
+
+                <!--运费模板列表-->
+                <div class="layui-tab-item layui-show ">
+                    {include file="freight/lists"/}
+                </div>
+
+                <!--物流公司列表-->
+                <div class="layui-tab-item">
+                    {include file="freight/express"/}
+                </div>
+
+                <!--查询配置-->
+                <div class="layui-tab-item">
+                    {include file="freight/config"/}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'element', 'like', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , element = layui.element
+            , like = layui.like;
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+
+        getLists('freight');
+
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            form.render('select');
+            var type = $(this).attr('data-type');
+            getLists(type);
+        });
+
+
+        //监听搜索
+        form.on('submit(express-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('express-lists', {
+                where: field
+            });
+        });
+
+        form.on('submit(freight-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('freight-lists', {
+                where: field
+            });
+        });
+
+        //清空查询
+        form.on('submit(express-clear-search)', function () {
+            $('#express_name').val('');
+            //刷新列表
+            table.reload('express-lists', {
+                where: []
+            });
+        });
+
+        form.on('submit(freight-clear-search)', function () {
+            $('#name').val('');
+            $('#charge_way').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('freight-lists', {
+                where: []
+            });
+        });
+
+        function getLists(type) {
+
+            if (type == 'freight') {
+                table.render({
+                    elem: '#freight-lists'
+                    , url: '{:url("freight/lists")}'
+                    , cols: [[
+                        {field: 'id', width: 60, title: 'ID', sort: true}
+                        , {field: 'name', title: '模板名称'}
+                        , {field: 'charge_way_text', title: '计费方式'}
+                        , {field: 'remark', title: '备注'}
+                        , {field: 'create_time', title: '创建时间'}
+                        , {fixed: 'right', title: '操作',width:160, align: 'center', fixed: 'right', toolbar: '#freight-operation'}
+                    ]]
+                    , page: true
+                    , text: {none: '暂无数据！'}
+                    , parseData: function (res) {
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.count,
+                            "data": res.data.lists, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+            }
+
+            if (type == 'express') {
+                table.render({
+                    elem: '#express-lists'
+                    , url: '{:url("express/lists")}'
+                    , cols: [[
+                         {field: 'name', title: '快递公司',align:'center'}
+                        , {field: 'icon', width: 150,title: '快递图标',templet:'#icon',align:'center'}
+                        , {field: 'website', title: '公司网址',align:'center'}
+                        , {field: 'code', title: '快递编码',align:'center'}
+                        , {field: 'code100', title: '快递100编码',align:'center'}
+                        , {field: 'codebird', title: '快递鸟编码',align:'center'}
+                        , {field: 'sort', title: '排序', align: 'center',sort: true, width: 100}
+                        , {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#express-operation'}
+                    ]]
+                    , page: true
+                    , text: {none: '暂无数据！'}
+                    , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.lists, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+            }
+        }
+
+
+        //新增运费模板
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加运费模板'
+                    ,content: '{:url("freight/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-freight-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("freight/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('freight-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        };
+        $('.layui-btn.layuiadmin-btn-freight').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //运费模板监听工具条
+        table.on('tool(freight-lists)', function (obj) {
+            var id = obj.data.id;
+            //详情
+            if(obj.event === 'detail-freight'){
+                layer.open({
+                    type: 2
+                    ,title: '详情'
+                    ,content: '{:url("freight/detail")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,yes: function(index, layero){
+                        table.reload('freight-lists'); //再执行关闭
+                    }
+                })
+            }
+
+            //编辑
+            if(obj.event === 'edit-freight'){
+                layer.open({
+                    type: 2
+                    ,title: '编辑'
+                    ,btn: ['确定', '取消']
+                    ,content: '{:url("freight/edit")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-freight-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("freight/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('freight-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+
+            //删除运费模板
+            if(obj.event === 'del-freight'){
+                layer.confirm('删除后运费模板将消失，确认删除运费模板吗?', {
+                    btn: ['确认','取消'] //按钮
+                }, function(){
+                    like.ajax({
+                        url: '{:url("freight/del")}'
+                        , data: {'id': id}
+                        , type: 'post'
+                        , success: function (res) {
+                            if (res.code == 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                },function () {
+                                    table.reload('freight-lists');
+                                });
+                            }
+                        },
+                    });
+                });
+            }
+        });
+
+
+        // =========================================快递公司==================================================
+        //新增快递公司
+        var express_active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '新增快递公司'
+                    ,content: '{:url("express/add")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'express-submit'
+                            ,submit = layero.find('iframe').contents().find("#express-submit");
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(express-submit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("express/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('express-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    },
+
+                })
+            }
+        };
+
+        $('.layui-btn.layuiadmin-btn-express').on('click', function(){
+            var type = $(this).data('type');
+            express_active[type] ? express_active[type].call(this) : '';
+        });
+
+
+        //快递公司列表操作
+        table.on('tool(express-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                layer.confirm('确定删除此快递公司？', function(index){
+                    like.ajax({
+                        url:'{:url("express/del")}',
+                        data:{delData:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('express-lists'); //数据刷新
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑快递公司信息'
+                    ,content: '{:url("express/edit")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#express-submit-edit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(express-submit-edit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("express/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    console.log(res);
+                                    if(res.code == 1)
+                                    {
+                                        console.log(1);
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('express-lists'); //数据刷新
+                                    }
+                                }
+
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+
+
+        // ========================================查询配置==================================================
+        form.on('radio(kd100)', function(data){
+            if(data.value =='kd100'){
+                $('#kd100_appkey').show();
+                $('#kd100_customer').show();
+                $('#kdniao_appkey').hide();
+                $('#kdniao_ebussinessid').hide();
+            }
+        });
+
+        form.on('radio(kdniao)', function(data){
+            if(data.value =='kdniao'){
+                $('#kd100_appkey').hide();
+                $('#kd100_customer').hide();
+                $('#kdniao_appkey').show();
+                $('#kdniao_ebussinessid').show();
+            }
+        });
+
+        form.on('submit(query-submit)',function (data) {
+            like.ajax({
+                url: '{:url("express/setExpress")}'
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    });
+                }
+            });
+        });
+    });
+
+
+</script>

@@ -1,0 +1,88 @@
+{layout name="layout2" /}
+<style>
+    .tips{
+        color: red;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user" id="layuiadmin-form-user" style="padding: 20px 30px 0 0;">
+
+    <input type="hidden" value="{$info.id}" name="id">
+    <input type="hidden" value="{$type}" name="type">
+
+    <!--通知场景-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">通知场景：</label>
+        <div class="layui-input-inline" style="padding-top: 8px">
+            {$info.scene}
+        </div>
+    </div>
+
+    <!--模板id-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>模板ID：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text" name="template_code" value="{$info.sms_notice.template_code | default = ''}"  autocomplete="off" class="layui-input" lay-verify="required" lay-vertype="tips">
+                <div class="layui-form-mid layui-word-aux">需要与短信接口的模板ID一致</div>
+            </div>
+        </div>
+    </div>
+
+    <!--场景变量-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">场景变量：</label>
+        <div class="layui-input-block">
+            {foreach $info.variable as $item => $val}
+            <button type="button"  class="layui-btn layui-btn-primary variable-btn" data-value="{$item}">{$val}</button>
+            {/foreach}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-form-mid layui-word-aux">系统在当前场景预定义好的通知变量</div>
+    </div>
+
+    <!--通知内容-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>短信内容：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <textarea name="content" id="content" class="layui-textarea">{$info.sms_notice.content | default = ''}</textarea>
+                <div class="layui-form-mid layui-word-aux">支持嵌入场景变量，复制场景变量的值填入即可生效</div>
+            </div>
+        </div>
+    </div>
+
+    <!--状态-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value="1" title="开启" {if ($info.sms_notice.status ?? 0) == 1}checked{/if} />
+            <input type="radio" name="status" value="0" title="关闭" {if ($info.sms_notice.status ?? 0) == 0}checked{/if}  />
+            <div class="layui-form-mid layui-word-aux">开启或关闭当前场景通知</div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).use(['form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+        $(document).on('click', '.variable-btn', function () {
+            var copyText = $(this).data('value');
+            let aux = document.createElement("input");
+            aux.setAttribute("value", '{'+copyText+'}');
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            document.body.removeChild(aux);
+        })
+    })
+</script>

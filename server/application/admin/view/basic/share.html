@@ -1,0 +1,195 @@
+{layout name="layout1" /}
+<style>
+
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+
+<div class="layui-card">
+   <div class="layui-card-body">
+       <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4; margin-bottom: 30px;">
+           <div class="layui-colla-item">
+               <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+               <div class="layui-colla-content layui-show">
+                   *设置商城分享标题，分享简介。
+               </div>
+           </div>
+       </div>
+
+       <div class="layui-form">
+           <div class="layui-tab layui-tab-card">
+               <ul class="layui-tab-title">
+                   <li class="layui-this">H5商城</li>
+                   <li>小程序商城</li>
+               </ul>
+               <div class="layui-tab-content">
+                   <!-- H5 -->
+                   <div class="layui-tab-item layui-show">
+                       <!-- H5分享标题 -->
+                       <div class="layui-form-item" style="margin-bottom:0;">
+                           <label for="h5_share_title" class="layui-form-label">分享标题：</label>
+                           <div class="layui-input-inline">
+                               <input type="text" id="h5_share_title" name="h5_share_title" value="{$config.h5.h5_share_title}" autocomplete="off" class="layui-input">
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"></label>
+                           <div class="layui-input-block">
+                               <div class="layui-form-mid layui-word-aux">H5商城分享页面时，显示的分享标题</div>
+                           </div>
+                       </div>
+                       <!-- H5分享简介 -->
+                       <div class="layui-form-item" style="margin-bottom:0;">
+                           <label for="h5_share_intro" class="layui-form-label">分享简介：</label>
+                           <div class="layui-input-inline">
+                               <input type="text" id="h5_share_intro" name="h5_share_intro" value="{$config.h5.h5_share_title}" autocomplete="off" class="layui-input">
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"></label>
+                           <div class="layui-input-block">
+                               <div class="layui-form-mid layui-word-aux">H5商城分享页面时，显示的分享简介</div>
+                           </div>
+                       </div>
+                       <!-- H5分享图片 -->
+                       <div class="layui-form-item" style="margin-bottom:0;">
+                           <label class="layui-form-label">分享图片：</label>
+                           <div class="layui-input-inline">
+                               <div class="" style="height:80px;line-height:80px;">
+                                   <input name="h5_share_image" type="hidden" value="{$config.h5.h5_share_image}" >
+                                   {if !empty($config.h5.h5_share_image)}
+                                       <div class="goods-img-add" style="display: none"></div>
+                                       <div class="goods-li">
+                                           <img class="goods-img" style="width: auto;height: 50px" src="{$config.file_url}{$config.h5.h5_share_image}">
+                                           <a class="goods-img-del-x" style="display: none">x</a>
+                                       </div>
+                                   {else}
+                                        <div class="goods-img-add"></div>
+                                   {/if}
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                    <!-- 小程序 -->
+                   <div class="layui-tab-item">
+                       <!-- 小程序分享标题 -->
+                       <div class="layui-form-item" style="margin-bottom:0;">
+                           <label for="mnp_share_title" class="layui-form-label">分享标题：</label>
+                           <div class="layui-input-inline">
+                               <input type="text" id="mnp_share_title" name="mnp_share_title" value="{$config.mnp.mnp_share_title}" autocomplete="off" class="layui-input">
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"></label>
+                           <div class="layui-input-block">
+                               <div class="layui-form-mid layui-word-aux">小程序商城分享页面时，显示的分享标题</div>
+                           </div>
+                       </div>
+                   </div>
+                    <!-- 提交 -->
+                   <div class="layui-form-item" style="margin-top:30px">
+                       <div class="layui-input-block">
+                           <button class="layui-btn layui-bg-blue" lay-submit lay-filter="addSublime">提交</button>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+       </div>
+   </div>
+</div>
+
+<script>
+layui.config({
+        version:"{$front_version}",
+    base: '/static/plug/layui-admin/dist/layuiadmin/'
+}).extend({
+    index: 'lib/index'
+}).use(['index','table','like'], function(){
+    var form = layui.form;
+    var like = layui.like;
+
+    // 监听提交
+    form.on('submit(addSublime)', function(data){
+        console.log(data.field)
+        layui.$.ajax({
+            url: '{:url("Basic/setShare")}'
+            , data: data.field
+            , type: 'post'
+            , success: function (res) {
+                if(res.code === 1) {
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    });
+                    return false;
+                }
+            }
+        });
+        return false;
+    });
+
+    //上传图片
+    like.imageUpload('.goods-img-add', function (uri, element) {
+        var html = '<div class="goods-li">\n' +
+            '<img class="goods-img" ' +
+            'src="' + uri[0] + '">' +
+            '<a class="goods-img-del-x" style="display: none">x</a>' +
+            '</div>';
+        element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+        element.parent().append(html);
+        element.css('display','none');
+    }, true);
+
+    //删除图片
+    $(document).on('click', '.goods-img-del-x', function () {
+        $(this).parent().siblings('input').val('');
+        $(this).parent().prev().css('display','block');
+        $(this).parent().remove();
+    });
+    //显示图片
+    $(document).on('click', '.goods-img', function () {
+        var image = $(this).attr('src');
+        like.showImg(image,600);
+    });
+    //  删除按钮的显示与隐藏
+    $(document).on('mouseover', '.goods-img', function () {
+        $(this).next().show();
+    });
+    $(document).on('mouseout', '.goods-img', function () {
+        $(this).next().hide();
+    });
+    $(document).on('mouseover', '.goods-img-del-x', function () {
+        $(this).show();
+    });
+    $(document).on('mouseout', '.goods-img-del-x', function () {
+        $(this).hide();
+    });
+
+});
+</script>

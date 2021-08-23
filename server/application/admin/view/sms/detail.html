@@ -1,0 +1,71 @@
+{layout name="layout2" /}
+<style>
+    .layui-input-inline {
+        padding-top: 10px
+    }
+    .layui-input-block{
+        padding-top: 10px
+    }
+    .layui-form-label{
+        width: 120px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$info.id}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信标题：</label>
+        <div class="layui-input-inline" >
+            {$info.name}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发送手机号：</label>
+        <div class="layui-input-inline">
+            {$info.mobile}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信内容：</label>
+        <div class="layui-input-inline">
+            {$info.content}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发送状态：</label>
+        <div class="layui-input-inline">
+            {$info.send_status}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信结果：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                {$info.results}
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发送时间：</label>
+        <div class="layui-input-inline">
+            {$info.send_time}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">创建时间：</label>
+        <div class="layui-input-inline">
+            {$info.create_time}
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).use(['form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+
+    })
+</script>

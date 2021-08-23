@@ -1,0 +1,182 @@
+{layout name="layout2" /}
+<style>
+    .div-flex {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+
+    .width-160 {
+        width: 200px;
+    }
+
+    .layui-table th {
+        text-align: center;
+    }
+
+    .table-margin {
+        margin-left: 50px;
+        margin-right: 50px;
+        text-align: center;
+    }
+
+    .image {
+        height: 80px;
+        width: 80px;
+    }
+
+    .mt50 {
+        margin-left: 50px;
+    }
+
+</style>
+<div class="layui-card-body" >
+    <!--基本信息-->
+    <div class="layui-form" lay-filter="layuiadmin-form-express" id="layuiadmin-form-express" >
+        <input type="hidden" name="order_id" value="{$detail.id}">
+
+        <div class="layui-form-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>快递信息</legend>
+            </fieldset>
+        </div>
+
+
+        {empty name="$detail.shipping"}
+            <div class="layui-form-item div-flex">
+                <label class="layui-form-label"></label>
+                <div class="width-160">暂无物流信息</div>
+            </div>
+        {else/}
+            <div class="layui-form-item div-flex">
+                <label class="layui-form-label ">发货时间:</label>
+                <div class="width-160">{$detail.shipping.create_time_text | default= "未知"}</div>
+                {if condition = "$detail.shipping.send_type eq 1"}
+                    <label class="layui-form-label ">快递方式:</label>
+                    <div class="width-160">{$detail.shipping.shipping_name | default="未知"}</div>
+                    <label class="layui-form-label ">快递单号:</label>
+                    <div class="width-160">{$detail.shipping.invoice_no | default= "未知"}</div>
+                {else/}
+                    <label class="layui-form-label ">配送方式:</label>
+                    <div class="width-160">无需快递</div>
+                {/if}
+            </div>
+        {/empty}
+
+        <div class="layui-form-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>商品信息</legend>
+            </fieldset>
+        </div>
+
+
+        <div class="layui-form-item table-margin">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="250">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>商品信息</th>
+                    <th>价格(元)</th>
+                    <th>数量</th>
+                    <th>小计(元)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $detail.order_goods as $k => $goods}
+                <tr>
+                    <td>
+                        <div style="text-align: left">
+                            <div class="layui-col-md3">
+                                <img src="{$goods.goods_image}" class="image-show image">
+                            </div>
+                            <div class="layui-col-md9">
+                                <p style="margin-top: 10px">{$goods.goods_name}</p>
+                                <br>
+                                <p>{$goods.spec_value}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>￥{$goods.goods_price}</td>
+                    <td>{$goods.goods_num}</td>
+                    <td>{$goods.total_price}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>物流轨迹</legend>
+            </fieldset>
+        </div>
+
+
+        <div class="layui-form-item table-margin">
+            <table class="layui-table">
+                <colgroup>
+                    <col>
+                </colgroup>
+                <thead>
+                <tr >
+                    <th colspan="3">轨迹</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $detail.shipping.traces as $k => $item}
+                <tr>
+                    {if is_array($item)}
+                        {foreach $item as $k1 => $value}
+                            <td>{$value}</td>
+                        {/foreach}
+                    {else /}
+                        <td>{$item}</td>
+                    {/if}
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="layui-form-item div-flex ">
+            <div class="layui-input-block ">
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary width_160 " id="back">返回</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'element', 'jquery', 'like', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form;
+        var like = layui.like;
+
+        //主图放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        $('#back').click(function () {
+            var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);
+            parent.layui.table.reload('order-lists');
+            return true;
+        });
+    });
+</script>

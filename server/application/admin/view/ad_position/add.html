@@ -1,0 +1,69 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-item .layui-form-label {
+        width: 120px;
+    }
+    .layui-form-item .layui-input-inline {
+        /*width: 300px;*/
+    }
+    .layui-form-item .layui-input-inline .layui-input {
+        /*width: 260px;*/
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-ad_position" id="layuiadmin-form-ad_position" style="padding: 20px 30px 0 0;">
+<!--    <input type="hidden" name="id" value="">-->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>广告位:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" value="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片建议大小:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="width" value="" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+
+        <div class="layui-input-inline" style="margin: 0px;width: 60px;">
+            <label class="layui-form-mid">宽度</label>
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name="height" value="" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline" style="margin: 0px;width: 60px;">
+            <label class="layui-form-mid">高度</label>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">广告位状态:</label>
+        <div class="layui-input-inline">
+            <!--            <input type="checkbox" lay-filter="disable" name="is_show" lay-skin="switch" lay-text="启用|停用" checked>-->
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="停用" >
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-ad_position-submit" id="add-ad_position-submit" value="确认">
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+    });
+
+</script>

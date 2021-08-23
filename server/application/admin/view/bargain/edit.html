@@ -1,0 +1,306 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        width: 110px;
+    }
+</style>
+
+<div class="layui-card layui-form">
+    <div class="layui-card-body">
+        <!-- 选择商品 -->
+        <input type="hidden" name="id" value="{$detail.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>砍价商品：</label>
+            <div class="layui-input-block">
+                <a class="layui-btn layui-btn-normal select-goods">选择砍价商品</a>
+            </div>
+        </div>
+        <!-- 商品信息 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="goods_info">
+                    {if $detail.is_goods_item}
+                    <img src="{$detail.goods.image}" alt="商品图片" style="width:80px;height:80px;">
+                    <span style="margin-left:5px;">{$detail.goods.name}</span>
+                    <input type="hidden" name="goods_id" value="{$detail.goods.id}">
+                    {/if}
+                </div>
+                <table id="goods_list" class="layui-table" lay-size="sm" style="width:630px;">
+                    <thead>
+                        <tr style="background-color: #f3f5f9">
+                            <th style="width: 120px;text-align: center">商品规格</th>
+                            <th style="width: 60px;text-align: center">商品价格</th>
+                            <th style="width: 40px;text-align: center">活动底价</th>
+                            <th style="width: 40px;text-align: center">首刀金额</th>
+                            <th style="width: 40px;text-align: center">商品库存</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {if $detail.is_goods_item}
+                        {volist name="$detail.item" id="vo"}
+                            <tr>
+                                <td style="text-align: center">{$vo.spec_value_str}</td>
+                                <td style="text-align: center">{$vo.spec_item_price}</td>
+                                <td style="width: 40px;">
+                                    <input onkeyup="value=value.replace(/^\\D*(\\d*(?:\\.\\d{0,2})?).*$/g, \'$1\')"
+                                           type="number" name=floor_price[{$detail.goods_id}][{$vo.spec_item_id}]
+                                           lay-verType="tips" lay-verify="required" autocomplete="off"
+                                           class="layui-input" value="{$vo.floor_price}">
+                                </td>
+                                <td style="width: 40px;">
+                                    <input onkeyup="value=value.replace(/^\\D*(\\d*(?:\\.\\d{0,2})?).*$/g, \'$1\')"
+                                           type="number" name=first_knife_price[{$detail.goods_id}][{$vo.spec_item_id}]
+                                           lay-verType="tips" lay-verify="required|first_knife_price" autocomplete="off"
+                                           class="layui-input" value="{$vo.first_knife_price}">
+                                </td>
+                                <td style="width: 40px;text-align: center;">{$vo.stock}</td>
+                            </tr>
+                        {/volist}
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 砍价有效时长 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="time_limit" class="layui-form-label"><font color="red">*</font>砍价有效时长：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" id="time_limit" name="time_limit" value="{$detail.time_limit}" class="layui-input" autocomplete="off"
+                       onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                       lay-verType="tips" lay-verify="required|number|time_limit">
+            </div>
+            <div class="layui-form-mid layui-word-aux">小时</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">本次发起砍价活动有效时长。</div>
+            </div>
+        </div>
+
+        <!-- 拼团活动时间 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label" style="width:110px;"><font color="red">*</font>砍价活动时间：</label>
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input type="text" id="activity_start_time" name="activity_start_time" value="{$detail.activity_start_time}" placeholder="开始时间" class="layui-input" autocomplete="off" lay-verType="tips" lay-verify="required">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input type="text" id="activity_end_time" name="activity_end_time" value="{$detail.activity_end_time}" placeholder="结束时间" class="layui-input" autocomplete="off" lay-verType="tips" lay-verify="required">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:110px;"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">本商品参与砍价活动的时间范围。</div>
+            </div>
+        </div>
+
+        <!-- 砍价分享标题 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="share_title" class="layui-form-label" style="width:110px;">砍价分享标题：</label>
+            <div class="layui-input-inline" style="width: 300px;">
+                <input type="text" id="share_title" name="share_title" value="{$detail.share_title}" class="layui-input" autocomplete="off" lay-verType="tips">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:110px;"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">分享砍价活动时的标题，为空时默认使用商品标题</div>
+            </div>
+        </div>
+
+        <!-- 砍价分享简介 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="share_intro" class="layui-form-label" style="width:110px;">砍价分享简介：</label>
+            <div class="layui-input-inline" style="width: 300px;">
+                <input type="text" id="share_intro" name="share_intro" value="{$detail.share_intro}" class="layui-input" autocomplete="off" lay-verType="tips">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:110px;"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">分享砍价活动时的简介，为空时默认使用商品简介</div>
+            </div>
+        </div>
+
+        <!-- 购买方式 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label"><font color="red">*</font>购买方式：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="payment_where" value="1" title="砍到指定底价才可购买" {if $detail.payment_where == 1}checked{/if}>
+                <input type="radio" name="payment_where" value="2" title="任意金额可购买" {if $detail.payment_where == 2}checked{/if}>
+            </div>
+        </div>
+
+        <!-- 每刀金额 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>每刀金额：</label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <input type="radio" name="knife_type" value="1" title="随机金额" {if $detail.knife_type == 1}checked{/if}>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="min_knife_price" value="{$detail.min_knife_price}" class="layui-input" autocomplete="off"
+                           lay-verType="tips" lay-verify="min_knife_price" style="width:100px;" placeholder="最小金额"
+                           onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')">
+                </div>
+                <div class="layui-inline"><span>~</span></div>
+                <div class="layui-inline">
+                    <input type="text" name="max_knife_price" value="{$detail.max_knife_price}" class="layui-input" autocomplete="off"
+                           lay-verType="tips" lay-verify="max_knife_price" style="width:100px;" placeholder="最大金额"
+                           onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')">
+                </div>
+            </div>
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <input type="radio" name="knife_type" value="2" title="固定金额" {if $detail.knife_type == 2}checked{/if}>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="fixed_knife_price" value="{$detail.fixed_knife_price}" class="layui-input" autocomplete="off"
+                           lay-verType="tips" lay-verify="fixed_knife_price" style="width:100px;" placeholder="元"
+                           onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')">
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动状态 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label"><font color="red">*</font>活动状态：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="1" title="开启" {if $detail.status}checked{/if}>
+                <input type="radio" name="status" value="0" title="关闭" {if !$detail.status}checked{/if}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">活动开启并且在砍价活动时间内才能发起新的砍价活动</div>
+            </div>
+        </div>
+
+        <!-- 确认按钮 -->
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+        </div>
+
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form', 'like', 'laydate'], function() {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , laydate = layui.laydate;
+
+        // 开始时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#activity_start_time'
+            ,trigger: 'click'
+        });
+
+        // 结束时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#activity_end_time'
+            ,trigger: 'click'
+        });
+
+        // 选择商品
+        $(document).on('click','.select-goods',function () {
+            layer.open({
+                type: 2
+                ,title: '选择商品'
+                ,content: '{:url("common/selectGoods")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确认', '取消']
+                ,yes: function(index, layero){
+                    var data = window["layui-layer-iframe" + index].callbackdata();
+                    if(data.length){
+                        goods_ids = [];
+                        $('#goods_list tbody').remove();
+                    }
+                    data.forEach(function(item, index) {
+                        console.log(item);
+                        var goods_info_html = '<img src="'+item.image+'" alt="商品图片" style="width:80px;height:80px;">\n' +
+                                              '<span style="margin-left:5px;">'+item.name+'</span>\n' +
+                                              '<input type="hidden" name="goods_id" value="'+item.id+'">';
+                        $(".goods_info").html(goods_info_html);
+                        $("#goods_list").show();
+                        for(var i = 0; item.goods_item.length > i; i++){
+                            var goods_item = item.goods_item[i];
+                            if(goods_ids.indexOf(goods_item.id) === -1) {
+                                goods_ids.push(goods_item.id);
+                                var goods_html = '<tr>\n' +
+                                    '<td style="text-align: center">'+goods_item.spec_value_str+'</td>\n' +
+                                    '<td style="text-align: center">'+goods_item.price+'</td>\n' +
+                                    '<td style="width: 40px;"><input onkeyup="value=value.replace(/^\\D*(\\d*(?:\\.\\d{0,2})?).*$/g, \'$1\')" type="number" name=floor_price['+item.id+']['+goods_item.id+'] lay-verType="tips" lay-verify="required" autocomplete="off" class="layui-input"></td>\n' +
+                                    '<td style="width: 40px;"><input onkeyup="value=value.replace(/^\\D*(\\d*(?:\\.\\d{0,2})?).*$/g, \'$1\')" type="number" name=first_knife_price['+item.id+']['+goods_item.id+'] lay-verType="tips" lay-verify="required|first_knife_price" autocomplete="off" class="layui-input"></td>\n' +
+                                    '<td style="width: 40px;text-align: center">'+item.stock+'</td>\n' +
+                                    '</tr>';
+                                $('#goods_list').append(goods_html);
+                            }
+                        }
+                    });
+                    $('.goods').show();
+                }
+            })
+        });
+
+        // 表单验证
+        form.verify({
+            min_knife_price: function(value){
+                var type = $('input[name=knife_type]:checked').val();
+                if (type === '1') {
+                    if (!value || value === '') {
+                        return '请填写最小砍价金额';
+                    }
+                    if(parseFloat(value) < 0){
+                        return '最小砍价金额不能小于0';
+                    }
+                }
+            },
+            max_knife_price: function(value){
+                var type = $('input[name=knife_type]:checked').val();
+                if (type === '1') {
+                    if (!value || value === '') {
+                        return '请填写最大砍价金额';
+                    }
+                    if(parseFloat(value) < 0){
+                        return '最大砍价金额不能小于0';
+                    }
+                }
+            },
+            fixed_knife_price: function (value) {
+                var type = $('input[name=knife_type]:checked').val();
+                if (type === '2') {
+                    if (!value || value === '') {
+                        return '请填写固定砍价金额';
+                    }
+                    if(parseFloat(value) < 0){
+                        return '固定砍价金额不能小于0';
+                    }
+                }
+            },
+            first_knife_price: function (value, that) {
+                var goods_price = $(that).parent().prev().prev().html();
+                if (parseFloat(value) > parseFloat(goods_price)) {
+                    return '首刀价格不能大于商品价格';
+                }
+            }
+        });
+
+    });
+</script>

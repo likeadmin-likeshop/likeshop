@@ -1,0 +1,75 @@
+{layout name="layout2" /}
+<style>
+    .div-flex {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+    .width-160 {
+        width: 200px;
+    }
+    .layui-table th {
+        text-align: center;
+    }
+    .layui-form-label {
+        width: 120px;
+    }
+</style>
+
+<div class="layui-card-body" >
+    <!--基本信息-->
+    <div class="layui-form" lay-filter="layuiadmin-form-member" id="layuiadmin-form-member" >
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>基本信息</legend>
+        </fieldset>
+    </div>
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label ">会员编号:</label>
+        <div class="width-160">{$detail.user_sn}</div>
+        <label class="layui-form-label ">会员昵称:</label>
+        <div class="width-160">{$detail.nickname}</div>
+        <label class="layui-form-label ">手机号码:</label>
+        <div class="width-160">{$detail.mobile}</div>
+    </div>
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label ">分销员:</label>
+        <div class="width-160">{$detail.distribution_text}</div>
+        <label class="layui-form-label ">邀请码:</label>
+        <div class="width-160">{$detail.distribution_code}</div>
+        <label class="layui-form-label ">上级推荐人编号:</label>
+        <div class="width-160">{$detail.first_leader_sn}</div>
+    </div>
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label ">直推会员数:</label>
+        <div class="width-160">{$detail.first_fans}</div>
+    </div>
+
+    <!--分销信息-->
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>分销信息</legend>
+        </fieldset>
+    </div>
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label ">分销订单数:</label>
+        <div class="width-160">{$detail.distribution_num}</div>
+        <label class="layui-form-label ">分销订单金额:</label>
+        <div class="width-160">{$detail.distribution_amount}</div>
+        <label class="layui-form-label ">分销佣金:</label>
+        <div class="width-160">{$detail.distribution_money}</div>
+    </div>
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label ">可提现佣金:</label>
+        <div class="width-160">{$detail.earnings}</div>
+        <label class="layui-form-label ">已提现佣金:</label>
+        <div class="width-160">{$detail.have_withdraw}</div>
+    </div>
+
+</div>
+</div>

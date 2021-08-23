@@ -1,0 +1,430 @@
+@import "./builder.scss";
+
+page {
+    /* 定义一些主题色及基础样式 */
+    font-family: PingFang SC, Arial, Hiragino Sans GB, Microsoft YaHei, sans-serif;
+    font-size: 28rpx;
+    color: $-color-normal;
+	padding-bottom: env(safe-area-inset-bottom);
+    background-color: $-color-body;
+}
+
+.flex1{
+	flex:1;
+}
+
+.flexnone {
+	flex: none;
+}
+
+.wrap {
+	flex-wrap: wrap;
+}
+.bold {
+    font-weight: bold;
+}
+/* 定义字体颜色 */
+.primary {
+    color: $-color-primary;
+}
+
+.bg-primary {
+    background-color: $-color-primary;
+}
+.bg-white {
+    background-color: $-color-white;
+}
+.bg-body {
+    background-color: $-color-body;
+}
+.bg-gray {
+    background-color: $-color-border;
+}
+
+
+.black {
+    color: $-color-black;
+}
+
+.white {
+    color: $-color-white;
+}
+
+.normal {
+    color: $-color-normal;
+}
+
+.lighter {
+    color: $-color-lighter;
+}
+
+.muted {
+    color: $-color-muted;
+}
+
+/* 定义字体大小 */
+
+.xxl {
+    font-size: 36rpx;
+}
+
+.xl {
+    font-size: 34rpx;
+}
+
+.lg {
+    font-size: 32rpx;
+}
+
+.md {
+    font-size: 30rpx;
+}
+.nr {
+  font-size: 28rpx;
+}
+.sm {
+    font-size: 26rpx;
+}
+
+.xs {
+    font-size: 24rpx;
+}
+
+.xxs {
+    font-size: 22rpx;
+}
+
+/* 定义常用外边距 */
+
+.ml5 {
+    margin-left: 5rpx;
+}
+
+.ml10 {
+    margin-left: 10rpx;
+}
+
+.ml20 {
+    margin-left: 20rpx;
+}
+
+.ml30 {
+    margin-left: 30rpx;
+}
+
+.mr5 {
+    margin-right: 5rpx;
+}
+
+.mr10 {
+    margin-right: 10rpx;
+}
+
+.mr20 {
+    margin-right: 20rpx;
+}
+
+.mr30 {
+    margin-right: 30rpx;
+}
+
+.mt5 {
+    margin-top: 5rpx;
+}
+
+.mt10 {
+    margin-top: 10rpx;
+}
+
+.mt20 {
+    margin-top: 20rpx;
+}
+
+.mt30 {
+    margin-top: 30rpx;
+}
+
+.mb5 {
+    margin-bottom: 5rpx;
+}
+
+.mb10 {
+    margin-bottom: 10rpx;
+}
+
+.mb20 {
+    margin-bottom: 20rpx;
+}
+
+.mb30 {
+    margin-bottom: 30rpx;
+}
+
+/* 定义常用的弹性布局 */
+.wrap {
+    flex-wrap: wrap;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.row-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-end {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.row-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.row-around {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.column-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.column-around {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.column-end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.column-between {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+/* 超出隐藏 */
+.line1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.line2 {
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 中划线 */
+.line-through {
+    text-decoration: line-through;
+}
+
+
+/* br60 */
+.br60 {
+    border-radius: 60rpx;
+}
+
+/* 初始化按钮 */
+page button {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    font-weight: normal;
+    font-size: 28rpx;
+    overflow: unset;
+	margin-left: 0;
+	margin-right: 0;
+}
+page button::after {
+	border: none;
+}
+	
+page input {
+	font-size: 28rpx;
+}
+button[type=primary] {
+	background-color: $-color-primary;
+}
+.button-hover[type=primary] {
+	background-color: $-color-primary;
+}
+/* 按钮大小 */
+button[size="xs"]{
+    line-height: 58rpx;
+    height: 58rpx;
+    font-size: 26rpx;
+    padding: 0 30rpx;
+}
+
+button[size="sm"] {
+    line-height: 62rpx;
+    height: 62rpx;
+    font-size: 28rpx;
+    padding: 0 30rpx;
+}
+
+button[size="md"]{
+    line-height: 70rpx;
+    height: 70rpx;
+    font-size: 30rpx;
+    padding: 0 30rpx;
+}
+button[size="lg"]{
+    line-height: 80rpx;
+    height: 80rpx;
+    font-size: 32rpx;
+    padding: 0 30rpx;
+}
+
+
+//******图标******/
+
+.icon-xs {
+    @include icon-image(28rpx);
+}
+
+.icon-sm {
+    @include icon-image(30rpx);
+}
+
+.icon {
+	@include icon-image(34rpx);
+}
+.icon-md {
+	@include icon-image(44rpx);
+}
+.icon-lg {
+    @include icon-image(52rpx);
+}
+
+.icon-xl {
+    @include icon-image(64rpx);
+}
+
+.icon-xxl {
+    @include icon-image(120rpx);
+}
+
+.img-null {
+    width: 300rpx;
+    height: 300rpx;
+}
+
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+//#ifndef H5
+/* 单选 */
+radio {
+	
+	.uni-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+	}
+	.uni-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.uni-radio-input-checked {
+			border: 1px solid $-color-primary !important;
+			background-color: $-color-primary !important;
+		}
+	}
+} 
+
+
+/* 多选 */
+checkbox {
+	.uni-checkbox-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.uni-checkbox-input-checked {
+		    border: 1px solid $-color-primary !important;
+		    background-color: $-color-primary !important;
+		    color: #fff !important;
+			&::before {
+				font-size: 35rpx;
+			}
+		}
+	}
+}
+//#endif
+// #ifdef MP-WEIXIN
+/* 单选 */
+radio {
+	
+	.wx-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+	}
+	.wx-radio-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.wx-radio-input-checked {
+			border: 1px solid $-color-primary !important;
+			background-color: $-color-primary !important;
+		}
+	}
+} 
+
+
+/* 多选 */
+checkbox {
+	.wx-checkbox-input {
+	    border-radius: 50%;
+	    width: 34rpx;
+	    height: 34rpx;
+		&.wx-checkbox-input-checked {
+		    border: 1px solid $-color-primary !important;
+		    background-color: $-color-primary !important;
+		    color: #fff !important;
+			&::before {
+				font-size: 35rpx;
+			}
+		}
+	}
+}
+// #endif
+
+
+

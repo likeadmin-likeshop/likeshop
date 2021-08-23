@@ -1,0 +1,161 @@
+{layout name="layout1" /}
+
+<style>
+    #card-body {
+        margin-top: 20px;
+    }
+</style>
+<div class="layui-fluid">
+<div class="layui-card">
+    <div class="layui-card-body" >
+        <div class="layui-form" lay-filter="layuiadmin-form-hot_search" id="layuiadmin-form-hot_search">
+
+            <div class="layui-form-item div-flex" style="margin-top: 20px">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                    <legend>热门搜索设置</legend>
+                </fieldset>
+            </div>
+
+            <div class="layui-card-body" id="card-body">
+
+                {foreach $info as $k => $v }
+                <div class="layui-form-item">
+                    {eq name="$k" value="0"}
+                    <label class="layui-form-label">热门搜索:</label>
+                    {else/}
+                    <label class="layui-form-label"></label>
+                    {/eq}
+                    <div class="layui-input-inline">
+                        <input type="text" name="hot_keyword[]" value="{$v}" placeholder="请输入热门搜索关键字" lay-verify="" autocomplete="off" class="layui-input">
+                    </div>
+                    <button class="layui-btn layui-btn-small {$view_theme_button} add " type="button" ><i class="layui-icon"></i></button>
+                    {gt name="$k" value="0"}
+                    <button class="layui-btn layui-btn-small layui-btn-danger del" type="button" ><i class="layui-icon"></i></button>
+                    {/gt}
+                </div>
+                {/foreach}
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="set_hot_keyword">确认修改</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+
+
+    function addTem() {
+
+        var str = "";
+
+        str += "<div class='layui-form-item'>";
+        str += "<label class='layui-form-label'></label>";
+        str += "<div class='layui-input-inline'  >";
+        str += "<input type='text' name='hot_keyword[]' value='' placeholder='请输入热门搜索关键字' lay-verify='required' autocomplete='off' class='layui-input'>";
+        str += "</div>";
+        str += "<button class='layui-btn layui-btn-small {$view_theme_button}' type='button' ><i class='layui-icon'></i></button>";
+        // if (v > 0){
+        //     str += "<button class='layui-btn layui-btn-small layui-btn-danger' type='button' onclick='delTem(" + v + ")'><i class='layui-icon'></i></button>";
+        // }
+        str += "<button class='layui-btn layui-btn-small layui-btn-danger del' type='button' ><i class='layui-icon'></i></button>";
+        str += "</div>";
+        // str += "";
+
+        // $(".template" + id).after(str);
+        // var id = $(this).parent().prevAll().length;
+        var id = $(this).parent().index();
+        console.log(id);
+        var parent = $(this).parent().parent();
+        // console.log(1);
+        // console.log(parent);
+    }
+
+    function delTem() {
+        // if ( value <= 0 ){
+        //     layer.msg('不能删除');
+        //     return;
+        // }
+        // console.log($(this).parent())
+        // $(this).attr('class');
+        // $(this).hide();
+        // var a = $('.del').remove()
+        // console.log(a);
+    }
+</script>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','form','like','element'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,element = layui.element;
+
+
+        $(document).on('click','.add',function(){
+
+            var len = $(this).parent().prevAll().length + 1;
+            var str = "";
+            str += "<div class='layui-form-item'>";
+            str += "<label class='layui-form-label'></label>";
+            str += "<div class='layui-input-inline'  >";
+            str += "<input type='text' name='hot_keyword[]' value='' placeholder='请输入热门搜索关键字' lay-verify='' autocomplete='off' class='layui-input'>";
+            str += "</div>";
+            str += "<button class='layui-btn layui-btn-small {$view_theme_button} add' type='button'><i class='layui-icon'></i></button>";
+            if ( len >= 1 ) {
+                str += "<button class='layui-btn layui-btn-small layui-btn-danger del' type='button' ><i class='layui-icon'></i></button>";
+            }
+            str += "</div>";
+
+            $(this).parent().after(str);
+        });
+
+        $(document).on('click','.del',function(){
+            var len = $(this).parent().prevAll().length + 1;
+            if ( len == 1 ){
+                layer.msg('不能删除');
+                return;
+            }
+            $(this).parent().remove();
+        });
+
+        form.on('submit(set_hot_keyword)',function (data) {
+            like.ajax({
+                url: '{:url("HotSearch/set")}'
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+
+                    if(res.code == 1)
+                    {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            ,icon: 1
+                            ,time: 1500
+                        }, function(){
+                            location.href = location.href;
+                        });
+                    }
+                },
+                error:function(res){
+                    layer.msg('网络错误', {
+                        offset: '15px'
+                        ,icon: 2
+                        ,time: 1000
+                    }, function(){
+                        return;
+                    });
+                }
+            });
+        });
+
+    });
+</script>

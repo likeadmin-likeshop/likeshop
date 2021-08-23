@@ -1,0 +1,92 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell { height: auto; }
+    .layui-input-block {
+        line-height: 38px;
+    }
+</style>
+<div class="layui-form" style="margin-left: 50px;margin-top: 15px;margin-bottom:30px;">
+  <input type="hidden" name="id" value="{$id}" />
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">提现审核：</label>
+    <div class="layui-input-block">
+      <input type="radio" name="review_status" value="1" title="审核通过">
+      <input type="radio" name="review_status" value="0" title="审核拒绝" checked>
+    </div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label"></label>
+    <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">审核拒绝后，提现金额会全部退回佣金账户</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">审核备注：</label>
+    <div class="layui-input-block">
+      <textarea name="description" placeholder="请输入内容" class="layui-textarea" style="width:380px;height:120px;"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-sm layuiadmin-btn-withdraw layui-btn-normal }" lay-submit lay-filter="confirm">确 认</button>
+      <button class="layui-btn layui-btn-sm layuiadmin-btn-withdraw layui-btn-primary }" lay-submit lay-filter="cancel">返 回</button>
+    </div>
+  </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+      // 确认
+      form.on('submit(confirm)', function(data){
+        console.log(data.field)
+        if(data.field.review_status == '0') {
+          // 审核拒绝
+          like.ajax({
+              url:'{:url("withdraw/refuse")}',
+              data:{'id':data.field.id, 'description': data.field.description},
+              type:"post",
+              success:function(res)
+              {
+                if(res.code == 1)
+                {
+                  layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000}, function(){
+                    parent.location.reload();
+                  });
+                }
+              }
+          });
+        }else if(data.field.review_status == '1') {
+          // 审核通过
+          like.ajax({
+              url:'{:url("withdraw/confirm")}',
+              data:{'id':data.field.id, 'description': data.field.description},
+              type:"post",
+              success:function(res)
+              {
+                if(res.code == 1)
+                {
+                  layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000}, function(){
+                    parent.location.reload();
+                  });
+                }
+              }
+          });
+        }
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      });
+      // 返回
+      form.on('submit(cancel)', function(data){
+        var index = parent.layer.getFrameIndex(window.name); 
+        parent.layer.close(index);
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      });
+    });
+</script>

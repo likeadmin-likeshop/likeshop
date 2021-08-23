@@ -1,0 +1,100 @@
+{layout name="layout1" /}
+
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+    <div class="layui-card">
+
+        <div class="layui-card-body" >
+            <div class="layui-form" lay-filter="">
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label">版权信息：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="company_name"  lay-verType="tips" autocomplete="off" value="{$config.company_name}" class="layui-input">
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:110px">Copyright © 2019-2020 公司名称</div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label" style="white-space: nowrap;">ICP备案号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="number"   lay-verType="tips" autocomplete="off" value="{$config.number}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"style="white-space: nowrap;">备案号链接：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="link"   lay-verType="tips" autocomplete="off" value="{$config.link}" class="layui-input">
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:110px">域名信息备案系统链接。http://beian.miit.gov.cn/</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.verify({
+
+        });
+        form.on('submit(setmnp)',function (data) {
+            layui.$.ajax({
+                url: '{:url("Basic/setCopyright")}'//实际使用请改成服务端真实接口
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+
+                    // if(res.code == 0)
+                    // {
+                    //     layer.msg(res.msg, {
+                    //         offset: '15px'
+                    //         ,icon: 2
+                    //         ,time: 1000
+                    //     });
+                    //     return false;
+                    // }
+
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        location.href = location.href; //后台主页
+                    });
+                },
+                error:function(res){
+                    layer.msg('网络错误', {
+                        offset: '15px'
+                        ,icon: 2
+                        ,time: 1000
+                    }, function(){
+                        return;
+                    });
+                }
+            });
+        });
+
+    });
+
+</script>

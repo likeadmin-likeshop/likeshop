@@ -1,0 +1,164 @@
+{layout name="layout2" /}
+
+<style>
+    .layui-form-label { width: 160px; }
+    .layui-input-block { margin-left: 190px; }
+    .engine_method { line-height: 36px; }
+</style>
+
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <input type="hidden" name="engine" value="{$engine}">
+    {if $engine == 'local'}
+        <div class="layui-form-item" style=" margin-bottom: 0; ">
+            <label class="layui-form-label">存储方式：</label>
+            <div class="layui-input-block">
+                <span class="engine_method">本地存储</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">本地存储方式不需要配置其他参数</div>
+            </div>
+        </div>
+    {elseif $engine == 'qiniu'}
+        <div class="layui-form-item">
+            <label class="layui-form-label">存储方式：</label>
+            <div class="layui-input-block">
+                <span class="engine_method">七牛云存储</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">存储空间（Bucket）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qiniu_bucket" value="{$storage.qiniu.bucket}" placeholder="存储空间名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">ACCESS_KEY（AK）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qiniu_ak" value="{$storage.qiniu.access_key}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">SECRET_KEY（SK）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qiniu_sk" value="{$storage.qiniu.secret_key}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label">空间域名（Domain）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qiniu_domain" value="{$storage.qiniu.domain}" placeholder="http://" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">请补全http://或https://，例如https://static.cloud.com</div>
+            </div>
+        </div>
+
+    {elseif $engine == 'aliyun'}
+        <div class="layui-form-item">
+            <label class="layui-form-label">存储方式：</label>
+            <div class="layui-input-block">
+                <span class="engine_method">阿里云存储</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">存储空间（Bucket）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="aliyun_bucket" value="{$storage.aliyun.bucket}" placeholder="存储空间名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">AccessKeyId：</label>
+            <div class="layui-input-block">
+                <input type="text" name="aliyun_ak" value="{$storage.aliyun.access_key_id}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">AccessKeySecret：</label>
+            <div class="layui-input-block">
+                <input type="text" name="aliyun_sk" value="{$storage.aliyun.access_key_secret}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label">空间域名（Domain）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="aliyun_domain" value="{$storage.aliyun.domain}" placeholder="http://" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">请补全http://或https://，例如https://static.cloud.com</div>
+            </div>
+        </div>
+
+    {elseif $engine == 'qcloud'}
+        <div class="layui-form-item">
+            <label class="layui-form-label">存储方式：</label>
+            <div class="layui-input-block">
+                <span class="engine_method">腾讯云存储</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">存储空间（Bucket）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qcloud_bucket" value="{$storage.qcloud.bucket}" placeholder="存储空间名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属地区（Region）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qcloud_region" value="{$storage.qcloud.region}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">SecretId：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qcloud_ak" value="{$storage.qcloud.secret_id}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">SecretKey：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qcloud_sk" value="{$storage.qcloud.secret_key}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label">空间域名（Domain）：</label>
+            <div class="layui-input-block">
+                <input type="text" name="qcloud_domain" value="{$storage.qcloud.domain}" placeholder="http://" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">请补全http://或https://，例如https://static.cloud.com</div>
+            </div>
+        </div>
+    {/if}
+
+    <div class="layui-form-item" >
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+    })
+</script>

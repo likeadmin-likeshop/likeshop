@@ -1,0 +1,11 @@
+{  
+    "applinks": {  
+        "apps": [],  
+        "details": [  
+            {  
+                "appID": "8656MXP6VT.com.gzyx.likeshop",  
+                "paths": [ "/ulink/*"]  
+            }  
+        ]  
+    }  
+}

@@ -1,0 +1,130 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label{
+        width: 90px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user" id="layuiadmin-form-user" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$info.id}" name="id">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-card">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">余额调整</li>
+                    <li>积分调整</li>
+                    <li>成长值调整</li>
+                </ul>
+                <div class="layui-tab-content" >
+                    <div class="layui-tab-item  layui-show " >
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">当前余额：</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-mid">{$info.user_money}</label>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">余额增减：</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="money_handle" value="1" title="增加余额">
+                                <input type="radio" name="money_handle" value="0" title="扣减余额">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">调整余额：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="money" value="" lay-verify="" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+                                <label class="layui-form-mid layui-word-aux">请输入调整的余额金额</label>
+                            </div>
+                            <label class="layui-form-mid">元</label>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea type="text" name="money_remark" autocomplete="off" class="layui-textarea" style="width: 30%;"></textarea>
+                                <label class="layui-form-mid layui-word-aux" style="margin-left: 10px;">不超过100字</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">当前积分：</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-mid">{$info.user_integral}</label>
+                                <input type="hidden" value="{$info.user_integral}" name="now_integral">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">积分增减：</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="integral_handle" value="1" title="增加积分">
+                                <input type="radio" name="integral_handle" value="0" title="扣减积分">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">调整积分：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="integral" value="" lay-verify="" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+                                <label class="layui-form-mid layui-word-aux">请输入调整的积分数量</label>
+                            </div>
+                            <label class="layui-form-mid">分</label>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea type="text" name="integral_remark" autocomplete="off" class="layui-textarea" style="width: 30%;"></textarea>
+                                <label class="layui-form-mid layui-word-aux" style="margin-left: 10px;">不超过100字</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">当前成长值：</label>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-mid">{$info.user_growth}</label>
+                                <input type="hidden" value="{$info.user_growth}" name="now_growth">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">成长值增减：</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="growth_handle" value="1" title="增加成长值">
+                                <input type="radio" name="growth_handle" value="0" title="扣减成长值">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">调整成长值：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="growth" value="" lay-verify="" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+                                <label class="layui-form-mid layui-word-aux">请输入调整的成长值</label>
+                            </div>
+<!--                            <label class="layui-form-mid">分</label>-->
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea type="text" name="growth_remark" autocomplete="off" class="layui-textarea" style="width: 30%;"></textarea>
+                                <label class="layui-form-mid layui-word-aux" style="margin-left: 10px;">不超过100字</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="adjust_user-submit" id="adjust_user-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+    })
+</script>

@@ -1,0 +1,65 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$info.id}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信场景：</label>
+        <div class="layui-input-inline" style="padding-top: 8px">
+           {$info.name}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板ID：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="template_code" placeholder="请输入模板ID" autocomplete="off" class="layui-input" value="{$info.template_code}" lay-verify="required" lay-vertype="tips">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信变量：</label>
+        <div class="layui-input-block">
+            {foreach $info.variable as $item => $val}
+            <button type="button"  class="layui-btn layui-btn-primary variable-btn" data-value="{$item}">{$val}</button>
+            {/foreach}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板内容：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <textarea placeholder="请输入内容" name="content" id="content" class="layui-textarea">{$info.content}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" lay-filter="disable" name="status" lay-skin="switch" lay-text="开启|关闭" {if condition="$info.status eq 1" }checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="message-submit" id="message-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).use(['form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+        $(document).on('click', '.variable-btn', function () {
+            var variable = $(this).attr('data-value');
+            if(variable){
+                variable = '{'+variable+'}';
+                var textarea = $("#content")[0];
+                var content = textarea.value;
+                var start = textarea.selectionStart;
+                var end = textarea.selectionEnd;
+                //重新渲染文本框
+                textarea.value = content.substr(0, start) +variable + content.substr(end, content.length);
+                $("#content").focus();
+            }
+        })
+    })
+</script>

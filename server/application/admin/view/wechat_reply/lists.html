@@ -1,0 +1,303 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*微信公众号回复管理，可以设置自动回复用户输入内容；</p>
+                        <p>*关注回复用于用户关注公众号时回复；</p>
+                        <p>*关键词回复用于用户输入内容时回复。关键词相同时，根据排序回复，排序值越小越前；</p>
+                        <p>*默认回复用于用户输入内容未匹配时回复；</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                {foreach $type_list as $type =>  $name}
+                <li data-type={$type}  {if 'subscribe' == $type } class="layui-this" {/if} >{$name}</li>
+                {/foreach}
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-reply {$view_theme_color}" data-type="add">新增回复</button>
+                        </div>
+                        <table id="reply-lists" lay-filter="reply-lists"></table>
+                        <script type="text/html" id="status">
+                            <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='status'  lay-skin="switch"
+                                   lay-text="显示|隐藏" {{#  if(d.status){ }} checked  {{#  } }} />
+                        </script>
+                        <script type="text/html" id="reply-operation">
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit"><i class="layui-icon"></i>编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm"  lay-event="del" ><i class="layui-icon"></i>删除</a>
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    var type = 'subscribe';
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+        //事件
+        var active = {
+            add: function(){
+                var add = layer.open({
+                    type: 2
+                    ,title: '新增回复 '
+                    ,content: '{:url("WechatReply/add")}?type='+type
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-reply-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['reply_type'] = type;
+                            like.ajax({
+                                url:'{:url("WechatReply/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('reply-lists'); //数据刷新
+                                    }
+                                },
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        table.on('edit(reply-lists)', function (obj) {
+            var ids = [];
+            var id = obj.data.id;
+            var fields = obj.field;
+            var field_value = obj.value;
+            ids.push(id);
+            if(isNaN(field_value)){
+                var old_value=$(this).prev().text();
+
+                layer.tips('请输入数字', $(this), {tips: [1, '#FF5722']});
+                $(this).val(old_value);
+
+                return false;
+            }
+
+            changeFields(ids,fields,field_value)
+
+        });
+        $('.layui-btn.layuiadmin-btn-reply').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        form.on('switch(switch-status)',function (obj) {
+            var ids = [];
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var fields = obj.elem.attributes['data-field'].nodeValue
+            var field_value = 0;
+            ids.push(id);
+            if(this.checked){
+                field_value = 1;
+            }
+            changeFields(ids,fields,field_value)
+
+        })
+        getList()
+
+        element.on('tab(tab-all)', function (data) {
+            type = $(this).attr('data-type');
+            getList();
+        });
+
+
+
+        function getList() {
+
+            switch (type) {
+                case "subscribe":
+                    var cols = [
+                        {field: 'name', title: '规则名称', align: 'center'}
+                        , {field: 'content_type', title: '回复类型', align: 'center'}
+                        , {field: 'content', title: '回复内容', align: 'center'}
+                        , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
+                        , {title: '操作',  align: 'center', toolbar: '#reply-operation'}
+                    ];
+                    break;
+                case "text":
+                    var cols = [
+                         {field: 'keyword', title: '关键词', align: 'center'}
+                        , {field: 'matching_type', title: '匹配方式', align: 'center'}
+                        , {field: 'content_type', title: '回复类型', align: 'center'}
+                        , {field: 'content', title: '回复内容', align: 'center'}
+                        , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
+                        , {field: 'sort', title: '排序', align: 'center',edit:'text'}
+                        , {title: '操作',  align: 'center', toolbar: '#reply-operation'}
+                    ];
+                    break;
+                case "default":
+                    var cols = [
+                       {field: 'name', title: '规则名称', align: 'center'}
+                        , {field: 'content_type', title: '回复类型', align: 'center'}
+                        , {field: 'content', title: '回复内容', align: 'center'}
+                        , {title: 'status', title:'启用状态',  align: 'center', toolbar: '#status'}
+                        , {title: '操作',  align: 'center', toolbar: '#reply-operation'}
+                    ];
+                    break;
+            }
+
+            //管理员管理
+            table.render({
+                elem: '#reply-lists'
+                , url: '{:url("WechatReply/lists")}?type='+type  //模拟接口
+                , cols: [
+                    cols
+                ]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list, //解析数据列表
+                    };
+                }
+            });
+        }
+
+        //监听工具条
+        table.on('tool(reply-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var attr = obj.data.attr;
+                var name = obj.data.name;
+                layer.confirm('确认删除回复:'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("WechatReply/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('reply-lists'); //数据刷新
+                            }
+                        },
+                    });
+                });
+            }else if(obj.event === 'edit'){
+                var id = obj.data.id;
+                var edit = layer.open({
+                    type: 2
+                    ,title: '编辑回复'
+                    ,content: '{:url("WechatReply/edit")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-reply-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['reply_type'] = type;
+                            like.ajax({
+                                url:'{:url("WechatReply/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('reply-lists'); //数据刷新
+                                    }
+                                },
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+    });
+    function changeFields(ids,fields,value) {
+        $.ajax({
+            url:'{:url("WechatReply/changeFields")}',
+            data:{id:ids,field:fields,value:value,reply_type:type},
+            type:'post',
+            dataType:'json',
+            success:function (res) {
+                if(res.code == 1) {
+                    layui.layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                    }, function(){
+                        if(type !== 'text')
+                        location.href = location.href;
+                    });
+
+                } else {
+                    layui.layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 1000
+                    }, function(){
+                        location.href = location.href;
+                    });
+                }
+            }
+        })
+
+    }
+</script>

@@ -1,0 +1,56 @@
+<style>
+    .label-width{
+        width: 120px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-form" lay-filter="layuiadmin-form-config" id="layuiadmin-form-config" style="padding: 20px 30px 0 0;">
+        <div class="layui-form-item">
+            <label class="layui-form-label label-width">物流查询方式:</label>
+            <div class="layui-input-block">
+                <input type="radio" name="way" lay-filter="kd100" value="kd100" title="快递100" {if condition="$config.way eq 'kd100'"} checked {/if}>
+                <input type="radio" name="way" lay-filter="kdniao" value="kdniao" title="快递鸟" {if condition="$config.way eq 'kdniao'"} checked {/if}>
+            </div>
+        </div>
+
+        <!--快递100-->
+        <div class="layui-form-item " id="kd100_appkey" {if condition="$config.way eq 'kdniao'"} style="display: none"{/if}>
+            <label class="layui-form-label label-width">授权KEY:</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="kd100_appkey" value="{$config.kd100_appkey | default =''}" lay-vertype="tips" placeholder="请输入APPKEY" autocomplete="off" class="layui-input">
+                <div class=" layui-form-mid layui-word-aux" >快递100分配的授权KEY</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item kd100" id="kd100_customer" {if condition="$config.way eq 'kdniao'"} style="display: none"{/if}>
+            <label class="layui-form-label label-width">CUSTOMER:</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="kd100_customer" value="{$config.kd100_customer | default =''}" lay-vertype="tips" placeholder="请输入CUSTOMER" autocomplete="off" class="layui-input">
+                <div class=" layui-form-mid layui-word-aux">快递100分配的customer</div>
+            </div>
+        </div>
+
+
+        <!--快递鸟-->
+        <div class="layui-form-item kdniao" id="kdniao_appkey" {if condition="$config.way eq 'kd100'"} style="display: none"{/if}>
+            <label class="layui-form-label label-width">APPKEY:</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="kdniao_appkey" value="{$config.kdniao_appkey | default =''}" lay-vertype="tips" placeholder="请输入APPKEY" autocomplete="off" class="layui-input">
+                <div class=" layui-form-mid layui-word-aux" >快递鸟分配的电商加密私钥</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item kdniao" id="kdniao_ebussinessid" {if condition="$config.way eq 'kd100'"} style="display: none"{/if}>
+            <label class="layui-form-label label-width">EBussinessID:</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="kdniao_ebussinessid" value="{$config.kdniao_ebussinessid | default =''}" lay-vertype="tips" placeholder="请输入CUSTOMER" autocomplete="off" class="layui-input">
+                <div class=" layui-form-mid layui-word-aux" >快递鸟分配的电商ID</div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item " style="padding-left: 10%">
+            <input type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="query-submit" id="query-submit" value="确认">
+        </div>
+    </div>
+</div>

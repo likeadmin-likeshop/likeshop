@@ -1,0 +1,342 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label {
+        width: 156px;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+    .tips{
+        color: red;
+    }
+    .copy{
+        margin-left: 10px;
+    }
+    .layui-form-item .layui-input-inline{
+        width: 410px;
+    }
+    .layui-input{
+        display: inline-block;
+        width: 80%;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        *填写微信小程序开发配置，请前往微信公众平台申请小程序并完成认证。
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-header" style="margin-top: 20px">小程序配置</div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+                <!--                微信小程序-->
+                <div class="layui-form-item div-flex">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>微信小程序</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">小程序名称：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="{$mnp.name}"  class="layui-input" autocomnplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">原始ID：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="original_id" value="{$mnp.original_id}"  class="layui-input" autocomnplete="off">
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">小程序码：</label>
+                    <div class="layui-input-block">
+                        <div class="img-content">
+                            <input name="qr_code" type="hidden" value="{$mnp.qr_code}">
+                            <div class="img-add" {if $mnp.qr_code } style="display: none" {/if}></div>
+                        {if !empty($mnp.qr_code)}
+                        <div class="img-container">
+                            <img class="img-src" src="{$mnp.abs_qr_code}">
+                            <a class="img-del-x">x</a>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</span>
+            </div>
+            <!--                开发者ID-->
+            <div class="layui-form-item div-flex">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>开发者ID</legend>
+                </fieldset>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="tips">*</span>AppID：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="app_id" value="{$mnp.app_id}" autocomplete="off"   lay-verify="required" lay-verType="tips"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="tips">*</span>AppSecret：</label>
+                <div class="layui-input-inline">
+                    <input type="text"  name="app_secret" value="{$mnp.app_secret}" lay-verify="required"  lay-verType="tips" autocomnplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击开发>基本配置>公众号开发信息，设置AppID和AppSecret</span>
+            </div>
+            <!--                服务器域名-->
+            <div class="layui-form-item div-flex">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>服务器域名</legend>
+                </fieldset>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">request合法域名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="request_domain" readonly="readonly" value="{$mnp.request_domain}" class="layui-input">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名</span>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">socket合法域名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="socket_domain" readonly="readonly"  value="{$mnp.socket_domain}" class="layui-input">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名</span>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">uploadFile合法域名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="uploadfile_domain" readonly="readonly" value="{$mnp.uploadfile_domain}" class="layui-input">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名</span>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">downloadFile合法域名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="downloadfile_domain" readonly="readonly" value="{$mnp.downloadfile_domain}" class="layui-input">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名</span>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">udp合法域名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="udp_domain" readonly="readonly" value="{$mnp.udp_domain}" class="layui-input">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名</span>
+            </div>
+            <!--                业务域名-->
+            <div class="layui-form-item div-flex">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>业务域名</legend>
+                </fieldset>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">业务域名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" readonly="readonly"  value="{$mnp.business_domain}" class="layui-input">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名</span>
+            </div>
+            <!--                消息推送-->
+<!--            <div class="layui-form-item div-flex">-->
+<!--                <fieldset class="layui-elem-field layui-field-title">-->
+<!--                    <legend>消息推送</legend>-->
+<!--                </fieldset>-->
+<!--            </div>-->
+
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">URL：</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="url" readonly="readonly"  value="{$mnp.url}" class="layui-input" autocomplete="off">-->
+<!--                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label"></label>-->
+<!--                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击开发>基本配置>服务器配置，填写服务器地址（URL）</span>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">Token：</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text"  name="token" value="{$mnp.token}" autocomnplete="off" class="layui-input">-->
+<!--                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label"></label>-->
+<!--                <span style="color: #a3a3a3;font-size: 9px">小程序账号登录微信公众平台，点击开发>基本配置>服务器配置，设置令牌Token。不填默认为“LikeShop”</span>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">EncodingAESKey：</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text"  name="encoding_ses_key" value="{$mnp.encoding_ses_key}" autocomnplete="off" class="layui-input">-->
+<!--                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label"></label>-->
+<!--                <span style="color: #a3a3a3;font-size: 9px">消息加密密钥由43位字符组成，字符范围为A-Z,a-z,0-9</span>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">消息加密方式：</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="radio" name="encryption_type" {if $mnp.encryption_type == 1} checked {/if} value="1" title="明文模式(不使用消息体加解密功能，安全系数较低)"  >-->
+<!--                </div>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="radio" name="encryption_type" {if $mnp.encryption_type == 2} checked {/if}  value="2" title="兼容模式(明文、密文将共存，方便开发者调试和维护)" >-->
+<!--                </div>-->
+<!--                <div class="layui-input-block" style="margin-left: 186px">-->
+<!--                    <input type="radio" name="encryption_type" {if $mnp.encryption_type == 3} checked {/if}  value="3" title="安全模式（推荐）(消息包为纯密文，需要开发者加密和解密，安全系数高)" >-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">消息加密方式：</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="radio" name="data_type" value="1" title="JSON"  {if $mnp.data_type == 1} checked {/if} >-->
+<!--                    <input type="radio" name="data_type" value="2" title="XML" {if $mnp.data_type == 2} checked {/if}  >-->
+
+<!--                </div>-->
+<!--            </div>-->
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确定</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like;
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="'+ uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //复制
+        $(document).on('click','.copy',function () {
+            var copyText = $(this).prev()
+            copyText.select()
+            document.execCommand("Copy");
+
+
+        })
+        form.on('submit(setmnp)', function (data) {
+            layui.like.ajax({
+                url: '{:url("mnp/setMnp")}' //实际使用请改成服务端真实接口
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+
+                }
+            });
+        });
+    });
+
+</script>

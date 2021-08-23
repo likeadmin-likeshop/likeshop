@@ -1,0 +1,137 @@
+{layout name="layout1" /}
+<style>
+    #div1{position: absolute;
+        left:105%;
+        bottom:65%;}
+</style>
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*会员注册时的服务协议，在登录注册页面显示。</p>
+                        <p>*会员隐私政策协议，在登录注册页面显示。</p>
+                        <p>*售后保障协议，在退款申请页面显示。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="layui-form" lay-filter="">
+                <div class="layui-tab layui-tab-card">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">服务协议</li>
+                        <li>隐私政策</li>
+                        <li>售后保障</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <label class="layui-form-label"style="white-space: nowrap;">内容：</label>
+                            <div class="layui-input-block">
+                                <textarea  name="service" id="service" lay-verify="content" class="field-content">{$config.service}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-tab-item">
+                            <label class="layui-form-label"style="white-space: nowrap;">内容：</label>
+                            <div class="layui-input-block">
+                                <textarea  name="privacy" id="privacy" lay-verify="content" class="field-content">{$config.privacy}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-tab-item">
+                            <label class="layui-form-label"style="white-space: nowrap;">内容：</label>
+                            <div class="layui-input-block">
+                                <textarea  name="after_sale" id="after_sale" lay-verify="content" class="field-content">{$config.after_sale}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+    </div>
+    </div>
+</div>
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','likeedit','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,likeedit = layui.likeedit;
+//富文本上传图片
+        likeedit.set({
+            uploadImage: {
+                url: "{:url('file/image')}",
+                type: 'post'
+            }
+        })
+        var service = likeedit.build('service'); //建立编辑器
+        var privacy = likeedit.build('privacy'); //建立编辑器
+        var after_sale = likeedit.build('after_sale'); //建立编辑器
+        form.verify({
+
+            content: function() {
+                likeedit.sync(service)
+                likeedit.sync(privacy)
+                likeedit.sync(after_sale)
+            }
+        })
+        form.verify({
+
+        });
+        form.on('submit(setmnp)',function (data) {
+            layui.$.ajax({
+                url: '{:url("ShopSetting/setPolicy")}'//实际使用请改成服务端真实接口
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+
+                    // if(res.code == 0)
+                    // {
+                    //     layer.msg(res.msg, {
+                    //         offset: '15px'
+                    //         ,icon: 2
+                    //         ,time: 1000
+                    //     });
+                    //     return false;
+                    // }
+
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        
+                    });
+                },
+                error:function(res){
+                    layer.msg('网络错误', {
+                        offset: '15px'
+                        ,icon: 2
+                        ,time: 1000
+                    }, function(){
+                        return;
+                    });
+                }
+            });
+        });
+    });
+
+</script>

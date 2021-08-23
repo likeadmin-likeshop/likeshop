@@ -1,0 +1,66 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="" style="padding: 20px 30px 0 0;">
+    <div class="layui-tab">
+        <!--连续签到-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">连续签到：</label>
+            <div class="layui-input-inline">
+                <input type="number" name="days" lay-verify="required" lay-verType="tips" placeholder="请输入天数"
+                       autocomplete="off" class="layui-input">
+            </div>
+
+                <label class="layui-form-mid">天</label>
+
+        </div>
+        <!--签到奖励-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">签到奖励：</label>
+            <div class="layui-input-inline " style="margin-right: 0px;width: 110px">
+                <input type="checkbox" name="integral_status" title="赠送积分" lay-skin="primary">
+            </div>
+            <div class="layui-input-inline">
+                <input type="number" name="integral" lay-verify="required" lay-verType="tips" placeholder="请输入积分"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <label class="layui-form-mid">积分</label>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width: 110px">
+                <input type="checkbox" name="growth_status" title="赠送成长值" lay-skin="primary">
+            </div>
+            <div class="layui-input-inline">
+                <input type="number" name="growth" lay-verify="" lay-verType="tips" placeholder="请输入成长值"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <label class="layui-form-mid">成长值</label>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-sign_daily-submit" id="add-sign_daily-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , likeedit = layui.likeedit;
+
+
+    });
+</script>

@@ -1,0 +1,85 @@
+<?php
+// +----------------------------------------------------------------------
+// | likeshop开源商城系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | gitee下载：https://gitee.com/likeshop_gitee
+// | github下载：https://github.com/likeshop-github
+// | 访问官网：https://www.likeshop.cn
+// | 访问社区：https://home.likeshop.cn
+// | 访问手册：http://doc.likeshop.cn
+// | 微信公众号：likeshop技术社区
+// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
+// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | likeshop团队版权所有并拥有最终解释权
+// +----------------------------------------------------------------------
+
+// | author: likeshop.cn.team
+// +----------------------------------------------------------------------
+namespace app\api\controller;
+use app\api\logic\GoodsCommentLogic;
+
+class GoodsComment extends ApiBase{
+    public $like_not_need_login = ['lists','category'];
+
+    /**
+     * note 商品评论分类
+     * create_time 2020/11/11 16:33
+     */
+    public function category()
+    {
+        $get = $this->request->get();
+        $collect = GoodsCommentLogic::category($get);
+        $this->_success('获取成功', $collect);
+    }
+    /**
+     * note 商品评论列表
+     * create_time 2020/11/11 16:34
+     */
+    public function lists(){
+        $get = $this->request->get();
+        $collect = GoodsCommentLogic::lists($get, $this->page_no, $this->page_size);
+        $this->_success('获取成功', $collect);
+
+    }
+    /**
+     * note 添加商品评论
+     * create_time 2020/11/11 15:14
+     */
+    public function addGoodsComment()
+    {
+        $post = $this->request->post();
+        $post['user_id'] = $this->user_id;
+        $result = $this->validate($post, 'app\api\validate\GoodsComment');
+        if ($result === true) {
+            $result = GoodsCommentLogic::addGoodsComment( $post,$this->user_id);
+            if($result === true){
+                $this->_success('评论成功');
+            }
+        }
+        $this->_error($result);
+    }
+    /**
+     * note 获取未评论或已评论的订单商品列表
+     * create_time 2020/11/12 11:11
+     */
+    public function getOrderGoods(){
+        $type = $this->request->get('type',1);
+        $list = GoodsCommentLogic::getOrderGoods($type,$this->user_id, $this->page_no, $this->page_size);
+        $this->_success('',$list);
+    }
+
+    /**
+     * note 获取评论的商品信息
+     * create_time 2020/11/13 14:45
+     */
+    public function getGoods(){
+        $id = $this->request->get('id');
+        if($id){
+            $goods = GoodsCommentLogic::getGoods($id);
+            $this->_success('获取成功',$goods);
+        }
+        $this->_success('请选择评论的商品');
+    }
+}

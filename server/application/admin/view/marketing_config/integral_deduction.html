@@ -1,0 +1,121 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 120px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        *设置积分营销的规则，可以关闭积分抵现功能
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+
+                <!--积分抵现比例-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">积分抵现比例：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="integral_deduction_money" lay-verify="required" value="{$config.integral_deduction_money}" autocomplete="off" class="layui-input award">
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-mid">积分可抵扣1元</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">填写多少积分可以抵扣1元，例如填写100表示1积分等于0.01元</span>
+                    </div>
+                </div>
+
+                <!--积分抵现比例-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">积分使用需超过：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="integral_deduction_limit" value="{$config.integral_deduction_limit}" autocomplete="off" class="layui-input award">
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-mid">积分</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">会员账户积分需要超过设定的数值时，才允许在订单中抵现，填0表示没有限制</span>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">积分抵现：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="integral_deduction_status" value="1" title="开启" {if $config.integral_deduction_status == 1} checked {/if} >
+                        <input type="radio" name="integral_deduction_status" value="0" title="关闭" {if $config.integral_deduction_status == 0} checked {/if}  >
+                        <div  class="layui-form-mid layui-word-aux" style="white-space: nowrap">开启或关闭积分抵现，关闭后订单结算不能使用积分</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+        $('.award').bind('input propertychange', function() {
+            var that = $(this);
+            var value = that.val();
+            format(that,value)
+
+        });
+        //格式化分销比例
+        function format(that,value){
+            value = value.replace(/[^0-9.]/g,'');  //清除“数字”和“.”以外的字符
+
+            value = value.replace(/\.{2,}/g,".");  //只保留第一个. 清除多余的
+            value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+
+            value = value.replace(/^(\-)*(\d+)\.(\d)(\d).*$/,'$1$2.$3$4'); //只能输入两个小数
+            if(value.indexOf(".")< 0 && value !=""){
+                value= parseFloat(value);
+            }
+            that.val(value);
+        }
+        form.on('submit(set)', function (data) {
+            like.ajax({
+                url: '{:url("MarketingConfig/integralDeduction")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        },function () {
+                            location.href = location.href;
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>

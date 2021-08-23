@@ -1,0 +1,35 @@
+{layout name="layout2" /}
+<style>
+    .tips{
+        color: red;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_group" id="layuiadmin-form-user_group" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>分组名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" lay-vertype="tips" placeholder="请输入分组名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+            <textarea type="text" name="remark" autocomplete="off" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-user_group-submit" id="add-user_group-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+
+    })
+</script>

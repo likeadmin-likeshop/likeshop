@@ -1,0 +1,241 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        font-size: 14px;
+        padding: 0 5px;
+        height: auto;
+        overflow: visible;
+        text-overflow: inherit;
+        white-space: normal;
+        word-break: break-all;
+    }
+
+    .goods-content > div:not(:last-of-type) {
+        border-bottom: 1px solid #DCDCDC;
+    }
+
+    .goods-data::after {
+        display: block;
+        content: '';
+        clear: both;
+    }
+
+    .goods_name_hide {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*记录管理后台系统日志，可用于排查事故原因</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">管理员:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="account" id="account" placeholder="请输入搜索内容"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">访问链接:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="uri" id="uri" placeholder="请输入搜索内容"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">访问方式:</label>
+                                <div class="layui-input-block">
+                                    <select name="type" id="type">
+                                        <option value="">全部</option>
+                                        <option value="GET">GET</option>
+                                        <option value="POST">POST</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">来源ip:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="ip" id="ip" placeholder="请输入搜索内容"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">日志时间:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="start_time" class="layui-input" id="start_time"
+                                               placeholder="" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline" style="margin-right: 5px;width: 20px;">
+                                    <label class="layui-form-mid">至</label>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="end_time" class="layui-input" id="end_time"
+                                           placeholder="" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-btn-group">
+                                    <button type="button" id="today" day="1" class="layui-btn layui-btn-normal day">今天</button>
+                                    <button type="button"  day="-1" class="layui-btn layui-btn-primary day">昨天</button>
+                                    <button type="button"  day="7" class="layui-btn layui-btn-primary day">最近7天</button>
+                                    <button type="button"  day="30" class="layui-btn layui-btn-primary day">最近30天</button>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button class="layui-btn layuiadmin-btn-ad {$view_theme_color}" lay-submit
+                                        lay-filter="order-search">查询
+                                </button>
+                                <button class="layui-btn layuiadmin-btn-ad layui-btn-primary " lay-submit
+                                        lay-filter="order-clear-search">重置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card-body">
+                    <table id="order-lists" lay-filter="order-lists"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like', 'laydate'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            , element = layui.element
+            , laydate = layui.laydate;
+
+
+
+        //监听搜索
+        form.on('submit(order-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('order-lists', {
+                where: field
+            });
+        });
+        //清空查询
+        form.on('submit(order-clear-search)', function () {
+            $('#account').val('');
+            $('#uri').val('');
+            $('#ip').val('');
+            $('#start_time').val('{$today[0]}');
+            $('#end_time').val('{$today[1]}');
+            $('#type').val('');
+            $('#today').trigger("click");
+            form.render('select');
+            //刷新列表
+            table.reload('order-lists', {
+                where: []
+            });
+        });
+
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+            , value: "{$today[0]}"
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+            ,value: "{$today[1]}"
+        });
+
+        $('.day').click(function(){
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $(this).removeClass('layui-btn-primary');
+            $(this).addClass('layui-btn-normal');
+            var day = $(this).attr('day');
+            switch (day) {
+                case '-1':
+                    $('#start_time').val('{$yesterday[0]}');
+                    $('#end_time').val('{$yesterday[1]}');
+                    break;
+                case '1':
+                    $('#start_time').val('{$today[0]}');
+                    $('#end_time').val('{$today[1]}');
+                    break;
+                case '7':
+                    $('#start_time').val('{$days_ago7[0]}');
+                    $('#end_time').val('{$days_ago7[1]}');
+                    break;
+                case '30':
+                    $('#start_time').val('{$days_ago30[0]}');
+                    $('#end_time').val('{$days_ago30[1]}');
+                    break;
+            }
+
+        });
+        //获取列表
+        getList();
+        function getList() {
+            table.render({
+                limit:20,
+                elem: '#order-lists'
+                , url: '{:url("log/lists")}'
+                , cols: [[
+                    {field: 'id', title: '记录ID', width: 60, align: 'center'}
+                    , {field: 'account', title: '管理员', align: 'center', width: 80}
+                    , {field: 'uri', title: '访问链接', align: 'center',  width: 200}
+                    , {field: 'type', title: '访问方式', align: 'center',  width: 80}
+                    , {field: 'param', title: '访问参数', align: 'left',  width: 200}
+                    , {field: 'ip', title: '来源', align: 'center',  width: 110}
+                    , {fixed: 'right', field: 'create_time_str', title: '日志时间', align: 'center',  width: 160}
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.lists, //解析数据列表
+                    };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+        }
+    });
+</script>

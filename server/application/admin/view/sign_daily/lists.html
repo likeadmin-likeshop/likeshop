@@ -1,0 +1,507 @@
+{layout name="layout1" /}
+<style>
+    .layui-border-box {
+        margin-left: 40px;
+        margin-right: 40px;
+
+    }
+    .record{
+        display: none;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-form">
+        <div class="layui-card">
+            <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*用户每天签到一次可获得每天签到奖励，包括积分和成长值。</p>
+                        <p>*点击新增连续签到奖励可以设置满足连续签到天数时的额外奖励，连续天数规则不能重复。</p>
+                        <p>*用户签到中断会重新计算连续天数；超过设置的最大连续签到奖励天数后，也会重新计算连续天数，循环发放连续奖励。</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type=1 class="layui-this">签到设置</li>
+                <li data-type=2 >签到记录</li>
+            </ul>
+                <div class="layui-card-header"></div>
+                <div class="layui-form-item record">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员信息：</label>
+                    <div class="layui-input-inline">
+                        <select name="type"  id="type">
+                            <option value=""></option>
+                            <option value="sn">会员编号</option>
+                            <option value="nickname">会员昵称</option>
+                            <option value="mobile">手机号码</option>
+
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="keyword"  id="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layuiadmin-btn-record {$view_theme_color}" lay-submit lay-filter="record-search">查询</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-record }" lay-submit lay-filter="record-clear-search">清空查询</button>
+                    </div>
+                </div>
+                </div>
+            <!--每天签到奖励-->
+            <div class="layui-form-item sigh">
+                <label class="layui-form-label " style="margin-left: 20px;width: 100px">每天签到奖励：</label>
+                <div class="layui-input-inline " style="margin-right: 0px;width: 110px">
+                    <input type="checkbox" name="integral_status" title="赠送积分" lay-skin="primary" {if
+                           condition="$config['dailySign']['integral_status'] eq 1" }checked{/if}>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="number" name="integral" value="{$config.dailySign.integral}" lay-verify="required"
+                           lay-verType="tips" placeholder="请输入积分"
+                           autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-mid">积分</label>
+                </div>
+
+            </div>
+
+            <div class="layui-form-item sigh">
+                <label class="layui-form-label" style="margin-left: 20px;width: 100px"></label>
+                <div class="layui-input-inline" style="margin-right: 0px;width: 110px">
+                    <input type="checkbox" name="growth_status" title="赠送成长值" lay-skin="primary"
+                           {if
+                           condition="$config['dailySign']['growth_status'] eq 1" }checked{/if}>
+                </div>
+
+                <div class="layui-input-inline">
+                    <input type="number" name="growth" value="{$config.dailySign.growth}" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-mid">成长值</label>
+                </div>
+
+            </div>
+
+            <div class="layui-form-item sigh">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="margin-left: 20px;width: 100px">连续签到奖励：</label>
+                    <div class=" layui-form-mid layui-word-aux">连续签到奖励断签后会重新计算连续签到天数，达到连续天数后即可获得连续奖励</div>
+                </div>
+            </div>
+            <!--新增连续签到奖励-->
+            <div class="layui-form-item sigh">
+                <div class="layui-inline " style="margin-left: 15px;width: 100px">
+
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-sign_daily {$view_theme_color}" data-type="add">新增连续签到奖励
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="layui-card-body" style="margin-top: -20px">
+                <div class="layui-card">
+                    <table id="sign_daily-lists" class="layui-border-box" lay-filter="sign_daily-lists"></table>
+
+                    <script type="text/html" id="status">
+                        <input type="checkbox" lay-filter="switch-status" data-id={{d.id}} data-field='is_recommend'
+                               lay-skin="switch"
+                               lay-text="是|否" {{# if(d.is_recommend){ }} checked {{# } }}/>
+                    </script>
+
+                    <!--连续天数-->
+                    <script type="text/html" id="daysTpl">
+                        {{#  if( d.days == null || d.days == 0 || d.days == ''){ }}
+                        ----
+                        {{#  } else { }}
+                        {{d.days}}天
+                        {{#  } }}
+                    </script>
+                    <!--连续奖励-->
+                    <script type="text/html" id="integralTpl">
+                        {{#  if( d.integral == null || d.integral == 0 || d.integral == ''
+                        ||d.growth == null ||d.growth == 0 ||d.growth == ''){ }}
+                        ----
+                        {{#  } else { }}
+                        赠送{{d.integral}}积分；赠送{{d.growth}}成长值
+                        {{#  } }}
+                    </script>
+
+                    <script type="text/html" id="sign_daily-operation">
+                        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                    </script>
+
+                    <!--会员信息-->
+                    <script type="text/html" id="user">
+                        <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
+                        <div class="layui-input-inline"  style="text-align: left">
+                            <p>会员编号:{{d.user_id}}</p>
+                            <p>昵称:{{d.nickname}}</p>
+                            <p>手机号:{{d.mobile}}</p>
+                            <p>性别:{{d.sex}}</p>
+                            <p>注册时间:{{d.create_time}}</p>
+                        </div>
+                    </script>
+
+                    <!--签到奖励-->
+                    <script type="text/html" id="integral">
+                        赠送{{d.integral}}积分；赠送{{d.growth}}成长值
+                    </script>
+
+                    <!--连续奖励-->
+                    <script type="text/html" id="continuous_integral">
+                        赠送{{d.continuous_integral}}积分；赠送{{d.continuous_growth}}成长值
+                    </script>
+                </div>
+            </div>
+            <!--签到规则说明-->
+            <div class="layui-form-item sigh">
+                <div class="layui-card">
+                    <label class="layui-form-label" style="margin-left: 20px;width: 100px">签到规则说明:</label>
+                    <div class="layui-input-inline" style="width: 500px">
+
+            <textarea name="instructions" id="instructions" placeholder="请输入签到规则说明" class="layui-textarea"
+                      style="width: 500px;height: 200px">{$config.instructions| default=''}</textarea>
+
+
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-primary layuiadmin-btn-sign_daily " id="default">使用默认说明
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item sigh">
+                <label class="layui-form-label" style="width: 100px"></label>
+                <div class="layui-input-block" style="text-align: center; width: 950px;height: 60px">
+                    <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="formSign">确认保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            ,element = layui.element;
+
+        //监听搜索
+        form.on('submit(sign_daily-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('sign_daily-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        //监听搜索
+        form.on('submit(record-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('sign_daily-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        //清空记录查询
+        form.on('submit(record-clear-search)', function(){
+            $('#keyword').val('');
+            $('#type').val('');
+
+            form.render('select');
+            //清空输入框
+            //刷新列表
+            table.reload('sign_daily-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+
+        $('.layui-btn.layuiadmin-btn-record').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        getList('');
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            var type = $(this).attr('data-type');
+            if(type ==1){
+                $('.sigh').show();
+                $('.record').hide();
+            }
+
+
+            if(type == 2){
+                $('.sigh').hide();
+                $('.record').show();
+            }
+            getList(type);
+        });
+
+        //签到规则默认说明
+        $('#default').click(function () {
+            $('#instructions').val('1.每天签到可以获得每天签到奖励；\n' +
+                '2.每日最多可签到1次，断签则会重新计算连签天数，达到连续天数后即可获得连续奖励；\n' +
+                '3.活动以及奖励最终解释权归商家所有。')
+
+
+        })
+
+
+        //确定保存按钮
+        form.on('submit(formSign)', function (data) {
+
+            set(data, "{:url('sign_daily/signRule')}");
+
+        });
+
+        function set(data, url) {
+            like.ajax({
+                url: url //实际使用请改成服务端真实接口
+                , data: data.field
+                , type: "post",
+                success: function (res) {
+                    if (res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            location.href = location.href;
+                        });
+                    }
+                }
+            });
+        }
+
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form
+                    ,url = '{:url("sign_daily/lists")}';
+
+                var tablecols  = [
+                    {field: 'days', title: '连续天数', templet: '#daysTpl',width:300}
+                    , {field: 'integral', title: '连续奖励', templet: '#integralTpl',width:400}
+                    , {title: '操作', align: 'center', fixed: 'right', toolbar: '#sign_daily-operation',width:350}
+                ];
+                var page = false;
+                if(type == 2){
+                    url = '{:url("sign_daily/record")}';
+                    page = true;
+                    tablecols = [
+                        {type:'numbers',title:'序号'}
+                        , {field: 'user', title: '会员信息', align: 'center',templet:'#user',width:400}
+                        , {field: 'days', title: '连续天数',width:100}
+                        , {field: 'reward', title: '签到奖励',templet:'#integral',width:250}
+                        , {field: 'continuous_reward', title: '连续奖励',templet:'#continuous_integral',width:250}
+                        , {fixed: 'right', field:'sign_time',title:'签到时间',width:250}
+
+                    ];
+                }
+                //管理员管理
+                table.render({
+                    elem: '#sign_daily-lists'
+                    , url: url  //模拟接口
+                    ,initSort:{
+                        field:'days' //排序字段，对应cols设定的各字段名
+                        ,type:'asc'   //排序方式 asc:升序、desc：降序、null：默认排序
+                    }
+                    , cols:  [tablecols]
+                    , page: page
+                    , text: {none: '暂无数据！'}
+                    , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list, //解析数据列表
+                        };
+
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                })})};
+
+        //事件
+        var active = {
+            add: function () {
+                layer.open({
+                    type: 2
+                    , title: '新增连续签到奖励'
+                    , content: '{:url("sign_daily/add",["type"=>2])}'
+                    , area: ['60%', '60%']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'add-sign_daily-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field;
+                            $.ajax({
+                                url: '{:url("sign_daily/add")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        // return false;
+                                        layer.close(index); //关闭弹层
+                                        table.reload('sign_daily-lists'); //数据刷新
+                                    } else {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+
+                                },
+                                error: function (res) {
+                                    layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 2
+                                        , time: 1000
+                                    });
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            },
+
+
+        }
+        $('.layui-btn.layuiadmin-btn-sign_daily').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({}).use(['index', 'table', 'form', 'like'], function (exports) {
+        var $ = layui.$
+            , table = layui.table
+            , form = layui.form
+            , like = layui.like;
+
+
+
+        //监听工具条
+        table.on('tool(sign_daily-lists)', function (obj) {
+            if (obj.event === 'edit') {
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    , title: '编辑连续签到奖励'
+                    , content: '{:url("sign_daily/edit")}?id=' + id
+                    , area: ['60%', '60%']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'edit-sign_daily-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field;
+                            like.ajax({
+                                url: '{:url("sign_daily/edit")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('sign_daily-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+
+            if (obj.event === 'del') {
+                var id = obj.data.id;
+                var day = obj.data.days;
+                layer.confirm('确定移除连续签到奖励：'+'<span style="color: red">'+day+'天</span>', function (index) {
+                    like.ajax({
+                        url: '{:url("sign_daily/del")}',
+                        data: {'id': id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code == 1) {
+                                obj.del();
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                            }
+                        },
+                    });
+                });
+            }
+
+        });
+    });
+</script>

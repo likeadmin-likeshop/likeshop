@@ -1,0 +1,349 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+
+        <!-- 提示区域 -->
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*设置参与积分抽奖的奖品。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 选项卡 -->
+        <div class="layui-tab layui-tab-card">
+            <ul class="layui-tab-title">
+                <li data-type="1" class="layui-this">奖品</li>
+                <li data-type="2">设置</li>
+                <li data-type="3">记录</li>
+            </ul>
+            <div class="layui-tab-content">
+                <!-- 1、奖品 -->
+                <div class="layui-tab-item layui-show">
+                    <!-- 操作按钮 -->
+                    <div style="padding: 30px 0 10px 0;">
+                        <button class="layui-btn layui-btn-sm layuiadmin-btn-event {$view_theme_color}" data-type="add">新增奖品</button>
+                    </div>
+                    <!-- 数据表格 -->
+                    <table id="table-data-lists-prize" lay-filter="table-data-lists-prize"></table>
+                    <script type="text/html" id="table-image">
+                        <img src="{$storageUrl}{{d.image}}" alt="图片" style="width:60px;height:60px;" class="image-show">
+                    </script>
+                    <script type="text/html" id="table-status">
+                        <input type="checkbox" lay-filter="switch-status"
+                               data-id={{d.id}} data-field='status' lay-skin="switch"
+                               lay-text="是|否" {{#  if(d.status){ }} checked  {{#  } }} />
+                    </script>
+                    <script type="text/html" id="operation">
+                        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                    </script>
+                </div>
+
+                <!-- 2、设置 -->
+                <div class="layui-tab-item">
+                    <div class="layui-form">
+                        <div class="layui-form-item" style="margin-bottom:0;">
+                            <label for="limit" class="layui-form-label">抽奖次数：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" min="0" id="limit" name="limit" value="{$setConfig.limit}"
+                                       onkeyup="value=value.replace(/[^\d]/g,'')"
+                                       class="layui-input" autocomplete="off" lay-verify="required|number">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">次</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-block">
+                                <div class="layui-form-mid layui-word-aux">每日抽奖次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label for="rule" class="layui-form-label">活动规则：</label>
+                            <div class="layui-input-inline" style="width:350px;">
+                                <textarea name="rule" id="rule" placeholder="请输入内容" class="layui-textarea">{$setConfig.rule}</textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">抽奖状态：</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="status" value="1" title="开启" {if $setConfig.status}checked{/if}>
+                                <input type="radio" name="status" value="0" title="关闭" {if !$setConfig.status}checked{/if}>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="addSetButton">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3、记录 -->
+                <div class="layui-tab-item">
+                    <table id="table-data-lists-record" lay-filter="table-data-lists-record"></table>
+                    <script type="text/html" id="table-userInfo">
+                        <div class="layui-input-inline"  style="text-align: left">
+                            {{#  if(d.user){ }}
+                                <p>会员编号：{{d.user.sn}}</p>
+                                <p>手机号码：{{d.user.mobile}}</p>
+                                <p>会员昵称：{{d.user.nickname}}</p>
+                            {{#  } }}
+                        </div>
+                    </script>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- CSS样式 -->
+<style>
+    .layui-table-cell { height: auto; }
+</style>
+
+<!-- JS脚本 -->
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        // 渲染数据表格
+        table.render({
+            id: 'table-data-lists-prize'
+            ,elem: '#table-data-lists-prize'
+            ,url: '{:url("LuckDraw/index")}'
+            ,cols: [[
+                {field:'id',  title:'ID', width:80}
+                ,{field:'name', title:'奖品名称', width:150}
+                ,{field:'number', title:'奖品数量', width:100, align:'center'}
+                ,{field:'images', title:'图片', width:120, align:'center', templet:"#table-image"}
+                ,{field:'probability', title:'几率', width:80, align:'center'}
+                ,{field:'sort', title:'排序', edit:true, width:80, align:'center'}
+                ,{field:'status', title:'状态', width:100, align:'center', templet:"#table-status"}
+                ,{title:'操作', toolbar: '#operation'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.list
+                };
+            }
+        });
+
+        // 渲染抽奖记录
+        table.render({
+            id: 'table-data-lists-record'
+            ,elem: '#table-data-lists-record'
+            ,url: '{:url("LuckDraw/record")}'
+            ,cols: [[
+                {field:'id',  title:'ID', width:80}
+                ,{field:'userInfo', title:'会员信息', width:200, templet:"#table-userInfo"}
+                ,{field:'create_time', title:'抽奖时间', width:200, align:'center'}
+                ,{field:'prize_name', title:'奖品', width:150, align:'center'}
+                ,{field:'number', title:'数量', width:100, align:'center'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.list
+                };
+            }
+        });
+
+        // 操作事件管理
+        var active = {
+            add: function() {
+                layer.open({
+                    type: 2
+                    ,title: '新增奖品'
+                    ,content: '{:url("LuckDraw/add")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index];
+                        var submit = layero.find('iframe').contents().find('#addSubmit');
+                        console.log("aaa");
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(addSubmit)', function(data){
+                            $.ajax({
+                                url: '{:url("LuckDraw/add")}',
+                                data: data.field,
+                                type: 'post',
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1000});
+                                        layer.close(index);
+                                        table.reload('table-data-lists-prize', {
+                                            where: []
+                                        });
+                                    } else {
+                                        layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1000});
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            },
+            edit: function (obj) {
+                if ({$setConfig.status} === 1) {
+                    layui.layer.msg('请在设置关闭抽奖在操作!', { time:1000 });
+                    return false;
+                }
+                layer.open({
+                    type: 2
+                    ,title: '编辑奖品'
+                    ,content: '{:url("LuckDraw/edit")}?id='+obj.data.id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index];
+                        var submit = layero.find('iframe').contents().find('#addSubmit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(addSubmit)', function(data){
+                            $.ajax({
+                                url: '{:url("LuckDraw/edit")}',
+                                data: data.field,
+                                type: 'post',
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1000});
+                                        layer.close(index);
+                                        table.reload('table-data-lists-prize', {
+                                            where: []
+                                        });
+                                    } else {
+                                        layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1000});
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            },
+            del: function (obj) {
+                layer.confirm('确定删除: '+obj.data.name, function(index){
+                    if ({$setConfig.status} === 1) {
+                        layui.layer.msg('请在设置关闭抽奖在操作!', { time:1000 });
+                        return false;
+                    }
+                    like.ajax({
+                        url:'{:url("LuckDraw/del")}',
+                        data: {id: obj.data.id},
+                        type: 'post',
+                        success:function(res) {
+                            if(res.code === 1) {
+                                layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1000});
+                                layer.close(index);
+                                table.reload('table-data-lists-prize');
+                                obj.del();
+                            } else {
+                                layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1000});
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            },
+            // 切换状态
+            switchStatus: function (obj) {
+                if ({$setConfig.status} === 1) {
+                    layui.layer.msg('请在设置关闭抽奖在操作!', { time:1000 });
+                    table.reload('table-data-lists-prize', { where: [] });
+                    return false;
+                }
+                like.ajax({
+                    url:'{:url("LuckDraw/switchStatus")}',
+                    data:obj,
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                        }
+                    }
+                });
+            }
+        };
+
+        // 监听提交设置
+        form.on('submit(addSetButton)', function(data){
+            $.ajax({
+                url: '{:url("LuckDraw/set")}',
+                data: data.field,
+                type: 'post',
+                success:function(res) {
+                    if(res.code === 1) {
+                        layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1000});
+                        location.href = '{:url("LuckDraw/index")}';
+                    } else {
+                        layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1000});
+                    }
+                }
+            });
+            return false;
+        });
+
+        // 切换状态
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue;
+            var fields = obj.elem.attributes['data-field'].nodeValue;
+            var status = this.checked ? 1 : 0;
+
+            var data = {"id":id, "field":fields, "status":status};
+            active['switchStatus'] ? active['switchStatus'].call(this, data) : '';
+        });
+
+        table.on('edit(table-data-lists-prize)', function (obj) {
+            var data = {"id":obj.data.id, "field":obj.field, "data":obj.data.sort};
+            $.ajax({
+                url: '{:url("LuckDraw/sort")}',
+                data: data,
+                type: 'post',
+                success:function(res) {
+                    if(res.code === 0) {
+                        layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1000});
+                    }
+                }
+            });
+            return false;
+
+        });
+
+
+        // 绑定事件按钮(激活active事件)
+        $('.layui-btn.layuiadmin-btn-event').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        // 监听表格按钮
+        table.on('tool(table-data-lists-prize)', function(obj){
+            active[obj.event].call(this, obj)
+        });
+
+    });
+</script>

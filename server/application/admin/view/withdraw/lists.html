@@ -1,0 +1,357 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*审核会员的佣金提现申请。</p>
+                        <p>*佣金提现支持微信、支付宝转账。提现失败会退回全部金额。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 选项卡 -->
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+          <!-- 选项卡头部 -->
+          <ul class="layui-tab-title">
+            {foreach $status as $key => $val}
+              {if $key == 1 }
+              <li data-status="{$key}" class="layui-this">{$val}</li>
+              {else}
+                <li data-status="{$key}">{$val}</li>
+              {/if}
+            {/foreach}
+          </ul>
+          <!-- 选项卡内容 -->
+            <div class="layui-tab-item layui-show">
+              <!-- 面板 -->
+              <div class="layui-card">
+                <!-- 面板头部 -->
+                  <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">会员信息:</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                                <select name="search_key" id="search_key">
+                                    <option value="user_sn">会员编号</option>
+                                    <option value="nickname">会员昵称</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline" style="width: 200px;">
+                                <input type="text" id="keyword" name="keyword" placeholder="会员信息" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                          <label class="layui-form-label">提现单号:</label>
+                            <div class="layui-input-inline" style="width: 120px;">
+                              <input type="text" id="withdraw_sn" name="withdraw_sn" placeholder="提现单号" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">提现方式：</label>
+                            <div class="layui-input-inline">
+                                <select name="type" id="type">
+                                    <option value="">全部</option>
+                                    {foreach $type as $item => $val}
+                                    <option value="{$item}">{$val}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">提现时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input time" id="start_time" name="start_time"  autocomplete="off">
+                            </div>
+                            <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
+                                <label class="layui-form-mid">-</label>
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input time" id="end_time" name="end_time"  autocomplete="off">
+                            </div>
+                        </div>
+        
+                        <div class="layui-inline">
+                            <div class="layui-btn-group">
+                                <button type="button" id="today" day="1" class="layui-btn layui-btn-sm layui-btn-normal day">今天</button>
+                                <button type="button"  day="-1" class="layui-btn layui-btn-sm layui-btn-primary day">昨天</button>
+                                <button type="button"  day="7" class="layui-btn layui-btn-sm layui-btn-primary day">近7天</button>
+                                <button type="button"  day="30" class="layui-btn layui-btn-sm layui-btn-primary day">近30天</button>
+                            </div>
+                        </div>
+        
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-withdraw {$view_theme_color}" lay-submit lay-filter="withdraw-search">查询</button>
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-withdraw layui-btn-primary }" lay-submit lay-filter="withdraw-clear-search">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 面板内容 -->
+                <div class="layui-card-body">
+                  <table id="withdraw-lists" lay-filter="withdraw-lists"></table>
+                  <!--会员信息-->
+                  <script type="text/html" id="user-info">
+                    <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
+                    <div class="layui-input-inline"  style="text-align: left;">
+                        <p>会员编号:{{d.user_sn}}</p>
+                        <p>会员昵称:{{d.nickname}}</p>
+                        <p>会员等级:{{d.user_level_name}}</p>
+                    </div>
+                  </script>
+                  <!--操作-->
+                  <script type="text/html" id="withdraw-operation">
+                    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">详情</a>
+                    <!-- 待提现的才能审核 -->
+                    {{#  if(d.status == 1){ }}
+                    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="review">审核</a>
+                    {{#  } }}
+                    <!-- 提现中的微信零钱申请单才能查询结果 -->
+                    {{#  if(d.status == 2 && d.type == 2){ }}
+                    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search">查询结果</a>
+                    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="withdraw_failed">提现失败</a>
+                    {{#  } }}
+                    <!-- 提现中的收款码申请单才能转账操作 -->
+                    {{#  if(d.status == 2 && (d.type == 3 || d.type == 4 || d.type == 5)){ }}
+                    <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="transfer">转账</a>
+                    {{#  } }}
+                  </script>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','laydate', 'element'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element
+            ,laydate = layui.laydate;
+
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+            , value: "{$today[0]}"
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+            ,value: "{$today[1]}"
+        });
+
+        //监听搜索
+        form.on('submit(withdraw-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('withdraw-lists', {
+                where: field,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //清空查询
+        form.on('submit(withdraw-clear-search)', function(){
+            $('#keyword').val('');
+            $('#withdraw_sn').val('');
+            $('#status').val('');
+            $('#type').val('');
+            $('#start_time').val('{$today[0]}');
+            $('#end_time').val('{$today[1]}');
+            $('#today').trigger("click");
+            form.render('select');
+            //刷新列表
+            table.reload('withdraw-lists', {
+                where: [],
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //获取待提现列表
+        getList('1');
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $('#keyword').val('');
+            $('#order_status').val('');
+            $('#goods_name').val('');
+            $('#pay_way').val('');
+            $('#order_type').val('');
+            $('#start_time').val('');
+            $('#end_time').val('');
+            $('#delivery_type').val('');
+            form.render('select');
+            var status = $(this).attr('data-status');
+            getList(status);
+        });
+
+
+        function getList(status) {
+          table.render({
+            id:'withdraw-lists'
+            ,elem: '#withdraw-lists'
+            ,url: '{:url("withdraw/lists")}?status=' + status
+            ,cols: [[
+                {field: 'sn',title: '提现单号', width:180}
+                ,{field: 'export', title: '会员信息', width:250, templet: '#user-info'}
+                ,{field: 'mobile', title: '手机号码', width:120}
+                ,{field: 'money', title: '提现金额', width:100}
+                ,{field: 'type_text', title: '提现方式', align:'center', width:100}
+                ,{field: 'status_text', title: '提现状态', align:'center', width:100}
+                ,{field: 'remark', title: '提现备注', align:'center', width:100}
+                ,{field: 'create_time', title: '提现时间', align:'center', width:250}
+                ,{fixed: 'right' ,title: '操作', align: 'center',width:250, toolbar: '#withdraw-operation'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            },done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+          });
+        }
+
+        table.on('tool(withdraw-lists)', function(obj){
+            var id = obj.data.id;
+
+            // 详情
+            if(obj.event === 'detail') {
+              layer.open({
+                type: 2
+                , title: '提现详情'
+                , content: '{:url("Withdraw/detail")}?id=' + id
+                , area: ['90%', '90%']
+              });
+            }
+
+            // 审核
+            if(obj.event === 'review') {
+              layer.open({
+                type: 2
+                , title: '提现审核'
+                , content: '{:url("Withdraw/review")}?id=' + id
+                , area: ['60%', '60%']
+              });
+            }
+
+            // 查询结果
+            if(obj.event === 'search') {
+              like.ajax({
+              url:'{:url("withdraw/search")}',
+              data:{'id':id},
+              type:"post",
+              success:function(res)
+              {
+                if(res.code == 1)
+                {
+                  layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000}, function(){
+                    parent.location.reload();
+                  });
+                }
+              }
+             });
+            }
+
+            // 提现失败
+            if(obj.event === 'withdraw_failed') {
+              layer.confirm('提现失败将退回佣金,确定要操作吗?', {icon: 3, title:'提示'}, function(index){
+                like.ajax({
+                url:'{:url("withdraw/withdrawFailed")}',
+                data:{'id':id},
+                type:"post",
+                success:function(res)
+                {
+                  if(res.code == 1)
+                  {
+                    layui.layer.msg('提现失败退回佣金', {offset: '15px', icon: 1, time: 1000},function(){
+                      // 关闭对话框
+                      layer.close(index);
+                      location.reload();
+                    });
+                  }
+                }
+               });
+                
+              });
+            }
+
+            // 转账
+            if(obj.event === 'transfer') {
+              layer.open({
+                type: 2
+                , title: '转账'
+                , content: '{:url("Withdraw/transfer")}?id=' + id
+                , area: ['90%', '90%']
+              });
+            }
+        });
+
+
+        $('.day').click(function(){
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $(this).removeClass('layui-btn-primary');
+            $(this).addClass('layui-btn-normal');
+            var day = $(this).attr('day');
+            switch (day) {
+                case '-1':
+                    $('#start_time').val('{$yesterday[0]}');
+                    $('#end_time').val('{$yesterday[1]}');
+                    break;
+                case '1':
+                    $('#start_time').val('{$today[0]}');
+                    $('#end_time').val('{$today[1]}');
+                    break;
+                case '7':
+                    $('#start_time').val('{$days_ago7[0]}');
+                    $('#end_time').val('{$days_ago7[1]}');
+                    break;
+                case '30':
+                    $('#start_time').val('{$days_ago30[0]}');
+                    $('#end_time').val('{$days_ago30[1]}');
+                    break;
+            }
+        });
+
+    });
+
+</script>

@@ -1,0 +1,359 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*平台管理广告信息，系统默认了部分广告位，允许新建广告位。</p>
+                    <p>*广告区分不同的终端，移动端商城（含H5、小程序、APP）和PC端商城。</p>
+                    <p>*广告链接可以选择商城页面，商品页面，自定义链接，用户点击广告后跳转到相应的页面。</p>
+                    <p>*广告停用之后，商城不展示该广告。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <!--                <li data-type = ''>全部</li>-->
+                {foreach $type as $item => $val}
+                <li data-type = {$item} {if $item == 1} class="layui-this" {/if}  >{$val}</li>
+                {/foreach}
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">广告标题:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="keyword" id="keyword" placeholder="请输入广告标题" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">广告位置:</label>
+                                <div class="layui-input-block">
+                                    <select name="pid" id="pid">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-ad {$view_theme_color}" lay-submit lay-filter="ad-search">查询</button>
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-primary " lay-submit lay-filter="ad-clear-search">清空查询</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;">
+                            <button class="layui-btn layui-btn-sm  layuiadmin-btn-ad {$view_theme_color}" data-type="add">新增广告</button>
+                        </div>
+                        <table id="ad-lists" lay-filter="ad-lists"></table>
+                        <script type="text/html" id="show">
+                            <input type="checkbox"  name="status" lay-filter="switch-show" id={{d.id}}  lay-skin="switch" lay-text="显示|隐藏" {{#  if(d.status){ }} checked  {{#  } }}>
+                        </script>
+                        <script type="text/html" id="status-info">
+                            {{# if(d.status == 1){ }}
+                            启动
+                            {{# }else{}}
+                            停用
+                            {{#}}}
+                        </script>
+                        <script type="text/html" id="ad-operation">
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                            {{# if(d.status == 1){ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">停用</a>
+                            {{# }else{ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">启用</a>
+                            {{#} }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                        </script>
+
+                        <script type="text/html" id="image">
+                            <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element,
+             client = 1;
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        //监听搜索
+        form.on('submit(ad-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('ad-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //清空查询
+        form.on('submit(ad-clear-search)', function(){
+            $('#keyword').val('');
+            $('#position').val('');
+            $('#client').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('ad-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+
+        //事件
+        var active = {
+            add: function(){
+                var add_page = layer.open({
+                    type: 2
+                    ,title: '新增广告'
+                    ,content: '{:url("ad/add")}?client='+client
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-ad-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['client'] = client;
+                            like.ajax({
+                                url:'{:url("ad/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('ad-lists'); //数据刷新
+                                    }
+                                },
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-ad').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        getList('')
+        getPosition();
+
+        element.on('tab(tab-all)', function (data) {
+            client = $(this).attr('data-type');
+
+            getList();
+            getPosition();
+        });
+
+        function getPosition(){
+
+            like.ajax({
+                url:'{:url("Ad/getPosition")}',
+                data:{client:client},
+                type:"get",
+                success:function(res)
+                {
+
+                    if(res.code == 1)
+                    {
+                        var data = res.data;
+                        var obj = document.getElementById("pid");
+                        obj.options.length = 0;
+                        obj.options.add(new Option('全部','')); //这个兼容IE与firefox
+                        for(var key in data) {
+                            obj.options.add(new Option(data[key],key)); //这个兼容IE与firefox
+                        }
+                        form.render('select');
+                    }
+                }
+            });
+        }
+
+
+        function getList() {
+            //管理员管理
+            table.render({
+                elem: '#ad-lists'
+                , url: '{:url("ad/lists")}?client='+client  //模拟接口
+                , cols: [[
+                    {field: 'client_name', title: '终端',width:200}
+                    ,{field: 'name', title: '广告标题',width:200}
+                    , {field: 'position_name', title: '广告位置',width:200}
+                    , {field: 'image', title: '广告图片', templet: '#image',width:200}
+                    , {field: 'link', title: '广告链接',width:300}
+                    , {field: 'status', title: '广告状态',width:100,toolbar: '#status-info'}
+                    , {fixed: 'right', title: '操作' ,toolbar: '#ad-operation',width:250}
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list, //解析数据列表
+                    };
+                }
+                , done: function fix() {
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $(".layui-table-fixed").each(function () {
+                            $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    });
+                    $(".layui-table-header tr").each(function (index, val) {
+                        $(".layui-table-fixed").each(function () {
+                            $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
+                        });
+                    });
+                    window.onresize = function () {
+                        fix()
+                    }
+                }
+            });
+        }
+
+        //监听工具条
+        table.on('tool(ad-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确认删除广告:'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("ad/del")}',
+                        data:{id:id,client:client},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                obj.del();
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                            }
+                        },
+                    });
+                });
+            }else if(obj.event === 'edit'){
+                var id = obj.data.id;
+                var edit_page = layer.open({
+                    type: 2
+                    ,title: '编辑广告'
+                    ,content: '{:url("ad/edit")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-ad-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['client'] = client;
+                            like.ajax({
+                                url:'{:url("ad/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('ad-lists'); //数据刷新
+                                    }
+                                },
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }else if(obj.event === 'status_switch'){
+                var id = obj.data.id;
+                var status = obj.data.status;
+                var name = obj.data.name;
+                if (status == 1){
+                    confirm_text = '确定停用广告：';
+                    status = 0;
+                }else {
+                    var confirm_text = '确定启用广告：';
+                    status = 1;
+                }
+                layer.confirm(confirm_text +'<span style="color: red">'+name+'</span>', function(index){
+
+                    like.ajax({
+                        url:'{:url("ad/switchStatus")}',
+                        data:{id:id,status:status,client:client},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                table.reload('ad-lists');
+                            }
+                        }
+                    });
+                })
+            }
+        });
+    });
+</script>

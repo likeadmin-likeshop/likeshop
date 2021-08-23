@@ -1,0 +1,187 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*可以通过会员分组对会员进行更加有效管理。</p>
+                    <p>*会员分组被使用则不允许删除。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-user_group {$view_theme_color}" data-type="add">添加分组</button>
+            </div>
+
+            <table id="user_group-lists" lay-filter="user_group-lists"></table>
+
+            <script type="text/html" id="user_group-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加分组'
+                    ,content: '{:url("user_group/add")}'
+                    ,area: ['60%', '60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'user_group-submit'
+                            ,submit = layero.find('iframe').contents().find("#add-user_group-submit");
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(add-user_group-submit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("user_group/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user_group-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-user_group').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        table.render({
+            id: 'user_group-lists',
+            elem: '#user_group-lists'
+            ,url: '{:url("user_group/lists")}'
+            ,cols: [[
+                {field: 'id', width: 80, title: 'ID', sort: true}
+                ,{field: 'name', width: 200, title: '分组名称'}
+                ,{field: 'remark', title: '备注'}
+                ,{fixed: 'right', title: '操作', width: 180, align: 'center', fixed: 'right', toolbar: '#user_group-operation'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list, //解析数据列表
+                };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        table.on('tool(user_group-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确认删除分组：'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("user_group/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('user_group-lists'); //数据刷新
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑分组'
+                    ,content: '{:url("user_group/edit")}?id='+id
+                    ,area: ['60%', '60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#edit-user_group-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(edit-user_group-submit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("user_group/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user_group-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+    });
+</script>

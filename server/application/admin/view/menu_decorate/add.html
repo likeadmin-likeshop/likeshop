@@ -1,0 +1,151 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="">
+    <div class="layui-tab">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="red">*</span>名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标</label>
+            <div class="layui-input-inline">
+                <div class="img-content">
+                    <input name="image" type="hidden" value="">
+                    <div class="img-add"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label"></label>
+            <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽200像素*高200像素的jpg，jpeg，png，gif图片</span>
+        </div>
+        <div class="layui-form-item tips">
+            <label class="layui-form-label"><span class="red">*</span>链接地址</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="link_type" value="1" title="商城模块" checked>
+            </div>
+            <div class="layui-input-inline">
+                <select name="menu" lay-verify="required" lay-search="">
+                    {foreach $menu_list as $item => $val}
+                    <option value="{$item}">{$val.name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label"></label>
+            <span style="color: #a3a3a3;font-size: 9px">选择系统默认的链接地址</span>
+        </div>
+
+        <div class="layui-form-item tips">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+                <input type="radio" name="link_type" value="2" title="自定义链接">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="url" placeholder="请输入链接" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label"></label>
+            <span style="color: #a3a3a3;font-size: 9px"> 如：https://www.likecms.net/。可设置关联公众号的文章，其它地址需登录微信小程序管理后台配置业务域名</span>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sort"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label"></label>
+            <span style="color: #a3a3a3;font-size: 9px">    只能填写大于0整数，数字越大排序越前</span>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">显示</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="is_show" value="1" title="显示" checked>
+                <input type="radio" name="is_show" value="0" title="隐藏">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="add-menu_decorate-submit" id="add-menu_decorate-submit" value="确认">
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+
+        /*----------------------------------图片上传--------------------------*/
+        //上传图片
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+
+    });
+</script>

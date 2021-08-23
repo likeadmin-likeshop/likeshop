@@ -1,0 +1,131 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+    .tips{
+        color: red;
+    }
+    .goods{
+        display: none;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_level" id="layuiadmin-form-user_level" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>活动专区：</label>
+        <div class="layui-input-inline">
+            <select name="activity_id">
+                <option value="">请选择活动专区</option>
+                {foreach $activity_list as $id => $name}
+                <option value="{$id}">{$name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>专区商品</label>
+        <div class="layui-input-block">
+            <a class="layui-btn layui-btn-normal select-goods" >选择专区商品</a>
+        </div>
+    </div>
+    <div class="layui-form-item goods">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block ">
+            <table id="goods_list" class="layui-table" lay-size="sm">
+                <colgroup>
+                    <col width="40px">
+                </colgroup>
+                <thead>
+                <tr style="background-color: #f3f5f9">
+                    <th style="width: 120px;text-align: center">商品</th>
+                    <th style="width: 120px;text-align: center">规格</th>
+                    <th style="width: 120px;text-align: center">商品价格</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-goods-submit" id="add-goods-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-form-label {
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,goods_ids = [];
+
+        $(document).on('click','.select-goods',function () {
+            layer.open({
+                type: 2
+                ,title: '选择商品'
+                ,content: '{:url("common/selectGoods")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确认', '取消']
+                ,yes: function(index, layero){
+                    var data = window["layui-layer-iframe" + index].callbackdata();
+                    if(data.length){
+                        goods_ids = [];
+                        $('#goods_list tbody').remove();
+                    }
+                    data.forEach(function(item,index,arr) {
+
+                        var image = item.image;
+                        for(var i = 0; item.goods_item.length > i;i++){
+                            var goods_item = item.goods_item[i];
+                            if(goods_ids.indexOf(goods_item.id) == -1) {
+
+                                goods_ids.push(goods_item.id);
+                                if(item.goods_item[i].image) {
+                                    image = item.goods_item[i].image;
+                                }
+                                var goods_html = '<tr>\n' +
+                                    '<td style="text-align: left">' +
+                                    '   <input type="hidden" name="goods_id[]" value="'+item.id +'">' +
+                                    '   <img class="image-show" width="80px" height="80px" src="'+image +'">'+item.name+
+                                    '</td>\n' +
+                                    '<td style="text-align: center">' +
+                                    '   <input type="hidden" name="item_id[]" value="'+goods_item.id+'">'+goods_item.spec_value_str+
+                                    '</td>\n' +
+                                    '<td style="text-align: center">'+goods_item.price+'</td>\n' +
+                                    '</tr>';
+                                $('#goods_list').append(goods_html);
+                            }
+                        }
+
+                    })
+                    $('.goods').show();
+
+                }
+
+            })
+        })
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+    })
+
+</script>

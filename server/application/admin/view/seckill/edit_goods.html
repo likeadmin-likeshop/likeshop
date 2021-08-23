@@ -1,0 +1,94 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+    .tips{
+        color: red;
+    }
+
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_level" id="layuiadmin-form-user_level" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>秒杀时段</label>
+        <div class="layui-input-inline">
+            <select name="seckill_id">
+                <option value="">请选择秒杀时段</option>
+                {foreach $seckill as $item}
+                <option value="{$item.id}" {if $detail[0]['seckill_id'] == $item.id} selected {/if}>{$item.time}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>秒杀商品</label>
+        <div class="layui-input-block">
+            <table id="goods_list" class="layui-table" lay-size="sm" style="width: 800px;">
+                <colgroup>
+                    <col width="60px">
+                </colgroup>
+                <thead>
+                <tr style="background-color: #f3f5f9">
+                    <th style="width: 120px;text-align: center">商品</th>
+                    <th style="width: 120px;text-align: center">商品规格</th>
+                    <th style="width: 60px;text-align: center">商品价格</th>
+                    <th style="width: 30px;text-align: center">秒杀价格</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $detail as $item}
+                <tr>
+                    <td >
+                        <img class="image-show" width="80px" height="80px" src="{$storageUrl}{$item.image}">{$item.name}
+                    </td>
+                    <td>{$item.spec_value_str}</td>
+                    <td style="text-align: center">{$item.goods_price}</td>
+                    <input type="hidden" name="id[]" value="{$item.id}" >
+                    <input type="hidden" name="item_id[]" value="{$item.item_id}" >
+                    <input type="hidden" name="goods_id[]" value="{$item.goods_id}" >
+                    <td style="text-align: center"><input name="price[]" value="{$item.price}" autocomplete="off" class="layui-input"  lay-verify="required" lay-reqtext="请输入秒杀价格"></td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-seckill-submit" id="edit-seckill-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-form-label {
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,goods_ids = [];
+
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+    })
+
+</script>

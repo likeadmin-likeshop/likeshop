@@ -1,0 +1,151 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 140px;
+    }
+    .layui-input-block{
+        margin-left:170px;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" lay-verType="tips"  placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">父级分类：</label>
+        <div class="layui-input-inline">
+            <select name="pid" lay-verify="required" placeholder="请选择父级分类" lay-filter="search_pid">
+                <option value="0" data-level="1">顶级分类</option>
+                {foreach $category_list as $item => $val}
+                <option value="{$item}" data-level={$val.level}>{$val.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类图标：</label>
+        <div class="layui-input-inline">
+            <div class="img-content">
+                <input name="image" type="hidden" value="">
+                <div class="img-add"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item"><label class="layui-form-label"></label>
+        <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽200像素*高200像素的jpg，jpeg，png，gif图片</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序：</label>
+        <div class="layui-input-inline">
+            <input type="text"  value="0" name="sort"  placeholder="请输入排序" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item is_recommend">
+        <label class="layui-form-label">首页推荐：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="is_recommend" value="1" title="推荐" checked>
+            <input type="radio" name="is_recommend" value="0" title="不推荐">
+        </div>
+    </div>
+    <div class="layui-form-item is_recommend">
+        <label class="layui-form-label"></label>
+        <span style="color: #a3a3a3;font-size: 9px">当前分类推荐在PC商城首页显示，默认推荐</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">显示状态：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="is_show" value="1" title="显示" checked>
+            <input type="radio" name="is_show" value="0" title="不显示">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-inline">
+            <textarea type="text" name="remark" autocomplete="off" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-goods_category-submit" id="add-goods_category-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //监听分类父级选择
+        form.on('select(search_pid)', function(data){
+            if(0 == data.value){
+                $('.is_recommend').show();
+            }else{
+                $('.is_recommend').hide();
+            }
+        });
+    })
+</script>

@@ -1,0 +1,142 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="">
+    <div class="layui-tab">
+        <input type="hidden" name="id" value="{$info.id}">
+
+        <!--品牌名称-->
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>品牌名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" value="{$info.name}" lay-verify="required" lay-verType="tips"
+                       placeholder="请输入品牌名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <!--品牌首字母-->
+        <!--{$info['initial'] | dump}-->
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>品牌首字母</label>
+            <div class="layui-input-inline">
+                <select name="initial" id="initial">
+                    {foreach $capital as $val}
+                    <option value="{$val}" {if condition="$info.initial eq $val " }selected="selected" {/if}>{$val}</option>
+
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <!--品牌图片-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌图片</label>
+            <div class="layui-input-inline">
+                <div class="img-content">
+                    <input name="image" type="hidden" value="{$info.image}">
+                    <div class="img-add"  {if $info.image } style="display: none" {/if} ></div>
+                    {if !empty($info.image)}
+                    <div class="img-container">
+                        <img class="img-src" src="{$info.abs_image}">
+                        <a class="img-del-x">x</a>
+                    </div>
+                    {/if}
+            </div>
+        </div>
+        <!--品牌排序-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌排序</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sort" value="{$info.sort}" placeholder="请输入品牌排序" class="layui-input">
+            </div>
+        </div>
+        <!--是否推荐-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否推荐</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="is_show" value="1" title="显示" {if condition="$info.is_show eq 1" }checked{/if}>
+                <input type="radio" name="is_show" value="0" title="不显示" {if condition="$info.is_show eq 0" }checked{/if}>
+            </div>
+        </div>
+        <!--品牌描述-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌描述</label>
+            <div class="layui-input-inline">
+                <textarea name="remark" placeholder="请输入品牌描述" class="layui-textarea">{$info.remark}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="edit-goods_brand-submit" id="edit-goods_brand-submit" value="确认">
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+    });
+</script>

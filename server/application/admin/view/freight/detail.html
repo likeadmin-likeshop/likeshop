@@ -1,0 +1,120 @@
+{layout name="layout2" /}
+<style>
+    .div-flex {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+
+    .layui-form-label {
+        width: 100px;
+    }
+
+    .width-160 {
+        width: 200px;
+    }
+
+    .layui-table th {
+        text-align: center;
+    }
+
+    .table-margin {
+        margin-left: 50px;
+        margin-right: 50px;
+        text-align: center;
+    }
+
+    .image {
+        height: 80px;
+        width: 80px;
+    }
+
+    .mt50 {
+        margin-left: 50px;
+    }
+
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-ad_position" id="layuiadmin-form-category" style="padding: 20px 30px 100px 0;">
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label ">模板名称:</label>
+        <div class="width-160">{$detail.name}</div>
+    </div>
+
+    <div class="layui-form-item div-flex">
+        <label class="layui-form-label">计费方式</label>
+        <div class="width-160">{$detail.charge_way_text}</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+            <textarea name="remark"  placeholder="备注信息" class="layui-textarea">{$detail.remark}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">配送区域</label>
+        <div class="layui-input-block">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="30%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>可配送区域</th>
+                    <th class="th_first_unit">首件 (个)</th>
+                    <th class="th_first_money">运费 (元)</th>
+                    <th class="th_continue_unit">续件 (个)</th>
+                    <th class="th_continue_money">续费 (元)</th>
+                </tr>
+                </thead>
+                <tbody >
+                    {foreach $detail.configs as $k => $item}
+                        <tr>
+                            <th style="text-align: left">{$item.region_name}</th>
+                            <th>{$item.first_unit}</th>
+                            <th>{$item.first_money}</th>
+                            <th>{$item.continue_unit}</th>
+                            <th>{$item.continue_money}</th>
+                        </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="layui-form-item" >
+    <div class="layui-input-block ">
+        <button type="button" class="layui-btn layui-btn-primary " id="back">返回</button>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','jquery','like','transfer'], function() {
+        var $ = layui.$
+            , form = layui.form
+            , transfer = layui.transfer
+            , like = layui.like;
+
+        $('#back').click(function () {
+            var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);
+            parent.layui.table.reload('freight-lists');
+            return true;
+        });
+
+    });
+
+</script>

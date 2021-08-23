@@ -1,0 +1,302 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*发布商品时可以选择供货商，方便货源管理。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="white-space: nowrap;">供货商名称：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="keyword"  id="keyword" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-unit {$view_theme_color}" lay-submit lay-filter="supplier-search">查询</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-unit }" lay-submit lay-filter="supplier-clear-search">清空查询</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-unit {$view_theme_color}" data-type="add">新增供货商</button>
+<!--                <button class="layui-btn layui-btn-sm layuiadmin-btn-unit layui-btn-danger" data-type="batchdel">删除所选</button>-->
+            </div>
+
+            <table id="supplier_lists" lay-filter="supplier_lists"></table>
+
+            <script type="text/html" id="supplier-operation">
+
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">修改</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+
+
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','like','table','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        //监听搜索
+        form.on('submit(supplier-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('supplier_lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+        });
+        //清空查询
+        form.on('submit(supplier-clear-search)', function(){
+            $('#keyword').val('');//清空输入框
+            //刷新列表
+            table.reload('supplier_lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                {layer.open({
+                    type: 2
+                    ,title: '新增供货商'
+                    ,content: '{:url("Supplier/add")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'supplier-submit'
+                            ,submit = layero.find('iframe').contents().find("#supplier-submit");
+                        //监听提交
+
+
+                        iframeWindow.layui.form.on('submit(supplier-submit)', function(data){
+                            var field = data.field;
+                            console.log(field);
+
+                            {like.ajax({
+                                url:'{:url("Supplier/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('supplier_lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+
+                                }
+                            });
+                            }
+                        });
+                        submit.trigger('click');
+                    },
+
+                })}
+            }
+
+            ,batchdel:function(){ //删除所选
+                var checkStatus = table.checkStatus('supplier_lists')
+                    ,checkData = checkStatus.data; //得到选中的数据
+                //是否已选数据
+                if(checkData.length === 0){
+                    return layer.msg('请选择数据');
+                }else {
+                    //获取所选id
+                    ids = [];
+                    for (var i in checkData){
+                        ids.push(checkData[i]['id']);
+                    }
+
+                    layer.confirm('确定删除所选供货商信息？', function(index){
+                        like.ajax({
+                            url:'{:url("Supplier/del")}',
+                            data:{id:ids},
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    table.reload('supplier_lists'); //数据刷新
+                                }else{
+                                    layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 2
+                                        , time: 1000
+                                    });
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            }
+        };
+        $('.layui-btn.layuiadmin-btn-unit').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        table.render({
+            id: 'supplier_lists',
+            elem: '#supplier_lists'
+            ,url: '{:url("supplier/lists")}'
+            ,cols: [[
+                {type: 'numbers',title: '序号'}
+                ,{field: 'name',width:150, title: '供货商名称'}
+                ,{field: 'contact',width:150, title: '联系人'}
+                ,{field: 'tel',width:150, title: '联系电话'}
+                ,{field: 'address',width:250, title: '联系地址'}
+                ,{field: 'remark',width:250, title: '备注'}
+                ,{fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#supplier-operation'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        table.on('tool(supplier_lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确定删除供货商:<span style="color: red">'+name+"</span>", function(index){
+                    like.ajax({
+                        url:'{:url("Supplier/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('supplier_lists'); //数据刷新
+                                obj.del();
+                            }else{
+                                layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 2
+                                    , time: 1000
+                                });
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '修改供货商信息'
+                    ,content: '{:url("Supplier/edit")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#supplier-submit-edit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(supplier-submit-edit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("Supplier/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    console.log(res);
+                                    if(res.code == 1)
+                                    {
+                                        console.log(1);
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('supplier_lists'); //数据刷新
+                                    }
+                                    else{
+                                        console.log(2);
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+    });
+</script>

@@ -1,0 +1,35 @@
+{layout name="layout2" /}
+
+<div class="layui-card layui-form">
+    <div class="layui-card-body">
+        <div class="layui-form-item">
+            <label for="sn" class="layui-form-label"><span style="color:red;">*</span>会员编号：</label>
+            <div class="layui-input-inline" style="width: 250px;">
+                <input type="text" id="sn" name="sn" lay-verType="tips" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="remarks" class="layui-form-label">备注信息：</label>
+            <div class="layui-input-inline" style="width: 250px;">
+                <textarea id="remarks" name="remarks" placeholder="请输入内容不超100个字符" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'element', 'jquery', 'like'], function () {
+        var $ = layui.$;
+        var like = layui.like;
+        var form = layui.form;
+    });
+</script>

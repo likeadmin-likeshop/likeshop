@@ -1,0 +1,128 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell { height: auto; }
+    .layui-input-block {
+        line-height: 38px;
+    }
+</style>
+<div class="layui-form" style="margin-left: 50px;margin-top: 15px;margin-bottom:30px;">
+  <input type="hidden" name="id" value="{$id}" />
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">转账操作：</label>
+    <div class="layui-input-block">
+      <input type="radio" name="transfer_status" value="1" title="转账成功">
+      <input type="radio" name="transfer_status" value="0" title="转账失败" checked>
+    </div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label"></label>
+    <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">转账失败后，提现金额会全部退回佣金账户</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">转账凭证：</label>
+    <div class="layui-input-block">
+      <div class="" style="height:80px;line-height:80px">
+        <input name="transfer_voucher" type="hidden" value="">
+        <div class="transfer_voucher_add"></div>
+    </div>
+    </div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">转账备注：</label>
+    <div class="layui-input-block">
+      <textarea name="transfer_description" placeholder="请输入内容" class="layui-textarea" style="width:380px;height:120px;"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-sm layuiadmin-btn-withdraw layui-btn-normal }" lay-submit lay-filter="confirm">确 认</button>
+      <button class="layui-btn layui-btn-sm layuiadmin-btn-withdraw layui-btn-primary }" lay-submit lay-filter="cancel">返 回</button>
+    </div>
+  </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+      // 确认
+      form.on('submit(confirm)', function(data){
+        // console.log(data.field)
+        if(data.field.transfer_status == '0') {
+          // 转账失败
+          like.ajax({
+              url:'{:url("withdraw/transferFail")}',
+              data: data.field,
+              type:"post",
+              success:function(res)
+              {
+                if(res.code == 1)
+                {
+                  layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000}, function(){
+                    parent.location.reload();
+                  });
+                }
+              }
+          });
+        }else if(data.field.transfer_status == '1') {
+          // 转账成功
+          like.ajax({
+              url:'{:url("withdraw/transferSuccess")}',
+              data:data.field,
+              type:"post",
+              success:function(res)
+              {
+                if(res.code == 1)
+                {
+                  layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000}, function(){
+                    parent.location.reload();
+                  });
+                }
+              }
+          });
+        }
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      });
+      // 返回
+      form.on('submit(cancel)', function(data){
+        var index = parent.layer.getFrameIndex(window.name); 
+        parent.layer.close(index);
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      });
+
+      //上传图片
+      like.imageUpload('.transfer_voucher_add', function (uri, element) {
+            if(uri.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="goods-li">\n' +
+                '<img style="width:80px" class="goods-img" ' +
+                'src="' + uri[0] + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+      //删除图片
+      $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+    });
+</script>

@@ -1,0 +1,442 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-form">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                    <div class="layui-colla-item">
+                        <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                        <div class="layui-colla-content layui-show">
+                            <p>*会员购买商品之后可以对购买的商品进行评价。</p>
+                            <p>*可以对会员的商品评价进行回复，隐藏或删除。</p>
+                            <p>*商品评价会在商城的商品详情中进行显示。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type=1 class="layui-this">全部评论</li>
+                <li data-type=2 >待回复评论</li>
+            </ul>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="white-space: nowrap;">评价信息：</label>
+                            <div class="layui-input-inline">
+                                <select name="choice"  id="choice">
+                                    <option value=""></option>
+                                    <option value="1">商品名称</option>
+                                    <option value="2">会员编号</option>
+                                    <option value="3">会员昵称</option>
+                                    <option value="4">手机号码</option>
+
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="keyword"  id="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">评分等级：</label>
+                                <div class="layui-input-inline">
+                                    <select name="goods_comment" id="goods_comment"   >
+                                        <option value="">全部</option>
+                                        <option value="1">好评</option>
+                                        <option value="2">中评</option>
+                                        <option value="3">差评</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">评论时间：</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="start_time" class="layui-input" id="start_time"
+                                           placeholder="" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="layui-input-inline" style="margin-right: 5px;width: 20px;">
+                                <label class="layui-form-mid">至</label>
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="end_time" class="layui-input" id="end_time"
+                                       placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-unit {$view_theme_color}" lay-submit lay-filter="comment-search">查询</button>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-unit }" lay-submit lay-filter="comment-clear-search">清空查询</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="layui-card-body">
+                    <div class="layui-card">
+                        <div style="padding-bottom: 10px;">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-unit layui-btn-danger" data-type="batchdel" id="batchdel">删除所选</button>
+                        </div>
+                        <table id="goods_comment-lists" class="layui-border-box" lay-filter="goods_comment-lists"></table>
+
+                        <!--会员信息-->
+                        <script type="text/html" id="user">
+                            <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
+                            <div class="layui-input-inline"  style="text-align: left">
+                                <p>会员编号：{{d.sn}}</p>
+                                <p>昵称：{{d.nickname}}</p>
+                                <p>会员等级：{{d.level_name}}</p>
+                            </div>
+                        </script>
+
+                        <!--商品信息-->
+                        <script type="text/html" id="goods">
+                            <img src="{{d.image}}" style="height:80px;width: 80px;" class="image-show layui-col-md4">
+                            <div class="layui-input-inline"  style="text-align: left;margin-left: 5px;">
+                                <p>商品名称:{{d.name}}</p>
+                                <p>商品规格:{{d.spec_value_str}}</p>
+                            </div>
+                        </script>
+
+                        <script type="text/html" id="comment_image">
+                            {{#  layui.each(d.comment_image, function(index, item){ }}
+                                <img src="{{item}}" class="image-show" alt="评论图片" style="width:50px;height:50px;float:left;margin-right:5px;">
+                            {{#  }); }}
+                        </script>
+
+                        <script type="text/html" id="comment-operation">
+                            {{# if(d.reply === null) { }}
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="reply">待回复</a>
+                            {{#  } }}
+                            {{# if(d.reply) { }}
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="reply">修改回复</a>
+                            {{#  } }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">{{d.info_state_switch}}</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                        </script>
+
+                    </div>
+                </div>
+        </div>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like','form','laydate'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            ,element = layui.element
+            , laydate = layui.laydate;
+
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+        getList(1);
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            var type = $(this).attr('data-type');
+            getList(type);
+        });
+
+        //监听搜索
+        form.on('submit(comment-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('goods_comment-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+        });
+        //清空查询
+        form.on('submit(comment-clear-search)', function(){
+            $('#keyword').val('');
+            $('#choice').val('');
+            $('#goods_comment').val('');
+            $('#start_time').val('');  //清空输入框
+            $('#end_time').val('');  //清空输入框
+            //刷新列表
+            form.render('select');
+            table.reload('goods_comment-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        function getList(type) {
+            table.render({
+                elem: '#goods_comment-lists'
+                , url: '{:url("goods_comment/lists")}?type='+type
+                , cols: [[
+                    {type: 'checkbox',title: '当页全选'},
+                    {field: 'user', title: '会员信息',templet:'#user',width:310},
+                    {field: 'goods', title: '商品信息',templet:'#goods',width:320},
+                    {field: 'goods_comment', title: '评分等级', align: 'center',width:100},
+                    // {field: 'comment', title: '评价内容',templet:'#comment',width:250},
+                    {field: 'comment', title: '买家评价',width:200},
+                    {field: 'commentImage', title: '评论图片',width:200, templet:"#comment_image"},
+                    {field: 'reply', title: '商家回复',width:200},
+                    {field: 'status', title: '显示状态', align: 'center',width:100},
+                    {field: 'comment_time', title: '评论时间', align: 'center',width:200},
+                    {fixed: 'right', title: '操作', align: 'center', toolbar: '#comment-operation',width:200},
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.lists, //解析数据列表
+                    };
+                }
+                , done: function fix() {
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $(".layui-table-fixed").each(function () {
+                            $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    });
+                    $(".layui-table-header tr").each(function (index, val) {
+                        $(".layui-table-fixed").each(function () {
+                            $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
+                        });
+                    });
+                    window.onresize = function () {
+                        fix()
+                    }
+                }
+
+
+            })};
+
+        table.on('tool(goods_comment-lists)', function(obj){
+
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确定删除评论:<span style="color: red">'+name+"</span>", function(index){
+                    like.ajax({
+                        url:'{:url("goods_comment/del")}',
+                        data:{delData:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('goods_comment-lists'); //数据刷新
+                                obj.del();
+                            }else{
+                                layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 2
+                                    , time: 1000
+                                });
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+            if(obj.event === 'status_switch'){
+                var id = obj.data.id;
+                var info_state = obj.data.status;
+                var name = obj.data.name;
+                var status = 0;
+                if (info_state == '显示'){
+                    status = 0;
+                    layer.confirm('确认隐藏评论:<span style="color: red">'+name+'</span>', function(index){
+                        like.ajax({
+                            url:'{:url("goods_comment/switchStatus")}',
+                            data:{id:id,status:status},
+                            type:"get",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    table.reload('goods_comment-lists');
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+                }else if (info_state == '隐藏') {
+                    status = 1;
+                    layer.confirm('确认显示评论:<span style="color: red">'+name+'</span>', function(index){
+                        like.ajax({
+                            url:'{:url("goods_comment/switchStatus")}',
+                            data:{id:id,status:status},
+                            type:"get",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    table.reload('goods_comment-lists');
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+                }
+
+            }
+
+            if(obj.event === 'reply'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '商品评论'
+                    ,content: '{:url("goods_comment/reply")}?id='+id
+                    ,area: ['60%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'reply-comment-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("goods_comment/reply")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('goods_comment-lists'); //数据刷新
+                                    }else{
+                                        iframeWindow.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+
+                                },
+                                error:function(res)
+                                {
+                                    layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 2
+                                        , time: 1000
+                                    });
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+
+        $('#batchdel').click(
+            function(){ //删除所选
+                var checkStatus = table.checkStatus('goods_comment-lists')
+                    ,checkData = checkStatus.data; //得到选中的数据
+                //是否已选数据
+                if(checkData.length === 0){
+                    return layer.msg('请选择数据');
+                }else {
+                    //获取所选id
+                    ids = [];
+                    for (let i of checkData){
+                        ids.push(i['id']);
+                    }
+
+                    layer.confirm('确定删除所选评价？', function(index){
+                        like.ajax({
+                            url:'{:url("goods_comment/del")}',
+                            data:{delData:ids},
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    table.reload('goods_comment-lists'); //数据刷新
+                                }else{
+                                    layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 2
+                                        , time: 1000
+                                    });
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            }
+        )
+
+
+    });
+
+</script>

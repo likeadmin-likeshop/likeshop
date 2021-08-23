@@ -1,0 +1,154 @@
+{layout name="layout2" /}
+<style>
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user" id="layuiadmin-form-user" style="padding: 20px 30px 0 0;">
+   <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员编号：</label>
+        <div class="layui-input-inline" style="margin-top:10px">
+            {$info.sn}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员昵称：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" value="{$info.nickname}" name="nickname" type="text" placeholder="请输入会员昵称" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员头像：</label>
+        <div class="layui-input-block">
+            <div class="img-content">
+                <input name="avatar" type="hidden" value="{$info.avatar}">
+                <div class="img-add"  {if $info.avatar } style="display: none" {/if} ></div>
+            {if !empty($info.avatar)}
+            <div class="img-container">
+                <img class="img-src" src="{$info.abs_avatar}">
+                <a class="img-del-x">x</a>
+            </div>
+            {/if}
+        </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号码：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" value="{$info.mobile}" name="mobile" type="text" placeholder="请输入手机号码" >
+        </div>
+    </div>
+
+    <!--登录密码-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录密码：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" value="" name="password" type="password" autocomplete="off">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class=" layui-form-mid layui-word-aux">设置会员登录商城的密码，留空表示不修改登录密码</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" value="0" title="未知" {if $info.sex == 0}checked{/if} >
+            <input type="radio" name="sex" value="1" title="男"  {if $info.sex == 1}checked{/if} >
+            <input type="radio" name="sex" value="2" title="女"  {if $info.sex == 2}checked{/if} >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">生日：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" value="{$info.birthday}" autocomplete="off"   name="birthday" id="birthday" type="text" placeholder="请输入生日" >
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-submit"  id="edit-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','laydate','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,laydate = layui.laydate
+            ,like = layui.like;
+        laydate.render({
+            elem: '#birthday'
+            ,format: 'yyyy-MM-dd'
+            ,trigger: 'click'
+        });
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image, 600);
+        });
+
+        form.on('select(category)', function(data){
+            var level = $(data.elem).find("option:selected").attr("data-level");
+            $('.alliance_ratio').hide();
+            $('.autotrophy_ratio').hide();
+            if(level == 2){
+                $('.alliance_ratio').show();
+                $('.autotrophy_ratio').show();
+
+            }
+        });
+
+    })
+</script>

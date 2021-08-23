@@ -1,0 +1,275 @@
+{layout name="layout1" /}
+<style> .layui-table-cell { height: auto; } </style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- 操作提示 -->
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*拼团列表，查看拼团商品，拼团团长，拼团订单等信息；</p>
+                        <p>*拼团失败的订单系统自动原路退款，退款失败时，可手动点击退款</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索模块 -->
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label for="goods_name" class="layui-form-label">商品名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="goods_name" name="goods_name" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label for="status" class="layui-form-label">团长信息：</label>
+                    <div class="layui-input-block">
+                        <select name="type" id="type" >
+                            <option value="">请选择</option>
+                            <option value="sn">会员编号</option>
+                            <option value="nickname">会员昵称</option>
+                            <option value="mobile">手机号码</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" id="keyword" name="keyword" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">开团时间：</label>
+                <div class="layui-inline" style="margin-right:0;">
+                    <div class="layui-input-inline">
+                        <input type="text" id="found_time" name="found_time" placeholder="开始时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline"> - </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" id="found_end_time" name="found_end_time" placeholder="结束时间" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-btn-group">
+                        <button type="button"  day="7" class="layui-btn layui-btn-sm layui-btn-primary day">近7天</button>
+                        <button type="button"  day="30" class="layui-btn layui-btn-sm layui-btn-primary day">近30天</button>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label for="status" class="layui-form-label">拼团状态：</label>
+                    <div class="layui-input-inline">
+                        <select name="status" id="status" >
+                            <option value="">全部</option>
+                            {foreach $team_status as $item => $val}
+                            <option value="{$item}">{$val}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm  layuiadmin-btn-article {$view_theme_color}" lay-submit lay-filter="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-article }" lay-submit lay-filter="clear-search">重置</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据表格 -->
+        <div class="layui-card-body">
+            <table id="table-lists" lay-filter="table-lists"></table>
+            <script type="text/html" id="table-user">
+                <img src="{{d.user.avatar}}" style="height:80px;width: 80px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left">
+                    <p>会员编号:{{d.user.sn}}</p>
+                    <p>手机号码:{{d.user.mobile}}</p>
+                    <p>会员昵称:{{d.user.nickname}}</p>
+                    <p>会员等级:{{d.user_level ?? '无'}}</p>
+                    <p>性别:{{d.user.sex}}</p>
+                    <p>注册时间:{{d.user.create_time}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="table-goods">
+                <div>
+                    <img src="{{d.image}}" alt="图片" style="width:60px;height:60px;float:left;" class="image-show">
+                    <div style="margin-left:5px; width:150px;height:60px;white-space:normal;float: left;">{{d.name}}</div>
+                </div>
+            </script>
+            <script type="text/html" id="table-people">
+                {{d.need}} / {{d.join}}
+            </script>
+            <script type="text/html" id="table-start_time">
+                <div style="width:100px;height:60px;white-space:normal;">
+                    {{d.found_time}}
+                </div>
+            </script>
+            <script type="text/html" id="table-end_time">
+                <div style="width:100px;height:60px;white-space:normal;">
+                    {{d.found_end_time}}
+                </div>
+            </script>
+
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-primary layui-btn-sm " lay-event="views">详情</a>
+                {{#  if(d.status === 2){ }}
+                    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="refund">原路退款</a>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like', 'laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+        // 开始时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#found_time'
+            ,trigger: 'click'
+        });
+
+        // 结束时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#found_end_time'
+            ,trigger: 'click'
+        });
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src);
+        });
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            table.reload('table-lists', {
+                where: field,
+                page: { curr: 1 }
+            });
+        });
+
+        // 监听重置搜素
+        form.on('submit(clear-search)', function(){
+            $('#goods_name').val('');
+            $('#status').val('');
+            $('#found_time').val('');
+            $('#found_end_time').val('');
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').addClass('layui-btn-primary');
+            form.render('select');
+            table.reload('table-lists', { where: [] });
+        });
+
+        // 渲染数据表格
+        table.render({
+            elem: '#table-lists'
+            ,url: '{:url("TeamFound/lists")}'
+            ,cols: [[
+                {field: 'id', title: 'ID',width:60, align:"center"}
+                ,{field: 'sn', title: '拼团编号', width:200, align:"center"}
+                ,{field: 'user', title: '团长信息',width:300, templet: '#table-user'}
+                ,{field: 'goods', title: '拼团商品',width:250, templet: '#table-goods'}
+                ,{field: 'found_time_t', title: '开团时间', width:150, align: 'center', templet: '#table-start_time'}
+                ,{field: 'found_end_time_t', title: '结束时间', width:120, align: 'center', templet: '#table-end_time'}
+                ,{field: 'found_people', title: '成团人数', width:100, align: 'center', templet: '#table-people'}
+                ,{field: 'status_text', title: '拼团状态',width:100, align: 'center'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#operation',width:200}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(res, curr, count){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        //事件
+        var active = {
+            views: function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '拼团详细'
+                    ,content: '{:url("TeamFound/detail")}?found_id='+obj.data.id
+                    ,area: ['90%','90%']
+                });
+            },
+            refund: function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '参团人订单信息'
+                    ,content: '{:url("TeamFound/refundDetail")}?found_id='+obj.data.id
+                    ,area: ['90%','90%']
+                });
+            }
+        };
+
+        // 监听表格右侧工具条
+        table.on('tool(table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 切换状态
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue;
+            var fields = obj.elem.attributes['data-field'].nodeValue;
+            var status = this.checked ? 1 : 0;
+            var data = {"id":id, "field":fields, "status":status};
+            active['switchStatus'] ? active['switchStatus'].call(this, data) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        $('.day').click(function(){
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $(this).removeClass('layui-btn-primary');
+            $(this).addClass('layui-btn-normal');
+            var day = $(this).attr('day');
+            switch (day) {
+                case '7':
+                    $('#found_time').val('{$days_ago7[0]}');
+                    $('#found_end_time').val('{$days_ago7[1]}');
+                    break;
+                case '30':
+                    $('#found_time').val('{$days_ago30[0]}');
+                    $('#found_end_time').val('{$days_ago30[1]}');
+                    break;
+            }
+        });
+
+    });
+</script>

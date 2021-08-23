@@ -1,0 +1,74 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 160px;
+    }
+</style>
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*会员注册设置</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-card-body" >
+            <div class="layui-form" lay-filter="">
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;">短信验证注册手机：</label>
+                    <div class="layui-input-block ">
+                        <input type="radio" name="open" value="0" title="关闭" {if condition="$config eq 0"}checked{/if}>
+                        <input type="radio" name="open" value="1" title="开启" {if condition="$config eq 1"}checked{/if}>
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">
+                        会员手机号码注册账号时,是否需要短信验证码验证.默认关闭.
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like'], function(){
+        var $ = layui.$
+            ,like = layui.like
+            ,form = layui.form;
+
+        form.on('submit(setmnp)',function (data) {
+            like.ajax({
+                url: '{:url("ShopSetting/setRegister")}'
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        location.href = location.href;
+                    });
+                }
+            });
+        });
+    });
+
+</script>

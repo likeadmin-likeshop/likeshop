@@ -1,0 +1,120 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 100px;
+    }
+</style>
+
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-body" >
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*会员提现金额要求设置。</p>
+                        <p> *会员只能对分销佣金进行提现。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="layui-card-body" >
+            <div class="layui-form" lay-filter="">
+
+               <div class="layui-form-item">
+                <label class="layui-form-label"style="white-space: nowrap; " >提现方式：</label>
+                <div class="layui-input-inline" style="width:100px">
+                  <input type="checkbox" name="type[]" title="钱包余额" lay-skin="primary" value="1" {if in_array(1,$config.type)}checked{/if}>
+                </div>
+                <div class="layui-input-inline" style="width:100px">
+                  <input type="checkbox" name="type[]" title="微信零钱" lay-skin="primary" value="2" {if in_array(2,$config.type)}checked{/if}>
+                </div>
+                <div class="layui-input-inline" style="width:100px">
+                  <input type="checkbox" name="type[]" title="银行卡" lay-skin="primary" value="5" {if in_array(5,$config.type)}checked{/if}>
+                </div>
+                <div class="layui-input-inline" style="width:100px">
+                  <input type="checkbox" name="type[]" title="微信收款码" lay-skin="primary" value="3" {if in_array(3,$config.type)}checked{/if}>
+                </div>
+                <div class="layui-input-inline" style="width:100px">
+                  <input type="checkbox" name="type[]" title="支付宝收款码" lay-skin="primary" value="4" {if in_array(4,$config.type)}checked{/if}>
+                </div>
+               </div>
+
+               <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                 <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">默认需要保留至少一种提现方式</div>
+              </div> 
+               
+                  
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="white-space: nowrap; " >最低提现金额：</label>
+                    <div class="layui-input-inline" >
+                        <input type="number" name="min_withdraw"   lay-verType="tips" autocomplete="off" value="{$config.min_withdraw}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">会员提现需满足最低提现金额，才能提交提现申请。</div>
+                    </div>
+                    <div  class="layui-form-mid" > 元</div>
+                </div>
+
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap; " >最高提现金额：</label>
+                    <div class="layui-input-inline" >
+                        <input type="number" name="max_withdraw"   lay-verType="tips" autocomplete="off" value="{$config.max_withdraw}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">会员提现允许的最高提现金额。</div>
+                    </div>
+                    <div  class="layui-form-mid" > 元</div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap; " >提现手续费：</label>
+                    <div class="layui-input-inline" >
+                        <input type="number" name="poundage"   lay-verType="tips" autocomplete="off" value="{$config.poundage}" class="layui-input">
+                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">会员提现时收取的手续费占比。</div>
+                    </div>
+                    <div  class="layui-form-mid" > %</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="setWithdrawal">确认</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.on('submit(setWithdrawal)',function (data) {
+           like.ajax({
+                url: '{:url("shopSetting/setWithdraw")}'
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+                    if(res.code == 1) {
+                      layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                      });
+                    }
+                },
+            });
+        });
+
+    });
+
+</script>

@@ -1,0 +1,277 @@
+{layout name="layout1" /}
+<style>
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;}
+    #div1{
+        position: absolute;
+        left:105%;
+        bottom:55%;
+    }
+    #div2{position: absolute;
+        left:110%;
+        bottom:55%;}
+    #div3{position: absolute;
+        left:105%;
+        bottom:20%;}
+    #div4{position: absolute;
+        left:110%;
+        bottom:55%;}
+    #div5{position: absolute;
+        left:110%;
+        bottom:55%;}
+</style>
+
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header" style="margin: 20px;padding-left: 5px;border-left: solid green 8px;text-align: left;">基础设置</div>
+        <div class="layui-card-body" >
+            <div class="layui-form" lay-filter="">
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label">存储方式：</label>
+                    <div class="layui-input-block" style="left:20px">
+                        <input type="radio" name="way" value="1" title="本地存储" checked>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label">图片大小：</label>
+                    <div class="layui-input-block" style="left:20px">
+                        <input type="text" name="size"   lay-verType="tips" autocomplete="off" value="{$config.size}" class="layui-input">
+                    </div>
+                    <div id="div1" class="layui-input-inline" style="display: inline;"> b</div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:130px">允许上传的文件大小，为空或填0表示不限制</div>
+                </div>
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label">图片类型：</label>
+                    <div class="layui-input-block"style="left:20px">
+                        <input type="text" name="type"   lay-verType="tips" autocomplete="off" value="{$config.type}" class="layui-input">
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:130px">允许上传的图片扩展名，多个扩展名用英文逗号隔开，为空或填0表示不限制</div>
+                </div>
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"style="white-space: nowrap;">图片Mime类型：</label>
+                    <div class="layui-input-block"style="left:20px">
+                        <input type="text" name="mime_type"   lay-verType="tips" autocomplete="off" value="{$config.mime_type}" class="layui-input">
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:130px">允许上传的图片Mime类型，多个扩展名用英文逗号隔开，为空或填0表示不限制</div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <h3 class="layui-form-label" style="margin: 20px;padding-left: 5px;border-left: solid green 8px;text-align: left;width: 100px;right:20px">水印设置</h3>
+                </div>
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label">图片水印：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="启用" {if condition="$config.status eq 1" }checked{/if}>
+                        <input type="radio" name="status" value="0" title="停用" {if condition="$config.status eq 0" }checked{/if}>
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" >启用水印之后新上传的图片会添加水印</div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label">水印类型：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="mark_type" value="1" title="图片" {if condition="$config.mark_type eq 1" }checked{/if}>
+                        <input type="radio" name="mark_type" value="2" title="文字" {if condition="$config.mark_type eq 2" }checked{/if}>
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">水印图片：</label>
+                    <div class="layui-inline" id="icon">
+
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="mark" type="hidden" value="{$config.mark}" >
+                            {if !empty($config.mark)}
+                            <div class="goods-img-add" style="display: none" ></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.mark}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add" ></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">建议尺寸：宽280px*高50px。jpg，jpeg，png格式</div>
+
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label"style="white-space: nowrap;">水印图片位置：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="location" value="1" title="左上角" {if condition="$config.location eq 1" }checked{/if}>
+                        <input type="radio" name="location" value="2" title="右上角" {if condition="$config.location eq 2" }checked{/if}>
+                        <input type="radio" name="location" value="3" title="居中" {if condition="$config.location eq 3" }checked{/if}>
+                        <input type="radio" name="location" value="4" title="左下角" {if condition="$config.location eq 4" }checked{/if}>
+                        <input type="radio" name="location" value="5" title="右下角" {if condition="$config.location eq 5" }checked{/if}>
+                    </div>
+                    <div class=" layui-form-mid layui-word-aux" >水印图片在图片中的位置</div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"style="white-space: nowrap;" >水印图片透明度：</label>
+                    <div class="layui-input-block"style="left:30px">
+                        <input type="text" name="transparency"   lay-verType="tips" autocomplete="off" value="{$config.transparency}" class="layui-input">
+                    </div>
+                    <div id="div2" class="layui-input-inline" style="display: inline;"> %</div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:140px">水印的透明度，可选值为0-100。为空或填0则为不透明。</div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"style="white-space: nowrap;">水印图片倾斜度：</label>
+                    <div class="layui-input-block"style="left:30px">
+                        <input type="text" name="slope"   lay-verType="tips" autocomplete="off" value="{$config.slope}" class="layui-input">
+                        <div id="div3" class="layui-input-inline" style="display: inline;">度</div>
+                        <div class=" layui-form-mid layui-word-aux" >水印图片倾斜角度</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"style="white-space: nowrap;">水印横坐标偏移量：</label>
+                    <div class="layui-input-block"style="left:30px">
+                        <input type="text" name="offset_x"   lay-verType="tips" autocomplete="off" value="{$config.offset_x}" class="layui-input">
+                    </div>
+                    <div id="div4" class="layui-input-inline" style="display: inline;">px</div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:140px">水印相对于横坐标偏移的距离</div>
+                </div>
+
+                <div class="layui-form-item layui-col-sm6 layui-col-md4">
+                    <label class="layui-form-label"style="white-space: nowrap;">水印纵坐标偏移量：</label>
+                    <div class="layui-input-block"style="left:30px">
+                        <input type="text" name="offset_y"   lay-verType="tips" autocomplete="off" value="{$config.offset_y}" class="layui-input">
+                    </div>
+                    <div id="div5" class="layui-input-inline" style="display: inline;">px</div>
+                    <div class=" layui-form-mid layui-word-aux" style="left:140px">水印相对于纵坐标偏移的距离</div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.verify({
+
+        });
+        form.on('submit(setmnp)',function (data) {
+            layui.$.ajax({
+                url: '{:url("Basic/setUpload")}'//实际使用请改成服务端真实接口
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+
+                    // if(res.code == 0)
+                    // {
+                    //     layer.msg(res.msg, {
+                    //         offset: '15px'
+                    //         ,icon: 2
+                    //         ,time: 1000
+                    //     });
+                    //     return false;
+                    // }
+
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1500
+                    }, function(){
+                        location.href = location.href; //后台主页
+                    });
+                },
+                error:function(res){
+                    layer.msg('网络错误', {
+                        offset: '15px'
+                        ,icon: 2
+                        ,time: 1000
+                    }, function(){
+                        return;
+                    });
+                }
+            });
+        });
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="' + '/' + uri + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val('/'+uri);
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+    });
+
+</script>

@@ -1,0 +1,302 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height:auto;
+    }
+    .goods-content>div:not(:last-of-type) {
+        border-bottom:1px solid #DCDCDC;
+    }
+    .goods-info::after{
+        display: block;
+        content: '';
+        clear: both;
+    }
+    .goods_name_hide{
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*会员提交的售后退款订单列表。</p>
+                    <p>*订单状态处于待收货，已完成（在售后退款时效内）时，会员可提交售后退款。</p>
+                    <p>*退货退款售后申请店铺需要确认收货后才能退款。</p>
+                    <p>*店铺同意退款后处于等待退款状态，由平台会自动进行原路退款操作。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <li data-type='' class="layui-this">全部</li>
+                {foreach $status as $item => $val}
+                <li data-type="{$item}">{$val}</li>
+                {/foreach}
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item">
+                            <div class="layui-row">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">售后搜索:</label>
+                                    <div class="layui-input-block">
+                                        <select name="search_key" id="search_key">
+                                            <option value="sn">售后单号</option>
+                                            <option value="order_sn">订单编号</option>
+                                            <option value="goods_name">商品名称</option>
+                                            <option value="user_sn">会员编号</option>
+                                            <option value="nickname">会员昵称</option>
+                                            <option value="user_mobile">手机号码</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <input type="text" name="keyword" id="keyword" placeholder="请输入搜索内容"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+
+
+                                <div class="layui-inline status">
+                                    <label class="layui-form-label">申请状态:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status" id="status">
+                                            <option value="">全部</option>
+                                            {foreach $status as $item => $val}
+                                            <option value="{$item}">{$val}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">申请时间:</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="start_time" class="layui-input" id="start_time"
+                                                   placeholder="" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline" style="margin-right: 5px;width: 20px;">
+                                        <label class="layui-form-mid">至</label>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="end_time" class="layui-input" id="end_time"
+                                               placeholder="" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-ad {$view_theme_color}" lay-submit
+                                            lay-filter="after-sale-search">查询
+                                    </button>
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-primary " lay-submit
+                                            lay-filter="after-sale-clear-search">清空查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card-body">
+                        <table id="after-sale-lists" lay-filter="after-sale-lists"></table>
+
+                        <script type="text/html" id="after-sale-operation">
+                            <div style="text-align: left;margin-left: 10px">
+                                <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">售后详情</a>
+                            </div>
+                        </script>
+
+                        <script type="text/html" id="image">
+                            <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">
+                        </script>
+
+                        <!--订单信息-->
+                        <script type="text/html" id="order">
+                            <div style="text-align: left">
+                                <p>订单编号:{{d.order.order_sn}}</p>
+                                <p>订单金额:{{d.order.total_amount}}</p>
+                                <p>付款方式:{{d.order.pay_way}}</p>
+                                <p>订单状态:{{d.order.order_status}}</p>
+                            </div>
+                        </script>
+
+                        <!--会员信息-->
+                        <script type="text/html" id="user">
+                            <img src="{{d.user.avatar}}" style="height:80px;width: 80px" class="image-show">
+                            <div class="layui-input-inline"  style="text-align: left">
+                                <p>会员编号:{{d.user.sn}}</p>
+                                <p>昵称:{{d.user.nickname}}</p>
+                            </div>
+                        </script>
+
+                        <!--商品信息-->
+                        <script type="text/html" id="goods">
+                            <div class="goods-content">
+                                {{#  layui.each(d.order_goods, function(index, item){ }}
+                                <div style="text-align: left;" class="goods-info">
+                                    <img src="{{ item.base_image }}" style="height:80px;width: 80px" class="image-show layui-col-md4">
+                                    <div class="layui-input-inline layui-col-md8">
+                                        <span class="layui-col-md7 goods_name_hide">{{ item.goods_name }}</span>
+                                        <span class="layui-col-md5">￥{{ item.goods_price }}</span>
+                                        <br>
+                                        <span class="layui-col-md7 goods_name_hide">{{ item.spec_value }}</span>
+                                        <span class="layui-col-md5">{{ item.goods_num }}件</span>
+                                    </div>
+                                </div>
+                                {{#  }); }}
+                            </div>
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like', 'laydate'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            , element = layui.element
+            , laydate = layui.laydate;
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        //监听搜索
+        form.on('submit(after-sale-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('after-sale-lists', {
+                where: field,
+                page: {
+                    curr: 1
+                },
+            });
+        });
+        //清空查询
+        form.on('submit(after-sale-clear-search)', function () {
+            $('#keyword').val('');
+            $('#status').val('');
+            $('#pay_way').val('');
+            $('#order_source').val('');
+            $('#start_time').val('');
+            $('#end_time').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('after-sale-lists', {
+                where: [],
+                page: {
+                    curr: 1
+                },
+            });
+        });
+
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+        //获取列表
+        getList('');
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            $('#keyword').val('');
+            $('#status').val('');
+            $('#start_time').val('');
+            $('#end_time').val('');
+            form.render('select');
+            var type = $(this).attr('data-type');
+            getList(type);
+            if (type !== ''){
+                $('.status').hide();
+            }else {
+                $('.status').show();
+            }
+        });
+
+        function getList(type) {
+            table.render({
+                elem: '#after-sale-lists'
+                , url: '{:url("after_sale/lists")}?type=' + type
+                , cols: [[
+                    {field:'id',title: 'id',width:60,align: 'center'}
+                    , {field: 'sn', title: '售后单号', align: 'center',width:160}
+                    , {field: 'order', title: '订单信息', align: 'center',templet:'#order',width:230}
+                    , {field: 'user', title: '退款人', templet:'#user',width:310}
+                    , {field: 'order_goods', title: '退款商品', align: 'center',templet:'#goods',width:260}
+                    , {field: 'refund_type', title: '退款方式', align: 'center',width:100}
+                    , {field: 'refund_price', title: '退款金额', align: 'center',width:100}
+                    , {field: 'status', title: '售后状态', align: 'center',width:100}
+                    , {field: 'create_time', title: '申请时间', align: 'center',width:90}
+                    , {fixed: 'right', title: '操作', width: 100, align: 'center', toolbar: '#after-sale-operation'}
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.lists, //解析数据列表
+                    };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+        }
+
+        //监听工具条
+        table.on('tool(after-sale-lists)', function (obj) {
+            var id = obj.data.id;
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2
+                    ,title: '售后详情'
+                    ,content: '{:url("after_sale/detail")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['返回']
+                    ,yes: function(index, layero){
+                        layer.close(index);
+                        table.reload('after-sale-lists'); //数据刷新
+                    }
+                })
+            }
+        });
+    });
+</script>

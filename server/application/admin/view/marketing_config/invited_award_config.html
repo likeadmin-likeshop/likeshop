@@ -1,0 +1,81 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 150px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        *设置会员邀请的奖励规则。
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邀请会员获赠积分：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="invited_award_integral" value="{$config.invited_award_integral}" autocomplete="off" class="layui-input invited_award_integral">
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-mid">积分</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">每邀请1位会员获赠的积分数量</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        form.on('submit(set)', function (data) {
+            layui.like.ajax({
+                url: '{:url("MarketingConfig/orderAwardConfig")}' //实际使用请改成服务端真实接口
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+
+                }
+            });
+        });
+    });
+</script>

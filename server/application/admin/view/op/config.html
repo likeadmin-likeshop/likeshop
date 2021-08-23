@@ -1,0 +1,95 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 150px;
+    }
+    .tips{
+        color: red;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        *填写微信开放平台开发配置，请前往微信开放平台创建应用并完成认证。
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+                <div class="layui-form-item div-flex">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>开发者信息</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="tips">*</span>AppID：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="app_id" value="{$config.app_id}"  lay-verify="required"  autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="tips">*</span>AppSecret：</label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-md3">
+                            <input type="text"  name="secret" value="{$config.secret}"  lay-verify="required"  autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">登录微信开放平台，查看并设置</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        form.on('submit(set)', function (data) {
+            layui.like.ajax({
+                url: '{:url("Op/config")}' //实际使用请改成服务端真实接口
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+
+                }
+            });
+        });
+    });
+</script>

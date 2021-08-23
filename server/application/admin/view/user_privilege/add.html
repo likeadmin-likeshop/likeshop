@@ -1,0 +1,128 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+    .tips{
+        color: red;
+    }
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_level" id="layuiadmin-form-user_level" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>权益名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" lay-verType="tips"  placeholder="请输入权益名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>权益图标：</label>
+        <div class="layui-input-inline">
+            <div class="" style="height:80px;line-height:80px">
+                <input name="image" type="hidden" value="">
+                <div class="goods-img-add"></div>
+            </div>
+            <div class=" layui-form-mid layui-word-aux"  style="white-space: nowrap">建议尺寸：100*100像素，jpg，jpeg，png图片类型</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权益说明：</label>
+        <div class="layui-input-block">
+            <textarea name="remark" lay-verType="tips" placeholder="请输入权益说明" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-user_privilege-submit" id="add-user_privilege-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-form-label {
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            if(uri.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="' + uri[0] + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+
+    })
+
+</script>

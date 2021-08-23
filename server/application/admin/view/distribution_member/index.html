@@ -1,0 +1,413 @@
+{layout name="layout1" /}
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*分销会员列表，可查看分销员佣金详情，直推会员，分销订单，以及修改分销会员上级；</p>
+                        <p>*分销佣金需要订单完成并且超出售后期限后系统自动结算。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type='member' class="layui-this">分销会员列表</li>
+                <li data-type='audit'>待审核分销会员列表</li>
+            </ul>
+            <div class="layui-tab-content">
+                <!--分销会员列表-->
+                <div class="layui-tab-item layui-show ">
+                    {include file="distribution_member/member_lists"/}
+                </div>
+
+                <!--待审核分销会员列表-->
+                <div class="layui-tab-item">
+                    {include file="distribution_member/audit_lists"/}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'element', 'like', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , element = layui.element
+            , like = layui.like;
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+
+        getLists('member');
+
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            form.render('select');
+            var type = $(this).attr('data-type');
+            getLists(type);
+        });
+
+
+        function getLists(type) {
+            // 会员列表
+            if (type == 'member') {
+                table.render({
+                    elem: '#member-lists'
+                    , url: '{:url("distribution_member/index")}?type=member'
+                    , cols: [[
+                        {type: 'numbers', title: '序号', align: 'center'}
+                        , {field: 'user', title: '会员信息', templet: '#user-info', width: 350}
+                        , {field: 'distribution_code', title: '邀请码', width: 100, align: 'center'}
+                        , {field: 'leader', title: '上级推荐人',  width: 280, align: 'center', templet:'#leader-info'}
+                        , {field: 'fans', title: '推广会员数', width: 110, align: 'center'}
+                        , {field: 'distribution_num', title: '分销订单数', width: 110, align: 'center'}
+                        , {field: 'distribution_amount', title: '分销订单金额', width: 130, align: 'center'}
+                        , {field: 'distribution_money', title: '分销佣金', width: 110, align: 'center'}
+                        , {fixed: 'right', title: '操作', width: 280, align: 'center', toolbar: '#member-operation'}
+                    ]]
+                    , page: true
+                    , text: {none: '暂无数据！'}
+                    , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.lists, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+            }
+
+            // 审核会员列表
+            if (type == 'audit') {
+                table.render({
+                    elem: '#audit-lists'
+                    , url: '{:url("distribution_member/index")}?type=audit'
+                    , cols: [[
+                        {type: 'numbers', title: '序号', align: 'center'}
+                        , {field: 'user', title: '会员信息', templet: '#user-info'}
+                        , {field: 'leader', title: '上级推荐人',  align: 'center', templet:'#leader-info'}
+                        , {field: 'reason', title: '申请原因',  align: 'center'}
+                        , {field: 'status_text', title: '状态', width: 110, align: 'center'}
+                        , {field: 'create_time', width: 180, title: '申请时间', align: 'center'}
+                        , {fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#audit-operation'}
+                    ]]
+                    , page: true
+                    , text: {none: '暂无数据！'}
+                    , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code": res.code,
+                            "msg": res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.lists, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+            }
+        }
+
+
+        //==============================================会员列表start===============================================
+        var active = {
+            add: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '添加分销会员'
+                    ,content: '{:url("DistributionMember/addMember")}'
+                    ,area: ['500px', '400px']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("DistributionMember/addMember")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1000});
+                                        layer.close(index);
+                                        table.reload('member-lists', {
+                                            where: []
+                                        });
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                    ,cancel: function(index, layero){
+                        var window_index = index;
+                        layer.confirm('尚未保存，确定关闭吗？', {
+                            time: 0, //不自动关闭
+                            btn: ['确定', '取消'],
+                            yes: function(index){
+                                layer.close(index);
+                                layer.close(window_index);
+                            }
+                        });
+                        return false;
+                    }
+                });
+            },
+        };
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        form.on('submit(member-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('member-lists', {
+                where: field,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //清空查询
+        form.on('submit(member-clear-search)', function () {
+            $('#freeze_distribution').val('');
+            $('#member_keyword').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('member-lists', {
+                where: [],
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        table.on('tool(member-lists)', function (obj) {
+
+            var id = obj.data.id;
+            var nickname = obj.data.nickname;
+
+            if (obj.event === 'freeze' || obj.event === 'unfreeze') {
+
+                var type = 'freeze';
+                var confirm_text = '确定冻结分销会员:';
+                if (obj.event === 'unfreeze'){
+                    type = 'unfreeze';
+                    confirm_text = '确定解冻分销会员:';
+                }
+
+                layer.confirm(confirm_text + '<span style="color: red">'+nickname+'</span>', function (index) {
+                    like.ajax({
+                        url: '{:url("distribution_member/freeze")}',
+                        data: {'id':id, 'type': type},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code == 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                table.reload('member-lists');
+                                layer.close(index);
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+
+            // 会员分销资料(分销资料)
+            if (obj.event === 'info') {
+                layer.open({
+                    type: 2
+                    ,title: '分销资料'
+                    ,content: '{:url("distribution_member/info")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn:['返回']
+                })
+            }
+
+            //推广会员
+            if (obj.event === 'fans') {
+                layer.open({
+                    type: 2
+                    ,title: '推广会员'
+                    ,content: '{:url("distribution_member/fans")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn:['返回']
+                })
+            }
+
+            //收入明细
+            if (obj.event === 'earnings_detail') {
+                layer.open({
+                    type: 2
+                    ,title: '收入明细'
+                    ,content: '{:url("distribution_member/earningsDetail")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn:['返回']
+                })
+            }
+
+            //修改上级
+            if (obj.event === 'update_leader') {
+                layer.open({
+                    type: 2
+                    ,title: '修改上级'
+                    ,content: '{:url("distribution_member/updateLeader")}?id='+id
+                    ,area: ['60%', '60%']
+                    ,btn:['确认', '返回']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'update-leader-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("distribution_member/updateLeader")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        table.reload('member-lists');
+                                        layer.close(index);
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+
+        });
+
+        //==============================================会员列表end===============================================
+
+
+        //==============================================会员审核列表start==========================================
+
+        form.on('submit(audit-clear-search)', function () {
+            $('#audit_keyword').val('');
+            $('#audit_status').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('audit-lists', {
+                where: [],
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+
+        form.on('submit(audit-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('audit-lists', {
+                where: field,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //会员审核操作
+        table.on('tool(audit-lists)', function (obj) {
+
+            var id = obj.data.id;
+            var nickname = obj.data.nickname;
+
+            var confirm_text = '';
+            var data= {};
+
+            if (obj.event === 'pass') {
+                confirm_text = '确定审核通过分销申请:'+ nickname;
+                data = {'id': id, 'type': 'pass'};
+                auditAjax(confirm_text, data);
+            }
+
+            if (obj.event === 'refuse') {
+                confirm_text = '确定审核拒绝分销申请:'+ nickname;
+                data = {'id': id, 'type': 'refuse'};
+                auditAjax(confirm_text, data);
+            }
+        });
+
+        //审核操作
+        function auditAjax(confirm_text, data) {
+            layer.confirm(confirm_text, function (index) {
+                like.ajax({
+                    url: '{:url("distribution_member/audit")}',
+                    data: data,
+                    type: "post",
+                    success: function (res) {
+                        if (res.code == 1) {
+                            layui.layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                            table.reload('audit-lists');
+                            layer.close(index);
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        }
+
+        //==============================================会员审核列表end===========================================
+
+    });
+
+
+</script>

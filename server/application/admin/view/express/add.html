@@ -1,0 +1,155 @@
+{layout name="layout2" /}
+<script src="__PUBLIC__/static/common/js/area.js"></script>
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+    }
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;}
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-unit" id="layuiadmin-form-unit" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="0" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>快递公司：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="name" lay-verify="required" lay-vertype="tips" placeholder="请输入快递公司" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>快递图标：</label>
+        <div class="layui-inline" >
+
+            <div class="" style="height:80px;line-height:80px">
+                <input name="icon" type="hidden" value="" >
+                <div class="goods-img-add" ></div>
+            </div>
+            <div class=" layui-form-mid layui-word-aux">快递图标，建议宽高尺寸200px*200px。</div>
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司网址：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="website"  lay-vertype="tips" placeholder="请输入公司网址" autocomplete="off" class="layui-input">
+            <label class=" layui-form-mid layui-word-aux" ></label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">快递编码：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="code"  lay-vertype="tips" placeholder="请输入快递编码" autocomplete="off" class="layui-input">
+            <label class=" layui-form-mid layui-word-aux" >快递公司拼音简称。</label>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap">快递100编码：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="code100"  lay-vertype="tips" placeholder="请输入快递100编码" autocomplete="off" class="layui-input">
+            <label class=" layui-form-mid layui-word-aux" style="white-space: nowrap" >快递公司在快递100平台的编码，方便快递查询跟踪。</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap;left: 10px;">快递鸟编码：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="codebird"  lay-vertype="tips" placeholder="请输入快递鸟" autocomplete="off" class="layui-input">
+            <label class=" layui-form-mid layui-word-aux" style="white-space: nowrap" >快递公司在快递鸟平台的编码，方便快递查询跟踪。</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="sort"  lay-vertype="tips" placeholder="请输入排序" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="express-submit" id="express-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like_area','like'], function(){
+        var $ = layui.$
+            ,like_area = layui.like_area
+            ,like = layui.like
+            ,form = layui.form;
+
+
+        //三级联动
+        like_area.init('province','city','district','province_id','city_id','district_id');
+        $(document).on('click', '.image-del-x', function () {
+            $(this).parent().prev().val('');
+            $(this).parent().siblings('.image-add').css('display','block');
+            $(this).parent().remove();
+            return false;
+        });
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            if(uri.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="'+ uri[0] + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+
+
+    })
+</script>

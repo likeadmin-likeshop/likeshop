@@ -1,0 +1,116 @@
+{
+  "name": "alibabacloud/client",
+  "homepage": "https://www.alibabacloud.com/",
+  "description": "Alibaba Cloud Client for PHP - Use Alibaba Cloud in your PHP project",
+  "keywords": [
+    "sdk",
+    "tool",
+    "cloud",
+    "client",
+    "aliyun",
+    "library",
+    "alibaba",
+    "alibabacloud"
+  ],
+  "type": "library",
+  "license": "Apache-2.0",
+  "support": {
+    "source": "https://github.com/aliyun/openapi-sdk-php-client",
+    "issues": "https://github.com/aliyun/openapi-sdk-php-client/issues"
+  },
+  "authors": [
+    {
+      "name": "Alibaba Cloud SDK",
+      "email": "sdk-team@alibabacloud.com",
+      "homepage": "http://www.alibabacloud.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-libxml": "*",
+    "ext-openssl": "*",
+    "ext-mbstring": "*",
+    "ext-simplexml": "*",
+    "ext-xmlwriter": "*",
+    "guzzlehttp/guzzle": "^6.3|^7.0",
+    "danielstjules/stringy": "^3.1",
+    "mtdowling/jmespath.php": "^2.5",
+    "adbario/php-dot-notation": "^2.2",
+    "clagiordano/weblibs-configmanager": "^1.0"
+  },
+  "require-dev": {
+    "ext-spl": "*",
+    "ext-dom": "*",
+    "ext-pcre": "*",
+    "psr/cache": "^1.0",
+    "ext-sockets": "*",
+    "drupal/coder": "^8.3",
+    "symfony/dotenv": "^3.4",
+    "league/climate": "^3.2.4",
+    "phpunit/phpunit": "^5.7.27",
+    "monolog/monolog": "^1.24",
+    "composer/composer": "^1.8",
+    "mikey179/vfsstream": "^1.6",
+    "symfony/var-dumper": "^3.4"
+  },
+  "suggest": {
+    "ext-sockets": "To use client-side monitoring"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlibabaCloud\\Client\\": "src"
+    },
+    "files": [
+      "src/Functions.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AlibabaCloud\\Client\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "optimize-autoloader": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts-descriptions": {
+    "cs": "Tokenizes PHP, JavaScript and CSS files to detect violations of a defined coding standard.",
+    "cbf": "Automatically correct coding standard violations.",
+    "fixer": "Fixes code to follow standards.",
+    "test": "Run all tests.",
+    "unit": "Run Unit tests.",
+    "feature": "Run Feature tests.",
+    "clearCache": "Clear cache like coverage.",
+    "coverage": "Show Coverage html.",
+    "endpoints": "Update endpoints from OSS."
+  },
+  "scripts": {
+    "cs": "phpcs --standard=PSR2 -n ./",
+    "cbf": "phpcbf --standard=PSR2 -n ./",
+    "fixer": "php-cs-fixer fix ./",
+    "test": [
+      "phpunit --colors=always"
+    ],
+    "unit": [
+      "@clearCache",
+      "phpunit --testsuite=Unit --colors=always"
+    ],
+    "feature": [
+      "@clearCache",
+      "phpunit --testsuite=Feature --colors=always"
+    ],
+    "coverage": "open cache/coverage/index.html",
+    "clearCache": "rm -rf cache/*",
+    "endpoints": [
+      "AlibabaCloud\\Client\\Regions\\LocationService::updateEndpoints",
+      "@fixer"
+    ],
+    "release": [
+      "AlibabaCloud\\Client\\Release::release"
+    ]
+  }
+}

@@ -1,0 +1,302 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                   <p>*用户可以根据商品分类搜索商品，请正确创建分类。</p>
+                    <p>*点击分类名称前符号，显示该商品分类的下级分类。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+
+                <div class="layui-btn-container" style="display: inline-block;">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn layui-btn-sm  layui-btn-goods_category {$view_theme_color}" id="goods_category-add">添加</button>
+                        <button class="layui-btn layui-btn-sm  layui-btn-goods_category {$view_theme_color}" id="expand-all">全部展开</button>
+                        <button class="layui-btn layui-btn-sm  layui-btn-goods_category {$view_theme_color}" id="fold-all">全部折叠</button>
+                    </div>
+                </div>
+                <input type="text" id="search-value" placeholder="请输入" autocomplete="off" class="layui-input" style="display: inline-block;width: 140px;padding: 0 5px;margin-right: 5px;">
+                <div class="layui-btn-container" style="display: inline-block;">
+                    <button id="search" class="layui-btn layui-btn-sm  layui-btn-goods_category {$view_theme_color}">
+                        <i class="layui-icon">&#xe615;</i>搜索
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="goods_category-lists" lay-filter="goods_category-lists"></table>
+            <script type="text/html" id="image">
+                <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">
+            </script>
+            <script type="text/html" id="is_recommend">
+                {{# if(d.is_recommend == 1){ }}
+                推荐
+                {{# }else{}}
+                不推荐
+                {{#}}}
+            </script>
+            <!-- 表格操作列 -->
+            <script type="text/html" id="goods_category-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">修改</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+            </script>
+
+            <!-- 表格状态列 -->
+            <script type="text/html" id="is_show">
+                <input type="checkbox"  lay-filter="switch-is_show" data-id={{d.id}} data-field='is_show'   lay-skin="switch"
+                       lay-text="显示|隐藏" {{#  if(d.is_show){ }} checked  {{#  } }} />
+            </script>
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        treeTable: 'treetable-lay/treeTable'
+        ,like: 'layui-admin/dist/layuiadmin/modules/like',
+    }).use(['layer', 'treeTable','form','like','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var treeTable = layui.treeTable;
+        var form = layui.form;
+        var like = layui.like;
+
+        var data ={$category_tree|raw};
+        console.log(data);
+        var insTb = treeTable.render({
+            elem: '#goods_category-lists',
+            data: data,
+            tree: {
+                iconIndex:0,
+                childName:'sub',
+                treeColIndex:3,
+                getIcon: function (d) {  // 自定义图标
+                    return '<i class="ew-tree-icon layui-icon layui-icon-spread-left "></i>';
+                }
+
+            },
+            cols: [
+                {field: 'name', title: '分类名称',width: 280},
+                {field: '#image', title: '分类图标', width: 120,style:'height:100px;',toolbar: '#image', align: 'center'},
+                {templet: '#is_recommend', title: '首页推荐', width: 100,align: 'center'},
+                {templet: '#is_show', title: '显示', width: 100},
+                {field: 'sort', title: '排序', width: 80, align: 'center',event: 'tips',sort: true},
+                {fixed: 'right', align: 'center', toolbar: '#goods_category-operation', title: '操作', width: 180}
+            ],
+            style: 'margin-top:0;'
+        });
+
+        form.on('switch(switch-is_show)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var status = 0;
+            if(this.checked){
+                status = 1;
+            }
+            like.ajax({
+                url:'{:url("goods_category/switchStatus")}',
+                data:{id:id,status:status},
+                type:'post',
+                success:function (res) {
+                    if(res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+
+                    }
+                }
+            })
+        })
+        treeTable.on('tool(goods_category-lists)', function (obj) {
+            var event = obj.event;
+            if (event === 'del') {
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确定删除商品分类:'+'<span style="color: red">'+name+'</span>', function(index) {
+                    var ids = [id];
+                    $.ajax({
+                        url: '{:url("goods_category/del")}',
+                        data: {ids: id},
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.code === 1) {
+                                obj.del();
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                            } else {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 2
+                                    , time: 1000
+                                },function () {
+                                    window.location.href = window.location.href;
+                                });
+                            }
+                        }
+                    })
+                })
+            }
+            if (event === 'edit') {
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑商品分类'
+                    ,content: '{:url("goods_category/edit")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-goods_category-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field; //获取提交的字段
+                            $.ajax({
+                                url:'{:url("GoodsCategory/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        location.reload();//刷新
+                                    }else{
+                                        iframeWindow.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                },
+                                error:function(res)
+                                {
+                                    layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 2
+                                        , time: 1000
+                                    });
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                    ,success: function(layero, index){
+
+                    }
+                })
+            }
+
+        });
+
+        $('#goods_category-add').click(function () {
+            layer.open({
+                type: 2
+                ,title: '新增商品分类'
+                ,content: '{:url("goods_category/add")}'
+                ,area: ['90%','90%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submitID = 'add-goods_category-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+submitID);
+
+                    //监听提交
+                    iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                        var field = data.field; //获取提交的字段
+                        $.ajax({
+                            url:'{:url("goods_category/add")}',
+                            data:field,
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    location.reload();//刷新
+                                }else{
+                                    iframeWindow.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 2
+                                        , time: 1000
+                                    });
+                                }
+
+                            },
+                            error:function(res)
+                            {
+                                layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 2
+                                    , time: 1000
+                                });
+                            }
+                        });
+                    });
+
+                    submit.trigger('click');
+                }
+                ,success: function(layero, index){
+
+                }
+            })
+        })
+
+        // 全部展开
+        $('#expand-all').click(function () {
+            insTb.expandAll();
+        });
+
+        // 全部折叠
+        $('#fold-all').click(function () {
+            insTb.foldAll();
+        });
+        //搜索
+        $('#search').click(function () {
+            var keywords = $('#search-value').val();
+            if (keywords) {
+                insTb.filterData(keywords);
+            } else {
+                insTb.clearFilter();
+            }
+        });
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+    });
+</script>

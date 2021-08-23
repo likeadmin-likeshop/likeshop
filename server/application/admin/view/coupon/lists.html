@@ -1,0 +1,345 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*优惠券在发放时间内，只要未关闭未删除，符合条件就能领取。</p>
+                    <p>*优惠券已关闭，不能继续领取，已发放的优惠券在用券时间内能继续使用。</p>
+                    <p>*优惠券已删除，不能继续领取，已发放的优惠券不能继续使用。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <li data-type='' class="layui-this">全部</li>
+                <li data-type=1 >进行中</li>
+                <li data-type=0 >已关闭</li>
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">优惠券名称：</label>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="name" name="name" placeholder="请输入优惠券名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-coupon {$view_theme_color}" lay-submit lay-filter="coupon-search">查询</button>
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-coupon layui-btn-primary }" lay-submit lay-filter="coupon-clear-search">清空查询</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-coupon {$view_theme_color}" data-type="add">新增优惠券</button>
+                        </div>
+
+                        <table id="coupon-lists" lay-filter="coupon-lists"></table>
+
+                        <script type="text/html" id="coupon-operation">
+                            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">详情</a>
+                            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="log">发放记录</a>
+
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                            {{# if(d.status){ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status">关闭</a>
+                            {{# } }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+    .layui-form-label{
+        width: 86px;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+        $('.layui-btn.layuiadmin-btn-coupon').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '新增优惠券'
+                    ,content: '{:url("coupon/add")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-coupon-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID)
+                            ,goods_ids = iframeWindow.callbackdata();
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field.goods_ids = goods_ids;
+                            like.ajax({
+                                url:'{:url("coupon/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('coupon-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+
+
+        //监听搜索
+        form.on('submit(coupon-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('coupon-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //清空查询
+        form.on('submit(coupon-clear-search)', function(){
+            $('#name').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('coupon-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //获取列表
+        getList('')
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            var type = $(this).attr('data-type');
+            $('.status').hide();
+            if(type === ''){
+                $('.status').show();
+            }
+            getList(type)
+        });
+
+        //监听工具条
+        table.on('tool(coupon-lists)', function(obj){
+            var id = obj.data.id;
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2
+                    ,title: '优惠券详情'
+                    ,content: '{:url("coupon/detail")}?id='+id
+                    ,area: ['90%', '90%']
+
+                })
+            }
+            //优惠券编辑
+            if(obj.event === 'edit'){
+                layer.open({
+                    type: 2
+                    ,title: '编辑优惠券'
+                    ,content: '{:url("coupon/edit")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-coupon-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID)
+                            ,goods_ids = iframeWindow.callbackdata();
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field.goods_ids = goods_ids;
+                            like.ajax({
+                                url:'{:url("coupon/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('coupon-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+
+                })
+            }
+            //发放记录
+            if(obj.event === 'log'){
+                layer.open({
+                    type: 2
+                    ,title: '发放记录'
+                    ,content: '{:url("coupon/log")}?id='+id
+                    ,area: ['90%', '90%']
+
+
+                })
+
+            }
+            if(obj.event === 'status'){
+                var name = obj.data.name;
+                var tips = '确定关闭优惠券：'+'<span style="color: red">'+name+'</span>'+'，关闭后不能再开放领取，已发放的优惠券能继续使用';
+
+                layer.confirm(tips, function(index){
+                    like.ajax({
+                        url:'{:url("coupon/close")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('coupon-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+
+                })
+
+            }
+            //优惠券删除
+            if(obj.event == 'del'){
+                var name = obj.data.name;
+                layer.confirm('确定删除优惠券：'+'<span style="color: red">'+name+'</span>'+'。删除后已发放的优惠券不能继续使用', function(index){
+                    like.ajax({
+                        url:'{:url("coupon/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('coupon-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+
+                })
+
+            }
+
+        });
+
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form;
+
+                var cols  = [
+                    {type: 'checkbox'}
+                    ,{field: 'name',align: 'center',width:120,title: '优惠券名称'}
+                    ,{field: 'money',align: 'center',width:100, title: '面额'}
+                    ,{field: 'send_time',align: 'center',width:320, title: '发放时间'}
+                    ,{field: 'condition_type',align: 'center',width:180,title: '使用门槛'}
+                    ,{field: 'sent_total',align: 'center',width:180,title: '发放情况'}
+                    ,{field: 'use_time_type',align: 'center',width: 320, align: 'center',title:'用券时间'}
+                    ,{field: 'get_type',align: 'center',width:160, title:'领取方式'}
+                    ,{field: 'status_desc',align: 'center',width:160, title:'状态'}
+                    ,{field: 'create_time',align: 'center',width:180, title:'创建时间'}
+                    ,{fixed: 'right', title: '操作',width:360, align: 'center', toolbar: '#coupon-operation'}
+                ];
+                //管理员管理
+                table.render({
+                    id:'coupon-lists'
+                    ,elem: '#coupon-lists'
+                    ,url: '{:url("coupon/lists")}?type='+type  //模拟接口
+                    ,cols: [cols]
+                    ,page:true
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code":res.code,
+                            "msg":res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+
+            });
+        }
+
+    });
+</script>

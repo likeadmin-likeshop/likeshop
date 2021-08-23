@@ -1,0 +1,119 @@
+{layout name="layout1" /}
+<style> .layui-table-cell { height: auto; } </style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- 数据表格 -->
+        <div class="layui-card-body">
+            <table id="table-lists" lay-filter="table-lists"></table>
+            <!--会员信息-->
+            <script type="text/html" id="table-user">
+                <div class="layui-input-inline"  style="text-align: left">
+                    <p>会员编号：{{d.user.sn}}</p>
+                    <p>手机号码：{{d.user.mobile}}</p>
+                    <p>会员昵称：{{d.user.nickname}}</p>
+                    <p>会员等级：{{d.user_level}}</p>
+                </div>
+            </script>
+            <!--订单信息-->
+            <script type="text/html" id="table-order">
+                <div class="layui-input-inline"  style="text-align: left">
+                    <p>订单编号：{{d.order.order_sn}}</p>
+                    <p>订单来源：{{d.order.order_source_text}}</p>
+                    <p>实付金额：{{d.order.order_amount}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="table-orderStatus">
+                <div class="layui-input-inline"  style="text-align: left">
+                    <p>订单状态：{{d.order.order_status_text}}</p>
+                    <p>支付状态：{{d.order.pay_status_text}}</p>
+                    <p>支付方式：{{d.order.pay_way_text}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="operation">
+                {{#  if(d.order.pay_status == 1){ }}
+                    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="refund">确认退款</a>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        // 渲染数据表格
+        table.render({
+            elem: '#table-lists'
+            ,url: '{:url("TeamFound/refundDetail")}?found_id={$found_id}'
+            ,cols: [[
+                {field: 'id', title: 'ID',width:60, align:"center"}
+                ,{field: 'userInfo', title: '团员信息',width:250, templet: '#table-user'}
+                ,{field: 'orderInfo', title: '订单信息',width:250, templet: '#table-order'}
+                ,{field: 'orderStatus', title: '订单状态', width:200, align: 'center', templet: '#table-orderStatus'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#operation',width:200}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(res, curr, count){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        //事件
+        var active = {
+            refund: function (obj) {
+                layer.confirm('确定原路退款拼团订单:'+'<span style="color: red">'+obj.data.order.order_sn+'</span>', function(index) {
+                    like.ajax({
+                        url: '{:url("TeamFound/handlerRefund")}',
+                        data: {order_id: obj.data.order_id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code === 1) {
+                                layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000},function () {
+                                    location.reload();
+                                });
+                                layer.close(index);
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+        };
+
+
+
+        // 监听表格右侧工具条
+        table.on('tool(table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

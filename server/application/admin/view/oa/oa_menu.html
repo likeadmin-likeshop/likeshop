@@ -1,0 +1,700 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    *配置微信公众号菜单，点击确认，保存菜单并发布至微信公众号。
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form" lay-filter="">
+            <div id="app" class="row">
+                <div class="col-sm-12">
+                    <div class="wechat-reply-wrapper wechat-menu">
+                        <div class="ibox-content clearfix">
+                            <div class="view-wrapper col-sm-4">
+                                <div class="mobile-header">公众号</div>
+                                <section class="view-body">
+                                    <div class="time-wrapper"><span class="time">9:36</span></div>
+                                </section>
+                                <div class="menu-footer">
+                                    <ul class="flex" id="menu">
+                                        {foreach $menu as $item_menu => $val_menu}
+                                        <li data-id={$item_menu}>
+                                            <span class="active-menu"><i class="icon-sub"></i>{$val_menu.name}</span>
+                                            <div class="sub-menu">
+                                                <ul>
+                                                    {foreach $val_menu.sub_button as $item_child => $val_child }
+                                                    <li data-id={$item_menu}_{$item_child}>
+                                                        <span  class="active-menu"  >{$val_child.name}</span>
+                                                    </li>
+                                                    {/foreach}
+                                                    {if count($val_menu.sub_button) <5}
+                                                    <li data-id={$item_menu}_1 class="add-menu"><i class="icon-add"></i></li>
+                                                    {/if}
+
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        {/foreach}
+                                        {if (!empty($menu) && count($menu) < 3) }
+                                        <li data-id={++$item_menu} class="add-menu"><i class="icon-add"></i></li>
+                                        {/if}
+                                        {if empty($menu) }
+                                        <li data-id=1 class="add-menu"><i class="icon-add"></i></li>
+                                        {/if}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="control-wrapper menu-control col-sm-8">
+                                <h3 class="popover-title">菜单名称 <a class="fr del-menu" href="javascript:void(0);"  >删除</a></h3>
+                                <p class="tips-txt">已添加子菜单，仅可设置菜单名称。</p>
+                                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">菜单名称</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="name" id="menu_name" placeholder="请输入" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">菜单类型</label>
+                                            <div class="layui-input-block">
+                                                <select lay-filter="menu_type" class="select" id="menu_type" >
+                                                    <option value="click">关键字</option>
+                                                    <option value="view">跳转网页</option>
+                                                    <option value="miniprogram">小程序</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="layui-inline click">
+                                            <label class="layui-form-label">关键字</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="key" id="key"  placeholder="请输入" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline view" style="display: none" >
+                                            <label class="layui-form-label">网页链接</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="url" id="url" placeholder="请输入" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline miniprogram" style="display: none">
+                                            <label class="layui-form-label">appid</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="appid" id="appid" placeholder="请输入" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline miniprogram" style="display: none">
+                                            <label class="layui-form-label">小程序路径</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="pagepath" id="pagepath" placeholder="请输入" autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-block">
+                                            <button class="layui-btn layui-btn-sm layui-btn-add_menu {$view_theme_color}">确定</button>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color} publish" lay-submit lay-filter="setmnp" >发布菜单</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    @charset "UTF-8";
+    .flex{ display: -webkit-box; display: -moz-box; display: -webkit-flex; display: -moz-flex; display: -ms-flexbox; display: flex; }
+    #app{padding-bottom: 80px}
+    #app .layout{ border:1px solid #d7dde4; background:#f5f7f9; position:relative; border-radius:4px; overflow:hidden}
+
+    #app .layout-logo{ width:100px; height:30px; background:#5b6270; border-radius:3px; float:left; position:relative; top:15px; left:20px}
+
+    #app .layout-copy{ text-align:center; padding:10px 0 20px; color:#9ea7b4}
+
+    #app .layout-ceiling{ background:#464c5b; padding:10px 0; overflow:hidden}
+
+    #app .layout-ceiling-main{ float:right; margin-right:15px; }
+
+    #app .layout-ceiling-main a{ color:#9ba7b5}
+
+    #app .layout-breadcrumb{ padding:10px 15px 0}
+
+    #app .layout-content{ min-height:200px; margin:15px; overflow:hidden; background:#fff; border-radius:4px; margin-right: 0; }
+
+    #app .layout-content-main{ padding-left:10px; position: relative; width: 98.5%; }
+
+    #app .layout-copy{ text-align:center; padding:10px 0 20px; color:#9ea7b4}
+
+    #app .layout-menu-left{ background:#464c5b}
+
+    #app .layout-header{ height:40px; padding-left:15px; background:#fff; box-shadow:0 1px 1px rgba(0,0,0,.1)}
+
+    #app .layout-logo-left{ width:90%; height:30px; background:#5b6270; border-radius:3px; margin:15px auto}
+
+    #app .m-frame{ position: absolute; background-color: #fff; }
+
+    #app .m-tag-item{ display: inline-block}
+
+    #app .layout-header{ padding-left:15px; margin-bottom: 5px; }
+
+
+
+
+
+    #table-list{ padding: 25px 25px 0 25px; }
+
+    #table-list .mp-search-wrapper{ float: right; margin-left: 12px; }
+
+    #table-list .mp-header-wrapper{ overflow: hidden; }
+
+    #table-list .mp-header-wrapper h1{ padding-left:15px; float: left; font-size: 18px; line-height: 24px; padding-bottom: 20px; font-weight: 400; color: #464c5b; }
+
+
+
+    .mp-form{ padding: 20px 20px 20px 0; }
+
+    .mp-form .ivu-tree li{ margin: 0; }
+
+    .mp-form .ivu-color-picker .ivu-select-dropdown{ left: -38px !important; }
+
+    .mp-form .mp-upload{ display: inline-block; }
+
+    .mp-form .demo-upload-list{ display: inline-block; width: 60px; height: 60px; text-align: center; line-height: 60px; border: 1px solid transparent; border-radius: 4px; overflow: hidden; background: #fff; position: relative; box-shadow: 0 1px 1px rgba(0,0,0,.2); margin-right: 4px; }
+
+    .mp-form .demo-upload-list img{ width: 100%; height: 100%; }
+
+    .mp-form .demo-upload-list-cover{ display: none; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,.6); }
+
+    .mp-form .demo-upload-list:hover .demo-upload-list-cover{ display: block; }
+
+    .mp-form .demo-upload-list-cover i{ color: #fff; font-size: 20px; cursor: pointer; margin: 0 2px; }
+
+    [v-cloak]{ display: none}
+
+    .mp-form .mp-upload-btn{ width:58px; height:58px; line-height:58px; }
+
+    .mp-form .add-submit-item .ivu-btn{ position: fixed; left: 0; bottom: 0; border-radius: 0; }
+
+
+
+
+
+    .frameMove-enter-active{ animation-name: slideInLeft; animation-duration: 0.4s !important; }
+
+    .frameMove-leave-active{ animation-name: slideOutRight; animation-duration: 0.4s !important; }
+
+    .vertical-center-modal{ display: flex; align-items: center; justify-content: center; }
+
+    .vertical-center-modal .ivu-modal{ top: 0; }
+
+    .vertical-center-modal .ivu-modal-header{ z-index: 9; position: relative; }
+
+    .vertical-center-modal .ivu-modal-close{ z-index: 10; }
+
+    .layout-header{ height:40px; background:#fff; box-shadow:0 1px 1px rgba(0,0,0,.1); }
+
+    .wechat-reply-wrapper .fl{ float: left; }
+    .wechat-reply-wrapper .fr{ float: right; }
+    .wechat-reply-wrapper .clearfix:after{ content:"."; display:block; height:0; visibility:hidden; clear:both; }
+    .wechat-reply-wrapper .ibox-title{ padding:15px; font-size: 16px; border-bottom: 1px solid #e7eaec; }
+    .wechat-reply-wrapper .ibox-title p{ border-left: 2px solid #2494f2; text-indent: 8px; }
+    .wechat-reply-wrapper .ibox-content{ padding: 15px;display: flex; flex-wrap: wrap }
+    .wechat-reply-wrapper .ibox-content .view-wrapper{ position: relative; margin-right: 20px; width: 317px; background-image:url("/static/admin/images/mobile_head.png"); background-repeat: no-repeat; background-position: left top; background-color: #f5f5f5; margin-bottom: 20px;}
+    .wechat-reply-wrapper .ibox-content .view-wrapper .mobile-header{ position: absolute; left: 0; top: 36px; width: 100%; text-align: center; color: #fff; font-size: 16px; }
+    .wechat-reply-wrapper .ibox-content .view-wrapper .view-body{ margin-top: 65px; height: 500px; }
+    .wechat-reply-wrapper .view-wrapper .view-body .time-wrapper{ margin-bottom: 10px; text-align: center; }
+    .wechat-reply-wrapper .view-wrapper .view-body .time-wrapper .time{ display: inline-block; color: #f5f5f5; display: inline-block; color: #f5f5f5; background: rgba(0,0,0,.3); padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item{ display: none; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item.show{ display: none; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item .avatar{ width: 40px; height: 40px; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item .avatar img{ max-width: 100%; height: auto; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item .box-content{ position: relative; max-width: 60%; min-height: 40px; margin-left: 15px; padding: 10px; border: 1px solid #ccc; word-break: break-all; word-wrap: break-word; line-height: 1.5; border-radius: 5px; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item .box-content .picbox{ max-width: 100%; }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item .box-content:before{ content: ''; position: absolute; left: -13px; top: 11px; display: block; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #ccc; -webkit-transform: rotate(90deg); transform: rotate(90deg); }
+    .wechat-reply-wrapper .view-wrapper .view-body .view-item .box-content:after{ content: ''; content: ''; position: absolute; left: -12px; top: 11px; display: block; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #f5f5f5; -webkit-transform: rotate(90deg); transform: rotate(90deg); }
+    .wechat-reply-wrapper .submit{text-align: center;}
+    /* 图文 */
+    .view-wrapper .view-body .view-item.news-box{ width: 100%; background-color: #fff; border-radius: 5px; }
+    .view-wrapper .view-body .view-item .vn-content{ padding:0;}
+    .view-wrapper .view-body .view-item .vn-content .vn-title{ line-height: 1.5; font-size: 16px; }
+    .view-wrapper .view-body .view-item .vn-content .vn-time{ padding: 5px 0; font-size: 12px; color: #999; }
+    .view-wrapper .view-body .view-item .vn-content .vn-picture{ width: 100%; height: 150px; background-size: cover; background-position: center center;  border-radius: 5px 5px 0 0;}
+    .view-wrapper .view-body .view-item .vn-content .vn-picture-info{ line-height: 22px; color: #7b7b7b; padding: 0; display: block; overflow: hidden; word-break: break-all; text-overflow: ellipsis; font-size: 12px; white-space: nowrap; }
+    .view-wrapper .view-body .view-item .vn-more{ display: block; padding: 10px 0 0; border-top: 1px solid #dddddd; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .view-wrapper .view-body .view-item .vn-content .con-item-box{ position: relative; }
+    .view-wrapper .view-body .view-item .vn-content .con-item-box .first-title{ width: 100%; height: 44px; line-height: 44px; font-size: 14px; position: absolute; left: 0; bottom: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; /*background: rgba(0,0,0,.8);*/ color: #fff; text-indent: 1em; }
+    .view-wrapper .view-body .view-item .vn-content .con-item-list{ margin-top: 10px; margin:6px 10px 0 10px; border-top: 1px solid #FBFBFB; }
+    .view-wrapper .view-body .view-item .vn-content .con-item-list .list-tit-info{ width: 70%; line-height: 1.5; word-wrap:break-word; }
+    .view-wrapper .view-body .view-item .vn-content .con-item-list .list-pic{ width: 20%; min-height: 50px; background-size: cover; background-position: center center; }
+
+
+
+    /* 音乐 */
+    .view-wrapper .view-body .view-item.music-box .box-content{ position: relative; width: 100%; background: #080; color: #fff; border-color: #080; }
+    .view-wrapper .view-body .view-item.music-box .box-content p{ width: 75%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .view-wrapper .view-body .view-item.music-box .box-content .music-icon{ position: absolute; right: 11px; top: 50%; width: 30px; height: 30px; background: #0a0; text-align: center; line-height: 30px; margin-top: -15px; font-size: 16px; }
+
+
+    .view-wrapper .view-body .view-item.music-box .box-content:after{ display: none; }
+    .view-wrapper .view-body .view-item.music-box .box-content:before{ border-top: 10px solid #080; }
+    /* 视频 */
+    .view-wrapper .view-body .view-item.video-box{ width: 100%; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; }
+    .view-wrapper .view-body .view-item.video-box .vn-title{ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+    /* 右侧控制器 */
+    .wechat-reply-wrapper .ibox-content .control-wrapper{ position: relative; width: 535px; height: 565px; padding: 0; border: 1px solid #e2e2e2;display: none }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-title{ position: absolute; left: 71px; top: -12px; width: auto; padding: 0 10px; font-size: 20px; background-color: #fff; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body{ margin-top: 40px; padding: 0 10px; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .form-group label{ font-weight: normal; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .form-group .tips:after{ content: '*'; color: red; position: absolute; margin-left: 4px; font-weight: bold; line-height: 1.8em; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .form-group .group-item{ position: relative; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .form-group .group-item .file-btn{ position: absolute; right: 15px; top: 0; display: block; width: 66px; border-radius: 6px; cursor: pointer; padding: .5rem; background-color: #18a689; color: #fff; text-align: center; height: 100%; line-height: 23px; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .form-group .group-item textarea{ resize: none; width: 100%; height: 100px; padding: 10px; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .tips-info{ padding-left: 100px; font-size: 12px; color: #737373; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .control-main .control-item{ display: none; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body .control-main .control-item.show{ display: block; }
+
+    /* 微信菜单定制 */
+    .wechat-menu{ position: relative; }
+    .wechat-menu ul{ padding: 0; }
+    .wechat-menu .menu-footer{ position: absolute; left:0; bottom: -10px; width: 100%; padding-left: 43px; box-sizing: border-box; background: url("/static/admin/images/mobile_foot.png") no-repeat 0 0; border-top: 1px solid #e7e7eb; }
+    .wechat-menu .menu-footer span{display: block;}
+    .wechat-menu .menu-footer .icon-add{ background: url("/static/admin/images/index.png") 0 0 no-repeat; width: 14px; height: 14px; vertical-align: middle; display: inline-block; margin-top: -2px; border-bottom: none!important; }
+    .wechat-menu .menu-footer li{ position: relative; -webkit-flex: 1; -moz-flex:1; -ms-flex: 1; flex: 1; height: 50px; line-height: 50px; text-align: center; cursor: pointer; list-style: none; border: 1px solid transparent; border-right: 1px solid #e7e7eb; }
+    .wechat-menu .menu-footer .icon-sub{ background: url("/static/admin/images/index.png") 0 -48px no-repeat; width: 7px; height: 7px; vertical-align: middle; display: inline-block; margin-right: 2px; margin-top: -2px; }
+    .wechat-menu .menu-footer .sub-menu{ position: absolute; border-radius: 3px; border: 1px solid #d0d0d0; display: block; bottom: 60px; width: 100%; background-color: #fafafa; }
+    .wechat-menu .menu-footer .sub-menu:after{ content: ''; position: absolute; width: 10px; height: 10px; background: #fafafa;-webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); bottom: -5px; border-bottom: 1px solid #d0d0d0; border-right: 1px solid #d0d0d0; left: 50%; margin-left: -5px; }
+    .wechat-menu .menu-footer .sub-menu li{border-right: 0; border-bottom: 1px solid #d0d0d0;}
+    .wechat-menu .menu-footer .sub-menu li:last-child{border-bottom: 0;}
+    .wechat-menu .menu-footer .active{border:1px solid #44b549;}
+    .wechat-menu .menu-footer .sub-menu li.active{border:1px solid #44b549 !important;}
+    /* 右侧 */
+    .wechat-menu .menu-control .popover-title{ padding: 8px 14px; margin: 0; font-size: 14px; background-color: #f7f7f7; border-bottom: 1px solid #ebebeb; border-radius: 5px 5px 0 0; font-weight: 400;wechat-reply-wrapper .ibox-content .control-wrapper }
+    .wechat-menu .menu-control .popover-title a{ color: #06C; font-size: 12px; }
+    .wechat-menu .menu-control .tips-txt{line-height: 40px; padding: 0 20px;}
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body.menu-content{ padding: 0 20px; margin-top: 0; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body.menu-content .radio{ display: inline-block !important; width: 45%; }
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body.menu-content .menu-control-box {padding: 0 20px;}
+    .wechat-reply-wrapper .ibox-content .control-wrapper .control-body.menu-content .menu-control-box .radio{ display: block!important; width: 100%; }
+    .menu-control-box .item{ display: none; }
+    .menu-control-box .show{ display: block; }
+
+
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','element','table','jquery'], function () {
+        var $=layui.$
+        ,form = layui.form
+        //选中状态
+        $(document).on('click', '.active-menu', function () {
+
+            var ids = $(this).parent().attr("data-id");
+            var id = ids.split("_");
+
+
+            $('.active').removeClass('active');
+            $(this).addClass("active");
+
+
+            if(id.length < 2){
+                var one_id = $('.active').parent().index();
+                menu_info = menu[one_id];
+
+            }else{
+                var two_id = $('.active').parent().index();
+                var one_id = $('.active').parent().parent().parent().parent().index();
+                menu_info = menu[one_id].sub_button[two_id];
+
+            }
+
+
+            if(menu_info){
+                menuInfo(menu_info);
+                $('.menu-control').css('display','block');
+            }else{
+                initMenu();
+            }
+
+        })
+
+        //删除菜单
+        $(document).on('click','.del-menu',function() {
+            var data_id = $('.active').parent();
+
+                //用于判断几级菜单
+            var ids = data_id.attr("data-id");
+            var id = ids.split("_");
+
+                //首页菜单
+                if(id.length == 1){
+                    var one_id = $('.active').parent().index();
+                    menu.splice(one_id,1);
+
+                    if(menu.length == 2){
+                        var data_id = parseInt(id[0]) + 1;
+                        $('#menu').append("<li data-id='"+ data_id +" ' class='add-menu'> <i class='icon-add'></i></li>");
+                    }
+
+                }else{  //子级菜单
+
+                    var two_id = $('.active').parent().index();
+                    var one_id = $('.active').parent().parent().parent().parent().index();
+
+                    menu[one_id].sub_button.splice(two_id,1);
+
+                    if(menu[one_id].sub_button.length < 5){
+
+                        var sub_button_id = parseInt(id[1]) + 1
+                        var data_id = id[0]+'_'+ sub_button_id;
+                        if(menu[one_id].sub_button.length == 4){
+                            $('.active').parent().parent().append("<li  data-id='"+ data_id +" ' class='add-menu'><i class='icon-add'></i></li>");
+                        }
+
+                    }
+                }
+
+                $('.active').parent().remove()
+                $('.active').removeClass('active');
+                $('.menu-control').css('display','none');
+
+        })
+        //添加菜单
+        $(document).on('click','.add-menu',function(){
+
+            if($('.menu-control').css('display') == 'block' ){
+                layer.msg('请先确定菜单', {
+                    time: 2000, //2s后自动关闭
+                });
+                return false;
+            }
+
+            $(this).removeClass("add-menu");
+
+            var ids = $(this).attr("data-id");
+            var id = ids.split("_");
+            $('.menu-control').css('display','block');
+            initMenu();
+            //首级菜单
+            if(id.length == 1){
+                //首级菜单只有一个时
+                if(menu.length < 2){
+                    var data_id = menu.length + 1
+
+                    $(this).parent().append("<li data-id='"+data_id+" ' class='add-menu'> <i class='icon-add'></i></li>");
+                    // p=$(this).parent();
+                    $(this).children().remove();
+                    $(this).append("<span class='active-menu'> <i class='icon-sub'></i>一级菜单</span>")
+                    $(this).children().addClass('active');
+                    // p.children(':first').children(':first').trigger('click');
+
+                }
+                //最后一个菜单时
+                if(menu.length == 2){
+                    $(this).children().remove();
+                    $(this).append("<span class='active-menu'><i class='icon-sub'></i>一级菜单</span>")
+                    $(this).children().addClass('active');
+
+                }
+
+                var data_id = id[0]+'_'+ 0;
+                $(this).append("<div class='sub-menu'><ul><li data-id='"+data_id+"  'class='add-menu'><i class='icon-add'></i></li></ul></div>");
+
+
+            }else{   //二级菜单
+                //不是最后一个时
+
+                var one_id = $(this).parent().parent().parent().index();
+
+                if(menu[one_id].sub_button.length < 4){
+                    var sub_button_id = parseInt(id[1]) + 1
+                    var data_id = id[0]+'_'+ sub_button_id;
+                    $(this).parent().append("<li data-id='"+data_id+" ' class='add-menu'> <i class='icon-add'></i></li>");
+                    $(this).children().remove();
+                    $(this).append("<span class='active-menu' >二级菜单</span>")
+                    $(this).children().addClass('active');
+                    return 0;
+
+                }
+                //最后一个菜单时
+                if(menu[one_id].sub_button.length == 4){
+                    $(this).children().remove();
+                    $(this).append("<span class='active-menu'>二级菜单</span>")
+                }
+
+                $(this).children().addClass('active');
+            }
+
+
+
+        })
+        //同步菜单名称
+        $(document).on('change','#menu_name',function(){
+            menu_name = $(this).val();
+            active = $('.active').text(menu_name);
+        });
+        //确认添加菜单
+        $(document).on('click','.layui-btn-add_menu',function(){
+
+
+                var menu_name = $('#menu_name').val();
+                var menu_type = $('#menu_type').val();
+
+                var result =checkData(menu_name,menu_type);     //验证数据
+                if(result){
+                    mergeMenu(menu_name,menu_type);     //合并菜单
+                    $('.active').removeClass('active');
+                    $('.menu-control').css('display','none');
+                }
+
+
+
+        })
+
+        //菜单类型切换
+        form.on('select(menu_type)', function (data) {
+
+            if(data.value == 'click'){
+                $('.click').css('display','block');
+                $('.view').css('display','none');
+                $('.miniprogram').css('display','none');
+            }
+            if(data.value == 'view'){
+                $('.click').css('display','none');
+                $('.view').css('display','block');
+                $('.miniprogram').css('display','none');
+            }
+            if(data.value == 'miniprogram'){
+                $('.click').css('display','none');
+                $('.view').css('display','block');
+                $('.miniprogram').css('display','block');
+            }
+        })
+        //回显菜单信息
+        function menuInfo(menu_info) {
+
+            $('#menu_name').val(menu_info.name);
+
+            $("#menu_type").val(menu_info.type);
+
+            form.render('select');
+            if(menu_info.type == 'click'){
+                $('.click').css('display','block');
+                $('.view').css('display','none');
+                $('.miniprogram').css('display','none');
+                $('#key').val(menu_info.key);
+            }
+            if(menu_info.type == 'view'){
+                $('.click').css('display','none');
+                $('.view').css('display','block');
+                $('.miniprogram').css('display','none');
+                $('#url').val(menu_info.url);
+            }
+            if(menu_info.type == 'miniprogram'){
+                $('.click').css('display','none');
+                $('.view').css('display','block');
+                $('.miniprogram').css('display','block');
+                $('#url').val(menu_info.url);
+                $('#appid').val(menu_info.appid);
+                $('#miniprogram').val(menu_info.pagepath);
+            }
+
+        }
+        //验证数据
+        function checkData(name,type){
+            if(name == ''){
+                layer.msg('请输入菜单名称', {
+                    time: 2000, //2s后自动关闭
+                });
+                return false;
+
+            }
+            switch (type) {
+                case 'click':
+                    if($('#key').val() == ''){
+                        layer.msg('请输入关键词', {
+                            time: 2000, //2s后自动关闭
+                        });
+                        return false;
+
+                    }
+                    break;
+                case 'view':
+                    if($('#url').val() == ''){
+                        layer.msg('请输入网页链接', {
+                            time: 2000, //2s后自动关闭
+                        });
+                        return false;
+
+                    }
+                    break;
+
+
+                case 'miniprogram':
+                    if($('#url').val() == ''){
+                        layer.msg('请输入网页链接', {
+                            time: 2000, //2s后自动关闭
+                        });
+                        return false;
+
+                    }
+                    if($('#appid').val() == ''){
+                        layer.msg('请输入appid', {
+                            time: 2000, //2s后自动关闭
+                        });
+                        return false;
+
+                    }
+                    if($('#pagepath').val() == ''){
+                        layer.msg('请输入小程序路径', {
+                            time: 2000, //20s后自动关闭
+                        });
+                        return false;
+
+                    }
+                    break;
+            }
+            return true;
+        }
+        //合并菜单
+        function mergeMenu(name,type){
+            var data_id = $('.active').parent();
+            var ids = data_id.attr("data-id");
+            var id = ids.split("_");
+            var data = new Object();
+            switch (type) {
+                case 'click':
+                    data = {
+                        'name':name,
+                        'key':$('#key').val(),
+                        'type' : type,
+                    }
+                    break;
+                case 'view':
+                    data = {
+                        'name':name,
+                        'url':$('#url').val(),
+                        'type' : type,
+                    }
+
+                    break;
+
+
+                case 'miniprogram':
+                    data = {
+                        'name':name,
+                        'url':$('#url').val(),
+                        'appid':$('#appid').val(),
+                        'pagepath':$('#pagepath').val(),
+                        'type':type,
+                    }
+                    break;
+           }
+
+            if(id.length < 2){  //首级菜单
+                var one_id =  $('.active').parent().index();
+                data.sub_button = [];
+                if(menu[one_id]){  //如果存在数组，进行更新
+                    menu[one_id] = data;
+
+                    return  true
+                }
+                menu.push(data);
+            }else{   //子级菜单
+                var two_id = $('.active').parent().index();
+                var one_id = $('.active').parent().parent().parent().parent().index();
+                if(menu[one_id].sub_button[two_id]){ //如果存在数组，进行更新
+                    menu[one_id].sub_button[two_id] = data;
+                    return true;
+                }
+                menu[one_id].sub_button.push(data);
+            }
+
+           return true;
+
+        }
+        //初始化菜单
+        function initMenu(){
+
+            $('.click').css('display','block');
+            $('.view').css('display','none');
+            $('.miniprogram').css('display','none');
+            $("#menu_type").val('click');
+            form.render('select');
+            $('#menu_name').val('');
+            $('#url').val('');
+            $('#key').val('');
+            $('#appid').val('');
+            $('#pagepath').val('');
+        }
+
+        //发布
+        $(document).on('click','.publish',function(){
+            if(menu.length === 0){
+                layer.msg('请先设置菜单', {
+                    time: 2000, //20s后自动关闭
+                });
+                return false;
+            }
+            $.ajax({
+                url:'{:url("oa/pulishMenu")}',
+                data:JSON.stringify({button:menu}),
+                type:'post',
+                dataType:'json',
+                contentType:"application/json;charset=utf-8",
+                success:function (res) {
+                    if(res.code ) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    } else {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 2
+                            , time: 2000
+                        });
+                    }
+                }
+            })
+        })
+
+    });
+
+    var menu = <?php echo json_encode($menu);?>
+
+
+
+
+
+
+</script>

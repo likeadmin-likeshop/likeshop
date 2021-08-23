@@ -1,0 +1,317 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+    .tips{
+        color: red;
+    }
+    .unit-tips{
+        float: left;
+        display: block;
+        padding: 9px 0!important;
+        line-height: 20px;
+        margin-right: 10px;
+    }
+    .goods{
+        display: none;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-coupon" id="layuiadmin-form-coupon" style="padding: 20px 30px 0 0;">
+    <input type="hidden" name="id">
+<!--    优惠券名称-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>优惠券名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入优惠券名称" autocomplete="off" class="layui-input" disabled>
+        </div>
+    </div>
+<!--    发放时间-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>发放时间：</label>
+        <div class="layui-input-inline">
+            <input type="text"   name="send_time_start" class="layui-input time" autocomplete="off" disabled>
+        </div>
+        <div class="unit-tips">至</div>
+        <div class="layui-input-inline">
+            <input type="text"  name="send_time_end" class="layui-input time" autocomplete="off" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label><span style="color: #a3a3a3;font-size: 9px">优惠券开始发放和结束发放的时间</span>
+    </div>
+<!--     优惠券面额-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>优惠券面额：</label>
+        <div class="layui-input-inline">
+            <input type="text"  lay-verify="required"  lay-verType="tips"  name="money"  placeholder="请输入优惠券面额" class="layui-input" disabled>
+        </div>
+        <div class="layui-form-mid layui-word-aux">元</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label><span
+            style="color: #a3a3a3;font-size: 9px">面额需大于0元，支持两位小数</span>
+    </div>
+<!--    发放总量-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>发放总量：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="send_total_type" value="1" title="不限制数量" disabled>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width:auto">
+                <input type="radio" name="send_total_type" value="2" title="发放" disabled>
+            </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="number" name="send_total" class="layui-input" disabled>
+            </div>
+            <div class="unit-tips">张</div>
+        </div>
+    </div>
+<!--    使用门槛-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>使用门槛：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="condition_type" value="1" title="无使用门槛" disabled >
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                <input type="radio" name="condition_type" value="2" title="订单满" disabled>
+            </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="number" name="condition_money" class="layui-input" disabled>
+            </div>
+            <div class="unit-tips">元可用</div>
+        </div>
+    </div>
+<!--    用券时间-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>用券时间：</label>
+        <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+            <input type="radio" name="use_time_type" value="1" title="固定时间" disabled >
+        </div>
+        <div class="layui-input-inline">
+            <input type="text"   name="use_time_start" class="layui-input time" disabled>
+        </div>
+        <div class="unit-tips">至</div>
+        <div class="layui-input-inline">
+            <input type="text"  name="use_time_end" class="layui-input time" disabled>
+        </div>
+        <div class="unit-tips">可用</div>
+        <div class="layui-form-item" style="padding-top: 10px">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                <input type="radio" name="use_time_type" value="2" title="领券当日起" disabled>
+            </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="number" name="use_time" class="layui-input" disabled>
+            </div>
+            <div class="unit-tips">天内可用</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                <input type="radio" name="use_time_type" value="3" title="领券次日起" disabled>
+            </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="number" name="tomorrow_use_time" class="layui-input" disabled>
+            </div>
+            <div class="unit-tips">天内可用</div>
+        </div>
+    </div>
+<!--    领取方式-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>领取方式：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="get_type" value="1" title="直接领取" disabled >
+            <div style="color: #a3a3a3;font-size: 9px;">用户可在首页、每日领券直接领取</div>
+            <input type="radio" name="get_type" value="1" title="平台赠送" disabled>
+            <div style="color: #a3a3a3;font-size: 9px;">平台后台直接赠送</div>
+        </div>
+    </div>
+<!--    领取次数-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>领取次数：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="get_num_type" value="1" title="不限制领取次数" disabled >
+        </div>
+        <div class="layui-form-item" style="padding-top: 10px">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                <input type="radio" name="get_num_type" value="2" title="限制领取" disabled>
+            </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="number" name="get_num" class="layui-input" disabled>
+            </div>
+            <div class="unit-tips">次</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline" style="margin-right: 0px;width: auto">
+                <input type="radio" name="get_num_type" value="3" title="每天限制领取" disabled>
+            </div>
+            <div class="layui-input-inline" style="width: 110px">
+                <input type="number"name="day_get_num" class="layui-input" disabled>
+            </div>
+            <div class="unit-tips">次</div>
+        </div>
+    </div>
+<!--    适用商品-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>适用商品：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="use_goods_type" lay-filter="use_goods_type" value="1" title="全部商品可用" checked disabled>
+            <input type="radio" name="use_goods_type" lay-filter="use_goods_type" value="2" title="指定商品可用" disabled>
+            <input type="radio" name="use_goods_type" lay-filter="use_goods_type" value="3" title="指定商品不可用" disabled>
+        </div>
+    </div>
+
+    <div class="layui-form-item goods">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block ">
+            <table id="goods_list" class="layui-table" lay-size="sm">
+                <colgroup>
+                    <col width="60px">
+                </colgroup>
+                <thead>
+                <tr style="background-color: #f3f5f9">
+                    <th style="width: 120px;text-align: center">商品信息</th>
+                    <th style="width: 80px;text-align: center">价格</th>
+                    <th style="width: 120px;text-align: center">库存</th>
+                    <th style="width: 20px;text-align: center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-coupon-submit" id="edit-coupon-submit" value="确认">
+    </div>
+</div>
+<script>
+    var goods_ids = [];
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,laydate = layui.laydate;
+        lay('.time').each(function() {
+            laydate.render({
+                elem : this,
+                type:'datetime',
+                trigger : 'click'
+            });
+
+            form.on('radio(use_goods_type)', function (data) {
+                var value = data.value;
+                $('.goods').hide();
+                if(value != 1){
+                    layer.open({
+                        type: 2
+                        ,title: '选择商品'
+                        ,content: '{:url("coupon/selectGoods")}'
+                        ,area: ['90%', '90%']
+                        ,btn: ['确认', '取消']
+                        ,yes: function(index, layero){
+                            var data = window["layui-layer-iframe" + index].callbackdata();
+                            data.forEach(function(item,index,arr) {
+                                if(goods_ids.indexOf(item.id) == -1) {
+                                    goods_ids.push(item.id);
+                                    var goods_html = ' <tr>\n' +
+                                        '                    <td style="text-align: center">'+item.name+'</td>\n' +
+                                        '                    <td style="text-align: center">'+item.price+'</td>\n' +
+                                        '                    <td style="text-align: center">'+item.stock+'</td>\n' +
+                                        '                    <td style="text-align: center"> <a class="layui-btn layui-btn-danger layui-btn-sm" data-id="'+item.id+'">删除</a>\n' +
+                                        '                </tr>';
+                                    $('#goods_list').append(goods_html);
+                                }
+
+                            })
+                            $('.goods').show();
+
+                        }
+
+                    })
+                }
+
+            })
+
+            //删除商品
+            $(document).on('click','.layui-btn-danger',function () {
+                var id = parseInt($(this).attr('data-id'));
+                goods_ids.splice(goods_ids.indexOf(id),1);
+                $(this).parent().parent().remove();
+
+            })
+
+
+
+
+        });
+        {notempty name='detail'}
+        var detail= {$detail|raw|default=''};
+        $('input[name="id"]').val(detail['id']);
+        $('input[name="name"]').val(detail['name']);
+        $('input[name="send_time_start"]').val(detail['send_time_start']);
+        $('input[name="send_time_end"]').val(detail['send_time_end']);
+        $('input[name="money"]').val(detail['money']);
+        $("input[name=send_total_type][value="+detail['send_total_type']+"]").prop('checked',"true");
+        $("input[name=condition_type][value="+detail['condition_type']+"]").prop('checked',"true");
+        $("input[name=use_time_type][value="+detail['use_time_type']+"]").prop('checked',"true");
+        $("input[name=get_type][value="+detail['get_type']+"]").prop('checked',"true");
+        $("input[name=get_num_type][value="+detail['get_num_type']+"]").prop('checked',"true");
+        $("input[name=use_goods_type][value="+detail['use_goods_type']+"]").prop('checked',"true");
+        form.render();
+        if(detail['send_total_type'] == 2){
+            $('input[name="send_total"]').val(detail['send_total']);
+        }
+        if(detail['condition_type'] == 2){
+            $('input[name="condition_money"]').val(detail['condition_money']);
+        }
+        if(detail['use_time_type'] == 1){
+            $('input[name="use_time_start"]').val(detail['use_time_start']);
+            $('input[name="use_time_end"]').val(detail['use_time_end']);
+        }
+
+        if(detail['use_time_type'] == 2 ||detail['use_time_type'] == 3  ){
+            var radio =  $("input[name=use_time_type][value="+detail['use_time_type']+"]");
+            radio.parent().next().children('input[name="use_time"]').val(detail['use_time']);
+        }
+        if(detail['get_num_type'] == 2){
+            var radio =  $("input[name=get_num_type][value="+detail['get_num_type']+"]");
+            radio.parent().next().children('input[name="get_num"]').val(detail['get_num']);
+        }
+        if(detail['get_num_type'] == 3){
+            var radio =  $("input[name=get_num_type][value="+detail['get_num_type']+"]");
+            radio.parent().next().children('input[name="day_get_num"]').val(detail['get_num']);
+        }
+        if(detail['goods_coupon'].length){
+            $('.goods').show();
+            detail['goods_coupon'].forEach(function(item,index,arr) {
+                goods_ids.push(item.id);
+                var goods_html = ' <tr>\n' +
+                    '                    <td style="text-align: center">'+item.name+'</td>\n' +
+                    '                    <td style="text-align: center">'+item.price+'</td>\n' +
+                    '                    <td style="text-align: center">'+item.stock+'</td>\n' +
+                    '                    <td style="text-align: center"> <a class="layui-btn layui-btn-danger layui-btn-sm" data-id="'+item.id+'">删除</a>\n' +
+                    '                </tr>';
+                $('#goods_list').append(goods_html);
+            })
+        }
+
+
+        {/notempty}
+    });
+</script>

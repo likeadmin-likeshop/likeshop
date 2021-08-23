@@ -1,0 +1,523 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*会员列表，对会员进行编辑，账户调整，等级调整和资料查看等操作。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员信息：</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <select name="keyword_type" id="keyword_type">
+                            <option value="sn">会员编号</option>
+                            <option value="nickname">会员昵称</option>
+                            <option value="mobile">会员手机号码</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="keyword" name="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员等级：</label>
+                    <div class="layui-input-inline">
+                        <select id="level" name="level"   style="height:80px;width: 80px" >
+                            <option value="">全部</option>
+                            <option value="0" selected>无等级</option>
+                            {foreach $level_list as $item }
+                            <option value="{$item.id}">{$item.name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员分组：</label>
+                    <div class="layui-input-inline">
+                        <select id="group_id" name="group_id"   style="height:80px;width: 80px" >
+                            <option value="">全部</option>
+                            {foreach $group_list as $item }
+                            <option value="{$item.id}">{$item.name}</option>
+                            {/foreach}
+
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">消费金额：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="total_amount_start"  autocomplete="off">
+                    </div>
+                    <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
+                        <label class="layui-form-mid">-</label>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="total_amount_end"  autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">注册时间:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="start_time" name="start_time"  autocomplete="off">
+                    </div>
+                    <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
+                        <label class="layui-form-mid">-</label>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="end_time" name="end_time"  autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-user {$view_theme_color}" lay-submit lay-filter="user-search">查询</button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-user layui-btn-primary " lay-submit lay-filter="user-clear-search">清空查询</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-user {$view_theme_color}" data-type="send_coupon">发放优惠券</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-user {$view_theme_color}" data-type="set_group">设置分组</button>
+            </div>
+
+            <table id="user-lists" lay-filter="user-lists"></table>
+
+            <script type="text/html" id="user-info">
+                <img src="{{d.abs_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
+                <div class="layui-input-inline" style="text-align:left;width: 240px">
+                    <p>会员编号：{{d.sn}}</p>
+                    <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.nickname}}</p>
+                    <p>会员等级：{{d.level_name}}</p>
+                </div>
+            </script>
+
+
+            <script type="text/html" id="referrer">
+                {{# if(d.first_leader){}}
+                <img src="{{d.referrer_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
+                <div class="layui-input-inline" style="text-align:left;width: 240px">
+                    <p>编号：{{d.referrer_sn}}</p>
+                    <p>手机号码：{{d.referrer_mobile}}</p>
+                    <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.referrer_nickname}}</p>
+                    <p>等级：{{d.referrer_level_name}}</p>
+                </div>
+                {{# }else{ }}
+                -
+                {{# } }}
+            </script>
+            <script type="text/html" id="account">
+                <div class="layui-input-inline">
+                    <label>余额：{{d.user_money}}</label>
+                    <br/>
+                    <label>积分：{{d.user_integral}}</label>
+                </div>
+            </script>
+
+
+            <script type="text/html" id="user-operation">
+                <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="info">资料</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm"  id="adjust_user" lay-event="adjust_user">账户调整</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm"  id="adjust_level" lay-event="adjust_level">等级调整</a>
+
+            </script>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            , laydate = layui.laydate;
+
+        //监听搜索
+        form.on('submit(user-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('user-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+        //日期时间范围
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+
+        //清空查询
+        form.on('submit(user-clear-search)', function(){
+            $('#keyword_type').val('sn');
+            $('#keyword').val('');  //清空输入框
+            $('#level').val('');  //清空输入框
+            $('#group_id').val('');  //清空输入框
+            $('#start_time').val('');  //清空输入框
+            $('#end_time').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('user-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+
+        //事件
+        var active = {
+            send_coupon:function() { //发放优惠券
+                var check_status = table.checkStatus('user-lists')
+                    ,user_list = check_status.data; //得到选中的数据
+
+                //是否已选数据
+                if(0 === user_list.length ){
+                    return layer.msg('请选择用户');
+                }
+                //获取所选id
+                ids = [];
+                for (var i in user_list){
+                    ids.push(user_list[i]['id']);
+                }
+                layer.open({
+                    type: 2
+                    ,title: '发放优惠券'
+                    ,content: '{:url("coupon/sendCouponList")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定发放', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'send-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var coupon_list = window["layui-layer-iframe" + index].callbackdata();
+                            if(coupon_list.length === 0){
+                                return layer.msg('请选择优惠券');
+                            }
+                            coupon_ids = [];
+                            for (var i in coupon_list){
+                                coupon_ids.push(coupon_list[i]['id']);
+                            }
+                            like.ajax({
+                                url:'{:url("coupon/sendCoupon")}',
+                                data:{coupon_ids:coupon_ids,user_ids:ids},
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('goods_brand-lists'); //数据刷新
+                                    }
+
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+            ,set_group:function() { //设置分组
+                var check_status = table.checkStatus('user-lists')
+                    ,user_list = check_status.data; //得到选中的数据
+
+
+                //是否已选数据
+                if( user_list.length === 0){
+                    return layer.msg('请选择用户');
+                }
+                //获取所选id
+                ids = [];
+                for (var i in user_list){
+                    ids.push(user_list[i]['id']);
+                }
+
+                layer.open({
+                    type: 2
+                    ,title: '设置分组'
+                    ,content: '{:url("user/setGroup")}'
+                    ,area: ['60%', '60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'user-submit-edit'
+                            ,submit = layero.find('iframe').contents().find("#set_group-submit");
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(set_group-submit)', function(data){
+                            var group_id = data.field.group_id;
+                            $.ajax({
+                                url:'{:url("user/setGroup")}',
+                                data:{group_id:group_id,user_ids:ids},
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-user').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+    });
+
+
+
+    layui.define(['table', 'form'], function(exports){
+        var $ = layui.$
+            ,table = layui.table
+            ,form = layui.form;
+
+        //管理员管理
+        table.render({
+            id:'user-lists'
+            ,elem: '#user-lists'
+            ,url: '{:url("user/lists")}' //模拟接口
+            ,cols: [[
+                {type: 'checkbox'}
+                ,{field: 'id', width: 80, title: 'ID', sort: true, hide:true}
+                ,{field: 'avatar', title: '会员信息',width: 350,align: 'center', toolbar: '#user-info'}
+                ,{field: 'group_name', title: '会员分组',width: 100,}
+                ,{field: 'referrals', title: '推荐人信息',align: 'center',width: 300,toolbar: '#referrer'}
+                ,{field: 'total_order_amount', title: '消费金额',width: 90}
+                ,{field: 'money', title: '账户余额',width: 120,toolbar: '#account'}
+                ,{field: 'login_time', title: '最后登录时间',width: 160}
+                ,{fixed: 'right', title: '操作', width: 340,toolbar: '#user-operation'}
+
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            }
+            , done: function fix() {
+                $(".layui-table-main tr").each(function (index, val) {
+                    $(".layui-table-fixed").each(function () {
+                        $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                });
+                $(".layui-table-header tr").each(function (index, val) {
+                    $(".layui-table-fixed").each(function () {
+                        $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
+                    });
+                });
+                window.onresize = function () {
+                    fix()
+                }
+            }
+        });
+
+        var moreShow = 0;
+        //监听工具条
+        table.on('tool(user-lists)', function(obj){
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑会员'
+                    ,content: '{:url("user/edit")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#edit-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(edit-submit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+
+            }
+            if(obj.event === 'info'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '会员资料'
+                    ,content: '{:url("user/info")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['返回']
+                })
+            }
+            if(obj.event === 'adjust_user'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '账户调整'
+                    ,content: '{:url("user/adjustAccount")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#adjust_user-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(adjust_user-submit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/adjustAccount")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'adjust_level'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '等级调整'
+                    ,content: '{:url("user/adjustLevel")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#adjust_level-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(adjust_level-submit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/adjustLevel")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+    });
+</script>

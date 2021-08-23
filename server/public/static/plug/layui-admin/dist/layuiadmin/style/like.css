@@ -1,0 +1,130 @@
+.upload-image-div{
+    height: 80px;
+    width: 80px;
+    float: left;
+    opacity: 1;
+    position: relative;
+    border:1px dashed #a0a0a0;
+    background-image:url('../layui/images/other/image.png');
+    background-repeat: no-repeat;
+    background-position: 50% 35%;
+    margin: 4px;
+    text-align: center;
+}
+.upload-image-a{
+    cursor: pointer;
+    position: absolute;
+    z-index: 100;
+    top: 58px;
+    right: -10%;
+    width: 100px;
+    height: 20px;
+    font-size: 8px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 10px;
+    color: #4e8bff;
+}
+.upload-image-a:hover
+{
+    color: #0641cb;
+}
+.upload-video-div{
+    height: 80px;
+    width: 80px;
+    float: left;
+    opacity: 1;
+    position: relative;
+    border:1px dashed #a0a0a0;
+    background-image:url('../layui/images/other/video.png');
+    background-repeat: no-repeat;
+    background-position: 50% 35%;
+    margin: 4px;
+    text-align: center;
+}
+.upload-video-a{
+    cursor: pointer;
+    position: absolute;
+    z-index: 100;
+    top: 58px;
+    right: -10%;
+    width: 100px;
+    height: 20px;
+    font-size: 8px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 10px;
+    color: #4e8bff;
+}
+.upload-video-a:hover
+{
+    color: #0641cb;
+}
+
+
+.like-layui-collapse {
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 2px;
+    border-color: #c4c4c4;
+}
+.like-layui-colla-title {
+    position: relative;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 15px 0 35px;
+    color: #333;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    overflow: hidden;
+}
+.like-layui-colla-title:hover {
+    color: #2ba1fc;
+}
+
+
+.like-layui-form-label{
+    margin: 20px;
+    padding-left: 5px;
+    border-left: solid #2ba1fc 8px;
+    text-align: left;
+    width: 100px
+}
+.like-layui-elem-quote {
+    margin-bottom: 10px;
+    padding: 15px;
+    line-height: 22px;
+    border-left: 5px solid #2ba1fc;
+    border-radius: 0 2px 2px 0;
+    background-color: #f2f2f2;
+}
+
+.layui-form-select dl dd.layui-this {
+    background-color: #1E9FFF;
+}
+
+.layui-form-onswitch {
+    border-color: #1E9FFF;
+    background-color: #1E9FFF;
+}
+
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    padding: 1px;
+    width: 100%;
+    height: 100%;
+    background-color: #1E9FFF;
+}
+
+.info_footer {
+    text-align: center;
+    bottom: 20px;
+    left: 40%;
+    font-size:14px;
+    color:rgba(112,112,112,1);
+    font-weight:400;
+    margin-bottom: 12px;
+}

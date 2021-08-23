@@ -1,0 +1,243 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-btn-container" style="display: inline-block;">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn  {$view_theme_color}" id="add">
+                            添加
+                        </button>
+                        <button class="layui-btn  {$view_theme_color}" id="expand-all">全部展开
+                        </button>
+                        <button class="layui-btn   {$view_theme_color}" id="fold-all">全部折叠
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="menu-lists" class="layui-table" lay-filter="menu-lists"></table>
+            <script type="text/html" id="icon">
+                <i class="layui-icon {{d.icon}}"></i>
+            </script>
+            <script type="text/html" id="operation">
+                {{#  if(d.system == 0){ }}
+                <a class="edit layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
+                        class="layui-icon layui-icon-edit"></i>修改
+                </a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
+                        class="layui-icon layui-icon-delete"></i>删除
+                </a>
+                {{#  } }}
+                {{#  if(d.system == 1){ }}
+                <a class="edit layui-btn layui-btn-disabled layui-btn-xs" lay-event=""><i
+                        class="layui-icon layui-icon-edit"></i>修改
+                </a>
+                <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event=""><i
+                        class="layui-icon layui-icon-delete"></i>删除
+                </a>
+                {{#  } }}
+            </script>
+
+            <!-- 表格状态列 -->
+            <script type="text/html" id="disable">
+                {{#  if(d.system == 0 && d.type == 1){ }}
+                <input type="checkbox" lay-filter="switch-disable" data-id={{d.id}} lay-skin="switch"
+                       lay-text="菜单显示|菜单隐藏" {{# if(d.disable==0){ }} checked {{# } }}/>
+                {{#  } }}
+                {{#  if(d.system == 1 && d.type == 1){ }}
+                <input type="checkbox" lay-filter="switch-disable" data-id={{d.id}} lay-skin="switch"
+                       lay-text="权限显示|权限隐藏" disabled checked />
+                {{#  } }}
+                {{#  if(d.system == 0 && d.type == 2){ }}
+                <input type="checkbox" lay-filter="switch-disable" data-id={{d.id}} lay-skin="switch"
+                       lay-text="权限启用|权限禁用" {{# if(d.disable==0){ }} checked {{# } }}/>
+                {{#  } }}
+                {{#  if(d.system == 1 && d.type == 2){ }}
+                <input type="checkbox" lay-filter="switch-disable" data-id={{d.id}} lay-skin="switch"
+                       lay-text="权限启用|权限禁用" disabled checked />
+                {{#  } }}
+            </script>
+
+            <div class="page-loading">
+                <div class="ball-loader sm">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        treeTable: 'treetable-lay/treeTable'
+        ,like: 'layui-admin/dist/layuiadmin/modules/like',
+    }).use(['form', 'tree', 'treeTable','like'], function () {
+        var $ = layui.$
+        ,like = layui.like
+        ,treeTable = layui.treeTable
+        ,form = layui.form;
+
+        var data = {$lists|raw}
+        // 渲染表格
+        var insTb = treeTable.render({
+            elem: '#menu-lists',
+            data: data,
+            tree: {
+                iconIndex:0,
+                childName:'sub',
+                treeColIndex:3,
+                getIcon: function (d) {  // 自定义图标
+                    return '<i class="ew-tree-icon layui-icon layui-icon-spread-left "></i>';
+                }
+
+            },
+            cols: [
+                {field: 'name', title: '名称',width: 280},
+                {field: 'type_str', title: '类型',width: 70},
+                {field: '#icon', title: '图标', width: 80,toolbar: '#icon'},
+                {field: 'uri', title: '规则',width: 200},
+                {field: 'sort', title: '排序', width: 80,event: 'tips',edit:'number'},
+                {templet: '#disable', title: '控制', width: 120},
+                {align: 'center', toolbar: '#operation', title: '操作', width: 200},
+                {field: '', title: '',width: ''},
+            ],
+            style: 'margin-top:0;'
+        });
+
+
+        treeTable.on('tool(menu-lists)', function(obj){
+            var menu_id = obj.data.id;
+
+            if(obj.event === 'del'){
+                layer.confirm('确定删除此菜单及其子菜单？', function(index){
+                    like.ajax({
+                        url:'{:url("auth/del")}',
+                        data: {ids:[menu_id]},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1) {
+                                layer.close(index);
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                },function(){
+                                    window.location.href = window.location.href;
+                                });
+                            }
+                        }
+                    });
+                });
+            }else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2
+                    ,title: '编辑菜单'
+                    ,content: '{:url("auth/edit")}?id='+menu_id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#menu-submit');
+                        iframeWindow.layui.form.on('submit(menu-submit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("auth/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1) {
+                                        layer.close(index); //关闭弹层
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        },function(){
+                                            window.location.href = window.location.href;
+                                        });
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        });
+
+        form.on('switch(switch-disable)',function (obj) {
+            var menu_id = obj.elem.attributes['data-id'].nodeValue;
+            var disable = 1;
+            if(obj.elem.checked){
+                disable = 0;
+            }
+            var data ={disable:disable,id:menu_id}
+            like.ajax({
+                url:'{:url("auth/status")}',
+                data:data,
+                type:"post",
+            });
+        })
+        $('#add').click(function(){
+            layer.open({
+                type: 2
+                ,title: '添加菜单'
+                ,content: '{:url("auth/add")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submit = layero.find('iframe').contents().find('#menu-submit');
+                    iframeWindow.layui.form.on('submit(menu-submit)', function(data){
+                        var field = data.field;
+                        like.ajax({
+                            url:'{:url("auth/add")}',
+                            data:field,
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1) {
+                                    layer.close(index); //关闭弹层
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    },function(){
+                                        window.location.href = window.location.href;
+                                    });
+                                }
+                            }
+                        });
+                    });
+
+                    submit.trigger('click');
+                }
+            });
+        });
+
+        // 全部展开
+        $('#expand-all').click(function () {
+            insTb.expandAll();
+        });
+
+        // 全部折叠
+        $('#fold-all').click(function () {
+            insTb.foldAll();
+        });
+    });
+</script>

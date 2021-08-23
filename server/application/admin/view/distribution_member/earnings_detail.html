@@ -1,0 +1,113 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">记录时间:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input time" id="start_time" name="start_time"  autocomplete="off">
+                    </div>
+                    <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
+                        <label class="layui-form-mid">-</label>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input time" id="end_time" name="end_time"  autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-earnings {$view_theme_color}" lay-submit lay-filter="earnings-search">查询</button>
+                    <button class="layui-btn layuiadmin-btn-earnings layui-btn-primary }" lay-submit lay-filter="earnings-clear-search">重置</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-card-body">
+            <table id="earnings-lists" lay-filter="earnings-lists"></table>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+        var user_id = {$user_id | raw};
+
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+        });
+
+        //监听搜索
+        form.on('submit(earnings-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('earnings-lists', {
+                where: field
+            });
+        });
+
+        //清空查询
+        form.on('submit(earnings-clear-search)', function(){
+            $('#start_time').val('');
+            $('#end_time').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('earnings-lists', {
+                where: []
+            });
+        });
+
+
+        table.render({
+            id:'earnings-lists'
+            ,elem: '#earnings-lists'
+            ,url: '{:url("distribution_member/earningsDetail")}?id='+user_id
+            ,cols: [[
+                {field: 'sn',title: '记录编号'}
+                ,{field: 'order_sn', title: '来源订单'}
+                ,{field: 'money', title: '收入金额'}
+                ,{field: 'type', title: '收入类型'}
+                ,{field: 'create_time', title: '记录日期'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists,
+                };
+            }
+        });
+
+    });
+
+</script>

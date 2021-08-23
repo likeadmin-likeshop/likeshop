@@ -1,0 +1,118 @@
+{layout name="layout1" /}
+<style>
+    .copy{
+        margin-top: 5px;
+        margin-left:30px
+    }
+</style>
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-body" >
+                <div class="layui-form" lay-filter="">
+                    <div class="layui-form-item div-flex" style="margin-top: 20px">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                            <legend>APP设置</legend>
+                        </fieldset>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="white-space: nowrap">苹果APP下载链接：</label>
+                        <div class="layui-input-inline"  style="width: 300px;left: 30px">
+                            <input type="text" name="line_ios"  lay-verType="tips" autocomplete="off" value="{$config.line_ios}" class="layui-input">
+                            <label class="layui-form-mid layui-word-aux" style="white-space: nowrap">苹果APP下载链接，可以配置应用宝下载链接</label>
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="white-space: nowrap">安卓APP下载链接：</label>
+                        <div class="layui-input-inline"  style="width: 300px;left: 30px">
+                            <input type="text" name="line_android"  lay-verType="tips" autocomplete="off" value="{$config.line_android}" class="layui-input">
+                            <label class="layui-form-mid layui-word-aux" style="white-space: nowrap">安卓APP下载链接，可以配置应用宝下载链接</label>
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="white-space: nowrap">APP下载引导文案：</label>
+                        <div class="layui-input-inline"  style="width: 300px;left: 30px">
+                            <input type="text" name="download_doc"  lay-verType="tips" autocomplete="off" value="{$config.download_doc}" class="layui-input">
+                            <label class="layui-form-mid layui-word-aux" style="white-space: nowrap">APP下载引导文案，默认文案：欢迎点击下载APP~</label>
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm copy" >复制</button>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="white-space: nowrap;left: 45px">弹出协议：</label>
+                        <div class="layui-input-block" style="left: 30px">
+                            <input type="checkbox" name="agreement" lay-skin="switch" lay-text="是|否" {if condition="$config.agreement eq 1" }checked{/if}>
+
+                        </div>
+                        <label class="layui-form-mid layui-word-aux" style="white-space: nowrap;left: 30px">APP启动后强制弹窗同意隐私协议</label>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="white-space: nowrap;left:30px">开启微信登录：</label>
+                        <div class="layui-input-block" style="left: 30px">
+                            <input type="checkbox" name="wechat_login" lay-skin="switch" lay-text="是|否" {if condition="$config.wechat_login eq 1" }checked{/if}>
+                        </div>
+                        <label class="layui-form-mid layui-word-aux" style="white-space: nowrap;left: 30px">选择开启，则表示APP允许微信授权登录</label>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="left: 30px">
+                            <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="setapp">确认</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.on('submit(setapp)',function (data) {
+            like.ajax({
+                url: '{:url("Basic/setApp")}'//实际使用请改成服务端真实接口
+                ,data: data.field
+                ,type: 'post'
+                ,success: function(res){
+
+                    if(res.code == 1)
+                    {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            ,icon: 1
+                            ,time: 1500
+                        }, function(){
+                            location.href = location.href; //后台主页
+                        });
+                    }
+                }
+            });
+        });
+
+        //复制
+        $(document).on('click','.copy',function () {
+            var copyText = $(this).prev().children();
+            copyText.select();
+            document.execCommand("Copy");
+        });
+
+    });
+
+</script>

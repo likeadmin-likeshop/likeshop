@@ -1,0 +1,47 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="">
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-tab">
+        <div class="layui-form-item layui-col-sm6  layui-col-md4">
+            <label class="layui-form-label"><font color="red">*</font>充值金额</label>
+            <div class="layui-input-block">
+                <input type="text" name="money" value="{$info.money}" lay-verify="required" lay-verType="tips" placeholder="请输入充值金额" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm6  layui-col-md4">
+            <label class="layui-form-label">赠送金额</label>
+            <div class="layui-input-block">
+                <input type="text" name="give_money" value="{$info.give_money}" lay-verType="tips" placeholder="请输入赠送金额" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-col-sm6  layui-col-md4">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="number"  name="sort" value="{$info.sort}"  placeholder="请输入排序" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">推荐</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="is_recommend" value="1" title="是" {if condition="$info.is_recommend eq 1" } checked {/if} >
+                <input type="radio" name="is_recommend" value="0" title="否" {if condition="$info.is_recommend eq 0" } checked {/if} >
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="edit-recharge-submit" id="edit-recharge-submit" value="确认">
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+    });
+</script>

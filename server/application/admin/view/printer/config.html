@@ -1,0 +1,59 @@
+{layout name="layout2" /}
+<style>
+    .tips{
+        color: red;
+    }
+</style>
+
+<div class="layui-form" lay-filter="">
+    <input name="id" type="hidden" value="{$detail.id}">
+    <div class="layui-tab">
+        <div class="layui-form-item">
+            <label class="layui-form-label">打印机：</label>
+            <div class="layui-input-block" style="padding-top: 8px;">
+                    易联云
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>应用ID：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text"  name="client_id" value="{$detail.client_id}"  placeholder="请输入应用ID" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>应用秘钥：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text"  name="client_secret" value="{$detail.client_secret}"  placeholder="请输入应用秘钥" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>状态：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="checkbox" lay-filter="disable" name="status" lay-skin="switch" lay-text="开启|关闭" {if condition="$detail.status eq 1" }checked{/if}>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="set_config-submit" id="set_config-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','likeedit','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+
+    });
+</script>

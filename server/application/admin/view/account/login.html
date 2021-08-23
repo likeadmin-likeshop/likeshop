@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$config.name}</title>
+    <link rel="shortcut icon" href="{$storageUrl}{$config.web_favicon}"/>
+    <link rel="stylesheet" href="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/common/css/login.css"/>
+</head>
+<style>
+    #logo{
+        width: 176px;height: 42px
+    }
+</style>
+<body>
+<div class="login">
+    <div class="logo">
+        <img style="width: auto;height: 42px" src="{$storageUrl}{$config.login_logo}"/>
+    </div>
+    <div class="login-form-box">
+        <div class="login-left">
+            <div class="login-left-img">
+                <img  src="{$storageUrl}{$config.admin_image}"/>
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="login-form layui-form">
+                <div class="login-title">
+                    {$config.admin_title}
+                </div>
+                <div class="form-box-item">
+                    <div class="icon">
+                        <img src="__PUBLIC__/static/common/image/login/login_number.png"/>
+                    </div>
+                    <div>
+                        <input type="text" name="account" lay-verify="required" lay-vertype="tips"
+                               class="layui-input" style="border:none;width: 150px;padding-left: 20px;"
+                               placeholder="请输入账号" value="{$account}"/>
+                    </div>
+                </div>
+                <div class="form-box-item">
+                    <div class="icon">
+                        <img src="__PUBLIC__/static/common/image/login/login_password.png"/>
+                    </div>
+                    <div>
+                        <input type="password" name="password" lay-verify="required" lay-vertype="tips"
+                               class="layui-input" style="border:none;width: 150px;padding-left: 20px;"
+                               placeholder="请输入密码"/>
+                    </div>
+                </div>
+                <div class="form-box-item">
+                    <div class="icon">
+                        <img src="__PUBLIC__/static/common/image/login/login_code.png"/>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <input  type="text" name="code" lay-verify="required" lay-vertype="tips"
+                                style="border:none;width: 150px;padding-left: 20px;" placeholder="请输入验证码"/>
+                        <img style="height: 36px;width: 126px;" src="{:captcha_src()}"
+                             class="layadmin-user-login-codeimg" id="captcha">
+                    </div>
+                </div>
+                <div class="form-box-checked">
+                    <div>
+                        <input type="checkbox" lay-skin="primary" name="remember_account" title="记住账号" {notempty name="account"}checked=""{/notempty}>
+                    </div>
+                </div>
+                <button id="login" lay-filter="login" class="submit-btn" lay-submit style="background-color: #2C85EA">登录</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        {$config.company_name}&nbsp;&nbsp;<a target="_blank" href="{$config.link}">{$config.number}</a>&nbsp;&nbsp;
+    </footer>
+</div>
+<script src="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/layui/layui.js"></script>
+</body>
+<script>
+    if (self != top) {
+        parent.window.location.replace(window.location.href);
+    }
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user', 'like'], function () {
+        var $ = layui.$
+            , like = layui.like
+            , form = layui.form
+        form.render();
+
+        //更换图形验证码
+        $('body').on('click', '#captcha', function () {
+            var othis = $(this);
+            this.src = '{:captcha_src()}?t=' + new Date().getTime();
+        });
+
+
+        function login(obj) {
+            like.ajax({
+                url: '{:url("account/login")}' //实际使用请改成服务端真实接口
+                , data: obj.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            location.href = '../'; //后台主页
+                        });
+                    }
+                    $('#captcha').attr('src', '{:captcha_src()}?t=' + new Date().getTime());
+                },
+            });
+        }
+
+        //提交
+        form.on('submit(login)', function (obj) {
+            console.log(3434);
+            login(obj);
+        });
+
+
+        $('[name="account"]').keyup(function (event) {
+            if (event.keyCode == 13) {
+                $('#login').trigger('click');
+            }
+        });
+        $('[name="password"]').keyup(function (event) {
+            if (event.keyCode == 13) {
+                $('#login').trigger('click');
+            }
+        });
+        $('[name="code"]').keyup(function (event) {
+            if (event.keyCode == 13) {
+                $('#login').trigger('click');
+            }
+        });
+    });
+</script>
+</html>

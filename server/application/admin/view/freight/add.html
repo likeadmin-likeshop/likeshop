@@ -1,0 +1,240 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="layuiadmin-form-ad_position" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" placeholder="请输入模板名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">计费方式</label>
+        <div class="layui-input-block" id="charge_way">
+            <input type="radio" class="type" name="charge_way" value="1" title="按重量" checked>
+            <input type="radio" class="type" name="charge_way" value="2" title="按体积">
+            <input type="radio" class="type" name="charge_way" value="3" title="按件数">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+            <textarea name="remark"  placeholder="备注信息" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">配送区域</label>
+        <div class="layui-input-block">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="25%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>可配送区域</th>
+                    <th class="th_first_unit">首件 (个)</th>
+                    <th class="th_first_money">运费 (元)</th>
+                    <th class="th_continue_unit">续件 (个)</th>
+                    <th class="th_continue_money">续费 (元)</th>
+
+                    <th class="able-operat">操作</th>
+                </tr>
+                </thead>
+                <tbody >
+                    <!--全国-->
+                    <tr class='area_all'>
+                        <td><span class='all_area_name'>全国</span></td>
+                        <input type='hidden' class='region' name='region[]' value='all'>
+                        <td><input type='number' name='first_unit[]' lay-verify='required' autocomplete='off' class='layui-input '></td>
+                        <td><input type='number' name='first_money[]' lay-verify='required' autocomplete='off' class='layui-input '></td>
+                        <td><input type='number' name='continue_unit[]' lay-verify='required' autocomplete='off' class='layui-input '></td>
+                        <td><input type='number' name='continue_money[]' lay-verify='required' autocomplete='off' class='layui-input '></td>
+                        <td></td>
+                    </tr>
+                    <tr class="area_tbody"></tr>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <button type="button" id="btn-area" class="layui-btn layui-btn-sm layui-btn-normal layuiadmin-btn-select_area" >添加运费规则</button>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-freight-submit" id="add-freight-submit" value="确认">
+    </div>
+</div>
+
+<script>
+
+    var araeDataIds = '';
+    var araeDataNmae = '';
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','jquery','like','transfer'], function() {
+        var $ = layui.$
+            , form = layui.form
+            , transfer = layui.transfer
+            , like = layui.like;
+
+        window.callTree = function (data) {
+
+            for (var i =0;i< data.length; i++){
+                araeDataNmae += data[i]['context']+',';
+                araeDataIds += data[i]['nodeId'] + ',';
+            }
+
+            araeDataNmae = araeDataNmae.substring(0,araeDataNmae.length-1);
+            araeDataIds = araeDataIds.substring(0,araeDataIds.length-1);
+
+        };
+
+        $(document).on('click', '#btn-area', function () {
+           layer.open({
+                type: 2
+                ,title: '配送区域'
+                ,content: '{:url("freight/area")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确定','返回']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submitID = 'area-freight-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                    //监听提交
+                    iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+
+                        if (araeDataIds == ''){
+                            layer.msg('请选择地区');
+                            return ;
+                        }
+                            addArea(araeDataNmae);
+                            $('input.region:last').val(araeDataIds);
+                            araeDataNmae = '';
+                            araeDataIds = '';
+                        layer.close(index);
+                    });
+                    submit.trigger('click');
+                }
+
+            });
+        });
+
+
+        form.on('submit(add-freight-submit)', function (data) {
+            var field = data.field;
+            like.ajax({
+                url: '{:url("freight/add")}'
+                , data: field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        },function () {
+                        });
+                    }
+                },
+            });
+        });
+    });
+
+
+    function addArea(data) {
+        var add = ".area_tr";
+        var id = $('tr.area_tr:last').attr('data-id');
+        if (id === undefined){
+            id = 1;
+            add = ".area_tbody";
+        }else{
+            add = add+id;
+        }
+        var v = parseInt(id) + 1;
+        var str = "<tr class='area_tr area_tr"+v+"' data-id='" + v + "'>" +
+            "<td><span class=' area_name area_name"+v+" '>"+data+"</span></td>" +
+            "<input type='hidden' class='region region"+v+" ' name='region["+v+"]' value=''>" +
+            "<td><input type='number' name='first_unit["+v+"]' lay-verify='required'  autocomplete='off' class='layui-input '></td>" +
+            "<td><input type='number' name='first_money["+v+"]' lay-verify='required'  autocomplete='off' class='layui-input '></td>" +
+            "<td><input type='number' name='continue_unit["+v+"]' lay-verify='required'  autocomplete='off' class='layui-input '></td>" +
+            "<td><input type='number' name='continue_money["+v+"]' lay-verify='required'  autocomplete='off' class='layui-input '></td>" +
+            "<td style='text-align:center'>" +
+            "<button class='layui-btn layui-btn-sm layui-btn-normal' type='button' onclick='editArea(" + v + ")'>" +
+            "<i class='layui-icon layui-icon-edit'></i>" +
+            "</button>" +
+            "<button class='layui-btn layui-btn-sm layui-btn-danger' type='button' onclick='delArea(" + v + ")'>" +
+            "<i class='layui-icon layui-icon-delete'></i>" +
+            "</button>" +
+            "</td>" +
+            "</tr>";
+
+        $(add).after(str);
+    }
+
+    function delArea(value) {
+        $(".area_tr" + value).remove();
+    }
+
+
+    //编辑模板行
+    function editArea(value) {
+
+        var regionSelected = '.region'+value;//选择编辑的行
+        var selectIds = $(regionSelected).val();//选中行的地区id
+
+        layer.open({
+            type: 2
+            , title: '配送区域'
+            , content: '{:url("freight/areaEdit")}'
+            , area: ['90%', '90%']
+            , btn: ['确定', '返回']
+            , success: function (layero,index) {
+                var iframe = window['layui-layer-iframe' + index];
+                iframe.editSelected(selectIds);
+            }
+            , yes: function (index, layero) {
+                var iframeWindow = window['layui-layer-iframe' + index]
+                    , submitID = 'area-freight-submit'
+                    , submit = layero.find('iframe').contents().find('#' + submitID);
+                //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                    if (araeDataIds == '') {
+                        layer.msg('请选择地区');
+                        return;
+                    }
+                    $(".area_name" + value).text(araeDataNmae);
+                    $(".region" + value).val(araeDataIds);
+                    araeDataNmae = '';
+                    araeDataIds = '';
+                    layer.close(index);
+                });
+                submit.trigger('click');
+            }
+        });
+
+    }
+
+
+
+
+
+</script>

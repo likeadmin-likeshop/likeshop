@@ -1,0 +1,259 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    *阿里云短信通道配置。
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <li data-type="1"  class="layui-this">短信配置</li>
+                <li data-type="2" >发送记录</li>
+            </ul>
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item search">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">短信标题:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="name" id="name" placeholder="请输入短信标题" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">发送手机号:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="mobile" id="mobile" placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">发送状态:</label>
+                                <div class="layui-input-block">
+                                    <select name="send_status" id="send_status">
+                                        <option value="">全部</option>
+                                        {foreach $status_list as $item => $val}
+                                        <option value="{$item}">{$val}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建时间:</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="start_time" class="layui-input" id="start_time"
+                                                   placeholder="" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline" style="margin-right: 5px;width: 20px;">
+                                        <label class="layui-form-mid">至</label>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="end_time" class="layui-input" id="end_time"
+                                               placeholder="" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-ad {$view_theme_color}" lay-submit
+                                            lay-filter="sms-search">查询
+                                    </button>
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-primary " lay-submit
+                                            lay-filter="sms-clear-search">清空查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card-body">
+                        <table id="sms-lists" lay-filter="sms-lists"></table>
+                        <script type="text/html" id="sms_config-operation">
+                            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="config">配置</a>
+
+                        </script>
+                        <script type="text/html" id="sms_log-operation">
+                            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="detail">详情</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element
+            , laydate = layui.laydate
+            ,type = 1;
+        //监听搜索
+        form.on('submit(sms-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('sms-lists', {
+                where: field
+            });
+        });
+        //清空查询
+        form.on('submit(sms-clear-search)', function () {
+            $('#name').val('');
+            $('#mobile').val('');
+            $('#send_status').val('');
+            $('#start_time').val('');
+            $('#end_time').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('sms-lists', {
+                where: []
+            });
+        });
+        getList();
+        $('.search').hide();
+        element.on('tab(tab-all)', function (data) {
+            type = $(this).attr('data-type');
+            $('.search').hide();
+            if(type == 2){
+                $('.search').show();
+            }
+            getList();
+        });
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,type: 'datetime'
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'datetime'
+        });
+        function getList() {
+            var page = false;
+            var url = '{:url("sms/lists")}'
+            var cols = [
+                {type:'numbers',title: '序号',width:60}
+                , {field: 'name', title: '短信通道', align: 'center'}
+                , {field: 'describe', title: '通道描述', align: 'center',}
+                , {field: 'status_desc', title: '状态', align: 'center'}
+                , {title: '操作', width: 250, align: 'center', fixed: 'right', toolbar: '#sms_config-operation'}
+            ];
+            if(type == 2){
+                var url = '{:url("sms/logLists")}';
+                var cols = [
+                    {type:'numbers',title: '序号',width:60}
+                    , {field: 'name', title: '短信标题', align: 'center'}
+                    , {field: 'content', title: '短信内容', align: 'center',}
+                    , {field: 'mobile', title: '发送手机号', align: 'center'}
+                    , {field: 'send_status', title: '发送状态', align: 'center'}
+                    , {field: 'send_time', title: '发送时间', align: 'center'}
+                    , {field: 'create_time', title: '创建时间', align: 'center'}
+                    , {title: '操作', width: 250, align: 'center', fixed: 'right', toolbar: '#sms_log-operation'}
+                ];
+                var page = true;
+            }
+            //管理员管理
+            table.render({
+                elem: '#sms-lists'
+                , url: url  //模拟接口
+                , cols: [cols]
+                , page: page
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list, //解析数据列表
+                    };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+        }
+
+        //监听工具条
+        table.on('tool(sms-lists)', function(obj){
+            var id = obj.data.id;
+            if(obj.event === 'config'){
+                layer.open({
+                    type: 2
+                    ,title: '消息设置'
+                    ,content: '{:url("sms/config")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,yes: function(index, layero){
+
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'config-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("sms/config")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        window.location.href = window.location.href;
+                                    }
+
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+
+                })
+            }
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2
+                    ,title: '短信详情'
+                    ,content: '{:url("sms/detail")}?id='+id
+                    ,area: ['90%', '90%']
+
+                })
+            }
+
+        });
+    });
+</script>

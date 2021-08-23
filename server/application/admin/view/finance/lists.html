@@ -1,0 +1,174 @@
+<style>
+     .layui-card .header-title {
+        font-size: 16px;
+        font-weight: bold;
+     }
+    .layui-card .header-title::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        vertical-align: -4px;
+        margin-right: 5px;
+        background: #3A91FB;
+    }
+    .layui-card .survey-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .layui-card .survey-list  .item {
+        width: 20%;
+        min-width: 200px;
+    }
+    .layui-card .survey-list  .item .title {
+        display: flex;
+        align-items: center;
+    }
+    .layui-card .survey-list  .item .title img {
+        width: 30px;
+        height: 30px;
+        margin-right: 12px;
+    }
+    .layui-card .survey-list  .item .layuiadmin-big-font {
+        margin-left: 42px;
+        color: #333;
+        font-size: 25px;
+    }
+</style>
+
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-col-md12">
+        <!-- 订单-->
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="header-title">订单概况</div>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list survey-list">
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/month_order_amount.png" alt="">
+                        <div>本月订单金额（元）</div>
+                    </div>
+                    
+                <p class="layuiadmin-big-font">{$data.month_order_amount}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/total_order_amount.png" alt="">
+                        <div>订单总金额（元）</div>
+                    </div>
+                    
+                <p class="layuiadmin-big-font">{$data.total_amount}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/order_num.png" alt="">
+                        <div>订单总数（笔）</div>
+                    </div>
+                    
+                <p class="layuiadmin-big-font">{$data.order_num}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/refund_amount.png" alt="">
+                        <div>退款订单总额（元）</div>
+                    </div>
+                    
+                <p class="layuiadmin-big-font">{$data.refund_amount}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/refund_num.png" alt="">
+                        <div>退款订单总数（笔）</div>
+                    </div>
+                    
+                <p class="layuiadmin-big-font">{$data.refund_num}</p>
+                </div>
+            </div>
+        </div>
+
+        <!--会员-->
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="header-title">会员概况</div>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list survey-list">
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/total_user_money.png" alt="">
+                        <div>会员余额（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.total_user_money}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/total_user_integral.png" alt="">
+                        <div>会员积分 </div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.total_user_integral}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/able_earnings.png" alt="">
+                        <div>会员可提现佣金（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.able_earnings}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/have_withdraw_earnings.png" alt="">
+                        <div>会员已提现佣金（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.have_withdraw_earnings}</p>
+                </div>
+            </div>
+        </div>
+
+        <!--分销-->
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="header-title">分销概况</div>
+            </div>
+            <div class="layui-card-body layuiadmin-card-list survey-list">
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/month_earnings.png" alt="">
+                        <div>本月分销佣金（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.month_earnings}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/distribution_earnings.png" alt="">
+                        <div>分销总佣金（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.distribution_earnings}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/wait_earnings.png" alt="">
+                        <div>提现中佣金（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.wait_earnings}</p>
+                </div>
+                <div class="item">
+                    <div class="title">
+                        <img class="icon" src="__PUBLIC__/static/common/image/finance/distribution_have_withdraw.png" alt="">
+                        <div>已提现佣金（元）</div>
+                    </div>
+
+                    <p class="layuiadmin-big-font">{$data.have_withdraw_earnings}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

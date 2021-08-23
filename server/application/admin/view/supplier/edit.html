@@ -1,0 +1,57 @@
+{layout name="layout2" /}
+<script src="__PUBLIC__/static/common/js/area.js"></script>
+<div class="layui-form" lay-filter="layuiadmin-form-unit" id="layuiadmin-form-unit" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$info.id}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap;"><font color="red">*</font>供货商名称：</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="name" value="{$info.name}" lay-verify="required" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap;"><font color="red">*</font>联系人姓名：</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="contact" value="{$info.contact}" lay-verify="required" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap;"><font color="red">*</font>联系电话：</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="tel" value="{$info.tel}" lay-verify="required" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap;"><font color="red">*</font>联系地址：</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="address" value="{$info.address}" lay-verify="required" lay-vertype="tips" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap;">备注：</label>
+        <div class="layui-input-inline" >
+            <textarea name="remark" placeholder="" class="layui-textarea" style="width: 400px;height: 100px">{$info.remark}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="supplier-submit-edit" id="supplier-submit-edit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+
+
+
+
+    })
+</script>

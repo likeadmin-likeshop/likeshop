@@ -1,0 +1,314 @@
+{layout name="layout1" /}
+
+
+<div class="layui-col-md12">
+    <div class="layui-fluid">
+
+        <div class="layui-form" lay-filter="">
+            <div class="layui-card" >
+                <div class="layui-card-body">
+                    <div class="layui-input-inline">
+                        <div class="layui-card-header" >概况</div>
+                    </div>
+
+                    <div class="layui-input-inline" style="left: 50px">
+                        <div class="layui-input-inline">
+                            <select name="days" lay-verify="required" lay-filter="days">
+                                <option value="today" >今日实时</option>
+                                <option value="ago_seven" >近7天</option>
+                                <option value="ago_fifteen" >近15天</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-input-inline " id="days" style="white-space: nowrap;left:70px">
+                        {$res.start} 至 {$res.end}
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-sm6 layui-col-md3" >
+                    <div class="layui-card" >
+                        <div class="layui-card-header" >
+                            会员数量
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" >
+                            <p class="layuiadmin-big-font" id="count_user">{$res.count}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-sm6 layui-col-md3">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            新增会员数量
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font" id="add_user">{$res.add}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--会员分析图-->
+            <div class="layui-card" style="margin-top:20px">
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline layui-card-header" style="">会员趋势分析</div>
+                        <div class="layui-input-inline" style="right: 100px">
+                            <select name="member" lay-verify="required"  lay-filter="member">
+                                <option value="ago_seven">近7天</option>
+                                <option value="ago_fifteen">近15天</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline" id="member_days" style="white-space: nowrap;top:8px;right:80px">
+                            {$res.start_seven} 至 {$res.end_seven}
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div id="memberCharts" style="width: 100%;height: 80vh;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','echarts','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,echarts = layui.echarts;
+
+
+        form.on('select(days)', function(data){
+            like.ajax({
+                url:'{:url("statistics/member")}',
+                data:{'days':data.value},
+                type:"post",
+                success:function(res)
+                {
+                    $('#days').html(res.data.start+  ' 至 ' +res.data.end );
+                    $('#count_user').html(res.data.count);
+                    $('#add_user').html(res.data.add);
+                }
+            });
+        });
+
+
+        const colorList = ["#9E87FF", '#73DDFF', '#fe9a8b', '#F56948', '#9E87FF'];
+
+        like.ajax({
+            url: '{:url("statistics/member")}',
+            data: {member:'ago_seven'},
+            type: "post",
+            success: function (res) {
+                var memberNum =  res.data.echarts_count;
+                var newMember =  res.data.echarts_add;
+                var xData     = res.data.days;
+                var option    = setOption(memberNum, newMember, xData);
+                let chart     = document.getElementById('memberCharts');
+                let memberChart = echarts.init(chart);
+                memberChart.setOption(option, true);
+                window.addEventListener('resize', function () {
+                    memberChart.resize()
+                });
+            }
+        });
+
+
+        form.on('select(member)', function(data){
+            like.ajax({
+                url: '{:url("statistics/member")}',
+                data: {member:data.value},
+                type: "post",
+                success: function (res) {
+                    $('#member_days').html(res.data.start+  ' 至 ' +res.data.end );
+
+                    var xData = res.data.days;
+                    var memberNum = res.data.echarts_count;
+                    var newMemeber = res.data.echarts_add;
+                    let option = setOption(memberNum, newMemeber, xData);
+                    let memberChart = echarts.init(document.getElementById('memberCharts'));
+                    memberChart.setOption(option, true);
+                    window.addEventListener('resize', function () {
+                        memberChart.resize()
+                    });
+                }
+            });
+        });
+
+
+        //图标设置
+        function setOption(memberNum, newMember, xData) {
+            option = {
+                backgroundColor: '#fff',
+                legend: {
+                    icon: 'circle',
+                    top: '5%',
+                    right: '5%',
+                    itemWidth: 6,
+                    itemGap: 20,
+                    textStyle: {
+                        color: '#556677'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: '#fff',
+                    textStyle: {
+                        color: '#5c6c7c'
+                    },
+                    padding: [10, 10],
+                    extraCssText: 'box-shadow: 1px 0 2px 0 rgba(163,163,163,0.5)'
+                },
+                grid: {
+                    top: '15%'
+                },
+                xAxis: [{
+                    type: 'category',
+                    name: '(日期)',
+                    data: xData,
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(107,107,107,0.37)', //x轴颜色
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        textStyle: {
+                            color: '#999' //坐标轴字颜色
+                        },
+                        margin: 15
+                    },
+                    axisPointer: {
+                        label: {
+                            padding: [11, 5, 7],
+                            backgroundColor: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#fff' // 0% 处的颜色
+                                }, {
+                                    offset: 0.9,
+                                    color: '#fff' // 0% 处的颜色
+                                }, {
+                                    offset: 0.9,
+                                    color: '#33c0cd' // 0% 处的颜色
+                                }, {
+                                    offset: 1,
+                                    color: '#33c0cd' // 100% 处的颜色
+                                }],
+                                global: false // 缺省为 false
+                            }
+                        }
+                    },
+                    boundaryGap: false
+                }],
+                yAxis: [{
+                    type: 'value',
+                    name: '(人)',
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: 'rgba(107,107,107,0.37)', //y轴颜色
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#999'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                }],
+                series: [{
+                    name: '会员数量',
+                    type: 'line',
+                    data: memberNum,
+                    symbolSize: 1,
+                    symbol: 'circle',
+                    smooth: true,
+                    yAxisIndex: 0,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 5,
+                        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                            offset: 0,
+                            color: '#9effff'
+                        },
+                            {
+                                offset: 1,
+                                color: '#9E87FF'
+                            }
+                        ]),
+                        shadowColor: 'rgba(158,135,255, 0.3)',
+                        shadowBlur: 10,
+                        shadowOffsetY: 20
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: colorList[0],
+                            borderColor: colorList[0]
+                        }
+                    }
+                }, {
+                    name: '新增会员数量',
+                    type: 'line',
+                    data: newMember,
+                    symbolSize: 1,
+                    symbol: 'circle',
+                    smooth: true,
+                    yAxisIndex: 0,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 5,
+                        color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [{
+                            offset: 0,
+                            color: '#73DD39'
+                        },
+                            {
+                                offset: 1,
+                                color: '#73DDFF'
+                            }
+                        ]),
+                        shadowColor: 'rgba(115,221,255, 0.3)',
+                        shadowBlur: 10,
+                        shadowOffsetY: 20
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: colorList[1],
+                            borderColor: colorList[1]
+                        }
+                    }
+                }]
+            };
+            return option;
+        }
+    });
+
+</script>

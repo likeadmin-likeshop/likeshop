@@ -1,0 +1,99 @@
+{layout name="layout1" /}
+<style> .layui-table-cell { height: auto; } </style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- 操作提示 -->
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*设置参与拼团活动的商品。</p>
+                        <p>*用户退出拼团，需商家后台审核通过之后，方可原路退回支付金额</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 设置 -->
+        <div class="layui-card-body layui-form">
+            <div class="layui-form-item" style="margin-bottom: 0;">
+                <label class="layui-form-label" style="width:110px;"><font color="red">*</font>系统自动成团：</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="automatic" value="1" title="开始" {if $automatic}checked{/if}>
+                    <input type="radio" name="automatic" value="0" title="关闭" {if !$automatic}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">开启系统自动成团后，拼团到时间后自动成团</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" lay-submit lay-filter="addSubmit">确定</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.on('submit(addSubmit)', function(data){
+            like.ajax({
+                url:'{:url("TeamSet/set")}',
+                data: data.field,
+                type:"post",
+                success:function(res) {
+                    if(res.code === 1) {
+                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                    } else {
+                        layui.layer.msg(res.msg, { offset:'15px', icon:2, time:1000 });
+                    }
+                }
+            });
+            return false;
+        });
+
+        //事件
+        var active = {
+            // 切换状态
+            set: function (obj) {
+
+                like.ajax({
+                    url:'{:url("TeamSet/set")}',
+                    data:{},
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                        } else {
+                            layui.layer.msg(res.msg, { offset:'15px', icon:2, time:1000 });
+                        }
+                    }
+                });
+            }
+
+        };
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

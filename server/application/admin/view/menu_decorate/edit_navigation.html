@@ -1,0 +1,132 @@
+{layout name="layout1" /}
+<style>
+  .layui-form {
+    margin-top: 15px;
+  }
+  .reqRed::before {
+    content: '*';
+    color: red;
+  }
+  .layui-form-label {
+    color: #6a6f6c;
+  }
+  .img-content{
+    height:80px;
+    line-height:80px
+  }
+  .img-container {
+    float: left;
+    opacity: 1;
+    position: relative;
+  }
+
+  .img-src {
+    width: 80px;
+    height: 80px;
+    padding: 4px;
+  }
+  .img-del-x {
+    position: absolute;
+    z-index: 100;
+    top: -4px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    line-height: 16px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    background: hsla(0, 0%, 60%, .6);
+    border-radius: 10px;
+  }
+</style>
+<div class="layui-form">
+  <input type="hidden" name="id" value="{$navigation.id}" />
+  <div class="layui-form-item">
+    <label class="layui-form-label reqRed">导航名称</label>
+    <div class="layui-input-block" style="width: 200px;">
+      <input type="text" name="name" value="{$navigation.name}" required lay-verify="required" class="layui-input" />
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">选中图标</label>
+    <div class="layui-input-block" style="width: 200px;">
+      <div class="img-content">
+        <input name="selected_icon" type="hidden" value="{$navigation.selected_icon}">
+        <div class="img-add"  {if $navigation.selected_icon } style="display: none" {/if} ></div>
+        {if !empty($navigation.selected_icon)}
+        <div class="img-container">
+          <img style="width:100px; height: 100px;" class="img-src" src="{$navigation.selected_icon}">
+          <a class="img-del-x">x</a>
+        </div>
+        {/if}
+      </div>
+    </div>
+  </div>
+  <div class="layui-form-item"><label class="layui-form-label"></label>
+    <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽100像素*高100像素的jpg，jpeg，png，gif图片。不传则使用默认图标</span>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">未选中图标</label>
+    <div class="layui-input-block" style="width: 200px;">
+      <input name="un_selected_icon" type="hidden" value="{$navigation.un_selected_icon}">
+      <div class="img-add"  {if $navigation.un_selected_icon } style="display: none" {/if} ></div>
+        {if !empty($navigation.un_selected_icon)}
+        <div class="img-container">
+          <img style="width:100px; height: 100px;" class="img-src" src="{$navigation.un_selected_icon}">
+          <a class="img-del-x">x</a>
+        </div>
+        {/if}
+    </div>
+  </div>
+  <div class="layui-form-item"><label class="layui-form-label"></label>
+    <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽100像素*高100像素的jpg，jpeg，png，gif图片。不传则使用默认图标</span>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block" style="width: 200px;">
+      <button class="layui-btn layui-hide" lay-submit id="edit-navigation_decorate-submit" lay-filter="edit-navigation_decorate-submit">确定</button>
+    </div>
+  </div>
+</div>
+<script>
+  layui.config({
+    version:"{$front_version}",
+    base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+  }).extend({
+      index: 'lib/index' //主入口模块
+  }).use(['index','table','like'], function(){
+    var $ = layui.$
+      ,form = layui.form
+      ,table = layui.table
+      ,like = layui.like;
+
+      // 图片上传
+      like.imageUpload('.img-add', function (uris, element) {
+      if(uris.length>1){
+          layer.msg('最多最能选中1张图片');
+          return;
+      }
+      var html = '<div class="img-container">\n' +
+          '<img style="width: 100px; height: 100px;" class="img-src" ' +
+          'src="' + uris[0] + '">' +
+          '<a class="img-del-x">x</a>' +
+          '</div>';
+          element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+          element.parent().append(html);
+          element.css('display','none');
+      }, true);
+      //删除图片
+      $(document).on('click', '.img-del-x', function () {
+          $(this).parent().siblings('input').val('');
+          $(this).parent().prev().css('display','block');
+          $(this).parent().remove();
+      });
+      //显示图片
+      $(document).on('click', '.img-src', function () {
+          var image = $(this).attr('src');
+          like.showImg(image,600);
+      });
+  });
+</script>

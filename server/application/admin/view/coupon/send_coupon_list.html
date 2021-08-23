@@ -1,0 +1,117 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">优惠券名称：</label>
+                            <div class="layui-input-inline" style="width: 200px;">
+                                <input type="text" id="name" name="name" placeholder="请输入优惠券名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-coupon {$view_theme_color}" lay-submit lay-filter="coupon-search">查询</button>
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-coupon layui-btn-primary }" lay-submit lay-filter="coupon-clear-search">清空查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table id="coupon-lists" lay-filter="coupon-lists"></table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="send-submit" class="send-submit" id="send-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+    .layui-form-label{
+        width: 86px;
+    }
+</style>
+<script>
+    var table;
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+        table = layui.table
+        $('.layui-btn.layuiadmin-btn-coupon').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //监听搜索
+        form.on('submit(coupon-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('coupon-lists', {
+                where: field
+            });
+        });
+        //清空查询
+        form.on('submit(coupon-clear-search)', function(){
+            $('#name').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('coupon-lists', {
+                where: []
+            });
+        });
+        table.on('submit(send-submit)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+        });
+        layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,form = layui.form;
+
+                //管理员管理
+                table.render({
+                    id:'coupon-lists'
+                    ,elem: '#coupon-lists'
+                    ,url: '{:url("coupon/lists")}?type=send'  //模拟接口
+                    ,cols: [[
+                        {type: 'checkbox'}
+                        ,{field: 'name',align: 'center',width:120,title: '优惠券名称'}
+                        ,{field: 'money',align: 'center',width:100, title: '面额'}
+                        ,{field: 'send_time',align: 'center',width:320, title: '发放时间'}
+                        ,{field: 'condition_type',align: 'center',width:180,title: '使用门槛'}
+                        ,{field: 'sent_total',align: 'center',width:180,title: '发放情况'}
+                        ,{field: 'use_time_type',align: 'center',width: 320, align: 'center',title:'用券时间'}
+                        ,{field: 'get_type',align: 'center',width:160, title:'领取方式'}
+                        ,{field: 'status_desc',align: 'center',width:160, title:'状态'}
+                        ,{field: 'create_time',align: 'center',width:180, title:'创建时间'}
+                    ]]
+                    ,page:true
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code":res.code,
+                            "msg":res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list, //解析数据列表
+                        };
+                    }
+                });
+
+            });
+
+    });
+    var callbackdata = function () {
+        var data = table.checkStatus('coupon-lists').data
+            ,index = parent.layer.getFrameIndex(window.name);
+        return data;
+    }
+</script>

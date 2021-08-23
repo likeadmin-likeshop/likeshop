@@ -1,0 +1,174 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 100px;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                       <p> *设置商城客服联系信息</p>
+                       <p> *小程序客服在微信小程序后台开通</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客服微信号：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="wechat" value="{$config.wechat}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客服电话：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="phone"  lay-verType="tips"  value="{$config.phone}" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">客服电话</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">服务时间：</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="time" value="{$config.time}" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">服务时间。例如：周一到周六9：00-19：00</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客服图片：</label>
+                    <div class="layui-input-block">
+                        <div class="img-content">
+                            <input name="image" type="hidden" value="{$config.image}">
+                            <div class="img-add" {if $config.image } style="display: none" {/if}></div>
+                        {if !empty($config.image)}
+                        <div class="img-container">
+                            <img class="img-src" src="{$config.file_url}{$config.image}">
+                            <a class="img-del-x">x</a>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="'+ uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        form.on('submit(set)', function (data) {
+            like.ajax({
+                url: '{:url("ServiceConfig/config")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        },function () {
+                            location.href = location.href;
+                        });
+                    }
+                }
+            });
+        });
+
+
+        // //验证手机或座机
+        var mobile = /^1[3|5|7|8]\d{9}$/,phone = /^0\d{2,3}-?\d{7,8}$/, other = /^400-[016789]\d{2}-\d{4}$/;
+        form.verify({
+            tellphone: function(value){
+                var flag = mobile.test(value) || phone.test(value) || other.test(value);
+                if(!flag){
+                    return '请输入正确座机号码或手机号';
+                }
+            }
+        });
+
+    });
+</script>

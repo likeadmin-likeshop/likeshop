@@ -1,0 +1,282 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*用户可以根据商品品牌搜索商品。</p>
+                    <p>*发布商品时可以选择商品对应的品牌。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">品牌名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="keyword" placeholder="请输入品牌名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods_brand {$view_theme_color}" lay-submit lay-filter="goods_brand-search">
+                        <i class="layui-icon  layuiadmin-button-btn"></i>查询
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm  layui-btn-primary layuiadmin-btn-goods_brand  " lay-submit lay-filter="goods_brand-clear-search">清空查询</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods_brand {$view_theme_color}" data-type="add">添加品牌</button>
+                </div>
+            </div>
+
+            <table id="goods_brand-lists" lay-filter="goods_brand-lists"></table>
+            <script type="text/html" id="img">
+                <img src="{{d.image}}" style="height:80px;width: 80px" class="image-show">
+            </script>
+            <script type="text/html" id="status">
+                <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}}  lay-skin="switch"
+                       lay-text="显示|隐藏" {{#  if(d.is_show){ }} checked  {{#  } }} />
+            </script>
+            <script type="text/html" id="goods_brand-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+
+        //监听搜索
+        form.on('submit(goods_brand-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('goods_brand-lists', {
+                where: field,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+        //清空查询条件
+        form.on('submit(goods_brand-clear-search)',function () {
+            //清空输入框
+            $('#keyword').val('');
+
+            //执行刷新列表
+            table.reload('goods_brand-lists',{
+                where:[],
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var status = 0;
+            if(this.checked){
+                status = 1;
+            }
+
+            like.ajax({
+                url:'{:url("goods_brand/switchStatus")}',
+                data:{id:id,status:status},
+                type:'post',
+                success:function (res) {
+                    if(res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+
+                    }
+                }
+            })
+        })
+
+
+        //管理员管理
+        table.render({
+            elem: '#goods_brand-lists'
+            ,url: '{:url("goods_brand/lists")}' //模拟接口
+            ,cols: [[
+                {type:'numbers',title: '序号',width:60}
+                ,{field: 'name',width:120,title: '品牌名称'}
+                ,{field: 'image', title: '图片',width:160, align: 'center',toolbar: '#img'}
+                ,{field: 'initial', title: '品牌首字母', align: 'center',width:120}
+                ,{field: 'is_show', title: '显示状态', width: 120, align: 'center',toolbar:'#status'}
+                ,{field: 'sort', title: '排序', width: 80, align: 'center',sort: true}
+                ,{fixed: 'right', title: '操作', align: 'center', width: 250,toolbar: '#goods_brand-operation'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list, //解析数据列表
+                };
+            }
+            ,done: function(res, curr, count){
+                setTimeout(function () {
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-fixed-l .layui-table-body").removeAttr("style");
+                    $(".layui-table-fixed-r .layui-table-body").removeAttr("style");
+                    $(".layui-table-main tr").each(function (index, val) {
+                        console.log($(val).height());
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }, 100)
+            }
+        });
+
+        //监听工具条
+        table.on('tool(goods_brand-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确定品牌:'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("goods_brand/del")}',
+                        data:{delData:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('goods_brand-lists'); //数据刷新
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑品牌'
+                    ,content: '{:url("goods_brand/edit")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-goods_brand-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("goods_brand/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('goods_brand-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加品牌'
+                    ,content: '{:url("goods_brand/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-goods_brand-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("goods_brand/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('goods_brand-lists'); //数据刷新
+                                    }
+
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            },
+
+        }
+        $('.layui-btn.layuiadmin-btn-goods_brand').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $(document).on('click', '.image-show', function () {
+            var img = $(this);
+            var src = img.attr('src');
+            like.showImg(src,600);
+        });
+    });
+
+</script>

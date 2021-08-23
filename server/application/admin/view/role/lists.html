@@ -1,0 +1,175 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-role {$view_theme_button}" data-type="add">添加</button>
+            </div>
+
+            <table id="role-lists" lay-filter="role-lists"></table>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.check == true){ }}
+                <button class="layui-btn layui-btn-xs">已审核</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-primary layui-btn-xs">未审核</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="table-useradmin-admin">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加新角色'
+                    ,content: '{:url("role/add")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find("#add-role-submit");
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(add-role-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            like.ajax({
+                                url:'{:url("role/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('role-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-role').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        table.render({
+            elem: '#role-lists'
+            ,url: '{:url()}'
+            ,cols: [[
+                {field: 'id', width: 60, title: 'ID', sort: true}
+                ,{field: 'name',width: 120, title: '角色名称'}
+                ,{field: 'auth_str',width: 160, title: '角色权限'}
+                ,{field: 'desc', width: 160,title: '角色说明'}
+                ,{field: 'create_time_str',width: 170, title: '创建时间'}
+                ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
+                ,{title: '', width: '',align: 'center',fixed: 'right'}
+            ]]
+            ,text: {none: '暂无数据！'}
+        });
+
+        table.on('tool(role-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                layer.confirm('确定删除此角色？', function(index){
+                    like.ajax({
+                        url:'{:url("role/del")}',
+                        data:{role_id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('role-lists'); //数据刷新
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else if(obj.event === 'edit'){
+                var tr = $(obj.tr);
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑角色'
+                    ,content: '{:url("role/edit")}?role_id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find("#edit-role-submit");
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(edit-role-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            like.ajax({
+                                url:'{:url("role/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('role-lists'); //数据刷新
+                                    }else{
+                                        iframeWindow.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                    ,success: function(layero, index){
+
+                    }
+                })
+            }
+        });
+
+    });
+</script>

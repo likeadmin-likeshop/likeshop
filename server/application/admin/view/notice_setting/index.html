@@ -1,0 +1,271 @@
+{layout name="layout1" /}
+
+<style>
+    .layui-table-cell {
+        height:auto;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*平台配置在各个场景下的通知发送方式和内容模板。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type='1' class="layui-this">通知会员</li>
+                <li data-type='2' >通知平台</li>
+            </ul>
+            <div class="layui-tab-content">
+                <!--通知会员-->
+                <div class="layui-tab-item layui-show ">
+                    {include file="notice_setting/notice_user"/}
+                </div>
+
+                <!--通知平台-->
+                <div class="layui-tab-item">
+                    {include file="notice_setting/notice_platform"/}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/html" id="systemTpl">
+    {{#  if((d.support).includes(1)){ }}
+        <div>
+            {{#  if(d.system_notice.status == 1){ }}
+            <a class="layui-btn layui-btn layui-btn-sm operation-btn">已开启</a>
+            {{#  } else { }}
+            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn">已关闭</a>
+            {{#  } }}
+            <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="system_record">通知记录</a>
+            <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="system">设置</a>
+        </div>
+    {{#  } else { }}
+        -
+    {{#  } }}
+</script>
+
+<script type="text/html" id="smsTpl">
+    {{#  if((d.support).includes(2)){ }}
+    <div>
+        {{#  if(d.sms_notice.status == 1){ }}
+        <a class="layui-btn layui-btn layui-btn-sm operation-btn">已开启</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn">已关闭</a>
+        {{#  } }}
+        <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="sms_record">通知记录</a>
+        <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="sms">设置</a>
+    </div>
+    {{#  } else { }}
+        -
+    {{#  } }}
+</script>
+
+<script type="text/html" id="oaTpl">
+    {{#  if((d.support).includes(3)){ }}
+        <div>
+            {{#  if(d.oa_notice.status == 1){ }}
+            <a class="layui-btn layui-btn layui-btn-sm operation-btn">已开启</a>
+            {{#  } else { }}
+            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn">已关闭</a>
+            {{#  } }}
+            <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="oa_record">通知记录</a>
+            <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="oa">设置</a>
+        </div>
+    {{#  } else { }}
+        -
+    {{#  } }}
+</script>
+
+<script type="text/html" id="mnpTpl">
+    {{#  if((d.support).includes(4)){ }}
+    <div>
+        {{#  if(d.mnp_notice.status == 1){ }}
+        <a class="layui-btn layui-btn layui-btn-sm operation-btn">已开启</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn">已关闭</a>
+        {{#  } }}
+        <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="mnp_record">通知记录</a>
+        <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="mnp">设置</a>
+    </div>
+    {{#  } else { }}
+        -
+    {{#  } }}
+</script>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'element', 'like', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , element = layui.element
+            , like = layui.like;
+
+        getLists(1);
+
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            form.render('select');
+            var type = $(this).attr('data-type');
+            getLists(type);
+        });
+
+
+        //列表
+        function getLists(type) {
+
+            var elem = '#user-lists';
+            if (type == 2) {
+                elem = '#platform-lists';
+            }
+
+            table.render({
+                elem: elem
+                , url: '{:url("noticeSetting/index")}?type='+type
+                , cols: [[
+                     {field: 'scene', title: '通知类型',width:150}
+                    , {field: 'desc', title: '通知场景说明', width:150 }
+                    , {field: 'system_notice', title: '系统通知', align: 'center', templet:'#systemTpl'}
+                    , {field: 'sms_notice', title: '短信通知', align: 'center', templet:'#smsTpl'}
+                    , {field: 'oa_notice', title: '微信模板消息', align: 'center', templet:'#oaTpl'}
+                    , {field: 'mnp_notice', title: '微信小程序提醒', align: 'center', templet:'#mnpTpl'}
+                ]]
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count,
+                        "data": res.data.lists,
+                    };
+                }
+                ,done: function(res, curr, count){
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+        }
+
+
+        //操作
+        var active = {
+            //系统通知
+            system: function (obj) {
+                setPage('系统通知设置', obj.data.id, 'system');
+            },
+            //系统通知记录
+            system_record: function (obj) {
+                recordPage('系统通知记录', obj.data.id, 1);
+            },
+
+            //短信通知
+            sms: function (obj) {
+                setPage('短信通知设置', obj.data.id, 'sms');
+            },
+            //知信通知记录
+            sms_record: function (obj) {
+                recordPage('短信通知记录', obj.data.id, 2);
+            },
+
+            //公众号通知
+            oa: function (obj) {
+                setPage('公众号通知设置', obj.data.id, 'oa');
+            },
+            //微信模板通知记录
+            oa_record: function (obj) {
+                recordPage('微信模板通知记录', obj.data.id, 3);
+            },
+
+            //小程序
+            mnp: function (obj) {
+                setPage('小程序通知设置', obj.data.id, 'mnp');
+            },
+            //微信小程序通知记录
+            mnp_record: function (obj) {
+                recordPage('微信小程序通知记录', obj.data.id, 4);
+            },
+        };
+
+
+        //设置页面
+        function setPage(title, id, type) {
+            layer.open({
+                type: 2
+                ,title: title
+                ,content: '{:url("noticeSetting/set")}?id='+id+'&type='+type
+                ,area: ['90%','90%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero) {
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submitID = 'addSubmit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                    //监听提交
+                    iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                        var field = data.field;
+                        like.ajax({
+                            url:'{:url("noticeSetting/set")}',
+                            data:field,
+                            type:"post",
+                            success:function(res) {
+                                if(res.code === 1) {
+                                    layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                    layer.close(index);
+                                    table.reload('user-lists');
+                                    table.reload('platform-lists');
+                                }
+                            }
+                        });
+                    });
+                    submit.trigger('click');
+                }
+            });
+        }
+        // 通知记录界面
+        function recordPage(title, id, send_type) {
+            layer.open({
+                type: 2
+                ,title: title
+                ,content: '{:url("noticeSetting/record")}?id='+id+'&send_type='+send_type
+                ,area: ['90%','90%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero) {
+                    layer.close(index);
+                }
+            });
+        }
+
+
+        // 监听表格右侧工具条
+        table.on('tool(user-lists)', function(obj) {
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        table.on('tool(platform-lists)', function(obj) {
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+    });
+
+</script>

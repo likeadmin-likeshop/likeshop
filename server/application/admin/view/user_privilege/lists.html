@@ -1,0 +1,213 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*设定不同权益具有的会员权益，丰富会员权益内容，持续提升会员权益的吸引力。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <div class="layui-card">
+
+                <div class="layui-card-body">
+                    <div style="padding-bottom: 10px;" class="add">
+                        <button class="layui-btn layui-btn-sm layuiadmin-btn-user_privilege {$view_theme_color}" data-type="add">新增会员权益</button>
+                    </div>
+
+                    <table id="user_privilege-lists" lay-filter="user_privilege-lists"></table>
+                    <script type="text/html" id="image">
+                        <img src="{{d.image}}" style="height:auto;width: auto" class="image-show">
+                    </script>
+                    <script type="text/html" id="user_privilege-operation">
+                        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                    </script>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        $('.layui-btn.layuiadmin-btn-user_privilege').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        layui.define(['table', 'form'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,form = layui.form;
+
+            //管理员管理
+            table.render({
+                id:'user_privilege-lists'
+                ,elem: '#user_privilege-lists'
+                ,url: '{:url("user_privilege/lists")}'  //模拟接口
+                ,cols: [[
+                    {field: 'name', title: '权益名称',width:160}
+                    ,{field: 'icon',width:160, title: '权益图标',toolbar:'#image'}
+                    ,{field: 'remark',width:160, title:'权益说明'}
+                    ,{fixed: 'right', title: '操作', width:160,align: 'center', toolbar: '#user_privilege-operation'}
+                ]]
+                ,page:true
+                ,text: {none: '暂无数据！'}
+                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code":res.code,
+                        "msg":res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list, //解析数据列表
+                    };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+
+        });
+
+
+        //事件
+        var active = {
+            add: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '添加会员权益'
+                    ,content: '{:url("user_privilege/add")}'
+                    ,area: ['60%', '60%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-user_privilege-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("user_privilege/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user_privilege-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+
+        table.on('tool(user_privilege-lists)', function(obj) {
+            var id = obj.data.id;
+            if (obj.event === 'edit') {
+                var index = layer.open({
+                    type: 2
+                    , title: '编辑会员权益'
+                    , content: '{:url("user_privilege/edit")}?id=' + id
+                    , area: ['60%', '60%']
+                    , btn: ['保存', '取消']
+                    , maxmin: true
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'edit-user_privilege-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field;
+                            like.ajax({
+                                url: '{:url("user_privilege/edit")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user_privilege-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+
+            }
+            if (obj.event === 'del') {
+                var name = obj.data.name;
+                layer.confirm('确定删除会员权益：<span style="color: red">' + name + '</span>', function (index) {
+                    like.ajax({
+                        url: '{:url("user_privilege/del")}',
+                        data: {id: id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code == 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('user_privilege-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+
+            }
+        })
+
+    });
+</script>

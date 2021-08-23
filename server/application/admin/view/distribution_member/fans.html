@@ -1,0 +1,178 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        font-size:14px;
+        padding:0 5px;
+        height:auto;
+        overflow:visible;
+        text-overflow:inherit;
+        white-space:normal;
+        word-break: break-all;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <li data-type='all' class="layui-this">全部</li>
+                <li data-type="first_leader">一级粉丝</li>
+                <li data-type="second_leader">二级粉丝</li>
+                <li data-type="third_leader">三级粉丝</li>
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item">
+
+                            <div class="layui-row">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">会员信息:</label>
+                                    <div class="layui-input-block">
+                                        <select name="search_key">
+                                            <option value="sn">会员编号</option>
+                                            <option value="nickname">会员昵称</option>
+                                            <option value="mobile">手机号码</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <input type="text" name="keyword" id="keyword" placeholder="请输入搜索内容" autocomplete="off" class="layui-input">
+                                </div>
+
+                                <div class="layui-inline">
+                                    <button class="layui-btn layuiadmin-btn-member {$view_theme_color}" lay-submit lay-filter="fans-search">
+                                        查询
+                                    </button>
+                                    <button class="layui-btn layuiadmin-btn-express layui-btn-primary " lay-submit
+                                            lay-filter="fans-clear-search">重置
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card-body">
+                        <table id="fans-lists" lay-filter="fans-lists"></table>
+                        <script type="text/html" id="member-operation">
+                            <div style="text-align: left">
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="info">分销资料</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="fans">推广会员</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="earnings_detail">收入明细</a><br/>
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update_leader" style="margin-top: 5px">修改上级</a>
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="freeze" style="margin-top: 5px">冻结资格</a>
+                            </div>
+                        </script>
+
+                        <!--会员信息-->
+                        <script type="text/html" id="user-info">
+                            <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
+                            <div class="layui-input-inline"  style="text-align: left">
+                                <p>会员编号:{{d.sn}}</p>
+                                <p>会员昵称:{{d.nickname}}</p>
+                                <p>手机号码:{{d.mobile}}</p>
+                                <p>会员等级:</p>
+                                <p>性别:{{d.sex}}</p>
+                                <p>注册时间:{{d.create_time}}</p>
+                            </div>
+                        </script>
+
+                        <!--会员信息-->
+                        <script type="text/html" id="leader-info">
+                            {{#  if(d.leader.length == 0){ }}
+                            <p>无</p>
+
+                            {{#  } else { }}
+                            <div class="layui-input-inline" >
+                                <p>会员编号:{{d.leader.sn}}</p>
+                                <p>会员昵称:{{d.leader.nickname}}</p>
+                                <p>手机号码:{{d.leader.mobile}}</p>
+                                <p>会员等级: {{d.leader.level}}</p>
+                            </div>
+                            {{#  } }}
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like', 'laydate'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            , element = layui.element
+            , laydate = layui.laydate;
+
+        var user_id = {$user_id | raw};
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        //监听搜索
+        form.on('submit(fans-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('fans-lists', {
+                where: field
+            });
+        });
+        //清空查询
+        form.on('submit(fans-clear-search)', function () {
+            $('#keyword').val('');
+            form.render('select');
+            //刷新列表
+            table.reload('fans-lists', {
+                where: []
+            });
+        });
+
+        //获取列表
+        getList('all');
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            $('#keyword').val('');
+            form.render('select');
+            var type = $(this).attr('data-type');
+            getList(type);
+        });
+
+        function getList(type) {
+            table.render({
+                elem: '#fans-lists'
+                , url: '{:url("distributionMember/fans")}?id=' + user_id + '&type=' +  type
+                , cols: [[
+                    {type: 'numbers', title: '序号', align: 'center'}
+                    , {field: 'user', title: '会员信息', templet: '#user-info', width: 350, align: 'center'}
+                    , {field: 'leader', title: '上级推荐人',  width: 260, align: 'center', templet:'#leader-info'}
+                    , {field: 'fans', title: '推广会员数',  align: 'center'}
+                    , {field: 'distribution_num', title: '分销订单数',  align: 'center'}
+                    , {field: 'distribution_amount', title: '分销订单金额',  align: 'center'}
+                    , {field: 'distribution_money', title: '分销佣金', align: 'center'}
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count,
+                        "data": res.data.lists,
+                    };
+                }
+            });
+        }
+    });
+</script>

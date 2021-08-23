@@ -1,0 +1,99 @@
+{layout name="layout2" /}
+<style>
+.tips{
+    color: red;
+}
+</style>
+
+<div class="layui-form" lay-filter="">
+    <div class="layui-tab">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="tips">*</span>类型：</label>
+            <div class="layui-input-block">
+                <div class="layui-col-md4">
+                    <select name="type"  placeholder="请选择" >
+                        {foreach $type_list as $type}
+                        <option value="{$type.id}">{$type.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>名称：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text" name="name" lay-verify="required" lay-verType="tips" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <span style="color: #a3a3a3;font-size: 9px">自定义打印机名称</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>终端号：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text"  name="machine_code"  placeholder="请输入终端号" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>秘钥：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text"  name="private_key"  placeholder="请输入秘钥" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>打印联数：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="number"  name="print_number"  placeholder="请输入打印联数" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <span style="color: #a3a3a3;font-size: 9px">打印小票的张数</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>自动打印：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="radio" name="auto_print" value="1" title="开启" >
+                <input type="radio" name="auto_print" value="0" title="关闭" checked>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <span style="color: #a3a3a3;font-size: 9px">自动打印订单，默认关闭</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>状态</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="停用">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-printer-submit" id="add-printer-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','likeedit','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+
+    });
+</script>

@@ -1,0 +1,144 @@
+{layout name="layout2" /}
+<style>
+    .pay-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+    .pay-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .pay-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-balance" id="layuiadmin-form-balance" style="padding: 20px 30px 0 0;">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付简称：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="text" name="short_name" value="{$info.short_name | default = ''}" lay-verify="required" lay-verType="tips"  autocomplete="off" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">会员在商城看见的支付名称</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付图标</label>
+        <div class="layui-input-inline">
+            <div style="height:80px;line-height:80px">
+                <input name="icon" type="hidden" value="{$info.icon}">
+                {if !empty($info.icon)}
+                <div class="pay-img-add" style="display: none" ></div>
+                <div class="pay-li">
+                    <img class="pay-img" src="{$info.icon}">
+                    <a class="pay-img-del-x" style="display: none">x</a>
+                </div>
+                {else}
+                <div class="pay-img-add" ></div>
+                {/if}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <label class=" layui-form-mid layui-word-aux">支付方式图标。建议尺寸：宽100px*高100px，jpg，jpeg，png格式</label>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <div class="layui-col-md4">
+                <input type="number"  name="sort" value="{$info.sort | default = ''}" class="layui-input" >
+                <div class=" layui-form-mid layui-word-aux">排序越小越前</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态:</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value=1 title="启用"{if condition="$info.status eq 1" }checked{/if}>
+            <input type="radio" name="status" value=0 title="关闭" {if condition="$info.status eq 0" }checked{/if}>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="pay_config-submit-edit" id="pay_config-submit-edit" value="确认">
+    </div>
+</div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+
+        //上传图片
+        like.imageUpload('.pay-img-add', function (uri, element) {
+            if(uri.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="pay-li">\n' +
+                '<img class="pay-img" ' +
+                'src="' + uri[0] + '">' +
+                '<a class="pay-img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+
+        //删除图片
+        $(document).on('click', '.pay-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+
+        //显示图片
+        $(document).on('click', '.pay-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,400);
+        });
+
+
+
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.pay-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.pay-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.pay-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.pay-img-del-x', function () {
+            $(this).hide();
+        });
+    })
+</script>

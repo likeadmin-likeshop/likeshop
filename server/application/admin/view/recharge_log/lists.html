@@ -1,0 +1,388 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*会员充值订单列表。</p>
+                        <p>*充值订单状态为待付款，已完成。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">订单搜索:</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <select name="type" id="type">
+                            <option value="order_sn">订单编号</option>
+                            <option value="nickname">会员昵称</option>
+                            <option value="sn">会员编号</option>
+                            <option value="mobile">会员手机号码</option>
+                            <option value="transaction_id">外部交易号</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="keyword" name="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">订单来源：</label>
+                    <div class="layui-input-inline">
+                        <select name="order_source" id="order_source">
+                            <option value="0">全部</option>
+                            <option value="2">H5商城</option>
+                            <option value="1">小程序商城</option>
+                            <option value="4">安卓APP商城</option>
+                            <option value="3">苹果APP商城</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">订单状态：</label>
+                    <div class="layui-input-inline">
+                        <select name="pay_status" id="pay_status">
+                            <option value="0">全部</option>
+                            <option value="2">待支付</option>
+                            <option value="1">已完成</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">付款方式：</label>
+                    <div class="layui-input-inline">
+                        <select name="pay_way" id="pay_way">
+                            <option value="0">全部</option>
+                            <option value="2">微信支付</option>
+                            <option value="1">支付宝支付</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">下单时间:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input time" id="start_time" name="start_time"  autocomplete="off">
+                    </div>
+                    <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
+                        <label class="layui-form-mid">-</label>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input time" id="end_time" name="end_time"  autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-btn-group">
+                        <button type="button" id="today" day="1" class="layui-btn layui-btn-sm layui-btn-normal day">今天</button>
+                        <button type="button"  day="-1" class="layui-btn layui-btn-sm layui-btn-primary day">昨天</button>
+                        <button type="button"  day="7" class="layui-btn layui-btn-sm layui-btn-primary day">近7天</button>
+                        <button type="button"  day="30" class="layui-btn layui-btn-sm layui-btn-primary day">近30天</button>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-recharge {$view_theme_color}" lay-submit lay-filter="recharge-search">查询</button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-recharge layui-btn-primary }" lay-submit lay-filter="recharge-clear-search">清空查询</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-card-body">
+            <table id="recharge-lists" lay-filter="recharge-lists"></table>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+        //日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+            , value: "{$today[0]}"
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            , type: 'datetime'
+            ,theme: '#1E9FFF'
+            ,value: "{$today[1]}"
+        });
+
+        //监听搜索
+        form.on('submit(recharge-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('recharge-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        //清空查询
+        form.on('submit(recharge-clear-search)', function(){
+            $('#keyword').val('');
+            $('#pay_status').val(0);
+            $('#order_source').val(0);
+            $('#pay_way').val(0);
+            $('#create_start').val('');
+            $('#create_end').val('');
+            $('#start_time').val('{$today[0]}');
+            $('#end_time').val('{$today[1]}');
+            $('#today').trigger("click");
+            form.render('select');
+            //刷新列表
+            table.reload('recharge-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+    });
+
+
+
+    layui.define(['table', 'form'], function(exports){
+        var $ = layui.$
+            ,table = layui.table
+            ,form = layui.form;
+
+        //管理员管理
+        table.render({
+            id:'recharge-lists'
+            ,elem: '#recharge-lists'
+            ,url: '{:url("rechargeLog/lists")}' //模拟接口
+            ,cols: [[
+                {field: 'order_sn',title: '订单编号'}
+                ,{field: 'order_amount', title: '充值金额'}
+                ,{field: 'give_money', title: '赠送金额'}
+                ,{field: 'give_integral', title: '赠送积分'}
+                ,{field: 'give_growth', title: '赠送成长值'}
+                ,{field: 'pay_way', title: '支付方式'}
+                ,{field: 'pay_time', title: '支付时间'}
+                ,{field: 'pay_status', title: '订单状态'}
+                ,{fixed: 'right', field: 'create_time',  title: '下单时间'}
+
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            }
+            , done: function fix() {
+                $(".layui-table-main tr").each(function (index, val) {
+                    $(".layui-table-fixed").each(function () {
+                        $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                });
+                $(".layui-table-header tr").each(function (index, val) {
+                    $(".layui-table-fixed").each(function () {
+                        $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
+                    });
+                });
+                window.onresize = function () {
+                    fix()
+                }
+            }
+        });
+
+        //监听工具条
+        table.on('tool(user-lists)', function(obj){
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑会员'
+                    ,content: '{:url("user/edit")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#edit-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(edit-submit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+
+            }
+            if(obj.event === 'info'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '会员资料'
+                    ,content: '{:url("user/info")}?id='+id
+                    ,area: ['90%','90%']
+                    ,btn: ['返回']
+                })
+            }
+            if(obj.event === 'adjust_user'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '账户调整'
+                    ,content: '{:url("user/adjustAccount")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#adjust_user-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(adjust_user-submit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/adjustAccount")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'adjust_level'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '等级调整'
+                    ,content: '{:url("user/adjustLevel")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#adjust_level-submit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(adjust_level-submit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/adjustLevel")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+        $('.day').click(function(){
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $(this).removeClass('layui-btn-primary');
+            $(this).addClass('layui-btn-normal');
+            var day = $(this).attr('day');
+            switch (day) {
+                case '-1':
+                    $('#start_time').val('{$yesterday[0]}');
+                    $('#end_time').val('{$yesterday[1]}');
+                    break;
+                case '1':
+                    $('#start_time').val('{$today[0]}');
+                    $('#end_time').val('{$today[1]}');
+                    break;
+                case '7':
+                    $('#start_time').val('{$days_ago7[0]}');
+                    $('#end_time').val('{$days_ago7[1]}');
+                    break;
+                case '30':
+                    $('#start_time').val('{$days_ago30[0]}');
+                    $('#end_time').val('{$days_ago30[1]}');
+                    break;
+            }
+        });
+    });
+</script>

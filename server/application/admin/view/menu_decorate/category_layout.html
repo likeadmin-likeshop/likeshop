@@ -1,0 +1,72 @@
+{layout name="layout1" /}
+<style>
+  .layui-table-cell {
+      height: auto;
+  }
+  .layui-form-radio * {
+    font-size: 12px;
+  }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show tips">
+                      <p>*商品分类页可以选择布局，不同布局适应不同层级的商品分类。最多显示三级分类</p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form" style="margin-top: 15px;">
+                <div class="layui-form-item" style="font-size: 5px !important;">
+                    <label class="layui-form-label" style="width: 100px">商品分类页布局</label>
+                    {foreach $category_layouts as $k => $v}
+                    <div class="layui-inline" style="margin-right: 15px;">
+                        <img src="{$v}" style="width:220px;border: 5px solid #ccc" /><br />
+                        <input type="radio" name="layout_no" value="{$k}" class="layui-input" title="{$category_layouts_tips[$k]}" {if $k == $layout_no}checked{/if} />
+                    </div>
+                    {/foreach}
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div>
+                        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="category_layout_submit">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+      version:"{$front_version}",
+      base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index','form','like'], function(){
+      var $ = layui.$
+      , form = layui.form
+      , like = layui.like;
+
+      // 监听提交
+      form.on('submit(category_layout_submit)', function(obj) {
+        like.ajax({
+          url:'{:url("menu_decorate/categoryLayout")}',
+          data: obj.field,
+          type:"post",
+          success:function(res)
+          {
+            if(res.code == 1)
+            {
+              layui.layer.msg(res.msg, {
+                offset: '15px'
+                , icon: 1
+                , time: 1000
+              });
+            }
+          }
+      });
+        });
+    });
+</script>

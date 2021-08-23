@@ -1,0 +1,103 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-item .layui-input-inline {
+        width: 270px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$info.id}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">父类菜单</label>
+        <div class="layui-input-inline">
+            <select name="pid" class="layui-select">
+                {eq name="info.type" value="1"}<option value="0">顶级</option>{/eq}
+                {volist name='menu_lists' id='vo'}
+                <option value="{$vo.id}" {eq name="info['pid']" value="$vo.id"} selected {/eq} >{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" placeholder="请输入菜单名称" autocomplete="off" class="layui-input" value="{$info.name}" lay-verify="required" placeholder="请输入菜单名称" lay-vertype="tips">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-inline">
+            <input type="radio" lay-filter="type" name="type" value="1" title="菜单" {eq name="info.type" value="1"}checked{/eq}>
+            <input type="radio" lay-filter="type" name="type" value="2" title="权限" {eq name="info.type" value="2"}checked{/eq}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">规则</label>
+        <div class="layui-input-inline">
+            <input type="text" name="uri"  placeholder="请输入控制器方法规则：例：admin/lists" autocomplete="off" class="layui-input"  lay-vertype="tips" value="{$info.uri}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-inline">
+            <input type="number" name="sort" autocomplete="off" class="layui-input"  lay-verify="required" placeholder="请输入排序，数字越大越靠前" lay-vertype="tips" value="{$info.sort}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请选择图标</label>
+        <div class="layui-input-inline">
+            <input type="text" id="iconPicker" lay-filter="iconPicker" style="display:none;">
+            <input type="hidden" name="icon" value="{$info.icon}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" lay-filter="disable" name="disable" lay-skin="switch" lay-text="启用|禁用" {if condition="$info.disable eq 0" }checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="menu-submit" id="menu-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        iconPicker: 'iconpicker/module/iconPicker/iconPicker' //主入口模块
+    }).use(['form','iconPicker'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+        var iconPicker = layui.iconPicker;
+
+        iconPicker.render({
+            // 选择器，推荐使用input
+            elem: '#iconPicker',
+            // 数据类型：fontClass/unicode，推荐使用fontClass
+            type: 'fontClass',
+            // 是否开启搜索：true/false，默认true
+            search: true,
+            // 是否开启分页：true/false，默认true
+            page: true,
+            // 每页显示数量，默认12
+            limit: 50,
+            // 每个图标格子的宽度：'43px'或'20%'
+            cellWidth: '43px',
+            // 点击回调
+            click: function (data) {
+                $('input[name="icon"]').val(data.icon);
+            }
+        });
+        iconPicker.checkIcon('iconPicker', '{$info.icon}');
+
+
+        form.on('radio(type)', function (data) {
+            if (data.value == 1) {
+                $("#pid").prepend("<option value='0'>顶级</option>");
+            } else {
+                $("#pid option[value='0']").remove();
+            }
+            form.render('select');
+        });
+    })
+</script>

@@ -1,0 +1,136 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*商城支付方式设置，不同应用场景支持的支付方式不同。</p>
+                        <p>*请前往微信和支付宝平台申请对应的支付端口。</p>
+                        <p>*微信支付的appid，appsecret从微信功能模块获取</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <h1 class="site-h1">支付设置</h1>
+        </div>
+
+        <div class="layui-card-body" id="card-body">
+
+            <table id="pay_config-lists" lay-filter="pay_config-lists"></table>
+            <script type="text/html" id="icon">
+                <img src="{{d.icon}}" class="image-show">
+            </script>
+
+            <script type="text/html" id="pay_config-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">配置</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src, 400);
+        });
+
+        table.render({
+            id: 'pay_config-lists',
+            elem: '#pay_config-lists'
+            ,url: '{:url("pay_config/lists")}'
+            ,cols: [[
+                {field: 'name', title: '支付方式'}
+                ,{field: 'icon', title: '图标', toolbar: '#icon', align: 'center'}
+                ,{field: 'short_name', title: '简称', align: 'center'}
+                ,{field: 'status_text', title: '状态', minWidth: 40, align: 'center'}
+                ,{field: 'sort', title: '排序', event: 'tips',  sort: true}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#pay_config-operation'}
+            ]]
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.list,
+                };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        table.on('tool(pay_config-lists)', function(obj){
+            if(obj.event === 'edit') {
+                var name = obj.data.name;
+                var code = obj.data.code;
+
+                var edit_page;
+                if (code == 'balance') {
+                    edit_page = 'editBalance';
+                }else if (code == 'wechat') {
+                    edit_page = 'editWechat';
+                }else if (code　==　'alipay') {
+                    edit_page = 'editAlipay';
+                }
+                
+                layer.open({
+                    type: 2
+                    ,title: '编辑'+name
+                    ,content: '{:url("pay_config/'+edit_page+'")}?name='+name
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero)　{
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#pay_config-submit-edit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(pay_config-submit-edit)', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("pay_config/'+edit_page+'")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index);
+                                        table.reload('pay_config-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+        });
+    });
+
+</script>

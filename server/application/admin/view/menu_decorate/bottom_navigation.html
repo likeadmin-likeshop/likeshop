@@ -1,0 +1,285 @@
+{layout name="layout1" /}
+<style>
+  .layui-tab-content {
+    height: auto !important;
+  }
+  .layui-btn {
+    margin-bottom: 15px;
+  }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show tips">
+                      *设置移动端商城底部导航图标和名称
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab">
+          <ul class="layui-tab-title">
+            <li class="layui-this">菜单按钮设置</li>
+            <li>其它设置</li>
+          </ul>
+          <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+              <!-- 导航项 -->
+              <button class="layui-btn layui-btn-normal layui-btn-sm layui-hide" data-type="add">新增</button>
+              <table id="navigator-list" lay-filter="navigator-list"></table>
+              <script type="text/html" id="selectd_icon">
+                {{#  if(d.selected_icon != ''){ }}
+                  <img src="{{d.selected_icon}}" style="width: 50px; height: 50px;" />
+                {{#  } }} 
+              </script>
+              <script type="text/html" id="un_selected_icon">
+                {{#  if(d.un_selected_icon != ''){ }}
+                  <img src="{{d.un_selected_icon}}" style="width: 50px; height: 50px;" />
+                {{#  } }} 
+              </script>
+              <script type="text/html" id="operation">
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</button>
+<!--                <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</button>-->
+              </script>
+            </div>
+            <div class="layui-tab-item">
+              <!-- 其他设置项 -->
+              <div class="layui-form">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">文本颜色</label>
+                  <div class="layui-input-block">
+                    <input type="color" name="unSelectedTextColor" value="{$unSelectedTextColor}" />
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label"></label>
+                  <span class="layui-word-aux">导航文本未选中时的颜色</span>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label">选中颜色</label>
+                  <div class="layui-input-block">
+                    <input type="color" name="selectedTextColor" value="{$selectedTextColor}" />
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label"></label>
+                  <span class="layui-word-aux">导航文本选中时的颜色</span>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label"></label>
+                  <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="navigation-setting">确 定</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like', 'colorpicker'], function(){
+      var $ = layui.$
+        ,form = layui.form
+        ,table = layui.table
+        ,like = layui.like;
+
+      // 数据表格渲染
+      table.render({
+        id: 'navigator-list',
+        elem: '#navigator-list'
+        ,url: '{:url("menu_decorate/bottomNavigation")}'
+        ,cols: [[
+          {field: 'name', title: '导航名称',width: 200, align: 'center'}
+          ,{title: '选中图标', width: 160, templet: '#selectd_icon', align: 'center'}
+          ,{title: '未选中图标', width: 160, templet: '#un_selected_icon', align: 'center'}
+          ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#operation', align: 'center'}
+        ]]
+        ,page:true
+        ,text: {none: '暂无数据！'}
+        ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+            return {
+                "code":res.code,
+                "msg":res.msg,
+                "count": res.data.count, //解析数据长度
+                "data": res.data.lists, //解析数据列表
+            };
+        }
+        ,done: function(res, curr, count){
+            // 解决操作栏因为内容过多换行问题
+            $(".layui-table-main tr").each(function (index, val) {
+                $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+            });
+        }
+      });
+
+      // 新增
+      $('.layui-btn').click(function(obj) {
+        $operate = obj.currentTarget.dataset.type;
+        if($operate == 'add') {
+          layer.open({
+            type: 2
+            ,title: '新增'
+            ,content: '{:url("menu_decorate/addNavigation")}'
+            ,area: ['90%','90%']
+            ,btn: ['确定', '取消']
+            ,yes: function(index, layero){
+              var iframeWindow = window['layui-layer-iframe'+ index]
+                ,submitID = 'add-navigation_decorate-submit'
+                ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+              //监听提交
+              iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                var field = data.field;
+                $.ajax({
+                  url:'{:url("menu_decorate/addNavigation")}',
+                  data:field,
+                  type:"post",
+                  success:function(res)
+                  {
+                    if(res.code == 1)
+                    {
+                      layui.layer.msg(res.msg, {
+                          offset: '15px'
+                          , icon: 1
+                          , time: 1000
+                      });
+                      layer.close(index); //关闭弹层
+                      table.reload('navigator-list'); //数据刷新
+                    }else{
+                      iframeWindow.layer.msg(res.msg, {
+                          offset: '15px'
+                          , icon: 2
+                          , time: 1000
+                      });
+                    }
+                  }
+                });
+              });
+              submit.trigger('click');
+            }
+          });
+        }
+      });
+
+      // 监听行工具条
+      table.on('tool(navigator-list)', function(obj) {
+        switch(obj.event) {
+          case 'edit':
+            layer.open({
+              type: 2
+              ,title: '编辑'
+              ,content: '{:url("menu_decorate/editNavigation")}?id=' + obj.data.id
+              ,area: ['90%','90%']
+              ,btn: ['确定', '取消']
+              ,yes: function(index, layero){
+                var iframeWindow = window['layui-layer-iframe'+ index]
+                  ,submitID = 'edit-navigation_decorate-submit'
+                  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                //监听提交
+                iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                  var field = data.field;
+                  $.ajax({
+                    url:'{:url("menu_decorate/editNavigation")}',
+                    data:field,
+                    type:"post",
+                    success:function(res)
+                    {
+                      if(res.code == 1)
+                      {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                        layer.close(index); //关闭弹层
+                        table.reload('navigator-list'); //数据刷新
+                      }else{
+                        iframeWindow.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 2
+                            , time: 1000
+                        });
+                      }
+                    }
+                  });
+                });
+                submit.trigger('click');
+              }
+            });
+            break;
+          case 'del':
+            layer.confirm('确定删除导航:'+'<span style="color: red">'+obj.data.name+'</span>', function(index){
+            $.ajax({
+              url:'{:url("menu_decorate/delNavigation")}',
+              data:{'id':obj.data.id},
+              type:"post",
+              success:function(res)
+              {
+                if(res.code == 1)
+                {
+                  obj.del();
+                  layui.layer.msg(res.msg, {
+                      offset: '15px'
+                      , icon: 1
+                      , time: 1000
+                  });
+                  layer.close(index); //关闭弹层
+                }else{
+                  layer.msg(res.msg, {
+                      offset: '15px'
+                      , icon: 2
+                      , time: 1000
+                  });
+                }
+              }
+            });
+          });
+            break;
+        }
+      });
+
+  // 监听表单提交
+  form.on('submit(navigation-setting)', function(data) {
+    $.ajax({
+      url:'{:url("menu_decorate/setNavigationSetting")}',
+      data: data.field,
+      type:"post",
+      success:function(res)
+      {
+        if(res.code == 1)
+        {
+          layui.layer.msg(res.msg, {
+            offset: '15px'
+            , icon: 1
+            , time: 1000
+          });
+        }else{
+          layui.layer.msg(res.msg, {
+            offset: '15px'
+            , icon: 2
+            , time: 1000
+          }, function() {
+            location.reload();
+          });
+        }
+      }
+    });
+    return false;
+  });
+});
+</script>

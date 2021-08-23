@@ -1,0 +1,195 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*请登录微信公众平台，将模板消息所在行业选择为：消费品/消费品，其他/其他，所选行业不一致将会导致模板消息不可用；</p>
+                        <p>*公众平台模板消息所在行业选择一个月只能修改一次,请谨慎选择；</p>
+                        <p>*同步模板是根据模板编号从微信公众平台获取对应的模板ID；</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">启用状态：</label>
+                    <div class="layui-input-inline">
+                        <select id="disable" name="disable"   style="height:80px;width: 80px" >
+                            <option value="">全部</option>
+                            <option value="0">已启用</option>
+                            <option value="1">已关闭</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-goods_brand {$view_theme_color}" lay-submit lay-filter="template_message-search">
+                        <i class="layui-icon  layuiadmin-button-btn"></i>查询
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn  layui-btn-primary layuiadmin-btn-goods_brand  " lay-submit lay-filter="template_message-clear-search">重置</button>
+                </div>
+            </div>
+
+            <div class="layui-card-body">
+                <table id="template_message-lists" lay-filter="template_message-lists"></table>
+
+                <script type="text/html" id="status">
+                    <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}}  lay-skin="switch"
+                           lay-text="启用|关闭" {{#  if(!d.disable){ }} checked  {{#  } }} />
+                </script>
+                <script type="text/html" id="template_message-operation">
+                    <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="synchro">同步模板</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="edit">编辑模板</a>
+                </script>
+            </div>
+        </div>
+    </div>
+    <style>
+        .layui-table-cell {
+            height: auto;
+        }
+    </style>
+    <script>
+        layui.config({
+        version:"{$front_version}",
+            base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index','table','like'], function(){
+            var $ = layui.$
+                ,form = layui.form
+                ,table = layui.table
+                ,like = layui.like;
+
+            //监听搜索
+            form.on('submit(template_message-search)', function(data){
+                var field = data.field;
+                //执行重载
+                table.reload('template_message-lists', {
+                    where: field
+                });
+            });
+            //清空查询条件
+            form.on('submit(template_message-clear-search)',function () {
+                // 重置选择
+                // $('#disable > option').eq(0).attr("selected",true);
+
+                //执行刷新列表
+                table.reload('template_message-lists',{
+                    where:[]
+                });
+
+            });
+
+
+            form.on('switch(switch-status)',function (obj) {
+                var id = obj.elem.attributes['data-id'].nodeValue;
+                var status = 1;
+                if(this.checked){
+                    status = 0;
+                }
+
+                like.ajax({
+                    url:'{:url("oa_message/switchStatus")}',
+                    data:{id:id,disable:status},
+                    type:'get',
+                    success:function (res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                        }
+                    }
+                })
+            });
+        });
+
+        layui.config({
+        version:"{$front_version}",
+            base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+        }).extend({
+        }).use(['index','table', 'form','like'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,form = layui.form
+                ,like = layui.like;
+
+            //模板消息管理
+            table.render({
+                elem: '#template_message-lists'
+                ,url: '{:url("oa_message/lists")}' //模拟接口
+                ,cols: [[
+                    {field:'id',title: '序号',width:60}
+                    ,{field: 'template_id_short',width:160,title: '模板编号'}
+                    ,{field: 'name', title: '模板名称', align: 'center',width:120}
+                    ,{field: 'template_id', title: '模板ID', align: 'center',width:180}
+                    ,{field: 'msg_type', title: '消息类型', align: 'center',width:120}
+                    ,{field: 'scene', title: '消息场景', align: 'center',width:120}
+                    ,{field: 'disable', title: '启用状态', width: 120, align: 'center',toolbar:'#status'}
+                    ,{fixed: 'right',title: '操作', align: 'center', width: 250,toolbar: '#template_message-operation'}
+                ]]
+                ,page:true
+                ,text: {none: '暂无数据！'}
+                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code":res.code,
+                        "msg":res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.list, //解析数据列表
+                    };
+
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+
+            //监听工具条
+            table.on('tool(template_message-lists)', function(obj){
+                if(obj.event === 'synchro'){
+                    var id = obj.data.id;
+                    var template_id_short = obj.data.template_id_short;
+                    layer.confirm('确定同步模板：'+template_id_short, function(index){
+                        like.ajax({
+                            url:'{:url("oa_message/synchro")}',
+                            data:{id:id},
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code === 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    table.reload('template_message-lists'); //数据刷新
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }else if(obj.event === 'edit'){
+                    var id = obj.data.id;
+                    layer.open({
+                        type: 2
+                        ,title: '编辑模板'
+                        ,content: '{:url("oa_message/edit")}?id='+id
+                        ,area: ['50%','50%']
+                    })
+                }
+            });
+        });
+    </script>

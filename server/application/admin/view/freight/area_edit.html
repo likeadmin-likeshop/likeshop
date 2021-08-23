@@ -1,0 +1,351 @@
+{layout name="layout2" /}
+<link rel="stylesheet" href="/static/plug/dtree/dtree.css" media="all">
+<link rel="stylesheet" href="/static/plug/dtree/font/dtreefont.css" media="all">
+
+    <div class="layui-row " style="margin-top: 10px;background: #f2f2f2">
+        <div class="layui-col-md5">
+            <div class="layui-card">
+                <div class="layui-card-header">选择地区</div>
+                <div class="layui-card-body">
+                    <div style="height: 280px;overflow: auto;">
+                        <ul id="cskTree1" class="dtree" data-id="0"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div style="height: 280px;text-align: center">
+                <button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-top: 180px;" id="csk_btn">选择</button>
+            </div>
+        </div>
+        <div class="layui-col-md5">
+            <div class="layui-card">
+                <div class="layui-card-header">已选地区</div>
+                <div class="layui-card-body">
+                    <div style="height: 280px;overflow: auto;">
+                        <ul id="cskTree2" class="dtree" data-id="-1"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="layui-form-item layui-hide">
+    <input type="button" lay-submit lay-filter="area-freight-submit" id="area-freight-submit" value="确认">
+</div>
+
+<script type="text/javascript" src="/static/plug/dtree/areaData.js"></script>
+<script type="text/javascript" src="/static/plug/dtree/dtree.js"></script>
+<script src="/static/common/js/area.js"></script>
+<script>
+    var selectedIds = '';//编辑的id
+    var regionIds = [];//格式化后的需要编辑的id
+    function editSelected(data) {
+        selectedIds = data;
+        regionIds = selectedIds.split(",");
+    }
+
+    var data = array_column(areas,'id');
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        dtree: '../../../dtree'
+    }).use(['index', 'form', 'jquery', 'like','dtree'], function () {
+        var $ = layui.$
+            , jquery = layui.jquery
+            , like = layui.like
+            , dtree = layui.dtree;
+
+        var source = areaDatas;//树状结构的完整数据(用于渲染树形结构插件)
+        //组装选中地区id几其相关地区id
+        selectedIds += ',' + getAboutIds(regionIds);
+
+        //渲染数据框1的地区选中
+        dtree.render({
+            elem: "#cskTree1",
+            data:areaDatas,
+            checkbar:true,
+            initLevel: 1,
+            skin: "laySimple",
+            checkbarType:"all",
+            load:true,
+            done: function(res, $ul, first){
+                dtree.chooseDataInit("cskTree1",selectedIds); // 初始化选中
+
+                //把需要编辑的选中的数据在数据框2中选中
+                var editParam = dtree.getCheckbarNodesParam("cskTree1");  // 获取选中数据
+                checkedData = editParam;
+                delData = [];
+                dtree.reload("cskTree2",{data:editParam});
+            }
+        });
+
+        var checkedData = [];//选中的数据;
+        var delData = [];//删除的数据
+        //渲染地区数据框2的数据
+        var dtreeDiv = dtree.render({
+            elem: "#cskTree2",
+            data: [],
+            checkbar:true,
+            response:{treeId:"nodeId",title:"context"},
+            dataFormat:"list",
+            skin: "laySimple",
+            none: "暂无",
+            toolbar:true,
+            toolbarShow:["delete"],
+            toolbarWay:"fixed", // "contextmenu"：右键菜单（默认），"fixed"："固定在节点后","follow"："跟随节点动态呈现"
+            toolbarStyle: {title: "选中"},
+            toolbarFun: {
+                delTreeNode: function(treeNode, $div){
+                    delData.push(treeNode);
+                    dtreeDiv.changeTreeNodeDel(true); // 删除成功
+                }
+            },
+        });
+
+        //框1中选择的数据 在框2中显示
+        $("#csk_btn").click(function(){
+            var param = dtree.getCheckbarNodesParam("cskTree1");  // 获取选中数据
+            if(param.length == 0) {
+                layer.msg("请至少选择一个");
+            }
+            checkedData = param;
+            delData = [];
+            dtree.reload("cskTree2",{data:param});
+        });
+
+        //点击确认时,把编辑过的框2的数据返回到地区编辑页
+        $("#area-freight-submit").click(function(){
+            dtreeDiv.setDisabledAllNodes('cskTree2');
+            var data = dtreeDiv.getAllDisabledNodesParam('cskTree2');
+            var needDel = [];//需要删除的数据
+            //1,遍历删除的地区id;1级不处理,2级,3级处理
+            for (var x = 0; x < delData.length; x++){
+
+                if (delData[x]['level'] == 2){
+                    var sameLevel = [];
+                    var partner = 0;
+                    //删除上一级,同2级中,数量只有一个时,不删除上级
+                    for (var i = 0; i < data.length; i++){
+                        if (data[i]['level'] == 2){
+                            sameLevel.push(data[i]);
+                        }
+                        if (data[i]['nodeId'] == delData[x]['parentId']){
+                            partner = i;
+                        }
+                    }
+
+                    if (sameLevel.length > 1){
+                        needDel.push(data[partner]['nodeId']);
+                    }
+                }
+
+                if (delData[x]['level'] == 3){
+                    for (var a = 0;a < data.length; a++){
+                        if (data[a]['nodeId'] == delData[x]['parentId']){
+                            for (var b = 0;b < data.length; b++){
+                                if (data[b]['nodeId'] == data[a]['parentId']){
+                                    needDel.push(data[b]['nodeId']);
+                                }
+                            }
+                            needDel.push(data[a]['nodeId']);
+                        }
+                    }
+                }
+            }
+
+
+            for (var f =0; f < delData.length;){
+                if (delData[f]['level'] == 1){
+                    delData.splice(f,1);
+                } else {
+                    f++;
+                }
+            }
+
+
+            var result = [];
+            for (var d = 0; d < data.length; d++){
+                if(needDel.indexOf(data[d]['nodeId']) == -1) {
+                    result.push(data[d]);
+                }
+            }
+
+            var lastData = [];
+            var firstDataIds = [];
+            var secondDataIds = [];
+
+            for (var e = 0; e < result.length; e++){
+                if (result[e]['level'] == 1){
+                    var sourceFirst = getFirstChildBySource(source,result[e]['nodeId']);//完整数据中一级的子级(二,三级)
+                    var resultFirst = getChild(result,result[e]['nodeId']);//选中的数据中一级的子级数量
+
+                    if (sourceFirst.length == resultFirst.length){
+                        lastData.push(result[e]);
+                        firstDataIds.push(result[e]['nodeId']);
+                    }
+                }
+            }
+
+            //检查非全选时,二级是否全选
+            for (var m =0; m < result.length; m++){
+
+                if((result[m]['level'] == 2) && (firstDataIds.indexOf(result[m]['parentId']) == -1)){
+
+                    var sourceSecond = getSecondChildBySource(source,result[m]['nodeId']);
+                    var resultSecond = getFirstChild(result,result[m]['nodeId']);
+
+                    if (sourceSecond.length == resultSecond.length){
+                        lastData.push(result[m]);
+                        secondDataIds.push(result[m]['nodeId']);
+                    }
+                }
+            }
+
+
+            //检查非全选时,三级是否全选
+            for (var n =0; n < result.length; n++){
+
+                if((result[n]['level'] == 3) && (secondDataIds.indexOf(result[n]['parentId']) == -1)){
+                    //三级的上级(二级id)的上级是否在firstData中
+                    var thirdLeader = getSecondLeader(source,result[n]['nodeId']);
+
+                    if (firstDataIds.indexOf(thirdLeader) == -1){
+                        lastData.push(result[n]);
+                    }
+                }
+            }
+
+            parent.window.callTree && parent.window.callTree(lastData);
+
+        });
+
+
+        //获取3级的上级
+        function getSecondLeader(data,id) {
+            for (var i = 0; i < data.length; i++) {
+                var firstChildren = data[i]['children'];
+                for (var x =0; x < firstChildren.length; x++){
+                    var  secondChildren = firstChildren[x]['children'];
+                    for (var y = 0; y < secondChildren.length; y++){
+                        if (secondChildren[y]['id'] == id){
+                            return data[i]['id'];
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+
+        //获取一级下的子级(二级,三级)
+        function getFirstChildBySource(data,pid) {
+            var child = [];
+            for (var i = 0; i < data.length; i++){
+                if (data[i]['id'] == pid){
+                    var firstChildren = data[i]['children'];
+                    for (var x =0; x < firstChildren.length; x++){
+                        child.push(firstChildren[x]);
+                        var  secondChildren = firstChildren[x]['children'];
+                        for (var y = 0; y < secondChildren.length; y++){
+                            child.push(secondChildren[y]);
+                        }
+                    }
+                }
+            }
+            return child;
+        }
+
+        //获取二级下的子级(三级)
+        function getSecondChildBySource(data,pid) {
+            var child = [];
+            for (var i = 0; i < data.length; i++){
+                var firstChildren = data[i]['children'];
+                for (var x =0; x < firstChildren.length; x++){
+                    if(firstChildren[x]['id'] == pid){
+                        var  secondChildren = firstChildren[x]['children'];
+                        for (var y = 0; y < secondChildren.length; y++){
+                            child.push(secondChildren[y]);
+                        }
+                    }
+                }
+            }
+            return child;
+        }
+
+        //获取下级
+        function getChild(data,pid) {
+            var child = [];
+            for (var i = 0; i < data.length; i++){
+                if (data[i]['parentId'] == pid){
+                    child.push(data[i]);
+                    for (var a = 0; a < data.length; a++){
+                        if (data[a]['parentId'] == data[i]['nodeId']){
+                            child.push(data[a]);
+                        }
+                    }
+                }
+            }
+            return child;
+        }
+
+        //第一个下级
+        function getFirstChild(data,pid) {
+            var firstChild = [];
+            for (var i = 0; i < data.length; i++){
+                if (data[i]['parentId'] == pid){
+                    firstChild.push(data[i]);
+                }
+            }
+            return firstChild;
+        }
+
+
+        //获取父类id
+        function getParentIds(ids) {
+            var call_ids=[];
+            for(var i in ids){
+                if(data[ids[i]]['parent_id']!=0){
+                    ids.push(data[ids[i]]['parent_id']);
+                    call_ids.push(data[ids[i]]['parent_id']);
+                }
+            }
+            if(call_ids.length!=0){
+                ids=ids.concat(getParentIds(call_ids));
+            }
+            return ids;
+        }
+
+
+        //获取子类id
+        function getChildrenIds(ids){
+            var call_ids=[];
+            for(var i in ids){
+                if(data[ids[i]]['level']==3){
+                    continue;
+                }
+                for(var j in data){
+                    if(ids[i] == data[j]['parent_id']){
+                        ids.push(data[j]['id']);
+                        call_ids.push(data[j]['id']);
+                    }
+                }
+            }
+            if(call_ids.length!=0){
+                ids=ids.concat(getChildrenIds(call_ids));
+            }
+            return ids;
+        }
+
+        //获取有关的地区id
+        function getAboutIds(ids){
+            result = getChildrenIds(ids);
+            result = result.concat(getParentIds(ids));
+            return array_unique(result);
+        }
+
+    });
+
+</script>

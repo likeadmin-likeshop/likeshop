@@ -1,0 +1,37 @@
+{layout name="layout2" /}
+
+<div class="layui-form"  style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">提醒类型：</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="id" value="{$info.id}">
+            <span style="line-height: 37px;">{$info.name}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提醒内容：</label>
+        <div class="layui-input-block">
+            <span style="line-height: 37px;">{$info.template}</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">气泡状态：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value=1 title="开启"  {if $info.status}checked{/if}>
+            <input type="radio" name="status" value=0 title="关闭" {if !$info.status}checked{/if}>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-bubble-submit" id="edit-bubble-submit" value="确认">
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){})
+</script>

@@ -1,0 +1,54 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-item .layui-input-inline {
+        width: 270px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-role" id="layuiadmin-form-role" style="padding: 20px 30px 0 0;">
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" value="{$info.name}" lay-verify="required" lay-vertype="tips" placeholder="请输入名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限</label>
+        <div class="layui-input-block">
+            <div id="test12" class="demo-tree-more"></div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">说明</label>
+        <div class="layui-input-inline">
+            <textarea type="text" name="desc"  autocomplete="off" class="layui-textarea">{$info.desc}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="edit-role-submit" id="edit-role-submit">提交</button>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','tree'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,tree = layui.tree;
+
+
+        var data ={$auth_tree|raw};
+
+        tree.render({
+            elem: '#test12'
+            ,data: data
+            ,showCheckbox: true  //是否显示复选框
+            ,id: 'auth'
+            ,isJump: true //是否允许点击节点时弹出新窗口跳转
+        });
+
+    })
+</script>

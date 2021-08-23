@@ -1,0 +1,216 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell { height: auto; }
+    .layui-input-block { line-height: 38px; }
+    .layui-form-label { width: 100px; }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+
+        <div class="layui-form layui-card-body">
+            <!-- 发起人信息 -->
+            <div class="layui-form-item" style="margin-bottom:0;">
+                <span>发起人信息</span>
+            </div>
+            <div style="margin-left:30px">
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">会员编号：</label>
+                    <div class="layui-input-block">{$detail.user.sn}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">会员昵称：</label>
+                    <div class="layui-input-block">{$detail.user.nickname}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">手机号码：</label>
+                    <div class="layui-input-block">{$detail.user.mobile}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">会员等级：</label>
+                    <div class="layui-input-block">{$detail.user.level.name}</div>
+                </div>
+            </div>
+            <!-- 砍价信息 -->
+            <div class="layui-form-item" style="margin-bottom:0;">
+                <span>砍价信息</span>
+            </div>
+            <div style="margin-left:30px">
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">发起砍价时间：</label>
+                    <div class="layui-input-block">{$detail.launch_start_time}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">砍价有效期限：</label>
+                    <div class="layui-input-block">{$detail.launch_end_time}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">砍价商品：</label>
+                    <div class="layui-input-block">
+                        <img src="{$detail.goods_snap.image}" alt="图片" style="width:60px;height:60px;float:left;" class="image-show">
+                        <div class="layui-inline">
+                            <div>{$detail.goods_snap.name}</div>
+                            <div>{$detail.goods_snap.spec_value_str}&nbsp; ￥{$detail.goods_snap.price}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">活动底价：</label>
+                    <div class="layui-input-block">￥{$detail.bargain_price}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">购买方式：</label>
+                    <div class="layui-input-block">任意金额可购买</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">已砍次数：</label>
+                    <div class="layui-input-block">{$detail.help_number}</div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom:0;">
+                    <label class="layui-form-label">砍价状态：</label>
+                    <div class="layui-input-block">{$detail.status}</div>
+                </div>
+            </div>
+
+            <!-- ===================砍价订单列表 ====================== -->
+            <div class="layui-form-item" style="margin:30px 0 10px 0;">
+                <span>砍价订单</span>
+            </div>
+            <div style="margin-left:30px">
+                <table id="table-lists-order" lay-filter="table-lists-order"></table>
+                <script type="text/html" id="table-goods-order">
+                    <div>
+                        <img src="{{d.domain}}{{d.goods_snap.image}}" alt="图片" style="width:60px;height:60px;float:left;" class="image-show">
+                        <div class="layui-inline">
+                            <div>{{d.goods_snap.name}}</div>
+                            <div>{{d.goods_snap.spec_value_str}}&nbsp; ￥{{d.goods_snap.price}}</div>
+                        </div>
+                    </div>
+                </script>
+                <script type="text/html" id="table-order_sn-order">
+                    {{#  if(d.order){ }} {{d.order.order_sn}} {{#  } }}
+                </script>
+                <script type="text/html" id="table-create_time-order">
+                    {{#  if(d.order){ }} {{d.order.create_time}} {{#  } }}
+                </script>
+                <script type="text/html" id="table-order_amount-order">
+                    {{#  if(d.order){ }} {{d.order.order_amount}} {{#  } }}
+                </script>
+                <script type="text/html" id="table-order_status-order">
+                    {{d.order_status}}
+                </script>
+                <!--会员信息-->
+                <script type="text/html" id="table-user-order">
+                    <div class="layui-input-inline"  style="text-align: left">
+                        {{#  if(d.user){ }}
+                        <img src="{{d.user.avatar}}" alt="头象" style="width: 80px; height: 80px;">
+                        <div class="layui-inline">
+                            <p>会员编号:{{d.user.sn}}</p>
+                            <p>会员昵称:{{d.user.nickname}}</p>
+                            <p>会员等级:{{d.user.level.name ?? '无'}}</p>
+                        </div>
+                        {{#  } }}
+                    </div>
+                </script>
+            </div>
+
+            <!-- ===================砍价记录列表 ====================== -->
+            <div class="layui-form-item" style="margin:30px 0 10px 0;">
+                <span>砍价记录</span>
+            </div>
+            <div style="margin-left:30px">
+                <table id="table-lists-knife" lay-filter="table-lists-knife"></table>
+                <!--会员信息-->
+                <script type="text/html" id="table-user-knife">
+                    <div class="layui-input-inline"  style="text-align: left">
+                        {{#  if(d.user){ }}
+                            <img src="{{d.user.avatar}}" alt="头象" style="width: 80px; height: 80px;">
+                            <div class="layui-inline">
+                                <p>会员编号:{{d.user.sn}}</p>
+                                <p>会员昵称:{{d.user.nickname}}</p>
+                                <p>会员等级:{{d.user.level.name ?? '无'}}</p>
+                            </div>
+                        {{#  } }}
+                    </div>
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src);
+        });
+
+        // 渲染数据表格
+        table.render({
+            elem: '#table-lists-order'
+            ,url: '{:url("Bargain/knifeOrderRecord")}?launch_id={$detail.id}'
+            ,cols: [[
+                {field: 'userInfo', title: '发起人',width:280, templet: '#table-user-order'}
+                ,{field: 'order_sn', title: '订单号', width:180, align: 'center', templet: '#table-order_sn-order'}
+                ,{field: 'goods', title: '商品信息',width:250, templet: '#table-goods-order'}
+                ,{field: 'create_time', title: '下单时间', width:160, align: 'center', templet: '#table-create_time-order'}
+                ,{field: 'order_amount', title: '下单金额', width:100, align: 'center', templet: '#table-order_amount-order'}
+                ,{field: 'order_status', title: '订单状态',width:100, align: 'center', templet: '#table-order_status-order'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(res, curr, count){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        table.render({
+            elem: '#table-lists-knife'
+            ,url: '{:url("Bargain/knifeRecord")}?launch_id={$detail.id}'
+            ,cols: [[
+                {field: 'userInfo', title: '会员信息',width:280, templet: '#table-user-knife'}
+                ,{field: 'help_price', title: '砍掉金额', width:180, align: 'center'}
+                ,{field: 'surplus_price', title: '剩余金额', width:180, align: 'center'}
+                ,{field: 'help_time', title: '砍价时间', width:160, align: 'center'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(res, curr, count){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+    });
+</script>

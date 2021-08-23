@@ -1,0 +1,43 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板编号：</label>
+        <div class="layui-input-block">
+            <input type="text" name="template_id_short" value="{$info.template_id_short}" lay-verType="tips" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板名称：</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value="{$info.name}" lay-verType="tips"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板ID：</label>
+        <div class="layui-input-block">
+            <input type="text" name="template_id" value="{$info.template_id}" placeholder="尚未同步" lay-verType="tips"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板内容：</label>
+        <div class="layui-input-block">
+            <textarea name="content" class="layui-textarea">{$info.content}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-article_category-submit" id="edit-article_category-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+    })
+</script>

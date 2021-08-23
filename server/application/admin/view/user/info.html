@@ -1,0 +1,312 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label{
+        width: 120px;
+    }
+    .layui-card .layui-tab{
+        margin-left: 7px;
+    }
+    .layui-form-label{
+        margin-left: 20px;
+        width: 98px;
+    }
+    .layui-input-inline{
+        width:160px;
+    }
+    .layui-table-cell {
+         height: auto;
+     }
+
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_group" id="layuiadmin-form-user_group" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item div-flex">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>基础信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员昵称：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.nickname}</label>
+        </div>
+        <label class="layui-form-label">会员编号：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.sn}</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员头像：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">
+                <img class="image-show" src="{$detail.avatar}" width="80px" height="80px">
+            </label>
+        </div>
+        <label class="layui-form-label">会员等级：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.group_name}</label>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号码：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.mobile}</label>
+        </div>
+        <label class="layui-form-label">性别：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.sex}</label>
+        </div>
+    </div>
+    <div class="layui-input-item">
+        <label class="layui-form-label">生日：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.birthday}</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">注册时间：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.create_time}</label>
+        </div>
+        <label class="layui-form-label">最后登录：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.login_time}</label>
+        </div>
+    </div>
+    <div class="layui-form-item div-flex">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>分销信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分销会员：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.distribution_tips}</label>
+        </div>
+        <label class="layui-form-label">邀请码：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.distribution_code}</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐人：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.superior_referrer}</label>
+        </div>
+        <label class="layui-form-label">推荐人编号：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.superior_referrer_sn}</label>
+        </div>
+    </div>
+    <div class="layui-form-item div-flex">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>账户信息</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">余额：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.user_money}</label>
+        </div>
+        <label class="layui-form-label">积分：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.user_integral}</label>
+        </div>
+        <label class="layui-form-label">成长值：</label>
+        <div class="layui-input-inline">
+            <label class="layui-form-mid">{$detail.user_growth}</label>
+        </div>
+    </div>
+    <div class="layui-form-item div-flex">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>消费能力</legend>
+        </fieldset>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label" style="margin-left: 72px;">本月消费金额：</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <label class="layui-form-mid">{$detail.month_amount}</label>
+        </div>
+        <label class="layui-form-label">本月订单笔数：</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <label class="layui-form-mid">{$detail.month_num}</label>
+        </div>
+        <label class="layui-form-label">累积消费金额：</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <label class="layui-form-mid">{$detail.total_order_amount}</label>
+        </div>
+        <label class="layui-form-label">累积订单笔数：</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <label class="layui-form-mid">{$detail.total_num}</label>
+        </div>
+        <label class="layui-form-label">平均消费单价：</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <label class="layui-form-mid">{$detail.avg_amount}</label>
+        </div>
+    </div>
+    <div class="layui-form-item div-flex">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>消费明细</legend>
+        </fieldset>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">下单明细</li>
+                    <li >积分明细</li>
+                    <li >签到明细</li>
+                    <li >余额明细</li>
+                    <li >推广明细</li>
+                    <li >收货地址</li>
+                </ul>
+            </div>
+            <script type="text/html" id="referrer">
+                <img src="{{d.avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
+                <div class="layui-input-inline">
+                    <label>编号：{{d.sn}}</label>
+                    <br/>
+                    <label>手机号码：{{d.mobile}}</label>
+                    <br/>
+                    <label>昵称：{{d.nickname}}</label>
+                    <br/>
+                    <label>注册时间：{{d.create_time}}</label>
+                </div>
+            </script>
+            <script type="text/html" id="account">
+                <div class="layui-input-inline">
+                    <label>余额：{{d.user_money}}</label>
+                    <br/>
+                    <label>积分：{{d.user_integral}}</label>
+                </div>
+            </script>
+            <script type="text/html" id="address">
+                <div class="layui-input-inline">
+                    <label>联系人：{{d.consignee}}</label>
+                    <br/>
+                    <label>联系手机：{{d.mobile}}</label>
+                    <br/>
+                    <label>收货地址：{{d.address}}</label>
+                    <br/>
+                </div>
+            </script>
+
+            <div class="layui-card-body">
+                <table id="lists" lay-filter="lists"></table>
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="user_group-submit" id="user_group-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','element'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element
+            ,id = {$detail.id};
+        element.on('tab(tab-all)', function (data) {
+            var index = data.index;
+            getList(index);
+        })
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+        getList(0)
+        function getList(index){
+            switch (index) {
+                case 0:
+                    var cols = [
+                        {field: 'order_sn', title: '订单编号',width: 180}
+                        ,{field: 'delivery_address', title: '收货地址',width: 460,toolbar: '#address'}
+                        ,{field: 'total_num', title: '商品数量',align: 'center',width: 100}
+                        ,{field: 'total_amount', title: '订单总额',width: 120, templet: function(d){
+                               return '￥'+ d.total_amount +'</span>'
+                            }
+                        }
+                        ,{field: 'discount_amount', title: '优惠金额',width: 120,templet: function(d){
+                                return '￥'+ d.discount_amount +'</span>'
+                            }
+                        }
+                        ,{field: 'order_amount', title: '实付金额',width: 160,templet: function(d){
+                                return '￥'+ d.order_amount +'</span>'
+                            }
+                        }
+                        ,{field: 'pay_time',title:'订单支付时间' ,width: 160}
+                    ];
+                    break;
+                case 1:
+                    var cols = [
+                        {field: 'source_type', title: '来源用途',}
+                        ,{field: 'change_amount', title: '变动积分',}
+                        ,{field: 'left_amount', title: '剩余积分',}
+                        ,{field: 'remark', title: '备注',}
+                        ,{field: 'create_time', title: '变动时间',}
+                    ];
+                    break;
+                case 2:
+                    var cols = [
+                        {field: 'source_type', title: '动作',}
+                        ,{field: 'change_amount', title: '获得积分',}
+                        ,{field: 'remark', title: '备注',}
+                        ,{field: 'create_time', title: '变动时间',}
+                    ];
+                    break;
+                case 3:
+                    var cols = [
+                        {field: 'source_type', title: '来源用途',}
+                        ,{field: 'change_amount', title: '变动金额',}
+                        ,{field: 'left_amount', title: '剩余金额',}
+                        ,{field: 'remark', title: '备注',}
+                        ,{field: 'create_time', title: '变动时间',}
+                    ];
+                    break;
+                case 4:
+                    var cols = [
+                        {field: 'referrer', title: '直推会员信息',toolbar: '#referrer'}
+                        ,{field: 'level_name', title: '会员等级',}
+                        ,{field: 'total_order_amount', title: '消费金额',}
+                        ,{field: 'account', title: '账户金额',toolbar: '#account'}
+                    ];
+                    break;
+                case 5:
+                    var cols = [
+                        {field: 'contact', title: '联系人',}
+                        ,{field: 'telephone', title: '联系手机',}
+                        ,{field: 'address', title: '收货地址',}
+                        ,{field: 'default', title: '默认地址',}
+                    ];
+                    break;
+                
+            }
+            table.render({
+                id:'lists'
+                ,elem: '#lists'
+                ,url: '{:url("user/getList")}?type='+index+'&user_id='+id //模拟接口
+                ,cols: [cols]
+                ,page:true
+                ,text: {none: '暂无数据！'}
+                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code":res.code,
+                        "msg":res.msg,
+                        "count": res.data.count, //解析数据长度
+                        "data": res.data.lists, //解析数据列表
+                    };
+                }
+            });
+
+        }
+
+    })
+</script>

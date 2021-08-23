@@ -1,0 +1,157 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell { height: auto; }
+    .layui-input-block {
+        line-height: 38px;
+    }
+</style>
+<div style="margin-left: 50px;margin-top: 15px;margin-bottom:30px;">
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">会员编号：</label>
+    <div class="layui-input-block">{$detail.user_sn}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">会员昵称：</label>
+    <div class="layui-input-block">{$detail.nickname}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">手机号码：</label>
+    <div class="layui-input-block">{$detail.mobile}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">提现金额：</label>
+    <div class="layui-input-block">¥ {$detail.money}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">手续费：</label>
+    <div class="layui-input-block">¥ {$detail.poundage}({$detail.poundage/$detail.money*100}%)</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">到账金额：</label>
+    <div class="layui-input-block">¥ {$detail.left_money}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">提现方式：</label>
+    <div class="layui-input-block">{$detail.typeDesc}</div>
+  </div>
+  <!-- 银行卡 -->
+  {if $detail.type == 5}
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">提现银行：</label>
+    <div class="layui-input-block">{$detail.bank}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">银行支行：</label>
+    <div class="layui-input-block">{$detail.subbank}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">开户名称：</label>
+    <div class="layui-input-block">{$detail.real_name}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">银行账号：</label>
+    <div class="layui-input-block">{$detail.account}</div>
+  </div>
+  {/if}
+  <!-- 微信收款码 -->
+  {if $detail.type == 3 || $detail.type == 4}
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">
+      {if $detail.type == 3}
+        微信号：
+      {/if}
+      {if $detail.type == 4}
+        支付宝账号：
+      {/if}
+    </label>
+    <div class="layui-input-block">{$detail.account}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">真实姓名：</label>
+    <div class="layui-input-block">{$detail.real_name}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">收款码：</label>
+    <div class="layui-input-block">
+      <img class="image-show" src="{$detail.money_qr_code}" style="width:80px;height:80px;" alt="" />
+    </div>
+  </div>
+  {/if}
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">申请时间：</label>
+    <div class="layui-input-block">{$detail.create_time}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">申请备注：</label>
+    <div class="layui-input-block">{$detail.remark}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">审核备注：</label>
+    <div class="layui-input-block">{$detail.description}</div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">提现状态：</label>
+    <div class="layui-input-block">{$detail.statusDesc}</div>
+  </div>
+  <!-- 除转入钱包余额，其他都有凭证记录 -->
+  {if $detail.type != 1}
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">转账凭证：</label>
+    {if $detail.type == 2}
+      <!-- 微信零钱 转账凭证为：支付单号 -->
+      <div class="layui-input-block">{$detail.payment_no}</div>
+    {elseif ($detail.type == 3 || $detail.type == 4 || $detail.type == 5) && $detail.status == 3 && $detail.transfer_voucher }
+      <!-- 银行卡、微信收款码、支付宝收款码 且 状态为提现成功 -->
+      <div class="layui-input-block">
+        <img class="image-show" src="{$detail.transfer_voucher}" style="width:80px;height:80px;" alt="" />
+      </div>
+    {/if}
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">转账时间：</label>
+    {if $detail.type == 2}
+      <!-- 微信零钱 转账时间为支付时间 -->
+      <div class="layui-input-block">{$detail.payment_time}</div>
+    {elseif $detail.type == 3 || $detail.type == 4 || $detail.type == 5}
+      <!-- 银行卡、微信收款码、支付宝收款码 -->
+      <div class="layui-input-block">{$detail.transfer_time}</div>
+    {/if}
+  </div>
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label">转账备注：</label>
+    <div class="layui-input-block">{$detail.transfer_description}</div>
+  </div>
+  {/if}
+  <div class="layui-form-item" style="margin-bottom:0;">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <a class="layui-btn layui-btn-normal layui-btn-sm">确 定</a>  
+      <a class="layui-btn layui-btn-primary layui-btn-sm">返 回</a>
+    </div>
+  </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src);
+        });
+
+        $('.layui-btn').click(function(){
+          var index = parent.layer.getFrameIndex(window.name); 
+          parent.layer.close(index);
+        });
+    });
+</script>

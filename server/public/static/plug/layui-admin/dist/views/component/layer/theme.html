@@ -1,0 +1,102 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layer 组件风格定制</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+
+  <div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+      <a lay-href="">主页</a>
+      <a><cite>组件</cite></a>
+      <a href="http://layer.layui.com/" target="_blank">layer</a>
+      <a><cite>风格定制</cite></a>
+    </div>
+  </div>
+
+  <style>
+  /* 这段样式只是用于演示 */
+  #LAY-component-layer-theme .layui-card-body{padding-top: 15px;}
+  </style>
+
+  <div class="layui-fluid" id="LAY-component-layer-theme">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">风格定制</div>
+          <div class="layui-card-body">
+            
+            <div class="layui-btn-container layadmin-layer-demo">
+              <button data-type="test1" class="layui-btn layui-btn-primary">layuiAdmin风格</button>
+              <button data-type="test2" class="layui-btn layui-btn-primary">右侧呼出</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-body">
+            
+            持续增加中
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../layuiadmin/layui/layui.js"></script>  
+  <script>
+  layui.config({
+    base: '../../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index'], function(){
+    var $ = layui.$
+    ,admin = layui.admin
+    ,element = layui.element
+    ,router = layui.router();
+
+    element.render();
+    
+    var active = {
+      test1: function(){
+        admin.popup({
+          title: 'layuiAdmin'
+          ,shade: 0
+          ,anim: -1
+          ,area: ['280px', '150px']
+          ,id: 'layadmin-layer-skin-test'
+          ,skin: 'layui-anim layui-anim-upbit'
+          ,content: '内容'
+        })
+      }
+      ,test2: function(){
+        top.layui.admin.popupRight({
+          id: 'LAY_adminPopupLayerTest'
+          ,success: function(){
+            $('#'+ this.id).html('<div style="padding: 20px;">放入内容</div>');
+            //admin.view(this.id).render('system/xxx')
+          }
+        });
+      }
+    };
+    
+    $('#LAY-component-layer-theme .layadmin-layer-demo .layui-btn').on('click', function(){
+      var type = $(this).data('type');
+      active[type] && active[type].call(this);
+    });
+  });
+  </script>
+</body>
+</html>

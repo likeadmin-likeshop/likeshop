@@ -1,0 +1,119 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item type">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品名称:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="keyword" id="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品分类:</label>
+                                <div class="layui-input-block">
+                                    <select name="cid"  placeholder="请选择商品分类" >
+                                        <option value="0">全部</option>
+                                        {foreach $category_list as $val }
+                                        <option value="{$val.id}">{$val.html}{$val.name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button class="layui-btn layuiadmin-btn-goods {$view_theme_color}" lay-submit lay-filter="goods-search">查询</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <table id="goods-lists" lay-filter="goods-lists"></table>
+                        <script type="text/html" id="goods-info">
+                            <img src="{{d.image}}" style="height:60px;width: 60px" class="image-show"> {{d.name}}
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="select-submit" class="select-submit" id="select-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    var table;
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,element = layui.element;
+
+        //监听搜索
+        form.on('submit(goods-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('goods-lists', {
+                where: field
+            });
+        });
+        //清空查询
+        form.on('submit(goods-clear-search)', function(){
+            $('#keyword').val('');  //清空输入框
+            $('#status_search').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('goods-lists', {
+                where: []
+            });
+        });
+
+        });
+        layui.define(['table', 'form'], function (exports) {
+        var $ = layui.$
+            , form = layui.form;
+            table = layui.table;
+        //管理员管理
+        table.render({
+            id: 'goods-lists'
+            , elem: '#goods-lists'
+            , url: '{:url("common/selectGoods")}'  //模拟接口
+            , cols: [[
+                {type: 'radio'}
+                , {field: 'name', title: '商品名称', toolbar: '#goods-info'}
+                , {field: 'price',  title: '价格'}
+                , {field: 'stock', title: '库存'}
+            ]]
+            , page: true
+            , text: {none: '暂无数据！'}
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.list, //解析数据列表
+                };
+            }
+        });
+    })
+        var callbackdata = function () {
+            var data = table.checkStatus('goods-lists').data
+            ,index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            return data;
+        }
+
+</script>

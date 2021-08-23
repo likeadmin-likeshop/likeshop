@@ -1,0 +1,241 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*平台维护文章分类，方便文章分类整理。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layui-btn-article_category {$view_theme_color}" data-type="add">新增文章分类</button>
+            </div>
+
+            <table id="article_category-lists" lay-filter="article_category-lists"></table>
+
+            <script type="text/html" id="article-operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status_switch">
+                    {{#  if(d.is_show == 1){ }}
+                    停用
+                    {{#  } else { }}
+                    启用
+                    {{#  } }}
+                </a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table', 'like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like;
+
+        //监听搜索
+        form.on('submit(article_category-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('article_category-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+        });
+
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加分类'
+                    ,content: '{:url("article_category/add")}'
+                    ,area: ['60%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-article_category-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("article_category/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('article_category-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        };
+        $('.layui-btn-article_category').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        table.render({
+            elem: '#article_category-lists'
+            ,url: '{:url("article_category/lists")}'
+            ,cols: [[
+                {field: 'name', title: '文章分类'}
+                ,{field: 'is_show_text', title:'分类状态', minWidth: 40, align: 'center'}
+                ,{field: 'create_time', title: '创建时间'}
+                ,{fixed:'right', title: '操作',  align: 'center', toolbar: '#article-operation', width: 200}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists //解析数据列表
+                };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+
+
+        //监听工具条
+        table.on('tool(article_category-lists)', function(obj){
+            if(obj.event === 'del'){
+                var id = obj.data.id;
+                var name = obj.data.name;
+                layer.confirm('确定要删除文章分类:'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("article_category/del")}',
+                        data:{'id':id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index);
+                                table.reload('article_category-lists');
+                            }
+                        }
+                    });
+                });
+            }
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '编辑文章分类'
+                    ,content: '{:url("article_category/edit")}?id='+id
+                    ,area: ['60%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-article_category-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("article_category/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('article_category-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }else if(obj.event === 'status_switch'){
+                var id = obj.data.id;
+                var status = obj.data.is_show;
+                var name = obj.data.name;
+                var confirm_text = '';
+                if (status == 1){
+                    confirm_text = '确定停用文章分类：';
+                    status = 0;
+                } else {
+                    status = 1;
+                    confirm_text = '确定启用文章分类：';
+                }
+
+                layer.confirm(confirm_text+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("article_category/switchStatus")}',
+                        data:{id:id,is_show:status},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('article_category-lists');
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+
+</script>

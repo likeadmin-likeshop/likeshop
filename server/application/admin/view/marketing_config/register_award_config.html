@@ -1,0 +1,140 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 180px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        *设置会员注册的奖励规则
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">会员注册奖励积分：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="register_award_integral_status" value="1" title="开启" {if $config.register_award_integral_status == 1} checked {/if} >
+                        <input type="radio" name="register_award_integral_status" value="0" title="关闭" {if $config.register_award_integral_status == 0} checked {/if}  >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="register_award_integral" value="{$config.register_award_integral}" autocomplete="off" class="layui-input award">
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-mid">积分</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">填0表示不奖励积分</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">会员注册赠送优惠券红包：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="register_award_coupon_status" value="1" title="开启" {if $config.register_award_coupon_status == 1} checked {/if} >
+                        <input type="radio" name="register_award_coupon_status" value="0" title="关闭" {if $config.register_award_coupon_status == 0} checked {/if}  >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <div class="layui-col-xs12 layui-col-md8">
+                            <select name="register_award_coupon" xm-select="register_award_coupon" xm-select-search="" xm-select-search-type="dl" xm-select-skin="normal">
+                                {foreach $coupon_list as $val}
+                                <option value="{$val.id}">{$val.name} </option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"></label>
+                        <span style="color: #a3a3a3;font-size: 9px">选择赠送的指定发放优惠券，可以多选或不选。注册时自动赠送，只能赠送一次</span>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<link rel="stylesheet" href="/static/plug/formSelects/formSelects-v4.css" />
+<script src="/static/plug/formSelects/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,formSelects = layui.formSelects
+            ,select_id = [{$config.register_award_coupon}];
+
+
+        $('.award').bind('input propertychange', function() {
+            var that = $(this);
+            var value = that.val();
+            format(that,value)
+
+        });
+        //格式化分销比例
+        function format(that,value){
+            value = value.replace(/[^0-9.]/g,'');  //清除“数字”和“.”以外的字符
+
+            value = value.replace(/\.{2,}/g,".");  //只保留第一个. 清除多余的
+            value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+
+            value = value.replace(/^(\-)*(\d+)\.(\d)(\d).*$/,'$1$2.$3$4'); //只能输入两个小数
+            if(value.indexOf(".")< 0 && value !=""){
+                value= parseFloat(value);
+            }
+            that.val(value);
+        }
+
+        //三级联动
+        formSelects.value('register_award_coupon',select_id);
+
+        form.on('submit(set)', function (data) {
+            layui.like.ajax({
+                url: '{:url("MarketingConfig/orderAwardConfig")}' //实际使用请改成服务端真实接口
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+
+                }
+            });
+        });
+    });
+</script>

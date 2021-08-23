@@ -1,0 +1,142 @@
+{layout name="layout1" /}
+
+<style>
+    .layui-table-cell {
+        height:auto;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-header">
+        <!--搜索-->
+        <div class="layui-form">
+            <div class="layui-inline">
+                <label class="layui-form-label">通知内容</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="content" id="content" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">通知时间</label>
+                <div class="layui-input-inline" style="width: 300px;">
+                    <input type="text" name="create_time" id="create_time" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="search">查询</button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" lay-submit lay-filter="reset">重置</button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card-body">
+        <table id="record" lay-filter="record"></table>
+    </div>
+</div>
+
+<script type="text/html" id="user-info">
+    {{#  if(d.receive_type == 1){ }}
+        {{ d.userInfo }}
+    {{#  } else if(d.receive_type == 2) { }}
+        {{ d.userInfo.nickname }}({{ d.userInfo.sn }})
+    {{#  } else if(d.receive_type == 3) { }}
+        {{ d.userInfo }}
+    {{#  } }}
+</script>
+<script type="text/html" id="operation">
+    <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del">删除</a>
+</script>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        treeTable: 'treetable-lay/treeTable'
+        ,like: 'layui-admin/dist/layuiadmin/modules/like',
+    }).use(['form', 'laydate', 'table', 'jquery', 'layer', 'like'], function(){
+        var $ = layui.jquery;
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        var layer = layui.layer;
+        var like = layui.like;
+
+        laydate.render({
+            elem: '#create_time',
+            type: 'datetime',
+            range: '#'
+        });
+
+        var tableIns = table.render({
+            elem: '#record'
+            ,url: '{:url("noticeSetting/record")}?id={$param.id}&&send_type={$param.send_type}'
+            ,page: true //开启分页
+            , text: {
+                none: '暂无数据'
+            }
+            ,cols: [[ //表头
+                {field: 'sceneDesc', title: '通知类型', width:220, align: 'center'}
+                ,{title: '通知对象', width:250 , templet: '#user-info', align: 'center'}
+                ,{field: 'content', title: '通知内容', width:250 , align: 'center'}
+                ,{ title: '其他信息', width:180 , align: 'center'}
+                ,{ field: 'extra', title: '通知反馈', width:180 , align: 'center'}
+                ,{field: 'create_time', title: '通知时间', width:180 , align: 'center'}
+                ,{field: 'sign', title: '操作', fixed: 'right', toolbar: '#operation' , align: 'center'}
+            ]]
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists //解析数据列表
+                };
+            }
+            ,response: {
+                statusCode: 1 //规定成功的状态码，默认：0
+            }
+        });
+
+        table.on('tool(record)', function(obj) {
+            switch (obj.event) {
+                case 'del':
+                    layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                        like.ajax({
+                            url: '{:url("noticeSetting/delRecord")}',
+                            data: {
+                                id: obj.data.id
+                            },
+                            method: 'post',
+                            success: function (res) {
+                                if(res.code == 1) {
+                                    layer.msg(res.msg);
+                                    table.reload('record');
+                                }
+                            }
+                        });
+
+                        layer.close(index);
+                    });
+                    break;
+            }
+        });
+
+        form.on('submit(search)', function (obj) {
+            tableIns.reload({
+                where: obj.field,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        form.on('submit(reset)', function () {
+            $('#content').val('');
+            $('#create_time').val('');
+            tableIns.reload({
+                where: [],
+                page: {
+                    curr: 1
+                }
+            });
+        });
+    });
+
+</script>

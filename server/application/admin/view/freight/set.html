@@ -1,0 +1,70 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    *设置店铺的配送方式
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-form-item div-flex" style="margin-top: 20px">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                <legend>配送方式</legend>
+            </fieldset>
+        </div>
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">快递发货</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="type" lay-skin="switch"  lay-text="开启|关闭" {if condition="$type eq 1"}checked{/if}>
+                    </div>
+                    <div class="layui-form-mid">开启快递发货后，买家下单可以选择快递送货上门。</div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="set">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like;
+
+        form.on('submit(set)', function (data) {
+            like.ajax({
+                url: '{:url("freight/set")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        },function () {
+                            location.reload();
+                        });
+                    }
+                }
+            });
+        });
+    });
+
+</script>

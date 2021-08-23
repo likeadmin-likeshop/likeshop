@@ -1,0 +1,377 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 150px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*设定充值方案后，会员可以选择推荐的充值方案充值。</p>
+                        <p>*充值设置允许关闭充值功能。</p>
+                        <p>*充值金额不能提现。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type="1" class="layui-this">充值方案</li>
+                <li data-type="2" >充值设置</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <div style="padding-bottom: 10px;" class="add">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-recharge {$view_theme_color}" data-type="add">新增充值方案</button>
+                            </div>
+                            <table id="recharge-lists" lay-filter="recharge-lists"></table>
+                            <script type="text/html" id="recharge-operation">
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                            </script>
+                            <script type="text/html" id="recommend">
+                                <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='is_recommend'   lay-skin="switch"
+                                       lay-text="是|否" {{#  if(d.is_recommend){ }} checked  {{#  } }} />
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+
+                    <div class="layui-form" lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">充值功能：</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="open_racharge" value="1" title="开启">
+                                <input type="radio" name="open_racharge" value="0" title="关闭">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">开启或关闭充值功能，关闭后商城会隐藏充值功能入口</span>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">每充值1元赠送积分：</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  name="give_integral" autocomplete="off" class="layui-input give_integral">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">填写每充值1元赠送积分数量，允许小数</span>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">每充值1元赠送成长值：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="give_growth" autocomplete="off" class="layui-input give_growth">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">填写每充值1元赠送成长值，允许小数</span>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">最低充值金额：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="min_money" autocomplete="off" class="layui-input min_money">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <span style="color: #a3a3a3;font-size: 9px">自定义充值最低充值金额要求，不填或填0表示没有限制</span>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+
+        $('.layui-btn.layuiadmin-btn-recharge').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '新增充值方案'
+                    ,content: '{:url("recharge/add")}'
+                    ,area: ['60%', '60%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-recharge-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("recharge/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('recharge-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+
+        //获取列表
+        getList(1)
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            var type = $(this).attr('data-type');
+            getList(type)
+        });
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var fields = obj.elem.attributes['data-field'].nodeValue
+            var status = 0;
+            if(this.checked){
+                status = 1;
+            }
+
+            changeFields(id,fields,status);
+        })
+
+        //监听工具条
+        table.on('tool(recharge-lists)', function(obj){
+            var id = obj.data.id;
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '修改充值方案'
+                    ,content: '{:url("recharge/edit")}?id='+id
+                    ,area: ['60%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-recharge-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("recharge/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('recharge-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'del'){
+                var money = obj.data.money;
+                layer.confirm('确定删除充值金额：'+'<span style="color: red">'+money+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("recharge/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('recharge-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+
+                })
+
+            }
+            if(obj.event === 'tips'){
+                layer.tips('数字越大，越靠前', $(this), {tips: [1, '#FF5722'],time:1500});
+            }
+
+
+        });
+        //商品排序
+        table.on('edit(recharge-lists)', function (obj) {
+            var id = obj.data.id;
+            var fields = 'sort';
+            var field_value = obj.value;
+
+            if(isNaN(field_value)){
+                var old_value=$(this).prev().text();
+
+                layer.tips('请输入数字', $(this), {tips: [1, '#FF5722']});
+                $(this).val(old_value);
+
+                return false;
+            }
+
+            changeFields(id,fields,field_value);
+
+        });
+        form.on('submit(set)', function (data) {
+            layui.like.ajax({
+                url: '{:url("recharge/setRecharge")}' //实际使用请改成服务端真实接口
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+
+                }
+            });
+        });
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form;
+
+                var cols  = [
+                     {type: 'checkbox'}
+                    ,{field: 'money', title: '充值金额',width:320,}
+                    ,{field: 'give_money',width:160, title: '赠送金额'}
+                    ,{field: 'recommend',width:160, title: '推荐',toolbar: '#recommend'}
+                    ,{field: 'sort',width: 80, title:'排序',event: 'tips',edit:'text',sort: true}
+                    ,{fixed: 'right', title: '操作', align: 'center', width:300, toolbar: '#recharge-operation'}
+                ];
+                //管理员管理
+                table.render({
+                    id:'recharge-lists'
+                    ,elem: '#recharge-lists'
+                    ,url: '{:url("recharge/lists")}?type='+type  //模拟接口
+                    ,cols: [cols]
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        if(type == 2){
+                            $('.give_growth').val(res.data[0].give_growth);
+                            $('.give_integral').val(res.data[0].give_integral);
+                            $('.min_money').val(res.data[0].min_money);
+                            $("input[name=open_racharge][value="+res.data[0].open_racharge+"]").prop("checked",true);
+                            form.render();
+                        }else{
+                            return {
+                                "code":res.code,
+                                "msg":res.msg,
+                                "data": res.data, //解析数据列表
+                            };
+                        }
+
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+
+                });
+
+            });
+        }
+        function changeFields(id,fields,value){
+            $.ajax({
+                url:'{:url("recharge/changeFields")}',
+                data:{id:id,field:fields,value:value},
+                type:'get',
+                dataType:'json',
+                success:function (res) {
+                    if(res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }else {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 2
+                            , time: 1000
+                        }, function () {
+                            if (fields === 'is_recommend') {
+                                window.location.href = window.location.href;
+                            }
+                        });
+                    }
+                }
+            })
+        }
+
+    });
+</script>

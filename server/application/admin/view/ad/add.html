@@ -1,0 +1,294 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+    .tips{
+        color: red;
+    }
+    .goods{
+        display: none;
+    }
+    .img-tips{
+        display: none;
+    }
+    .size-tips{
+       color: #a3a3a3;
+       font-size: 9px;
+    }
+    .url-tips{
+        color: #a3a3a3;
+        font-size: 9px;
+    }
+    .link{
+        display: none;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+    .category{
+        display: none;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_level" id="layuiadmin-form-user_level" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>广告标题：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" placeholder="请输入广告标题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>广告位置：</label>
+        <div class="layui-input-inline">
+            <select  name="pid" id="pid" lay-filter="search_position">
+                <option value="">请选择广告位置</option>
+                {foreach $position_list as $item => $val}
+                <option value="{$item}" >{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item category">
+        <label class="layui-form-label"><span class="tips">*</span>商品分类：</label>
+        <div class="layui-input-inline">
+            <select  name="category_id" id="category_id">
+                <option value="">请选择商品分类</option>
+                {foreach $category_list as $item => $val}
+                <option value="{$val.id}" >{$val.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>广告图片：</label>
+        <div class="layui-input-inline">
+            <div class="img-content">
+                <input name="image" type="hidden" value="">
+                <div class="img-add"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item img-tips">
+        <label class="layui-form-label"></label>
+        <span class="size-tips"></span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">链接类型：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="link_type" title="商城页面" value="1" lay-filter="link">
+            <input type="radio" name="link_type" title="商品页面" value="2" lay-filter="link">
+            <input type="radio" name="link_type" title="自定义链接" value="3" lay-filter="link">
+        </div>
+    </div>
+    <div class="layui-form-item link page">
+        <label class="layui-form-label">商城页面：</label>
+        <div class="layui-input-block">
+            {foreach $link_page as $item => $val}
+            <input type="radio" name="page" title="{$val.name}" value="{$item}" {if condition="$item eq 0"} checked{/if}>
+            {/foreach}
+        </div>
+    </div>
+    <div class="layui-form-item link goods">
+        <label class="layui-form-label">商品页面：</label>
+        <div class="layui-input-inline">
+            <a class="layui-btn layui-btn-normal select-goods" >选择商品</a>
+        </div>
+    </div>
+    <div class="layui-form-item link goods-tips">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block ">
+            <input type="hidden" name="goods_id" value="">
+            <table id="goods_list" class="layui-table" lay-size="sm">
+                <colgroup>
+                    <col width="40px">
+                </colgroup>
+                <thead>
+                <tr style="background-color: #f3f5f9">
+                    <th style="width: 120px;text-align: center">商品信息</th>
+                    <th style="width: 60px;text-align: center">商品价格</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-form-item link url">
+        <label class="layui-form-label">跳转链接：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <input type="text" name="url" value=""  placeholder="请输入跳转链接" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item link url-tips">
+        <label class="layui-form-label"></label>
+        <span>请填写完整的自定义链接，http或者https开头的完整链接。</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>广告状态：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="停用" >
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-ad-submit" id="add-ad-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-form-label {
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,goods_ids = [];
+        //上传图片
+        like.imageUpload('.img-add', function (uri, element) {
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uri[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+
+        // 监听 广告位置选择
+        form.on('select(search_position)', function(data){
+            var id = data.value;
+            if(id){
+                img_size(id);
+            }else{
+                $('.img-tips').hide();
+            }
+
+
+            if(21 == id){
+                $('.category').show();
+            }else{
+                $('.category').hide();
+            }
+
+        });
+        form.on('radio(link)', function (data) {
+            var value = data.value;
+            $('.link').hide();
+            switch (value) {
+                case '1':
+                    $('.page').show();
+                    break;
+                case '2':
+                    $('.goods').show();
+                    $('.goods-tips').show();
+                    break;
+                case '3':
+                    $('.url').show();
+                    $('.url-tips').show();
+                    break;
+            }
+
+        })
+        // 获取建议图片大小
+        function img_size(id) {
+
+            like.ajax({
+                url:'{:url("Ad/imgSize")}',
+                data:{id:id},
+                type:"get",
+                success:function(res)
+                {
+                    var data = res.data;
+                    if(data){
+                        $('.img-tips').show();
+                        var html  = '建议上传广告图片宽*高, '+data['width']+'px*'+data['height']+'px';
+                        $('.size-tips').text(html);
+                    }else{
+                        $('.img-tips').hide();
+                    }
+                }
+            });
+        }
+        $(document).on('click','.select-goods',function () {
+            layer.open({
+                type: 2
+                ,title: '选择商品'
+                ,content: '{:url("common/selectGoods")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确认', '取消']
+                ,yes: function(index, layero){
+                    var data = window["layui-layer-iframe" + index].callbackdata();
+                    if(data.length){
+                        $('#goods_list tbody').remove();
+                        var goods = data[0];
+                        var goods_html = '<tr>\n' +
+                            '                    <td style="text-align: center"><img class="image-show" width="80px" height="80px" src="'+goods.image +'">'+goods.name+'</td>\n' +
+                            '                    <td style="text-align: center">'+goods.price+'</td>\n' +
+                            '                </tr>';
+                        $('#goods_list').prev().val(goods.id);
+                        $('#goods_list').append(goods_html);
+                        $('.goods').show();
+                    }
+                }
+
+            })
+        })
+    })
+
+</script>

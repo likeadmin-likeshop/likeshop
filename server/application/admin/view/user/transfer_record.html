@@ -1,0 +1,153 @@
+{layout name="layout1" /}
+<style>
+  .layui-table-cell {
+    font-size:14px;
+    padding:0 5px;
+    height:auto;
+    overflow:visible;
+    text-overflow:inherit;
+    white-space:normal;
+    word-break: break-all;
+  }
+  .layui-table-body {
+    height: auto !important;
+  }
+</style>
+<!-- 操作提示 -->
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-card-body">
+      <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+        <div class="layui-colla-item">
+          <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+          <div class="layui-colla-content layui-show">
+            <p>**转账记录列表，可按照时间进行查看</p>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- 搜索 -->
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+      <div class="layui-form-item">
+          <div class="layui-inline">
+              <label class="layui-form-label">记录时间:</label>
+              <div class="layui-input-inline">
+                  <input type="text" class="layui-input" id="start_time" name="start_time"  autocomplete="off">
+              </div>
+              <div class="layui-input-inline" style="margin-right: 5px;width: 10px;">
+                  <label class="layui-form-mid">-</label>
+              </div>
+              <div class="layui-input-inline">
+                  <input type="text" class="layui-input" id="end_time" name="end_time"  autocomplete="off">
+              </div>
+          </div>
+          <div class="layui-inline">
+              <button class="layui-btn layui-btn-sm layuiadmin-btn-user {$view_theme_color}" lay-submit lay-filter="search">查询</button>
+              <button class="layui-btn layui-btn-sm layuiadmin-btn-user layui-btn-primary " lay-submit lay-filter="clear-search">重置</button>
+          </div>
+      </div>
+  </div>
+<!-- 数据表格 -->
+<table id="transfer_list" lay-filter="transfer_list"></table>
+
+<!-- 转账人信息 -->
+<script type="text/html" id="transferFrom">
+  <img src="{{d.from_avatar}}" style="height:80px;width: 80px" class="image-show">
+  <div class="layui-input-inline"  style="text-align: left">
+      <p>会员编号:{{d.from_sn}}</p>
+      <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:150px;">会员昵称:{{d.from_nickname}}</p>
+      <p>会员等级:{{d.from_level_name}}</p>
+  </div>
+</script>
+
+<!-- 收款人信息 -->
+<script type="text/html" id="transferTo">
+  <img src="{{d.to_avatar}}" style="height:80px;width: 80px" class="image-show">
+  <div class="layui-input-inline"  style="text-align: left">
+      <p>会员编号:{{d.to_sn}}</p>
+      <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width:150px;">会员昵称:{{d.to_nickname}}</p>
+      <p>会员等级:{{d.to_level_name}}</p>
+  </div>
+</script>
+
+<script>
+  layui.config({
+    base: '/static/plug/layui-admin/dist/layuiadmin/'
+  }).extend({
+    index: 'lib/index'
+  }).use(['index', 'element', 'like', 'table', 'laydate'], function () {
+    var $ = layui.$
+      , form = layui.form
+      , table = layui.table
+      , element = layui.element
+      , laydate = layui.laydate
+      , like = layui.like;
+
+        //日期时间范围
+        laydate.render({
+        elem: '#start_time'
+        ,type: 'datetime'
+        ,trigger: 'click'
+        });
+
+        //日期时间范围
+        laydate.render({
+            elem: '#end_time'
+            ,type: 'datetime'
+            ,trigger: 'click'
+        });
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+          var field = data.field;
+          //执行重载
+          table.reload('transfer_list', {
+              where: field,
+              page: {
+                  curr: 1 //重新从第 1 页开始
+              }
+          });
+        });
+
+        //清空查询
+        form.on('submit(clear-search)', function(){
+            $('#start_time').val('');  //清空输入框
+            $('#end_time').val('');  //清空输入框
+            //刷新列表
+            table.reload('transfer_list', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        table.render({
+        elem: '#transfer_list'
+        ,height: 312
+        ,url: '/admin/user/transferRecord/' //数据接口
+        ,page: true //开启分页
+        ,cols: [[ //表头
+          {field: 'transfer_sn', title: '记录编号', width:180, align: 'center'}
+          ,{title: '转账人', width:250, templet: '#transferFrom', align: 'center'}
+          ,{title: '收款人', width:250, templet: '#transferTo', align: 'center'}
+          ,{field: 'money', title: '转账金额', width:120, align: 'center'} 
+          ,{field: 'create_time', title: '转账时间', align: 'center'}
+        ]]
+        ,parseData: function(res){ //res 即为原始返回的数据
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.msg, //解析提示文本
+            "count": res.data.count, //解析数据长度
+            "data": res.data.list //解析数据列表
+          };
+        }
+      });
+  });
+</script>

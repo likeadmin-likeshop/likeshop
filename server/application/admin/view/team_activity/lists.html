@@ -1,0 +1,327 @@
+{layout name="layout1" /}
+<style> .layui-table-cell { height: auto; } </style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- 操作提示 -->
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*设置参与拼团活动的商品。</p>
+                        <p>*用户退出拼团，需商家后台审核通过之后，方可原路退回支付金额</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索模块 -->
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label for="goods_name" class="layui-form-label">商品名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="goods_name" name="goods_name" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label for="status" class="layui-form-label">拼团状态：</label>
+                    <div class="layui-input-block">
+                        <select name="status" id="status" >
+                            <option value="">全部</option>
+                            <option value="1">已开启</option>
+                            <option value="0">已关闭</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width:105px;">活动结束时间：</label>
+                    <div class="layui-inline" style="margin-right:0;">
+                        <div class="layui-input-inline">
+                            <input type="text" id="start_time" name="start_time" placeholder="开始时间" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline"> - </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <input type="text" id="end_time" name="end_time" placeholder="结束时间" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm  layuiadmin-btn-article {$view_theme_color}" lay-submit lay-filter="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary layuiadmin-btn-article }" lay-submit lay-filter="clear-search">重置</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据表格 -->
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="add">新增拼团商品</button>
+            </div>
+            <table id="table-lists" lay-filter="table-lists"></table>
+            <script type="text/html" id="table-goods">
+                <div>
+                    <img src="{{d.image}}" alt="图片" style="width:60px;height:60px;float:left;" class="image-show">
+                    <div style="margin-left:5px; width:150px;height:60px;white-space:normal;float: left;">{{d.name}}</div>
+                </div>
+            </script>
+            <script type="text/html" id="table-cost_price">
+                ￥{{d.min_price}}~￥{{d.max_price}}
+            </script>
+            <script type="text/html" id="table-team_price">
+                ￥{{d.team_min_price}} ~ ￥{{d.team_max_price}}
+            </script>
+            <script type="text/html" id="table-team_time">
+                {{d.start_time}} ~ {{d.end_time}}
+            </script>
+            <script type="text/html" id="table-status">
+                <input type="checkbox" lay-filter="switch-status"
+                      data-end-time="{{d.end_time}}"
+                       data-id={{d.team_id}} data-field='status' lay-skin="switch"
+                       lay-text="是|否" {{#  if(d.status){ }} checked  {{#  } }} />
+            </script>
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-primary layui-btn-sm " lay-event="lists">拼团列表</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除商品</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like', 'laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+        // 开始时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#start_time'
+            ,trigger: 'click'
+        });
+
+        // 结束时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#end_time'
+            ,trigger: 'click'
+        });
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src);
+        });
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            table.reload('table-lists', {
+                where: field,
+                page: { curr: 1 }
+            });
+        });
+
+        // 监听重置搜素
+        form.on('submit(clear-search)', function(){
+            $('#goods_name').val('');
+            $('#status').val('');
+            $('#start_time').val('');
+            $('#end_time').val('');
+            form.render('select');
+            table.reload('table-lists', {where: [], page: { curr: 1} });
+        });
+
+        // 渲染数据表格
+        table.render({
+            elem: '#table-lists'
+            ,url: '{:url("TeamActivity/lists")}'
+            ,cols: [[
+                {field: 'goods', title: '商品',width:250, templet: '#table-goods'}
+                ,{field: 'cost_price', title: '原价', align: 'center', width:150, templet: '#table-cost_price'}
+                ,{field: 'team_price', title: '拼团价', align: 'center', width:170, templet: '#table-team_price'}
+                ,{field: 'team_count', title:'拼团数量', align: 'center',width:100}
+                ,{field: 'follow_count', title:'参团人数',align: 'center',width:100}
+                ,{field: 'team_time', title: '活动时间', width:320, align: 'center', templet: '#table-team_time'}
+                ,{field: 'likes', title: '拼团状态',width:100, align: 'center', templet: '#table-status'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#operation',width:280}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(res, curr, count){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '新增拼团商品'
+                    ,content: '{:url("teamActivity/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            console.log(field);
+                            like.ajax({
+                                url:'{:url("teamActivity/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                        layer.close(index);
+                                        table.reload('table-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            },
+            // 编辑
+            edit: function (obj) {
+                if (obj.data.del !== 0 || obj.data.status !== 0) {
+                    layui.layer.msg('活动进行中,禁止编辑,请先结束活动!', { time:1000 });
+                    return false;
+                }
+                layer.open({
+                    type: 2
+                    ,title: '编辑拼团商品'
+                    ,content: '{:url("teamActivity/edit")}?id='+obj.data.team_id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("teamActivity/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                        layer.close(index);
+                                        table.reload('table-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            },
+            // 删除
+            del: function (obj) {
+                if (obj.data.del !== 0 || obj.data.status !== 0) {
+                    layui.layer.msg('活动进行中,禁止删除,请先结束活动!', { time:1000 });
+                    return false;
+                }
+                layer.confirm('确定删除商品:'+'<span style="color: red">'+obj.data.name+'</span>', function(index) {
+                    like.ajax({
+                        url: '{:url("teamActivity/del")}',
+                        data: {id:obj.data.team_id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code === 1) {
+                                layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000});
+                                layer.close(index);
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            },
+            // 切换状态
+            switchStatus: function (obj) {
+                var endTime = Times.tostrtime(obj.endTime);
+                var curTime = Times.curTimestamp();
+                if (endTime <= curTime) {
+                    layui.layer.msg('拼团时间已过，请重新修改活动时间后再开启！', { time:1000 });
+                    table.reload('table-lists', { where: [] });
+                    return false;
+                }
+                like.ajax({
+                    url:'{:url("teamActivity/switchStatus")}',
+                    data:obj,
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                            table.reload('table-lists', { where: [] });
+                        }
+                    }
+                });
+            },
+            lists: function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '拼团列表'
+                    ,content: '{:url("teamActivity/teamOrder")}?id='+obj.data.team_id
+                    ,area: ['90%','90%']
+                });
+            }
+        };
+
+        // 监听表格右侧工具条
+        table.on('tool(table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 切换状态
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue;
+            var fields = obj.elem.attributes['data-field'].nodeValue;
+            var status = this.checked ? 1 : 0;
+            var endTime = obj.elem.attributes['data-end-time'].nodeValue;
+
+            var data = {"id":id, "field":fields, "status":status, endTime:endTime};
+            active['switchStatus'] ? active['switchStatus'].call(this, data) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

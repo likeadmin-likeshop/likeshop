@@ -1,0 +1,184 @@
+{layout name="layout2" /}
+<link rel="stylesheet" href="/static/admin/css/goods.css" media="all">
+
+<div class="layui-card layui-form">
+    <div class="layui-card-body">
+        <div class="layui-form-item">
+            <label for="prize_type" class="layui-form-label"><font color="red">*</font>类型：</label>
+            <div class="layui-input-inline">
+                <select id="prize_type" name="prize_type" lay-filter="prize_type"
+                        lay-verType="tips" lay-verify="required|number">
+                    <option value="">请选择</option>
+                    <option value="1">积分</option>
+                    <option value="2">谢谢惠顾</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 选择积分类型 才会出现 -->
+        <div class="layui-form-item" id="prize_number" style="display:none;">
+            <label for="number" class="layui-form-label"><font color="red">*</font>数量：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" id="number" name="number" class="layui-input"
+                       onkeyup="value=value.replace(/[^\d]/g,'')" value="0"
+                       autocomplete="off" lay-verType="tips" lay-verify="prize_number">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片：</label>
+            <div style="height:80px;line-height:80px">
+                <div class="master-image"></div>
+                <div class="goods-img-add goods-image upload-image-div" lay-verify="image" lay-vertype="tips"> <a class="upload-image-a"> + 添加图片</a></div>
+            </div>
+        </div>
+
+        <!-- 抽奖几率 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="probability" class="layui-form-label"><font color="red">*</font>几率：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" id="probability" name="probability" class="layui-input"
+                       onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                       autocomplete="off" lay-verType="tips" lay-verify="required|number">
+            </div>
+            <div class="layui-form-mid layui-word-aux">%</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">请填写0~100的数字</div>
+            </div>
+        </div>
+
+        <!-- 排序 -->
+        <div class="layui-form-item">
+            <label for="sort" class="layui-form-label"><font color="red">*</font>排序：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" id="sort" name="sort" class="layui-input"
+                       onkeyup="value=value.replace(/[^\d]/g,'')" value="0"
+                       autocomplete="off" lay-verType="tips" lay-verify="required|number">
+            </div>
+        </div>
+
+        <!-- 状态 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>状态：</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="status" value="1" title="开启">
+                <input type="radio" name="status" value="0" title="关闭" checked>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+        </div>
+
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form', 'like'], function() {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like;
+
+        //商品主图事件
+        $(document).on('mouseenter', '.goods-li', function () {
+            $(this).children().last().show();
+        });
+        $(document).on('mouseleave', '.goods-li', function () {
+            $(this).children().last().hide();
+        });
+        $(document).on('click', '.goods-li', function () {
+            var src = $(this).children('img').attr('src');
+            like.showImg(src, 400);
+        });
+        //主图显示删除按钮
+        $(document).on('mouseenter','.master-image',function () {
+            $(this).children('.goods-image-del').show();
+        });
+        $(document).on('mouseleave', '.master-image', function () {
+            $(this).children('.goods-image-del').hide();
+        });
+        $(document).on('click', '.master-image', function () {
+            var src = $(this).children('img').attr('src');
+            like.showImg(src, 400);
+        });
+        $(document).on('click', '.goods-img-del-x', function () {
+            if($(this).hasClass('goods-image-del')){
+                $(this).parent().next().show();
+                $(this).parent().children().remove();
+            }
+            $(this).parent().remove();
+            return false;
+        });
+        // 上传图片
+        like.imageUpload('.goods-img-add', function (uris, element) {
+            if(element.hasClass('goods-image')){
+                if(uris.length>1){
+                    layer.msg('最多最能选中1张图片');
+                    return;
+                }
+                var html = '' +
+                    '<input name="image" type="hidden" value="'+ like.getUrlFileName(uris[0], '{$storageUrl}') + '">' +
+                    '  <img class="goods-img" src="' + uris[0] + '">\n' +
+                    '<a class="goods-img-del-x goods-image-del">x</a>'
+                element.prev().append(html);
+                element.css('display','none');
+                return 0;
+            }
+
+            var count = element.prev().children().length;
+
+            count = !count ? 0:count;
+            if (count+uris.length > 5) {
+                layer.msg('最多最能选中5张图片');
+                return;
+            }
+            for(var i in uris){
+                var uri = uris[i];
+                var template_goods_image = $('#template-goods-image').html();
+                element.prev().append(template_goods_image.replace('{image-src}', '/'+uri).replace('{image-src}', '/'+uri));
+            }
+        }, true);
+
+        // 选择抽奖类型
+        form.on('select(prize_type)', function(data) {
+            // 未选择类型
+            if (data.value === "" ) {
+                $("#prize_number").hide();
+                $("#prize_number input").val(0);
+            }
+            // 积分类型类型
+            if (data.value === "1") {
+                $("#prize_number").show();
+            }
+            // 谢谢惠顾类型
+            if (data.value === "2") {
+                $("#prize_number").hide();
+                $("#prize_number input").val(0);
+            }
+        });
+
+        // 表单验证
+        form.verify({
+            prize_number: function (value) {
+                var type = $("#prize_type").val();
+                if (type === "1") {
+                    if (value === "") {
+                        return '请填写奖品数量';
+                    }
+                    if (parseInt(value) < 0) {
+                        return '奖品数量需为大于等于0的正整数';
+                    }
+                }
+            }
+        });
+
+    });
+</script>

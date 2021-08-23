@@ -1,0 +1,157 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+    }
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+    #image{
+        left:110px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-category" id="layuiadmin-form-category" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="0" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>帮助标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" lay-verify="required" lay-verType="tips" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>帮助分类</label>
+        <div class="layui-input-block">
+            <select name="cid"  placeholder="请选择帮助分类" >
+                <option value="">请选择分类</option>
+                {foreach $category_list as $val}
+                <option value="{$val['id']}">{$val['name']}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">帮助简介</label>
+        <div class="layui-input-block">
+            <input type="text"   name="synopsis"  placeholder="请输入帮助简介" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">帮助封面图</label>
+        <div class="layui-input-inline">
+            <div class="" style="height:80px;line-height:80px">
+                <input name="image" type="hidden" value="">
+                <div class="goods-img-add"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class=" layui-form-mid layui-word-aux" id="image">建议尺寸：500*500像素</label>
+        </div>
+    </div>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">帮助简介</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <textarea name="synopsis" required lay-verify="required" lay-verType="tips" placeholder="请输入帮助简介" class="layui-textarea"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">帮助排序</label>
+        <div class="layui-input-block">
+            <input type="number"  name="sort"  placeholder="请输入排序" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">帮助状态</label>
+        <div class="layui-input-inline"  >
+            <input type="radio" name="is_show" lay-filter="is_show" style="width: 500px" value=1 title="显示" checked >
+            <input type="radio" name="is_show" lay-filter="is_show" style="width: 500px" value=0 title="隐藏">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">帮助内容</label>
+        <div class="layui-input-block">
+            <textarea  name="content" id="content" lay-verify="content"  class="field-content"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-help-submit" id="add-help-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','likeedit','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,likeedit = layui.likeedit;
+        //富文本上传图片
+        likeedit.set({
+            uploadImage: {
+                url: "{:url('file/image')}",
+                type: 'post'
+            }
+        })
+        var content = likeedit.build('content'); //建立编辑器
+        form.verify({
+
+            content: function() {
+                likeedit.sync(content)
+            }
+        })
+
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            if(uri.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="' + uri[0] + '">' +
+                '<a class="goods-img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+
+    });
+</script>

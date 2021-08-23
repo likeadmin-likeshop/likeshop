@@ -1,0 +1,217 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        width: 110px;
+    }
+</style>
+
+<div class="layui-card layui-form">
+    <div class="layui-card-body">
+        <!-- 选择商品 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>拼团商品：</label>
+            <div class="layui-input-block">
+                <a class="layui-btn layui-btn-normal select-goods">选择拼团商品</a>
+            </div>
+        </div>
+        <!-- 商品信息 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="goods_info"></div>
+                <table id="goods_list" class="layui-table" lay-size="sm" style="display:none;width:630px;">
+                    <thead>
+                        <tr style="background-color: #f3f5f9">
+                            <th style="width: 120px;text-align: center">商品规格</th>
+                            <th style="width: 60px;text-align: center">商品价格</th>
+                            <th style="width: 40px;text-align: center">拼团价格</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- 拼团人数 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="people_num" class="layui-form-label"><font color="red">*</font>拼团人数：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="2" id="people_num" name="people_num" class="layui-input" autocomplete="off"
+                       onkeyup="value=value.replace(/[^\d]/g,'')"
+                       lay-verType="tips" lay-verify="required|number|people_num">
+            </div>
+            <div class="layui-form-mid layui-word-aux">人</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">最少两人成团，设置商品拼团人数</div>
+            </div>
+        </div>
+        <!-- 拼团时效 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="time_limit" class="layui-form-label"><font color="red">*</font>拼团时效：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" id="time_limit" name="time_limit" class="layui-input" autocomplete="off"
+                       onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                       lay-verType="tips" lay-verify="required|number|time_limit">
+            </div>
+            <div class="layui-form-mid layui-word-aux">小时</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">拼团有效期，超出时间还未成团则拼团失败</div>
+            </div>
+        </div>
+        <!-- 拼团活动时间 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label" style="width:110px;"><font color="red">*</font>拼团活动时间：</label>
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input type="text" id="start_time" name="start_time" class="layui-input" autocomplete="off" lay-verType="tips" lay-verify="required">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input type="text" id="end_time" name="end_time" class="layui-input" autocomplete="off" lay-verType="tips" lay-verify="required">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:110px;"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">拼团活动时间，超出活动时间拼团商品自动失效</div>
+            </div>
+        </div>
+
+        <!-- 拼够分享标题 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="share_title" class="layui-form-label" style="width:110px;">拼团分享标题：</label>
+            <div class="layui-input-inline" style="width: 300px;">
+                <input type="text" id="share_title" name="share_title" class="layui-input" autocomplete="off" lay-verType="tips">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:110px;"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">分享拼团活动时的标题，为空时默认使用商品标题</div>
+            </div>
+        </div>
+
+        <!-- 拼够分享简介 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label for="share_intro" class="layui-form-label" style="width:110px;">拼团分享简介：</label>
+            <div class="layui-input-inline" style="width: 300px;">
+                <input type="text" id="share_intro" name="share_intro" class="layui-input" autocomplete="off" lay-verType="tips">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:110px;"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">分享拼团活动时的简介，为空时默认使用商品简介</div>
+            </div>
+        </div>
+
+        <!-- 拼团状态 -->
+        <div class="layui-form-item" style="margin-bottom: 0;">
+            <label class="layui-form-label"><font color="red">*</font>拼团状态：</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="status" value="1" title="开启">
+                <input type="radio" name="status" value="0" title="关闭" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <div class="layui-form-mid layui-word-aux">活动开启并且在拼团活动时间内才能进行拼团活动</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+        </div>
+
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form', 'like', 'laydate'], function() {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , laydate = layui.laydate;
+
+        // 开始时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#start_time'
+            ,trigger: 'click'
+        });
+
+        // 结束时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#end_time'
+            ,trigger: 'click'
+        });
+
+        // 选择商品
+        $(document).on('click','.select-goods',function () {
+            layer.open({
+                type: 2
+                ,title: '选择商品'
+                ,content: '{:url("common/selectGoods")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确认', '取消']
+                ,yes: function(index, layero){
+                    var data = window["layui-layer-iframe" + index].callbackdata();
+                    if(data.length){
+                        goods_ids = [];
+                        $('#goods_list tbody').remove();
+                    }
+                    data.forEach(function(item, index) {
+                        console.log(item);
+                        var goods_info_html = '<img src="'+item.image+'" alt="商品图片" style="width:80px;height:80px;">\n' +
+                                              '<span style="margin-left:5px;">'+item.name+'</span>\n' +
+                                              '<input type="hidden" name="goods_id" value="'+item.id+'">';
+                        $(".goods_info").html(goods_info_html);
+                        $("#goods_list").show();
+                        for(var i = 0; item.goods_item.length > i; i++){
+                            var goods_item = item.goods_item[i];
+                            if(goods_ids.indexOf(goods_item.id) === -1) {
+                                goods_ids.push(goods_item.id);
+                                var goods_html = '<tr>\n' +
+                                    '<td style="text-align: center">'+goods_item.spec_value_str+'</td>\n' +
+                                    '<td style="text-align: center">'+goods_item.price+'</td>\n' +
+                                    '<td style="width: 40px;"><input onkeyup="value=value.replace(/^\\D*(\\d*(?:\\.\\d{0,2})?).*$/g, \'$1\')" type="number" name=item['+item.id+']['+goods_item.id+'] lay-verType="tips" lay-verify="required" autocomplete="off" class="layui-input"></td>\n' +
+                                    '</tr>';
+                                $('#goods_list').append(goods_html);
+                            }
+                        }
+                    });
+                    $('.goods').show();
+                }
+            })
+        });
+
+        // 表单验证
+        form.verify({
+            people_num: function(value){
+                if(parseInt(value) < 2){
+                    return '拼团人数需大于2';
+                }
+            },
+            time_limit: function(value){
+                if(parseFloat(value) <= 0){
+                    return '成团有效期不能少于等于0';
+                }
+            }
+        });
+
+    });
+</script>

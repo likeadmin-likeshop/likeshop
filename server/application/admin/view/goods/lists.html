@@ -1,0 +1,563 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>*发布商品时可选统一规格或者多规格，满足商品不同销售属性设置。</p>
+                    <p>*商品售卖状态分为销售中、仓库中、回收站。</p>
+                    <p>*库存预警商品为库存不足的销售中、仓库中商品。</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <li data-type='1' class="layui-this">销售中商品({$statistics.sell})</li>
+                <li data-type='2' >仓库中商品({$statistics.warehouse})</li>
+                <li data-type='3' >库存预警商品({$statistics.warn})</li>
+                <li data-type='4' >回收站商品({$statistics.recycle})</li>
+            </ul>
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item type">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品名称:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="keyword" id="keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品编码:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="code" id="code" placeholder="请输入编码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品分类:</label>
+                                <div class="layui-input-block">
+                                    <select name="category_id"  placeholder="请选择商品分类" >
+                                        <option value="0">全部</option>
+                                        {foreach $category_list as $val }
+                                        <option value="{$val.id}">{$val.html}{$val.name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品供货商:</label>
+                                <div class="layui-input-block">
+                                    <select name="supplier_id" id="supplier_id"  placeholder="请选择商品供货商" >
+                                        <option value="0">全部</option>
+                                        {foreach $supplier_list as $val }
+                                        <option value="{$val.id}">{$val.name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" lay-submit lay-filter="goods-search">查询</button>
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="goods-clear-search">清空查询</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;" class="add">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" data-type="add">发布商品</button>
+                            <button id="lower" class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" data-type="lower">下架</button>
+                            <button id="upper" class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" data-type="upper" style="display: none;">上架</button>
+                        </div>
+                        <table id="goods-lists" lay-filter="goods-lists"></table>
+                        <script type="text/html" id="ratio">
+                            <p >一级佣金：{{d.first_ratio_desc}}</p>
+                            <p >二级佣金：{{d.second_ratio_desc}}</p>
+                            <p >三级佣金：{{d.three_ratio_desc}}</p>
+<!--                            <p >股东分红比例：{{d.region_ratio_desc}}</p>-->
+<!--                            <p >区域分红比例：{{d.shareholder_ratio_desc}}</p>-->
+                        </script>
+                        <script type="text/html" id="new">
+                            <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='is_new'   lay-skin="switch"
+                                   lay-text="是|否" {{#  if(d.is_new){ }} checked  {{#  } }} />
+                        </script>
+                        <script type="text/html" id="best">
+                            <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='is_best'   lay-skin="switch"
+                                   lay-text="是|否" {{#  if(d.is_best){ }} checked  {{#  } }} />
+                        </script>
+                        <script type="text/html" id="like">
+                            <input type="checkbox"  lay-filter="switch-status" data-id={{d.id}} data-field='is_like'   lay-skin="switch"
+                                   lay-text="是|否" {{#  if(d.is_like){ }} checked  {{#  } }} />
+                        </script>
+                        <script type="text/html" id="goods-info">
+                            <img src="{{d.image}}" style="height:60px;width: 60px;margin-right: 5px;" class="image-show"> {{d.name}}
+                        </script>
+                        <script type="text/html" id="goods-operation">
+                            {{# if(d.type == 0 || d.type == 1 || d.type == 2 || d.type == 3){ }}
+                              <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                                {{# if(d.status == 1){ }}
+                                    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status">下架</a>
+                                {{# }else{ }}
+                                    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="status">上架</a>
+                                {{#} }}
+                              <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="recycle">移至回收站</a>
+                            {{# } }}
+                            {{# if(d.type == 4){ }}
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="recycle">放回仓库</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                            {{# } }}
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+
+        //监听搜索
+        form.on('submit(goods-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('goods-lists', {
+                where: field,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+        //清空查询
+        form.on('submit(goods-clear-search)', function(){
+            $('#keyword').val('');  //清空输入框
+            $('#code').val('');  //清空输入框
+            $('#category_id').val(0);  //清空输入框
+            $('#supplier_id').val(0);  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('goods-lists', {
+                where: [],
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        $('.layui-btn.layuiadmin-btn-goods').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '添加商品'
+                    ,content: '{:url("goods/add")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'goods-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("goods/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        },function () {
+                                            window.location.href = window.location.href;
+                                        });
+
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                    ,cancel: function(index, layero){
+                        var window_index = index;
+                        layer.confirm('商品未保存，确定关闭吗？', {
+                            time: 0, //不自动关闭
+                            btn: ['确定', '取消'],
+                            yes: function(index){
+                                layer.close(index);
+                                layer.close(window_index);
+                            }
+                        });
+                        return false;
+                    }
+                });
+            },
+            //批量下架
+            lower: function(){
+                var checkStatus = table.checkStatus('goods-lists');
+                var checkData = checkStatus.data;
+                var ids = [];
+                // 取出选中的行ID
+                checkData.forEach(function (item) {
+                    ids.push(parseInt(item['id']));
+                });
+                if (ids.length <= 0) {
+                    layui.layer.msg('未选择', {time: 1000});
+                    return false;
+                }
+                // 提交数据
+                like.ajax({
+                    url:'{:url("goods/lowerStatus")}',
+                    data:{"ids":ids},
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:1 ,time: 1000});
+                            updateTabNumber();
+                            table.reload('goods-lists', { where: [] });
+                        } else {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:2 ,time: 1000});
+                        }
+                    }
+                });
+
+            },
+            //批量上架
+            upper: function(){
+                var checkStatus = table.checkStatus('goods-lists');
+                var checkData = checkStatus.data;
+                var ids = [];
+                // 取出选中的行ID
+                checkData.forEach(function (item) {
+                    ids.push(parseInt(item['id']));
+                });
+                if (ids.length <= 0) {
+                    layui.layer.msg('未选择', {time: 1000});
+                    return false;
+                }
+                // 提交数据
+                like.ajax({
+                    url:'{:url("goods/upperStatus")}',
+                    data:{"ids":ids},
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:1 ,time: 1000});
+                            updateTabNumber();
+                            table.reload('goods-lists', { where: [] });
+                        } else {
+                            layui.layer.msg(res.msg, {offset:'15px', icon:2 ,time: 1000});
+                        }
+                    }
+                });
+
+            }
+        };
+
+
+
+
+        //获取列表
+        getList(1);
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            var type = $(this).attr('data-type');
+            getList(type);
+            if (type === '1') {
+                $("#lower").show();
+                $("#upper").hide();
+            } else if (type === '2')  {
+                $("#lower").hide();
+                $("#upper").show();
+            } else{
+                $("#lower").hide();
+                $("#upper").hide();
+            }
+        });
+
+        //监听工具条
+        table.on('tool(goods-lists)', function(obj){
+            var id = obj.data.id;
+            var name = obj.data.name;
+            //上下架
+            if(obj.event === 'status'){
+                var tips = '确定上架当前商品：'+'<span style="color: red">'+name+'</span>';
+
+                var field_value = 1;
+
+                if(obj.data.status){
+                    field_value = 0;
+                    tips = '确定下架当前商品：'+'<span style="color: red">'+name+'</span>';
+                }
+
+                layer.confirm(tips, function(index){
+                    var fields = 'status';
+                    changeFields(id,fields,field_value);
+                })
+            }
+            //移入、移出回收站
+            if(obj.event === 'recycle'){
+                var tips = '确定移至回收站：'+'<span style="color: red">'+name+'</span>';
+                var field_value = -1;
+                if(obj.data.status == -1){
+                    field_value = 0;
+                    tips = '确定放回仓库：'+'<span style="color: red">'+name+'</span>';
+                }
+                layer.confirm(tips, function(index){
+                    var fields = 'status';
+                    changeFields(id,fields,field_value);
+                })
+            }
+            if(obj.event === 'edit'){
+                var id = obj.data.id;
+                var index = layer.open({
+                    type: 2
+                    ,title: '编辑商品'
+                    ,content: '{:url("goods/edit")}?goods_id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'goods-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("goods/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        },function () {
+                                            window.location.href = window.location.href;
+                                        });
+
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                    ,cancel: function(index, layero){
+                    var window_index = index;
+                    layer.confirm('商品未保存，确定关闭吗？', {
+                        time: 0, //不自动关闭
+                        btn: ['确定', '取消'],
+                        yes: function(index){
+                            layer.close(index);
+                            layer.close(window_index);
+                        }
+                    });
+                    return false;
+                    }
+                });
+            }
+            if(obj.event === 'del'){
+                var name = obj.data.name;
+                layer.confirm('确定删除商品:'+'<span style="color: red">'+name+'</span>', function(index){
+                    like.ajax({
+                        url:'{:url("goods/del")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                updateTabNumber();
+                                table.reload('goods-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+
+
+                })
+
+            }
+            if(obj.event === 'tips'){
+                layer.tips('数字越大，越靠前', $(this), {tips: [1, '#FF5722'],time:1500});
+            }
+        });
+        //精选推荐、猜你喜欢
+        form.on('switch(switch-status)',function (obj) {
+            var id = obj.elem.attributes['data-id'].nodeValue
+            var fields = obj.elem.attributes['data-field'].nodeValue
+            var status = 0;
+            if(this.checked){
+                status = 1;
+            }
+
+            changeFields(id,fields,status);
+        })
+        //商品排序
+        table.on('edit(goods-lists)', function (obj) {
+            var id = obj.data.id;
+            var fields = 'sort';
+            var field_value = obj.value;
+
+            if(isNaN(field_value)){
+                var old_value=$(this).prev().text();
+
+                layer.tips('请输入数字', $(this), {tips: [1, '#FF5722']});
+                $(this).val(old_value);
+
+                return false;
+            }
+
+            changeFields(id,fields,field_value);
+
+        });
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form;
+
+                var cols  = [
+                     {type: 'checkbox'}
+                    ,{field: 'name', title: '商品名称',width:320,toolbar: '#goods-info'}
+                    ,{field: 'cat_name',width:160, title: '商品分类'}
+                    ,{field: 'commission_status',width:160, title: '三级分销'}
+                    ,{field: 'ratio',width:160, title: '分销比例',toolbar: '#ratio'}
+                    ,{field: 'price',width:180,title: '价格'}
+                    ,{field: 'stock',width: 100,title: '总库存'}
+                    ,{field: 'total_sales_sum',width: 100,title: '总销量'}
+                    ,{field: 'ratio',width:160, title: '新品推荐',toolbar: '#new'}
+                    ,{field: 'ratio',width:160, title: '好物优选',toolbar: '#best'}
+                    ,{field: 'ratio',width:160, title: '猜你喜欢',toolbar: '#like'}
+                    ,{field: 'sort',width: 80, title:'排序',event: 'tips',edit:'text',sort: true}
+                    ,{field: 'create_time_desc',width:160, title:'发布时间'}
+                    ,{fixed: 'right', title: '操作', align: 'center', width:300, toolbar: '#goods-operation'}
+                ];
+                //管理员管理
+                table.render({
+                    id:'goods-lists'
+                    ,elem: '#goods-lists'
+                    ,url: '{:url("goods/lists")}?type='+type  //模拟接口
+                    ,cols: [cols]
+                    ,page:true
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code":res.code,
+                            "msg":res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.list //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        setTimeout(function () {
+                            // 解决操作栏因为内容过多换行问题
+                            $(".layui-table-fixed-l .layui-table-body").removeAttr("style");
+                            $(".layui-table-fixed-r .layui-table-body").removeAttr("style");
+                            $(".layui-table-main tr").each(function (index, val) {
+                                console.log($(val).height());
+                                $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                                $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                            });
+                        }, 100)
+                    }
+                });
+
+            });
+        }
+        function changeFields(id,fields,value){
+            $.ajax({
+                url:'{:url("goods/changeFields")}',
+                data:{id:id,field:fields,value:value},
+                type:'post',
+                dataType:'json',
+                success:function (res) {
+                    if(res.code == 1) {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            if (fields == 'status') {
+                                window.location.href = window.location.href;
+                            }
+                        });
+                        updateTabNumber();
+                    }else {
+                        layui.layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 2
+                            , time: 1000
+                        });
+                    }
+                }
+            })
+        }
+
+        /**
+         * 更新选项卡 统计数据
+         */
+        function updateTabNumber() {
+            like.ajax({
+                url: '{:url("goods/totalCount")}',
+                data: {},
+                type: "GET",
+                success: function (res) {
+                    if (res.code === 1) {
+                        $(".layui-tab-title li[data-type=1]").html("销售中商品(" + res.data.sell + ")");
+                        $(".layui-tab-title li[data-type=2]").html("仓库中商品(" + res.data.warehouse + ")");
+                        $(".layui-tab-title li[data-type=3]").html("库存预警商品(" + res.data.warn + ")");
+                        $(".layui-tab-title li[data-type=4]").html("回收站商品(" + res.data.recycle + ")");
+                    }
+                }
+            });
+        }
+
+    });
+</script>

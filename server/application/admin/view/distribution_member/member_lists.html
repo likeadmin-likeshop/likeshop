@@ -1,0 +1,94 @@
+<style>
+    .operation-btn{
+        margin: 5px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">会员信息:</label>
+                <div class="layui-input-block">
+                    <select name="search_key">
+                        <option value="sn">会员编号</option>
+                        <option value="nickname">会员昵称</option>
+                        <option value="mobile">手机号码</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <input type="text" name="keyword" id="member_keyword" placeholder="请输入搜索内容" autocomplete="off" class="layui-input">
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">分销状态:</label>
+                <div class="layui-input-block">
+                    <select name="freeze_distribution" id="freeze_distribution">
+                        <option value="">全部</option>
+                        <option value="0">未冻结</option>
+                        <option value="1">已冻结</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-member {$view_theme_color}" lay-submit lay-filter="member-search">
+                    查询
+                </button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-express layui-btn-primary " lay-submit
+                        lay-filter="member-clear-search">重置
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-bottom: 10px;" class="add">
+        <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="add">添加分销会员</button>
+    </div>
+    <table id="member-lists" lay-filter="member-lists"></table>
+
+    <script type="text/html" id="member-operation">
+        <div style="text-align: left">
+            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="info">分销资料</a>
+            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="fans">推广会员</a>
+            <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="earnings_detail">收入明细</a><br/>
+            <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="update_leader" >修改上级</a>
+            {{#  if(d.freeze_distribution == 0){ }}
+            <a class="layui-btn layui-btn-danger layui-btn-sm operation-btn" lay-event="freeze" >冻结资格</a>
+            {{#  } else { }}
+            <a class="layui-btn layui-btn-danger layui-btn-sm operation-btn" lay-event="unfreeze" >解冻资格</a>
+            {{#  } }}
+        </div>
+    </script>
+
+    <!--会员信息-->
+    <script type="text/html" id="user-info">
+        <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
+        <div class="layui-input-inline"  style="text-align: left">
+            <p>会员编号:{{d.sn}}</p>
+            <p>会员昵称:{{d.nickname}}</p>
+            <p>手机号码:{{d.mobile}}</p>
+            <p>会员等级:{{d.level}}</p>
+<!--            <p>性别:{{d.sex}}</p>-->
+<!--            <p>注册时间:{{d.create_time}}</p>-->
+        </div>
+    </script>
+
+    <!--会员信息-->
+    <script type="text/html" id="leader-info">
+        {{#  if(d.leader.length == 0){ }}
+        <p>无</p>
+
+        {{#  } else { }}
+        <div class="layui-input-inline" >
+            <p>会员编号:{{d.leader.sn}}</p>
+            <p>会员昵称:{{d.leader.nickname}}</p>
+            <p>手机号码:{{d.leader.mobile}}</p>
+            <p>会员等级: {{d.leader.level}}</p>
+        </div>
+        {{#  } }}
+    </script>
+
+</div>

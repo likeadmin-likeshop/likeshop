@@ -1,0 +1,73 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="layuiadmin-form-reply" id="layuiadmin-form-reply" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>规则名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" value="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label><span style="color: #a3a3a3;font-size: 9px">方便通过名称管理默认回复内容</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>关键词：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="keyword" value="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label><span style="color: #a3a3a3;font-size: 9px">关键词不能超过5个字</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">匹配方式：</label>
+        <div class="layui-input-inline">
+            <select name="matching_type">
+                <option value="1">全匹配</option>
+                <option value="2">模糊匹配</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">内容类型：</label>
+        <div class="layui-input-inline">
+            <select name="content_type" lay-filter="aihao">
+                <option value="1">文本</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">回复内容：</label>
+        <div class="layui-input-inline">
+            <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">启用状态：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="status" value="1" title="启用" checked>
+            <input type="radio" name="status" value="0" title="停用" >
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-reply-submit" id="add-reply-submit" value="确认">
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+    });
+
+</script>

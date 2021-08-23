@@ -1,0 +1,42 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<div class="layui-fluid">
+
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">快递名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="express_name" id="express_name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-express {$view_theme_color}" lay-submit lay-filter="express-search">
+                    查询
+                </button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-express layui-btn-primary " lay-submit
+                        lay-filter="express-clear-search">重置
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-bottom: 10px;">
+        <button class="layui-btn layui-btn-sm layuiadmin-btn-express {$view_theme_color}" data-type="add">新增快递公司</button>
+    </div>
+
+    <table id="express-lists" lay-filter="express-lists"></table>
+
+    <script type="text/html" id="express-operation">
+        <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+    </script>
+
+    <script type="text/html" id="icon">
+        <img src="{{d.icon}}" style="height:80px;width: 80px" class="image-show">
+    </script>
+
+</div>

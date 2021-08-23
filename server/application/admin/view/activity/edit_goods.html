@@ -1,0 +1,91 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+    .tips{
+        color: red;
+    }
+
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user_level" id="layuiadmin-form-user_level" style="padding: 20px 30px 0 0;">
+    <input type="hidden" name="id" value="{$info[0]['id']}">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>活动专区：</label>
+        <div class="layui-input-inline">
+            <select name="activity_id">
+                <option value="">请选择活动专区</option>
+                {foreach $activity_list as $id => $name}
+                <option value="{$id}" {if $info[0]['activity_id'] == $id} selected {/if}>{$name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="tips">*</span>专区商品：</label>
+        <div class="layui-input-block">
+            <table id="goods_list" class="layui-table" lay-size="sm" style="width: 800px;">
+                <colgroup>
+                    <col width="60px">
+                </colgroup>
+                <thead>
+                <tr style="background-color: #f3f5f9">
+                    <th style="width: 120px;text-align: center">商品</th>
+                    <th style="width: 120px;text-align: center">商品规格</th>
+                    <th style="width: 60px;text-align: center">商品价格</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $info as $item}
+                <tr>
+                    <td >
+                        <img class="image-show" width="80px" height="80px" src="{$item.image}">{$item.name}
+                    </td>
+                    <td>{$item.spec_value_str}</td>
+                    <td style="text-align: center">{$item.price}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-goods-submit" id="edit-goods-submit" value="确认">
+    </div>
+</div>
+<style>
+    .layui-form-label {
+        width: 100px;
+    }
+    .layui-input-block {
+        margin-left: 130px;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,goods_ids = [];
+
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+    })
+
+</script>

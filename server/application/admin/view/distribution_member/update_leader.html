@@ -1,0 +1,60 @@
+{layout name="layout2" /}
+<style>
+    .div-flex {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+    .layui-form-label {
+        width: 120px;
+    }
+    .width-160 {
+        width: 200px;
+    }
+</style>
+
+<div class="layui-card-body" >
+    <!--基本信息-->
+    <div class="layui-form" lay-filter="layuiadmin-form-update-leader" id="layuiadmin-form-update-leader" >
+        <input type="hidden" name="user_id" value="{$user_id}">
+
+        <div class="layui-form-item div-flex">
+            <label class="layui-form-label ">当前上级:</label>
+            <div class="width-160">{$first_leader}</div>
+        </div>
+
+        <div class="layui-form-item div-flex">
+            <label class="layui-form-label ">调整方式:</label>
+            <div>
+                <select name="change_type" lay-verify="required">
+                    <option value="clear">清空上级</option>
+                    <option value="appoint">指定上级推荐人</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item div-flex">
+            <label class="layui-form-label ">上级推荐人编号:</label>
+            <div>
+                <input type="text" name="referrer_sn" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="update-leader-submit" id="update-leader-submit" value="确认">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'element', 'jquery', 'like', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like;
+    });
+</script>

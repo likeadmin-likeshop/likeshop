@@ -1,0 +1,423 @@
+{layout name="layout1" /}
+<style>
+    .activity-area{
+        display: none;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*专区活动能很方便的聚合需要促销的商品，形成各类专题页。</p>
+                        <p>*新增专区活动，可设置专区在首页上架显示。</p>
+                        <p>*活动专区可任意删除，请谨慎操作。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type=1 class="layui-this">专区商品</li>
+                <li data-type=2 >活动专区</li>
+            </ul>
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item seach">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">商品名称:</label>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="name" name="name" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">活动专区:</label>
+                                <div class="layui-input-inline">
+                                    <select id="activity_id" name="activity_id"   style="height:80px;width: 80px" >
+                                        <option value="">全部</option>
+                                        {foreach $activity_list as $id => $name}
+                                        <option value="{$id}">{$name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-activity {$view_theme_color}" lay-submit lay-filter="activity-search">查询</button>
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-activity layui-btn-primary" lay-submit lay-filter="activity-clear-search">清空查询</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-activity activity-goods {$view_theme_color}" data-type="add_goods">新增专区商品</button>
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn-activity activity-area  {$view_theme_color}" data-type="add_activity">新增活动专区</button>
+                        </div>
+                        <table id="activity-lists" lay-filter="activity-lists"></table>
+                        <script type="text/html" id="goods-info">
+                            <img src="{$storageUrl}{{d.image}}" style="height:60px;width: 60px;margin-right: 5px;" class="image-show"> {{d.name}}
+                        </script>
+                        <script type="text/html" id="area-image">
+                            <img src="{{d.image}}" style="height:60px;width: 60px" class="image-show">
+                        </script>
+                        <script type="text/html" id="goods-operation">
+
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del_goods">删除</a>
+                        </script>
+                        <script type="text/html" id="area-operation">
+                            <a class="layui-btn {$view_theme_color} layui-btn-sm" lay-event="edit_activity">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del_activity">删除</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element;
+
+        //监听搜索
+        form.on('submit(activity-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('activity-lists', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        $('.layui-btn.layuiadmin-btn-activity').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        //事件
+        var active = {
+            add_activity: function(){
+                var index = layer.open({
+                    type: 2
+                    ,title: '新增活动专区'
+                    ,content: '{:url("activity/addActivity")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-activity-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("activity/addActivity")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('activity-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            },
+            add_goods:function () {
+                var index = layer.open({
+                    type: 2
+                    ,title: '新增专区商品'
+                    ,content: '{:url("activity/addGoods")}'
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'add-goods-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("activity/addGoods")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('activity-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+
+            }
+        }
+
+
+
+        //清空查询
+        form.on('submit(activity-clear-search)', function(){
+            $('#name').val('');  //清空输入框
+            $('#activity_id').val('');  //清空输入框
+            form.render('select');
+            //刷新列表
+            table.reload('activity-lists', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //获取列表
+        getList('')
+        //切换列表
+        element.on('tab(tab-all)', function (data) {
+            $('.activity-area').hide();
+            $('.activity-goods').show();
+            $('.seach').show();
+            var type = $(this).attr('data-type');
+            if(type == 2){
+                $('.seach').hide();
+                $('.activity-area').show();
+                $('.activity-goods').hide();
+            }
+            getList(type)
+        });
+
+        //监听工具条
+        table.on('tool(activity-lists)', function(obj){
+            var id = obj.data.id;
+            if(obj.event === 'del_activity'){
+                var name = obj.data.name;
+                layer.confirm('确定删除专区:'+'<span style="color: red">'+name+'</span>'+'。该专区的商品将会全部移除，请谨慎操作。', function(index){
+                    like.ajax({
+                        url:'{:url("activity/delactivity")}',
+                        data:{id:id},
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('activity-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+            if(obj.event === 'del_goods'){
+                var goods_id = obj.data.goods_id;
+                var goods_name = obj.data.name;
+                var activity_id = obj.data.activity_id;
+                layer.confirm('确定删除移除商品：'+'<span style="color: red">'+goods_name+'</span>', function(index) {
+                    like.ajax({
+                        url: '{:url("activity/delGoods")}',
+                        data: {goods_id: goods_id,activity_id:activity_id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code == 1) {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                                layer.close(index); //关闭弹层
+                                table.reload('activity-lists'); //数据刷新
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+
+            }
+            if(obj.event === 'edit_activity'){
+                layer.open({
+                    type: 2
+                    ,title: '编辑活动专区'
+                    ,content: '{:url("activity/editActivity")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,btn: ['保存', '取消']
+                    ,maxmin: true
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'edit-activity-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("activity/editActivity")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('activity-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+            if(obj.event === 'edit_goods'){
+                var id = obj.data.goods_id;
+                var activity_id = obj.data.activity_id;
+                var index = layer.open({
+                    type: 2
+                    , title: '编辑活动商品'
+                    , content: '{:url("activity/editGoods")}?goods_id=' + id+'&activity_id='+activity_id
+                    , area: ['60%', '60%']
+                    , btn: ['保存', '取消']
+                    , maxmin: true
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'edit-goods-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field;
+                            like.ajax({
+                                url: '{:url("activity/editGoods")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('activity-lists'); //数据刷新
+                                    }
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+
+        });
+
+        function getList(type) {
+            layui.define(['table', 'form'], function(exports){
+                var $ = layui.$
+                    ,table = layui.table
+                    ,form = layui.form
+                    ,url = '{:url("activity/goodsLists")}';
+
+                var cols  = [
+                    {type: 'checkbox'}
+                    ,{field: 'name', title: '商品',width:320,toolbar: '#goods-info'}
+                    ,{field: 'activity_name',width:160, title: '活动专区'}
+                    ,{field: 'status_desc',width:160, title:'专区状态'}
+                    ,{fixed: 'right', title: '操作',width:320, align: 'center',  toolbar: '#goods-operation'}
+                ];
+                if(type == 2){
+                    url = url = '{:url("activity/areaLists")}';
+                    cols = [
+                        {type: 'checkbox'}
+                        ,{field: 'name',align: 'center',title: '专区名称'}
+                        ,{field: 'title',align: 'center',title: '专区标题'}
+                        ,{field: 'iamge',align: 'center', title:'专区图片',toolbar: '#area-image'}
+                        ,{field: 'status_desc',align: 'center', title:'专区状态'}
+                        ,{fixed: 'right', title: '操作',width:320, align: 'center',  toolbar: '#area-operation'}
+                    ];
+                }
+                //管理员管理
+                table.render({
+                    id:'activity-lists'
+                    ,elem: '#activity-lists'
+                    ,url: url  //模拟接口
+                    ,cols: [cols]
+                    ,page:true
+                    ,text: {none: '暂无数据！'}
+                    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                        return {
+                            "code":res.code,
+                            "msg":res.msg,
+                            "count": res.data.count, //解析数据长度
+                            "data": res.data.lists, //解析数据列表
+                        };
+                    }
+                    ,done: function(res, curr, count){
+                        // 解决操作栏因为内容过多换行问题
+                        $(".layui-table-main tr").each(function (index, val) {
+                            $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                            $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    }
+                });
+
+            });
+        }
+
+    });
+</script>

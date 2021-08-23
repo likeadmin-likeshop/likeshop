@@ -1,0 +1,46 @@
+<div class="layui-fluid">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">模板名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">计费方式</label>
+                    <div class="layui-input-block">
+                        <select name="charge_way" id="charge_way">
+                            <option value="">全部</option>
+                            {foreach $charge_way_lists as $k => $val}
+                            <option value="{$k}">{$val}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-freight {$view_theme_color}" lay-submit lay-filter="freight-search">
+                        查询
+                    </button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-express layui-btn-primary " lay-submit
+                            lay-filter="freight-clear-search">重置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div style="padding-bottom: 10px;">
+            <button class="layui-btn layuiadmin-btn-freight {$view_theme_color} layui-btn-sm" data-type="add">添加运费模板</button>
+        </div>
+
+        <table id="freight-lists" lay-filter="freight-lists"></table>
+
+        <script type="text/html" id="freight-operation">
+            <a class="layui-btn layui-btn-warm {$view_theme_color} layui-btn-sm" lay-event="edit-freight">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del-freight">删除</a>
+        </script>
+
+</div>

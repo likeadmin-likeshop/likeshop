@@ -1,0 +1,43 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="layuiadmin-form-comment" id="layuiadmin-form--comment" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$res.id}" name="id">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">会员评论：</label>
+            <div class="layui-input-block" style="margin-top: 10px">
+                {if condition = "$res.comment == ''"}
+                未填写评价
+                {else}
+                {$res.comment}
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline" style="display:block;">
+            <label class="layui-form-label" style="padding-top: 0px"><font color="red">*</font>商家回复：</label>
+        </div>
+        <div class="layui-input-block">
+            <textarea name="reply" placeholder="" class="layui-textarea">{$res.reply}</textarea>
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="reply-comment-submit" id="reply-comment-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+    });
+</script>

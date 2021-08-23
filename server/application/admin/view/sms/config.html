@@ -1,0 +1,63 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label{
+        width: 120px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input type="hidden" value="{$info.id}" name="id">
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信渠道：</label>
+        <div class="layui-input-inline" style="padding-top: 8px">
+            {$info.name}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信签名：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <input type="text" name="sign" placeholder="请输入短信签名" autocomplete="off" class="layui-input" value="{$info.sign}" lay-verify="required" lay-vertype="tips">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">APP_KEY：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <input type="text" name="app_key" placeholder="请输入APP_KEY" autocomplete="off" class="layui-input" value="{$info.app_key}" lay-verify="required" lay-vertype="tips">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">SECRET_KEY：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <input type="text" name="secret_key" placeholder="请输入SECRET_KEY" autocomplete="off" class="layui-input" value="{$info.secret_key}" lay-verify="required" lay-vertype="tips">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" lay-filter="disable" name="status" lay-skin="switch" lay-text="开启|关闭" {if condition="$info.status eq 1" }checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="config-submit" id="config-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/' //静态资源所在路径
+    }).extend({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).use(['form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+
+
+
+
+    })
+</script>

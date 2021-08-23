@@ -1,0 +1,472 @@
+{layout name="layout2" /}
+<style>
+    .layui-icon-file:before {
+        content: "\e623";
+    }
+
+    .add-border{
+        border: 2px solid #1E9FFF;
+    }
+
+    .white-border{
+        border: 2px solid #ffffff;
+    }
+
+    .img-box{
+        border-left: 1px solid #1E9FFF;
+        margin-top: 10px
+    }
+
+
+    .img-border{
+        width: 130px;
+        height: 130px;
+        box-sizing: border-box;
+        padding: 5px;
+    }
+
+    .img-lists{
+        margin-bottom: 15px
+    }
+
+    .used-btn{
+        padding: 10px
+    }
+
+</style>
+
+<div class="layui-col-xs2 layui-col-sm2 layui-col-md2" style="margin-top: 10px">
+    <div id="cate-tree" class="demo-tree demo-tree-box"></div>
+</div>
+
+
+
+<div class="layui-col-xs10 layui-col-sm10 layui-col-md10 img-box" >
+    <div style="padding:10px">
+        <button id="add-cate" class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon">&#xe61f;</i>添加分类
+        </button>
+        <button id="upload" class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon">&#xe67c;</i>上传图片
+        </button>
+        <button id="del" class="layui-btn layui-btn-sm layui-btn-danger" style="margin-left: 10px"><i class="layui-icon">&#xe640;</i>删除图片
+        </button>
+    </div>
+
+    <div style="color: #a0a0a0"></div>
+
+    <div class="layui-card-body">
+        <div class="file-body layui-form">
+            <ul id="lists" class="layui-row fm_body layui-col-space10 img-lists"></ul>
+            <hr class="layui-bg-blue">
+
+            <div class="layui-col-sm10">
+                <div id="page"></div>
+            </div>
+
+            <div class="layui-col-sm2 used-btn">
+                <button id="used" class="layui-btn layui-btn-sm layui-btn-normal">使用选中图片</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var cate = 0;
+
+    var ids = [];//选中的id
+    var paths = [];//选中的路径
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'laypage', 'upload', 'like', 'flow', 'tree2'], function () {
+        var flow = layui.flow;
+        var tree = layui.tree2;
+        var like = layui.like;
+
+
+        $ = layui.$;
+        $('#lists').height($(document).height() - 150);
+        page_size = parseInt($('#lists').height() / 134) * parseInt($('#lists').width() / 140);
+        var getLists = function (page_no,cate) {
+            var count;
+            like = layui.like;
+            like.ajax({
+                url: '{:url("file/lists")}?cate='+cate //实际使用请改成服务端真实接口
+                , data: {type: 1, page_no: page_no, page_size: page_size}
+                , async: false
+                , success: function (res) {
+                    var html = '';
+                    lists = res.data.lists;
+
+                    if (lists.length == 0){
+                        html += '<div>暂无图片</div>'
+                    }
+
+                    for (var i in lists) {
+                        html += '<li style="display:inline-block"> <div align="center" class="white-border img-border"> <img data-id="'+lists[i]['id']+'" value="'+lists[i]['uri']+'" lay-src="' + lists[i]['uri'] + '" width="100" height="100"> <p class="layui-elip" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width: 100px">' + lists[i]['name'] + ' </p> </div> </li>';
+                    }
+
+
+                    $('#lists').html(html);
+                    flow.lazyimg();
+                    count = res['data']['count'];
+                }
+            });
+            return count;
+        }
+
+        count = getLists(1);
+        laypage = layui.laypage;
+        laypage.render({
+            theme: '#1E9FFF',
+            elem: 'page' //分页容器的id
+            , count: count //总页数
+            , limit: page_size //总页数
+            , skin: '#1E9FFF' //自定义选中色值
+            , groups: 3
+            , prev: '<'
+            , next: '>'
+            //,skip: true //开启跳页
+            , jump: function (obj, first) {
+                getLists(obj.curr);
+                ids = [];
+                paths = [];
+            }
+        });
+
+        var upload = layui.upload;
+        var success = null;
+        var update_count = 0;
+        var update_count_ed = 0;
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: window.location.href//上传接口
+            , accept: 'images'
+            , exts: 'jpg|png|gif|bmp|jpeg|ico'
+            , data : {'cate':cate}
+            , number: 20
+            , multiple: true
+            , before: function (obj) {
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                });
+            }
+            , choose: function (obj) {
+                var count = 0;
+                for (var i in obj.pushFile()) {
+                    update_count++;
+                }
+                ;
+            }
+            , done: function (res) {
+                if (res.code == 0) {
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 2500
+                    }, function () {
+                        return;
+                    });
+                }
+                if (res.code == 1) {
+                    update_count_ed++;
+                    if (update_count_ed == update_count) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 2500
+                        }, function () {
+                            window.location.href = window.location.href
+                        });
+                    }
+                    layer.closeAll("loading");
+                }
+            }
+            , error: function () {
+                layer.closeAll("loading");
+            }
+        });
+
+        $(document).on('click', 'img', function () {
+            if ($(this).parent().hasClass('add-border')){
+                $(this).parent().removeClass('add-border');
+                $(this).parent().addClass('white-border');
+            }else{
+                $(this).parent().addClass('add-border');
+                $(this).parent().removeClass('white-border');
+            }
+
+            //选中的图片的id
+            var choose_id = $(this).data('id');
+            var id_exist = $.inArray(choose_id, ids);
+            if (id_exist >= 0){
+                ids.splice(id_exist, 1);
+            }else{
+                ids.push(choose_id);
+            }
+
+            //选中的图片的路径
+            var choose_path = $(this).attr('value');
+            var path_exist = $.inArray(choose_path, paths);
+            if (path_exist >= 0){
+                paths.splice(path_exist, 1);
+            }else{
+                paths.push(choose_path);
+            }
+        });
+
+
+
+        //添加分类
+        $('#add-cate').click(function () {
+            layer.open({
+                type: 2
+                ,title: '添加分类'
+                ,content: '{:url("file_cate/add")}'
+                ,area: ['90%', '90%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submit = layero.find('iframe').contents().find("#add-cate-submit");
+
+                    //监听提交
+                    iframeWindow.layui.form.on('submit(add-cate-submit)', function(data){
+                        var field = data.field; //获取提交的字段
+                        like.ajax({
+                            url:'{:url("file_cate/add")}',
+                            data:field,
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    },function () {
+                                        window.location.reload();
+                                    });
+                                    layer.close(index);
+                                }
+                            }
+                        });
+                    });
+                    submit.trigger('click');
+                    return false;
+                }
+            });
+        });
+
+
+        //树形结构分类->增删改操作
+        var data = {$list | raw};
+        tree.render({
+            elem: '#cate-tree'
+            ,data: data
+            ,edit: ['update', 'del'] //操作节点的图标
+            ,click: function(obj){
+                //点击左边分类,刷新右边图库
+                var id = obj.data.id;
+                cate = id;
+
+                //重载上传接口
+                uploadInst.reload({
+                    elem: '#upload' //绑定元素
+                    , url: window.location.href//上传接口
+                    , accept: 'images'
+                    , exts: 'jpg|png|gif|bmp|jpeg|ico'
+                    , data : {'cate':cate}
+                });
+
+
+                count = getLists(1, id);
+                laypage = layui.laypage;
+                laypage.render({
+                    theme: '#1E9FFF',
+                    elem: 'page' //分页容器的id
+                    , count: count //总页数
+                    , limit: page_size //总页数
+                    , skin: '#1E9FFF' //自定义选中色值
+                    , groups: 3
+                    , prev: '<'
+                    , next: '>'
+                    //,skip: true //开启跳页
+                    , jump: function (obj, first) {
+                        getLists(obj.curr, id);
+                        ids = [];
+                        paths = [];
+                    }
+                });
+            }
+            ,customOperate: true
+            ,onlyIconControl:true
+            ,operate: function(obj){
+                var type = obj.type;
+                var data = obj.data; //得到当前节点的数据
+
+                var id = data.id;
+
+                if (data.field == 'all'){
+                    return false;
+                }
+
+                if(type === 'add'){
+
+                    layer.open({
+                        type: 2
+                        ,title: '添加分类'
+                        ,content: '{:url("file_cate/add")}'
+                        ,area: ['90%', '90%']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var iframeWindow = window['layui-layer-iframe'+ index]
+                                ,submit = layero.find('iframe').contents().find("#add-cate-submit");
+
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(add-cate-submit)', function(data){
+                                var field = data.field; //获取提交的字段
+                                like.ajax({
+                                    url:'{:url("file_cate/add")}',
+                                    data:field,
+                                    type:"post",
+                                    success:function(res)
+                                    {
+                                        if(res.code == 1)
+                                        {
+                                            layui.layer.msg(res.msg, {
+                                                offset: '15px'
+                                                , icon: 1
+                                                , time: 1000
+                                            },function () {
+                                                window.location.reload();
+                                            });
+                                            layer.close(index);
+                                        }
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                            return false;
+                        }
+                    });
+
+                } else if(type === 'update'){ //修改节点
+
+                    layer.open({
+                        type: 2
+                        ,title: '编辑分类'
+                        ,content: '{:url("file_cate/edit")}?id='+id
+                        ,area: ['90%', '90%']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var iframeWindow = window['layui-layer-iframe'+ index]
+                                ,submit = layero.find('iframe').contents().find("#edit-cate-submit");
+
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(edit-cate-submit)', function(data){
+                                var field = data.field;
+                                like.ajax({
+                                    url:'{:url("file_cate/edit")}',
+                                    data:field,
+                                    type:"post",
+                                    success:function(res)
+                                    {
+                                        if(res.code == 1)
+                                        {
+                                            layui.layer.msg(res.msg, {
+                                                offset: '15px'
+                                                , icon: 1
+                                                , time: 1000
+                                            },function () {
+                                                window.location.reload();
+                                            });
+                                            layer.close(index);
+                                        }
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                            return false;
+                        }
+                    });
+
+                } else if(type === 'del'){
+
+                    layer.confirm('确定删除所选分类？', function(index){
+                        like.ajax({
+                            url:'{:url("file_cate/del")}',
+                            data:{id:id},
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    },function () {
+                                        window.location.reload();
+                                    });
+                                    layer.close(index); //关闭弹层
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+                }
+            }
+        });
+
+
+        //使用选中图片
+        $('#used').click(function () {
+            if (ids.length <= 0){
+                layer.msg('请选择图片');
+                return false;
+            }
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            parent.window.callback && parent.window.callback(paths.reverse());
+        });
+
+
+        //删除选中的图片
+        $('#del').click(function () {
+            if (ids.length <= 0){
+                layer.msg('请选择图片');
+                return false;
+            }
+
+            layer.confirm('确定删除选中图片吗?', function(index){
+                like.ajax({
+                    url:"{:url('file/del')}",
+                    data:{ids:ids},
+                    type:"post",
+                    success:function(res)
+                    {
+                        if(res.code == 1)
+                        {
+                            layui.layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            },function () {
+                                window.location.reload();
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+    });
+
+</script>

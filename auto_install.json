@@ -1,0 +1,13 @@
+{
+  "php_ext":"fileinfo",
+  "chmod":[
+    {"mode":777,"path":"/server/runtime"}
+  ],
+  "success_url":"/index.php",
+  "php_versions":"72",
+  "db_config":"",
+  "admin_username":"",
+  "admin_password":"",
+  "run_path":"/server/public",
+  "remove_file":[]
+}

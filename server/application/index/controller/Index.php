@@ -26,10 +26,7 @@ class Index extends Controller
 {
     public function index()
     {
-        $template = app()->getRootPath() . 'public/pc/index.html';
-        if (is_mobile()) {
-            $template = app()->getRootPath() . 'public/mobile/index.html';
-        }
+        $template = app()->getRootPath() . 'public/mobile/index.html';
         if (file_exists($template)) {
             return view($template);
         }

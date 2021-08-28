@@ -35,6 +35,7 @@ class Ad extends AdminBase
             $get = $this->request->get();
             $this->_success('获取成功', AdLogic::lists($get));
         }
+        
         $type = \app\common\model\Ad::getAdTypeDesc(true);
         $this->assign('type', $type);
         return $this->fetch();

@@ -10,7 +10,7 @@
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
 // | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
+// | likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | likeshop团队版权所有并拥有最终解释权
 // +----------------------------------------------------------------------
@@ -74,8 +74,9 @@ class User extends ApiBase{
         $this->_success('获取成功',$list);
     }
 
-
-    //更换手机号
+    /**
+     * note 更换手机号
+     */
     public function changeMobile()
     {
         $data = $this->request->post();
@@ -100,8 +101,9 @@ class User extends ApiBase{
         $this->_error('操作失败');
     }
 
-
-    //获取微信手机号
+    /**
+     * note 获取微信手机号
+     */
     public function getMobile()
     {
         $post = $this->request->post();
@@ -112,8 +114,9 @@ class User extends ApiBase{
         return UserLogic::getMobileByMnp($post);
     }
 
-
-    //我的粉丝
+    /**
+     * note 我的粉丝
+     */
     public function fans()
     {
         $get = $this->request->get();

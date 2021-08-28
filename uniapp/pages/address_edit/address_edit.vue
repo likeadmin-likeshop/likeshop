@@ -1,5 +1,4 @@
 <template>
-<!-- pages/address_edit/address_edit.wxml -->
 <view class="address-edit">
     <form @submit="formSubmit" report-submit="true">
         <view class="form bg-white">
@@ -255,7 +254,6 @@ export default {
 };
 </script>
 <style lang="scss">
-/* pages/address_edit/address_edit.wxss */
 
 .address-edit {
     padding-top: 10rpx;

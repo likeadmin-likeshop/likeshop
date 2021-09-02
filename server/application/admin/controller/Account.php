@@ -28,7 +28,6 @@ use think\facade\Url;
 
 class Account extends AdminBase
 {
-
     public $like_not_need_login = ['login'];
 
     /**

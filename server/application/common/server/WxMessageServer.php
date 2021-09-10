@@ -111,7 +111,7 @@ class WxMessageServer
             'touser'      => $this->openid,
             'template_id' => $this->template_id,
             'url'         => $domain.$params['url'],
-            'date'        => [
+            'data'        => [
                 'first'  => $scene_model['first'],
                 'remark' => $scene_model['remark']
             ]

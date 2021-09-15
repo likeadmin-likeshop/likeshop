@@ -117,7 +117,7 @@ class Order extends ApiBase
         return OrderLogic::confirm($order_id, $this->user_id);
     }
 
-
+    //物流信息
     public function orderTraces()
     {
         $order_id = $this->request->get('id');

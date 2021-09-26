@@ -183,6 +183,9 @@ class AliPayServer
             if (false === $verify) {
                 throw new \Exception('异步通知验签失败');
             }
+            if (!in_array($data['trade_status'], ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
+                return true;
+            }
             $extra['transaction_id'] = $data['trade_no'];
             //验证订单是否已支付
             switch ($data['passback_params']) {

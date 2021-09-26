@@ -170,7 +170,12 @@ class Payment extends ApiBase
     public function aliNotify()
     {
         $data = $this->request->post();
-        return (new AliPayServer())->verifyNotify($data);
+        $result = (new AliPayServer())->verifyNotify($data);
+        if (true === $result) {
+            echo 'success';
+        } else {
+            echo 'fail';
+        }
     }
 
 

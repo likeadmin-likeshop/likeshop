@@ -1,5 +1,4 @@
 <template>
-
 	<view class="login">
 		<!-- #ifdef MP-WEIXIN -->
 		<view class="mpwx-login column-center">

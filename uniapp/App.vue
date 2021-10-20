@@ -42,7 +42,7 @@
 			this.bindCode(options)
 		},
 		onHide: function() {
-			console.log('App Hide')
+			// console.log('App Hide')
 		},
 		methods: {
 			...mapMutations(['SETCONFIG']),

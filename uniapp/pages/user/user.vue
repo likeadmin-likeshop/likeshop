@@ -1,3 +1,4 @@
+
 <template>
     <view class="user" :style="[background]">
         <view class="header">
@@ -234,16 +235,13 @@
                 toLogin()
             },
 
+            
+            
             goPage(url) {
                 if (!this.isLogin) return toLogin()
                 uni.navigateTo({
                     url
                 });
-            },
-            tapMenu(item) {
-                if (!this.isLogin) return toLogin()
-                console.log(item)
-                menuJump(item)
             },
             async getMenuFun() {
                 const {
@@ -255,6 +253,11 @@
                 if (code == 1) {
                     this.menuList = data
                 }
+            },
+            tapMenu(item) {
+                if (!this.isLogin) return toLogin()
+                console.log(item)
+                menuJump(item)
             },
 
             onCopy(e) {

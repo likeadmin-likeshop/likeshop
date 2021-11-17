@@ -41,7 +41,7 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ![qun.png](https://resource.likeshop.cn/gitee/qun.png)
 
 ### 联系微信客服（专业解答、获取功能清单）
-![联系微信客服.png](https://resource.likeshop.cn/gitee/lxkf.gif)
+![联系微信客服.png](https://resource.likeshop.cn/gitee/lxwm.png)
 
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 

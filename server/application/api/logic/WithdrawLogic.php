@@ -47,7 +47,7 @@ class WithdrawLogic extends LogicBase
             'poundage_percent' => ConfigServer::get('withdraw', 'poundage', 0),//提现手续费;
         ];
 
-        $types = ConfigServer::get('withdraw', 'type', []); //提现方式
+        $types = ConfigServer::get('withdraw', 'type', [1]); //提现方式
         // 封装提现方式
         $config['type'] = [];
         if($types) {

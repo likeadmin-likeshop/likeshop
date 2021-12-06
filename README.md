@@ -2,6 +2,9 @@
 
 ![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/toutu.png)
 
+## 双十二活动来啦
+[双十二活动来啦，全系列产品限量秒杀，击穿底价，不能错过！](https://mp.weixin.qq.com/s/mhf2IrvJEwK6l8NAtQHSAg)
+
 ## likeshop「开源精神」
 likeshop开源团队专注于围绕电商交易领域打造新时代的开源商城系统。我们关心并聚焦于解决以下问题
 1. 系统安装部署要保持简单，无需配置复杂的运行环境，方便后续工作开展。为此我们准备了简洁大方的傻瓜式安装引导界面，并且提供了宝塔一键安装教程，无论是Linux还是Windows操作系统都很方便部署。

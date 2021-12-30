@@ -2,9 +2,6 @@
 
 ![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/toutu.png)
 
-## 双十二活动来啦
-[双十二活动来啦，全系列产品限量秒杀，击穿底价，不能错过！](https://mp.weixin.qq.com/s/mhf2IrvJEwK6l8NAtQHSAg)
-
 ## likeshop「开源精神」
 likeshop开源团队专注于围绕电商交易领域打造新时代的开源商城系统。我们关心并聚焦于解决以下问题
 1. 系统安装部署要保持简单，无需配置复杂的运行环境，方便后续工作开展。为此我们准备了简洁大方的傻瓜式安装引导界面，并且提供了宝塔一键安装教程，无论是Linux还是Windows操作系统都很方便部署。
@@ -44,7 +41,7 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ![qun.png](https://resource.likeshop.cn/gitee/qun.png)
 
 ### 联系微信客服（专业解答、获取功能清单）
-![联系微信客服.png](https://resource.likeshop.cn/gitee/lxwm.png)
+![联系微信客服.png](https://resource.likeshop.cn/gitee/lxkf.png)
 
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 
@@ -136,23 +133,23 @@ likeshop服务端基于国内最流行php框架thinkphp5.1（后续会升级为6
 
 ### 部署运行
 #### 宝塔面板部署（正式发布推荐）
-[点击这里，查看详细部署教程，沉浸式教你如何使用宝塔面板安装likeshop](http://doc.likemarket.net/likeshop_develop_v2_x/2107074)
+[点击这里，查看详细部署教程，沉浸式教你如何使用宝塔面板安装likeshop](http://doc.likeshop.cn/likeshop_develop_v2_x/2107074)
 
 #### phpStudy部署（本地部署推荐）
-[点击这里，查看详细部署教程，沉浸式教你如何使用phpStudy安装likeshop](http://doc.likemarket.net/likeshop_develop_v2_x/2119296)
+[点击这里，查看详细部署教程，沉浸式教你如何使用phpStudy安装likeshop](http://doc.likeshop.cn/likeshop_develop_v2_x/2119296)
 
 #### docker部署
-[点击这里，查看详细部署教程，沉浸式教你如何使用docker安装likeshop](http://doc.likemarket.net/likeshop_develop_v2_x/2107075)
+[点击这里，查看详细部署教程，沉浸式教你如何使用docker安装likeshop](http://doc.likeshop.cn/likeshop_develop_v2_x/2107075)
 
 ## likeshop单商户商城系统 「演示环境」
 ### PC商城
-PC端访问链接：[https://likeshop.likemarket.net/](https://likeshop.likemarket.net/)
+PC端访问链接：[https://likeshop.likeshop.cn/](https://likeshop.likeshop.cn/)
 
 ### 移动端商城
 ![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
 
 ### PC管理后台
-PC管理后台演示： [http://likeshop-demo.likemarket.net/admin ](http://likeshop-demo.likemarket.net/admin )
+PC管理后台演示： [http://likeshop-demo.likeshop.cn/admin ](http://likeshop-demo.likeshop.cn/admin )
 
 账号：admin 密码：123456
 

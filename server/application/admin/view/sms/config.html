@@ -20,8 +20,26 @@
             </div>
         </div>
     </div>
+    <!-- 腾讯短信才需要APPID -->
+    {if $info.id == 2}
     <div class="layui-form-item">
-        <label class="layui-form-label">APP_KEY：</label>
+        <label class="layui-form-label">APP_ID：</label>
+        <div class="layui-input-block">
+            <div class="layui-col-sm4">
+                <input type="text" name="app_id" placeholder="请输入APP_ID" autocomplete="off" class="layui-input" value="{$info.app_id ?? ''}" lay-verify="required" lay-vertype="tips">
+            </div>
+        </div>
+    </div>
+    {/if}
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            {if $info.id == 1}
+                APP_KEY：
+            {else}
+                SECRET_ID:
+            {/if}
+            </label>
         <div class="layui-input-block">
             <div class="layui-col-sm4">
                 <input type="text" name="app_key" placeholder="请输入APP_KEY" autocomplete="off" class="layui-input" value="{$info.app_key}" lay-verify="required" lay-vertype="tips">

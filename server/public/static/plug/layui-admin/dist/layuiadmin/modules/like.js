@@ -166,6 +166,52 @@ layui.define(["jquery", "form", "upload"], function (exports) {
                     $(element).css('display','none');
                 }
             });
+        },
+        videoCallback: function(uris) {
+            var html = '<ul id="video-container">';
+            for(let uri of uris) {
+                html += '<li class="video-item">';
+                html += '<video src="'+uri+'" width="80" height="80"></video>';
+                html += '<input type="hidden" name="video" value="' + uri + '" />';
+                html += '<span class="video-del">x</span>';
+                html += '</li>';
+            }
+
+            html += '<div class="upload-file-div video-style" style="display:none" id="video">';
+            html += '<a href="#" class="upload-file-title">+添加视频</a>';
+            html += '</ul>';
+            var videoParent = $('#video').parent();
+            $('#video')[0].remove();
+            videoParent.append(html);
+
+            $('#video-container video').click(function() {
+                var video = $(this);
+                var uri = video.attr('src');
+                layer.open({
+                    type: 2,
+                    title: '查看视频',
+                    content: '/admin/file_new/showVideo?uri='+uri,
+                    area: ['90%', '90%']
+                });
+            });
+
+            // 删除视频按钮
+            $('.video-del').click(function() {
+                $(this).parent().remove();
+                var items = $('.video-item');
+                if(items.length == 0) {
+                    $('.upload-file-div').css('display', 'block');
+                    // 视频上传
+                    $('#video').click(function(){
+                        layer.open({
+                            type: 2,
+                            title: '上传视频',
+                            content: '/admin/file_new/lists?type=video',
+                            area: ['90%', '90%']
+                        });
+                    });
+                }
+            });
         }
     };
     exports("like", ojb)

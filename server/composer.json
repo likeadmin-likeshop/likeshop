@@ -31,7 +31,8 @@
         "qiniu/php-sdk": "^7.3",
         "aliyuncs/oss-sdk-php": "^2.4",
         "qcloud/cos-sdk-v5": "^2.1",
-        "alipaysdk/easysdk": "^2.2"
+        "alipaysdk/easysdk": "^2.2",
+        "tencentcloud/tencentcloud-sdk-php": "^3.0"
     },
     "autoload": {
         "psr-4": {

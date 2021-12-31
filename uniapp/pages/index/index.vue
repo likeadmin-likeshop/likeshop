@@ -81,10 +81,10 @@
 							<navigator class="item bg-white" v-for="(item, index) in activityArea" :key="index"
 								hover-class="none"
 								:url="`/pages/bundle/activity_detail/activity_detail?id=${item.id}&name=${item.title}&title=${item.name}`">
-								<view class="con column-center">
-									<custom-image width="300rpx" height="360rpx" :src="item.image"></custom-image>
-									<view class="title xxl">{{item.name}}</view>
-									<view class="desc white xxs line1">{{item.title}}</view>
+								<view class="column-center">
+									<custom-image width="300rpx" height="436rpx" :src="item.image"></custom-image>
+									<!-- <view class="title xxl">{{item.name}}</view>
+									<view class="desc primary xxs line1">{{item.title}}</view> -->
 								</view>
 							</navigator>
 						</scroll-view>
@@ -203,7 +203,8 @@
 		loadingFun,
 		menuJump,
 		arraySlice,
-		setTabbar
+		setTabbar,
+		getRect
 	} from '@/utils/tools'
 	import {
 		toLogin
@@ -260,12 +261,20 @@
 			// #endif
 		},
 		async onShow() {
+			this.$nextTick(function(){
+				getRect('.index').then((res) => {
+					if(res.top == 0) {
+						this.navBg = 0
+					}
+				})
+			})
+			
 			// #ifdef H5
 			this.enable = true
 			// #endif
 			await this.getHomeFun()
-			await this.getCartNum()
-			this.isLogin && this.$getRegisterCoupon()
+			this.getCartNum()
+			this.isLogin && this.getRegisterCouponFun()
 		},
 		onHide() {
 			// #ifdef H5
@@ -372,7 +381,7 @@
 			swiperChange(e) {
 				this.currentSwiper = e.detail.current
 			},
-			$getRegisterCoupon() {
+			getRegisterCouponFun() {
 				getRegisterCoupon().then(res => {
 					if (res.code == 1) {
 						if (res.data && res.data.length) {
@@ -527,14 +536,13 @@
 						display: inline-block;
 						overflow: hidden;
 						margin-right: 20rpx;
-						padding-bottom: 25rpx;
 
 						.title {
 							padding: 10rpx 0;
 						}
 
 						.desc {
-							background-color: #ED4477;
+							background-color: #FEE9EB;
 							padding: 6rpx 20rpx;
 							border-radius: 60rpx;
 							max-width: 260rpx;

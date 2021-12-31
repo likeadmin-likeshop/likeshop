@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\admin\logic;
@@ -182,14 +181,14 @@ class AfterSaleLogic
             switch ($log['channel']){
                 //会员申请售后
                 case AfterSaleLog::USER_APPLY_REFUND:
-                    $log['log_img'] = UrlServer::getFileUrl($result['refund_image']);
+                    $log['log_img'] = empty($result['refund_image'])  ? '' : UrlServer::getFileUrl($result['refund_image']);
                     $refund_reason = empty($result['refund_reason']) ? '未知' : $result['refund_reason'];
                     $refund_remark = empty($result['refund_remark']) ? '暂无' : $result['refund_remark'];
                     $log['log_remark'] = '退款原因('.$refund_reason.')'.'退款说明('.$refund_remark.')';
                     break;
                 //会员发快递
                 case AfterSaleLog::USER_SEND_EXPRESS:
-                    $log['log_img'] = UrlServer::getFileUrl($result['express_image']);
+                    $log['log_img'] = empty($result['express_image']) ? '' : UrlServer::getFileUrl($result['express_image']);
                     $express_name = $result['express_name'];
                     $invoice_no = $result['invoice_no'];
                     $express_remark = empty($result['express_remark']) ? '暂无' : $result['express_remark'];
@@ -308,7 +307,7 @@ class AfterSaleLogic
         Hook::listen('notice', [
             'user_id' => $after_sale['user_id'],
             'order_id' => $after_sale['order_id'],
-            'scene' => NoticeSetting::PLATFORM_PASS_REFUND_NOTICE,
+            'scene' => NoticeSetting::PLATFORM_REFUSE_REFUND_NOTICE,
         ]);
     }
 
@@ -404,7 +403,7 @@ class AfterSaleLogic
                 AfterSaleLog::REFUND_SUCCESS
             );
             //更新订单和订单商品状态
-            OrderRefundLogic::afterSaleRefundUpdate($order, $order_goods['id']);
+            OrderRefundLogic::afterSaleRefundUpdate($order, $order_goods['id'], $admin_id);
             //订单退款
             OrderRefundLogic::refund($order, $order['order_amount'], $after_sale['refund_price']);
 

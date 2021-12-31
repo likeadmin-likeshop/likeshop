@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 
@@ -23,6 +22,7 @@ namespace app\api\server;
 
 
 use app\api\logic\DistributionLogic;
+use app\api\logic\LoginLogic;
 use app\common\model\Client_;
 use app\common\model\NoticeSetting;
 use app\common\server\storage\Driver as StorageDriver;
@@ -64,7 +64,7 @@ class UserServer
             $avatar = '';     //头像路径
 
             if (empty($avatar_url)) {
-                $avatar = ConfigServer::get('website', 'user_image');
+                $avatar = ConfigServer::get('website', 'user_image', '');
             } else {
                 if ($config['default'] == 'local') {
                     $file_name = md5($openid . $time) . '.jpeg';
@@ -109,6 +109,9 @@ class UserServer
             //消息通知
             Hook::listen('notice', ['user_id' => $user_id, 'scene' => NoticeSetting::REGISTER_SUCCESS_NOTICE]);
 
+            //注册赠送优惠
+            LoginLogic::registerAward($user_id);
+
             Db::commit();
 
             $user_info = Db::name('user')
@@ -116,7 +119,7 @@ class UserServer
                 ->where(['id' => $user_id])
                 ->find();
             if (empty($user_info['avatar'])) {
-                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image'));
+                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image', ''));
             } else {
                 $user_info['avatar'] = UrlServer::getFileUrl($user_info['avatar']);
             }
@@ -222,7 +225,7 @@ class UserServer
                 ->find();
 
             if (empty($user_info['avatar'])) {
-                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image'));
+                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image', ''));
             } else {
                 $user_info['avatar'] = UrlServer::getFileUrl($user_info['avatar']);
             }

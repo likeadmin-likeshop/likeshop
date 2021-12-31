@@ -35,7 +35,7 @@
         <label class="layui-form-label">支付简称：</label>
         <div class="layui-input-block">
             <div class="layui-col-md4">
-                <input type="text" name="short_name" value="{$info.short_name | default = ''}" lay-verify="required" lay-verType="tips"  autocomplete="off" class="layui-input">
+                <input type="text" name="short_name" value="{$info.short_name | default = ''}" lay-verify="check_required" lay-verType="tips"  autocomplete="off" class="layui-input">
                 <div class="layui-form-mid layui-word-aux">会员在商城看见的支付名称</div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         <label class="layui-form-label">应用ID：</label>
         <div class="layui-input-block">
             <div class="layui-col-md4">
-                <input type="text" name="app_id" value="{$info.config.app_id | default = ''}" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+                <input type="text" name="app_id" value="{$info.config.app_id | default = ''}" lay-verify="check_required" lay-verType="tips" autocomplete="off" class="layui-input">
                 <div class="layui-form-mid layui-word-aux">支付宝应用APP_ID</div>
             </div>
         </div>
@@ -77,7 +77,7 @@
         <label class="layui-form-label">应用私钥：</label>
         <div class="layui-input-block">
             <div class="layui-col-md4">
-                <input type="text" name="private_key" value="{$info.config.private_key | default = ''}" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+                <input type="text" name="private_key" value="{$info.config.private_key | default = ''}" lay-verify="check_required" lay-verType="tips" autocomplete="off" class="layui-input">
                 <div class="layui-form-mid layui-word-aux">应用私钥（private_key）</div>
             </div>
         </div>
@@ -87,7 +87,7 @@
         <label class="layui-form-label">支付宝公钥：</label>
         <div class="layui-input-block">
             <div class="layui-col-md4">
-                <input type="text" name="ali_public_key" value="{$info.config.ali_public_key | default = ''}" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input">
+                <input type="text" name="ali_public_key" value="{$info.config.ali_public_key | default = ''}" lay-verify="check_required" lay-verType="tips" autocomplete="off" class="layui-input">
                 <div class="layui-form-mid layui-word-aux">支付宝公钥（ali_public_key）</div>
             </div>
         </div>
@@ -169,6 +169,17 @@
         });
         $(document).on('mouseout', '.pay-img-del-x', function () {
             $(this).hide();
+        });
+
+
+        form.verify({
+            check_required: function (value, item) {
+                var status = $('input[name="status"]:checked').val();
+                value = value.trim();
+                if (status == 1 && value.length == 0) {
+                    return '请填写完整';
+                }
+            }
         });
 
     })

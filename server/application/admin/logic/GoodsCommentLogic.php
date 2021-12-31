@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\logic;
 use think\db;
@@ -66,14 +65,18 @@ class GoodsCommentLogic{
 
         $res = Db::name('goods_comment gc')
             ->join('goods g','g.id = gc.goods_id')
-            ->join('goods_item gi','gi.id = gc.item_id')
+            ->leftjoin('goods_item gi','gi.id = gc.item_id')
             ->join('user u','u.id = gc.user_id')
             ->where('gc.del',0)
             ->where($where)
             ->withAttr('comment_image', function ($value, $data){
-                return Db::name('goods_comment_image')->where([
+                $imgs = Db::name('goods_comment_image')->where([
                     'goods_comment_id' => $data['id']
                 ])->column('uri');
+                foreach ($imgs as $k => $img) {
+                    $imgs[$k] = UrlServer::getFileUrl($img);
+                }
+                return $imgs;
             })
             ->field('u.id as user_id,u.nickname,u.mobile,u.sex,u.create_time,g.name,gi.spec_value_str
             ,gc.goods_comment,gc.comment,gc.create_time as comment_time,gc.status,u.avatar,g.image,gc.reply,u.sn,u.level
@@ -121,6 +124,7 @@ class GoodsCommentLogic{
             $item['create_time'] = date('Y-m-d H:i:s',$item['create_time']);
             $item['comment_time'] = date('Y-m-d H:i:s',$item['comment_time']);
             $item['avatar'] = UrlServer::getFileUrl($item['avatar']);
+            $item['image'] = UrlServer::getFileUrl($item['image']);
         }
 
         return [

@@ -1,26 +1,26 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 
 namespace app\admin\controller;
 use app\admin\logic\{GoodsBrandLogic, GoodsCategoryLogic, GoodsLogic, SupplierLogic,FreightLogic,CommonLogic};
+use think\Db;
 
 class Goods extends AdminBase
 {
@@ -46,6 +46,15 @@ class Goods extends AdminBase
         $this->assign('category_list', GoodsCategoryLogic::categoryTreeeTree());
         $this->assign('supplier_list',SupplierLogic::getSupplierList());
         return $this->fetch();
+    }
+
+    /**
+     * 列表导出
+     */
+    public function exportFile()
+    {
+        $get = $this->request->get();
+        $this->_success('', GoodsLogic::exportFile($get));
     }
 
     /**
@@ -91,6 +100,17 @@ class Goods extends AdminBase
             $spec_lists = [];
             if ($post['spec_type'] == 2) {
                 $spec_lists = $post;
+
+                // 规格值验证长度验证
+                foreach($spec_lists['spec_value_str'] as $key =>  $item) {
+                    $itemArr = explode(',', $item);
+                    foreach($itemArr as $subItem) {
+                        if(mb_strlen($subItem) > 64) {
+                            return $this->_error('第'. ($key+1) .'个SKU规格值超过了64个字符');
+                        }
+                    }
+                }
+
                 unset($spec_lists['goods_image']);
                 unset($spec_lists['spec_name']);
                 unset($spec_lists['spec_values']);
@@ -118,6 +138,7 @@ class Goods extends AdminBase
 
             //添加商品
             $result = GoodsLogic::add($post, $spec_lists);
+
             if ($result !== true) {
                 $this->_error('添加失败:' . $result);
             }
@@ -192,6 +213,20 @@ class Goods extends AdminBase
                 }
             }
 
+            if ($post['status'] == 0) {
+                $status = Db::name('goods')
+                    ->where(['id' => $post['goods_id']])
+                    ->value('status');
+                if ($status == 1) {
+                    $res = Db::name('team_activity')
+                        ->where(['status' => 1, 'goods_id'=> $post['goods_id']])
+                        ->find();
+                    if ($res) {
+                        $this->_error('该商品正在参与拼团，请先关闭后才允许下架');
+                    }
+                }
+            }
+
             //添加商品
             $result = GoodsLogic::edit($post, $spec_lists);
             if ($result !== true) {
@@ -238,10 +273,10 @@ class Goods extends AdminBase
         $field = $this->request->post('field');
         $field_value = $this->request->post('value');
         $result = CommonLogic::changeTableValue($table,$pk_name,$pk_value,$field,$field_value);
-        if($result){
+        if($result === true){
             $this->_success('修改成功');
         }
-        $this->_error('修改失败');
+        $this->_error($result);
     }
 
     /**
@@ -253,10 +288,10 @@ class Goods extends AdminBase
         if ($this->request->isAjax()) {
             $ids = $this->request->post('ids', []);
             $result = GoodsLogic::upperOrLower($ids, 0);
-            if ($result) {
+            if ($result === true) {
                 $this->_success('下架成功');
             }
-            $this->_error('下架失败');
+            $this->_error($result);
         }
     }
 
@@ -269,7 +304,7 @@ class Goods extends AdminBase
         if ($this->request->isAjax()) {
             $ids = $this->request->post('ids', []);
             $result = GoodsLogic::upperOrLower($ids, 1);
-            if ($result) {
+            if ($result === true) {
                 $this->_success('上架成功');
             }
             $this->_error('上架失败');

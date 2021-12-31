@@ -9,6 +9,8 @@ class Expressage
 
     protected $logistics_info;
 
+    protected $error;
+
     public function __construct($app, $key, $debug = false)
     {
         $this->app = $app;
@@ -41,5 +43,10 @@ class Expressage
     protected function encrypt($data, $appkey)
     {
         return urlencode(base64_encode(md5($data . $appkey)));
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 }

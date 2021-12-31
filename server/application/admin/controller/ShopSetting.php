@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
@@ -36,15 +35,17 @@ class ShopSetting extends AdminBase
             'order_cancel' => ConfigServer::get('trading', 'order_cancel', 30),//未付款订单多久时间后自动关闭
             'customer_cancel_limit' => ConfigServer::get('trading', 'customer_cancel_limit', 0),//已支付订单多长时间内允许客户主动取消订单
             'order_finish' => ConfigServer::get('trading', 'order_finish', 7),//已发货订单多久时间后自动收货完成订单
-            'refund_days' => ConfigServer::get('after_sale', 'refund_days', 7),//已完成订单多久时间内允许售后退款
-            'deduct_type' => ConfigServer::get('trading', 'deduct_type', 1),//订单库存扣减方式
+            'refund_days'  => ConfigServer::get('after_sale', 'refund_days', 7),//已完成订单多久时间内允许售后退款
+            'deduct_type'  => ConfigServer::get('trading', 'deduct_type', 1),//订单库存扣减方式
             'growth_ratio' => ConfigServer::get('trading', 'growth_ratio', 0),//成长值比例
-            'contact' => ConfigServer::get('shop', 'contact' ),//联系人
-            'mobile' => ConfigServer::get('shop', 'mobile'),//联系手机号
-            'province_id' => ConfigServer::get('shop', 'province_id'),//省份id
-            'city_id' => ConfigServer::get('shop', 'city_id'),//市id
-            'district_id' => ConfigServer::get('shop', 'district_id'),//区id
-            'address' => ConfigServer::get('shop', 'address'),//详细地址
+            'contact'      => ConfigServer::get('shop', 'contact' ),//联系人
+            'mobile'       => ConfigServer::get('shop', 'mobile'),//联系手机号
+            'province_id'  => ConfigServer::get('shop', 'province_id'),//省份id
+            'city_id'      => ConfigServer::get('shop', 'city_id'),//市id
+            'district_id'  => ConfigServer::get('shop', 'district_id'),//区id
+            'address'      => ConfigServer::get('shop', 'address'),//详细地址
+            'give_integral_scene' => ConfigServer::get('trading', 'give_integral_scene', 1),  //赠送积分时机
+            'give_growth_scene'   => ConfigServer::get('trading', 'give_growth_scene', 1)     //赠送成长值时机
         ];
         $this->assign('config', $config);
         return $this->fetch();
@@ -68,6 +69,9 @@ class ShopSetting extends AdminBase
             ConfigServer::set('shop', 'address', $post['address']);//店铺详细地址
             ConfigServer::set('order_message', 'order_contact', $post['order_contact']);//订单管理联系人
             ConfigServer::set('order_message', 'order_contact_mobile', $post['order_contact_mobile']);//订单管理联系人手机
+
+            ConfigServer::set('trading', 'give_integral_scene', $post['give_integral_scene']);//赠送积分时机
+            ConfigServer::set('trading', 'give_growth_scene', $post['give_growth_scene']);//赠送成长值时机
             $this->_success('修改成功');
         }
     }

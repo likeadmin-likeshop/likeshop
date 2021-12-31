@@ -1,5 +1,5 @@
 <template>
-	<scroll-view scroll-y="true" style="height: calc(100vh - 174rpx);" @scrolltolower="getGoodsSearchFun">
+	<scroll-view scroll-y="true" class="cate-scroll" @scrolltolower="getGoodsSearchFun">
 		<view class="cate-list">
 			<view class="cate-nav bg-white" v-if="navList.length && type == 2 || cate.type == 0">
 				<swiper :style="'height:' + navSwiperH + 'rpx;'" @change="swiperChange">
@@ -125,9 +125,9 @@
 					let navList = []
 					console.log(val)
 					if (val.type === 0) {
-						navList = val.sons[0].sons
+						navList = val.sons[0].sons || []
 					} else {
-						navList = val.sons
+						navList = val.sons || []
 					}
 					if (navList.length <= 5) {
 						this.navSwiperH = 200
@@ -159,6 +159,12 @@
 					uni.navigateTo({
 						url: `/pages/goods_search/goods_search?id=${item.id}&name=${item.name}&type=${item.type}`
 					})
+					return
+				}
+				
+				if(this.id == item.id) {
+					this.id = this.cate.id
+					this.onRefresh()
 					return
 				}
 				this.id = item.id
@@ -232,7 +238,11 @@
 	};
 </script>
 <style lang="scss">
+	.cate-scroll {
+		height: calc(100vh - 174rpx - var(--window-bottom));
+	}
 	.cate-list {
+		
 		.cate-nav {
 			position: relative;
 			border-radius: 20rpx;

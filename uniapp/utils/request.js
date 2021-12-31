@@ -21,8 +21,6 @@ import {
 } from './login'
 
 let index = 0;
-const CancelToken = axios.CancelToken;
-const source = CancelToken.source();
 
 function checkParams(params) {
 	if (typeof params != 'object') return params
@@ -56,8 +54,6 @@ service.interceptors.request.use(
 			config.url += paramsToStr(config.params)
 		}
 		config.header.token = Cache.get(TOKEN)
-		// throw new axios.Cancel('Operation canceled by the user.');
-		source.cancel('Operation canceled by the user.');
 		return config
 	},
 	error => {

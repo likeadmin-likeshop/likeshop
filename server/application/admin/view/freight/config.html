@@ -32,6 +32,13 @@
 
 
         <!--快递鸟-->
+        <div class="layui-form-item kdniao" id="kdniao_type" {if condition="$config.way eq 'kd100'"} style="display: none"{/if}>
+            <label class="layui-form-label label-width">快递鸟套餐:</label>
+            <div class="layui-input-block">
+                <input type="radio" name="kdniao_type" lay-filter="free" value="free" title="免费" {if condition="$config.kdniao_type eq 'free'"} checked {/if}>
+                <input type="radio" name="kdniao_type" lay-filter="pay" value="pay" title="付费" {if condition="$config.kdniao_type eq 'pay'"} checked {/if}>
+            </div>
+        </div>
         <div class="layui-form-item kdniao" id="kdniao_appkey" {if condition="$config.way eq 'kd100'"} style="display: none"{/if}>
             <label class="layui-form-label label-width">APPKEY:</label>
             <div class="layui-input-inline" >

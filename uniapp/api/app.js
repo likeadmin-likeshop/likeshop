@@ -91,6 +91,12 @@ export function getPrivatePolicy() {
     return request.get("policy/privacy")
 }
 
+// 售后保障
+export function getAfterSaleGuar() {
+    return request.get("policy/afterSale")
+}
+
+
 //客服
 export function getService() {
     return request.get("service/lists")
@@ -127,3 +133,5 @@ export function getRegisterCoupon() {
 export function getPayway() {
     return request.get('payment/payway')
 }
+
+

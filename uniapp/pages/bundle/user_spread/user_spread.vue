@@ -1,6 +1,10 @@
 <template>
 <!--pages/user_spread/user_spread.wxml-->
 <view class="user-spread">
+	<view class="explain row muted" v-if="vipState==0 || vipState==1">
+	    <image src="/static/images/icon_warning.png"></image>
+	    <span class="ml10">成为分销会员，推广下级可获得额外收益，推广越多收益越多</span>
+	</view>
     <loading-view v-if="showLoading"></loading-view>
     <view class="header" v-if="!showLoading">
         <view class="user-info row">
@@ -23,13 +27,11 @@
         <!-- 填表格 -->
         <view :hidden="!vipState==0" class="user-apply-box">
             <form>
+				
                 <view class="user-apply-vip column-center">
                     <view class="user-apply-header column-center">
                         <view class="title xxl normal">申请成为分销会员</view>
-                        <view class="explain row muted">
-                            <image src="/static/images/icon_warning.png"></image>
-                            <span class="ml10">成为分销会员，推广下级可获得额外收益，推广越多收益越多</span>
-                        </view>
+                       
                     </view>
                     <view class="vip-form">
                         <view class="form-item row">
@@ -45,7 +47,7 @@
                         </view>
                         <view class="form-item bg-white row" style="height: 74px;padding: 24rpx 20rpx 24rpx 30rpx">
                             <view class="label md" style="width: 150rpx;align-self: flex-start;">申请原因：</view>
-                            <u-input type="textarea" v-model="reason" placeholder="（必填）" :custom-style="{paddingLeft: '10rpx'}" :fixed="true" style="flex: 1" />
+                            <u-input type="textarea" v-model="reason" placeholder="（选填）" :custom-style="{paddingLeft: '10rpx'}" :fixed="true" style="flex: 1" />
                             <!-- <textarea name="reason" style="height: 150rpx;padding-top: 30rpx;" type="textarea" fixed="true" placeholder="（必填）" border="false" title-width="150rpx" @input="textareaChange" /> -->
                         </view>
                     </view>
@@ -61,10 +63,10 @@
             <view class="user-result column-center">
                 <view class="user-result-header column-center">
                     <view class="title xxl normal">申请成为分销会员</view>
-                    <view class="explain row muted">
+                <!--    <view class="explain row muted">
                         <image src="/static/images/icon_warning.png"></image>
                         <span class="ml10">成为分销会员，推广下级可获得额外收益，推广越多收益越多</span>
-                    </view>
+                    </view> -->
                 </view>
                 <view class="user-result-content column-center">
                     <image class="apply-result-img" :src="applyObject.status == 2 ? '/static/images/icon_payFail.png' : '/static/images/icon_paySuccess.png'" />
@@ -130,7 +132,7 @@
             </view>
             <view class="mt20 fans-msg-box row bg-white md">
                 <navigator url="/pages/bundle/user_fans/user_fans" hover-class="none" class="my-fans row-center normal">
-                    我的粉丝 <span class="primary ml10">{{userInfo.fans || 0}}</span>
+                    我的粉丝 <span class="primary ml10">{{userFans}}</span>
                     <u-icon class="ml10" name="arrow-right" size="28rpx" color="#666" />
                 </navigator>
                 <view class="line"></view>
@@ -151,22 +153,18 @@
                     常用工具
                 </view>
                 <view class="usual-content row">
-                    <navigator hover-class="none" url="/pages/bundle/user_withdraw/user_withdraw" class="usual-item column-center">
-                        <image src="/static/images/icon_tixian.png" class="usual-item-img"></image>
-                        <view class="nr normal mt20" style="line-height: 40rpx">提现</view>
-                    </navigator>
-                    <navigator hover-class="none" url="/pages/bundle/user_withdraw_code/user_withdraw_code" class="usual-item column-center">
-                        <image src="/static/images/icon_tixian_code.png" class="usual-item-img"></image>
-                        <view class="nr normal mt20" style="line-height: 40rpx">提现记录</view>
-                    </navigator>
-                    <navigator hover-class="none" url="/pages/bundle/user_spread_order/user_spread_order" class="usual-item column-center">
-                        <image src="/static/images/icon_fenxiao.png" class="usual-item-img"></image>
-                        <view class="nr normal mt20" style="line-height: 40rpx">分销订单</view>
-                    </navigator>
-                    <navigator hover-class="none" url="/pages/bundle/user_spread_month_bill/user_spread_month_bill" class="usual-item column-center">
-                        <image src="/static/images/icon_zhangdan.png" class="usual-item-img"></image>
-                        <view class="nr normal mt20" style="line-height: 40rpx">月度账单</view>
-                    </navigator>
+                <navigator hover-class="none" url="/pages/bundle/invite_fans/invite_fans" class="usual-item column-center">
+                    <image src="/static/images/icon_invite.png" class="usual-item-img"></image>
+                    <view class="nr normal mt20" style="line-height: 40rpx">邀请海报</view>
+                </navigator>
+                <navigator hover-class="none" url="/pages/bundle/user_spread_order/user_spread_order" class="usual-item column-center">
+                    <image src="/static/images/icon_fenxiao.png" class="usual-item-img"></image>
+                    <view class="nr normal mt20" style="line-height: 40rpx">分销订单</view>
+                </navigator>
+                <navigator hover-class="none" url="/pages/bundle/user_spread_month_bill/user_spread_month_bill" class="usual-item column-center">
+                    <image src="/static/images/icon_zhangdan.png" class="usual-item-img"></image>
+                    <view class="nr normal mt20" style="line-height: 40rpx">月度账单</view>
+                </navigator>
                 </view>
             </view>
         </view>
@@ -187,21 +185,21 @@
 
 <script>
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 import { inputInviteCode, applyVip, applyVipDetail, getInviteInfo, getPromoteHome, veryfiyDistribute } from "@/api/user";
 import area from '@/utils/area'
@@ -237,7 +235,8 @@ export default {
       able_withdrawal: 0,
       history_earnings: 0,
       month_earnings: 0,
-      today_earnings: 0
+      today_earnings: 0,
+	  userFans: 0
     };
   },
 
@@ -269,6 +268,7 @@ export default {
             this.inviteStatus = true;
           }
           this.userInfo = res.data;
+		  this.userFans = res.data.fans
           this.able_withdrawal = res.data.able_withdrawal
           this.history_earnings = res.data.history_earnings
           this.month_earnings = res.data.month_earnings
@@ -281,7 +281,7 @@ export default {
         veryfiyDistribute().then(res => {
             if(res.code == 10001) {
                 this.vipState = 2
-                // 填写表单
+                // 获取详情
                 this.getInviteInfoFun();
                 this.getPromoteHomeFun();
                 if(this.showLoading == true) {
@@ -289,7 +289,8 @@ export default {
                 }
             }
             else if(res.code == 20001) {
-                // 获取详情
+              
+				 // 填写表单
                 this.vipState = 0;
                 this.getInviteInfoFun();
                 this.applyVipDetailFun()
@@ -437,8 +438,21 @@ export default {
 };
 </script>
 <style lang="scss">
-/* pages/user_spread/user_spread.wxss */
 .user-spread {
+	.explain {
+		background-color: #FFFADE;
+	    padding: 18rpx 20rpx;
+		color: #F95F2F;
+	    image {
+	        width: 24rpx;
+	        height: 24rpx;
+	        flex: none;
+	    }
+	    span {
+	        font-size: 20rpx;
+	        line-height: 30rpx;
+	    }
+	}
     .header {
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAADaCAMAAADOtzdqAAABOFBMVEX/LDz/LTz/LT3/Lj3/Lj7/Lz7/Lz//MD//MED/MUD/MUH/MkD/MkH/MkL/M0H/M0L/M0P/NEL/NEP/NET/NUP/NUT/NUX/NkT/NkX/N0X/N0b/OEb/OEf/OUf/OUj/Okj/Okn/O0n/O0r/PEr/PEv/PUv/PUz/Pkv/Pkz/Pk3/P0z/P03/QE3/QE7/QU7/QU//Qk//QlD/Q1D/Q1H/RFH/RFL/RVL/RVP/RlL/RlP/RlT/R1P/R1T/R1X/SFT/SFX/SFb/SVX/SVb/SVf/Slb/Slf/S1f/S1j/TFj/TFn/TFr/TVn/TVr/Tlr/Tlv/T1v/T1z/UFz/UF3/UV3/UV7/Ul7/U1//VF//VGD/VWD/VWH/VmH/VmL/V2L/V2P/WGP/WGT/WWT/WWX/WmX/Wmb/W2b/W2f/XGf5O5EGAAANU0lEQVR42u3dbVfbRh6GcZdAiDYObly8xoAh4KioGD8bZ0XVqKgWtlcIQrNhaZJmN+1m9/t/g5UlIOAZyXoYtTPKfb2OOQf0y/+M5JGUkxDitlK5vHavSqWyfqeNaZu3Vb22rtu+6ZnXzk4Of1LEbfnQ0DfvQ98ioHuBO+K3p0xG+k27u7vgjviNzUj3pO/WnMAd8buWYTPSPek1cEd8r2XYjPTbnj8Hd8Rtf2Uz0l3oz+Vp4I64bT36SN+ljHRPOrgjvmM00m/7VgF3xGtPGI10T7obuCNeKzIa6XcCd8RrpWgj/XmwdKf9Orgjbs9U70nfiT3SXehe4I745R5j7eIrHdwR3xdmGI30mw4OGuCOeG2L0UifQj9ouIE74rVnjEb6ncAd8drOHOhhR7pXcxq4I265MxrprvSWG7gjjrkzGemtz4E74nbtzmiku7XdwB1xz50Y6fVII92T3pkG7ojXthmN9M5N3S64I17bZDTSPelu4I54bS3c6WgjFPRub1oc7o8e4VCg9Psm6khvB0nv9fr9fkTuy04Plx3uf8nnnxQKXxeLxUIeBwal0RNGI92F7hWF+/LS0uLSw/vavymV1tZKRZBH7Nv3PR2NNNKvO3TKhbe++GCRrn1t+niEEsQjxu2wGeku9MPDgVMuLPYHC0Hap7fQrgE8Yto6m5HuQvfKhcO+sDBXu3ObVQXgEcOKbEb6dS+cwnB/uPBVKO3Ohs01HCPErgMK9Ogj3ZWuus3nvvwgF1r7bm2ngIOEmC3emYx09XNzuS8vRNFeey5jwCNWlZiM9JuOjrR53JdyEbXLyjYOE2JUg8VId6F7zeG+GF27otRwxooYrWZYjPQ75eYs22Nor9cVLOARm2szLEb6TS91PZD7Qjzt9Ub9KY4UYpHCYKQ76dcFcX8QV7tTEUcKMag8F/qLcNDncl+Mr73VgnfE5mQ1/EjXAqXrx8eGkWN5Teaz9lanBe+IQZXkI92B7kh38+W+/FUi7Z1uB94Ri/GeeKTfKed/mppMe6/XhXfE4OLMYdKR7jV0MnO+S5mk2vuHvVUcLJS4WtKR7kL38uG+vJBc++GgD+8ocfl+lJFu+EmfduLD/QEL7YMXA3hHiVtLONJd6G6jnM95KhPtqvqihKOFkvY82Uj3pLvRuT9gpF3TVHhHiWsnGum3jcc5+sqdlXZN13B9BiWtoIYZ6aa/9PF1OfpwZ6Zd11XsF0OJl+9agpHuNnHLUYc7Q+2GMcB+YJS0jQQj3ZM+sZxo3JeYajfMLo4WStp2/JHuSbd8uC8vstVuntRwtFDSanToIUa61+k0One22kejMo4WStqzOSN97DfSXein9jQK9yXm2sc6DhZKvn437ksfhRzp9m01CveHzLVPJjIOFkp+fcaINdK9zs6sTYnkvpyCdmuCq5EoecVBjJE+lX52dn5uOktqCvcUtJ+e4uoMYpESdaRPobu1H0t07ilot218uYpYtG5QofuN9JsmVffTFO5paD87a+NIISbtj8KPdK9XZ43rrzop3FPRfn6G1Tti0+phyJE+lf7q4uJCu92HTnB/lI72Vxd1HCfEqA01xEifQp+mVz9/kLaJIBXtFyMcJcRuCf+3MNKnk33j7sdyf5T2n19XcJAQuyrtcTB0p9PeDLrcH6b9NU5WEduq/VNf6RcX5wPyWdQk97S0/wOrGcR+Fa+oEwL6z69ttb7xmPLPKdxT0v7mzQqODmLf8tMNuaMZI+v84twaDbXuXvXpss+/Jbmnpv3NDg4N+nMjuaem/bKPPzfijnta2i9N/LkRd9zT0v7PC/y5EW/cv05L+9UV7tFG3E331LT/gndQIt6451PT/raKvzfijnta2t/iSiTijbtUTkv7O9yxirjjXkpL+3sFf2/EG/diWtrfY7oj7rjn09L+K9buiDvu0lpK2j9s4e8tfOXtvdZAOzbH9tg81gbtve2y4NwLKWn/gBs8xG7d2W1rk01UZV1g7lJK2v+Fb1VFtu7cPeTfuF0RlnspHe1XMCNqBeXYnpehFMTknt9KQ/u/z8BGzIrNiR2mSbMoInepkob2j3gOsJCVOpYdNqtTEpB7Pg3tH/GkGRGXMe3w2F3wrYJw3KVKCtp/w2MixUse21Eby8Jxl3bYa78EHuEW7bodJ70oGvdV5tp/x9JdtJ6N7XiNnwnGXdpkrf33bfgRqnzHjl9HMO7SLmPtuOouViuanSQtLxb3Alvt/xlAkFBXZHQ7WXpBKO5Skal2XJcR6yR1aCdtWBSKu1RmqP2TAUIiaT+xk2cWheIubbDT/glvEhZp3W7YLDIKQnGXNphpP4Ehga7JBJ2lWqbabyqK7Fyo3m/2VdMS6Xw1mLu0yUj7b6tAJE4Df+tqS56tpfqLH4jFXdpkov2/PRgSp6bvyWdHptfxPbFtisVdqrLQ/gsMiVPVR+5xQ/av6bcffkss7s4bQRJr/4SbVAW6KEPfOWA25eCaJn0/QVEs7tJmUu3/wxviBYp6mmodzuquDwjwA+oaXhOMu1RNqP0chsRJppEdEeuYujE6Irw3RrQPy4Jxl6qJtF/hfdniVKAtZYw9ivYRxbtCu14/LgjGXaom0P4rrkEKVJe2HJGp2mneZY3v3ZHhuEvV2No/rsOQOFVOSa2qn3aqd5X8AacV0bg73mNqxzPdRapPYv3eX3vY+d4Xjru0rsfR/g4PDhOpEnltRQ/STvVO7hy2SsJxl8p6dO2X2PUrVG1C6kmwdqp3cjdlSzzuUnEQVfsET8kT67IMMdytgznaad4PyB9TEI+7JDWifZfaAiCx2ifGcm+udpr3HvFz9kXkLlWN8NrfbMCPYBFXzc0Q2mneif0Ex0Jyl/L1v4fT/qEBPaJVIa4gNsJop3hvENcz14Tk7jyAph9C+0cd36SKV3PeVRkf7RTvOqcbgXPRP7LaOQvW/mEA7CJGXFFphNROem8QyyJhuTu3MsqGr/aPk73HkCNiZWKrTGjtpHfifo+yuNyl6VM59AtS+9WogcEuasReyHZ47YT3Dp/7InNJxkGtrduvL6/evX97dXludGv4UknkZjcQTKJoJ7xPuNxIkMNhRl6joI2Q+/O0z3qf3TozAnfEUatBa5kQ2me8E/sRiuCO+Gn2juxTJaL2+96V2UvvVXBH/J6pmpG13/du8niuCu7Iq+27dA+t/Z53jcddkeCOvGYfHdaPof2u9z6PDxQDd+RFTOM42u94b/H4AA5wR16zjwGrx9L+2Xudx02R4I68ZnfMKPG033pXeNw1A+7Ia/YBM3G133qffdwMuCN+smjc9VGcejTuFrgjTHdwRxlcu5+AO+InA1dm0JeTnvJ195fgjvhJTflbVRXcET+1fZ+EGm/PzOx/nza4I36avZIyTLgjcogdkYjftmavk8uJ9rvLFva7I34j7mZqJbqbafZM1V4Fd8RRo6AHu0e+V/V73KuKeA5PIkBf8LkqnjODMhzxFLEhniKGshvxjMhm7GdEEk9XPZEyxr3y3eHRjz8eHX6H1zEJWgtPAA5bTTdv02ugI2Lk892bMZ/v3iSe717JEveqZt5Lw+slRcyY+yKykG/vIJZFhpQh7spP5kw/KcAjXnXinUqDWO9mGhA/R8kQ95ZJCe8hEy/Km/caMd6818jIm/d8ZrtJDfM9Ayer9liJ/F5VZZyJ96r6rdtNnzbBR7RWybdmG5Hfmm2Qb80uZof7kR/3I/ARri5B1X4Z5D3UO+LtrpQZ7rumb7vgI1plcrzfuc+D8E7RrpI/wCplh/sP/tx/AJ8MrN5nXuNx1ztFu0b5PEdXLZJyr5gBrYGPcBdnRhSvOt07qX2PspKxRyvZ4a4Ecf8WfISrZtPE0q5HUq5A0v6v2Dx9x56UezeIexd6xIu2HLGtPuGd+AZK7lu0j2pShrirQdxfAI94rY5paG2zIQfXNKmfG69mibsexF0HHgHbtukdNwOwN459PrUtgTviubaPXHvY8cHeGfp9pC1linvgYkYFHRHL6354bUvrzO4qUDqa5fvvX0rZ4t4L4t4DHSEr+Ht3NsGbar+5P0WvKM2+OjwN+LfHKxnjHnghErvEBO3p0GbRsCBljHvg10y4jU/UiiYD7SdFKWvcsYkgo96NxNoN/rQn517z545bVgVuRUuoXVuRMshd0rABOJvXZwaJtA/yUia5b/lxx+3Zgtc4jY39tMHnr4Sb95D/JBvH1D7ekjLLXWrTtHegJQMnrPEW8FpRyjB3PHgju8nRB/xY5vfXwWOVUGCFbkTt3YKUde54aF6GW1cjnKKq61z/LngkKppbuWOFwm51Spz/JnjgNQqzpFH0udj1vQL3vwe4o3CV6kH7xob1kgi/BLij8IsaeUC7UDMeyGVBfgNwR5Fa26n3dXM0tmxrPDL1fn1HpMergDv6ggJ3BO4IgTtC4I4QuCME7giBO0LgjhC4IwTuCIE7QuCOwB0hcEcI3BECd4TAHSFwRwjcEQJ3hMAdIXBHCNwRuCME7giBO0LgjhC4IwTuCIE7QuCOELgjBO4IgTsCd4TAHSFwRwjcEQJ3hMAdIXBHKLX+D1M28wmltJbgAAAAAElFTkSuQmCC);
         background-repeat: no-repeat;
@@ -636,18 +650,7 @@ export default {
                         line-height: 30rpx;
                         font-weight: bold;
                     }
-                    .explain {
-                        margin-top: 8rpx;
-                        image {
-                            width: 24rpx;
-                            height: 24rpx;
-                            flex: none;
-                        }
-                        span {
-                            font-size: 20rpx;
-                            line-height: 30rpx;
-                        }
-                    }
+                    
                 }
                 .user-result-content {
                     padding: 60rpx 0 22rpx;

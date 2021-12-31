@@ -108,6 +108,7 @@
 				this.$emit('close')
 			},
 			async getPosterFun() {
+				console.log(this.imgUrl)
 				if (!this.isLogin) return toLogin()
 				let url = 'pages/goods_details/goods_details'
 

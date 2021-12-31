@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\common\command;
@@ -28,6 +27,7 @@ use think\console\Input;
 use think\console\Output;
 use think\Db;
 use think\facade\Hook;
+use think\facade\Log;
 
 class DistributionOrder extends Command
 {
@@ -58,53 +58,73 @@ class DistributionOrder extends Command
         $after_sale_time = $after_sale_time * 24 * 60 * 60;
         $now = time();
 
-        //待分佣的分销订单
-        $orders = Db::name('distribution_order_goods')->alias('d')
-            ->field('o.id as order_id, d.money, d.id as distribution_id, d.user_id, d.sn, d.order_goods_id')
-            ->join('order_goods og', 'og.id = d.order_goods_id')
-            ->join('order o', 'o.id = og.order_id')
-            ->where('d.status', DistributionOrderModel::STATUS_WAIT_HANDLE)
-            ->where('o.order_status', Order::STATUS_FINISH)
-            ->where(Db::raw("o.create_time+$after_sale_time < $now"))
-            ->select();
+        Db::startTrans();
+        try{
+            //待分佣的分销订单
+            $orders = Db::name('distribution_order_goods')->alias('d')
+                ->field('o.id as order_id,o.confirm_take_time, d.money, d.id as distribution_id, d.user_id, d.sn, d.order_goods_id')
+                ->join('order_goods og', 'og.id = d.order_goods_id')
+                ->join('order o', 'o.id = og.order_id')
+                ->where('d.status', DistributionOrderModel::STATUS_WAIT_HANDLE)
+                ->where('o.order_status', Order::STATUS_FINISH)
+                ->where(Db::raw("o.confirm_take_time+$after_sale_time < $now"))
+                ->select();
 
-        foreach ($orders as $order) {
-
-            //当前分佣订单是否可结算
-            if (false === self::isSettle($order)) {
-                continue;
+            //处理用户表字段earnings为null时自增佣金报错的情况
+            $check_user = User::whereNull('earnings')->find();
+            if ($check_user) {
+                User::whereNull('earnings')->update(['earnings' => 0]);
             }
 
-            //增加用户佣金
-            $user = User::get($order['user_id']);
+            foreach ($orders as $order) {
+                
+                $user = User::get($order['user_id']);
 
-            //非分销会员或已被冻结的分销会员不参与分佣
-            if (empty($user) || $user['is_distribution'] != 1 || $user['freeze_distribution'] == 1) {
-                continue;
+                //当前分佣订单是否可结算   //非分销会员或已被冻结的分销会员不参与分佣
+                if ( false === self::isSettle($order) || empty($user)
+                    || $user['is_distribution'] != 1
+                    || $user['freeze_distribution'] == 1
+                ) {
+                    continue;
+                }
+
+                //增加佣金
+                $user->earnings = ['inc', $order['money']];
+                $user->update_time = time();
+                $user->save();
+
+                //增加佣金变动记录
+                AccountLogLogic::AccountRecord(
+                    $order['user_id'],
+                    $order['money'],
+                    1,
+                    AccountLog::distribution_inc_earnings,
+                    '',
+                    $order['distribution_id'],
+                    $order['sn']
+                );
+
+                //更新分销订单状态
+                DistributionOrderModel::updateOrderStatus($order['distribution_id'], DistributionOrderModel::STATUS_SUCCESS);
+
+                //通知会员
+                Hook::listen('notice', [
+                    'user_id'  => $order['user_id'],
+                    'earnings' => $order['money'],
+                    'scene'    => NoticeSetting::GET_EARNINGS_NOTICE,
+                ]);
+
+                // 赠送成长值和积分
+                Hook::listen('give_reward', [
+                    'order_id' => $order['order_id'],
+                    'scene'    => 4, //4=订单结算
+                ]);
             }
 
-            $user->earnings = ['inc', $order['money']];
-            $user->save();
-
-            //增加佣金变动记录
-            AccountLogLogic::AccountRecord(
-                $order['user_id'],
-                $order['money'],
-                1,
-                AccountLog::distribution_inc_earnings,
-                '',
-                $order['distribution_id'],
-                $order['sn']
-            );
-
-            //更新分销订单状态
-            DistributionOrderModel::updateOrderStatus($order['distribution_id'], DistributionOrderModel::STATUS_SUCCESS);
-
-            Hook::listen('notice', [
-                'user_id'  => $order['user_id'],
-                'earnings' => $order['money'],
-                'scene'    => NoticeSetting::GET_EARNINGS_NOTICE,
-            ]);
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            Log::write('结算分佣订单错误:'.$e->getMessage());
         }
     }
 

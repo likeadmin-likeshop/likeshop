@@ -28,6 +28,7 @@ class Kd100 extends Expressage
             $this->logistics_info = $result['data'];
             $this->logistics_info;
         }
+        $this->error = json_encode($result, JSON_UNESCAPED_UNICODE);
         return false;
     }
 }

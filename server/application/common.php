@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
@@ -615,4 +614,215 @@ function filterEmoji($str)
         $str);
     return $str;
 }
+
+
+/**
+ * Notes: 是否为https
+ * @author 段誉(2021/5/8 14:45)
+ * @return bool
+ */
+function is_https()
+{
+    if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+        return true;
+    } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+        return true;
+    } elseif (!empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * Notes: 获取文件扩展名
+ * @param $file
+ * @author 段誉(2021/7/7 18:03)
+ * @return mixed
+ */
+if (!function_exists('get_extension')) {
+    function get_extension($file)
+    {
+        return pathinfo($file, PATHINFO_EXTENSION);
+    }
+}
+
+
+/**
+ * Notes: 遍历指定目录下的文件(目标目录,排除文件)
+ * @param $dir 目标文件
+ * @param string $exclude_file 要排除的文件
+ * @param string $target_suffix 指定后缀
+ * @author 段誉(2021/7/7 18:04)
+ * @return array|bool
+ */
+
+if (!function_exists('get_scandir')) {
+    function get_scandir($dir, $exclude_file = '', $target_suffix = '')
+    {
+        if(!file_exists($dir)) {
+            return [];
+        }
+
+        if (empty(trim($dir))) {
+            return false;
+        }
+
+        $files = scandir($dir);
+        $res = [];
+        foreach ($files as $item) {
+            if ($item == "." || $item == ".." || $item == $exclude_file) {
+                continue;
+            }
+            if (!empty($target_suffix)) {
+                if (get_extension($item) == $target_suffix) {
+                    $res[] = $item;
+                }
+            } else {
+                $res[] = $item;
+            }
+        }
+
+        if (empty($item)) {
+            return false;
+        }
+        return $res;
+    }
+}
+
+
+
+/**
+ * Notes: 解压压缩包
+ * @param $file 压缩包路径
+ * @param $save_dir 保存路径
+ * @author 段誉(2021/7/7 18:11)
+ * @return bool
+ */
+if (!function_exists('unzip')) {
+    function unzip($file, $save_dir)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
+        $zip = new \ZipArchive();
+        if ($zip->open($file) !== TRUE) {//中文文件名要使用ANSI编码的文件格式
+            return false;
+        }
+        $zip->extractTo($save_dir);
+        $zip->close();
+        return true;
+    }
+}
+
+
+
+/**
+ * Notes: 删除目标目录
+ * @param $path
+ * @param $delDir
+ * @author 段誉(2021/7/7 18:19)
+ * @return bool
+ */
+if (!function_exists('del_target_dir')) {
+    function del_target_dir($path, $delDir)
+    {
+        $handle = opendir($path);
+        if ($handle) {
+            while (false !== ($item = readdir($handle))) {
+                if ($item != "." && $item != "..") {
+                    if (is_dir("$path/$item")) {
+                        del_target_dir("$path/$item", $delDir);
+                    } else {
+                        unlink("$path/$item");
+                    }
+                }
+            }
+            closedir($handle);
+            if ($delDir) {
+                return rmdir($path);
+            }
+        } else {
+            if (file_exists($path)) {
+                return unlink($path);
+            }
+            return false;
+        }
+    }
+}
+
+/**
+ * Notes: 获取本地版本数据
+ * @return mixed
+ * @author 段誉(2021/7/7 18:18)
+ */
+
+if (!function_exists('local_version')) {
+    function local_version()
+    {
+        if(!file_exists('./upgrade/')) {
+            // 若文件夹不存在，先创建文件夹
+            mkdir('./upgrade/');
+        }
+        if(!file_exists('./upgrade/version.json')) {
+            // 获取本地版本号
+            $version = config('project.version');
+            $data = ['version' => $version];
+            $src = './upgrade/version.json';
+            // 新建文件
+            file_put_contents($src, json_encode($data, JSON_UNESCAPED_UNICODE));
+        }
+
+        $json_string = file_get_contents('./upgrade/version.json');
+        // 用参数true把JSON字符串强制转成PHP数组
+        $data = json_decode($json_string, true);
+        return $data;
+    }
+}
+
+
+/**
+ * Notes: 获取ip
+ * @author 段誉(2021/7/9 10:19)
+ * @return array|false|mixed|string
+ */
+if (!function_exists('get_client_ip')) {
+    function get_client_ip()
+    {
+        if ($_SERVER['REMOTE_ADDR']) {
+            $cip = $_SERVER['REMOTE_ADDR'];
+        } elseif (getenv("REMOTE_ADDR")) {
+            $cip = getenv("REMOTE_ADDR");
+        } elseif (getenv("HTTP_CLIENT_IP")) {
+            $cip = getenv("HTTP_CLIENT_IP");
+        } else {
+            $cip = "unknown";
+        }
+        return $cip;
+    }
+}
+
+
+/**
+ * @notes 字符串超出指定数量后用..省略后面的字符
+ * @param $str
+ * @param $len
+ * @return mixed|string
+ * @author 段誉
+ * @date 2021/8/10 18:03
+ */
+if (!function_exists('omit_str')) {
+    function omit_str($str, $len) {
+        if (mb_strlen($str) > $len ) {
+            $str = mb_substr($str, 0, $len) . '..';
+        }
+        return $str;
+    }
+}
+
+
+
+
+
+
 

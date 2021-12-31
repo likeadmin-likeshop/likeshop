@@ -62,6 +62,7 @@
                             <div class="layui-inline">
                                 <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" lay-submit lay-filter="goods-search">查询</button>
                                 <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="goods-clear-search">清空查询</button>
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="export-file">导出</button>
                             </div>
                         </div>
                     </div>
@@ -134,6 +135,7 @@
             ,table = layui.table
             ,like = layui.like
             ,element = layui.element;
+        var listType = 1;
 
         //监听搜索
         form.on('submit(goods-search)', function(data){
@@ -162,6 +164,25 @@
             });
         });
 
+        // 导出
+        form.on('submit(export-file)', function(data){
+            var field = data.field;
+            $.ajax({
+                url: '{:url("goods/exportFile")}?type='+ listType,
+                type: 'get',
+                data: field,
+                dataType: 'json',
+                error: function() {
+                    layer.msg('导出超时，请稍后再试!');
+                },
+                success: function(res) {
+                    table.exportFile(res.data.exportTitle,res.data.exportData, res.data.exportExt, res.data.exportName);
+                },
+                timeout: 15000
+            });
+            layer.msg('导出中请耐心等待~');
+        });
+
         $('.layui-btn.layuiadmin-btn-goods').on('click', function(){
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
@@ -184,6 +205,7 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
                             var field = data.field;
+
                             like.ajax({
                                 url:'{:url("goods/add")}',
                                 data:field,
@@ -287,15 +309,15 @@
 
 
         //获取列表
-        getList(1);
+        getList(listType);
         //切换列表
         element.on('tab(tab-all)', function (data) {
-            var type = $(this).attr('data-type');
-            getList(type);
-            if (type === '1') {
+            listType = $(this).attr('data-type');
+            getList(listType);
+            if (listType === '1') {
                 $("#lower").show();
                 $("#upper").hide();
-            } else if (type === '2')  {
+            } else if (listType === '2')  {
                 $("#lower").hide();
                 $("#upper").show();
             } else{
@@ -366,7 +388,9 @@
                                             , icon: 1
                                             , time: 1000
                                         },function () {
-                                            window.location.href = window.location.href;
+                                            layer.close(index); //关闭弹层
+                                            updateTabNumber();
+                                            table.reload('goods-lists'); //数据刷新
                                         });
 
                                     }
@@ -485,6 +509,7 @@
                     ,elem: '#goods-lists'
                     ,url: '{:url("goods/lists")}?type='+type  //模拟接口
                     ,cols: [cols]
+                    ,title: '商品表'
                     ,page:true
                     ,text: {none: '暂无数据！'}
                     ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
@@ -492,7 +517,7 @@
                             "code":res.code,
                             "msg":res.msg,
                             "count": res.data.count, //解析数据长度
-                            "data": res.data.list //解析数据列表
+                            "data": res.data.list, //解析数据列表
                         };
                     }
                     ,done: function(res, curr, count){
@@ -501,7 +526,7 @@
                             $(".layui-table-fixed-l .layui-table-body").removeAttr("style");
                             $(".layui-table-fixed-r .layui-table-body").removeAttr("style");
                             $(".layui-table-main tr").each(function (index, val) {
-                                console.log($(val).height());
+                                // console.log($(val).height());
                                 $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
                                 $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
                             });
@@ -525,10 +550,11 @@
                             , time: 1000
                         }, function () {
                             if (fields == 'status') {
-                                window.location.href = window.location.href;
+
                             }
+                            updateTabNumber();
+                            table.reload('goods-lists'); //数据刷新
                         });
-                        updateTabNumber();
                     }else {
                         layui.layer.msg(res.msg, {
                             offset: '15px'

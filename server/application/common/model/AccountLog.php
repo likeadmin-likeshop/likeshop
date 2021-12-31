@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 namespace app\common\model;
 use think\Model;
@@ -54,6 +53,7 @@ class AccountLog extends Model{
     const admin_reduce_growth   = 301;
     const sign_give_growth      = 302;
     const recharge_give_growth  = 303;
+    const order_give_growth     = 304;//下单赠送成长值
 
     const withdraw_dec_earnings     = 400;//提现扣减佣金
     const withdraw_back_earnings    = 401;//提现被拒绝返回佣金
@@ -69,7 +69,7 @@ class AccountLog extends Model{
         , self::order_goods_give_integral
     ];
     const growth_change = [     //成长值变动类型
-        self::admin_add_growth,self::admin_reduce_growth,self::recharge_give_growth,self::sign_give_growth
+        self::admin_add_growth,self::admin_reduce_growth,self::recharge_give_growth,self::sign_give_growth, self::order_give_growth
     ];
 
     const earnings_change = [   //佣金变动
@@ -104,8 +104,9 @@ class AccountLog extends Model{
             self::deduct_order_first_integral   => '扣除首单积分',
             self::luck_draw_integral            => '积分抽奖中奖',
             self::order_goods_give_integral     => '购买商品赠送积分',
-            self::user_transfer_inc_balance   => '会员转账(收入方)',
-            self::user_transfer_dec_balance   => '会员转账(支出方)',
+            self::user_transfer_inc_balance     => '会员转账(收入方)',
+            self::user_transfer_dec_balance     => '会员转账(支出方)',
+            self::order_give_growth             => '下单赠送成长值',
         ];
         if($from === true){
             return $desc;

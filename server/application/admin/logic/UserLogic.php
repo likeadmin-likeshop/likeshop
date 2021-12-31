@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\logic;
 use app\admin\model\User;
@@ -48,9 +47,10 @@ class UserLogic{
             $where[] = [$get['keyword_type'],'like','%'.$get['keyword'].'%'];
         }
         //等级查询
-        if(isset($get['level']) && $get['level']){
+        if(isset($get['level']) && $get['level'] != ''){
             $where[] = ['level','=',$get['level']];
         }
+
         //分组查询
         if(isset($get['group_id']) && $get['group_id']){
             $where[] = ['group_id','=',$get['group_id']];
@@ -135,6 +135,87 @@ class UserLogic{
         return ['count'=>$user_count , 'lists'=>$user_list];
     }
 
+    public static function exportFile($get)
+    {
+        $where[] = ['del','=', '0'];
+
+        //查询
+        if(isset($get['keyword']) && $get['keyword']){
+            $where[] = [$get['keyword_type'],'like','%'.$get['keyword'].'%'];
+        }
+        //等级查询
+        if(isset($get['level']) && $get['level'] != ''){
+            $where[] = ['level','=',$get['level']];
+        }
+        //分组查询
+        if(isset($get['group_id']) && $get['group_id']){
+            $where[] = ['group_id','=',$get['group_id']];
+        }
+        //消费金额
+        if(isset($get['total_amount_start']) && $get['total_amount_start']){
+            $where[] = ['total_order_amount','>=',$get['total_amount_start']];
+        }
+        if(isset($get['total_amount_end']) && $get['total_amount_end']){
+            $where[] = ['total_order_amount','<=',$get['total_amount_end']];
+        }
+
+        //注册时间
+        if(isset($get['start_time']) && $get['start_time']!=''){
+            $where[] = ['create_time','>=',strtotime($get['start_time'])];
+        }
+        if(isset($get['end_time']) && $get['end_time']!=''){
+            $where[] = ['create_time','<=',strtotime($get['end_time'])];
+        }
+
+        $user_list = Db::name('user')->where($where)
+            ->order('id desc')
+            ->select();
+
+        //会员分组
+        $user_group = Db::name('user_group')->where(['del'=>0])->column('name','id');
+        //会员等级
+        $user_level = Db::name('user_level')->where(['del'=>0])->column('name','id');
+        // 所有会员信息
+        $all_user_list = User::where(['del'=>0])->column('sn,nickname,mobile,level','id');
+
+        $exportData = [];
+        foreach ($user_list as $item){
+            $groupName = '-';
+            $levelName = '无等级';
+            //会员所属分组
+            if(isset($user_group[$item['group_id']])){
+                $groupName = $user_group[$item['group_id']];
+            }
+
+            if(isset($user_level[$item['level']])){
+                $levelName = $user_level[$item['level']];
+            }
+
+            $referrer_user_info = '';
+            $referrer_nickname = '';
+            $referrer_sn = '';
+            $referrer_mobile = '';
+            $referrer_level_name = '-';
+            if(isset($all_user_list[$item['first_leader']])){
+                $referrer_user = $all_user_list[$item['first_leader']];
+                $referrer_nickname = $referrer_user['nickname'];
+                $referrer_sn = $referrer_user['sn'];
+                $referrer_mobile = $referrer_user['mobile'];
+                if(isset($user_level[$referrer_user['level']])){
+                    $referrer_level_name =$user_level[$referrer_user['level']];
+                }
+                $referrer_user_info.= '【昵称:'.$referrer_nickname.' 编号:'.$referrer_sn. ' 手机:'. $referrer_mobile . ' 等级:'. $referrer_level_name.'】';
+            }
+            $loginTime = date('Y-m-d H:i:s', $item['login_time']);
+
+            $exportData[] = [$item['sn'], $item['nickname'], $levelName, $groupName, $referrer_user_info, $item['total_order_amount'], $item['user_money'], $item['user_integral'], $loginTime];
+        }
+
+        $exportTitle = ['会员编号', '会员昵称', '会员等级', '会员分组', '推荐人信息', '消费金额', '账户余额', '积分', '最后登录时间'];
+        $exportExt = 'xls';
+        return ['exportTitle'=> $exportTitle, 'exportData' => $exportData, 'exportExt'=>$exportExt, 'exportName'=>'会员列表'.date('Y-m-d H:i:s')];
+    }
+
     /**
      * Notes: 获取会员信息
      * @param $id
@@ -182,9 +263,13 @@ class UserLogic{
             $user['superior_referrer_sn'] = '-';
             if($user['is_distribution']){
                 $user['distribution_tips'] = '是';
-                $superior_referrer = Db::name('user')->where(['id'=>$user['first_leader']])->field('nickname,sn')->find();
-                $user['superior_referrer'] = $superior_referrer['nickname'];
-                $user['superior_referrer_sn'] = $superior_referrer['sn'];
+                $superior_referrer = Db::name('user')->where(['id'=>$user['first_leader']])->field('nickname,sn')->findOrEmpty();
+                $user['superior_referrer'] = '-';
+                $user['superior_referrer_sn'] = '-';
+                if($superior_referrer) {
+                    $user['superior_referrer'] = $superior_referrer['nickname'];
+                    $user['superior_referrer_sn'] = $superior_referrer['sn'];
+                }
             }
             // 头像
             $user['avatar'] = UrlServer::getFileUrl($user['avatar']);
@@ -310,6 +395,8 @@ class UserLogic{
         if (!empty($post['password'])) {
             //生成密码
             $post['password'] = create_password($post['password'], $user->salt);
+        } else {
+            unset($post['password']);
         }
         $post['update_time'] = time();
         $post['birthday'] = strtotime($post['birthday']);
@@ -381,6 +468,7 @@ class UserLogic{
                             ->select();
                     $level_list = Db::name('user_level')->where(['del'=>0])->column('name','id');
                     foreach ($list as &$item) {
+                        $item['avatar'] = UrlServer::getFileUrl($item['avatar']);
                         $item['level_name'] = '-';
                         if(isset($level_list[$item['level']])){
                             $item['level_name'] = $level_list[$item['level']];

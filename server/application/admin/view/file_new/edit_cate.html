@@ -1,0 +1,78 @@
+{layout name="layout2" /}
+<style>
+    .layui-input-block {
+        width: 300px;
+    }
+</style>
+<div class="layui-form" style="margin-top: 15px;">
+    <input type="hidden" name="type" value="{$type}" />
+    <input type="hidden" name="id" value="{$cate['id']}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级分类</label>
+        <div class="layui-input-block">
+            <select name="pid">
+                <option value="">顶级分类</option>
+                {foreach $menu as $k => $v}
+                <option value="{$k}" {if ($cate['pid'] == $k)}selected{/if}>{$v}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="required" placeholder="允许2-10个汉字" value="{$cate['name']}" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="number" min="0" name="sort" value="{$cate['sort']}" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="add">更新</button>
+            <button class="layui-btn layui-btn-primary" id="close">返回</button>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'jquery'], function() {
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        // 编辑分类
+        form.on('submit(add)', function(data) {
+            var field = data.field;
+
+            $.ajax({
+                type: 'POST',
+                url: '{:url("file_new/editCate")}',
+                data: field,
+                dataType: 'json',
+                error: function() {
+                    layer.msg('请求出错');
+                },
+                success: function(res) {
+                    if(res.code == 1) {
+                        layer.msg(res.msg,{time: 1000}, function() {
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                            parent.location.reload();
+                        });
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                }
+            });
+        });
+
+        // 关闭当前窗口
+        $('#close').click(function() {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        })
+    });
+</script>

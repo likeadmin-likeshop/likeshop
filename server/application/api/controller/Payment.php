@@ -1,27 +1,27 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\api\controller;
 
 
 use app\api\model\Order;
+use app\common\model\Order as CommonOrder;
 use app\common\model\Client_;
 use app\common\server\AliPayServer;
 use app\common\server\WeChatPayServer;
@@ -54,6 +54,9 @@ class Payment extends ApiBase
         switch ($post['from']) {
             case 'order':
                 $order = Order::get($post['order_id']);
+                if ($order['order_status'] == CommonOrder::STATUS_CLOSE || $order['del'] == 1) {
+                    $this->_error('订单已关闭');
+                }
                 break;
             case 'recharge':
                 $order = Db::name('recharge_order')->where(['id' => $post['order_id']])->find();
@@ -80,52 +83,6 @@ class Payment extends ApiBase
         }
 
         $this->_success('', $result);
-    }
-
-
-
-    /**
-     * Notes: pc端预支付 NATIVE
-     * @author 段誉(2021/3/18 16:03)
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function pcPrepay()
-    {
-        $post = $this->request->post();
-        $pay_way = $post['pay_way'];
-        $order = Order::get($post['order_id']);
-
-        $return_msg = ['order_id' => $order['id'], 'order_amount' => $order['order_amount']];
-
-        //找不到订单
-        if (empty($order)) {
-            $this->_error('订单不存在');
-        }
-
-        //已支付
-        if ($order['pay_status'] == Pay::ISPAID || $order['order_amount'] == 0) {
-            $this->_success('支付成功', $return_msg, 10001);
-        }
-
-        $result = PaymentLogic::pcPay($order, $pay_way, $post['order_source']);
-
-        if (false === $result) {
-            $this->_error(PaymentLogic::getError(), $return_msg, PaymentLogic::getReturnCode());
-        }
-
-        if ($pay_way == Pay::BALANCE_PAY) {
-            $this->_success('余额支付成功', $return_msg, PaymentLogic::getReturnCode());
-        }
-
-        $return_msg['data'] = $result;
-
-        if (PaymentLogic::getReturnCode() != 0) {
-            $this->_success('', $return_msg, PaymentLogic::getReturnCode());
-        }
-
-        $this->_success('', $return_msg);
     }
 
 

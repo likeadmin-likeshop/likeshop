@@ -188,7 +188,7 @@
                     <th style="width: 20px;text-align: center">操作</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody  class="goods_info">
                 </tbody>
             </table>
         </div>
@@ -210,7 +210,8 @@
         var $ = layui.$
             ,form = layui.form
             ,laydate = layui.laydate
-            ,table = layui.table;
+            ,table = layui.table,
+            use_goods_type = 1;
 
 
         lay('.time').each(function() {
@@ -223,7 +224,12 @@
         });
         form.on('radio(select-goods)', function (data) {
             var value = data.value;
+            if(use_goods_type != value){
+                $('.goods_info').html("");
+                goods_ids = [];
+            }
             $('.goods').hide();
+
             if(value != 1){
                 layer.open({
                     type: 2
@@ -242,10 +248,11 @@
                                    '                    <td style="text-align: center">'+item.stock+'</td>\n' +
                                    '                    <td style="text-align: center"> <a class="layui-btn layui-btn-danger layui-btn-sm" data-id="'+item.id+'">删除</a>\n' +
                                    '                </tr>';
-                               $('#goods_list').append(goods_html);
+                               $('.goods_info').append(goods_html);
                            }
 
                         })
+                        use_goods_type = value;
                         $('.goods').show();
 
                     }

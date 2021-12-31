@@ -78,8 +78,8 @@
                             style="color: #a3a3a3;font-size: 9px">建议尺寸：800*800像素，你可以拖拽图片调整顺序，最多上传8张</span></div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">商品视频：</label>
-                        <div>
-                            <div class="goods-video-add goods-video"></div>
+                        <div class="upload-file-div video-style" id="video">
+                            <a href="#" class="upload-file-title">+添加视频</a>
                         </div>
                     </div>
                     <div class="layui-form-item"><label class="layui-form-label"></label><span
@@ -307,7 +307,7 @@
                     <input type="radio" name="give_integral_type" value="2" title="按比例赠送积分">
                 </div>
                 <div class="layui-input-inline" style="width:auto">
-                    <input type="number" name="give_integral_ratio" class="layui-input">
+                    <input type="number" min="0" name="give_integral_ratio" class="layui-input">
                 </div>
                 <div class="unit-tips">%</div>
             </div>
@@ -422,7 +422,7 @@
         <a class="goods-spec-value-del-x" style="display: none;">x</a>
         <input value="{spec_value}" spec-value-temp-id="{spec_value_temp_id}" class="layui-input goods-spec-value-input"
                placeholder="规格值"
-               lay-verify="more_spec_required" lay-verType="tips" switch-tab="1" verify-msg="规格值不能为空">
+               lay-verify="more_spec_required" maxlength="64" lay-verType="tips" switch-tab="1" verify-msg="规格值不能为空">
         <a class="click-a batch-spec-image">添加图片</a>
         <input type="hidden" class="goods-sepc-value-id-input" value="{spec_value_id}">
     </div>
@@ -616,22 +616,21 @@
             }
         }, true);
 
+        // ========= 视频上传 开始
+        $('#video').click(function(){
+            layer.open({
+                type: 2,
+                title: '上传视频',
+                content: '{:url("file_new/lists")}?type=video',
+                area: ['90%', '90%']
+            });
+        });
 
-        like.videoUpload('.goods-video-add',"{:url('file/video')}");
-        //视频显示删除按钮
-        $(document).on('mouseenter','.show-video',function () {
-            $(this).children('.goods-video-del').show();
-        })
-        $(document).on('mouseleave', '.show-video', function () {
-            $(this).children('.goods-video-del').hide();
-        });
-        $(document).on('click', '.goods-video-del-x', function () {
-            if($(this).hasClass('goods-video-del')){
-                $(this).parent().prev().show();
-                $(this).parent().remove();
-            }
-            return false;
-        });
+        window.videoCallback = function(uris) {
+            like.videoCallback(uris);
+        };
+        // ========== 视频上传 结束
+
         //图片拉拽
         $(document).on('dragstart', '.goods-li', function (e) {
             dragstart = e.offsetX;
@@ -992,13 +991,13 @@
             like.showImg($(this).attr('src'),600);
         });
 
-
         //规格生成表格
         createTableBySepc = function () {
             if ($('.goods-spec').size() <= 0) {
                 $('#more-spec-lists').hide();
                 return;
             }
+
             $('#more-spec-lists').show();
             var table_title = [];
             var table_data = [];
@@ -1334,7 +1333,7 @@
         //------------------------编辑页面----------------------------------
         {notempty name='info'}
         var goods_info= {$info|raw|default=''};
-        console.log(goods_info);
+        // console.log(goods_info);
         $('input[name="goods_id"]').val(goods_info['base']['id']);
         $('input[name="name"]').val(goods_info['base']['name']);
         $('input[name="code"]').val(goods_info['base']['code']);
@@ -1367,14 +1366,7 @@
         }
         //渲染商品视频
         if(goods_info['base']['abs_video']){
-            var video_html = '<div class="show-video">' +
-                ' <video width="160" height="160"   src="'+goods_info['base']['abs_video']+'"controls autoplay></video>'
-                +'<a class="goods-video-del-x goods-video-del">x</a>'
-                + '<input type="hidden" name="video" value="'+goods_info['base']['video']+'">'
-            '</div>';
-            $('.goods-video-add').after(video_html);
-            $('.goods-video-add').hide();
-
+            like.videoCallback([goods_info['base']['abs_video']]);
         }
         //渲染商品主图
         if(goods_info['base']['poster']){

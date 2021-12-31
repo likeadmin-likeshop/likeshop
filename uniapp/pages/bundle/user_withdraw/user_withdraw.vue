@@ -15,7 +15,7 @@
 								</view>
 							</view>
 							<view class="tips mt20 muted row xs" v-if="item.value == 2">
-								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%
+								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%，请自行缴纳税款
 								<!-- <view class="primary ml10">¥ {{widthDrawConfig.able_withdraw}}</view> -->
 							</view>
 						</view>
@@ -62,7 +62,7 @@
 								</view>
 							</view>
 							<view class="tips mt10 muted row xs">
-								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%
+								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%，请自行缴纳税款
 								<!-- <view  class="primary ml5">¥ {{widthDrawConfig.able_withdraw}}</view> -->
 							</view>
 						</view>
@@ -109,7 +109,7 @@
 								</view>
 							</view>
 							<view class="tips mt10 muted row xs">
-								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%
+								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%，请自行缴纳税款
 								<!-- <view class="primary ml5">¥ {{widthDrawConfig.able_withdraw}}</view> -->
 							</view>
 						</view>
@@ -154,7 +154,7 @@
 								</view>
 							</view>
 							<view class="tips mt10 muted row xs">
-								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%
+								提示：提现需扣除服务费{{widthDrawConfig.poundage_percent}}%，请自行缴纳税款
 								<!-- <view class="primary ml5">¥ {{widthDrawConfig.able_withdraw}}</view> -->
 							</view>
 						</view>
@@ -172,28 +172,30 @@
 </template>
 
 <script>
-	// +----------------------------------------------------------------------
-	// | LikeShop100%开源免费商用电商系统
-	// +----------------------------------------------------------------------
-	// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-	// | 开源版本可自由商用，可去除界面版权logo
-	// | 商业版本务必购买商业授权，以免引起法律纠纷
-	// | 禁止对系统程序代码以任何目的，任何形式的再发布
-	// | Gitee下载：https://gitee.com/likemarket/likeshopv2
-	// | 访问官网：https://www.likemarket.net
-	// | 访问社区：https://home.likemarket.net
-	// | 访问手册：http://doc.likemarket.net
-	// | 微信公众号：好象科技
-	// | 好象科技开发团队 版权所有 拥有最终解释权
-	// +----------------------------------------------------------------------
-	// | author: likeshop.cn.team
-	// +----------------------------------------------------------------------
+// +----------------------------------------------------------------------
+// | likeshop100%开源免费商用商城系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | gitee下载：https://gitee.com/likeshop_gitee
+// | github下载：https://github.com/likeshop-github
+// | 访问官网：https://www.likeshop.cn
+// | 访问社区：https://home.likeshop.cn
+// | 访问手册：http://doc.likeshop.cn
+// | 微信公众号：likeshop技术社区
+// | likeshop团队 版权所有 拥有最终解释权
+// +----------------------------------------------------------------------
+// | author: likeshopTeam
+// +----------------------------------------------------------------------
 	import {
 		applyWithdraw,
 		getWithdrawConfig
 	} from "@/api/user";
 	import {
-		uploadFile
+		uploadFile,
+		trottle
 	} from "@/utils/tools";
 	import {
 		baseURL
@@ -226,6 +228,7 @@
 		 */
 		onLoad: function(options) {
 			this.getWithdrawConfigFun();
+			this.applyWithdrawFun = trottle(this.applyWithdrawFun, 1000, this)
 		},
 
 

@@ -128,3 +128,72 @@
     font-weight:400;
     margin-bottom: 12px;
 }
+.layui-form-radioed>i {
+    color: #1E9FFF;
+}
+.layui-form-radio>i:hover, .layui-form-radioed>i {
+    color: #1E9FFF;
+}
+.layui-form-checked[lay-skin=primary] i {
+    border-color: #1E9FFF!important;
+    background-color: #1E9FFF;
+    color: #fff;
+}
+.layui-form-checkbox[lay-skin=primary]:hover i {
+    border-color: #1E9FFF;
+    color: #fff;
+}
+.layui-btn-primary:hover {
+    border-color: #1E9FFF;
+    color: #333;
+}
+
+/* 新文件上传 */
+.upload-file-div {
+    float: left;
+    width: 80px;
+    height:80px;
+    border: 1px dashed #a0a0a0;
+}
+.video-style {
+    background: url(/static/plug/layui-admin/dist/layuiadmin/layui/images/other/video.png);
+}
+.upload-file-title {
+    color: #4e8bff;
+    position: relative;
+    top:50px;
+    right: -10%;
+    font-size: 8px;
+}
+
+#video-container {
+    float: left;
+    width: 500px;
+}
+
+#video-container li {
+    float: left;
+    position: relative;
+    margin-right: 5px;
+}
+
+
+#video-container li:hover .video-del {
+    display: inline-block;
+}
+
+.video-del {
+    display: none;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    background: rgba(33,33,33,0.2);
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 14px;
+    position: absolute;
+    right: -9px;
+    top: -9px;
+    box-sizing: border-box;
+}

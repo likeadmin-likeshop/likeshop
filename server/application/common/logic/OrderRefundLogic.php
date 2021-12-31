@@ -1,23 +1,27 @@
 <?php
 // +----------------------------------------------------------------------
-// | LikeShop有特色的全开源社交分销电商系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 商业用途务必购买系统授权，以免引起不必要的法律纠纷
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | 微信公众号：好象科技
-// | 访问官网：http://www.likemarket.net
-// | 访问社区：http://bbs.likemarket.net
-// | 访问手册：http://doc.likemarket.net
-// | 好象科技开发团队 版权所有 拥有最终解释权
+// | gitee下载：https://gitee.com/likeshop_gitee
+// | github下载：https://github.com/likeshop-github
+// | 访问官网：https://www.likeshop.cn
+// | 访问社区：https://home.likeshop.cn
+// | 访问手册：http://doc.likeshop.cn
+// | 微信公众号：likeshop技术社区
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-// | author: likeshop.cn.team-段誉
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 
 namespace app\common\logic;
 
 
+use app\api\logic\DistributionLogic;
 use app\api\model\Order;
 use app\common\model\AccountLog;
 use app\common\model\Order as CommonOrder;
@@ -238,7 +242,7 @@ class OrderRefundLogic
      * @param $order_goods_id
      * @author 段誉(2021/1/28 15:22)
      */
-    public static function afterSaleRefundUpdate($order, $order_goods_id)
+    public static function afterSaleRefundUpdate($order, $order_goods_id, $admin_id = 0)
     {
         $order_goods = OrderGoods::get(['id' => $order_goods_id]);
         $order_goods->refund_status = OrderGoods::REFUND_STATUS_SUCCESS;//退款成功
@@ -250,13 +254,41 @@ class OrderRefundLogic
         $order->refund_amount += $order_goods['total_pay_price'];//退款金额 + 以前的退款金额
         $order->refund_status = 1;//退款状态：0-未退款；1-部分退款；2-全部退款
 
-        //退款金额等于订单应付金额时为全部退款
-        if ($order->refund_amount == $order['order_amount']) {
+        //如果订单商品已全部退款
+        if (self::checkOrderGoods($order['id'])) {
+            $order->order_status = CommonOrder::STATUS_CLOSE;
             $order->refund_status = 2;
+
+            OrderLogLogic::record(
+                OrderLog::TYPE_SHOP,
+                OrderLog::SYSTEM_CANCEL_ORDER,
+                $order['id'],
+                $admin_id,
+                OrderLog::SYSTEM_CANCEL_ORDER
+            );
         }
         $order->save();
+
+        //更新相关分佣订单为已失效
+        DistributionLogic::setFailByAfterSale($order_goods_id);
     }
 
+
+    //订单内商品是否已全部
+    public static function checkOrderGoods($order_id)
+    {
+        $order_goods = OrderGoods::where('order_id', $order_id)->select();
+        if (empty($order_goods)) {
+            return false;
+        }
+
+        foreach ($order_goods as $item) {
+            if ($item['refund_status'] != OrderGoods::REFUND_STATUS_SUCCESS) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     /**

@@ -1,5 +1,35 @@
 {layout name="layout1" /}
 
+<style>
+    .layui-form-label{
+        width: 160px;
+    }
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
 
 <div class="layui-fluid">
     <div class="layui-card">
@@ -8,8 +38,8 @@
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
                     <div class="layui-colla-content layui-show">
-                        <p>*分销相关的参数设置</p>
-                        <p>*分销佣金设置在商品管理中的添加商品时设置</p>
+                        <p>*分销推广相关的设置</p>
+                        <p>*分销会员开通方式：申请分销是指，成为分销员需要申请并审核通过；全员分销是指，会员注册账号即成为分销会员；</p>
                     </div>
                 </div>
             </div>
@@ -26,26 +56,52 @@
                         <div class="layui-card-body" >
 
                             <div class="layui-form" lay-filter="">
-                                <div class="layui-form-item ">
-                                    <label class="layui-form-label" style="white-space: nowrap; " >分销：</label>
-                                    <div class="layui-input-inline" >
-                                        <input type="radio" name="is_open" value="0" title="关闭" {if condition="$config.is_open eq 0"}checked{/if}>
-                                        <input type="radio" name="is_open" value="1" title="开启" {if condition="$config.is_open eq 1"}checked{/if}>
-                                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">分销开关，关闭后不发放分销佣金，隐藏分销相关功能及界面。</div>
+
+                                <!-- 自定义分销海报图 -->
+                                <div class="layui-form-item" style="margin-bottom:0;">
+                                    <label class="layui-form-label">自定义分销海报图：</label>
+                                    <div class="layui-input-inline">
+                                        <div class="" style="height:120px;line-height:120px;">
+                                            <input name="share_poster" type="hidden" value="{$config.share_poster}" >
+                                            {if !empty($config.share_poster)}
+                                            <div class="goods-img-add" style="display: none"></div>
+                                            <div class="goods-li">
+                                                <img class="goods-img" style="width: auto;height: 120px" src="{$config.share_poster}">
+                                                <a class="goods-img-del-x" style="display: none">x</a>
+                                            </div>
+                                            {else}
+                                            <div class="goods-img-add"></div>
+                                            {/if}
+                                        </div>
+                                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">自定义分销推广海报图片，建议尺寸：900*1225像素.背景图下方请留白用于放置会员信息</div>
                                     </div>
                                 </div>
 
                                 <div class="layui-form-item ">
-                                    <label class="layui-form-label" style="white-space: nowrap; " >分销会员申请：</label>
-                                    <div class="layui-input-block" >
+                                    <label class="layui-form-label" style="white-space: nowrap; " >分销会员开通方式：</label>
+                                    <div class="layui-input-inline" style="width: 340px;">
                                         <input type="radio" name="member_apply" value="1" title="申请分销" {if condition="$config.member_apply eq 1"}checked{/if}>
                                         <input type="radio" name="member_apply" value="2" title="全员分销" {if condition="$config.member_apply eq 2"}checked{/if}>
-                                        <input type="radio" name="member_apply" value="3" title="后台指定" {if condition="$config.member_apply eq 3"}checked{/if}>
+                                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">不同的分销方式，会员获得分销资格的途径不同。</div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label"></label>
-                                    <div class="layui-word-aux">选择申请分销时，成为分销员需要申请并审核通过；选择全员分销时，会员注册账号即成为分销会员；选择后台指定时，通过后台开通指定会员分销权限；</div>
+
+                                <div class="layui-form-item ">
+                                    <label class="layui-form-label" style="white-space: nowrap; " >商品详情显示分销佣金：</label>
+                                    <div class="layui-input-inline" >
+                                        <input type="radio" name="show_commission" value="0" title="关闭" {if condition="$config.show_commission eq 0"}checked{/if}>
+                                        <input type="radio" name="show_commission" value="1" title="开启" {if condition="$config.show_commission eq 1"}checked{/if}>
+                                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">开启或关闭商品详情显示分销佣金。默认关闭。</div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item ">
+                                    <label class="layui-form-label" style="white-space: nowrap; " >分销功能：</label>
+                                    <div class="layui-input-inline" >
+                                        <input type="radio" name="is_open" value="0" title="关闭" {if condition="$config.is_open eq 0"}checked{/if}>
+                                        <input type="radio" name="is_open" value="1" title="开启" {if condition="$config.is_open eq 1"}checked{/if}>
+                                        <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">开启或关闭分销功能。关闭后不发放分销佣金，隐藏分销相关功能及界面。</div>
+                                    </div>
                                 </div>
 
                                 <div class="layui-form-item">
@@ -94,6 +150,44 @@
                     });
                 },
             });
+        });
+
+
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="' + uri[0] + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,400);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
         });
 
     });

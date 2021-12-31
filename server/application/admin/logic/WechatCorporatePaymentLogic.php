@@ -138,19 +138,19 @@ class WechatCorporatePaymentLogic
             'update_time' => time()
           ]);
       //回退佣金
-      $user = User::get($withdraw_apply['user_id']);
-      $user->earnings = ['inc', $withdraw_apply['money']];
+      $user = User::get($withdraw['user_id']);
+      $user->earnings = ['inc', $withdraw['money']];
       $user->save();
 
       //增加佣金变动记录
       AccountLogLogic::AccountRecord(
-          $withdraw_apply['user_id'],
-          $withdraw_apply['money'],
+          $withdraw['user_id'],
+          $withdraw['money'],
           1,
           AccountLog::withdraw_back_earnings,
           '',
-          $withdraw_apply['id'],
-          $withdraw_apply['sn']
+          $withdraw['id'],
+          $withdraw['sn']
       );
       return [
         'code' => 0,
@@ -211,19 +211,19 @@ class WechatCorporatePaymentLogic
             'update_time' => time()
           ]);
           //回退佣金
-          $user = User::get($withdraw_apply['user_id']);
-          $user->earnings = ['inc', $withdraw_apply['money']];
+          $user = User::get($withdraw['user_id']);
+          $user->earnings = ['inc', $withdraw['money']];
           $user->save();
 
           //增加佣金变动记录
           AccountLogLogic::AccountRecord(
-              $withdraw_apply['user_id'],
-              $withdraw_apply['money'],
+              $withdraw['user_id'],
+              $withdraw['money'],
               1,
               AccountLog::withdraw_back_earnings,
               '',
-              $withdraw_apply['id'],
-              $withdraw_apply['sn']
+              $withdraw['id'],
+              $withdraw['sn']
           );
           return [
             'code' => 0,

@@ -1,0 +1,75 @@
+{layout name="layout1" /}
+<div class="layui-fluid">
+    <div class="layui-card layui-form">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*管理系统运行过程中产生的缓存。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body" id="card-body">
+            <table id="like-lists" lay-filter="like-lists"></table>
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="clear">清除系统缓存</a>
+            </script>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version: "{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'table', 'like', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like;
+
+        table.render({
+            elem: '#like-lists'
+            , cols: [[
+                {field: 'name', title: '管理内容', width: 200}
+                , {field: 'desc', title: '内容说明', Width: 150}
+                , {fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#operation'}
+            ]]
+            , data: [{
+                "name": "系统缓存"
+                , "desc": "系统运行过程中产生的各类缓存数据"
+            }]
+        });
+
+
+        table.on('tool(like-lists)', function(obj) {
+            if(obj.event === 'clear') {
+                like.ajax({
+                    url:'{:url("cache/cache")}',
+                    type:"post",
+                    success:function(res) {
+                        if(res.code === 1) {
+                            layui.layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            },function () {
+                                location.reload();
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+
+    });
+
+</script>

@@ -108,10 +108,10 @@ class Qiniu extends Server
 
         try {
             $error = $bucketMgr->delete($this->config['bucket'], $fileName);
-            if ($error !== null) {
-                $this->error = $error->message();
-                return false;
-            }
+//            if ($error !== null) {
+//                $this->error = $error->message();
+//                return false;
+//            }
             return true;
         } catch (\Exception $e) {
             $this->error = $e->getMessage();

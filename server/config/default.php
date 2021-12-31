@@ -7,10 +7,10 @@ return [
     ],
     'website' => [
         'admin_image' => '/static/common/image/default/login_form_img.png',
-        'admin_title' => 'LikeShop后台登录',
+        'admin_title' => 'likeshop管理后台',
         'partner_image' => '/static/common/image/default/login_form_img.png',
         'partner_title' => 'LIKE 机构后台登录',
-        'name' => 'LikeShop 管理后台',
+        'name' => 'likeshop',
         'mall_logo' => '/static/common/image/default/mall_logo@3x.png',
         'pc_logo' => '/static/common/image/default/backstage_logo.png',
         'login_logo' => '/static/common/image/default/login_logo_mall.png',
@@ -26,19 +26,22 @@ return [
         'shop_login_logo' => '/static/common/image/default/login_logo_mall.png',//移动端登录logo
     ],
     'decoration' => [ // 装修
-      // 商品分类页布局图片
-      'category_layout' => [
-        1 => '/static/common/image/default/category_layout1.png',
-        2 => '/static/common/image/default/category_layout2.png',
-        3 => '/static/common/image/default/category_layout3.png',
-        4 => '/static/common/image/default/category_layout4.png'
-      ],
-      'category_layout_tips' => [
-        1 => '一级布局，适合商品分类较少情形',
-        2 => '一级布局，适合商品分类较少情形',
-        3 => '二级布局，适合商品分类适中情形',
-        4 => '三级布局，适合商品分类丰富情形'
-      ]
+        // 商品分类页布局图片
+        'category_layout' => [
+            1 => '/static/common/image/default/category_layout1.png',
+            2 => '/static/common/image/default/category_layout2.png',
+            3 => '/static/common/image/default/category_layout3.png',
+            4 => '/static/common/image/default/category_layout4.png'
+        ],
+        'category_layout_tips' => [
+            1 => '一级布局，适合商品分类较少情形',
+            2 => '一级布局，适合商品分类较少情形',
+            3 => '二级布局，适合商品分类适中情形',
+            4 => '三级布局，适合商品分类丰富情形'
+        ]
+    ],
+    'distribution' => [
+        'share_poster' => '/images/share/share_user_bg.png',
     ]
-    
+
 ];

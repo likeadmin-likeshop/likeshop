@@ -37,7 +37,12 @@
             </view>
         </view>
         <checkbox :checked="isAgree" icon-size="15px" :checked-color="primaryColor" @click="changeChecked">
-            <view class="xs">已阅读并同意《隐私协议》《会员章程》</view>
+            <view class="sm row">
+            	已阅读并同意
+            	<navigator @tap.stop="" class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=0">《服务协议》</navigator>
+            	和
+            	<navigator @tap.stop="" class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=1">《隐私协议》</navigator>
+            </view>
         </checkbox>
         <view class="btn white bg-primary br60 row-center" @click="registerFun">
             立即注册

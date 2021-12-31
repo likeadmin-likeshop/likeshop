@@ -53,7 +53,7 @@
                 </div>
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <button type="button" id="today" day="1" class="layui-btn layui-btn-sm layui-btn-normal day">今天</button>
+                        <button type="button" id="today" day="1" class="layui-btn layui-btn-sm layui-btn-primary day">今天</button>
                         <button type="button"  day="-1" class="layui-btn layui-btn-sm layui-btn-primary day">昨天</button>
                         <button type="button"  day="7" class="layui-btn layui-btn-sm layui-btn-primary day">近7天</button>
                         <button type="button"  day="30" class="layui-btn layui-btn-sm layui-btn-primary day">近30天</button>
@@ -94,14 +94,14 @@
             elem: '#start_time'
             , type: 'datetime'
             ,theme: '#1E9FFF'
-            , value: "{$time.today[0]}"
+            , value: ""
         });
 
         laydate.render({
             elem: '#end_time'
             , type: 'datetime'
             ,theme: '#1E9FFF'
-            ,value: "{$time.today[1]}"
+            ,value: ""
         });
 
         //监听搜索
@@ -118,6 +118,9 @@
 
         //清空查询
         form.on('submit(account-clear-search)', function(){
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
             $('#keyword').val('');
             $('#keyword_type').val('sn');
             $('#pay_status').val(0);
@@ -125,9 +128,9 @@
             $('#pay_way').val(0);
             $('#create_start').val('');
             $('#create_end').val('');
-            $('#start_time').val('{$time.today[0]}');
-            $('#end_time').val('{$time.today[1]}');
-            $('#today').trigger("click");
+            $('#start_time').val('');
+            $('#end_time').val('');
+   
             form.render('select');
             //刷新列表
             table.reload('account-lists', {
@@ -158,7 +161,7 @@
                 ,{field: 'change_amount', title: '变动成长值'}
                 ,{field: 'left_amount', title: '剩余成长值 '}
                 ,{field: 'source_type_desc', title: '变动类型'}
-                ,{field: 'log_sn', title: '来源单号'}
+                ,{field: 'order_sn', title: '来源单号'}
                 ,{field: 'create_time', title: '记录时间'}
 
             ]]

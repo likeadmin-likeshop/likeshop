@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\admin\validate;
@@ -110,19 +109,29 @@ class GoodsCategory extends Validate
     /*
      * 验证分类
      */
-    protected function checkCategory($value,$rule,$data){
+    protected function checkCategory($value, $rule, $data)
+    {
+        $goods_category_list = Db::name('goods_category')
+            ->where([['del','=',0],['id','not in',$value]])
+            ->column('name','pid');
 
-        $goods_list = Db::name('goods')->where(['del'=>0])->column('id,name','third_category_id');
-        $goods_category_list = Db::name('goods_category')->where([['del','=',0],['id','not in',$value]])->column('name','pid');
+        foreach ($value as $item) {
 
-        foreach ($value as $item){
-            if(isset($goods_category_list[$item])){
-                $name = Db::name('goods_category')->where(['id'=>$item])->value('name');
-                return $name.'该分类下有子级，不能删除';
+            if(isset($goods_category_list[$item])) {
+                return $goods_category_list[$item].'该分类下有子级，不能删除';
             }
-            if(isset($goods_list[$item])){
-                $name = Db::name('goods_category')->where(['id'=>$item])->value('name');
-                return $name.'已经有商品绑定了该分类，不能删除';
+
+            $goods_used = Db::name('goods')
+                ->where(function ($query) use ($value) {
+                    $query->where('first_category_id', 'in', $value)
+                        ->whereOr('second_category_id', 'in', $value)
+                        ->whereOr('third_category_id', 'in', $value);
+                })
+                ->where(['del'=>0])
+                ->find();
+
+            if ($goods_used) {
+                return '所选分类已绑定商品';
             }
         }
         return true;

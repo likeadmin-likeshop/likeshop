@@ -13,13 +13,13 @@
                 </view>
                 <view class="mt20 normal xs" style="line-height: 35px">{{server.time}}</view>
                 <!-- #ifdef MP-WEIXIN -->
-                <button open-type="contact" class="sm row-center contact-btn br60">
-                    <text style="line-height: 50px;color: white;">在线客服</text>
+                <button open-type="contact" class="sm row-center br60">
+                    <text style="line-height: 50px;">在线客服</text>
                 </button>
                 <!-- #endif -->
                 <!-- #ifndef MP-WEIXIN -->
-                <view class="sm row-center contact-btn br60" @click="tipsShow()">
-                    <text style="line-height: 50px;color: white;">在线客服</text>
+                <view class="sm row-center br60" @click="tipsShow()">
+                    <text style="line-height: 50px;">在线客服</text>
                 </view>
                 <!-- #endif -->
             </view>
@@ -133,7 +133,6 @@
                     margin-top: 30px;
                 }
                 .contact-btn {
-                    background-color: $-color-primary;
                     width: 300rpx;
                     height: 60rpx;
                     margin-bottom: 20rpx;

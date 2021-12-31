@@ -8,7 +8,6 @@
 			<cate-two v-if="appConfig.cate_style == 3" :list="cateList"></cate-two>
 			<cate-three v-if="appConfig.cate_style == 4" :list="cateList"></cate-three>
 			<cate-four v-if="appConfig.cate_style == 1" :list="cateList"></cate-four>
-			
 		</view>
 	</view>
 </template>
@@ -29,8 +28,7 @@
 	export default {
 		data() {
 			return {
-				cateList: [],
-				cateTwoList: [],
+				cateList: []
 			};
 		},
 
@@ -55,11 +53,6 @@
 				getCatrgory().then(res => {
 					if (res.code == 1) {
 						this.cateList = res.data
-						let index = this.cateList.findIndex((item) => item.type == 1)
-						this.selectIndex = index == -1 ? 0 : index
-						this.cateList.forEach((item, index) => item.isShow = this.selectIndex == index ? true :
-							false)
-						this.cateTwoList = res.data[this.selectIndex] ? res.data[this.selectIndex].sons : []
 					}
 				});
 			},
@@ -72,7 +65,7 @@
 </script>
 <style lang="scss">
 	$header-height: 94rpx;
-
+	$nav-height: 80rpx;
 	page {
 
 
@@ -92,6 +85,10 @@
 					}
 				}
 			}
+			.content {
+				height: calc(100vh - #{$header-height} - var(--window-top) - var(--window-bottom));
+			}
 		}
+		
 	}
 </style>

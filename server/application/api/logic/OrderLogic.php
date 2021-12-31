@@ -1,20 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-// | author: likeshop.cn.team-段誉
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\api\logic;
@@ -70,10 +70,11 @@ class OrderLogic extends LogicBase
             $item_ids = array_column($goods, 'item_id');
             $infos = self::getGoodsColumn($item_ids);
 
-            $goods_lists = [];
-            $total_num = 0;//商品总数量
+            $goods_lists       = [];
+            $total_num         = 0;//商品总数量
             $total_goods_price = 0;//商品总金额
-            $discount_amount = 0;//优惠金额
+            $discount_amount   = 0;//优惠金额
+            $give_integral_num = 0;//赠送积分总数量
 
             //当前时段秒杀商品
             $seckill = SeckillLogic::getSeckillGoods();
@@ -90,6 +91,7 @@ class OrderLogic extends LogicBase
                 //订单汇总信息
                 $total_num += $good['num'];
                 $total_goods_price += $goods_info['goods_price'] * $good['num'];
+                $give_integral_num += $goods_info['give_integral_num'];
             }
 
             //用户地址
@@ -97,12 +99,12 @@ class OrderLogic extends LogicBase
             //运费
             $total_shipping_price = FreightLogic::calculateFreight($goods_lists, $user_address);
             //订单金额
-            $total_amount = $total_goods_price + $total_shipping_price;
+            $total_amount = $total_goods_price;
             //订单应付金额
-            $order_amount = $total_amount;
+            $order_amount = $total_goods_price;
 
             //使用优惠券
-            if (isset($post['coupon_id']) && self::$order_type == CommonOrder::NORMAL_ORDER){
+            if (isset($post['coupon_id']) && self::$order_type == CommonOrder::NORMAL_ORDER) {
                 //订单优惠金额
                 $discount_amount_data = self::calculateDiscountAmount($goods_lists, $post['coupon_id']);
                 $discount_amount = $discount_amount_data['total_discount'];
@@ -115,12 +117,14 @@ class OrderLogic extends LogicBase
             $integral_config = ConfigServer::get('marketing', 'integral_deduction_money', 0);
             //积分抵扣限制
             $integral_limit = ConfigServer::get('marketing', 'integral_deduction_limit', 0);
+            //积分描述
+            $integral_desc = IntegralLogic::getIntegralDesc($integral_config, $integral_limit);
 
             //使用积分抵扣
             $integral_amount = 0;//积分抵扣金额
             $user_use_integral = 0;//用户使用的积分
             $use_integral = $post['use_integral'] ?? 0;//是否使用积分
-            if ($use_integral == 1 && $order_amount > 0 && self::$order_type == CommonOrder::NORMAL_ORDER){
+            if ($use_integral == 1 && $order_amount > 0 && self::$order_type == CommonOrder::NORMAL_ORDER) {
                 $integral_data = self::integralDeductionMoney($goods_lists, $user_id, $integral_switch, $integral_config, $integral_limit);
                 $integral_amount = $integral_data['integral_money'];
                 $goods_lists = $integral_data['goods'];
@@ -132,26 +136,31 @@ class OrderLogic extends LogicBase
                 $order_amount = 0;
             }
 
+            $order_amount += $total_shipping_price;//应付订单金额+运费
+            $total_amount += $total_shipping_price;//订单金额+运费
+
             $result = [
-                'order_type' => self::$order_type,
-                'goods_lists' => array_values($goods_lists),
-                'coupon_id' => $post['coupon_id'] ?? 0,
-                'total_num' => $total_num,//订单总数量
+                'order_type'        => self::$order_type,
+                'goods_lists'       => array_values($goods_lists),
+                'coupon_id'         => $post['coupon_id'] ?? 0,
+                'total_num'         => $total_num,//订单总数量
                 'total_goods_price' => round($total_goods_price, 2),//订单商品总价
-                'total_amount' => round($total_amount, 2),//订单总价(商品价格,运费,优惠券等)
-                'order_amount' => round($order_amount, 2),//订单应付价格
-                'address' => $user_address,
-                'discount_amount' => $discount_amount,//优惠券抵扣金额
-                'integral_amount' => $integral_amount,//积分抵扣金额
-                'shipping_price' => round($total_shipping_price, 2),//运费
-                'remark' => $post['remark'] ?? '',
-                'pay_way' => $post['pay_way'] ?? 0,
-                'user_money' => $user['user_money'],//用户余额
+                'total_amount'      => round($total_amount, 2),//订单总价(商品价格,运费,优惠券等)
+                'order_amount'      => round($order_amount, 2),//订单应付价格
+                'give_integral_num' => intval($give_integral_num), //赠送总积分数
+                'address'           => $user_address,
+                'discount_amount'   => $discount_amount,//优惠券抵扣金额
+                'integral_amount'   => $integral_amount,//积分抵扣金额
+                'shipping_price'    => round($total_shipping_price, 2),//运费
+                'remark'            => $post['remark'] ?? '',
+                'pay_way'           => $post['pay_way'] ?? 0,
+                'user_money'        => $user['user_money'],//用户余额
                 'user_use_integral' => $user_use_integral,//用户使用积分
-                'user_integral' => $user['user_integral'],//用户拥有积分
-                'integral_limit' => $integral_limit,// 积分抵扣限制
-                'integral_switch' => $integral_switch,//积分抵扣开关
-                'integral_config' => $integral_config,//积分抵扣配置
+                'user_integral'     => $user['user_integral'],//用户拥有积分
+                'integral_limit'    => $integral_limit,// 积分抵扣限制
+                'integral_switch'   => $integral_switch,//积分抵扣开关
+                'integral_config'   => $integral_config,//积分抵扣配置
+                'integral_desc'     => $integral_desc,//积分抵扣描述
             ];
 
             return self::dataSuccess('', $result);
@@ -184,6 +193,7 @@ class OrderLogic extends LogicBase
         $goods_info['original_price'] = $goods_info['goods_price'];//商品原价
         $goods_info['member_price'] = $goods_info['goods_price'];//会员价格
         $goods_info['is_show_member'] = 0; //是否显示会员价格
+        $goods_info['give_integral_num'] = 0; // 赠送积分
         unset($goods_info['id']);
 
         //当前商品规格是否为秒杀商品
@@ -211,7 +221,7 @@ class OrderLogic extends LogicBase
         }
 
         //会员折扣价格,不参与商品活动
-        $level_discount = UserLevel::get($level)['discount'];
+        $level_discount = UserLevel::get($level)['discount'] ?? 0;
         if ($goods_info['is_member'] == 1 && $level_discount > 0) {
             //会员折扣价格
             $member_price = round($goods_info['goods_price'] * $level_discount / 10, 2);
@@ -221,6 +231,16 @@ class OrderLogic extends LogicBase
             $goods_info['is_show_member'] = 1;
             return $goods_info;
         }
+
+        // 赠送积分
+        if ($goods_info['give_integral_type'] == 1) {
+            $goods_info['give_integral_num'] += ($goods_info['give_integral'] * $goods_info['goods_num']);
+        } elseif ($goods_info['give_integral_type'] == 2) {
+            $proportion = $goods_info['give_integral'] / 100;
+            $give_integral_num = $proportion * $goods_info['goods_price'];
+            $goods_info['give_integral_num'] += ($give_integral_num * $goods_info['goods_num']);
+        }
+
         return $goods_info;
     }
 
@@ -333,23 +353,34 @@ class OrderLogic extends LogicBase
         $total_discount = 0;
         $discount = 0;//每件商品优惠金额
         $check_num = 0;
-        foreach ($goods as &$good){
+        foreach ($goods as &$good) {
             //指定可用时
-            if ($coupon['use_goods_type'] == 2 && !in_array($good['goods_id'], $coupon_goods)){
+            if ($coupon['use_goods_type'] == 2 && !in_array($good['goods_id'], $coupon_goods)) {
                 continue;
             }
             //指定不可用
-            if ($coupon['use_goods_type'] == 3 && in_array($good['goods_id'], $coupon_goods)){
+            if ($coupon['use_goods_type'] == 3 && in_array($good['goods_id'], $coupon_goods)) {
                 continue;
             }
 
-            $discount = ($good['goods_price'] * $good['goods_num']) / $total_goods_price * $coupon['money'];
+            //小计
+            $sub_price = $good['goods_price'] * $good['goods_num'];
+            //每个订单商品可以获得的优惠金额  (订单商品/总商品金额) * 优惠券金额
+            $discount = ($sub_price) / $total_goods_price * $coupon['money'];
             $discount = round($discount, 2);
+            //当前可获得优惠大于当前订单商品时
+            if ($discount > $sub_price) {
+                $discount = $sub_price;
+            }
             $good['discount_price'] = $discount;//每个商品优惠的金额
 
             //用于判断当前是否为最后一个商品
-            if (($check_num + 1) == $goods_count){
+            if (($check_num + 1) == $goods_count) {
                 $discount = $coupon['money'] - $total_discount;
+                //当前可获得优惠大于当前订单商品时
+                if ($discount > $sub_price) {
+                    $discount = $sub_price;
+                }
             }
             $check_num += 1;
             $total_discount += $discount;
@@ -416,13 +447,12 @@ class OrderLogic extends LogicBase
     {
         $field = 'i.id as item_id,g.id as goods_id,g.name as goods_name,g.status,g.del,g.image,
         g.is_integral,g.is_member,g.give_integral_type,g.give_integral,g.free_shipping_type,
-        g.free_shipping,g.free_shipping_template_id,g.image, i.image as spec_image,
-        i.spec_value_str,i.spec_value_ids,i.price as goods_price,i.image as spec_image,i.volume,i.stock,
-        i.weight,g.third_category_id';
+        g.free_shipping,g.free_shipping_template_id,i.image as spec_image,
+        i.spec_value_str,i.spec_value_ids,i.price as goods_price,i.volume,i.stock,
+        i.weight,g.first_category_id,g.second_category_id,g.third_category_id';
 
         $goods = Db::name('goods g')
             ->join('goods_item i', 'g.id = i.goods_id')
-            ->join('goods_category c', 'c.id = g.third_category_id')
             ->where('i.id', 'in', $item_ids)
             ->column($field, 'i.id');
 
@@ -531,31 +561,41 @@ class OrderLogic extends LogicBase
      */
     public static function addOrder($user_id, $data, $order_source, $user_address, $extra = [])
     {
+        $growth_ratio = ConfigServer::get('trading', 'growth_ratio', 0);
+        $give_growth_num = $growth_ratio > 0 ? ($data['order_amount'] / $growth_ratio) : 0;
+        $attach_values = array(
+            'give_integral_scene' => ConfigServer::get('trading', 'give_integral_scene', 1), //赠送积分时机
+            'give_growth_scene'   => ConfigServer::get('trading', 'give_growth_scene', 1),   //赠送成长值时机
+            'give_growth_num'     => intval(round($give_growth_num)),
+            'give_integral_num'   => $data['give_integral_num'] ?? 0,
+        );
+
         //订单主表记录
         $order_data = [
-            'order_type' => $data['order_type'],
-            'order_sn' => createSn('order', 'order_sn', '', 4),
-            'user_id' => $user_id,
-            'order_source' => $order_source,
-            'consignee' => $user_address['contact'],
-            'province' => $user_address['province_id'],
-            'city' => $user_address['city_id'],
-            'district' => $user_address['district_id'],
-            'address' => $user_address['address'],
-            'mobile' => $user_address['telephone'],
-            'goods_price' => $data['total_goods_price'],
-            'order_amount' => $data['order_amount'],//应付金额
-            'total_amount' => $data['total_amount'],//订单总金额
-            'shipping_price' => $data['shipping_price'],//店铺订单运费
-            'total_num' => $data['total_num'],//店铺订单商品数量
-            'user_remark' => $data['remark'],
-            'create_time' => time(),
-            'discount_amount' => $data['discount_amount'] ?? 0,//优惠券优惠金额
-            'pay_way' => $data['pay_way'],
-            'integral_amount' => $data['integral_amount'] ?? 0,
-            'use_integral' => $data['user_use_integral'],
-            'team_id' => $extra['team_id'] ?? 0,
-            'team_found_id' => $extra['found_id'] ?? 0,
+            'order_type'       => $data['order_type'],
+            'order_sn'         => createSn('order', 'order_sn', '', 4),
+            'user_id'          => $user_id,
+            'order_source'     => $order_source,
+            'consignee'        => $user_address['contact'],
+            'province'         => $user_address['province_id'],
+            'city'             => $user_address['city_id'],
+            'district'         => $user_address['district_id'],
+            'address'          => $user_address['address'],
+            'mobile'           => $user_address['telephone'],
+            'goods_price'      => $data['total_goods_price'],
+            'order_amount'     => $data['order_amount'],//应付金额
+            'total_amount'     => $data['total_amount'],//订单总金额
+            'shipping_price'   => $data['shipping_price'],//店铺订单运费
+            'total_num'        => $data['total_num'],//店铺订单商品数量
+            'user_remark'      => $data['remark'],
+            'create_time'      => time(),
+            'discount_amount'  => $data['discount_amount'] ?? 0,//优惠券优惠金额
+            'pay_way'          => $data['pay_way'],
+            'integral_amount'  => $data['integral_amount'] ?? 0,
+            'use_integral'     => $data['user_use_integral'],
+            'team_id'          => $extra['team_id'] ?? 0,
+            'team_found_id'    => $extra['found_id'] ?? 0,
+            'attach_values'    => json_encode($attach_values, JSON_UNESCAPED_UNICODE)
         ];
 
         //有使用优惠券并且有优惠金额,把优惠券id保存到订单表中
@@ -587,13 +627,9 @@ class OrderLogic extends LogicBase
         foreach ($goods_lists as $k1 => $good) {
             //商品验证
             if ($good['del'] == 1 || $good['status'] != 1) {
-//                throw new Exception($good['goods_name'] . '不存在或已下架');
-                //部分商品名字过长,在小程序端会出现无法显示完整的情况
                 throw new Exception( '包含不存在或已下架的商品,无法下单');
             }
             if ($good['goods_num'] > $good['stock']) {
-//                throw new Exception($good['goods_name'] . '库存不足');
-                //部分商品名字过长,在小程序端会出现无法显示完整的情况
                 throw new Exception('商品库存不足,无法下单');
             }
 
@@ -750,12 +786,13 @@ class OrderLogic extends LogicBase
     /**
      * Notes: 订单详情
      * @param $order_id
-     * @author 段誉(2021/1/30 15:03)
+     * @param $user_id
+     * @author 段誉(2021/5/25 14:13)
      * @return Order|array
      */
-    public static function getOrderDetail($order_id)
+    public static function getOrderDetail($order_id, $user_id)
     {
-        $order = Order::get(['del' => 0, 'id' => $order_id], ['orderGoods']);
+        $order = Order::get(['del' => 0, 'id' => $order_id, 'user_id' => $user_id], ['orderGoods']);
         if (!$order){
             return [];
         }
@@ -918,6 +955,12 @@ class OrderLogic extends LogicBase
         $order->confirm_take_time = time();
         $order->save();
 
+        // 赠送成长值和积分
+        Hook::listen('give_reward', [
+            'order_id' => $order_id,
+            'scene'    => 3, //3=订单完成
+        ]);
+
         //订单日志
         OrderLogLogic::record(
             OrderLog::TYPE_USER,
@@ -973,7 +1016,7 @@ class OrderLogic extends LogicBase
                 if ($app && $key) {
                     //快递配置设置为快递鸟时
                     if($express === 'kdniao'){
-                        $expressage = (new Kdniao($app, $key, Env::get('app.app_debug', 'true')));
+                        $expressage = (new Kdniao($key, $app, Env::get('app.app_debug', 'true')));
                         $shipping_field = 'codebird';
                     }else{
                         $expressage = (new Kd100($key, $app, Env::get('app.app_debug', 'true')));

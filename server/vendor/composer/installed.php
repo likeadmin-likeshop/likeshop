@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '87e155aa6e0ba4b4df2e7c98882213a963194f78',
+        'reference' => '8ffd49a23dddb18bf6998e6628474f359daf5e10',
         'name' => 'topthink/think',
         'dev' => true,
     ),
@@ -511,6 +511,15 @@
             'reference' => 'f04b7d187b120e0a44c18a2d479c2dd0abe99d9c',
             'dev_requirement' => false,
         ),
+        'tencentcloud/tencentcloud-sdk-php' => array(
+            'pretty_version' => '3.0.416',
+            'version' => '3.0.416.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../tencentcloud/tencentcloud-sdk-php',
+            'aliases' => array(),
+            'reference' => '38dec9b6a948a57e7c6449917fb60763d3972bb9',
+            'dev_requirement' => false,
+        ),
         'topthink/framework' => array(
             'pretty_version' => 'v5.1.40',
             'version' => '5.1.40.0',
@@ -521,12 +530,12 @@
             'dev_requirement' => false,
         ),
         'topthink/think' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '87e155aa6e0ba4b4df2e7c98882213a963194f78',
+            'reference' => '8ffd49a23dddb18bf6998e6628474f359daf5e10',
             'dev_requirement' => false,
         ),
         'topthink/think-captcha' => array(

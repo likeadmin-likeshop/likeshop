@@ -186,7 +186,7 @@
                     <th style="width: 20px;text-align: center">操作</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody  class="goods_info">
                 </tbody>
             </table>
         </div>
@@ -205,7 +205,8 @@
     }).use(['index', 'form','laydate'], function(){
         var $ = layui.$
             ,form = layui.form
-            ,laydate = layui.laydate;
+            ,laydate = layui.laydate,
+        use_goods_type = 1;
         lay('.time').each(function() {
             laydate.render({
                 elem : this,
@@ -214,8 +215,13 @@
                 format: 'yyyy-MM-dd HH:mm:ss'
             });
         });
+
             form.on('radio(select-goods)', function (data) {
                 var value = data.value;
+                if(use_goods_type != value){
+                    $('.goods_info').html("");
+                    goods_ids = [];
+                }
                 $('.goods').hide();
                 if(value != 1){
                     layer.open({
@@ -235,7 +241,7 @@
                                         '                    <td style="text-align: center">'+item.stock+'</td>\n' +
                                         '                    <td style="text-align: center"> <a class="layui-btn layui-btn-danger layui-btn-sm" data-id="'+item.id+'">删除</a>\n' +
                                         '                </tr>';
-                                    $('#goods_list').append(goods_html);
+                                    $('.goods_info').append(goods_html);
                                 }
 
                             })
@@ -269,7 +275,7 @@
         $("input[name=get_type][value="+detail['get_type']+"]").prop('checked',"true");
         $("input[name=get_num_type][value="+detail['get_num_type']+"]").prop('checked',"true");
         $("input[name=use_goods_type][value="+detail['use_goods_type']+"]").prop('checked',"true");
-
+        use_goods_type = detail['use_goods_type'];
         if(detail['send_total_type'] == 2){
             $('input[name="send_total"]').val(detail['send_total']);
         }
@@ -281,9 +287,13 @@
             $('input[name="use_time_end"]').val(detail['use_time_end']);
         }
 
-        if(detail['use_time_type'] == 2 ||detail['use_time_type'] == 3  ){
+        if(detail['use_time_type'] == 2){
             var radio =  $("input[name=use_time_type][value="+detail['use_time_type']+"]");
             radio.parent().next().children('input[name="use_time"]').val(detail['use_time']);
+        }
+        if(detail['use_time_type'] == 3){
+            var radio =  $("input[name=use_time_type][value="+detail['use_time_type']+"]");
+            radio.parent().next().children('input[name="tomorrow_use_time"]').val(detail['use_time']);
         }
         if(detail['get_num_type'] == 2){
             var radio =  $("input[name=get_num_type][value="+detail['get_num_type']+"]");

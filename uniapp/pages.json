@@ -7,7 +7,7 @@
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "首页",
-				"backgroundColorTop":"#FFFFFF",
+				"backgroundColorTop": "#FFFFFF",
 				"navigationBarTextStyle": "white"
 			}
 		},
@@ -153,18 +153,6 @@
 				"navigationBarTitleText": ""
 			}
 		}
-		// {
-		// 	"path": "pages/modal/modal",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"app-plus": {
-		// 			"animationType": "fade-in",
-		// 			"background": "transparent",
-		// 			"backgroundColor": "rgba(0,0,0,0)",
-		// 			"popGesture": "none"
-		// 		}
-		// 	}
-		// }
 	],
 	"subPackages": [{
 		"root": "pages/bundle",
@@ -174,7 +162,7 @@
 					"navigationBarTitleText": "商品秒杀"
 				}
 			},
-			
+
 			{
 				"path": "goods_logistics/goods_logistics",
 				"style": {
@@ -244,7 +232,7 @@
 			{
 				"path": "invite_fans/invite_fans",
 				"style": {
-					"navigationBarTitleText": "邀请粉丝"
+					"navigationBarTitleText": "邀请海报"
 				}
 			},
 			{
@@ -268,7 +256,7 @@
 			{
 				"path": "user_fans/user_fans",
 				"style": {
-					"navigationBarTitleText": "邀请粉丝"
+					"navigationBarTitleText": "我的粉丝"
 				}
 			},
 			{
@@ -390,17 +378,39 @@
 				"style": {
 					"navigationBarTitleText": "砍价记录"
 				}
+			}, 
+			{
+				"path": "recharge_code/recharge_code",
+				"style": {
+					"navigationBarTitleText": "充值记录",
+					"enablePullDownRefresh": false
+				}
+			}, 
+			{
+				"path": "balance_transfer/balance_transfer",
+				"style": {
+					"navigationBarTitleText": "余额转账"
+				}
+			}, 
+			{
+				"path": "transfer_record/transfer_record",
+				"style": {
+					"navigationBarTitleText": "转账记录"
+				}
+			}, 
+			{
+				"path": "set_pay_pwd/set_pay_pwd",
+				"style": {
+					"navigationBarTitleText": "设置支付密码"
+				}
+			}, 
+			{
+				"path": "forget_pay_pwd/forget_pay_pwd",
+				"style": {
+					"navigationBarTitleText": "忘记支付密码"
+				}
 			}
-		    ,{
-                    "path" : "recharge_code/recharge_code",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "充值记录",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+		]
 	}],
 	"tabBar": {
 		"color": "#666",

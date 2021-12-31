@@ -35,9 +35,9 @@
 <script type="text/html" id="user-info">
     {{#  if(d.receive_type == 1){ }}
         {{ d.userInfo }}
-    {{#  } else if(d.receive_type == 2) { }}
+    {{#  } else if(d.receive_type == 2 && d.userInfo != null) { }}
         {{ d.userInfo.nickname }}({{ d.userInfo.sn }})
-    {{#  } else if(d.receive_type == 3) { }}
+    {{#  } else if(d.receive_type == 3 && d.userInfo != null) { }}
         {{ d.userInfo }}
     {{#  } }}
 </script>

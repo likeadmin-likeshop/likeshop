@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 namespace app\admin\Logic;
 use app\admin\model\Coupon;
@@ -85,11 +84,11 @@ class CouponLogic{
         ];
         //用券时间
         if($post['use_time_type'] == 3){
-            $update_data['use_time'] = $post['tomorrow_use_time'];
+            $add_data['use_time'] = $post['tomorrow_use_time'];
         }
         //领取次数
         if($post['get_num_type'] == 3){
-            $update_data['get_num'] = $post['day_get_num'];
+            $add_data['get_num'] = $post['day_get_num'];
         }
         //提交订单
         Db::startTrans();
@@ -207,11 +206,30 @@ class CouponLogic{
 
 
     /*
-     * 删除优惠券 todo 删除已领取用户的优惠券
+     * 删除优惠券
      */
     public static function del($id){
-        $coupon = new Coupon();
-        return $coupon->save(['del'=>1,'update_time'=>time()],['id'=>$id]);
+        Db::startTrans();
+        try{
+            $coupon = new Coupon();
+            $coupon->save(['del'=>1,'update_time'=>time()],['id'=>$id]);
+
+            // 同步删除已领取未使用的用户的优惠券
+            Db::name('coupon_list')->where([
+                'status' => 0,
+                'coupon_id' => $id,
+                'del' => 0
+            ])->update([
+                'del' => 1,
+                'update_time' => time()
+            ]);
+
+            Db::commit();
+            return true;
+        }catch(\Exception $e) {
+            Db::rollback();
+            return false;
+        }
     }
 
     /*
@@ -240,15 +258,18 @@ class CouponLogic{
         foreach ($log_list as &$item)
         {
             $item['use_time_desc'] = '-';
-            $item['status_desc'] = '已使用';
+            $item['status_desc'] = '未使用';
             $item['create_time_desc'] = '';
             $item['sex_desc'] = '未知';
             if($item['use_time']){
                 $item['use_time_desc'] = date('Y-m-d H:i:s',$item['use_time']);
             }
             $item['u_create_time'] = date('Y-m-d H:i:s',$item['u_create_time']);
-            if($item['status']){
-                $item['status'] = '已使用';
+
+            if ($item['status'] == 1) {
+                $item['status_desc'] = '已使用';
+            } else if($item['status'] == 2) {
+                $item['status_desc'] = '已过期';
             }
 
             $item['avatar'] = UrlServer::getFileUrl($item['avatar']);

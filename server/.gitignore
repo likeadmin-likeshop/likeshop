@@ -4,3 +4,5 @@
 /runtime/*
 !/runtime/index.html
 /.env
+/public/upgrade/*
+!/public/upgrade/version.json

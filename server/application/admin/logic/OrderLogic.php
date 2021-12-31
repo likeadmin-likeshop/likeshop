@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\admin\logic;
@@ -28,6 +27,7 @@ use app\common\model\OrderGoods;
 use app\common\model\OrderLog;
 use app\common\logic\OrderLogLogic;
 use app\common\model\Pay;
+use app\common\model\UserLevel;
 use app\common\server\ConfigServer;
 use app\common\server\UrlServer;
 use app\common\server\YlyPrinter;
@@ -168,6 +168,107 @@ class OrderLogic
             $list['user_level'] = $list['user']['level']['name'] ?? '无等级';
         }
         return ['count' => $count, 'lists' => $lists];
+    }
+
+    public static function exportFile($get)
+    {
+        $where[] = ['o.del', '=', 0];
+
+        //订单状态
+        if ($get['type'] != '') {
+            $where[] = ['order_status', '=', $get['type']];
+        }
+
+        //订单搜素
+        if (!empty($get['search_key']) && !empty($get['keyword'])) {
+            $keyword = $get['keyword'];
+            switch ($get['search_key']) {
+                case 'order_sn':
+                    $where[] = ['o.order_sn', 'like', '%' . $keyword . '%'];
+                    break;
+                case 'user_sn':
+                    $where[] = ['u.sn', 'like', '%' . $keyword . '%'];
+                    break;
+                case 'nickname':
+                    $where[] = ['nickname', 'like', '%' . $keyword . '%'];
+                    break;
+                case 'user_mobile':
+                    $where[] = ['u.mobile', 'like', '%' . $keyword . '%'];
+                    break;
+                case 'consignee':
+                    $where[] = ['consignee', 'like', '%' . $keyword . '%'];
+                    break;
+                case 'consignee_mobile':
+                    $where[] = ['o.mobile', 'like', '%' . $keyword . '%'];
+                    break;
+            }
+        }
+
+        //商品名称
+        if (isset($get['goods_name']) && $get['goods_name'] != '') {
+            $where[] = ['g.name', 'like', '%' . $get['goods_name'] . '%'];
+        }
+
+        //付款方式
+        if (isset($get['pay_way']) && $get['pay_way'] != '') {
+            $where[] = ['o.pay_way', '=', $get['pay_way']];
+        }
+
+        //配送方式
+        if (isset($get['delivery_type']) && $get['delivery_type'] != '') {
+            $where[] = ['o.delivery_type', '=', $get['delivery_type']];
+        }
+
+        //订单类型
+        if (isset($get['order_type']) && $get['order_type'] != '') {
+            $where[] = ['o.order_type', '=', $get['order_type']];
+        }
+
+        //订单来源
+        if (isset($get['order_source']) && $get['order_source'] != '') {
+            $where[] = ['o.order_source', '=', $get['order_source']];
+        }
+
+        //下单时间
+        if (isset($get['start_time']) && $get['start_time'] != '') {
+            $where[] = ['o.create_time', '>=', strtotime($get['start_time'])];
+        }
+        if (isset($get['end_time']) && $get['end_time'] != '') {
+            $where[] = ['o.create_time', '<=', strtotime($get['end_time'])];
+        }
+
+        $field = 'o.*,o.order_type as order_type_text, o.order_source as order_source_text,o.pay_way as pay_way_text,address as delivery_address,o.pay_status as pay_status_text,o.order_status as order_status_text,u.sn as user_sn,u.nickname as user_nickname,u.level as user_level';
+
+        $lists = Order::alias('o')
+                ->join('user u','u.id=o.user_id')
+                ->join('order_goods og', 'og.order_id=o.id')
+                ->join('goods g', 'g.id=og.goods_id')
+                ->with('order_goods')
+                ->field($field)
+                ->where($where)
+                ->order('o.id', 'desc')
+                ->group('og.order_id')
+                ->select()
+                ->toArray();
+
+        $userLevel = UserLevel::where('del', 0)->column(['id','name'], 'id');
+
+        $exportTitle = ['订单编号', '订单类型', '下单时间', '支付时间', '订单来源', '会员编号', '会员昵称', '会员等级', '商品信息', '商品数量', '运费金额', '商品总金额', '优惠金额', '应付金额', '支付方式', '收货人', '手机号码', '收货地址', '配送方式', '支付状态', '订单状态'];
+        $exportExt = 'xls';
+        $exportData = [];
+        foreach ($lists as $item){
+//            halt($item);
+            $orderSn = 'SN'.$item['order_sn']; // 转字符串
+            $level = isset($userLevel[$item['user_level']]) ?  $userLevel[$item['user_level']] : '无等级';
+            $deliveryType = Order::getDeliveryType($item['delivery_type']);
+            $goodsStr = '';
+            foreach($item['order_goods'] as $subItem) {
+                $goodsInfo = json_decode($subItem['goods_info'], true);
+                $goodsStr.= '【'.$goodsInfo['goods_name'].' 规格:'.$goodsInfo['spec_value_str']. ' 数量:'.$subItem['goods_num']. '】';
+            }
+            $exportData[] = [$orderSn, $item['order_type_text'], $item['create_time'], $item['pay_time'], $item['order_source_text'], $item['user_sn'], $item['user_nickname'], $level, $goodsStr,$item['total_num'], $item['shipping_price'], $item['goods_price'], $item['discount_amount'], $item['order_amount'], $item['pay_way_text'], $item['consignee'], $item['mobile'], $item['delivery_address'],$deliveryType, $item['pay_status_text'], $item['order_status_text']];
+        }
+        return ['exportTitle'=> $exportTitle, 'exportData' => $exportData, 'exportExt'=>$exportExt, 'exportName'=>'订单列表'.date('Y-m-d H:i:s')];
     }
 
 
@@ -316,8 +417,7 @@ class OrderLogic
             $delivery_data['shipping_status'] = 1;
         }
         $delivery_id = Db::name('delivery')->insertGetId($delivery_data);
-
-
+        
         //更新订单下商品的发货状态
         $order->update_time = time();
         $order->shipping_time = time();
@@ -345,10 +445,20 @@ class OrderLogic
                 'params' => [
                     'order_sn' => $order->order_sn,
                     'nickname' => $nickname,
+                    'time'     => date('Y-m-d H:i:s'),
+                    'invoice_no'    => $data['invoice_no'] ?? '',
+                    'shipping_name' => $delivery_data['shipping_name'] ?? '无需快递',
+                    'goods_name'    => omit_str($order['order_goods'][0]['goods_name'] ?? '商品', 8)
                 ],
             ];
         }
         Hook::listen('sms_send', $send_data);
+
+        // 赠送成长值和积分
+        Hook::listen('give_reward', [
+            'order_id' => $order['id'],
+            'scene'    => 2, //2=发货场景
+        ]);
 
         // 发货模板消息
         Hook::listen('notice', [
@@ -377,6 +487,12 @@ class OrderLogic
         $order->update_time = time();
         $order->confirm_take_time = time();
         $order->save();
+
+        // 赠送成长值和积分
+        Hook::listen('give_reward', [
+            'order_id' => $order_id,
+            'scene'    => 3, //3=订单完成
+        ]);
 
         //订单日志
         OrderLogLogic::record(
@@ -438,7 +554,7 @@ class OrderLogic
 
         //快递配置设置为快递鸟时
         if($express === 'kdniao') {
-            $expressage = (new Kdniao($app, $key, Env::get('app.app_debug', 'true')));
+            $expressage = (new Kdniao($key, $app, Env::get('app.app_debug', 'true')));
             $shipping_field = 'codebird';
         } else {
             $expressage = (new Kd100($key, $app, Env::get('app.app_debug', 'true')));
@@ -454,7 +570,7 @@ class OrderLogic
         $expressage->logistics($shipping_code, $order['invoice_no']);
         $traces = $expressage->logisticsFormat();
         if ($traces == false) {
-            $traces[] = ['暂无物流信息'];
+            $traces[] = [$expressage->getError()];
         } else {
             foreach ($traces as &$item) {
                 $item = array_values(array_unique($item));

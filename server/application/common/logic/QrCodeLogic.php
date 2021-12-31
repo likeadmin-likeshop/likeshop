@@ -1,25 +1,23 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 namespace app\common\logic;
 use app\common\server\ConfigServer;
-use app\common\server\FileServer;
 use app\common\server\storage\Driver as StorageDriver;
 use app\common\server\UrlServer;
 use app\common\server\WeChatServer;
@@ -238,17 +236,67 @@ class QrCodeLogic extends LogicBase{
         }
     }
 
+
+    //获取分享海报背景
+    public function getSharePosterBg()
+    {
+        $share_bg = ConfigServer::get('distribution', 'share_poster');
+        // 获取存储引擎
+        $config = [
+            'default' => ConfigServer::get('storage', 'default', 'local'),
+            'engine'  => ConfigServer::get('storage_engine')
+        ];
+
+        if ($config['default'] == 'local') {
+            return ROOT_PATH .'/'.$share_bg;
+        } else {
+            $share_bg = UrlServer::getFileUrl($share_bg,'share');
+            if (!check_file_exists($share_bg)) {
+                return ROOT_PATH .'/images/share/share_user_bg.png';
+            }
+            return $share_bg;
+        }
+    }
+
+    //删除旧的文件
+    public function delOldPoster($poster_url, $save_dir, $qr_src)
+    {
+        // 获取存储引擎
+        $config = [
+            'default' => ConfigServer::get('storage', 'default', 'local'),
+            'engine'  => ConfigServer::get('storage_engine')
+        ];
+
+        if ($config['default'] == 'local') {
+            //删除文件
+            if (file_exists($poster_url) && strstr($poster_url, $save_dir)) {
+                unlink($poster_url);
+            }
+        } else {
+            try{
+                $StorageDriver = new StorageDriver($config);
+                $file_name = $save_dir . $qr_src;
+                $StorageDriver->delete($file_name);
+            } catch(Exception $e) {
+
+            }
+        }
+    }
+
     //生成用户分享图
     public function makeUserPoster($user, $content, $url_type, $client)
     {
         try {
             $save_dir = 'uploads/qr_code/user_share/';
-            $background_img = ROOT_PATH .'/images/share/share_user_bg.png';
+            $background_img = $this->getSharePosterBg();
             !file_exists($save_dir) && mkdir($save_dir, 0777, true);
 
             $save_key = 'uid'.$user['id'].$url_type.$client;
             $qr_src = md5($save_key) . '.png';
             $poster_url = ROOT_PATH.'/'.$save_dir . $qr_src;
+
+            //删除旧的图片
+            $this->delOldPoster($poster_url, $save_dir, $qr_src);
 
             $poster_config = $this->userShareConfig();
             //生成二维码
@@ -257,13 +305,11 @@ class QrCodeLogic extends LogicBase{
                 if(true !== $result){
                     return ['status' => 0, 'msg' => '微信配置错误：'.$result, 'data' => ''];
                 }
-
             }else{
                 $qrCode = new QrCode();
                 $qrCode->setText($content);
                 $qrCode->setSize(1000);
                 $qrCode->setWriterByName('png');
-
                 $qrCode->writeFile($poster_url);
             }
             $user_avatar =  UrlServer::getFileUrl($user['avatar'],'share');
@@ -300,7 +346,7 @@ class QrCodeLogic extends LogicBase{
             $local_uir = ROOT_PATH.'/'.$file_name;
             self::upload($local_uir, $file_name);
 
-            return ['status' => 1, 'msg' => '', 'data' => $file_name];
+            return ['status' => 1, 'msg' => '', 'data' => $file_name.'?v='.time()];
         }catch (Exception $e){
             return ['status' => 0, 'msg' => $e->getMessage(), 'data' => ''];
         }

@@ -17,7 +17,7 @@
 						<swipers :pid="4" height="200rpx" previous-margin="0" padding="20rpx 0 0" radius="10rpx">
 						</swipers>
 					</view>
-					<view class="cate-two mt20" v-if="cateTwoList[selectIndex] && cateTwoList[selectIndex].type == 0">
+					<view class="cate-two mt20" v-if="currentType">
 						<view v-for="(sitem, sindex) in cateTwoList" :key="sindex" class="two-item bg-white mb20">
 							<navigator class="title row-between" v-if="sitem.type == 1" hover-class="none"
 								:url="`/pages/goods_search/goods_search?id=${sitem.id}&name=${sitem.name}&type=${sitem.type}`">
@@ -62,7 +62,7 @@
 							<navigator hover-class="none" class="row item bg-white mt20" v-for="(item, index) in goodsList" :key="index" :url="`/pages/goods_details/goods_details?id=${item.id}`">
 								<u-image width="200rpx" height="200rpx" border-radius="14rpx" :src="item.image"></u-image>
 								<view class="flex1 ml20 mr10">
-									<view class="line2 sm">{{item.name}}</view>
+									<view class="line2">{{item.name}}</view>
 									<view class="muted" >
 										<text class="xxs">原价</text>  <price-format :subscriptSize="22" :firstSize="22" :secondSize="22" :price="item.market_price"></price-format>
 									</view>
@@ -128,7 +128,7 @@
 					cateList
 				} = this
 				this.selectIndex = index
-				this.cateTwoList = cateList[this.selectIndex].sons
+				this.cateTwoList = cateList[this.selectIndex].sons || []
 				this.onRefresh()
 			},
 			onRefresh() {
@@ -172,7 +172,7 @@
 					cateList,
 					selectIndex
 				} = this;
-				const item = cateList[selectIndex]
+				const item = cateList[selectIndex] 
 				if(item.type == 0) return
 				if (status == loadingType.FINISHED) return;
 				const params = {
@@ -193,10 +193,12 @@
 				handler(val) {
 					if(!val.length) return
 					let index = val.findIndex((item) => item.type == 1)
+					
 					this.selectIndex = index == -1 ? 0 : index
 					this.cateList = val
 					this.cateTwoList = val[this.selectIndex] ? val[this.selectIndex].sons : []
 					this.getGoodsSearchFun()
+					
 				}
 			}
 		},
@@ -211,6 +213,13 @@
 				}
 		
 				return false;
+			},
+			currentType() {
+				const {
+					cateList,
+					selectIndex
+				} = this
+				return cateList[selectIndex] ? cateList[selectIndex].type == 0 : true
 			}
 		},
 	}

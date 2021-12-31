@@ -81,7 +81,7 @@
                             <view class="xs muted">
                                 原价 ¥{{bargainObj.price || 0}}
                             </view>
-                            <view class="row" v-show="showCountDown">                                
+                            <view class="row" v-show="showCountDown" v-if="timestamp > 0">                                
                                 <u-count-down
                                     :timestamp="timestamp"
                                     :bg-color="primaryColor"
@@ -265,7 +265,7 @@
                 bargainObj: {},
                 status: 1,
                 precent: 0,
-                timestamp: 3000,
+                timestamp: 0,
                 userSpecText: '请选择商品规格',
                 userSpec: {},
                 bargainId: -1,

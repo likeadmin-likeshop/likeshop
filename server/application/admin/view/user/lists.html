@@ -30,8 +30,8 @@
                     <label class="layui-form-label">会员等级：</label>
                     <div class="layui-input-inline">
                         <select id="level" name="level"   style="height:80px;width: 80px" >
-                            <option value="">全部</option>
-                            <option value="0" selected>无等级</option>
+                            <option value="" selected>全部</option>
+                            <option value="0">无等级</option>
                             {foreach $level_list as $item }
                             <option value="{$item.id}">{$item.name}</option>
                             {/foreach}
@@ -82,6 +82,7 @@
                 <div class="layui-inline">
                     <button class="layui-btn layui-btn-sm layuiadmin-btn-user {$view_theme_color}" lay-submit lay-filter="user-search">查询</button>
                     <button class="layui-btn layui-btn-sm layuiadmin-btn-user layui-btn-primary " lay-submit lay-filter="user-clear-search">清空查询</button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-user layui-btn-primary " lay-submit lay-filter="export-file">导出</button>
                 </div>
             </div>
 
@@ -197,6 +198,25 @@
                     curr: 1 //重新从第 1 页开始
                 }
             });
+        });
+
+        // 导出
+        form.on('submit(export-file)', function(data){
+            var field = data.field;
+            $.ajax({
+                url: '{:url("user/exportFile")}',
+                type: 'get',
+                data: field,
+                dataType: 'json',
+                error: function() {
+                    layer.msg('导出超时，请稍后再试!');
+                },
+                success: function(res) {
+                    table.exportFile(res.data.exportTitle,res.data.exportData, res.data.exportExt, res.data.exportName);
+                },
+                timeout: 15000
+            });
+            layer.msg('导出中请耐心等待~');
         });
 
 

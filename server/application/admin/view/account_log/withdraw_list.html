@@ -1,0 +1,204 @@
+{layout name="layout1" /}
+<style>
+    .bubble { display: flex;justify-content: start;flex-wrap: wrap; margin-bottom: 20px; margin-left: 10px; }
+    .bubble .layui-card { background:#eee; width:180px; min-width:180px; height:100px; margin-right:20px; }
+    .bubble-content { padding-top: 10px; font-size: 14px; display: flex; justify-content: space-between;}
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- 操作提示 -->
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*佣金记录用于查看每笔订单的分销佣金明细；</p>
+                        <p>*佣金状态分为：待结算，已返佣，已失效。订单结算后才会进行返佣，结算前如果有售后退款，则佣金会失效；</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+            <ul class="layui-tab-title">
+                <li data-type='1' class="layui-this">分销佣金</li>
+            </ul>
+            <div class="layui-tab-content">
+                <!-- 【1、分销佣金模块】 -->
+                <div class="layui-tab-item layui-show">
+                    <!-- 搜索 -->
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <label for="distribution_keyword_type" class="layui-form-label">订单搜索：</label>
+                            <div class="layui-inline">
+                                <select id="distribution_keyword_type" name="distribution_keyword_type">
+                                    <option value="order_sn">订单编号</option>
+                                    <option value="nickname">会员昵称</option>
+                                    <option value="user_sn">会员编号</option>
+                                    <option value="mobile">会员手机号</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <input type="text" name="distribution_keyword" id="distribution_keyword" placeholder="请输入关键词" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-inline">
+                                <label for="distribution_status" class="layui-form-label">佣金状态:</label>
+                                <div class="layui-input-block">
+                                    <select id="distribution_status" name="distribution_status">
+                                        <option value="">全部</option>
+                                        <option value="1">待返佣</option>
+                                        <option value="2">已返佣</option>
+                                        <option value="3">已失效</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">记录时间：</label>
+                            <div class="layui-inline" style="margin-right:0;">
+                                <div class="layui-input-inline">
+                                    <input type="text" id="distribution_start_time" name="distribution_start_time" placeholder="记录时间" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline"> 至 </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <input type="text" id="distribution_end_time" name="distribution_end_time" placeholder="结束时间" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" lay-submit lay-filter="distribution-search">查询</button>
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="distribution-clear-search">清空查询</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--统计 -->
+                    <div class="bubble">
+                        <div class="layui-card">
+                            <div class="layui-card-header">当天</div>
+                            <div class="layui-card-body">
+                                <div class="bubble-content" id="distribution-dayCount">0元</div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">本月</div>
+                            <div class="layui-card-body">
+                                <div class="bubble-content" id="distribution-monthCount">0元
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">总计</div>
+                            <div class="layui-card-body">
+                                <div class="bubble-content" id="distribution-totalCount">0元
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--表格 -->
+                    <table id="table-data-lists-distribution" lay-filter="table-data-lists-distribution"></table>
+                    <script type="text/html" id="table-distribution-nickname">{{#  if(d.user != null){ }} {{d.user.nickname}} {{#  } }}</script>
+                    <script type="text/html" id="table-distribution-user_sn">{{#  if(d.user != null){ }} {{d.user.sn}} {{#  } }}</script>
+                    <script type="text/html" id="table-distribution-mobile">{{#  if(d.user != null){ }} {{d.user.mobile}} {{#  } }}</script>
+                    <script type="text/html" id="table-distribution-order_sn">{{d.order.order_sn}}</script>
+                    <script type="text/html" id="table-distribution-order_price">{{d.order.order_amount}}</script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like', 'laydate'], function() {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            , laydate = layui.laydate;
+
+        // ================================== 分销佣金start =============================
+
+        // 渲染“分销佣金”数据表格
+        table.render({
+            id: 'table-data-lists-distribution'
+            ,elem: '#table-data-lists-distribution'
+            ,url: '{:url("AccountLog/withdrawList")}?type=distribution'
+            ,cols: [[
+                {field:'id',  title:'ID', width:80}
+                ,{field:'nickname',  title:'会员昵称', width:100, templet:"#table-distribution-nickname"}
+                ,{field:'user_sn',  title:'会员编号', width:100, templet:"#table-distribution-user_sn"}
+                ,{field:'mobile',  title:'手机号码', width:120, templet:"#table-distribution-mobile"}
+                ,{field:'order_sn',  title:'订单号', width:230, templet:"#table-distribution-order_sn"}
+                ,{field:'order_price',  title:'订单金额', width:100, templet:"#table-distribution-order_price"}
+                ,{field:'money',  title:'分佣金额', width:100}
+                ,{field:'status_text',  title:'佣金状态', width:100}
+                ,{field:'create_time', title:'记录时间', width:200, align:'center'}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+        });
+
+        laydate.render({
+            elem: '#distribution_start_time'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#distribution_end_time'
+            ,type: 'datetime'
+        });
+
+        // 监听分销佣金搜索
+        form.on('submit(distribution-search)', function(data){
+            var field = data.field;
+            table.reload('table-data-lists-distribution', {
+                where: field
+            });
+        });
+        // 监听分销佣金清空查询
+        form.on('submit(distribution-clear-search)', function(){
+            $('#distribution_keyword_type').val('');
+            $('#distribution_keyword').val('');
+            $('#distribution_type').val('');
+            $('#distribution_status').val('');
+            $('#distribution_start_time').val('');
+            $('#distribution_end_time').val('');
+            form.render('select');
+            table.reload('table-data-lists-distribution', {
+                where: []
+            });
+        });
+
+        // ================================== 异步获取统计数据 =============================
+        $.ajax({
+            url:'{:url("AccountLog/withdrawTotalCount")}?type=distribution',
+            type:"get",
+            success:function(res) {
+                if(res.code === 1) {
+                    var data = res.data;
+                    $("#distribution-dayCount").html(data['today'] + '元');
+                    $("#distribution-monthCount").html(data['month'] + '元');
+                    $("#distribution-totalCount").html(data['total'] + '元');
+                }
+                return true;
+            }
+        });
+    });
+</script>

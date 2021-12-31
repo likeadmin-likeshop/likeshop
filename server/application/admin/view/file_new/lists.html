@@ -1,0 +1,361 @@
+{layout name="layout2" /}
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+    .container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .left {
+        width: 15%;
+        height: 100%;
+    }
+    .left button {
+        width: 90px;
+        height: 30px;
+        font-size: 12px;
+        margin-top: 5px;
+        margin-left: 34px;
+    }
+    .right {
+        width: 85%;
+        height: 100%;
+    }
+    .nav {
+        width: 100%;
+        height: 10%;
+        box-sizing: border-box;
+        padding: 5px;
+    }
+    .main {
+        width: 100%;
+        height: 80%;
+    }
+    .footer {
+        position: relative;
+        width: 100%;
+        height: 10%;
+    }
+    .footer button {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+    }
+    .file-video-li {
+        width: 130px;
+        height: 130px;
+        float: left;
+        box-sizing: border-box;
+        margin-right: 10px;
+        margin-top: 10px;
+        text-align: center;
+    }
+    .file-video-li video {
+        width: 100%;
+        height: 100%;
+    }
+    .li-click {
+        border: 2px solid #1E9FFF;
+    }
+    #page {
+        margin-top: 20px;
+        clear: both;
+    }
+    /* 清除浮动让父元素也具居高度 */
+    #file-container::after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+</style>
+<div class="container">
+    <div class="left">
+        <button class="layui-btn layui-btn-sm layui-btn-primary" id="all">全部</button>
+        <div id="menu"></div>
+    </div>
+    <div class="right">
+        <div class="nav layui-btn-group">
+            <button class="layui-btn layui-btn-sm layui-btn" id="addCate">添加分类</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" id="upload">{$title}</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger" id="delSelected">删除选中</button>
+        </div>
+        <div class="main">
+            <div id="file-container">
+                <script id="file-list" type="text/html">
+                    <ul>
+                        {{#  layui.each(d, function(index, item){ }}
+                        <li class="file-video-li" id="{{item.id}}" data-uri="{{item.uri}}">
+                            <video src="{{item.uri}}"></video>
+                            <span>{{item.name}}</span>
+                        </li>
+                        {{#  }); }}
+                    </ul>
+                    {{#  if(d.length === 0){ }}
+                    <div class="empty">
+                        <p>没有数据，请去上传</p>
+                    </div>
+                    {{#  } }}
+                </script>
+                <div id="lists-view"></div>
+            </div>
+            <div id="page"></div>
+        </div>
+        <div class="footer">
+            <button class="layui-btn layui-btn-sm layui-btn-normal" id="useSelected">使用选中项</button>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['tree', 'jquery', 'table', 'upload', 'laypage'], function() {
+        var $ = layui.jquery;
+        var tree = layui.tree;
+        var table = layui.table;
+        var upload = layui.upload;
+        var laypage = layui.laypage;
+        var laytpl = layui.laytpl;
+        var menu = '{$menu|raw}';
+        var cate_id = 0;
+        var page_no = 1;
+        var page_size = 10;
+
+        // 渲染树形分类
+        tree.render({
+            id: 'menu',
+            elem: '#menu',
+            data: JSON.parse(menu),
+            edit: true,
+            text: {
+                defaultNodeName: '',
+                none: ''
+            },
+            operate: function(obj) {
+                var type = obj.type; // 操作类型 edit/del
+                var data = obj.data;
+                if(type === 'update') { // 编辑
+                    editCate(data);
+                }else if(type === 'del') {
+                    delCate(data);
+                }
+            },
+            click: function(obj) {
+                cate_id = obj.data.id;
+                uploadIns.reload({
+                    data : {
+                        cate_id: cate_id
+                    }
+                });
+                getList(cate_id, page_no, page_size);
+            },
+            onlyIconControl: true
+        });
+
+        // 编辑分类名称
+        function editCate(data) {
+            layer.open({
+                type: 2,
+                title: '编辑分类',
+                content: '{:url("file_new/editCate")}?type={$type}&id='+data.id,
+                area: ['90%', '90%']
+            });
+        }
+
+        // 删除分类
+        function delCate(data) {
+            $.ajax({
+                type: 'POST',
+                url: '{:url("file_new/delCate")}',
+                data: data,
+                dataType: 'json',
+                error: function() {
+                    layer.msg('请求出错');
+                    location.reload();
+                },
+                success: function(res) {
+                    if(res.code == 1) {
+                        layer.msg(res.msg);
+                    }else{
+                        layer.msg(res.msg);
+                    }
+                    location.reload();
+                }
+            });
+        }
+
+        // 添加分类
+        $('#addCate').click(function() {
+            layer.open({
+                type: 2,
+                title: '添加分类',
+                content: '{:url("file_new/addCate")}?type={$type}',
+                area: ['90%', '90%']
+            });
+        });
+
+        $('#all').click(function() {
+            cate_id = 0;
+            getList(cate_id,page_no,page_size);
+        });
+
+        switch('{$type}') {
+            case 'video':
+                var accept = 'video';
+                break;
+        }
+
+        // 上传
+        var uploadIns = upload.render({
+            elem: '#upload' //绑定元素
+            ,url: '{:url("file_new/videoNew")}' //上传接口
+            ,data: {
+                cate_id: cate_id
+            }
+            ,accept: accept
+            ,done: function(res){
+                if(res.code == 1) {
+                    layer.msg(res.msg);
+                    location.reload();
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+
+        getList(cate_id, page_no, page_size);
+
+        // 获取列表
+        function getList(cate_id, page_no, page_size)
+        {
+            $.ajax({
+                type: 'get',
+                url: '{:url("file_new/pageLists")}?page_no='+page_no+'&page_size='+page_size+'&type={$type}&cate_id='+cate_id,
+                dataType: 'json',
+                error: function() {
+                    layer.msg('请求出错');
+                },
+                success: function(res) {
+                    if(res.code == 1) {
+                        // 重新渲染列表
+                        renderList(res.data.lists);
+                        // 分页组件
+                        laypage.render({
+                            elem: 'page' //注意，这里的 page 是 ID，不用加 # 号
+                            ,count: res.data.count //数据总数，从服务端得到
+                            ,curr: res.data.page_no
+                            ,limit: res.data.page_size
+                            ,limits: [10, 20, 30, 40, 50]
+                            ,layout: ['count', 'prev', 'page', 'next','limit']
+                            ,jump: function(obj, first) {
+                                //首次不执行
+                                if(!first){
+                                    getList(cate_id, obj.curr, obj.limit);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        // 重新渲染列表
+        function renderList(data) {
+            var getTpl = document.getElementById("file-list").innerHTML;
+            var listsView   = document.getElementById('lists-view');
+            laytpl(getTpl).render(data, function(html){
+                listsView.innerHTML = html;
+            });
+
+            // 点击添加样式
+            $('.file-video-li').click(function() {
+                var pos = $(this).attr('class').indexOf('li-click');
+                if(pos > 0) {
+                    $(this).removeClass('li-click');
+                }else{
+                    $(this).addClass('li-click');
+                }
+            });
+
+            // 双击播放视频
+            $('.file-video-li').dblclick(function() {
+                var video = $(this).find('video');
+                var uri = video.attr('src');
+
+                layer.open({
+                    type: 2,
+                    title: '查看视频',
+                    content: '{:url("file_new/showVideo")}?uri='+uri,
+                    area: ['90%', '90%']
+                });
+            });
+        }
+
+        // 删除所选
+        $('#delSelected').click(function() {
+            var selected = $('.li-click');
+
+            if(selected.length == 0) {
+                layer.msg('请先选择要删除的文件');
+                return false;
+            }
+            layer.confirm('确定删除所选文件吗?', {icon: 3, title:'提示'}, function(index){
+                // 提取id
+                var ids = [];
+                for(let item of selected) {
+                    ids.push($(item).attr('id'));
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{:url("file_new/delFile")}',
+                    data: {
+                        ids: ids
+                    },
+                    dataType: 'json',
+                    error: function() {
+                        layer.msg('请求出错');
+                        location.reload();
+                    },
+                    success: function(res) {
+                        if(res.code == 1) {
+                            layer.msg(res.msg);
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                        location.reload();
+                    }
+                });
+
+                layer.close(index);
+            });
+        });
+
+        // 使用选中
+        $('#useSelected').click(function() {
+            var selected = $('.li-click');
+
+            if(selected.length == 0) {
+                layer.msg('请先选择文件');
+                return false;
+            }
+            if(selected.length != 1) {
+                layer.msg('只能选择一个视频');
+                return false;
+            }
+
+            // 提取uri
+            var uris = [];
+            for(let item of selected) {
+                uris.push($(item).attr('data-uri'));
+            }
+            //当你在iframe页面关闭自身时
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+            // 调用父窗口方法
+            parent.window.videoCallback(uris);
+        });
+    });
+</script>

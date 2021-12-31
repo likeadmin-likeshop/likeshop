@@ -2,7 +2,7 @@
     "name" : "LikeShop",
     "appid" : "__UNI__6E0F3B6",
     "description" : "",
-    "versionName" : "2.1.5",
+    "versionName" : "2.4",
     "versionCode" : 100,
     "transformPx" : false,
     /* 5+App特有相关 */
@@ -66,16 +66,16 @@
             "sdkConfigs" : {
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "wxe900e56d8f36b6c0",
-                        "appsecret" : "6685551b554315efeb6573d82dd074c3",
-                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
+                        "appid" : "",
+                        "appsecret" : "",
+                        "UniversalLinks" : ""
                     }
                 },
                 "payment" : {
                     "weixin" : {
                         "__platform__" : [ "ios", "android" ],
-                        "appid" : "wxe900e56d8f36b6c0",
-                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
+                        "appid" : "",
+                        "UniversalLinks" : ""
                     },
                     "alipay" : {
                         "__platform__" : [ "ios", "android" ]
@@ -83,8 +83,8 @@
                 },
                 "share" : {
                     "weixin" : {
-                        "appid" : "wxe900e56d8f36b6c0",
-                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
+                        "appid" : "",
+                        "UniversalLinks" : ""
                     }
                 },
                 "ad" : {},
@@ -136,9 +136,10 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx75faf8824586138a",
+        "appid" : "",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6" : true
         },
         "usingComponents" : true,
         "optimization" : {
@@ -158,8 +159,8 @@
         "enable" : false
     },
     "h5" : {
-        "title" : "likeshop",
-        "domain" : "http://likeshop.yixiangonline.com/mobile/",
+        "title" : "加载中",
+        "domain" : "http://likeshopb2cos.yixiangonline.com/mobile/",
         "router" : {
             "base" : "/mobile/",
             "mode" : "history"

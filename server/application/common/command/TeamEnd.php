@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\common\command;
@@ -33,6 +32,7 @@ use think\console\Input;
 use think\console\Output;
 use think\Db;
 use think\Exception;
+use think\facade\Log;
 
 
 class TeamEnd extends Command
@@ -52,7 +52,7 @@ class TeamEnd extends Command
             ->where('end_time', '<=', $now)
             ->select();
         //更新商品is_team
-        $team_ids = array_column($activity,'team_id');
+        $team_ids = array_column($activity, 'team_id');
 
         Db::name('goods g')
             ->join('team_goods_item i', 'i.goods_id = g.id')
@@ -76,10 +76,10 @@ class TeamEnd extends Command
         //已过团结束时间,但未成团
         $lists = Db::name('team_found')
             ->field('id')
-            ->whereOr([ $map1, $map2 ])
+            ->whereOr([$map1, $map2])
             ->select();
 
-        if (empty($lists)){
+        if (empty($lists)) {
             return true;
         }
 
@@ -90,9 +90,9 @@ class TeamEnd extends Command
         $setting = ConfigServer::get('team', 'automatic', 0);
 
         //更新拼团状态
-        foreach ($lists as $item){
+        foreach ($lists as $item) {
             $found = TeamFound::get($item['id']);
-            if ($found['join'] == $found['need'] || $setting == 1){
+            if ($found['join'] == $found['need'] || $setting == 1) {
                 //人数凑齐,拼团成功 或者 系统自动成团
                 $team_status = Team::STATUS_SUCCESS;
             } else {
@@ -108,7 +108,7 @@ class TeamEnd extends Command
                 ->update(['status' => $team_status, 'team_end_time' => time()]);
         }
 
-        if (empty($refound_found_ids)){
+        if (empty($refound_found_ids)) {
             return true;
         }
 
@@ -117,38 +117,36 @@ class TeamEnd extends Command
             ->where(['team_found_id' => $refound_found_ids, 'del' => 0])
             ->select();
 
-        foreach ($orders as $order){
-            Db::startTrans();
-            try{
-                if ($order['order_status'] == Order::STATUS_CLOSE){
-                    continue;
-                }
-                if ($order['pay_status'] == Pay::REFUNDED || $order['pay_status'] == Pay::UNPAID){
-                    continue;
-                }
 
+        Db::startTrans();
+        try {
+            foreach ($orders as $order) {
+                if ($order['order_status'] == Order::STATUS_CLOSE) {
+                    continue;
+                }
+                if ($order['pay_status'] == Pay::REFUNDED || $order['pay_status'] == Pay::UNPAID) {
+                    continue;
+                }
                 //取消订单
                 OrderRefundLogic::cancelOrder($order['id'], OrderLog::TYPE_SYSTEM);
                 //更新订单状态
                 OrderRefundLogic::cancelOrderRefundUpdate($order);
                 //订单退款
                 OrderRefundLogic::refund($order, $order['order_amount'], $order['order_amount']);
-
-                Db::commit();
-
-            } catch (Exception $e) {
-                Db::rollback();
-                //错误记录
-                OrderRefundLogic::addErrorRefund($order, $e->getMessage());
-            }  catch ( \EasyWeChat\Kernel\Exceptions\Exception $we_e){
-                Db::rollback();
-                //错误记录
-                OrderRefundLogic::addErrorRefund($order, $we_e->getMessage());
-            } catch (\Exception $e2){
-                Db::rollback();
-                //错误记录
-                OrderRefundLogic::addErrorRefund($order, $e2->getMessage());
             }
+            Db::commit();
+        } catch (Exception $e) {
+            Db::rollback();
+            //错误记录
+            Log::write('拼购退款失败:' . $e->getMessage());
+        } catch (\EasyWeChat\Kernel\Exceptions\Exception $e) {
+            Db::rollback();
+            //错误记录
+            Log::write('拼购退款失败:' . $e->getMessage());
+        } catch (\Exception $e) {
+            Db::rollback();
+            //错误记录
+            Log::write('拼购退款失败:' . $e->getMessage());
         }
     }
 }

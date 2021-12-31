@@ -115,3 +115,4 @@ function array_unique(arr){
 function isInteger(obj) {
     return obj % 1 === 0
 }
+

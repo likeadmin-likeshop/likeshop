@@ -9,6 +9,7 @@
                         <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
                         <div class="layui-colla-content layui-show">
                             <p>*设置商城首页，商品详情页显示足迹气泡。营造活动氛围，增强气氛。</p>
+                            <p>*注意事项：设置中的足迹气泡开关是整个气泡的总开关,如果这里关了则任何地方都不显示气泡。</p>
                         </div>
                     </div>
                 </div>
@@ -16,10 +17,26 @@
             <!-- 选项卡 -->
             <div class="layui-tab layui-tab-card">
                 <ul class="layui-tab-title">
-                    <li data-type=1>设置</li>
                     <li data-type=2 class="layui-this">足迹气泡</li>
+                    <li data-type=1>设置</li>
                 </ul>
                 <div class="layui-tab-content">
+                    <!-- 足迹气泡 -->
+                    <div class="layui-tab-item layui-show">
+                        <div class="bubble">
+                            {volist name="footprint" id="vo"}
+                            <div class="layui-card">
+                                <div class="layui-card-header">{$vo.name}</div>
+                                <div class="layui-card-body">
+                                    <div class="bubble-content">
+                                        <button type="button" data-id="{$vo.id}" class="layui-btn layui-btn-normal layui-btn-sm edit-bubble">编辑</button>
+                                        {if $vo.status}<span>已开启</span>{else}<span>已关闭</span>{/if}
+                                    </div>
+                                </div>
+                            </div>
+                            {/volist}
+                        </div>
+                    </div>
                     <!-- 设置模块 -->
                     <div class="layui-tab-item">
                         <form class="layui-form">
@@ -45,22 +62,6 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                    <!-- 足迹气泡 -->
-                    <div class="layui-tab-item layui-show">
-                        <div class="bubble">
-                            {volist name="footprint" id="vo"}
-                            <div class="layui-card">
-                                <div class="layui-card-header">{$vo.name}</div>
-                                <div class="layui-card-body">
-                                    <div class="bubble-content">
-                                        <button type="button" data-id="{$vo.id}" class="layui-btn layui-btn-normal layui-btn-sm edit-bubble">编辑</button>
-                                        {if $vo.status}<span>已开启</span>{else}<span>已关闭</span>{/if}
-                                    </div>
-                                </div>
-                            </div>
-                            {/volist}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -93,7 +94,7 @@
                 type: 2
                 ,title: '编辑足迹气泡'
                 ,content: '{:url("footprint/edit")}?id='+id
-                ,area: ['90%', '90%']
+                ,area: ['400px', '400px']
                 ,btn: ['保存', '取消']
                 ,maxmin: true
                 ,yes: function(index, layero){
@@ -132,8 +133,8 @@
                 success:function(res) {
                     if(res.code === 1) {
                         layui.layer.msg(res.msg, {offset:'15px', icon:1, time: 1000});
-                        location.href = '{:url("footprint/index")}';
-                        layer.close(index);
+                        // location.href = '{:url("footprint/index")}';
+                        // layer.close(index);
                     } else {
                         layui.layer.msg(res.msg, {offset:'15px', icon:2, time: 1000});
                     }

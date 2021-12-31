@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 
@@ -215,7 +214,9 @@ class DistributionLogic
     public static function index($user_id)
     {
         $user_info = self::myLeader($user_id);//用户信息
-        $fans = Db::name('user')->where('find_in_set(' . $user_id . ', ancestor_relation)')->count();
+        $fans = Db::name('user')
+            ->where('first_leader|second_leader', '=', $user_id)
+            ->count();
 
         //今天的预估收益
         $today_earnings = Db::name('distribution_order_goods')
@@ -525,6 +526,25 @@ class DistributionLogic
 
 
     /**
+     * Notes: 发生售后后,更新分销订单为已失效
+     * @param $order_goods_id
+     * @author 段誉(2021/5/13 17:38)
+     * @return int|string
+     * @throws Exception
+     * @throws \think\exception\PDOException
+     */
+    public static function setFailByAfterSale($order_goods_id)
+    {
+        return Db::name('distribution_order_goods')
+            ->where('order_goods_id', $order_goods_id)
+            ->update([
+                'status' => DistributionOrder::STATUS_ERROR,
+                'update_time' => time(),
+            ]);
+    }
+
+
+    /**
      * Notes: 根据后台设置返回当前生成用户的分销会员状态(设置了全员分销,新生成的用户即为分销会员)
      * @author 段誉(2021/4/7 14:48)
      * @return int
@@ -532,7 +552,7 @@ class DistributionLogic
     public static function isDistributionMember()
     {
         $is_distribution = 0;
-        //分销会员申请--1,申请分销; 2-全员分销; 3-后台指定
+        //分销会员申请--1,申请分销; 2-全员分销;
         $distribution = ConfigServer::get('distribution', 'member_apply', 1);
         if ($distribution == 2) {
             $is_distribution = 1;

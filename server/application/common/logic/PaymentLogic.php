@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\common\logic;
@@ -90,65 +89,7 @@ class PaymentLogic extends LogicBase
     }
 
 
-    /**
-     * Notes: pc预支付
-     * @param $order
-     * @param $pay_way
-     * @author 段誉(2021/3/17 14:56)
-     * @return array|bool|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public static function pcPay($order, $pay_way, $order_source = Client_::pc)
-    {
-        $res = [];
-        switch ($pay_way) {
-            case Pay::WECHAT_PAY:
-                $res = WeChatPayServer::unifiedOrder('order', $order, $order_source);
-                if (false === $res) {
-                    self::$error = WeChatPayServer::getError();
-                    return false;
-                }
-                break;
-            case Pay::BALANCE_PAY:
-                $user = User::get($order['user_id']);
-                if ($user['user_money'] < $order['order_amount']) {
-                    self::$error = '余额不足';
-                    return false;
-                }
-                self::$return_code = 10001;//特殊状态码,用于前端判断
-                break;
-            case Pay::ALI_PAY:
-                if ($order_source != Client_::pc) {
-                    self::$error = '支付类型错误';
-                    return false;
-                }
-                $aliPay = new AliPayServer();
-                $res = $aliPay->pay('order', $order, $order_source);
-                if (false === $res) {
-                    self::$error = $aliPay->getError();
-                    return false;
-                }
-                self::$return_code = 20001;//特殊状态码,用于前端判断
-                break;
-            default:
-                self::$error = '无效的支付方式';
-                return false;
-        }
 
-        // 更新订单支付方式
-        $order = Order::get($order['id']);
-        $order->pay_way = $pay_way;
-        $order->save();
-
-        //余额支付 直接回调
-        if ($pay_way == Pay::BALANCE_PAY || $order['order_amount'] == 0) {
-            PayNotifyLogic::handle('order', $order['order_sn'], []);
-        }
-
-        return $res;
-    }
 
 
 

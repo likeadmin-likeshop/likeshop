@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 
 namespace app\admin\logic;
@@ -29,31 +28,21 @@ class GoodsLogic
      * 商品统计
      */
     public static function statistics(){
-        $goods_list = Db::name('goods')
-                    ->where(['del'=>0])
-                    ->field('id,status,stock,stock_warn')
-                    ->select();
-        $goods = [
-            'sell'      => 0,       //销售中
-            'warehouse' => 0,       //仓库中
-            'warn'      => 0,       //库存预警
-            'recycle'   => 0,       //回收站
-        ];
-        foreach ($goods_list as $item){
-            //库存预警
-            if($item['stock_warn'] && $item['stock_warn'] > $item['stock']) $goods['warn'] ++;
+        // 回收站商品数量
+        $goods['recycle'] = Db::name('goods')->where(['del'=>0, 'status'=>-1])->count('id');
+        // 仓库中商品数量(含库存预警)
+        $goods['warehouse'] = Db::name('goods')->where(['del'=>0, 'status'=>0])->count('id');
 
-            switch ($item['status']){
-                case 1://销售中
-                    $goods['sell']++;
-                    break;
-                case 0://仓库中
-                    $goods['warehouse']++;
-                    break;
-                case -1://库存预警
-                    $goods['recycle']++;
-            }
-        }
+        // 销售中商品数量(含库存预警)
+        $goods['sell'] = Db::name('goods')->where(['del'=>0, 'status'=>1])->count('id');
+
+        // 仓库中、销售中的库存预警商品数量
+        $goods['warn'] = Db::name('goods')
+            ->where([
+                ['del', '=', 0],
+                ['stock_warn', '>', 0],
+                ['stock','exp', Db::raw('<stock_warn')]
+            ])->count();
         return $goods;
     }
 
@@ -106,20 +95,17 @@ class GoodsLogic
                 ->order('id desc')
                 ->select();
 
-        $goods_category_list = Db::name('goods_category')->where(['del'=>0,'level'=>3])->column('name','id');
+
+        $goods_category_list = Db::name('goods_category')->where(['del'=>0])->column('name','id');
 
         foreach ($goods_list as &$item) {
-
             $item['type'] = $get['type'];
-            $item['cat_name'] = '';
+            $item['cat_name'] = self::getCateName($goods_category_list, $item);
             $item['commission_status'] = '关闭';
             if($item['is_commission']){
                 $item['commission_status'] = '开启';
             }
             $item['price'] = '￥'.$item['min_price'];
-            if(isset($goods_category_list[$item['third_category_id']])){
-                $item['cat_name'] = $goods_category_list[$item['third_category_id']];
-            }
             if($item['spec_type'] == 2 && $item['max_price'] !== $item['min_price']){
                 $item['price'] = '￥'.$item['min_price'].'~'.'￥'.$item['max_price'];
             }
@@ -140,6 +126,72 @@ class GoodsLogic
         }
 
         return ['count' => $goods_count, 'list' => $goods_list];
+    }
+
+    /**
+     * 列表导出
+     * @param $get
+     */
+    public static function exportFile($get)
+    {
+        $where = [];
+        $where[] = ['del', '=', '0'];
+        if($get['type']){
+            switch ($get['type']){
+                case 1:     //销售中
+                    $where[] = ['status','=',1];
+                    break;
+                case 2:     //仓库中
+                    $where[] = ['status','=',0];
+                    break;
+                case 3:     //库存预警
+                    $where[] = ['stock_warn','>',0];
+                    $where[] = ['stock','exp', Db::raw('<stock_warn')];
+                    break;
+                case 4:     //回收站
+                    $where[] = ['status','=',-1];
+                    break;
+            }
+        }
+
+        if (isset($get['keyword']) && $get['keyword']) {
+            $where[] = ['name', 'like', '%' . $get['keyword'] . '%'];
+        }
+        if(isset($get['code']) && $get['code']){
+            $where[] = ['code','like','%'.$get['code'].'%'];
+        }
+        if(isset($get['supplier_id']) && $get['supplier_id']){
+            $where[] = ['supplier_id','=',$get['supplier_id']];
+        }
+        if(isset($get['category_id']) && $get['category_id']){
+            $where[] = ['first_category_id|second_category_id|third_category_id','=',$get['category_id']];
+        }
+
+        $goods_list_export = Db::name('goods')
+            ->where($where)
+            ->field('*,virtual_sales_sum+sales_sum as total_sales_sum')
+            ->order('id desc')
+            ->select();
+
+        $goods_category_list = Db::name('goods_category')->where(['del'=>0])->column('name','id');
+
+        $exportTitle = ['商品名称', '商品分类', '是否开启分销', '一级佣金比例', '二级佣金比例', '三级佣金比例', 'SKU最低价', 'SKU最高价', '总库存', '总销量', '新品推荐', '好物优选', '猜你喜欢', '排序', '发布时间'];
+        $exportExt = 'xls';
+        $exportData = [];
+        foreach($goods_list_export as $item) {
+            $cateName = self::getCateName($goods_category_list, $item); // 商品分类
+            $isCommission = $item['is_commission'] ? '开启' : '关闭';
+            $firstRatio = $item['first_ratio'] > 0 ? $item['first_ratio'].'%' : 0;
+            $secondRatio = $item['second_ratio'] > 0 ? $item['second_ratio'].'%' : 0;
+            $threeRatio = $item['three_ratio'] > 0 ? $item['three_ratio'].'%' : 0;
+            $isNew = $item['is_new'] ? '是' : '否';
+            $isBest = $item['is_best'] ? '是' : '否';
+            $isLike = $item['is_like'] ? '是' : '否';
+            $createTime = date('Y-m-d H:i:s',$item['create_time']);
+            $exportData[] = [$item['name'], $cateName, $isCommission, $firstRatio, $secondRatio, $threeRatio, $item['min_price'], $item['max_price'], $item['stock'], $item['total_sales_sum'], $isNew, $isBest, $isLike, $item['sort'], $createTime];
+        }
+
+        return ['exportTitle'=> $exportTitle, 'exportData' => $exportData, 'exportExt'=>$exportExt, 'exportName'=>'商品列表'.date('Y-m-d H:i:s')];
     }
 
     /*
@@ -190,14 +242,16 @@ class GoodsLogic
             $give_integral_type = $post['give_integral_type'] ?? 0;
             switch ($give_integral_type){
                 case 1:
-                    $give_integral = $post['give_integral_num'];
+                    $give_integral = empty($post['give_integral_num']) ? 0 : $post['give_integral_num'];
                     break;
                 case 2:
-                    $give_integral = $post['give_integral_ratio'];
+                    $give_integral = empty($post['give_integral_ratio']) ? 0 : $post['give_integral_ratio'];
                     break;
                 default:
                     $give_integral = 0;
             }
+
+            $video = isset($post['video']) ? UrlServer::setFileUrl($post['video']) : '';
 
             //写入主表
             $data = [
@@ -209,7 +263,7 @@ class GoodsLogic
                 'brand_id'                  => $post['brand_id'],
                 'supplier_id'               => $post['supplier_id'],
                 'image'                     => $post['image'],
-                'video'                     => $post['video'] ?? '',
+                'video'                     => $video,
                 'poster'                    => $post['poster'] ?? '',
                 'remark'                    => $post['remark'],
                 'content'                   => $post['content'],
@@ -291,15 +345,21 @@ class GoodsLogic
                     ->column('id', 'name');
 
                 $data = [];
+                $check_values = []; //检查规格项是否存在相同值,相同值会出现错误
+
                 foreach ($post['spec_values'] as $k => $v) {
                     $row = explode(',', $v);
                     foreach ($row as $k2 => $v2) {
+                        if (in_array($v2, $check_values)) {
+                            throw new Exception('请勿添加相同规格值');
+                        }
                         $temp = [
                             'goods_id' => $goods_id,
                             'spec_id' => $goods_spec_name_key_id[$post['spec_name'][$k]],
                             'value' => $v2,
                         ];
                         $data[] = $temp;
+                        $check_values[] = $v2;
                     }
                 }
 
@@ -324,6 +384,7 @@ class GoodsLogic
                 }
                 Db::name('goods_item')->insertAll($spec_lists);
             }
+
             Db::commit();
             return true;
         } catch (Exception $e) {
@@ -375,14 +436,16 @@ class GoodsLogic
             $give_integral_type = $post['give_integral_type'] ?? 0;
             switch ($give_integral_type){
                 case 1:
-                    $give_integral = $post['give_integral_num'];
+                    $give_integral = empty($post['give_integral_num']) ? 0 : $post['give_integral_num'];
                     break;
                 case 2:
-                    $give_integral = $post['give_integral_ratio'];
+                    $give_integral = empty($post['give_integral_ratio']) ?  0 : $post['give_integral_ratio'];
                     break;
                 default:
                     $give_integral = 0;
             }
+
+            $video = isset($post['video']) ? UrlServer::setFileUrl($post['video']) : '';
 
             //写入主表
             $data = [
@@ -394,7 +457,7 @@ class GoodsLogic
                 'brand_id'                  => $post['brand_id'],
                 'supplier_id'               => $post['supplier_id'],
                 'image'                     => $post['image'],
-                'video'                     => $post['video'] ?? '',
+                'video'                     => $video,
                 'poster'                    => $post['poster'] ?? '',
                 'remark'                    => $post['remark'],
                 'content'                   => $post['content'],
@@ -535,15 +598,22 @@ class GoodsLogic
                     ->where(['goods_id' => $post['goods_id']])
                     ->where('name', 'in', $post['spec_name'])
                     ->column('id', 'name');
+
+                $check_values = [];//检查规格值是否存在相同
+
                 foreach ($post['spec_values'] as $k => $v) {
                     $value_id_row = explode(',', $post['spec_value_ids'][$k]);
                     $value_row = explode(',', $v);
                     foreach ($value_row as $k2 => $v2) {
+                        if (in_array($v2, $check_values)) {
+                            throw new Exception('请勿添加相同规格值');
+                        }
                         $temp = [
                             'goods_id' => $post['goods_id'],
                             'spec_id' => $goods_spec_name_key_id[$post['spec_name'][$k]],
                             'value' => $v2,
                         ];
+                        $check_values[] = $v2;
                         if ($value_id_row[$k2]) {
                             //更新规格值
                             Db::name('goods_spec_value')
@@ -695,13 +765,47 @@ class GoodsLogic
         }
 
         try {
+
+            if ($type == 0) {
+                $res = Db::name('team_activity')->whereIn('goods_id', $ids)
+                    ->where(['status' => 1])->find();
+                if ($res) {
+                    return '该商品正在参与拼团，请先关闭后才允许下架';
+                }
+            }
+
             $result = Db::name('goods')->whereIn('id', $ids)->update([
                 'status'      => $type,
                 'update_time' => time()
             ]);
-            return $result ? true : false;
+            return $result ? true : '上架失败';
         } catch (\Exception $e) {
-            return false;
+            return '上架失败';
         }
+    }
+
+
+    /**
+     * Notes: 分类名称
+     * @param $cates
+     * @param $item
+     * @author 段誉(2021/6/3 19:45)
+     * @return mixed|string
+     */
+    public static function getCateName($cates, $item)
+    {
+        if(isset($cates[$item['third_category_id']])) {
+            return $cates[$item['third_category_id']];
+        }
+
+        if(isset($cates[$item['second_category_id']])) {
+            return $cates[$item['second_category_id']];
+        }
+
+        if(isset($cates[$item['first_category_id']])) {
+            return $cates[$item['first_category_id']];
+        }
+
+        return '';
     }
 }

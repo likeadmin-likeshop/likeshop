@@ -37,11 +37,12 @@
 			this.getSystemInfo()
 		},
 		onShow: function(options) {
+			
 			//绑定邀请码
 			this.bindCode(options)
 		},
 		onHide: function() {
-			// console.log('App Hide')
+			console.log('App Hide')
 		},
 		methods: {
 			...mapMutations(['SETCONFIG']),

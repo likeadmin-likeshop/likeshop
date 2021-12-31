@@ -25,9 +25,9 @@
         <view class="fast-pay row wrap">
             <view v-for="(item, index) in rechargeObj" :key="index" class="fast-pay-item bg-white column-center" @tap="temRecharge" :data-id="item.id">
                 <view class="hot-recharge white" v-if="item.is_recommend">热门充值</view>
-                <view class="price bold">
-                    <price-format weight="bold" :firstSize="42" :price="item.money"></price-format>
-                    <text class="xxl" style="font-weight: 400">元</text>
+                <view class="price primary bold">
+                    <price-format weight="500" :firstSize="42" :secondSize="42" :price="item.money"></price-format>
+                    <text class="xxl" style="font-weight: 500">元</text>
                 </view>
                 <view class="preferential primary xs">{{item.tips}}</view>
             </view>
@@ -48,21 +48,21 @@
 
 <script>
 // +----------------------------------------------------------------------
-// | likeshop开源商城系统
+// | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | 开源版本可自由商用，可去除界面版权logo
+// | 商业版本务必购买商业授权，以免引起法律纠纷
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
+// | likeshop团队 版权所有 拥有最终解释权
 // +----------------------------------------------------------------------
-// | author: likeshop.cn.team
+// | author: likeshopTeam
 // +----------------------------------------------------------------------
 import { rechargeTemplate, recharge, getUser } from '@/api/user';
 import { prepay } from '@/api/app';
@@ -257,15 +257,15 @@ export default {
                 height: 150rpx;
                 border-radius: 10rpx;
                 margin-bottom: 16rpx;
+				border: 1px solid $-color-primary;
                 &:not(:nth-of-type(3n)) {
                     margin-right: 24rpx;
                 }
                 .hot-recharge {
                     position: absolute;
                     padding: 2rpx 10rpx;
-                    height: 30rpx;
                     background: linear-gradient(180deg, #FF2C3C 0%, #F95F2F 100%);
-                    border-radius: 0 20rpx 0 20rpx;
+                    border-radius: 0 10rpx 0 10rpx;
                     font-size: 20rpx;
                     top: 0;
                     right: 0;

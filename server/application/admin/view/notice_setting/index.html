@@ -141,12 +141,12 @@
                 elem: elem
                 , url: '{:url("noticeSetting/index")}?type='+type
                 , cols: [[
-                     {field: 'scene', title: '通知类型',width:150}
-                    , {field: 'desc', title: '通知场景说明', width:150 }
-                    , {field: 'system_notice', title: '系统通知', align: 'center', templet:'#systemTpl'}
-                    , {field: 'sms_notice', title: '短信通知', align: 'center', templet:'#smsTpl'}
-                    , {field: 'oa_notice', title: '微信模板消息', align: 'center', templet:'#oaTpl'}
-                    , {field: 'mnp_notice', title: '微信小程序提醒', align: 'center', templet:'#mnpTpl'}
+                    {field: 'scene', title: '通知类型',width:140}
+                    , {field: 'desc', title: '通知场景说明', width:140 }
+                    , {field: 'system_notice', title: '系统通知',width:240, align: 'center', templet:'#systemTpl'}
+                    , {field: 'sms_notice', title: '短信通知',width:240, align: 'center', templet:'#smsTpl'}
+                    , {field: 'oa_notice', title: '微信模板消息',width:240, align: 'center', templet:'#oaTpl'}
+                    , {field: 'mnp_notice', title: '微信小程序提醒',width:240, align: 'center', templet:'#mnpTpl'}
                 ]]
                 , text: {none: '暂无数据！'}
                 , parseData: function (res) {

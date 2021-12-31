@@ -13,7 +13,7 @@ likeshop开源团队专注于围绕电商交易领域打造新时代的开源商
 
 ## 免费企业版和付费企业版的区别
 likeshop开源不代表不收费，健康合理大大方方的收费方式能够助力开源项目持续的更新迭代，长久提供质量可靠的开源代码。现在重点说明likeshop单商户开源商城系统免费企业版和付费企业版的区别：
-1. 本仓库代码为单商户免费企业版，版本号v.2.4.0.20210429，代码全开源，支持免费商用，不能去除版权。任何发布在本仓库的单商户企业版代码都属于已免费开源的企业版本。其它领先的未发布版本为付费企业版。
+1. 本仓库代码为单商户免费企业版，版本号v2.5.7，代码全开源，支持免费商用，不能去除版权。任何发布在本仓库的单商户企业版代码都属于已免费开源的企业版本。其它领先的未发布版本为付费企业版。
 2. 免费企业版没有阉割任何功能，分销、拼团、砍价、抽奖、支付宝支付、APP商城等等功能模块完全同步付费企业版。免费企业版本包含H5商城端，小程序商城端、APP商城端、PC管理后台端，不含PC商城端；不能去除版权，不支持在线升级和更新包升级。
 3. 付费企业版本比免费企业版本领先几个版本（[点击前往技术社区查看最新企业版本号](https://home.likeshop.cn/?zone=1) ），包含H5商城端，小程序商城端、APP商城端、PC商城端，PC管理后台端；可以去版本、支持在线升级和更新包升级；付费后可永远获取最新企业版本，加入付费会员群，交换资源，享受更好的技术支持；
 4. 付费企业版本会按照升级一个版本就免费开源一个之前版本的节奏发布为免费企业版本。
@@ -41,7 +41,7 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ![qun.png](https://resource.likeshop.cn/gitee/qun.png)
 
 ### 联系微信客服（专业解答、获取功能清单）
-![联系微信客服.png](https://resource.likeshop.cn/gitee/lxkf.png)
+![联系微信客服.png](https://resource.likeshop.cn/gitee/lxwm.png)
 
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 
@@ -143,13 +143,13 @@ likeshop服务端基于国内最流行php框架thinkphp5.1（后续会升级为6
 
 ## likeshop单商户商城系统 「演示环境」
 ### PC商城
-PC端访问链接：[https://likeshop.likeshop.cn/](https://likeshop.likeshop.cn/)
+PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.cn/pc)
 
 ### 移动端商城
 ![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
 
 ### PC管理后台
-PC管理后台演示： [https://b2cdemo.likeshop.cn/](https://b2cdemo.likeshop.cn/)
+PC管理后台演示： [https://b2cdemo.likeshop.cn/admin](https://b2cdemo.likeshop.cn/admin)
 
 账号：admin 密码：123456
 

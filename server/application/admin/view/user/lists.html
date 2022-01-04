@@ -98,7 +98,7 @@
 
             <script type="text/html" id="user-info">
                 <img src="{{d.abs_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
-                <div class="layui-input-inline" style="text-align:left;width: 240px">
+                <div class="layui-input-inline" style="text-align:left;">
                     <p>会员编号：{{d.sn}}</p>
                     <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.nickname}}</p>
                     <p>会员等级：{{d.level_name}}</p>
@@ -109,7 +109,7 @@
             <script type="text/html" id="referrer">
                 {{# if(d.first_leader){}}
                 <img src="{{d.referrer_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
-                <div class="layui-input-inline" style="text-align:left;width: 240px">
+                <div class="layui-input-inline" style="text-align:left;">
                     <p>编号：{{d.referrer_sn}}</p>
                     <p>手机号码：{{d.referrer_mobile}}</p>
                     <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.referrer_nickname}}</p>

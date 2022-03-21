@@ -1,6 +1,7 @@
 #  🔥 likeshop单商户开源商城系统-企业版（免费商用）🔥
 
 ![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/toutu.png)
+![gitee头图 –0818.png](https://resource.likeshop.cn/gitee/gitee_kncgj.png)
 
 ## likeshop「开源精神」
 likeshop开源团队专注于围绕电商交易领域打造新时代的开源商城系统。我们关心并聚焦于解决以下问题

@@ -48,8 +48,39 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ###  官方公众号 | 官方商城
 ![官方公众号  官方商城.png](https://resource.likeshop.cn/gitee/gfsc.png)
 
+
+## 项目技术栈
+### 📡服务端
+<a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-7.2-8892bf"></a> <a href="https://www.thinkphp.cn/"><img src="https://img.shields.io/badge/ThinkPHP-5.1-6fb737"></a><a href="https://www.mysql.com/"> <img src="https://img.shields.io/badge/Mysql-5.7-315a80"></a><a href="https://redis.io/"> <img src="https://img.shields.io/badge/Redis-6-d12222"></a><a href="https://redis.io/"> <img src="https://img.shields.io/badge/Docker--139cff"></a>
+
+### 💻PC端管理后台
+<a href="https://www.mysql.com/"> <img src="https://img.shields.io/badge/Layui-2.7-118675"></a>
+服务端渲染
+
+### 📱移动端前台
+<a href="https://uniapp.dcloud.io/"><img src="https://img.shields.io/badge/uniapp--d85806"></a> <a href="https://cn.vuejs.org/"><img src="https://img.shields.io/badge/Vue.js-2-4eb883"></a>
+前后端分离、已适配微信小程序、手机h5页面、安卓app、苹果app。
+
+### 💻PC端前台
+<a href="https://cn.vuejs.org/"><img src="https://img.shields.io/badge/Vue.js-2-4eb883"></a> <a href="https://www.nuxtjs.cn/"><img src="https://img.shields.io/badge/Nuxt.js--18bc78"></a>
+前后端分离
+
+### 功能特性
+    代码逻辑注释清晰，非常方便二次开发。
+    支持PHP7，执行效率翻倍，遵循PSR-4开发规范。
+    支持composer，内置优秀php开发sdk，方便二次开发。
+    支持docker部署，内置docker-compose容器编排，一句命令自动配置项目运行环境。
+    支持管理后台配置定时任务，并记录定时任务运行日志。
+    支持七牛云、阿里云、腾讯云多种OSS对象存储，提升项目访问速度，降低服务器成本。
+    支持CDN配置，加快各地方访问速度。
+    支持商城多种场景的足迹气泡，让商城跟用户有更强的互动性。
+    支持商城首页、商城分类页、用户个人中心页、底部导航装修。
+    支持广告位，可在商城多个地方编辑添加广告。
+    支持5种佣金提现方式，更有微信零钱到账，零钱可直接到用户微信钱包。
+    下载体验更多功能！
+    
 ### 开发文档
-http://www.likeshop.cn/doc
+https://www.likeshop.cn/doc/2
 
 运营文档、开发文档、API文档一应俱全。
 
@@ -60,6 +91,21 @@ https://home.likeshop.cn/
 
 ### 官方网站
 https://www.likeshop.cn/
+
+
+## likeshop单商户商城系统 「演示环境」
+### PC商城
+PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.cn/pc)
+
+### 移动端商城
+![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
+
+### PC管理后台
+PC管理后台演示： [https://b2cdemo.likeshop.cn/admin](https://b2cdemo.likeshop.cn/admin)
+
+账号：admin 密码：123456
+
+
 
 更多产品介绍，欢迎访问likeshop官方网站。
 
@@ -77,81 +123,8 @@ likeshop单商户商城系统包含分销裂变，限时秒杀，拼团活动，
 
 联系客服获取完整PDF、Excel版本产品功能对照表。
 
-### 产品手册
-likeshop开源团队深知手册的重要性，为此我们会一直投入充足的时间为大家提供更详尽的手册，支持高效运营，支持二次开发。
-
-小提示：likeshop开源团队后续将会为付费用户准备更专业的手册。
-
-![帮助文档.png](https://resource.likeshop.cn/gitee/doc.png?v=2)
-
-[点击阅读全部手册；](http://doc.likeshop.cn/doc)
-
-## likeshop单商户 「技术架构」
-### 技术架构
-likeshop服务端基于国内最流行php框架thinkphp5.1（后续会升级为6.0），遵循thinkphp开发规范，代码逻辑清晰，方便二次开发。管理后台使用php渲染页面模式，让开发更简单。
-
-商城端使用业界标准方式：前端分离，由服务端提供标准数据接口；并且基于uni-app前端框架，一套代码，可以发布微信小程序、手机h5网页、安卓app、苹果app等10个应用平台。
-
-## 推荐环境
-### 服务器推荐
-#### 配置推荐
-服务器镜像（系统）推荐：CentOS7.2~7.9
-
-配置推荐：内存2G以上、带宽4M以上、其他配置项根据项目规模选择。
-
-服务器型号：根据需求选择，所有ECS服务器型号都适合常规项目使用。
-
-#### 阿里云服务器
-|初级配置 |中级配置|企业级配置|
-| :--- | :--- | :--- |
-| CPU：2核<br>内存：4G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥244<br>3年价格：￥565 |  CPU：4核<br>内存：8G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥598<br>3年价格：￥1495 | CPU：8核<br>内存：16G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥1897 <br>3年价格：￥4879
-|[新人优惠](https://www.aliyun.com/1111/new?userCode=cvswwj8k)|[爆款特惠](https://www.aliyun.com/activity/daily/bestoffer?userCode=cvswwj8k) |[老用户优惠](https://www.aliyun.com/activity/daily/bestoffer?userCode=cvswwj8k)|
-
-#### 腾讯云服务器
-|初级配置 |中级配置|企业级配置|
-|:--- | :--- | :--- |
-|CPU：2核<br>内存：4G<br>带宽：1~10M <br>云盘：50GB <br>1年价格：￥803<br>3年价格：￥2067 |  CPU：4核<br>内存：8G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥1350<br>3年价格：￥3471 | CPU：8核<br>内存：16G<br>带宽：1~10M <br>云盘：40~100G <br>1年价格：￥2511 <br>3年价格：￥6457
-|[新客专属福利](https://curl.qcloud.com/pD62VbaW)|[爆款特惠](https://curl.qcloud.com/mkwiZjsW) |[企业特惠](https://curl.qcloud.com/8liI3Cyx)|
-<br>
-具体配置，打开链接获取。
-
-### 功能特性
-    代码逻辑注释清晰，非常方便二次开发。
-    支持PHP7，执行效率翻倍，遵循PSR-4开发规范。
-    支持composer，内置优秀php开发sdk，方便二次开发。
-    支持docker部署，内置docker-compose容器编排，一句命令自动配置项目运行环境。
-    支持管理后台配置定时任务，并记录定时任务运行日志。
-    支持七牛云、阿里云、腾讯云多种OSS对象存储，提升项目访问速度，降低服务器成本。
-    支持CDN配置，加快各地方访问速度。
-    支持商城多种场景的足迹气泡，让商城跟用户有更强的互动性。
-    支持商城首页、商城分类页、用户个人中心页、底部导航装修。
-    支持广告位，可在商城多个地方编辑添加广告。
-    支持5种佣金提现方式，更有微信零钱到账，零钱可直接到用户微信钱包。
-    下载体验更多功能！
 
 
-
-### 部署运行
-#### 宝塔面板部署（正式发布推荐）
-[点击这里，查看详细部署教程，沉浸式教你如何使用宝塔面板安装likeshop](https://www.likeshop.cn/doc/13/29)
-
-#### phpStudy部署（本地部署推荐）
-[点击这里，查看详细部署教程，沉浸式教你如何使用phpStudy安装likeshop](https://www.likeshop.cn/doc/13/33)
-
-#### docker部署
-[点击这里，查看详细部署教程，沉浸式教你如何使用docker安装likeshop](https://www.likeshop.cn/doc/13/36)
-
-## likeshop单商户商城系统 「演示环境」
-### PC商城
-PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.cn/pc)
-
-### 移动端商城
-![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
-
-### PC管理后台
-PC管理后台演示： [https://b2cdemo.likeshop.cn/admin](https://b2cdemo.likeshop.cn/admin)
-
-账号：admin 密码：123456
 
 ## likeshop单商户 「界面预览」
 

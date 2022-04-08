@@ -23,6 +23,8 @@ const baseURL = baseURLMap[process.env.NODE_ENV]
 
 
 module.exports = {
-	version: '1.4.0',			// 版本号
+    HEADER: {
+        'content-type': 'application/json'
+    },
 	baseURL,					// API Base URL
 }

@@ -1,6 +1,5 @@
 
-#  🔥 likeshop单商户单商户标准版-企业版（免费商用）🔥
-## likeshop单商户标准版商城 「演示环境」
+## likeshop单商户标准版商城演示
 
 ### 移动端商城
 ![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
@@ -14,6 +13,7 @@ PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.
 
 
 更多产品介绍，欢迎访问likeshop官方网站:[www.likeshop.cn](https://www.likeshop.cn)
+<br>
 
 
 

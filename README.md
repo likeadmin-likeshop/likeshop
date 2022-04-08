@@ -2,6 +2,22 @@
 
 ![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/toutu.png)
 
+## likeshop单商户商城系统 「演示环境」
+### PC商城
+PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.cn/pc)
+
+### 移动端商城
+![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
+
+### PC管理后台
+PC管理后台演示： [https://b2cdemo.likeshop.cn/admin](https://b2cdemo.likeshop.cn/admin)
+
+账号：admin 密码：123456
+
+
+
+更多产品介绍，欢迎访问likeshop官方网站。
+
 ## likeshop「开源精神」
 likeshop开源团队专注于围绕电商交易领域打造新时代的开源商城系统。我们关心并聚焦于解决以下问题
 1. 系统安装部署要保持简单，无需配置复杂的运行环境，方便后续工作开展。为此我们准备了简洁大方的傻瓜式安装引导界面，并且提供了宝塔一键安装教程，无论是Linux还是Windows操作系统都很方便部署。
@@ -93,21 +109,7 @@ https://home.likeshop.cn/
 https://www.likeshop.cn/
 
 
-## likeshop单商户商城系统 「演示环境」
-### PC商城
-PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.cn/pc)
 
-### 移动端商城
-![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
-
-### PC管理后台
-PC管理后台演示： [https://b2cdemo.likeshop.cn/admin](https://b2cdemo.likeshop.cn/admin)
-
-账号：admin 密码：123456
-
-
-
-更多产品介绍，欢迎访问likeshop官方网站。
 
 ## likeshop单商户商城系统「产品说明」
 ### 产品定位

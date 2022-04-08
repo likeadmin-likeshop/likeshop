@@ -1,17 +1,28 @@
-// h5正式环境域名
-const proUrl = location.origin
-// 测试环境域名
-const devUrl = 'http://likeshopb2cos.yixiangonline.com'
+/** S 是否H5端 **/
+// #ifdef H5
+const IS_H5 = true
+// #endif
+
+// #ifndef H5
+const IS_H5 = false
+// #endif
+/** E 是否H5端 **/
+
+/** S API BaseURL **/
+const baseURLMap = {
+	// 开发环境 
+	development: 'http://likeshopb2cos.yixiangonline.com/api/',
+	// 生产环境
+	production: IS_H5 ? location.origin +'/api/' : 'http://likeshopb2cos.yixiangonline.com/api/',
+}
+
+const baseURL = baseURLMap[process.env.NODE_ENV]
+
+
+/** E API BaseURL **/
+
 
 module.exports = {
-    HEADER: {
-        'content-type': 'application/json'
-    },
-	// #ifdef H5
-    baseURL: process.env.NODE_ENV == 'production' ? proUrl+'/api/' : devUrl+'/api/',
-    // baseURL: process.env.NODE_ENV == 'production' ? '/api/' : '/api/',
-	// #endif
-	// #ifndef H5
-	baseURL: devUrl+'/api/',
-	// #endif
+	version: '1.4.0',			// 版本号
+	baseURL,					// API Base URL
 }

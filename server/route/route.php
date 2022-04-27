@@ -14,3 +14,8 @@ Route::rule('pc/:any', function () {
     Config::set('app_trace', false);
     return view(app()->getRootPath() . 'public/pc/index.html');
 })->pattern(['any' => '\w+']);
+
+//定时任务
+Route::rule('crontab', function () {
+    think\Console::call('crontab');
+});

@@ -4,6 +4,7 @@ namespace app\common\server\storage\engine;
 
 use think\Request;
 use think\Exception;
+use app\common\validate\Upload;
 
 /**
  * 存储引擎抽象类
@@ -39,6 +40,11 @@ abstract class Server
         $this->file = request()->file($name);
         if (empty($this->file)) {
             throw new Exception('未找到上传文件的信息');
+        }
+        // 校验文件
+        $validate = (new Upload());
+        if (!$validate->check(['file' => request()->file($name)])){
+            throw new Exception($validate->getError());
         }
         // 文件信息
         $this->fileInfo = $this->file->getInfo();

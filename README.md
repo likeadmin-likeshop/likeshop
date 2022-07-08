@@ -52,13 +52,14 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ## likeshop 「多沟通交流」
 我们喜欢直接的沟通交流，请加群或者客服吧。
 
-### 加入微信群 | QQ群
-![qun.png](https://resource.likeshop.cn/gitee/qun.png)
-
 ### 联系微信客服（专业解答、获取功能清单）
 ![联系微信客服.png](https://resource.likeshop.cn/gitee/lxwm.png)
 
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
+
+### 加入微信群 | QQ群
+![qun.png](https://resource.likeshop.cn/gitee/qun.png)
+
 
 
 

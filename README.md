@@ -97,11 +97,6 @@ https://www.likeshop.cn/doc/2
 
 运营文档、开发文档、API文档一应俱全。
 
-### 技术社区
-https://home.likeshop.cn/
-
-查看官方动态、更新计划、下载单商户和多商户等产品付费企业版代码。
-
 ### 官方网站
 https://www.likeshop.cn/
 

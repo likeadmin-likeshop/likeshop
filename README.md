@@ -60,6 +60,7 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ### 加入微信群 | QQ群
 ![qun.png](https://resource.likeshop.cn/gitee/qun.png)
 
+QQ群：1群 ~~371752229~~（已满），2群 704997444
 
 
 

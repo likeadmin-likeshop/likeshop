@@ -43,8 +43,8 @@ services:
 
 
   php7.2.4:
-    container_name: likeshop-php7.2.4-fpm
-    image: likeshop/php:7.2.4-fpm
+    container_name: likeshop-php7.2
+    image: likeshop/php:7.2.34-fpm
     restart: always
     working_dir: /server
     volumes:

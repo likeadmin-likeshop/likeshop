@@ -1,20 +1,22 @@
 <?php
 // +----------------------------------------------------------------------
-// | likeshop100%开源免费商用商城系统
+// | likeshop开源商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 开源版本可自由商用，可去除界面版权logo
-// | 商业版本务必购买商业授权，以免引起法律纠纷
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
 // | github下载：https://github.com/likeshop-github
 // | 访问官网：https://www.likeshop.cn
 // | 访问社区：https://home.likeshop.cn
 // | 访问手册：http://doc.likeshop.cn
 // | 微信公众号：likeshop技术社区
-// | likeshop团队 版权所有 拥有最终解释权
+// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
+// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | likeshop团队版权所有并拥有最终解释权
 // +----------------------------------------------------------------------
-// | author: likeshopTeam
+// | author: likeshop.cn.team
+// +----------------------------------------------------------------------
+// | Author: LikeShopTeam
 // +----------------------------------------------------------------------
 
 
@@ -22,13 +24,13 @@ namespace app\common\server;
 
 
 use think\Db;
+use think\facade\Cache;
 use think\facade\Config;
 
 class ConfigServer
 {
     /**
-     * User: 意象信息科技 lr
-     * Desc: 设置配置值
+     * @notes 设置配置值
      * @param $type
      * @param $name
      * @param $value
@@ -38,9 +40,13 @@ class ConfigServer
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
+     * @author 令狐冲
+     * @date 2022/9/29 16:03
      */
     public static function set($type, $name, $value)
     {
+        $CacheKey = 'config' . '-' . $type . '-' . $name;
+        Cache::rm($CacheKey);
         $original = $value;
         $update_time = time();
         if (is_array($value)) {
@@ -60,55 +66,64 @@ class ConfigServer
         return $original;
     }
 
+
     /**
-     * User: 意象信息科技 lr
-     * Desc: 获取配置值
+     * @notes 获取配置
      * @param $type
-     * @param $name
-     * @param string $default_value
-     * @return mixed|string
+     * @param string $name
+     * @param null|string $defaultValue
+     * @return array|int|mixed|string
+     * @author 令狐冲
+     * @date 2022/9/29 11:35
      */
-    public static function get($type, $name = '',  $default_value = null)
+    public static function get($type, $name = '', $defaultValue = NULL)
     {
+        //有缓存取缓存
+        $CacheKey = 'config' . '-' . $type . '-' . $name;
+        $value = Cache::get($CacheKey);
+        if ($value !== false) {
+            return $value;
+        }
+
+        //单项配置
         if ($name) {
             $value = Db::name('config')
                 ->where(['type' => $type, 'name' => $name])
                 ->value('value');
+            //数组配置需要自动转换
             $json = json_decode($value, true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $value = $json;
             }
-            if ($value) {
-                return $value;
+            //获取调用默认配置
+            if ($value === NULL) {
+                $value = $defaultValue;
             }
-            if($value ===0 || $value==='0'){
-                return $value;
+            //获取系统配置文件的配置
+            if ($value === NULL) {
+                Config::get('default.' . $type . '.' . $name);
             }
-            if ($default_value !== null) {
-                return $default_value;
-            }
-            return Config::get('default.' . $type . '.' . $name);
+            Cache::set($CacheKey, $value);
+            return $value;
         }
 
+        //多项配置
         $data = Db::name('config')
             ->where(['type' => $type])
             ->column('value', 'name');
-
+        //数组配置需要自动转换
         foreach ($data as $k => $v) {
             $json = json_decode($v, true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $data[$k] = $json;
             }
         }
-        if ($data) {
-            return $data;
+        if ($data === []) {
+            $data = $defaultValue;
         }
-        if($data ===0 || $data==='0'){
-            return $data;
+        if ($data === NULL) {
+            Config::get('default.' . $type . '.' . $name);
         }
-        if ($default_value !== null) {
-            return $default_value;
-        }
-        return Config::get('default.' . $type . '.' . $name);
+        return $data;
     }
 }

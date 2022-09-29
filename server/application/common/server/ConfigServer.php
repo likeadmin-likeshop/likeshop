@@ -101,7 +101,7 @@ class ConfigServer
             }
             //获取系统配置文件的配置
             if ($value === NULL) {
-                Config::get('default.' . $type . '.' . $name);
+                $value = Config::get('default.' . $type . '.' . $name);
             }
             Cache::set($CacheKey, $value);
             return $value;
@@ -122,7 +122,7 @@ class ConfigServer
             $data = $defaultValue;
         }
         if ($data === NULL) {
-            Config::get('default.' . $type . '.' . $name);
+            $data = Config::get('default.' . $type . '.' . $name);
         }
         return $data;
     }

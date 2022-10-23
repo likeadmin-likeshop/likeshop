@@ -31,9 +31,9 @@ class ConfigServer
 {
     /**
      * @notes 设置配置值
-     * @param $type
-     * @param $name
-     * @param $value
+     * @param string $type
+     * @param string $name
+     * @param mixed $value
      * @return mixed
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
@@ -43,7 +43,7 @@ class ConfigServer
      * @author 令狐冲
      * @date 2022/9/29 16:03
      */
-    public static function set($type, $name, $value)
+    public static function set(string $type, $name = '', $value = '')
     {
         $CacheKey = 'config' . '-' . $type . '-' . $name;
         Cache::rm($CacheKey);
@@ -69,14 +69,14 @@ class ConfigServer
 
     /**
      * @notes 获取配置
-     * @param $type
+     * @param string $type
      * @param string $name
-     * @param null|string $defaultValue
-     * @return array|int|mixed|string
+     * @param mixed $defaultValue
+     * @return mixed
      * @author 令狐冲
      * @date 2022/9/29 11:35
      */
-    public static function get($type, $name = '', $defaultValue = NULL)
+    public static function get(string $type, $name = '', $defaultValue = NULL)
     {
         //有缓存取缓存
         $CacheKey = 'config' . '-' . $type . '-' . $name;
@@ -90,6 +90,7 @@ class ConfigServer
             $value = Db::name('config')
                 ->where(['type' => $type, 'name' => $name])
                 ->value('value');
+            $value = $value ?: NULL;
             //数组配置需要自动转换
             $json = json_decode($value, true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -112,18 +113,18 @@ class ConfigServer
             ->where(['type' => $type])
             ->column('value', 'name');
         //数组配置需要自动转换
-        foreach ($data as $k => $v) {
-            $json = json_decode($v, true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $data[$k] = $json;
+        if (is_array($data)) {
+            foreach ($data as $k => $v) {
+                $json = json_decode($v, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $data[$k] = $json;
+                }
             }
         }
         if ($data === []) {
             $data = $defaultValue;
         }
-        if ($data === NULL) {
-            $data = Config::get('default.' . $type . '.' . $name);
-        }
+        Cache::set($CacheKey, $data);
         return $data;
     }
 }

@@ -63,7 +63,7 @@ class UrlServer
 
         } else {
 
-            $config = ConfigServer::get('storage_engine', NULL, $engine);
+            $config = ConfigServer::get('storage_engine',  $engine);
             $domain = isset($config['domain']) ? $config['domain'] : 'http://';
             return $domain . $uri;
         }
@@ -82,7 +82,7 @@ class UrlServer
             $domain = request()->domain();
             return str_replace($domain . '/', '', $uri);
         } else {
-            $config = ConfigServer::get('storage_engine', NULL, $engine);
+            $config = ConfigServer::get('storage_engine',  $engine);
             return str_replace($config['domain'], '', $uri);
         }
     }

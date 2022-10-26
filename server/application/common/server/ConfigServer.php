@@ -80,7 +80,8 @@ class ConfigServer
     {
         //有缓存取缓存
         $CacheKey = 'config' . '-' . $type . '-' . $name;
-        $value = Cache::get($CacheKey);
+        $result = Cache::get($CacheKey);
+        $value = $result['config_server'] ?? false;
         if ($value !== false) {
             return $value;
         }
@@ -90,7 +91,7 @@ class ConfigServer
             $value = Db::name('config')
                 ->where(['type' => $type, 'name' => $name])
                 ->value('value');
-            $value = $value ?: NULL;
+
             //数组配置需要自动转换
             $json = json_decode($value, true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -104,7 +105,7 @@ class ConfigServer
             if ($value === NULL) {
                 $value = Config::get('default.' . $type . '.' . $name);
             }
-            Cache::set($CacheKey, $value);
+            Cache::set($CacheKey, ['config_server' => $value]);
             return $value;
         }
 
@@ -124,7 +125,7 @@ class ConfigServer
         if ($data === []) {
             $data = $defaultValue;
         }
-        Cache::set($CacheKey, $data);
+        Cache::set($CacheKey, ['config_server' => $data]);
         return $data;
     }
 }

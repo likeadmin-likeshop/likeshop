@@ -38,7 +38,7 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 
 ## likeshop「欢迎大家使用」
 有朋自远方来，不亦乐乎！多一份使用，多一份责任，请建议结合自身情况，合理使用likeshop落地商城项目。
-<a href='https://www.likeshop.cn'>![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/gitee.png?v=1)<a/><br>
+
 ### 需要具备的基本能力
 没有具体的能力要求，会电脑开关机即可。我们已经准备了详尽的开发文档，宝塔一键部署教程，常见问题集合，甚至还有docker镜像包直接拿来用。小白上手也方便，直接根据运营文档操作。
 

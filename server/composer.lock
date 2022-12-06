@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5312aa6027da3bb4cbe41677a3450b29",
+    "content-hash": "2daddfbe605bec274304eee12ba8eaf7",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -3412,23 +3412,17 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.1.40",
+            "version": "v5.1.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "df0f92d58c70207c9ce9526fa7743eeff0831328"
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/df0f92d58c70207c9ce9526fa7743eeff0831328",
-                "reference": "df0f92d58c70207c9ce9526fa7743eeff0831328",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "url": "https://api.github.com/repos/top-think/framework/zipball/ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.6.0",
@@ -3467,9 +3461,9 @@
             ],
             "support": {
                 "issues": "https://github.com/top-think/framework/issues",
-                "source": "https://github.com/top-think/framework/tree/v5.1.40"
+                "source": "https://github.com/top-think/framework/tree/v5.1.42"
             },
-            "time": "2020-10-09T07:36:44+00:00"
+            "time": "2022-10-25T15:04:49+00:00"
         },
         {
             "name": "topthink/think-captcha",
@@ -3568,23 +3562,17 @@
         },
         {
             "name": "topthink/think-installer",
-            "version": "v2.0.1",
+            "version": "v2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-installer.git",
-                "reference": "52f4b717a46fd00bccd47c5a9f10a5c56d29fcf9"
+                "reference": "38ba647706e35d6704b5d370c06f8a160b635f88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-installer/zipball/52f4b717a46fd00bccd47c5a9f10a5c56d29fcf9",
-                "reference": "52f4b717a46fd00bccd47c5a9f10a5c56d29fcf9",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "url": "https://api.github.com/repos/top-think/think-installer/zipball/38ba647706e35d6704b5d370c06f8a160b635f88",
+                "reference": "38ba647706e35d6704b5d370c06f8a160b635f88",
+                "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0||^2.0"
@@ -3613,9 +3601,9 @@
             ],
             "support": {
                 "issues": "https://github.com/top-think/think-installer/issues",
-                "source": "https://github.com/top-think/think-installer/tree/v2.0.1"
+                "source": "https://github.com/top-think/think-installer/tree/v2.0.5"
             },
-            "time": "2020-10-27T05:43:17+00:00"
+            "time": "2021-01-14T12:12:14+00:00"
         },
         {
             "name": "xin/container",
@@ -3752,5 +3740,5 @@
         "ext-curl": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

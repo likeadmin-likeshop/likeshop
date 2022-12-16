@@ -119,8 +119,8 @@ class ArticleLogic
         $article = new Article();
 
         $data = [
-            'del' => time(),
-            'update_time' => 1
+            'del' => 1,
+            'update_time' => time()
         ];
         return $article->save($data, ['id' => $id, 'del' => 0]);
     }

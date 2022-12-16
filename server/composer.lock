@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5312aa6027da3bb4cbe41677a3450b29",
+    "content-hash": "2daddfbe605bec274304eee12ba8eaf7",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -3412,16 +3412,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.1.40",
+            "version": "v5.1.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "df0f92d58c70207c9ce9526fa7743eeff0831328"
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/df0f92d58c70207c9ce9526fa7743eeff0831328",
-                "reference": "df0f92d58c70207c9ce9526fa7743eeff0831328",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -3467,9 +3467,9 @@
             ],
             "support": {
                 "issues": "https://github.com/top-think/framework/issues",
-                "source": "https://github.com/top-think/framework/tree/v5.1.40"
+                "source": "https://github.com/top-think/framework/tree/v5.1.42"
             },
-            "time": "2020-10-09T07:36:44+00:00"
+            "time": "2022-10-25T15:04:49+00:00"
         },
         {
             "name": "topthink/think-captcha",
@@ -3752,5 +3752,5 @@
         "ext-curl": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

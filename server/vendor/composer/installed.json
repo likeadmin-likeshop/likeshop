@@ -3562,17 +3562,17 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.1.40",
-            "version_normalized": "5.1.40.0",
+            "version": "v5.1.42",
+            "version_normalized": "5.1.42.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "df0f92d58c70207c9ce9526fa7743eeff0831328"
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/df0f92d58c70207c9ce9526fa7743eeff0831328",
-                "reference": "df0f92d58c70207c9ce9526fa7743eeff0831328",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -3594,7 +3594,7 @@
                 "sebastian/phpcpd": "2.*",
                 "squizlabs/php_codesniffer": "2.*"
             },
-            "time": "2020-10-09T07:36:44+00:00",
+            "time": "2022-10-25T15:04:49+00:00",
             "type": "think-framework",
             "installation-source": "dist",
             "notification-url": "https://packagist.org/downloads/",
@@ -3620,9 +3620,9 @@
             ],
             "support": {
                 "issues": "https://github.com/top-think/framework/issues",
-                "source": "https://github.com/top-think/framework/tree/v5.1.40"
+                "source": "https://github.com/top-think/framework/tree/v5.1.42"
             },
-            "install-path": "../../thinkphp"
+            "install-path": "../topthink/framework"
         },
         {
             "name": "topthink/think-captcha",

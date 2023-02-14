@@ -14,6 +14,7 @@ PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.
 更多产品介绍，欢迎访问likeshop官方网站:[www.likeshop.cn](https://www.likeshop.cn)
 <br><br><br>
 
+<a href="https://www.likeshop.cn">![1.png](https://resource.likeshop.cn/gitee/kncgj.png)</a><br>
 
 
 ## likeshop「开源精神」

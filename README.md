@@ -1,15 +1,15 @@
 ## 🚀🚀🚀docker本地一句命令快速部署体验
-### 超级快速部署
-安装启动[docker](https://likeshop.likeshop.cn/pc)之后，在终端运行以下命令即可体验。<br>
+### 快速部署
+安装启动[docker](https://www.docker.com/)之后，在终端运行以下命令即可体验。<br>
   ```shell
   docker run -d --name likeshop -p 20208:80 likeshop/php-b2c:2.5.7
   ```
 ### 本地访问
-命令运行访问不了的话，稍等10秒。<br>
+命令运行完毕以后，访问不了，请稍等10秒，安装界面数据库信息按默认，请勿更改。<br>
 PC端管理后台：http://127.0.0.1:20208/admin
 <br>手机端商城端：http://127.0.0.1:20208/mobile
 ### ⚠️注意
-只适合本地部署使用，不熟悉docker请勿用于生产环境。
+docker快速部署只适合本地部署体验，不熟悉docker请勿用于生产环境，可能造成数据丢失等问题。
 <br>
 
 

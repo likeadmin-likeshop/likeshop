@@ -30,7 +30,6 @@ PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.
 
 
 
-<a href="https://www.likeshop.cn/">![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/51.png)</a><br>
 
 
 

@@ -29,7 +29,7 @@ PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.
 <br><br><br>
 
 
-<a href="http://www.likeshop.cn/product/13">![gitee头图 java.png](https://resource.likeshop.cn/gitee/java.png)</a><br>
+
 
 
 

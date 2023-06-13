@@ -1,5 +1,5 @@
 
-<a href="http://www.likeshop.cn/product/13">![gitee头图 java.png](https://resource.likeshop.cn/gitee/618.png)</a><br>
+<a href="http://www.likeshop.cn">![gitee头图 java.png](https://resource.likeshop.cn/gitee/618.png)</a><br>
 ## 🚀🚀🚀docker本地一句命令快速部署体验
 ### 快速部署
 安装启动[docker](https://www.docker.com/)之后，在终端运行以下命令即可体验。<br>

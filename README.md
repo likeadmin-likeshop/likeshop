@@ -20,11 +20,11 @@ docker快速部署只适合本地部署体验，不熟悉docker请勿用于生�
 ![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
 
 ### PC管理后台
-PC管理后台演示： [https://b2cdemo.likeshop.cn/admin](https://b2cdemo.likeshop.cn/admin)
+PC管理后台演示： [https://php-b2c-demo.likeshop.cn/admin](https://php-b2c-demo.likeshop.cn/admin)
 账号：admin 密码：123456
 
 ### PC商城
-PC端访问链接：[https://likeshop.likeshop.cn/pc](https://likeshop.likeshop.cn/pc)
+PC端访问链接：[https://php-b2c.likeshop.cn/pc](https://php-b2c.likeshop.cn/pc)
 
 
 更多产品介绍，欢迎访问likeshop官方网站:[www.likeshop.cn](https://www.likeshop.cn)

@@ -1,23 +1,51 @@
 
-<!--<a href="http://www.likeshop.cn">![gitee头图 java.png](https://resource.likeshop.cn/gitee/618.png)</a><br>-->
+<!--<a href="http://www.likeshop.cn">![gitee头图 java.png](/server/public/readme/gitee/618.png)</a><br>-->
+ <h1 align="center">likeshop全开源商城系统</h1>
+ <h4 align="center">🚀快速开发  🛠️代码易懂  ✅方便二开  🧑‍💻源码全开源</h4> 
+ <p align="center">
+<a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-7-8892bf"></a> <a href="https://www.tslang.cn/"> <a href="#"><img src="https://img.shields.io/badge/ThinkPHP-5.1-6fb737"></a> <a href="#"><img src="https://img.shields.io/badge/Vue.js-2-4eb883"></a> <a href="#"> <a href="#"><img src="https://img.shields.io/badge/Layui-2.7-118675"></a> <a href="https://uniapp.dcloud.io/"><img src="https://img.shields.io/badge/uniapp--d85806"></a> <a href="https://www.nuxtjs.cn/"><img src="https://img.shields.io/badge/Nuxt.js--18bc78"></a>
+</p>
+<div align="center">
+  <img src="/server/public/readme/likeshop.png" /><br>
+  <center class="half">
+<img  width="19%"  src="/server/public/readme/mobile-1.png" />
+<img  width="19%"  src="/server/public/readme/mobile-2.png" />
+<img  width="19%"  src="/server/public/readme/mobile-3.png" />
+<img  width="19%"  src="/server/public/readme/mobile-4.png" />
+<img  width="19%"  src="/server/public/readme/mobile-5.png" />
+</center> <br>
+</div>
+ 
 ## 🚀🚀🚀docker本地一句命令快速部署体验
-### 快速部署
-安装启动[docker](https://www.docker.com/)之后，在终端运行以下命令即可体验。<br>
+### 🐳快速部署
+安装启动 [docker](https://www.docker.com/) 之后，在终端运行以下命令即可体验。<br>
   ```shell
-  docker run -d --name likeshop -p 20208:80 likeshop/php-b2c:2.5.7
+   docker run -d --name likeshop  -p 20208:80 -e MYSQL_ROOT_PASSWORD=root  likeshop/php-b2c:latest
   ```
-### 本地访问
-命令运行完毕以后，访问不了，请稍等10秒，安装界面数据库信息按默认，请勿更改。<br>
-PC端管理后台：http://127.0.0.1:20208/admin
-<br>手机端商城端：http://127.0.0.1:20208/mobile
+如果需要自定义参数永久挂载数据，在终端运行以下命令，其中"[]"改成自定义参数。
+```shell
+docker run -d --name likeshop\
+-v 【主机存储数据库路径】:/var/lib/mysql\
+-v 【主机存储项目代码文件路径】:/var/www/html/likeshop\
+-p 【访问端口】:80\
+-e MYSQL_ROOT_PASSWORD=【Mysql密码】\
+likeshop/b2c:latest
+```
 ### ⚠️注意
-docker快速部署只适合本地部署体验，不熟悉docker请勿用于生产环境，可能造成数据丢失等问题。
-<br>
+1.如果出现无法访问，请等待1分钟，docker部署每次会下载最新源码。<br>
+2.安装的时候，数据默认帐号为root，默认密码为root。<br>
+3.不熟悉docker请勿用于生产环境，可能造成数据丢失等问题。
+
+### 🛜访问
+访问安装程序：http://127.0.0.1:20208
+<br>PC端管理后台：http://127.0.0.1:20208/admin/login
+<br>PC端前台：http://127.0.0.1:20208/pc/
+<br>手机端前台：http://127.0.0.1:20208/mobile/
 
 
 ## likeshop单商户标准版商城演示
 ### 移动端商城
-![移动端演示.png](https://resource.likeshop.cn/gitee/yszx.png)
+![移动端演示.png](/server/public/readme/gitee/yszx.png)
 
 ### PC管理后台
 PC管理后台演示： [https://php-b2c-demo.likeshop.cn/admin](https://php-b2c-demo.likeshop.cn/admin)
@@ -36,7 +64,7 @@ PC端访问链接：[https://php-b2c.likeshop.cn/pc](https://php-b2c.likeshop.cn
 
 
 ## likeshop「开源精神」
-![gitee头图 –0817.png](https://resource.likeshop.cn/gitee/toutu.png)<br>
+![gitee头图 –0817.png](/server/public/readme/gitee/toutu.png)<br>
 likeshop开源团队专注于围绕电商交易领域打造新时代的开源商城系统。我们关心并聚焦于解决以下问题
 1. 系统安装部署要保持简单，无需配置复杂的运行环境，方便后续工作开展。为此我们准备了简洁大方的傻瓜式安装引导界面，并且提供了宝塔一键安装教程，无论是Linux还是Windows操作系统都很方便部署。
 2. 商城运营起步要清晰明了，后台操作界面容易上手，快速进入卖货状态。例如微信公众号、小程序设置；微信支付、支付宝支付设置；阿里云、腾讯云短信设置；七牛云、阿里云OSS、腾讯云OSS设置等功能操作都非常方便。同时我们还准备了专业的运营手册进行操作指导。
@@ -73,14 +101,18 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 我们喜欢直接的沟通交流，请加群或者客服吧。
 
 ### 联系微信客服（专业解答、获取功能清单）
-![联系微信客服.png](https://resource.likeshop.cn/gitee/lxwm.png)
+![联系微信客服.png](/server/public/readme/gitee/lxwm.png)
 
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 
 ### 加入微信群 | QQ群
-![qun.png](https://resource.likeshop.cn/gitee/qun.png)
+![qun.png](/server/public/readme/gitee/qun.png)
 
-QQ群：1群 ~~371752229~~（已满），2群 704997444，3群 273164521
+QQ群：1群 ~~371752229~~（已满），2群 704997444（已满），3群 273164521
+
+
+ <a href="https://www.mddai.cn">![码多多AI](/server/public/readme/mddai.png)</a><br>
+
 
 
 
@@ -129,13 +161,13 @@ https://www.likeshop.cn/
 ### 产品定位
 likeshop单商户商城系统，产品定位为B2C模式，类似京东自营商城。免费企业版和付费企业版功能基本相同，不再赘述之间的区别。
 ### 产品终端
-![产品终端.png](https://resource.likeshop.cn/gitee/cpzd.png?v=2)
+![产品终端.png](/server/public/readme/gitee/cpzd.png?v=2)
 ### 产品功能
 likeshop单商户商城系统具备PC商城、H5商城、微信小程序商城、APP商城，各商城终端数据打通，使用PC管理后台进行统一的数据管理。
 
 likeshop单商户商城系统包含分销裂变，限时秒杀，拼团活动，砍价活动，优惠券，大转盘抽奖，每日签到，小票打印，积分商城，会员价，微信零钱到账，系统通知/短信通知/APP推送/微信模板消息/小程序消息提醒等常用丰富的营销模块。
 
-![功能清单缩略图.png](https://resource.likeshop.cn/gitee/cpjs.png?v=2)
+![功能清单缩略图.png](/server/public/readme/gitee/cpjs.png?v=2)
 
 联系客服获取完整PDF、Excel版本产品功能对照表。
 
@@ -145,35 +177,35 @@ likeshop单商户商城系统包含分销裂变，限时秒杀，拼团活动，
 ## likeshop单商户 「界面预览」
 
 ### 《移动端商城界面》
-![step01.png](https://resource.likeshop.cn/gitee/m1.png?v=2)
-![step02.png](https://resource.likeshop.cn/gitee/m2.png)
-![step03.png](https://resource.likeshop.cn/gitee/m3.png)
-![step04.png](https://resource.likeshop.cn/gitee/m4.png)
-![step05.png](https://resource.likeshop.cn/gitee/m5.png)
-![step06.png](https://resource.likeshop.cn/gitee/m6.png)
-![step07png](https://resource.likeshop.cn/gitee/m7.png)
-![step08png](https://resource.likeshop.cn/gitee/m8.png)
-![step09.png](https://resource.likeshop.cn/gitee/m9.png)
-![step10.png](https://resource.likeshop.cn/gitee/m10.png)
-![step11.png](https://resource.likeshop.cn/gitee/m11.png)
+![step01.png](/server/public/readme/gitee/m1.png?v=2)
+![step02.png](/server/public/readme/gitee/m2.png)
+![step03.png](/server/public/readme/gitee/m3.png)
+![step04.png](/server/public/readme/gitee/m4.png)
+![step05.png](/server/public/readme/gitee/m5.png)
+![step06.png](/server/public/readme/gitee/m6.png)
+![step07png](/server/public/readme/gitee/m7.png)
+![step08png](/server/public/readme/gitee/m8.png)
+![step09.png](/server/public/readme/gitee/m9.png)
+![step10.png](/server/public/readme/gitee/m10.png)
+![step11.png](/server/public/readme/gitee/m11.png)
 ### 《PC端商城界面》
-![pc_step01.png](https://resource.likeshop.cn/gitee/pc1.png)
-![pc_step03.png](https://resource.likeshop.cn/gitee/pc2.png)
-![pc_step04.png](https://resource.likeshop.cn/gitee/pc3.png)
+![pc_step01.png](/server/public/readme/gitee/pc1.png)
+![pc_step03.png](/server/public/readme/gitee/pc2.png)
+![pc_step04.png](/server/public/readme/gitee/pc3.png)
 ### 《PC端管理后台》
-![ht_step01.png](https://resource.likeshop.cn/gitee/admin1.png)
-![ht_step02.png](https://resource.likeshop.cn/gitee/admin2.png)
-![ht_step03.png](https://resource.likeshop.cn/gitee/admin3.png)
-![ht_step04.png](https://resource.likeshop.cn/gitee/admin4.png)
-![ht_step05.png](https://resource.likeshop.cn/gitee/admin5.png)
-![ht_step07.png](https://resource.likeshop.cn/gitee/admin6.png)
+![ht_step01.png](/server/public/readme/gitee/admin1.png)
+![ht_step02.png](/server/public/readme/gitee/admin2.png)
+![ht_step03.png](/server/public/readme/gitee/admin3.png)
+![ht_step04.png](/server/public/readme/gitee/admin4.png)
+![ht_step05.png](/server/public/readme/gitee/admin5.png)
+![ht_step07.png](/server/public/readme/gitee/admin6.png)
 
 ## likeshop单商户 「特别说明」
 1. 付费企业版领先免费企业版几个版本，免费企业版没有阉割功能，需要大家保留官方版权，为我们多宣传宣传。
 2. likeshop单商户商城系统一路研发过来，耗费的研发资金不敢说有几百万，但对我们而言也是无法想象的一个数目，我们不擅长去计算这些成本，只知道从likeshop单商户开始准备、深入研发、面世推出、更新迭代已经过去了很久的时间，每个月研发团队发放的薪资和社保都越来越多，一直处于亏损之中。所以请不要认为私下去除官方版权似乎对官方没有任何影响，开源项目要稳定的成长就需要健康的收入，因此去除版本切记购买付费版本。我们会认认真真做研发，也会认认真真去维权。
 
 ## likeshop单商户 「版权证书」
-![版权.png](https://resource.likeshop.cn/gitee/csbq.png)
+![版权.png](/server/public/readme/gitee/csbq.png)
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 

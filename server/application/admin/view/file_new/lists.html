@@ -218,6 +218,8 @@
                 if(res.code == 1) {
                     layer.msg(res.msg);
                     location.reload();
+                } else {
+                    layer.msg(res.msg, {icon:2})
                 }
             }
             ,error: function(){

@@ -50,6 +50,11 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
+    
+            // 验证是否是图片文件
+            if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
+                throw new Exception('不是有效的图像文件');
+            }
 
             if (!$StorageDriver->upload($save_dir)) {
                 throw new Exception('图片上传失败' . $StorageDriver->getError());
@@ -105,6 +110,11 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
+    
+            // 验证是否是图片文件
+            if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
+                throw new Exception('不是有效的图像文件');
+            }
 
             if (!$StorageDriver->upload($save_dir)) {
                 throw new Exception('图片上传失败' . $StorageDriver->getError());
@@ -157,6 +167,11 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
+    
+            // 验证是否是视频
+            if (! check_is_video($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
+                throw new Exception('不是有效的视频文件');
+            }
 
             if (!$StorageDriver->upload($save_dir)) {
                 throw new Exception('图片上传失败' . $StorageDriver->getError());
@@ -336,15 +351,20 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
-
-            if (!$StorageDriver->upload($save_dir)) {
-                throw new Exception('视频上传失败' . $StorageDriver->getError());
-            }
-
+    
             // 视频上传路径
             $fileName = $StorageDriver->getFileName();
             // 视频信息
             $fileInfo = $StorageDriver->getFileInfo();
+    
+            // 验证是否是视频
+            if (! check_is_video($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
+                throw new Exception('不是有效的视频文件');
+            }
+
+            if (!$StorageDriver->upload($save_dir)) {
+                throw new Exception('视频上传失败' . $StorageDriver->getError());
+            }
 
             //名字长度太长
             if (strlen($fileInfo['name']) > 128) {

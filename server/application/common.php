@@ -820,6 +820,30 @@ if (!function_exists('omit_str')) {
     }
 }
 
+function check_is_image($image) : bool
+{
+    
+    try {
+        if (function_exists('exif_imagetype')) {
+            $ImageType =  exif_imagetype($image);
+        } else {
+            $info = getimagesize($image);
+            $ImageType = $info ? $info[2] : false;
+        }
+    } catch (\Exception $e) {
+        return false;
+    }
+    
+    return in_array($ImageType, [1, 2, 3, 6]);
+}
+
+function check_is_video($video) : bool
+{
+    $type = mime_content_type($video);
+    
+    return strpos($type, 'video') !== false;
+}
+
 
 
 

@@ -1,5 +1,7 @@
 
-<!--<a href="http://www.likeshop.cn">![gitee头图 java.png](/server/public/readme/gitee/618.png)</a><br>-->
+  <a href="https://www.likeshop.cn">![likeshop全开源商城](/server/public/readme/likeshop_.png)</a><br>
+
+ <a href="https://www.chatmoney.cn">![likeshop全开源商城](/server/public/readme/chatmoney.png)</a><br>
  <h1 align="center">likeshop全开源商城系统</h1>
  <h4 align="center">🚀快速开发  🛠️代码易懂  ✅方便二开  🧑‍💻源码全开源</h4> 
  <p align="center">
@@ -109,10 +111,6 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 ![qun.png](/server/public/readme/gitee/qun.png)
 
 QQ群：1群 ~~371752229~~（已满），2群 704997444（已满），3群 273164521
-
-
- <a href="https://www.mddai.cn">![码多多AI](/server/public/readme/mddai.png)</a><br>
-
 
 
 

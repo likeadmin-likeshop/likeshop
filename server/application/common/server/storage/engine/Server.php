@@ -2,9 +2,9 @@
 
 namespace app\common\server\storage\engine;
 
+use app\common\validate\Upload;
 use think\Request;
 use think\Exception;
-use app\common\validate\Upload;
 
 /**
  * 存储引擎抽象类

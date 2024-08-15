@@ -59,6 +59,7 @@ class Login
             $request->user_info = $token_cache->get(600);
             return $next($request);
         }
+
         //token验证，并生成缓存
         $token_validate = new TokenValidate();
         $result = $token_validate->check(['token' => $token]);

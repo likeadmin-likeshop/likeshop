@@ -33,7 +33,7 @@ class Bargain extends Validate
     protected $rule = [
         'id'                  => 'require|number',
         'goods_id'            => 'require|number',
-        'time_limit'          => 'require',
+        'time_limit'          => 'require|gt:0|lt:1000',
         'activity_start_time' => 'require',
         'activity_end_time'   => 'require|endTime',
         'payment_where'       => 'require|in:1,2',
@@ -48,6 +48,8 @@ class Bargain extends Validate
         'goods_id.number'    => '选择砍价商品异常',
         'time_limit.require' => '请填写砍价活动有效期',
         'time_limit.number'  => '砍价活动有效期必须为数字',
+        'time_limit.gt'  => '砍价活动有效期必须大于0小时',
+        'time_limit.lt'  => '砍价活动有效期必须小于1000小时',
         'activity_start_time.require' => '请选择活动开始时间',
         'activity_end_time.require'   => '请选择活动结束时间',
         'payment_where.require' => '请选择购买方式',

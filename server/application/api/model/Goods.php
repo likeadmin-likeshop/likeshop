@@ -17,6 +17,7 @@
 // | author: likeshop.cn.team
 // +----------------------------------------------------------------------
 namespace app\api\model;
+use app\common\model\DistributionGoods;
 use app\common\server\ConfigServer;
 use app\common\server\UrlServer;
 use think\Db;
@@ -74,8 +75,8 @@ class Goods extends Model{
         $goods_item = $this->getAttr('goods_item');
 
         //将商品价格替换成商品规格价
-        $this->setAttr('price',$goods_item[0]['price']);
-        $this->setAttr('market_price',$goods_item[0]['market_price']);
+//        $this->setAttr('price',$goods_item[0]['price']);
+//        $this->setAttr('market_price',$goods_item[0]['market_price']);
 
         //拼接规格
         foreach ($spec_value as $item){
@@ -113,12 +114,21 @@ class Goods extends Model{
     public function getCommentAttr($value,$data){
         $comment = [];
         $goods_comment = Db::name('goods_comment g')
-                ->join('user u','g.user_id = u.id')
-                ->where(['goods_id'=>$data['id'],'g.del'=>0,'u.del'=>0,'g.status'=>1])
+                ->leftjoin('user u','g.user_id = u.id')
+                ->where(['goods_id'=>$data['id'],'g.del'=>0,'g.status'=>1])
                 ->order('g.id desc')
-                ->field('g.id,user_id,item_id,comment,g.create_time,nickname,avatar')
+                ->field('g.id,user_id,item_id,comment,g.create_time,nickname,avatar,virtual_data')
                 ->find();
+
         if($goods_comment){
+            // 虚拟评论
+            if (empty($goods_comment['user_id']) && !empty($goods_comment['virtual_data'])) {
+                $virtual_data = json_decode($goods_comment['virtual_data'], JSON_UNESCAPED_UNICODE);
+                $goods_comment['avatar'] = $virtual_data['avatar'] ?? '';
+                $goods_comment['nickname'] = $virtual_data['nickname'] ?? '';
+                $goods_comment['create_time'] = $virtual_data['comment_time'] ?? time();
+            }
+
             //好评人数
             $goods_count = Db::name('goods_comment')
                     ->where(['goods_id'=>$data['id'],'del'=>0])
@@ -132,7 +142,7 @@ class Goods extends Model{
             $comment_image = Db::name('goods_comment_image')->where(['goods_comment_id'=>$goods_comment])->column('uri');
 
             $comment = $goods_comment;
-            $comment['goods_rate'] = round(($goods_count/$comment_count)*100).'%';
+            $comment['goods_rate'] = round(($goods_count/$comment_count)*100, 2).'%';
             $comment['avatar'] = UrlServer::getFileUrl($comment['avatar']);
             $comment['spec_value_str'] = '';
             $comment['create_time'] = date('Y-m-d H:i:s',$comment['create_time']);
@@ -167,5 +177,49 @@ class Goods extends Model{
             }
         }
         return 0;
+    }
+
+    /**
+     * @notes 商品是否参与分销
+     * @param $value
+     * @return string
+     * @author Tab
+     */
+    public function getDistributionFlagAttr($value)
+    {
+        $data = DistributionGoods::where('goods_id', $value)->findOrEmpty()->toArray();
+        if (!empty($data) && $data['is_distribution'] == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @notes 分销状态搜索器
+     * @param $query
+     * @param $value
+     * @param $data
+     * @author Tab
+     */
+    public function searchIsDistributionAttr($query, $value, $data)
+    {
+        // 不参与分销
+        if (isset($data['is_distribution']) && $data['is_distribution'] == '0') {
+            // 先找出参与分销的商品id
+            $ids = DistributionGoods::where('is_distribution', 1)->column('goods_id');
+            if (!empty($ids)) {
+                // 在搜索条件中将它们排除掉
+                $query->where('id', 'not in', $ids);
+            }
+        }
+        // 参与分销
+        if (isset($data['is_distribution']) && $data['is_distribution'] == '1') {
+            // 先找出参与分销的商品id
+            $ids = DistributionGoods::where('is_distribution', 1)->column('goods_id');
+            if (!empty($ids)) {
+                // 在搜索条件中使用它们来进行过滤
+                $query->where('id', 'in', $ids);
+            }
+        }
     }
 }

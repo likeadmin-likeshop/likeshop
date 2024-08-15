@@ -1,0 +1,163 @@
+{layout name="layout1" /}
+<style>
+    .search {
+        margin-top: 15px;
+    }
+    .search .layui-form-label {
+        width: 80px;
+        text-align: left;
+    }
+    .btns {
+        margin-top: 15px;
+    }
+    .layui-table-cell {
+        height:auto;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-tab" lay-filter="fansTab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" type="one">下一级</li>
+                    <li type="two">下二级</li>
+                </ul>
+            </div>
+            <!--搜索区域-->
+            <div class="search layui-form">
+                <div class="layui-inline">
+                    <div class="layui-form-label">用户信息</div>
+                    <div class="layui-inline">
+                        <select name="field" id="field"  placeholder="请选择" >
+                            <option value="sn">用户编号</option>
+                            <option value="nickname">用户昵称</option>
+                        </select>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" id="keyword" name="keyword" class="layui-input" />
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary layui-bg-blue" lay-submit lay-filter="search">搜索</button>
+                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
+                </div>
+            </div>
+            <!--数据表格-->
+            <table id="lists" lay-filter="lists" style="margin-top:15px;"></table>
+            <!--自定义模板-->
+            <script type="text/html" id="user-info">
+                <img src="{{d.avatar}}" style="height:60px;width: 60px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>用户编号:{{d.sn}}</p>
+                    <p>用户昵称:{{d.nickname}}</p>
+                </div>
+            </script>
+                <script type="text/html" id="first-info">
+                    {{# if(d.first_leader_info != '系统'){}}
+                    <img src="{{d.first_leader_info.avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
+                    <div class="layui-input-inline" style="text-align:left;width: 240px">
+                        <p>用户编号：{{d.first_leader_info.sn}}</p>
+                        <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">用户昵称：{{d.first_leader_info.nickname}}</p>
+                    </div>
+                    {{# }else{ }}
+                    {{d.first_leader_info}}
+                    {{# } }}
+                </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['table', 'form', 'like', 'element'], function () {
+        let $ = layui.$
+            , form = layui.form
+            , element = layui.element
+            , table = layui.table;
+
+        let type = 'one';
+
+        //监听Tab切换
+        element.on('tab(fansTab)', function(data){
+            type = $(this).attr('type');
+            // 重载表格
+            table.reload('lists', {
+                where: {
+                    "type": type,
+                    id: "{$id}"
+                },
+                page: {curr: 1}
+            });
+        });
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            field.type = type;
+            field.id = "{$id}";
+            //执行重载
+            table.reload('lists', {
+                where: field,
+                page: {curr: 1}
+            });
+        });
+
+        //清空查询
+        form.on('submit(reset)', function(){
+            $('#keyword').val('');
+            $('#field').val('sn');
+            form.render('select');
+            //刷新列表
+            table.reload('lists', {
+                where: {
+                    type: type,
+                    id: "{$id}",
+                    keyword: ''
+                }, page: {curr: 1}
+            });
+        });
+
+        // 数据表格渲染
+        table.render({
+            elem: '#lists'
+            ,url: '{:url("user/fans")}' //数据接口
+            ,where: {
+                type: type,
+                id: "{$id}"
+            }
+            ,method: 'post'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {title: '用户信息', width:380, templet: '#user-info'}
+                ,{title: '上级推荐人', width:380, templet: '#first-info'}
+                ,{field: 'fans', title: '推荐下级人数'}
+            ]]
+            , text: {none: '暂无数据！'}
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            },
+            response: {
+                statusCode: 1
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+    });
+
+
+</script>

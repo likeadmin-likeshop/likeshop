@@ -40,7 +40,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">商品分类:</label>
                                 <div class="layui-input-block">
-                                    <select name="category_id"  placeholder="请选择商品分类" >
+                                    <select name="category_id" id="category_id"  placeholder="请选择商品分类" >
                                         <option value="0">全部</option>
                                         {foreach $category_list as $val }
                                         <option value="{$val.id}">{$val.html}{$val.name}</option>
@@ -59,11 +59,37 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="layui-inline">
-                                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" lay-submit lay-filter="goods-search">查询</button>
-                                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="goods-clear-search">清空查询</button>
-                                <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="export-file">导出</button>
+                            <div class="layui-row">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">配送方式:</label>
+                                    <div class="layui-input-block">
+                                        <select name="delivery_type" id="delivery_type"  placeholder="请选择商品供货商" >
+                                            <option value="0">全部</option>
+                                            {foreach $delivery_type as $key=>$val }
+                                            <option value="{$key}">{$val}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">商品类型:</label>
+                                    <div class="layui-input-block">
+                                        <select name="goods_type" id="goods_type"  placeholder="请选择商品类型" >
+                                            <option value="0">全部</option>
+                                            <option value="1">普通商品</option>
+                                            <option value="2">秒杀商品</option>
+                                            <option value="3">拼团商品</option>
+                                            <option value="4">砍价商品</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods {$view_theme_color}" lay-submit lay-filter="goods-search">查询</button>
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="goods-clear-search">清空查询</button>
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-goods layui-btn-primary " lay-submit lay-filter="export-file">导出</button>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="layui-card-body">
@@ -154,6 +180,8 @@
             $('#code').val('');  //清空输入框
             $('#category_id').val(0);  //清空输入框
             $('#supplier_id').val(0);  //清空输入框
+            $('#delivery_type').val(0);  //清空输入框
+            $('#goods_type').val(0);  //清空输入框
             form.render('select');
             //刷新列表
             table.reload('goods-lists', {
@@ -491,11 +519,10 @@
                      {type: 'checkbox'}
                     ,{field: 'name', title: '商品名称',width:320,toolbar: '#goods-info'}
                     ,{field: 'cat_name',width:160, title: '商品分类'}
-                    ,{field: 'commission_status',width:160, title: '三级分销'}
-                    ,{field: 'ratio',width:160, title: '分销比例',toolbar: '#ratio'}
                     ,{field: 'price',width:180,title: '价格'}
                     ,{field: 'stock',width: 100,title: '总库存'}
                     ,{field: 'total_sales_sum',width: 100,title: '总销量'}
+                    ,{field: 'attribute',width: 100,title: '商品类型'}
                     ,{field: 'ratio',width:160, title: '新品推荐',toolbar: '#new'}
                     ,{field: 'ratio',width:160, title: '好物优选',toolbar: '#best'}
                     ,{field: 'ratio',width:160, title: '猜你喜欢',toolbar: '#like'}

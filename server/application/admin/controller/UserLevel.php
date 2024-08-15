@@ -93,7 +93,7 @@ class UserLevel extends AdminBase{
                 UserLevelLogic::del($id);
                 $this->_success('删除成功','');
             }
-            $this->_error('删除失败','');
+            $this->_error($result,'');
         }
     }
 }

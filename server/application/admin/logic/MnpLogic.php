@@ -36,6 +36,7 @@ class MnpLogic{
             'uploadfile_domain'     => 'https://'.$domain_name,
             'downloadfile_domain'   => 'https://'.$domain_name,
             'udp_domain'            => 'udp://'.$domain_name,
+            'tcp_domain'            => 'tcp://'.$domain_name,
             'business_domain'       => $domain_name,
             'url'                   => url('api/weChat/index','','',true),
             'token'                 => ConfigServer::get('mnp', 'token', 'LikeShop'),

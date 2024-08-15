@@ -44,9 +44,24 @@
                <div class="layui-form-item">
                 <label class="layui-form-label"></label>
                  <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">默认需要保留至少一种提现方式</div>
-              </div> 
-               
-                  
+              </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"style="white-space: nowrap; " >微信零钱接口：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="transfer_way" value="1" title="企业付款到零钱" {if $config.transfer_way == 1}checked{/if}>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="transfer_way" value="2" title="商家转账到零钱" {if $config.transfer_way == 2}checked{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">选择商家转账到零钱时，运营账户必须要有钱才能提现</div>
+                </div>
+
+
+
                 <div class="layui-form-item">
                     <label class="layui-form-label"style="white-space: nowrap; " >最低提现金额：</label>
                     <div class="layui-input-inline" >

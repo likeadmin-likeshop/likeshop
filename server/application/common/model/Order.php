@@ -42,7 +42,10 @@ class Order extends Model
     //配送方式
     const DELIVERY_STATUS_EXPRESS = 1;//快递配送
     const DELIVERY_STATUS_SELF = 2;//上门自提
-    const DELIVERY_STATUS_CITY = 3;//同城配送
+
+    //核销状态
+    const NOT_WRITTEN_OFF = 0;//待核销
+    const WRITTEN_OFF = 1;//已核销
 
     //订单状态
     public static function getOrderStatus($status = true)
@@ -82,8 +85,27 @@ class Order extends Model
     {
         $desc = [
             self::DELIVERY_STATUS_EXPRESS => '快递发货',
-            self::DELIVERY_STATUS_SELF => '上门自提',
-            self::DELIVERY_STATUS_CITY => '同城配送',
+            self::DELIVERY_STATUS_SELF => '上门自提'
+        ];
+
+        if ($type === true){
+            return $desc;
+        }
+        return $desc[$type] ?? '未知';
+    }
+
+    /**
+     * @notes 核销状态
+     * @param $type
+     * @return string|string[]
+     * @author ljj
+     * @date 2021/8/16 7:31 下午
+     */
+    public static function getVerificationStatus($type)
+    {
+        $desc = [
+            self::NOT_WRITTEN_OFF => '待核销',
+            self::WRITTEN_OFF => '已核销',
         ];
 
         if ($type === true){
@@ -185,6 +207,17 @@ class Order extends Model
         return $this->hasOne('user', 'id', 'user_id')
             ->field('id,sn,nickname,avatar,level,mobile,sex,create_time');
     }
+    
+    /**
+     * @notes 自提门店
+     * @return \think\model\relation\HasOne
+     * @author lbzy
+     * @datetime 2023-10-08 16:48:44
+     */
+    function selffetchShop()
+    {
+        return $this->hasOne(SelffetchShop::class, 'id', 'selffetch_shop_id');
+    }
 
     //收货地址
     public function getDeliveryAddressAttr($value, $data)
@@ -196,5 +229,18 @@ class Order extends Model
 
         $region_desc = implode('', $region);
         return $region_desc . $data['address'];
+    }
+
+    /**
+     * @notes 核销状态
+     * @param $value
+     * @param $data
+     * @return string|string[]
+     * @author ljj
+     * @date 2021/8/16 7:32 下午
+     */
+    public function getVerificationStatusTextAttr($value, $data)
+    {
+        return self::getVerificationStatus($data['verification_status']);
     }
 }

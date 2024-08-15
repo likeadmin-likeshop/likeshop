@@ -1,0 +1,123 @@
+{layout name="layout2" /}
+<style>
+    html,
+    body {
+        background: #f8f8f8;
+    }
+    .layui-panel {
+        margin: 5px;
+    }
+    .layui-form-label {
+        width: 120px;
+        text-align: left;
+        padding-left:30px;
+        color: #6a6f6c !important;
+    }
+    .layui-form {
+        padding: 15px;
+        background: #f8f8f8;
+    }
+</style>
+<!-- 表单 -->
+<form class="layui-form">
+    <div class="layui-card">
+        <div class="layui-card-header">分销设置</div>
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+                <label class="layui-form-label">分销功能</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="is_open" value="0" title="关闭" {if $config.is_open == 0}checked{/if}>
+                    <input type="radio" name="is_open" value="1" title="开启" {if $config.is_open == 1}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block layui-word-aux">
+                    关闭分销功能后不会再产生新的分销佣金，商城端分销入口会关闭。
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">分销层级</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="level" value="1" title="一级分销" {if $config.level == 1}checked{/if}>
+                    <input type="radio" name="level" value="2" title="二级分销" {if $config.level == 2}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block layui-word-aux">
+                    允许发放佣金的分销层级
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品详情显示佣金</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="is_show_earnings" value="0" title="隐藏" {if $config.is_show_earnings == 0}checked{/if}>
+                    <input type="radio" name="is_show_earnings" value="1" title="显示" {if $config.is_show_earnings == 1}checked{/if}>
+                </div>
+                <div class="layui-input-block layui-word-aux">是否在商品详情显示佣金奖励提示</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">详情页佣金可见用户</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="show_earnings_scope" value="0" title="全部用户" {if $config.show_earnings_scope == 0}checked{/if}>
+                    <input type="radio" name="show_earnings_scope" value="1" title="分销商" {if $config.show_earnings_scope == 1}checked{/if}>
+                </div>
+                <div class="layui-input-block layui-word-aux">选择全部用户，则所有人在商品详情都可以看到佣金奖励提示</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">分销资格</div>
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+                <label class="layui-form-label">开通分销会员条件</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="apply_condition" value="1" title="无条件" {if $config.apply_condition == 1}checked{/if}>
+                    <input type="radio" name="apply_condition" value="2" title="申请分销" {if $config.apply_condition == 2}checked{/if}>
+                    <input type="radio" name="apply_condition" value="3" title="指定分销" {if $config.apply_condition == 3}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block layui-word-aux">
+                    开通分销会员条件切换至无条件时，所有用户都将开通分销会员资格。
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-bg-blue layui-btn layui-btn-sm" lay-submit lay-filter="*">保存设置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['element', 'form', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , layer = layui.layer;
+
+        form.on('submit(*)', function (data) {
+            like.ajax({
+                url: '{:url("DistributionSetting/set")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    layer.msg(res.msg);
+                },
+            });
+            return false; //阻止表单跳转
+        });
+
+    });
+</script>

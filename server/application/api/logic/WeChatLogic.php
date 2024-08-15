@@ -45,7 +45,20 @@ class WeChatLogic
         $app = Factory::officialAccount($config);
         $url = urldecode($url);
         $app->jssdk->setUrl($url);
-        $apis = ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'openLocation', 'getLocation', 'chooseWXPay', 'updateAppMessageShareData', 'updateTimelineShareData', 'openAddress'];
+        $apis = [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'onMenuShareQZone',
+            'openLocation',
+            'getLocation',
+            'chooseWXPay',
+            'updateAppMessageShareData',
+            'updateTimelineShareData',
+            'openAddress',
+            'scanQRCode'
+        ];
         try {
             $data = $app->jssdk->getConfigArray($apis, $debug = false, $beta = false);
             return data_success('', $data);
@@ -54,11 +67,11 @@ class WeChatLogic
         }
     }
 
-    public static function index()
+    public static function index($params)
     {
 
-        if (isset($_GET['echostr'])) {
-            echo $_GET["echostr"];
+        if (isset($params['echostr'])) {
+            echo $params["echostr"];
             exit;
         }
         //微信配置
@@ -84,7 +97,18 @@ class WeChatLogic
                                 return $text;
                             }
                             break;
-
+                        case WeChat::msg_event_click: // 点击事件
+                            $reply_content = Db::name('wechat_reply')->where([
+                                'reply_type' => WeChat::msg_type_text,
+                                'status' => 1,
+                                'del' => 0,
+                                'keyword' => $message['EventKey']
+                            ])->value('content');
+                            if (!empty($reply_content)) {
+                                $text = new Text($reply_content);
+                                return $text;
+                            }
+                            break;
                     }
 
                 case WeChat::msg_type_text://消息类型
@@ -99,7 +123,7 @@ class WeChatLogic
                                 $reply['keyword'] === $message['Content'] && $reply_content = $reply['content'];
                                 break;
                             case 2://模糊匹配
-                                stripos($reply['keyword'], $message['Content']) && $reply_content = $reply['content'];
+                                stripos($reply['keyword'], $message['Content']) !== false && $reply_content = $reply['content'];
                                 break;
                         }
                     }

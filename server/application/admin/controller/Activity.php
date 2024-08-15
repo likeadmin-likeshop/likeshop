@@ -29,7 +29,8 @@ class Activity extends AdminBase{
      */
     public function areaLists(){
         if($this->request->isAjax()){
-            $list = ActivityAreaLogic::areaLists();
+            $get = $this->request->get();
+            $list = ActivityAreaLogic::areaLists($get);
             $this->_success('',$list);
         }
     }
@@ -74,7 +75,7 @@ class Activity extends AdminBase{
             $result = $this->validate($post,'app\admin\validate\ActivityArea');
             if($result === true){
                 ActivityAreaLogic::editActivity($post);
-                $this->_success('新增成功',[]);
+                $this->_success('编辑成功',[]);
             }
             $this->_error($result);
         }

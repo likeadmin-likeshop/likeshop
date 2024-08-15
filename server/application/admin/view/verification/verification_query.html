@@ -1,0 +1,162 @@
+{layout name="layout2" /}
+<style>
+    .div-flex {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+
+    .layui-form-label {
+        width: 100px;
+    }
+
+    .width-160 {
+        width: 200px;
+    }
+
+    .layui-table th {
+        text-align: center;
+    }
+
+    .table-margin {
+        margin-left: 50px;
+        margin-right: 50px;
+        text-align: center;
+    }
+
+    .image {
+        height: 80px;
+        width: 80px;
+    }
+
+</style>
+
+<div class="layui-card-body" >
+    <!--基本信息-->
+    <div class="layui-form" lay-filter="layuiadmin-form-express" id="layuiadmin-form-express" >
+        <input type="hidden" name="id" value="{$detail.id}">
+
+        <div class="layui-form-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>收货信息</legend>
+            </fieldset>
+        </div>
+
+        <div class="layui-form-item div-flex">
+            <label class="layui-form-label ">联系人:</label>
+            <div class="width-160">{$detail.consignee}</div>
+            <label class="layui-form-label ">联系人手机:</label>
+            <div class="width-160">{$detail.mobile}</div>
+        </div>
+
+        <div class="layui-form-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>核销信息</legend>
+            </fieldset>
+        </div>
+
+        <div class="layui-form-item div-flex">
+            <label class="layui-form-label ">自提门店:</label>
+            <div class="width-160">{$detail.shop_name}</div>
+            <label class="layui-form-label ">核销员编号:</label>
+            <div class="width-160">{$detail.snapshot.sn}</div>
+            <label class="layui-form-label ">核销员名称:</label>
+            <div class="width-160">{$detail.snapshot.name}</div>
+            <label class="layui-form-label ">核销时间:</label>
+            <div class="width-160">{$detail.verification_time}</div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>商品信息</legend>
+            </fieldset>
+        </div>
+
+        <div class="layui-form-item table-margin">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="250">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>商品信息</th>
+                    <th>价格(元)</th>
+                    <th>数量</th>
+                    <th>小计(元)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $detail.order_goods as $k => $goods}
+                <tr>
+                    <td>
+                        <div style="text-align: left">
+                            <div class="layui-col-md3">
+                                <img src="{$goods.goods_image}" class="image-show image">
+                            </div>
+                            <div class="layui-col-md9">
+                                <p style="margin-top: 10px">{$goods.goods_name}</p>
+                                <br>
+                                <p>{$goods.spec_value}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>￥{$goods.goods_price}</td>
+                    <td>{$goods.goods_num}</td>
+                    <td>{$goods.total_price}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item div-flex " style="justify-content: center;">
+            <div class="layui-input-block ">
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary width_160 " id="back">返回</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'element', 'jquery', 'like', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form;
+        var like = layui.like;
+
+        //主图放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+
+        form.on('radio(express)', function (data) {
+            var checked = data.value;
+            if (checked == 1) {
+                $('.select-express').show();
+            } else {
+                $('.select-express').hide();
+            }
+        });
+
+        $('#back').click(function () {
+            var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);
+            parent.layui.table.reload('order-lists');
+            return true;
+        });
+
+    });
+</script>

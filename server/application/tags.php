@@ -70,4 +70,8 @@ return [
     'give_reward' => [
         'app\\common\\behavior\\GiveReward'
     ],
+    //商品下架或删除清除收藏夹
+    'update_collect' => [
+        'app\\common\\behavior\\UpdateCollect'
+    ],
 ];

@@ -25,13 +25,14 @@ class ActivityAreaLogic{
      * note 活动专区列表
      * create_time 2020/11/24 11:23
      */
-    public static function areaLists(){
+    public static function areaLists($get){
         $count = Db::name('activity_area')
                 ->where(['del'=>0])
                 ->count();
 
         $lists = Db::name('activity_area')
                 ->where(['del'=>0])
+                ->page($get['page'], $get['limit'])
                 ->select();
         foreach ($lists as &$item){
             $item['status_desc'] = '下架';
@@ -68,6 +69,7 @@ class ActivityAreaLogic{
                 ->join('goods G','AG.Goods_id = G.id')
                 ->where($where)
                 ->field('AG.id,AG.goods_id,AG.activity_id,AA.name,AA.status,G.id,G.name,G.image')
+                ->page($get['page'], $get['limit'])
                 ->order('AG.id desc')
                 ->select();
         $activity_lisst = Db::name('activity_area')

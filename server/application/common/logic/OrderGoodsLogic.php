@@ -21,9 +21,13 @@ namespace app\common\logic;
 
 
 use app\api\logic\SeckillLogic;
+use app\common\model\AfterSale;
+use app\common\model\Order;
+use app\common\model\OrderGoods;
 use app\common\model\Pay;
 use app\common\server\ConfigServer;
 use think\Db;
+use think\facade\Hook;
 
 /**
  * 订单商品逻辑
@@ -134,8 +138,54 @@ class OrderGoodsLogic
             //下架订单商品中 商品总库存已为0的商品
             Db::name('goods')->where('id', 'in', $need_handle_ids)->update(['status' => 0]);
 
+            // 下架或删除商品，更新商品收藏
+            Hook::listen('update_collect', ['goods_id' => $need_handle_ids]);
+
         } catch (\Exception $e) {}
 
+    }
+    
+    /**
+     * @notes 获取订单商品 退款运费
+     * @return integer|float
+     * @author lbzy
+     * @datetime 2023-06-26 09:20:21
+     */
+    static function getRefundExpressMoney($id)
+    {
+        $orderGoods = OrderGoods::find($id);
+        $order      = Order::find($orderGoods['order_id'] ?? 0);
+        
+        // 不是待发货 不退运费
+        if (empty($order['id']) || $order['order_status'] != Order::STATUS_WAIT_DELIVERY) {
+            return 0;
+        }
+        
+        $after_sales    = AfterSale::where('order_id', $order['id'])->select()->toArray();
+        
+        $aids           = [];
+    
+        foreach ($after_sales as $after_sale) {
+            if (! in_array($after_sale['order_goods_id'], $aids)) {
+                $aids[] = $after_sale['order_goods_id'];
+            }
+        }
+        
+        $orderGoodsList = OrderGoods::where('order_id', $order['id'])->select()->toArray();
+        
+        if (count($aids) != count($orderGoodsList)) {
+            if (in_array($id, $aids)) {
+                return 0;
+            } else {
+                // 没有记录，是否是最后一个订单商品
+                return count($aids) == (count($orderGoodsList) - 1) ? $order['shipping_price'] : 0;
+            }
+        }
+        
+        // 有记录，是否是在最后申请的
+        return $aids[count($aids) - 1] == $id ? $order['shipping_price'] : 0;
+        
+        
     }
 
 }

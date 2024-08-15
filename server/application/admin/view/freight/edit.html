@@ -14,12 +14,12 @@
     <div class="layui-form-item">
         <label class="layui-form-label">计费方式</label>
         <div class="layui-input-block" id="charge_way">
-            <input type="radio" class="type" name="charge_way" value="1" title="按重量" {if
-                   condition="$detail.charge_way eq 1" }checked{/if}>
-            <input type="radio" class="type" name="charge_way" value="2" title="按体积" {if
-                   condition="$detail.charge_way eq 2" }checked{/if}>
-            <input type="radio" class="type" name="charge_way" value="3" title="按件数" {if
-                   condition="$detail.charge_way eq 3" }checked{/if}>
+            <input type="radio" class="type" name="charge_way" lay-filter="change-way" value="1" title="按重量"
+                   {if condition="$detail.charge_way eq 1" }checked{/if}>
+            <input type="radio" class="type" name="charge_way" lay-filter="change-way" value="2" title="按体积"
+                   {if condition="$detail.charge_way eq 2" }checked{/if}>
+            <input type="radio" class="type" name="charge_way" lay-filter="change-way" value="3" title="按件数"
+                   {if condition="$detail.charge_way eq 3" }checked{/if}>
         </div>
     </div>
 
@@ -112,6 +112,31 @@
             , transfer = layui.transfer
             , like = layui.like;
 
+        // 切换文本
+        form.on('radio(change-way)', function(data){
+            changeTypeText();
+        });
+        function changeTypeText()
+        {
+            var data = form.val("layuiadmin-form-ad_position");
+            if (data.charge_way === "3") {
+                $('.th_first_unit').html('首件 (件)');
+                $('.th_continue_unit').html('续件 (件)');
+            }
+
+            if (data.charge_way === "2") {
+                $('.th_first_unit').html('首体积 (m³)');
+                $('.th_continue_unit').html('续体积 (m³)');
+            }
+
+            if (data.charge_way === "1") {
+                $('.th_first_unit').html('首重 (Kg)');
+                $('.th_continue_unit').html('续重 (Kg)');
+            }
+        }
+        $(function () {
+            changeTypeText();
+        });
 
         window.callTree = function (data) {
             for (var i = 0; i < data.length; i++) {

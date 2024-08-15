@@ -42,6 +42,7 @@ class ComposerStaticInit5a2d3f17a354f62b23555fb1b47bde64
             'think\\helper\\' => 13,
             'think\\composer\\' => 15,
             'think\\captcha\\' => 14,
+            'think\\' => 6,
         ),
         'c' => 
         array (
@@ -50,6 +51,10 @@ class ComposerStaticInit5a2d3f17a354f62b23555fb1b47bde64
         'a' => 
         array (
             'app\\' => 4,
+        ),
+        'W' => 
+        array (
+            'Webmozart\\Assert\\' => 17,
         ),
         'T' => 
         array (
@@ -153,6 +158,10 @@ class ComposerStaticInit5a2d3f17a354f62b23555fb1b47bde64
         array (
             0 => __DIR__ . '/..' . '/topthink/think-captcha/src',
         ),
+        'think\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-image/src',
+        ),
         'clagiordano\\weblibs\\configmanager\\' => 
         array (
             0 => __DIR__ . '/..' . '/clagiordano/weblibs-configmanager/src',
@@ -160,6 +169,10 @@ class ComposerStaticInit5a2d3f17a354f62b23555fb1b47bde64
         'app\\' => 
         array (
             0 => __DIR__ . '/../..' . '/application',
+        ),
+        'Webmozart\\Assert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
         'TencentCloud\\' => 
         array (
@@ -319,7 +332,7 @@ class ComposerStaticInit5a2d3f17a354f62b23555fb1b47bde64
         ),
         'Cron\\' => 
         array (
-            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+            0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
         ),
         'App\\' => 
         array (

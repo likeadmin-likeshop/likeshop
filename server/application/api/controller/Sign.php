@@ -61,8 +61,10 @@ class sign extends ApiBase{
     public function sign(){
         $result = $this->validate(['user_id'=>$this->user_id],'app\api\validate\Sign');
         if($result === true){
-            $sign = SignLogic::sign($this->user_id);
-            $this->_success('签到成功',$sign);
+            $result = SignLogic::sign($this->user_id);
+            if(is_array($result)){
+                $this->_success('签到成功',$result);
+            }
         }
         $this->_error($result);
 

@@ -25,13 +25,15 @@
                 <!-- 1、奖品 -->
                 <div class="layui-tab-item layui-show">
                     <!-- 操作按钮 -->
-                    <div style="padding: 30px 0 10px 0;">
+                    <div style="margin-bottom: 10px">
                         <button class="layui-btn layui-btn-sm layuiadmin-btn-event {$view_theme_color}" data-type="add">新增奖品</button>
                     </div>
                     <!-- 数据表格 -->
                     <table id="table-data-lists-prize" lay-filter="table-data-lists-prize"></table>
                     <script type="text/html" id="table-image">
-                        <img src="{$storageUrl}{{d.image}}" alt="图片" style="width:60px;height:60px;" class="image-show">
+                        {{#  if(d.image){ }}
+                         <img src="{$storageUrl}{{d.image}}" alt="图片" style="width:60px;height:60px;" class="image-show">
+                        {{#  } }}
                     </script>
                     <script type="text/html" id="table-status">
                         <input type="checkbox" lay-filter="switch-status"
@@ -47,6 +49,20 @@
                 <!-- 2、设置 -->
                 <div class="layui-tab-item">
                     <div class="layui-form">
+                        <div class="layui-form-item" style="margin-bottom:0;">
+                            <label for="need" class="layui-form-label">消耗积分：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" min="0" id="need" name="need" value="{$setConfig.need}"
+                                       onkeyup="value=value.replace(/[^\d]/g,'')"
+                                       class="layui-input" autocomplete="off" lay-verify="required|number">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-block">
+                                <div class="layui-form-mid layui-word-aux">每次抽奖消耗的积分数量</div>
+                            </div>
+                        </div>
                         <div class="layui-form-item" style="margin-bottom:0;">
                             <label for="limit" class="layui-form-label">抽奖次数：</label>
                             <div class="layui-input-inline">
@@ -73,6 +89,13 @@
                             <div class="layui-input-inline">
                                 <input type="radio" name="status" value="1" title="开启" {if $setConfig.status}checked{/if}>
                                 <input type="radio" name="status" value="0" title="关闭" {if !$setConfig.status}checked{/if}>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">中奖名单：</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="show_win" value="1" title="显示" {if $setConfig.show_win}checked{/if}>
+                                <input type="radio" name="show_win" value="0" title="隐藏" {if !$setConfig.show_win}checked{/if}>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -129,9 +152,9 @@
             ,cols: [[
                 {field:'id',  title:'ID', width:80}
                 ,{field:'name', title:'奖品名称', width:150}
-                ,{field:'number', title:'奖品数量', width:100, align:'center'}
+                ,{field:'prize_name', title:'奖品', width:200, align:'center'}
                 ,{field:'images', title:'图片', width:120, align:'center', templet:"#table-image"}
-                ,{field:'probability', title:'几率', width:80, align:'center'}
+                ,{field:'probability', title:'概率', width:80, align:'center'}
                 ,{field:'sort', title:'排序', edit:true, width:80, align:'center'}
                 ,{field:'status', title:'状态', width:100, align:'center', templet:"#table-status"}
                 ,{title:'操作', toolbar: '#operation'}
@@ -155,10 +178,11 @@
             ,url: '{:url("LuckDraw/record")}'
             ,cols: [[
                 {field:'id',  title:'ID', width:80}
-                ,{field:'userInfo', title:'会员信息', width:200, templet:"#table-userInfo"}
-                ,{field:'create_time', title:'抽奖时间', width:200, align:'center'}
-                ,{field:'prize_name', title:'奖品', width:150, align:'center'}
-                ,{field:'number', title:'数量', width:100, align:'center'}
+                ,{field:'userInfo', title:'会员信息',  templet:"#table-userInfo"}
+                ,{field:'create_time', title:'抽奖时间',align:'center'}
+                ,{field:'prize_name', title:'奖品', align:'center'}
+                ,{field:'remark', title:'备注信息', align:'center'}
+                ,{field:'send_desc', title:'发放状态', align:'center'}
             ]]
             ,page:true
             ,text: {none: '暂无数据！'}
@@ -209,7 +233,7 @@
                 })
             },
             edit: function (obj) {
-                if ({$setConfig.status} === 1) {
+                if ('{$setConfig.status}' === '1') {
                     layui.layer.msg('请在设置关闭抽奖在操作!', { time:1000 });
                     return false;
                 }
@@ -247,7 +271,7 @@
             },
             del: function (obj) {
                 layer.confirm('确定删除: '+obj.data.name, function(index){
-                    if ({$setConfig.status} === 1) {
+                    if ('{$setConfig.status}' === '1') {
                         layui.layer.msg('请在设置关闭抽奖在操作!', { time:1000 });
                         return false;
                     }
@@ -271,7 +295,7 @@
             },
             // 切换状态
             switchStatus: function (obj) {
-                if ({$setConfig.status} === 1) {
+                if ('{$setConfig.status}' === '1') {
                     layui.layer.msg('请在设置关闭抽奖在操作!', { time:1000 });
                     table.reload('table-data-lists-prize', { where: [] });
                     return false;
@@ -297,10 +321,10 @@
                 type: 'post',
                 success:function(res) {
                     if(res.code === 1) {
-                        layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1000});
+                        layui.layer.msg(res.msg, {offset:'15px',icon:1,time:1500});
                         location.href = '{:url("LuckDraw/index")}';
                     } else {
-                        layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1000});
+                        layui.layer.msg(res.msg, {offset:'15px',icon:2,time:1500});
                     }
                 }
             });

@@ -148,12 +148,15 @@
                     elem: '#express-lists'
                     , url: '{:url("express/lists")}'
                     , cols: [[
-                         {field: 'name', title: '快递公司',align:'center'}
-                        , {field: 'icon', width: 150,title: '快递图标',templet:'#icon',align:'center'}
+                         {field: 'name', title: '快递公司', width: 100, align:'center'}
+                        , {field: 'icon', width: 130,title: '快递图标', templet:'#icon',align:'center'}
                         , {field: 'website', title: '公司网址',align:'center'}
-                        , {field: 'code', title: '快递编码',align:'center'}
+                        , {field: 'code', title: '快递编码', align:'center'}
                         , {field: 'code100', title: '快递100编码',align:'center'}
                         , {field: 'codebird', title: '快递鸟编码',align:'center'}
+                        , {field: 'partner_id', title: 'partnerId',align:'center'}
+                        , {field: 'partner_key', title: 'partnerKey',align:'center'}
+                        , {field: 'tempid', title: 'tempid',align:'center'}
                         , {field: 'sort', title: '排序', align: 'center',sort: true, width: 100}
                         , {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#express-operation'}
                     ]]

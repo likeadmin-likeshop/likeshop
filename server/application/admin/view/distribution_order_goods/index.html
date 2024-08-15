@@ -1,0 +1,192 @@
+{layout name="layout1" /}
+<style>
+    .search {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .search .layui-form-label {
+        width: 60px;
+        text-align: right;
+    }
+    .layui-inline {
+        margin-top: 5px;
+    }
+    .layui-table-cell {
+        height:auto;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!--操作提示-->
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*分销订单明细；</p>
+                    </div>
+                </div>
+            </div>
+            <!--搜索区域-->
+            <div class="search layui-form">
+                <div class="layui-inline">
+                    <div class="layui-form-label">订单信息</div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="order_keyword" name="order_keyword" placeholder="订单编号" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-label">商品信息</div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="goods_keyword" name="goods_keyword" placeholder="名称" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-label">分销会员</div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="distribution_keyword" placeholder="编号/昵称" name="distribution_keyword" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-label">佣金状态</div>
+                    <div class="layui-input-inline">
+                        <select name="status" id="status"  placeholder="请选择" >
+                            <option value="0">全部</option>
+                            <option value="1">待返佣</option>
+                            <option value="2">已结算</option>
+                            <option value="3">已失效</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary layui-bg-blue" lay-submit lay-filter="search">搜索</button>
+                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
+                </div>
+            </div>
+            <!--数据表格-->
+            <table id="lists" lay-filter="lists"></table>
+            <!--自定义模板-->
+            <script type="text/html" id="order-info">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>订单编号:{{d.order_sn}}</p>
+                    <p style="width: 300px;text-overflow:ellipsis;overflow: hidden">下单时间:{{d.order_create_time}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="user-info">
+                <img src="{{d.user_info.avatar}}" style="height:60px;width: 60px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>用户编号:{{d.user_info.sn}}</p>
+                    <p>用户昵称:{{d.user_info.nickname}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="goods-info">
+                <img src="{{d.goods_image}}" style="height:60px;width: 60px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>商品名称:{{d.goods_name}}</p>
+                    <p>规格名称:{{d.spec_value_str}}</p>
+                    <p>数量:{{d.goods_num}}</p>
+                    <p>实付金额:{{d.total_pay_price}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="distribution-member-info">
+                <img src="{{d.distribution_avatar}}" style="height:60px;width: 60px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>分销会员编号:{{d.distribution_sn}}</p>
+                    <p>分销会员昵称:{{d.distribution_nickname}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="distribution-order-info">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>分销等级:{{d.level_name}}</p>
+                    <p>分销层级:{{d.level}}级</p>
+                    <p>佣金比例:{{d.ratio}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="earnings-info">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>佣金金额:{{d.money}}</p>
+                    <p>佣金状态:{{d.status_desc}}</p>
+                    <p>结算时间:{{d.settlement_time}}</p>
+                </div>
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['table', 'form', 'like'], function () {
+        let $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , table = layui.table;
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('lists', {
+                where: field,
+                page: {curr: 1}
+            });
+        });
+
+        //清空查询
+        form.on('submit(reset)', function(){
+            $('#order_keyword').val('');
+            $('#goods_keyword').val('');
+            $('#distribution_keyword').val('');
+            $('#status').val('0');
+            form.render('select');
+            //刷新列表
+            table.reload('lists', {
+                where: [], page: {curr: 1}
+            });
+        });
+
+        // 数据表格渲染
+        table.render({
+            elem: '#lists'
+            ,url: '{:url("distribution_order_goods/index")}' //数据接口
+            ,method: 'post'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {templet: '#order-info', title: '订单信息', width:280}
+                ,{templet: '#user-info', title: '买家信息', width:280}
+                ,{templet: '#goods-info', title: '商品信息', width:280}
+                ,{templet: '#distribution-member-info', title: '分销会员', width:280}
+                ,{templet: '#distribution-order-info', title: '分销信息', width:280}
+                ,{templet: '#earnings-info', title: '佣金信息'}
+            ]]
+            , text: {none: '暂无数据！'}
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            },
+            response: {
+                statusCode: 1
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+
+    });
+
+
+</script>

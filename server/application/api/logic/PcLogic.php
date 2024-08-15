@@ -19,6 +19,7 @@
 namespace app\api\logic;
 use app\api\model\Goods;
 use app\common\model\Ad;
+use app\common\model\GoodsBrand;
 use app\common\server\ConfigServer;
 use app\common\server\UrlServer;
 use think\Db;
@@ -230,7 +231,15 @@ class PcLogic{
         $where[] = ['status','=',1];
         //按商品名称搜索
         if($name){
-            $where[] = ['name','like','%'.$name.'%'];
+            // 优先查品牌 然后再查询商品
+            $band_ids = GoodsBrand::where('is_show', 1)->where('name', 'like', "%{$name}%")->column('id');
+            if ($band_ids) {
+                $where[] = function ($query) use($band_ids, $name) {
+                    $query->where('brand_id', 'in', $band_ids)->whereOr('name', 'like', "%{$name}%");
+                };
+            } else {
+                $where[] = [ 'name', 'like', "%{$name}%" ];
+            }
 
         }
         //按商品分类搜索
@@ -292,7 +301,7 @@ class PcLogic{
         $data = [
             'nickname'      => $post['nickname'],
             'sex'           => $post['sex'],
-            'create_time'   => time(),
+            'update_time'   => time(),
         ];
         return Db::name('user')->where(['id'=>$post['user_id']])->update($data);
     }

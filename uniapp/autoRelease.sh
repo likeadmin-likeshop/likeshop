@@ -1,6 +1,6 @@
 #!/bin/bash
 # 文件原路径
-srcPath="./unpackage/dist/build/h5"
+srcPath="./unpackage/dist/build/web"
 # 发布路径文件夹
 releasePath="../server/public/mobile"
 

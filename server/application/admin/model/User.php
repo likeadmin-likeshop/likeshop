@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\model;
+use app\common\model\Distribution;
 use app\common\server\UrlServer;
 use think\Db;
 use think\Model;
@@ -102,6 +103,32 @@ class User extends Model
             ->where(['d.user_id' => $data['id'], 'd.status' => 2])
             ->find();
         return $info;
+    }
+
+    public function getDistributionAttr($value)
+    {
+        $distribution = Distribution::where('user_id', $value)->findOrEmpty()->toArray();
+        if (!empty($distribution) && $distribution['is_distribution'] == 1) {
+            return '是';
+        }
+        return '否';
+    }
+
+
+    /**
+     * @notes 获取用户数量
+     * @param null $condition
+     * @return User
+     * @author 段誉
+     * @date 2022/4/27 11:24
+     */
+    public static function getUserCount($condition = null)
+    {
+        $where[] = ['del', '=', 0];
+        if (!is_null($condition)) {
+            $where[] = $condition;
+        }
+        return self::where($where)->count('id');
     }
 
 }

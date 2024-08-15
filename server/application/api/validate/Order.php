@@ -19,8 +19,17 @@
 
 namespace app\api\validate;
 use app\api\logic\SeckillLogic;
+use app\common\model\Goods;
+use app\common\model\GoodsItem;
+use app\common\model\Order as CommonOrder;
+use app\common\model\OrderGoods;
+use app\common\model\SelffetchShop;
+use app\common\model\SelffetchVerifier;
+use app\common\model\Team;
+use app\common\server\ConfigServer;
 use think\Db;
 use think\Validate;
+use app\common\model\AfterSale as CommonAfterSale;
 
 class Order extends Validate
 {
@@ -28,16 +37,32 @@ class Order extends Validate
         'goods' => 'require|array|checkGoods',
         'action' => 'require',
         'coupon_id' =>'checkCoupon',
+        'delivery_type' => 'require|in:'.CommonOrder::DELIVERY_STATUS_EXPRESS.','.CommonOrder::DELIVERY_STATUS_SELF,
+//        'selffetch_shop_id' => 'requireIf:delivery_type,'.CommonOrder::DELIVERY_STATUS_SELF,
+//        'consignee' => 'requireIf:delivery_type,'.CommonOrder::DELIVERY_STATUS_SELF,
+//        'mobile' => 'requireCallback:check_require|mobile',
+        'pickup_code' => 'require|checkPickupCode',
     ];
 
     protected $message = [
         'goods.require' => '参数错误',
         'action.require' => '参数缺失',
+        'delivery_type.require' => '配送方式不能为空',
+//        'selffetch_shop_id.requireIf' => '自提门店不能为空',
+//        'consignee.requireIf' => '取货人不能为空',
+//        'mobile.requireCallback' => '联系电话不能为空',
+//        'mobile.mobile' => '联系电话格式不正确',
+        'pickup_code.require' => '提货码不能为空',
     ];
 
     protected function sceneBuy()
     {
-        $this->only(['action', 'goods', 'coupon_id']);
+        $this->only(['action', 'goods', 'coupon_id', 'delivery_type']);
+    }
+
+    protected function sceneVerification()
+    {
+        $this->only(['pickup_code']);
     }
 
 
@@ -185,4 +210,90 @@ class Order extends Validate
 
     }
 
+
+    function check_require($value, $data){
+        if($data['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF){
+            return true;
+        }
+    }
+
+
+    public function checkPickupCode($value,$rule,$data)
+    {
+        $result = CommonOrder::where(['pickup_code'=>$value])->find();
+        if (empty($result)) {
+            return '提货码不正确或订单不存在';
+        }
+        if ($result['order_status'] != CommonOrder::STATUS_WAIT_DELIVERY) {
+            return '订单不允许核销';
+        }
+        if ($result['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF) {
+            return '不是自提订单，不允许核销';
+        }
+        if ($result['verification_status'] == CommonOrder::WRITTEN_OFF) {
+            return '订单已核销';
+        }
+        $verifier = SelffetchVerifier::where(['selffetch_shop_id'=>$result['selffetch_shop_id'],'user_id'=>$data['user_id'],'status'=>1,'del'=>0])->find();
+        if (empty($verifier)) {
+            return '非门店核销员，无法核销订单';
+        }
+        if ($result['order_type'] == CommonOrder::TEAM_ORDER){
+            $found = Db::name('team_found')->where(['id' => $result['team_found_id']])->find();
+            if ($found['status'] != Team::STATUS_SUCCESS){
+                return '拼团成功后才能核销';
+            }
+        }
+        
+        return true;
+    }
+
+
+    //验证订单商品是否支持对应的配送方式
+    public function checkDeliveryType($value,$rule,$data)
+    {
+        $is_express = ConfigServer::get('delivery_type', 'is_express');
+        $is_express = ($is_express === null) ? 1 : $is_express;
+        $is_selffetch = ConfigServer::get('delivery_type', 'is_selffetch');
+        $is_selffetch = ($is_selffetch === null) ? 0 : $is_selffetch;
+        $tips = true;
+        //门店自提
+        if ($value == CommonOrder::DELIVERY_STATUS_SELF) {
+            if ($is_selffetch == 0) {
+                $tips = '暂未开启门店自提配送方式';
+            }else {
+                $item_ids = implode(',',array_column($data['goods'],'item_id'));
+                $goods_ids = implode(',',GoodsItem::where('id','in', $item_ids)->column('goods_id'));
+                $goods = Goods::where('id','in', $goods_ids)->select();
+                $goods_name = [];
+                foreach ($goods as $val) {
+                    if ($val['is_selffetch'] == 0) {
+                        $goods_name[] = $val['name'];
+                    }
+                }
+                if (!empty($goods_name)) {
+//                    $tips = '商品：'.implode('、',$goods_name).'不支持门店自提！';
+                    $tips = '订单存在不支持门店自提的商品！';
+                }
+            }
+        }elseif ($value == CommonOrder::DELIVERY_STATUS_EXPRESS) { //快递配送
+            if ($is_express == 0) {
+                $tips = '暂未开启快递配送方式';
+            }else {
+                $item_ids = implode(',',array_column($data['goods'],'item_id'));
+                $goods_ids = implode(',',GoodsItem::where('id','in', $item_ids)->column('goods_id'));
+                $goods = Goods::where('id','in', $goods_ids)->select();
+                $goods_name = [];
+                foreach ($goods as $val) {
+                    if ($val['is_express'] == 0) {
+                        $goods_name[] = $val['name'];
+                    }
+                }
+                if (!empty($goods_name)) {
+//                    $tips = '商品：'.implode('、',$goods_name).'不支持快递配送！';
+                    $tips = '订单存在不支持快递配送的商品！';
+                }
+            }
+        }
+        return $tips;
+    }
 }

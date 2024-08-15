@@ -19,13 +19,17 @@
 namespace app\index\controller;
 
 use app\common\server\ConfigServer;
+use think\Console;
 use think\Controller;
 
 class Index extends Controller
 {
     public function index()
     {
-        $template = app()->getRootPath() . 'public/mobile/index.html';
+        $template = app()->getRootPath() . 'public/pc/index.html';
+        if (is_mobile()) {
+            $template = app()->getRootPath() . 'public/mobile/index.html';
+        }
         if (file_exists($template)) {
             return view($template);
         }
@@ -47,9 +51,11 @@ class Index extends Controller
             exit;
         }
         if (!preg_match("/^http(s)?:\\/\\/.+/", $url)) {
-            $url = "http://".$url;
+            $url = "http://" . $url;
         }
 
         $this->redirect($url);
     }
+
+
 }

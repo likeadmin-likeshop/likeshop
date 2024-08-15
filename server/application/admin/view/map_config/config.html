@@ -1,0 +1,92 @@
+{layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 100px;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" pad15>
+            <div class="layui-form" lay-filter="">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">腾讯地图key：</label>
+                    <div class="layui-input-inline" style="width: 300px;">
+                        <input type="text"  name="tx_map_key" value="{$config.tx_map_key}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like;
+
+        form.on('submit(set)', function (data) {
+            like.ajax({
+                url: '{:url("MapConfig/config")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        },function () {
+                            location.href = location.href;
+                        });
+                    }
+                }
+            });
+        });
+
+    });
+</script>

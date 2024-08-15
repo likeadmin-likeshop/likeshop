@@ -35,6 +35,7 @@ class AccountLog extends Model{
     const withdraw_to_balance   = 106;
     const user_transfer_inc_balance = 107;
     const user_transfer_dec_balance = 108;
+    const luck_draw_inc_balance     = 109;
 
     const admin_add_integral           = 200;
     const admin_reduce_integral        = 201;
@@ -48,6 +49,7 @@ class AccountLog extends Model{
     const luck_draw_integral           = 209;
     const deduct_order_first_integral  = 210;
     const order_goods_give_integral    = 211;
+    const luck_draw_dec_integral       = 212;
 
     const admin_add_growth      = 300;
     const admin_reduce_growth   = 301;
@@ -58,22 +60,24 @@ class AccountLog extends Model{
     const withdraw_dec_earnings     = 400;//提现扣减佣金
     const withdraw_back_earnings    = 401;//提现被拒绝返回佣金
     const distribution_inc_earnings = 402;//分销订单结算增加佣金
+    const admin_inc_earnings = 403; //后台增加佣金
+    const admin_reduce_earnings = 404; //后台减少佣金
 
     const money_change = [      //余额变动类型
         self::admin_add_money,self::admin_reduce_money,self::recharge_money,self::balance_pay_order,self::cancel_order_refund,self::after_sale_refund
-        , self::withdraw_to_balance,self::user_transfer_inc_balance, self::user_transfer_dec_balance
+        , self::withdraw_to_balance,self::user_transfer_inc_balance, self::user_transfer_dec_balance, self::luck_draw_inc_balance
     ];
     const integral_change = [   //积分变动类型
         self::admin_add_integral,self::admin_reduce_integral,self::sign_in_integral,self::recharge_give_integral,self::order_add_integral,self::invite_add_integral
         , self::order_deduction_integral,self::register_add_integral,self::cancel_order_refund_integral,self::luck_draw_integral,self::deduct_order_first_integral
-        , self::order_goods_give_integral
+        , self::order_goods_give_integral, self::luck_draw_dec_integral
     ];
     const growth_change = [     //成长值变动类型
         self::admin_add_growth,self::admin_reduce_growth,self::recharge_give_growth,self::sign_give_growth, self::order_give_growth
     ];
 
     const earnings_change = [   //佣金变动
-        self::withdraw_dec_earnings, self::withdraw_back_earnings, self::distribution_inc_earnings
+        self::withdraw_dec_earnings, self::withdraw_back_earnings, self::distribution_inc_earnings, self::admin_inc_earnings, self::admin_reduce_earnings
     ];
 
     public static function getAcccountDesc($from = true){
@@ -107,6 +111,10 @@ class AccountLog extends Model{
             self::user_transfer_inc_balance     => '会员转账(收入方)',
             self::user_transfer_dec_balance     => '会员转账(支出方)',
             self::order_give_growth             => '下单赠送成长值',
+            self::admin_inc_earnings            => '后台增加佣金',
+            self::admin_reduce_earnings         => '后台减少佣金',
+            self::luck_draw_dec_integral        => '积分抽奖消耗积分',
+            self::luck_draw_inc_balance         => '积分抽奖中奖余额',
         ];
         if($from === true){
             return $desc;

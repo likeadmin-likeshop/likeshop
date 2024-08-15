@@ -35,6 +35,22 @@ class AfterSale extends Model
     //退款类型
     const TYPE_ONLY_REFUND      = 0;//仅退款
     const TYPE_REFUND_RETURN    = 1;//退款退货
+    
+    /**
+     * @notes 不能核销的状态
+     * @return array
+     * @author lbzy
+     * @datetime 2023-06-21 11:48:32
+     */
+    static function CanNotVerificationStatusArr() : array
+    {
+        return [
+            self::STATUS_APPLY_REFUND,
+            self::STATUS_WAIT_RETURN_GOODS,
+            self::STATUS_WAIT_RECEIVE_GOODS,
+            self::STATUS_WAIT_REFUND,
+        ];
+    }
 
     //售后状态描述
     public static function getStatusDesc($state)
@@ -89,6 +105,11 @@ class AfterSale extends Model
         ];
         return $data;
     }
+    
+    function getConfirmTakeTimeAttr($fieldValue, $data)
+    {
+        return $fieldValue ? date('Y-m-d H:i:s', $fieldValue) : '';
+    }
 
 
 
@@ -106,7 +127,7 @@ class AfterSale extends Model
     public function order()
     {
         return $this->hasOne('order', 'id', 'order_id')
-            ->field('id,order_sn,total_amount,order_amount,pay_way,order_status');
+            ->field('id,order_sn,total_amount,order_amount,pay_way,order_status,delivery_type');
     }
 
 

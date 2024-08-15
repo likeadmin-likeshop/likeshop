@@ -28,18 +28,21 @@ class ArticleLogic
     public static function lists($id, $page, $size)
     {
         $where[] = [
-            ['del', '=', 0],
-            ['is_show', '=', 1],
+            ['a.del', '=', 0],
+            ['a.is_show', '=', 1],
+            ['c.del', '=', 0],
+            ['c.is_show', '=', 1],
         ];
 
         if (!empty($id)) {
             $where[] = ['cid', '=', $id];
         }
 
-        $res = DB::name('article')
+        $res = DB::name('article')->alias('a')
+            ->join('article_category c', 'c.id = a.cid')
             ->where($where)
-            ->field('id,title,synopsis,image,visit,create_time')
-            ->order(['create_time' => 'desc']);
+            ->field('a.id,a.title,a.synopsis,a.image,a.visit,a.create_time')
+            ->order(['a.id' => 'desc']);
 
         $count = $res->count();
         $article = $res->page($page, $size)->select();
@@ -89,7 +92,7 @@ class ArticleLogic
         $recommend_list = [];
         if(2 == $client){
             $recommend_list = Db::name('article')
-                            ->where([['del','=','0'], ['id','<>',$id]])
+                            ->where([['del','=','0'], ['id','<>',$id], ['is_show', '=', 1]])
                             ->field('id,title,image,visit')
                             ->order('visit desc')
                             ->limit(5)

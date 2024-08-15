@@ -92,20 +92,6 @@ class Crontab extends AdminBase
         $this->_error('删除失败');
     }
 
-
-    /**
-     * 定时任务操作
-     */
-    public function operation()
-    {
-        $post = $this->request->post();
-        $result = CrontabLogic::operation($post['operation'], $post['id']);
-        if ($result !== true) {
-            $this->_error('操作失败：' . $result);
-        }
-        $this->_success('操作成功');
-    }
-
     /**
      * 获取接下来执行时间
      */

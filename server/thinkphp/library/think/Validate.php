@@ -993,6 +993,7 @@ class Validate
         if (is_string($rule)) {
             $rule = explode(',', $rule);
         }
+
         if (false !== strpos($rule[0], '\\')) {
             // 指定模型类
             $db = new $rule[0];

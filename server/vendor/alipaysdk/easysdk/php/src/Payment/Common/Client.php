@@ -218,7 +218,7 @@ class Client {
      * @throws Exception
      * @throws TeaUnableRetryError
      */
-    public function refund($outTradeNo, $refundAmount){
+    public function refund($outTradeNo, $refundAmount, $params = []){
         $_runtime = [
             "ignoreSSL" => $this->_kernel->getConfig("ignoreSSL"),
             "httpProxy" => $this->_kernel->getConfig("httpProxy"),
@@ -258,6 +258,10 @@ class Client {
                     "out_trade_no" => $outTradeNo,
                     "refund_amount" => $refundAmount
                 ];
+                // 加入退款单号
+                if (isset($params['out_request_no']) && $params['out_request_no']) {
+                    $bizParams['out_request_no'] = $params['out_request_no'];
+                }
                 $textParams = [];
                 $_request->protocol = $this->_kernel->getConfig("protocol");
                 $_request->method = "POST";

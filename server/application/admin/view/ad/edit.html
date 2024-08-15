@@ -13,9 +13,9 @@
     .goods{
         display: none;
     }
-    .img-tips{
-        display: none;
-    }
+    /*.img-tips{*/
+    /*    display: none;*/
+    /*}*/
     .size-tips{
         color: #a3a3a3;
         font-size: 9px;
@@ -109,7 +109,11 @@
     </div>
     <div class="layui-form-item img-tips">
         <label class="layui-form-label"></label>
-        <span class="size-tips"></span>
+        {notempty name="$info.position_desc"}
+            <span class="size-tips">{$info.position_desc}</span>
+        {else /}
+            <span class="size-tips"></span>
+        {/notempty}
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">链接类型：</label>
@@ -121,10 +125,12 @@
     </div>
     <div class="layui-form-item link page">
         <label class="layui-form-label">商城页面：</label>
-        <div class="layui-input-block">
-            {foreach $link_page as $item => $val}
-            <input type="radio" name="page" title="{$val.name}" value="{$item}" >
-            {/foreach}
+        <div class="layui-input-inline">
+            <select name="page" style="width: 300px">
+                {foreach $link_page as $item => $val}
+                <option value="{$item}"  {if condition="$item eq $info.link"} selected{/if}>{$val.name}</option>
+                {/foreach}
+            </select>
         </div>
     </div>
     <div class="layui-form-item link goods">
@@ -172,6 +178,15 @@
             <input type="radio" name="status" value="0" title="停用" {if condition="$info.status eq 0"}checked{/if}>
         </div>
     </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-inline">
+            <input type="number" value="{$info.sort}" name="sort"  placeholder="请输入排序" class="layui-input" min="0">
+            <div class="layui-form-mid layui-word-aux">默认50。数值越大越靠前</div>
+        </div>
+    </div>
+
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="edit-ad-submit" id="edit-ad-submit" value="确认">
     </div>

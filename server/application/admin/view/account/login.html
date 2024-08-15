@@ -35,7 +35,7 @@
                     </div>
                     <div>
                         <input type="text" name="account" lay-verify="required" lay-vertype="tips"
-                               class="layui-input" style="border:none;width: 150px;padding-left: 20px;"
+                               class="layui-input" style="border:none;width: 300px;padding-left: 20px;"
                                placeholder="请输入账号" value="{$account}"/>
                     </div>
                 </div>
@@ -45,21 +45,11 @@
                     </div>
                     <div>
                         <input type="password" name="password" lay-verify="required" lay-vertype="tips"
-                               class="layui-input" style="border:none;width: 150px;padding-left: 20px;"
+                               class="layui-input" style="border:none;width: 300px;padding-left: 20px;"
                                placeholder="请输入密码"/>
                     </div>
                 </div>
-                <div class="form-box-item">
-                    <div class="icon">
-                        <img src="__PUBLIC__/static/common/image/login/login_code.png"/>
-                    </div>
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <input  type="text" name="code" lay-verify="required" lay-vertype="tips"
-                                style="border:none;width: 150px;padding-left: 20px;" placeholder="请输入验证码"/>
-                        <img style="height: 36px;width: 126px;" src="{:captcha_src()}"
-                             class="layadmin-user-login-codeimg" id="captcha">
-                    </div>
-                </div>
+
                 <div class="form-box-checked">
                     <div>
                         <input type="checkbox" lay-skin="primary" name="remember_account" title="记住账号" {notempty name="account"}checked=""{/notempty}>
@@ -89,12 +79,6 @@
             , like = layui.like
             , form = layui.form
         form.render();
-
-        //更换图形验证码
-        $('body').on('click', '#captcha', function () {
-            var othis = $(this);
-            this.src = '{:captcha_src()}?t=' + new Date().getTime();
-        });
 
 
         function login(obj) {

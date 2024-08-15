@@ -1,0 +1,115 @@
+{layout name="layout2" /}
+<style>
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-user" id="layuiadmin-form-user" style="padding: 20px 30px 0 0;">
+    <input type="hidden" name="id" value="{$detail.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">快递公司：</label>
+        <div class="layui-input-inline">
+            <select name="shipping_id" lay-filter="shipping_id">
+                <option value="">快递公司</option>
+                {foreach $express as $item}
+                <option value="{$item.id}" {if $detail['shipping_id'] == $item.id} selected {/if}>{$item.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">快递单号：</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" value="{$detail.invoice_no}" name="invoice_no" type="text" placeholder="请输入快递单号" >
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="change_delivery-submit" id="change_delivery-submit" value="确认">
+    </div>
+</div>
+<script>
+    var goods_ids = [];
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','laydate','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,laydate = layui.laydate
+            ,like = layui.like;
+        laydate.render({
+            elem: '#birthday'
+            ,format: 'yyyy-MM-dd'
+            ,trigger: 'click'
+        });
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image, 600);
+        });
+
+        form.on('select(category)', function(data){
+            var level = $(data.elem).find("option:selected").attr("data-level");
+            $('.alliance_ratio').hide();
+            $('.autotrophy_ratio').hide();
+            if(level == 2){
+                $('.alliance_ratio').show();
+                $('.autotrophy_ratio').show();
+
+            }
+        });
+
+    })
+    var callbackdata = function () {
+        return goods_ids;
+    }
+</script>

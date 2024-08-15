@@ -30,6 +30,7 @@ class GoodsCategory extends Validate
         'name'  => 'require|checkName',
         'pid'   => 'addPid|editPid',
         'image' => 'require',
+        'sort'  => 'integer|egt:0',
     ];
 
     protected $message = [
@@ -37,6 +38,8 @@ class GoodsCategory extends Validate
         'name.require'  => '分类名称不能为空！',
         'name.unique'   => '分类名称已存在',
         'image.require' => '请上传分类图标',
+        'sort.integer'  => '排序请输入整数',
+        'sort.egt'      => '排序值不合法',
     ];
     protected function sceneAdd()
     {

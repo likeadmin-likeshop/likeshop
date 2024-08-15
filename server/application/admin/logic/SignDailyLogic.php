@@ -40,6 +40,17 @@ class SignDailyLogic
         $where[] = ['del','=',0];
         $count =  Db::name('sign_daily')->where($where)->count();
         $lists = Db::name('sign_daily')->where($where)->select();
+        foreach ($lists as $key => $sign){
+            $tips = '';
+            if(1 == $sign['integral_status'] && $sign['integral'] > 0){
+                $tips.= '赠送'.$sign['integral'].'积分；';
+            }
+            if(1 == $sign['growth_status'] && $sign['growth'] > 0){
+                $tips.= '赠送'.$sign['growth'].'成长值';
+            }
+            $lists[$key]['award_tips'] = $tips;
+
+        }
         return ['count' => $count,'list' => $lists];
 
     }
@@ -67,11 +78,11 @@ class SignDailyLogic
             ->where(['us.del'=>0,'u.del'=>0])
             ->where($where )
             ->join('user u','u.id = us.user_id')
-            ->field('us.user_id,nickname,avatar,mobile,sex,u.create_time ,days,integral,growth,
+            ->field('us.user_id,sn,nickname,avatar,mobile,sex,u.create_time ,days,integral,growth,
             continuous_integral, continuous_growth,sign_time,mobile,us.sign_time')
             ->order('us.id desc')
+            ->page($get['page'], $get['limit'])
             ->select();
-
         foreach ( $lists as &$item){
             switch ($item['sex']){
                 case 1:
@@ -87,7 +98,6 @@ class SignDailyLogic
             $item['sign_time']   = date('Y-m-d H:i:s', $item['sign_time']);
             $item['avatar'] = UrlServer::getFileUrl($item['avatar']);
         }
-
         return ['count' => $count,'list' => $lists];
     }
 

@@ -1,0 +1,166 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height: auto;
+        white-space: normal;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*同步直播间每天最多可同步100000次，请合理分配获取频次。</p>
+                        <p>*获取直播间列表及直播间信息每天最多可同步100000次。</p>
+                        <p>*扫此二维码开播：<img class="image-show" src="/static/admin/images/zhibo.png" alt="zb" style="width:50px;height:50px;"> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="add">创建直播间</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="sync">同步直播间</button>
+            </div>
+            <table id="like-table-lists" lay-filter="like-table-lists"></table>
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table','like','laydate'], function(){
+        var $ = layui.$
+            ,table = layui.table
+            ,like = layui.like;
+
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+
+        //管理员管理
+        table.render({
+            id: 'like-table-lists'
+            ,elem: '#like-table-lists'
+            ,url: '{:url("LiveRoom/lists")}'
+            ,cols: [[
+                {field:'id', width: 80, title: 'ID', sort: true, hide:true}
+                ,{field:'name', title:'直播间名称',width:200}
+                ,{field:'roomid', title:'直播间ID',width:100, align:'center'}
+                ,{field:'anchor_name', title:'主播昵称', width:100, align:'center'}
+                ,{field:'start_time', title:'开播时间', width:200, align:'center'}
+                ,{field:'end_time', title:'结束时间', width:200, align:'center'}
+                ,{field:'goods', title:'商品数量', width:100, align:'center'}
+                ,{field:'live_status', title:'状态', width:100, align:'center'}
+                ,{fixed:'right', title:'操作', width:150, align:'center', toolbar:'#operation'}
+
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function fix() {
+                $(".layui-table-main tr").each(function (index, val) {
+                    $(".layui-table-fixed").each(function () {
+                        $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                });
+                $(".layui-table-header tr").each(function (index, val) {
+                    $(".layui-table-fixed").each(function () {
+                        $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
+                    });
+                });
+                window.onresize = function () {
+                    fix()
+                }
+            }
+        });
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '创建直播间'
+                    ,content: '{:url("LiveRoom/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            console.log(field);
+                            like.ajax({
+                                url:'{:url("LiveRoom/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                        layer.close(index);
+                                        table.reload('like-table-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            },
+            // 同步直播间
+            sync: function(){
+                table.reload('like-table-lists');
+            },
+            // 删除
+            del: function (obj) {
+                layer.confirm('确定要删除直播间:'+obj.data.name, function(index) {
+                    like.ajax({
+                        url: '{:url("LiveRoom/del")}',
+                        data: {id:obj.data.roomid},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code === 1) {
+                                layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000});
+                                layer.close(index);
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+        };
+
+        // 监听表格右侧工具条
+        table.on('tool(like-table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+    });
+</script>

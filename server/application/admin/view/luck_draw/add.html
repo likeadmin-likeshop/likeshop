@@ -6,40 +6,70 @@
         <div class="layui-form-item">
             <label for="prize_type" class="layui-form-label"><font color="red">*</font>类型：</label>
             <div class="layui-input-inline">
-                <select id="prize_type" name="prize_type" lay-filter="prize_type"
-                        lay-verType="tips" lay-verify="required|number">
+                <select id="prize_type" name="prize_type" lay-filter="prize_type" lay-verType="tips" lay-verify="required|number">
                     <option value="">请选择</option>
-                    <option value="1">积分</option>
-                    <option value="2">谢谢惠顾</option>
+                    {foreach $prizes as $key => $value}
+                    <option value="{$key}">{$value}</option>
+                    {/foreach}
                 </select>
             </div>
         </div>
 
-        <!-- 选择积分类型 才会出现 -->
-        <div class="layui-form-item" id="prize_number" style="display:none;">
-            <label for="number" class="layui-form-label"><font color="red">*</font>数量：</label>
+        <!-- 奖品为积分 -->
+        <div class="layui-form-item" id="prize_integral" style="display:none;">
+            <label for="integral" class="layui-form-label "><font color="red">*</font>数量：</label>
             <div class="layui-input-inline">
-                <input type="number" min="0" id="number" name="number" class="layui-input"
+                <input type="number" min="0" id="integral" name="integral" class="layui-input"
                        onkeyup="value=value.replace(/[^\d]/g,'')" value="0"
-                       autocomplete="off" lay-verType="tips" lay-verify="prize_number">
+                       autocomplete="off" lay-verType="tips" lay-verify="prize_integral">
             </div>
         </div>
+
+        <!-- 奖品为优惠券 -->
+        <div class="layui-form-item" id="prize_coupon" style="display:none;">
+            <label class="layui-form-label">优惠券：</label>
+            <div class="layui-input-inline">
+                <select class="coupon" name="coupon" placeholder="请选择" >
+                    {foreach $coupon as $val}
+                    <option value="{$val.id}">{$val.name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+
+        <!-- 奖品为余额 -->
+        <div class="layui-form-item" id="prize_balance" style="display:none;">
+            <label for="integral" class="layui-form-label "><font color="red">*</font>金额：</label>
+            <div class="layui-input-inline">
+                <input type="number" min="0" id="balance" name="balance" class="layui-input"
+                       onkeyup="value=value.replace(/[^\d]/g,'')" value="0"
+                       autocomplete="off" lay-verType="tips" lay-verify="prize_balance">
+            </div>
+        </div>
+
 
         <div class="layui-form-item">
             <label class="layui-form-label">图片：</label>
             <div style="height:80px;line-height:80px">
-                <div class="master-image"></div>
-                <div class="goods-img-add goods-image upload-image-div" lay-verify="image" lay-vertype="tips"> <a class="upload-image-a"> + 添加图片</a></div>
+                <div class="master-image">
+                    <input name="image" type="hidden" value="/static/common/image/default/luck_draw.png">
+                    <img class="goods-img" src="/static/common/image/default/luck_draw.png" alt="图">
+                    <a class="goods-img-del-x goods-image-del" style="display: none;">x</a>
+                </div>
+                <div class="goods-img-add goods-image upload-image-div" lay-verify="image" lay-vertype="tips" style="display: none;">
+                    <a class="upload-image-a"> + 添加图片</a>
+                </div>
             </div>
         </div>
 
-        <!-- 抽奖几率 -->
+        <!-- 抽奖概率 -->
         <div class="layui-form-item" style="margin-bottom: 0;">
-            <label for="probability" class="layui-form-label"><font color="red">*</font>几率：</label>
+            <label for="probability" class="layui-form-label"><font color="red">*</font>概率：</label>
             <div class="layui-input-inline">
                 <input type="number" min="0" id="probability" name="probability" class="layui-input"
                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                       autocomplete="off" lay-verType="tips" lay-verify="required|number">
+                       autocomplete="off" lay-verType="tips" lay-verify="required|number|probability">
             </div>
             <div class="layui-form-mid layui-word-aux">%</div>
         </div>
@@ -151,23 +181,47 @@
         form.on('select(prize_type)', function(data) {
             // 未选择类型
             if (data.value === "" ) {
-                $("#prize_number").hide();
-                $("#prize_number input").val(0);
+                $("#prize_integral").hide();
+                $("#prize_coupon").hide();
+                $("#prize_balance").hide();
+                $("#prize_integral input").val(0);
+                $("#prize_balance input").val(0);
             }
             // 积分类型类型
             if (data.value === "1") {
-                $("#prize_number").show();
+                $("#prize_integral").show();
+                $("#prize_coupon").hide();
+                $("#prize_balance").hide();
+                $("#prize_balance input").val(0);
             }
             // 谢谢惠顾类型
             if (data.value === "2") {
-                $("#prize_number").hide();
-                $("#prize_number input").val(0);
+                $("#prize_integral").hide();
+                $("#prize_coupon").hide();
+                $("#prize_balance").hide();
+                $("#prize_integral input").val(0);
+                $("#prize_balance input").val(0);
+            }
+            // 优惠券类型
+            if (data.value === "3") {
+                $("#prize_integral").hide();
+                $("#prize_coupon").show();
+                $("#prize_balance").hide();
+                $("#prize_integral input").val(0);
+                $("#prize_balance input").val(0);
+            }
+            // 余额
+            if (data.value === "4") {
+                $("#prize_integral").hide();
+                $("#prize_coupon").hide();
+                $("#prize_balance").show();
+                $("#prize_integral input").val(0);
             }
         });
 
         // 表单验证
         form.verify({
-            prize_number: function (value) {
+            prize_integral: function (value) {
                 var type = $("#prize_type").val();
                 if (type === "1") {
                     if (value === "") {
@@ -176,6 +230,22 @@
                     if (parseInt(value) < 0) {
                         return '奖品数量需为大于等于0的正整数';
                     }
+                }
+            },
+            prize_balance: function (value) {
+                var type = $("#prize_type").val();
+                if (type === "4") {
+                    if (value === "") {
+                        return '请填写奖品金额';
+                    }
+                    if (parseInt(value) < 0) {
+                        return '奖品金额需为大于等于0的正整数';
+                    }
+                }
+            },
+            probability:function (value) {
+                if (parseInt(value) > 100 || parseInt(value) < 0) {
+                    return '请填写0~100的中奖概率';
                 }
             }
         });

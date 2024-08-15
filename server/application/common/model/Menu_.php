@@ -34,6 +34,7 @@ class Menu_{
     const index_goods_category      = 11;
     const index_luckdraw            = 12;
     const index_bargain             = 13;
+    const index_live_room           = 14;
     /*
      * 个人中心菜单
      */
@@ -47,6 +48,8 @@ class Menu_{
     const centre_service          = 17;
     const centre_team_activity    = 18;
     const centre_bargain          = 19;
+    const centre_writeoff_order   = 20;
+    const centre_invitation_poster  = 21;
 
     /**
      * Notes: 菜单内容
@@ -65,21 +68,21 @@ class Menu_{
         $config1 = [
             self::index_seckill            => [
                 'name'          => '限时秒杀',
-                'link'          => '/pages/bundle/goods_seckill/goods_seckill',
+                'link'          => '/bundle/pages/goods_seckill/goods_seckill',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
             self::index_team_activity      => [
                 'name'          => '拼团活动',
-                'link'          => '/pages/bundle/goods_combination/goods_combination',
+                'link'          => '/bundle/pages/goods_combination/goods_combination',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
             self::index_hot_sell           => [
                 'name'          => '热销榜单',
-                'link'          => '/pages/bundle/hot_list/hot_list',
+                'link'          => '/bundle/pages/hot_list/hot_list',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
@@ -93,7 +96,7 @@ class Menu_{
             ],
             self::index_sign_in            => [
                 'name'          => '积分签到',
-                'link'          => '/pages/bundle/user_sign/user_sign',
+                'link'          => '/bundle/pages/user_sign/user_sign',
                 'is_tab'        => 0,
                 'menu_type'     => 1,
             ],
@@ -141,31 +144,38 @@ class Menu_{
             ],
             self::index_luckdraw           => [
                 'name'          => '积分抽奖',
-                'link'          => '/pages/bundle/luckly_wheel/luckly_wheel',
+                'link'          => '/bundle/pages/luckly_wheel/luckly_wheel',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
             self::index_bargain            => [
                 'name'          => '砍价活动',
-                'link'          => '/pages/bundle/bargain/bargain',
+                'link'          => '/bundle/pages/bargain/bargain',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
-        ],
+            ],
+            self::index_live_room           => [
+                'name'          => '商城直播',
+                'link'          => '/bundle/pages/live_broadcast/live_broadcast',
+                'is_tab'        => 0,
+                'link_type'     => 1,
+                'menu_type'     => 1,
+            ],
         ];
         //个人中心菜单
         $config2 = [
             self::centre_my_wallet         => [
                 'name'          => '我的钱包',
-                'link'          => '/pages/bundle/user_wallet/user_wallet',
+                'link'          => '/bundle/pages/user_wallet/user_wallet',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
             self::centre_generalize        => [
                 'name'          => '分销推广',
-                'link'          => '/pages/bundle/user_spread/user_spread',
+                'link'          => '/bundle/pages/user_spread/user_spread',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 2,
@@ -207,25 +217,39 @@ class Menu_{
             ],
             self::centre_service            => [
                 'name'          => '联系客服',
-                'link'          => '/pages/bundle/contact_offical/contact_offical',
+                'link'          => '/bundle/pages/contact_offical/contact_offical',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
             self::centre_team_activity      => [
                 'name'          => '我的拼团',
-                'link'          => '/pages/bundle/user_group/user_group',
+                'link'          => '/bundle/pages/user_group/user_group',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
             self::centre_bargain            => [
                 'name'          => '砍价记录',
-                'link'          => '/pages/bundle/bargain_code/bargain_code',
+                'link'          => '/bundle/pages/bargain_code/bargain_code',
                 'is_tab'        => 0,
                 'link_type'     => 1,
                 'menu_type'     => 1,
             ],
+            self::centre_writeoff_order     => [
+                'name'          => '核销订单',
+                'link'          => '/bundle/pages/writeoff_order/writeoff_order',
+                'is_tab'        => 0,
+                'link_type'     => 1,
+                'menu_type'     => 1,
+            ],
+            self::centre_invitation_poster => [
+                'name'          => '邀请海报',
+                'link'          => '/bundle/pages/invite_fans/invite_fans',
+                'is_tab'        => 0,
+                'link_type'     => 1,
+                'menu_type'     => 1,
+            ]
         ];
         $config_name = 'config'.$scene;
         $content = $$config_name;

@@ -24,6 +24,7 @@ use app\api\model\Order;
 use app\common\model\Order as CommonOrder;
 use app\common\model\Client_;
 use app\common\server\AliPayServer;
+use app\common\server\ConfigServer;
 use app\common\server\WeChatPayServer;
 use app\common\server\WeChatServer;
 use app\common\logic\PaymentLogic;
@@ -51,6 +52,9 @@ class Payment extends ApiBase
     public function prepay()
     {
         $post = $this->request->post();
+        if(!isset($post['from']) || !isset($post['order_id']) || !isset($post['pay_way'])) {
+            $this->_error('参数缺失');
+        }
         switch ($post['from']) {
             case 'order':
                 $order = Order::get($post['order_id']);
@@ -62,18 +66,18 @@ class Payment extends ApiBase
                 $order = Db::name('recharge_order')->where(['id' => $post['order_id']])->find();
                 break;
         }
-
         //找不到订单
         if (empty($order)) {
             $this->_error('订单不存在');
         }
-
+        // 变更支付方式
+        $order['pay_way'] = $post['pay_way'];
         //已支付
-        if ($order['pay_status'] == Pay::ISPAID || $order['order_amount'] == 0) {
-            $this->_success('支付成功', ['order_id' => $order['id']], 10001);
+        if ($order['pay_status'] == Pay::ISPAID) {
+            $this->_success('支付成功', ['order_id' => $order['id']], 10000);
         }
 
-        $result = PaymentLogic::pay($post['from'], $order, $post['order_source']);
+        $result = PaymentLogic::pay($post['from'], $order, $this->client);
         if (false === $result) {
             $this->_error(PaymentLogic::getError(), ['order_id' => $order['id']], PaymentLogic::getReturnCode());
         }
@@ -83,6 +87,56 @@ class Payment extends ApiBase
         }
 
         $this->_success('', $result);
+    }
+
+
+
+    /**
+     * Notes: pc端预支付 NATIVE
+     * @author 段誉(2021/3/18 16:03)
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function pcPrepay()
+    {
+        $post = $this->request->post();
+        $order = Order::get($post['order_id']);
+        $order['pay_way'] = $post['pay_way'];
+
+        $return_msg = ['order_id' => $order['id'], 'order_amount' => $order['order_amount']];
+
+        //找不到订单
+        if (empty($order)) {
+            $this->_error('订单不存在');
+        }
+
+        if ($order['order_status'] == CommonOrder::STATUS_CLOSE || $order['del'] == 1) {
+            $this->_error('订单已关闭');
+        }
+
+        //已支付
+        if ($order['pay_status'] == Pay::ISPAID) {
+            $this->_success('支付成功', $return_msg, 10001);
+        }
+
+        $result = PaymentLogic::pcPay($order, $post['order_source']);
+
+        if (false === $result) {
+            $this->_error(PaymentLogic::getError(), $return_msg, PaymentLogic::getReturnCode());
+        }
+
+        if ($order['pay_way'] == Pay::BALANCE_PAY) {
+            $this->_success('支付成功', $return_msg, PaymentLogic::getReturnCode());
+        }
+
+        $return_msg['data'] = $result;
+
+        if (PaymentLogic::getReturnCode() != 0) {
+            $this->_success('支付成功', $return_msg, PaymentLogic::getReturnCode());
+        }
+
+        $this->_success('支付成功', $return_msg);
     }
 
 
@@ -144,6 +198,16 @@ class Payment extends ApiBase
      */
     public function payway()
     {
+        $params = $this->request->get();
+        if(!isset($params['from']) || !isset($params['order_id'])) {
+            return $this->_error('参数缺失');
+        }
+        if($params['from'] == 'order') {
+            $order = Db::name('order')->where('id', $params['order_id'])->find();
+        }else if($params['from'] == 'recharge') {
+            $order = Db::name('recharge_order')->where('id', $params['order_id'])->find();
+        }
+
         $payModel = new Pay();
         $pay = $payModel->where(['status' => 1])->order('sort')->hidden(['config'])->select()->toArray();
 
@@ -167,8 +231,26 @@ class Payment extends ApiBase
             if (in_array($this->client, [Client_::mnp, Client_::oa]) && $item['code'] == 'alipay') {
                 unset($pay[$k]);
             }
+            if($params['from'] == 'recharge' && $item['code'] == 'balance') {
+                unset($pay[$k]);
+            }
+
         }
-        $this->_success('', array_values($pay));
+        // 订单自动取消时间
+        $cancelTime = ConfigServer::get('trading', 'order_cancel');
+        if(empty($cancelTime)) {
+            // 前端检测为0时不显示倒计时
+            $cancelTime = 0;
+        }else{
+            // 订单创建时间 + 后台设置自动关闭未付款订单时长
+            $cancelTime = $order['create_time'] + intval($cancelTime) * 60;
+        }
+        $data = [
+            'pay' => array_values($pay),
+            'order_amount' => $order['order_amount'],
+            'cancel_time' => $cancelTime,
+        ];
+        $this->_success('', $data);
     }
 
 }

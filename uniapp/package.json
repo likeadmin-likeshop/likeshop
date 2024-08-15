@@ -1,6 +1,6 @@
 {
   "name": "uni-app",
-  "version": "1.0.0",
+  "version": "3.3.13",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -9,5 +9,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }

@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>LikeShop单商户安装</title>
+        <title>likeshop单商户安装</title>
         <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
         <link rel="stylesheet" type="text/css" href="./css/mounted.css"/>
         <link rel="shortcut icon" href="./favicon.ico"/>
@@ -32,26 +32,26 @@
                     <?php if ($step == '1') { ?>
                         <div class="mounted-content-item show">
                             <div class="content-header">
-                                LikeShop100%开源免费商用电商系统授权协议
+                                likeshop开源商城系统授权协议
                             </div>
                             <div class="content">
-                                <h2>版权所有(c)2019-<?=date('Y')?>，LikeShop团队保留所有权利。</h2>
+                                <h2>版权所有(c)2019-<?=date('Y')?>，likeshop团队保留所有权利。</h2>
                                 <p class="mt16">
-                                    感谢你信任并选择LikeShop100%开源免费商用电商系统，LikeShop100%开源免费商用电商系统由广州好象科技有限公司（www.likeshop.cn）原创研发并取得软件著作权，100%开放源码，无加密，自主可控，方便二次开发。</p>
+                                    感谢你信任并选择likeshop开源商城系统，likeshop开源商城系统由广州好象科技有限公司（www.likeshop.cn）原创研发并取得软件著作权，代码全开源，小白易看懂，二开容易改，运营好上手。</p>
                                 <p class="mt6">为了正确并合法的使用本软件，请你在使用前务必阅读清楚下面的协议条款：</p>
-                                <h3 class="mt16">一、本授权协议适用且仅适用于LikeShop系列开源软件产品(以下简称LikeShop)任何版本，广州好象科技有限公司拥有本授权协议的最终解释权。</h3>
+                                <h3 class="mt16">一、本授权协议适用且仅适用于likeshop系列开源软件产品(以下简称likeshop)任何版本，广州好象科技有限公司拥有本授权协议的最终解释权。</h3>
                                 <h3 class="mt16">二、协议许可的权利</h3>
                                 <p class="mt6">
-                                    1．开源版本可以任意免费商用，可去除界面版权logo。付费版本需要取得商业授权方可使用，否则会被视为盗版行为并承担相应法律责任。
+                                    1．免费版本可免费商用，不能私自去除官方版权。付费版本需要取得商业授权方可使用，可以去除官方版权，否则会被视为盗版行为并承担相应法律责任。
                                 </p>
                                 <p class="mt6">
-                                    2．请尊重LikeShop开源团队劳动成果，严禁使用本系统转手、转卖、倒卖或二次开发后转手、转卖、倒卖等商业行为。
+                                    2．请尊重likeshop开源团队劳动成果，严禁使用本系统转手、转卖、倒卖或二次开发后转手、转卖、倒卖等商业行为。
                                 </p>
                                 <p class="mt6">
-                                    3．任何企业和个人不允许对LikeShop程序代码以任何形式任何目的再发布。
+                                    3．任何企业和个人不允许对likeshop程序代码以任何形式任何目的再发布。
                                 </p>
                                 <p class="mt6">
-                                    4．你可以在协议规定的约束和限制范围内修改LikeShop系列开源软件产品或界面风格以适应你的网站要求。
+                                    4．你可以在协议规定的约束和限制范围内修改likeshop系列开源软件产品或界面风格以适应你的网站要求。
                                 </p>
                                 <p class="mt6">
                                     5．你拥有使用本软件构建的系统全部内容所有权，并独立承担与这些内容的相关法律义务。
@@ -61,13 +61,13 @@
                                 </p>
                                 <h3 class="mt6">三、协议规定的约束和限制</h3>
                                 <p class="mt6">
-                                    1．开源版本可以任意免费商用，可去除界面版权logo。付费版本需要取得商业授权方可使用，否则会被视为盗版行为并承担相应法律责任。
+                                    1．免费版本可免费商用，不能私自去除官方版权。付费版本需要取得商业授权方可使用，可以去除官方版权，否则会被视为盗版行为并承担相应法律责任。
                                 </p>
                                 <p class="mt6">
                                     2．未经官方许可，不得对本软件或与之关联的商业授权进行出租、出售、抵押或发放子许可证。
                                 </p>
                                 <p class="mt6">
-                                    3．未经官方许可，禁止在LikeShop开源商城的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。
+                                    3．未经官方许可，禁止在likeshop开源商城的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。
                                 </p>
                                 <p class="mt6">
                                     4．如果你未能遵守本协议的条款，你的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。
@@ -87,22 +87,22 @@
                                 </p>
                                 <br><br>
                                 <p class="mt6">
-                                    LikeShop开源地址：https://gitee.com/likeshop_gitee/likeshop
+                                    likeshop开源地址：https://gitee.com/likeshop_gitee/likeshop
                                 </p>
                                 <p class="mt6">
-                                    LikeShop官方网站：https://www.likeshop.cn
+                                    likeshop官方网站：https://www.likeshop.cn
                                 </p>
                                 <p class="mt6">
-                                    LikeShop知识社区：https://home.likeshop.cn
+                                    likeshop知识社区：https://home.likeshop.cn
                                 </p>
                                 <p class="mt6">
                                     -----------------------------------------------------
                                 </p>
                                 <p class="mt6">
-                                    电话: 400-8489-315 18925185700 钟先生
+                                    电话: 18925185700 钟先生
                                 </p>
                                 <p class="mt6">
-                                    广州好象科技有限公司
+                                    likeshop开源团队
                                 </p>
                             </div>
                         </div>
@@ -224,7 +224,7 @@
                                     </div>
                                 </div>
                                 <div class="mounted-tips mt16">
-                                    系统要求LikeShop开源商城安装目录下的runtime和upload必须可写，才能使用LikeShop开源商城的所有功能。
+                                    系统要求likeshop开源商城安装目录下的runtime和upload必须可写，才能使用likeshop开源商城的所有功能。
                                 </div>
                                 <div class="mounted-item mt16">
                                     <div class="content-header">
@@ -248,25 +248,25 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td>/runtime</td>
+                                                <td>/server/runtime</td>
                                                 <td>runtime目录可写</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('runtime')) ?>
                                                 <td><?php if($modelInstall->checkDirWrite('runtime') =='fail') echo'请给runtime目录权限，若目录不存在先新建';?></td>
                                             </tr>
                                             <tr>
-                                                <td>/public/uploads</td>
+                                                <td>/server/public/uploads</td>
                                                 <td>uploads目录可写</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('public/uploads')) ?>
                                                 <td><?php if($modelInstall->checkDirWrite('public/uploads')=='fail') echo'请给public/uploads目录权限，若目录不存在先新建';?></td>
                                             </tr>
                                             <tr>
-                                                <td>../config</td>
+                                                <td>/server/config</td>
                                                 <td>config目录可写</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('config')) ?>
                                                 <td><?php if($modelInstall->checkDirWrite('config')=='fail') echo'请给config目录权限，若目录不存在先新建';?></td>
                                             </tr>
                                             <tr>
-                                                <td>../.env</td>
+                                                <td>/server/.env</td>
                                                 <td>.env文件可写</td>
                                                 <?php echo $modelInstall->correctOrFail($modelInstall->checkDirWrite('.env')) ?>
                                                 <td><?php if($modelInstall->checkDirWrite('.env')=='fail') echo'请给.env文件权限，若文件不存在，注意文件名第1字符是" . "';?></td>
@@ -419,7 +419,7 @@
                                             <img src="./images/icon_mountSuccess.png"/>
                                         </div>
                                         <div class="mt16 result">安装完成，进入管理后台</div>
-                                        <div style="margin-top: 5px;font-size:14px;">版本号：2.5.7.20210811</div>
+                                        <div style="margin-top: 5px;font-size:14px;">版本号：3.0.3.20231204</div>
                                         <div class="tips">
                                             为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹删除，或者config/install.lock/目录下创建install.lock文件防止重复安装。
                                         </div>

@@ -19,6 +19,7 @@
 namespace app\common\server;
 use App\Api\PrinterService;
 use App\Api\PrintService;
+use app\common\model\Order;
 use App\Oauth\YlyOauthClient;
 use App\Config\YlyConfig;
 use Exception;
@@ -151,11 +152,23 @@ class YlyPrinter{
                 $content .= "下单时间：".date("Y-m-d H:i").PHP_EOL;
                 $content .= "订单编号：".$order['order_sn'].PHP_EOL;
                 $content .= PHP_EOL;
-                $content .= "<FS2>收货信息</FS2>".PHP_EOL;
-                $content .= PHP_EOL;
-                $content .= "联系人：".$order['consignee'].PHP_EOL;
-                $content .= "手机号码：".$order['mobile'].PHP_EOL;
-                $content .= "收货地址：".$order['delivery_address'].PHP_EOL;
+                //自提订单，打印自提信息
+                if(Order::DELIVERY_STATUS_SELF == $order['delivery_type']){
+                    $content .= "<FS2>自提信息</FS2>".PHP_EOL;
+                    $content .= PHP_EOL;
+                    $content .= "提货人：".$order['consignee'].PHP_EOL;
+                    $content .= "手机号码：".$order['mobile'].PHP_EOL;
+                    $content .= "提货门店：".$order['selffetch_shop']['name'].PHP_EOL;
+                    $content .= "门店地址：".$order['selffetch_shop']['shop_address'].PHP_EOL;
+                }else{
+                    $content .= "<FS2>收货信息</FS2>".PHP_EOL;
+                    $content .= PHP_EOL;
+                    $content .= "联系人：".$order['consignee'].PHP_EOL;
+                    $content .= "手机号码：".$order['mobile'].PHP_EOL;
+                    $content .= "收货地址：".$order['delivery_address'].PHP_EOL;
+
+                }
+
                 $content .= PHP_EOL;
                 $content .= "<FS2>商品信息</FS2>".PHP_EOL;
                 $content .= str_repeat('-', 32).PHP_EOL;

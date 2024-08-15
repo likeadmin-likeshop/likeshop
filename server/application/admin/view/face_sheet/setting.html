@@ -1,0 +1,87 @@
+{layout name="layout1" /}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4; margin-bottom: 30px;">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>* 电子面单打印配置流程</p>
+                        <p>* 1、如您使用快递100云打印机: 到快递100官方申请账号并企业认证得到key和secret</p>
+                        <p>* 2、从打印机底部标签中得到打印机设备号(siid),这里说的是快递100的打印机,其他打印机可能不同</p>
+                        <p>* 3、新建一个发件人信息模板,以供打印时可以选择</p>
+                        <p>* 4、新建一个电子面单模板,以供打印时可以选择</p>
+                        <p>* 5、注意: 在创建电子面单模板是需要用到的 电子面单账号和密码，需自行联系快递公司开通获取</p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label for="kd100_key" class="layui-form-label">类型选择：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="type" value="1" title="快递100" {if ($faceSheet.type ?? 1)==1}checked{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="kd100_key" class="layui-form-label">授权Key：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="kd100_key" name="kd100_key" value="{$detail.kd100_key ?? ''}" autocomplete="off" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux" style="white-space:nowrap;">快递100Key: 快递100企业管理后台 -> 我的信息 -> 企业信息</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="kd100_secret" class="layui-form-label">Secret：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="kd100_secret" name="kd100_secret" value="{$detail.kd100_secret ?? ''}" autocomplete="off" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux" style="white-space:nowrap;">快递100Secret: 快递100企业管理后台 -> 我的信息 -> 企业信息</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="kd100_siid" class="layui-form-label">设备编号siid：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="kd100_siid" name="kd100_siid" value="{$detail.kd100_siid ?? ''}" autocomplete="off" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux" style="white-space:nowrap;">设备编码: 在打印机底部标签中可查看</div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-top:30px">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-bg-blue" lay-submit lay-filter="addSublime">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table'], function(){
+        var form = layui.form;
+
+        // 监听提交
+        form.on('submit(addSublime)', function(data){
+            layui.$.ajax({
+                url: '{:url("FaceSheet/setting")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if(res.code === 1) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            ,icon: 1
+                            ,time: 1000
+                        });
+                        return false;
+                    }
+                }
+            });
+            return false;
+        });
+
+    });
+</script>

@@ -106,11 +106,12 @@
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form','likeedit','like'], function(){
+    }).use(['index', 'form','likeedit','like','layedit'], function(){
         var $ = layui.$
             ,form = layui.form
             ,like = layui.like
-            ,likeedit = layui.likeedit;
+            // ,likeedit = layui.likeedit;
+            ,likeedit = layui.layedit;
         //富文本上传图片
         likeedit.set({
             uploadImage: {

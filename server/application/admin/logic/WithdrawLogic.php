@@ -22,6 +22,7 @@ namespace app\admin\logic;
 use app\admin\model\WithdrawApply;
 use app\common\logic\AccountLogLogic;
 use app\admin\logic\WechatCorporatePaymentLogic;
+use app\common\server\ConfigServer;
 use app\common\server\UrlServer;
 use app\common\model\AccountLog;
 use app\common\model\User;
@@ -151,7 +152,15 @@ class WithdrawLogic
           Db::name('withdraw_apply')
             ->where('id',  $id)
             ->update(['update_time' => time(),'description'=>$post['description']]);
-          return WechatCorporatePaymentLogic::pay($withdraw);
+            //微信零钱接口:1-企业付款到零钱;2-商家转账到零钱
+            $transfer_way = ConfigServer::get('withdraw', 'transfer_way',1);
+            if ($transfer_way == 1) {
+                return WechatCorporatePaymentLogic::pay($withdraw);
+            }
+            if ($transfer_way == 2) {
+                return WechatMerchantTransferLogic::transfer($withdraw);
+            }
+
         }
 
         //提现到微信收款码、支付收款码
@@ -238,9 +247,9 @@ class WithdrawLogic
         ->find();
       $detail['typeDesc'] = Withdraw::getTypeDesc($detail['type']);
       $detail['statusDesc'] = Withdraw::getStatusDesc($detail['status']);
-      $detail['create_time'] = Date('Y-m-d h:i:s', $detail['create_time']);
-      $detail['payment_time'] = Date('Y-m-d h:i:s', $detail['payment_time']);
-      $detail['transfer_time'] = $detail['transfer_time'] ? Date('Y-m-d h:i:s', $detail['transfer_time']) : '';
+      $detail['create_time'] = Date('Y-m-d H:i:s', $detail['create_time']);
+      $detail['payment_time'] = Date('Y-m-d H:i:s', $detail['payment_time']);
+      $detail['transfer_time'] = $detail['transfer_time'] ? Date('Y-m-d H:i:s', $detail['transfer_time']) : '';
       return $detail;
     }
 
@@ -255,7 +264,48 @@ class WithdrawLogic
 
         // 判断提现单是否为提现中状态 2 且 提现方式为 微信零钱 2
         if($withdraw['status'] == 2 && $withdraw['type'] == 2) {
-          return WechatCorporatePaymentLogic::search($withdraw);
+            //微信零钱接口:1-企业付款到零钱;2-商家转账到零钱
+            $transfer_way = ConfigServer::get('withdraw', 'transfer_way',1);
+            if ($transfer_way == 1) {
+                return WechatCorporatePaymentLogic::search($withdraw);
+            }
+            if ($transfer_way == 2) {
+                $result = WechatMerchantTransferLogic::details($withdraw);
+                // 记录查询结果
+                WithdrawApply::update(['update_time'=>time(),'pay_search_desc'=>json_encode($result, JSON_UNESCAPED_UNICODE)],['id'=>$withdraw['id']]);
+                if(isset($result['detail_status'])) {
+                    if ($result['detail_status'] == 'SUCCESS') {
+                        // 转账成功,标记提现申请单为提现成功,记录支付信息
+                        WithdrawApply::update(['status'=>3,'payment_no'=>$result['detail_id'],'payment_time'=>strtotime($result['update_time'])],['id'=>$withdraw['id']]);
+                        return ['code' => 1, 'msg' => '提现成功'];
+                    }
+                    if ($result['detail_status'] == 'FAIL') {
+                        // 转账失败
+                        WithdrawApply::update(['status'=>4],['id'=>$withdraw['id']]);
+                        //回退佣金
+                        $user = User::find($withdraw['user_id']);
+                        $user->earnings = ['inc', $withdraw['money']];
+                        $user->save();
+
+                        //增加佣金变动记录
+                        AccountLogLogic::AccountRecord(
+                            $withdraw['user_id'],
+                            $withdraw['money'],
+                            1,
+                            AccountLog::withdraw_back_earnings,
+                            '',
+                            $withdraw['id'],
+                            $withdraw['sn']
+                        );
+                        return ['code' => 1, 'msg' => '提现至微信零钱失败'];
+                    }
+                    if ($result['detail_status'] == 'PROCESSING') {
+                        return ['code' => 0, 'msg' => '正在处理中'];
+                    }
+                }else{
+                    return ['code' => 0, 'msg' => $result['message'] ?? '商家转账到零钱查询失败'];
+                }
+            }
         }else{
           return [
             'code' => 0,

@@ -1,5 +1,4 @@
 <template>
-<!--pages/webview/webview.wxml-->
 <view class="page-body">
   <view class="page-section page-section-gap">
     <web-view :src="url"></web-view>

@@ -70,7 +70,7 @@ class LoginPassword extends Validate
 
     public function sceneForget()
     {
-
+        $this->only([ 'mobile','password', 'code' ]);
     }
 
 }

@@ -40,7 +40,7 @@
 			// 一个z-index值，用于设置没有网络这个组件的层次，因为页面可能会有其他定位的元素层级过高，导致此组件被覆盖
 			zIndex: {
 				type: [Number, String],
-				default: ''
+				default: '1000'
 			},
 			// image 没有网络的图片提示
 			image: {
@@ -63,6 +63,9 @@
 			this.isIOS = (uni.getSystemInfoSync().platform === 'ios');
 			uni.onNetworkStatusChange((res) => {
 				this.isConnected = res.isConnected;
+				if (this.isConnected) {
+					this.refresh();
+				}
 				this.networkType = res.networkType;
 			});
 			uni.getNetworkType({
@@ -77,6 +80,27 @@
 			});
 		},
 		methods: {
+			refresh() {
+				this.$emit('retry');
+				// 页面重载
+				// #ifdef MP
+				var pages = getCurrentPages(); //获取所有页面的数组对象
+				var currPage = pages[pages.length - 1]; //当前页面
+				uni.redirectTo({
+					url: currPage.$page.fullPath
+				})
+				// #endif
+				// #ifdef APP
+				var pages = getCurrentPages(); //获取所有页面的数组对象
+				var currPage = pages[pages.length - 1]; //当前页面
+				uni.reLaunch({
+					url: currPage.$page.fullPath,
+				})
+				// #endif
+				// #ifdef H5
+				location.reload()
+				// #endif
+			},
 			retry() {
 				// 重新检查网络
 				uni.getNetworkType({
@@ -99,7 +123,6 @@
 						}
 					}
 				});
-				this.$emit('retry');
 			},
 			async openSettings() {
 				if (this.networkType == "none") {

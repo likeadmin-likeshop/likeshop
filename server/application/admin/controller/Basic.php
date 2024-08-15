@@ -33,22 +33,22 @@ class Basic extends AdminBase
     {
         $config = [
             'file_url' => UrlServer::getFileUrl('/'),
-            'name' => ConfigServer::get('website', 'name'),
-            'login_logo' => ConfigServer::get('website', 'login_logo'),
-            'keyword' => ConfigServer::get('website', 'keyword'),
-            'slogan_status' => ConfigServer::get('website', 'slogan_status'),
-            'slogan' => ConfigServer::get('website', 'slogan'),
-            'backstage_logo' => ConfigServer::get('website', 'backstage_logo'),
-            'admin_image' => ConfigServer::get('website', 'admin_image'),
-            'admin_title' => ConfigServer::get('website', 'admin_title'),
-            'partner_image' => ConfigServer::get('website', 'partner_image'),
-            'partner_title' => ConfigServer::get('website', 'partner_title'),
-            'shop_logo' => ConfigServer::get('website', 'shop_logo'),
-            'shop_login_logo'   =>ConfigServer::get('website', 'shop_login_logo'),
-            'pc_logo' => ConfigServer::get('website', 'pc_logo'),
-            'user_image' => ConfigServer::get('website', 'user_image'),
-            'goods_image'   =>ConfigServer::get('website', 'goods_image'),
-            'web_favicon'   =>ConfigServer::get('website', 'web_favicon'),
+            'name'            => ConfigServer::get('website', 'name'),
+            'login_logo'      => UrlServer::getFileUrl(ConfigServer::get('website', 'login_logo')),
+            'keyword'         => ConfigServer::get('website', 'keyword'),
+            'slogan_status'   => ConfigServer::get('website', 'slogan_status'),
+            'slogan'          => UrlServer::getFileUrl(ConfigServer::get('website', 'slogan')),
+            'backstage_logo'  => UrlServer::getFileUrl(ConfigServer::get('website', 'backstage_logo')),
+            'admin_image'     => UrlServer::getFileUrl(ConfigServer::get('website', 'admin_image')),
+            'admin_title'     => ConfigServer::get('website', 'admin_title'),
+            'partner_image'   => UrlServer::getFileUrl(ConfigServer::get('website', 'partner_image')),
+            'partner_title'   => ConfigServer::get('website', 'partner_title'),
+            'shop_logo'       => UrlServer::getFileUrl(ConfigServer::get('website', 'shop_logo')),
+            'shop_login_logo' => UrlServer::getFileUrl(ConfigServer::get('website', 'shop_login_logo')),
+            'pc_logo'         => UrlServer::getFileUrl(ConfigServer::get('website', 'pc_logo')),
+            'user_image'      => UrlServer::getFileUrl(ConfigServer::get('website', 'user_image')),
+            'goods_image'     => UrlServer::getFileUrl(ConfigServer::get('website', 'goods_image')),
+            'web_favicon'     => UrlServer::getFileUrl(ConfigServer::get('website', 'web_favicon')),
         ];
 
         $this->assign('config', $config);
@@ -72,17 +72,17 @@ class Basic extends AdminBase
         if ($result === true) {
 
             ConfigServer::set('website', 'name', $post['name']);
-            ConfigServer::set('website', 'login_logo', $post['login_logo']);
-            ConfigServer::set('website', 'web_favicon', $post['web_favicon']);
+            ConfigServer::set('website', 'login_logo', UrlServer::setFileUrl($post['login_logo']));
+            ConfigServer::set('website', 'web_favicon', UrlServer::setFileUrl($post['web_favicon']));
 
-            ConfigServer::set('website', 'backstage_logo', $post['backstage_logo']);
-            ConfigServer::set('website', 'admin_image', $post['admin_image']);
+            ConfigServer::set('website', 'backstage_logo', UrlServer::setFileUrl($post['backstage_logo']));
+            ConfigServer::set('website', 'admin_image', UrlServer::setFileUrl($post['admin_image']));
             ConfigServer::set('website', 'admin_title', $post['admin_title']);
-            ConfigServer::set('website', 'shop_logo', $post['shop_logo']);
-            ConfigServer::set('website', 'shop_login_logo', $post['shop_login_logo']);
-            ConfigServer::set('website', 'pc_logo', $post['pc_logo']);
-            ConfigServer::set('website', 'user_image', $post['user_image']);
-            ConfigServer::set('website', 'goods_image', $post['goods_image']);
+            ConfigServer::set('website', 'shop_logo', UrlServer::setFileUrl($post['shop_logo']));
+            ConfigServer::set('website', 'shop_login_logo', UrlServer::setFileUrl($post['shop_login_logo']));
+            ConfigServer::set('website', 'pc_logo', UrlServer::setFileUrl($post['pc_logo']));
+            ConfigServer::set('website', 'user_image', UrlServer::setFileUrl($post['user_image']));
+            ConfigServer::set('website', 'goods_image', UrlServer::setFileUrl($post['goods_image']));
 
             $this->_success('修改成功');
         }
@@ -100,7 +100,15 @@ class Basic extends AdminBase
             'company_name' => ConfigServer::get('copyright', 'company_name'),
             'number' => ConfigServer::get('copyright', 'number'),
             'link' => ConfigServer::get('copyright', 'link'),
+            'business_license' => ConfigServer::get('copyright', 'business_license'),
+            'other_qualifications' => ConfigServer::get('copyright', 'other_qualifications',[]),
         ];
+        $config['business_license'] = $config['business_license'] ? UrlServer::getFileUrl($config['business_license']) : '';
+        if (!empty($config['other_qualifications'])) {
+            foreach ($config['other_qualifications'] as &$val) {
+                $val = UrlServer::getFileUrl($val);
+            }
+        }
 
         $this->assign('config', $config);
 
@@ -124,6 +132,15 @@ class Basic extends AdminBase
         //  ConfigServer::set('copyright', 'logo',$post['logo']);
         ConfigServer::set('copyright', 'number', $post['number']);
         ConfigServer::set('copyright', 'link', $post['link']);
+        ConfigServer::set('copyright', 'business_license', UrlServer::setFileUrl($post['business_license'] ?? ''));
+        $other_qualifications = [];
+        if (!empty($post['other_qualifications'])) {
+            foreach ($post['other_qualifications'] as &$val) {
+                $val = UrlServer::setFileUrl($val);
+            }
+            $other_qualifications = json_encode($post['other_qualifications']);
+        }
+        ConfigServer::set('copyright', 'other_qualifications', $other_qualifications);
         return $this->_success('修改成功');
     }
 
@@ -175,7 +192,7 @@ class Basic extends AdminBase
     }
 
     /**
-     * APP设置
+     * APP设置页面
      * @return mixed
      */
     public function app()
@@ -191,6 +208,14 @@ class Basic extends AdminBase
         return $this->fetch();
     }
 
+    /**
+     * @notes 设置APP
+     * @throws @\think\Exception
+     * @throws @\think\db\exception\ModelNotFoundException
+     * @throws @\think\exception\DbException
+     * @throws @\think\exception\PDOException
+     * @date 2021/9/24 14:08
+     */
     public function setApp()
     {
         $post = $this->request->post();
@@ -205,7 +230,7 @@ class Basic extends AdminBase
     }
 
     /**
-     * 分享设置
+     * 分享设置页面
      */
     public function share()
     {
@@ -217,13 +242,24 @@ class Basic extends AdminBase
                 'h5_share_image' => ''
             ]),
             'mnp' => ConfigServer::get('share', 'mnp', [
-                'mnp_share_title' => ''
+                'mnp_share_title' => '',
+                'mnp_share_image' => ''
             ])
         ];
         $this->assign('config', $config);
         return $this->fetch();
     }
 
+    /**
+     * @notes 设置分享
+     * @throws @\think\Exception
+     * @throws @\think\db\exception\DataNotFoundException
+     * @throws @\think\db\exception\ModelNotFoundException
+     * @throws @\think\exception\DbException
+     * @throws @\think\exception\PDOException
+     * @author 张无忌
+     * @date 2021/9/24 14:08
+     */
     public function setShare()
     {
         $post = $this->request->post();
@@ -234,6 +270,7 @@ class Basic extends AdminBase
         ], JSON_UNESCAPED_UNICODE);
         $mnp = json_encode([
             'mnp_share_title' => $post['mnp_share_title'],
+            'mnp_share_image' => $post['mnp_share_image'],
         ], JSON_UNESCAPED_UNICODE);
         ConfigServer::set('share', 'h5', $h5);
         ConfigServer::set('share', 'mnp', $mnp);

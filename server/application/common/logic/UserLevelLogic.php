@@ -21,7 +21,7 @@ use think\Db;
 
 class UserLevelLogic{
     /**
-     * note 更新个人会员等级
+     * note 用户升级 更新个人会员等级
      * create_time 2020/11/26 18:52
      */
     public static function updateUserLevel($id){
@@ -43,7 +43,7 @@ class UserLevelLogic{
 
     }
     /**
-     * note 更新所有用户的等级
+     * note 用户升级 更新所有用户的等级
      * create_time 2020/11/26 19:11
      */
     public static function updateAllUserLevel($level_id){

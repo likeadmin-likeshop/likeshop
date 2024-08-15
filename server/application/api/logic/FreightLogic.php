@@ -72,7 +72,7 @@ class FreightLogic
             $shipping_price += self::calculate($temp, $user_address);
         }
 
-        return $shipping_price;
+        return $shipping_price < 0 ? 0 : $shipping_price;
     }
 
 

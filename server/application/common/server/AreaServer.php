@@ -29,7 +29,7 @@ class AreaServer
 {
     /**
      * 通过id获取地址
-     * @param $val 为非数组，返回单独地点名，为数组时，按顺序拼接地址返回
+     * @param $val(为非数组，返回单独地点名，为数组时，按顺序拼接地址返回)
      * @param string $address val为数组时，连接详细地址一起返回
      * @return mixed|string
      */

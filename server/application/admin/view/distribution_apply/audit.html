@@ -1,0 +1,42 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c !important;
+    }
+</style>
+<div class="layui-card layui-form" style="box-shadow:none;">
+    <div class="layui-card-body">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color:red;">*</span>审核结果</label>
+            <div class="layui-input-block">
+                <input type="radio" name="audit_status" value="1" title="审核通过">
+                <input type="radio" name="audit_status" value="2" title="审核拒绝" checked>
+            </div>
+            <div class="layui-form-mid layui-word-aux">审核通过即可成为分销会员</div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label for="denial_reason" class="layui-form-label">审核说明</label>
+            <div class="layui-input-block">
+                <textarea name="denial_reason" id="denial_reason" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(["table", "form", "element", "laydate", 'like'], function() {
+        var form = layui.form;
+        var like = layui.like;
+
+    });
+</script>

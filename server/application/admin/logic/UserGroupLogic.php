@@ -40,6 +40,7 @@ class UserGroupLogic
         $user_group_list = Db::name('user_group')
             ->where($where)
             ->field(['id','name', 'remark'])
+            ->order('id desc')
             ->page($get['page'],$get['limit'])
             ->select();
 

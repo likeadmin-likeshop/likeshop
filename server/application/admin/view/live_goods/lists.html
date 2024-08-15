@@ -1,0 +1,188 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height: auto;
+        white-space: normal;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*同步商品库每天最多可同步10000次，请合理分配获取频次。</p>
+                        <p>*添加商品每天最多可添加500次，删除商品每天最多可删除1000次。</p>
+                        <p>*获取商品列表每天最多可同步10000次。</p>
+                        <p>*多个环境下使用了同一个appid会导致access_token失效，从而导致列表数据无法获取。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <ul class="layui-tab-title">
+                <li data-type="2"  class="layui-this">审核通过</li>
+                <li data-type="1" >审核中</li>
+                <li data-type="3" >审核驳回</li>
+            </ul>
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div style="padding-bottom: 10px;" class="add">
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="add">添加直播商品</button>
+                            <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="sync">同步商品库</button>
+                        </div>
+                        <table id="like-table-lists" lay-filter="like-table-lists"></table>
+                        <script type="text/html" id="operation">
+                            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table','like','laydate'], function(){
+        var $ = layui.$
+            ,table = layui.table
+            ,like = layui.like
+            ,element = layui.element
+            ,type = 2;
+        ;
+        getList();
+        $('.search').hide();
+        element.on('tab(tab-all)', function (data) {
+            type = $(this).attr('data-type');
+            getList();
+        });
+        function getList() {
+            //管理员管理
+            table.render({
+                id: 'like-table-lists'
+                , elem: '#like-table-lists'
+                , url: '{:url("LiveGoods/lists")}?type='+ type
+                , cols: [[
+                    {field: 'goodsId', width: 80, title: 'ID', sort: true, hide: true}
+                    , {field: 'name', title: '商品名称', width: 200}
+                    , {field: 'price', title: '商品价格', width: 100, align: 'center'}
+                    , {field: 'url', title: '商品链接', width: 320, align: 'center'}
+                    , {field: 'goods_status_desc', title: '状态', width: 100, align: 'center'}
+                    , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#operation'}
+
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count,
+                        "data": res.data.lists
+                    };
+                }
+                , done: function fix() {
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $(".layui-table-fixed").each(function () {
+                            $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
+                        });
+                    });
+                    $(".layui-table-header tr").each(function (index, val) {
+                        $(".layui-table-fixed").each(function () {
+                            $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
+                        });
+                    });
+                    window.onresize = function () {
+                        fix()
+                    }
+                }
+            });
+        }
+
+        //图片放大
+        $(document).on('click', '.image-show', function () {
+            var src = $(this).attr('src');
+            like.showImg(src,600);
+        });
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加直播商品'
+                    ,content: '{:url("LiveGoods/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            console.log(field);
+                            like.ajax({
+                                url:'{:url("LiveGoods/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                        layer.close(index);
+                                        table.reload('like-table-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            },
+            // 同步商品库
+            sync: function(){
+                table.reload('like-table-lists');
+            },
+            // 删除
+            del: function (obj) {
+                layer.confirm('确定要删除商品:'+obj.data.name, function(index) {
+                    like.ajax({
+                        url: '{:url("LiveGoods/del")}',
+                        data: {id:obj.data.goodsId},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code === 1) {
+                                layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000});
+                                layer.close(index);
+                                obj.del();
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+        };
+
+        // 监听表格右侧工具条
+        table.on('tool(like-table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+    });
+</script>

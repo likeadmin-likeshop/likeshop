@@ -1,32 +1,44 @@
 {layout name="layout1" /}
 
-
 <div class="layui-col-md12">
     <div class="layui-fluid">
-
         <div class="layui-form" lay-filter="">
+            <!--概况统计-->
             <div class="layui-card" >
                 <div class="layui-card-body">
-                    <div class="layui-input-inline">
-                        <div class="layui-card-header" >概况</div>
-                    </div>
-
-                    <div class="layui-input-inline" style="left: 50px">
-                        <div class="layui-input-inline">
-                            <select name="days" lay-verify="required" lay-filter="days">
-                                <option value="today" >今日实时</option>
-                                <option value="ago_seven" >近7天</option>
-                                <option value="ago_fifteen" >近15天</option>
-                            </select>
+                    <div class="layui-inline">
+                        <div class="layui-btn-group">
+                            <button type="button"  day="1" class="layui-btn layui-btn-sm layui-btn-primary day">今天</button>
+                            <button type="button" id="seven"  day="7" class="layui-btn layui-btn-sm layui-btn-normal day">近7天</button>
+                            <button type="button"  day="15" class="layui-btn layui-btn-sm layui-btn-primary day">近15天</button>
                         </div>
                     </div>
 
-                    <div class="layui-input-inline " id="days" style="white-space: nowrap;left:70px">
-                        {$res.start} 至 {$res.end}
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间筛选:</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" name="start_time" class="layui-input" id="start_time"
+                                       placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-input-inline" style="width: 5px;">
+                            <label class="layui-form-mid">-</label>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_time" class="layui-input" id="end_time"
+                                   placeholder="" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-sm layuiadmin-btn-ad {$view_theme_color}" lay-submit lay-filter="search">筛选</a>
+                        <a class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-primary " lay-submit lay-filter="clear-search">清空</a>
                     </div>
                 </div>
             </div>
 
+            <!--概况统计-->
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-sm6 layui-col-md3" >
                     <div class="layui-card" >
@@ -34,7 +46,7 @@
                             会员数量
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" >
-                            <p class="layuiadmin-big-font" id="count_user">{$res.count}</p>
+                            <p class="layuiadmin-big-font" id="count_user">0</p>
                         </div>
                     </div>
                 </div>
@@ -45,7 +57,7 @@
                             新增会员数量
                         </div>
                         <div class="layui-card-body layuiadmin-card-list">
-                            <p class="layuiadmin-big-font" id="add_user">{$res.add}</p>
+                            <p class="layuiadmin-big-font" id="add_user">0</p>
                         </div>
                     </div>
                 </div>
@@ -55,26 +67,12 @@
             <div class="layui-card" style="margin-top:20px">
                 <div class="layui-card-body">
                     <div class="layui-form-item">
-                        <div class="layui-input-inline layui-card-header" style="">会员趋势分析</div>
-                        <div class="layui-input-inline" style="right: 100px">
-                            <select name="member" lay-verify="required"  lay-filter="member">
-                                <option value="ago_seven">近7天</option>
-                                <option value="ago_fifteen">近15天</option>
-                            </select>
-                        </div>
-                        <div class="layui-input-inline" id="member_days" style="white-space: nowrap;top:8px;right:80px">
-                            {$res.start_seven} 至 {$res.end_seven}
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
                         <div id="memberCharts" style="width: 100%;height: 80vh;"></div>
                     </div>
                 </div>
             </div>
 
         </div>
-
     </div>
 </div>
 
@@ -86,73 +84,107 @@
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index','table','like','echarts','form'], function(){
+    }).use(['index','table','like','echarts','form', 'laydate'], function(){
         var $ = layui.$
             ,form = layui.form
             ,like = layui.like
-            ,echarts = layui.echarts;
+            ,echarts = layui.echarts
+            ,laydate = layui.laydate;
 
+        const defaultSearch = {start_time:'{$time.days_ago7[0]}', end_time:'{$time.days_ago7[1]}'};
+        // 图表配置
+        const colorList = ["#9E87FF", '#73DDFF', '#fe9a8b', '#F56948', '#9E87FF'];
 
-        form.on('select(days)', function(data){
-            like.ajax({
-                url:'{:url("statistics/member")}',
-                data:{'days':data.value},
-                type:"post",
-                success:function(res)
-                {
-                    $('#days').html(res.data.start+  ' 至 ' +res.data.end );
-                    $('#count_user').html(res.data.count);
-                    $('#add_user').html(res.data.add);
-                }
-            });
+        // 首次加载数据
+        loadData(defaultSearch);
+
+        //监听搜索
+        form.on('submit(search)', function(data) {
+            formattingDate();
+            loadData(data.field);
+        });
+
+        //清空查询
+        form.on('submit(clear-search)', function() {
+            formattingDate();
+            $('#seven').trigger("click");
+            loadData(defaultSearch);
         });
 
 
-        const colorList = ["#9E87FF", '#73DDFF', '#fe9a8b', '#F56948', '#9E87FF'];
+        // 日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,theme: '#1E9FFF'
+            , value: "{$time.days_ago7[0]}"
+        });
 
-        like.ajax({
-            url: '{:url("statistics/member")}',
-            data: {member:'ago_seven'},
-            type: "post",
-            success: function (res) {
-                var memberNum =  res.data.echarts_count;
-                var newMember =  res.data.echarts_add;
-                var xData     = res.data.days;
-                var option    = setOption(memberNum, newMember, xData);
-                let chart     = document.getElementById('memberCharts');
-                let memberChart = echarts.init(chart);
-                memberChart.setOption(option, true);
-                window.addEventListener('resize', function () {
-                    memberChart.resize()
-                });
+        laydate.render({
+            elem: '#end_time'
+            ,theme: '#1E9FFF'
+            ,value: "{$time.days_ago7[1]}"
+        });
+
+        // 切换快捷日期
+        $('.day').click(function() {
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $(this).removeClass('layui-btn-primary');
+            $(this).addClass('layui-btn-normal');
+            var day = $(this).attr('day');
+            switch (day) {
+                case '1':
+                    $('#start_time').val('{$time.today[0]}');
+                    $('#end_time').val('{$time.today[1]}');
+                    break;
+                case '7':
+                    $('#start_time').val('{$time.days_ago7[0]}');
+                    $('#end_time').val('{$time.days_ago7[1]}');
+                    break;
+                case '15':
+                    $('#start_time').val('{$time.days_ago15[0]}');
+                    $('#end_time').val('{$time.days_ago15[1]}');
+                    break;
             }
         });
 
 
-        form.on('select(member)', function(data){
+        // 加载数据
+        function loadData(data) {
             like.ajax({
                 url: '{:url("statistics/member")}',
-                data: {member:data.value},
-                type: "post",
+                data: data,
+                type: "get",
                 success: function (res) {
-                    $('#member_days').html(res.data.start+  ' 至 ' +res.data.end );
+                    $('#count_user').html(res.data.count);
+                    $('#add_user').html(res.data.new);
 
-                    var xData = res.data.days;
-                    var memberNum = res.data.echarts_count;
-                    var newMemeber = res.data.echarts_add;
-                    let option = setOption(memberNum, newMemeber, xData);
-                    let memberChart = echarts.init(document.getElementById('memberCharts'));
+                    var memberNum =  res.data.echarts_count;
+                    var newMember =  res.data.echarts_new;
+                    var xData     = res.data.days;
+                    var option    = setOption(memberNum, newMember, xData);
+
+                    let chart     = document.getElementById('memberCharts');
+                    let memberChart = echarts.init(chart);
                     memberChart.setOption(option, true);
                     window.addEventListener('resize', function () {
                         memberChart.resize()
                     });
                 }
             });
-        });
+        }
 
+        // 格式化快捷日期
+        function formattingDate() {
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+        }
 
-        //图标设置
+        // 设置图表
         function setOption(memberNum, newMember, xData) {
+            console.log(xData);
             option = {
                 backgroundColor: '#fff',
                 legend: {
@@ -309,6 +341,7 @@
             };
             return option;
         }
+
     });
 
 </script>

@@ -123,14 +123,14 @@
                         {{#  } }}
                     </script>
                     <!--连续奖励-->
-                    <script type="text/html" id="integralTpl">
-                        {{#  if( d.integral == null || d.integral == 0 || d.integral == ''
-                        ||d.growth == null ||d.growth == 0 ||d.growth == ''){ }}
-                        ----
-                        {{#  } else { }}
-                        赠送{{d.integral}}积分；赠送{{d.growth}}成长值
-                        {{#  } }}
-                    </script>
+<!--                    <script type="text/html" id="integralTpl">-->
+<!--                        {{#  if( d.integral == null || d.integral == 0 || d.integral == ''-->
+<!--                        ||d.growth == null ||d.growth == 0 ||d.growth == ''){ }}-->
+<!--                        &#45;&#45;&#45;&#45;-->
+<!--                        {{#  } else { }}-->
+<!--                        赠送{{d.integral}}积分；赠送{{d.growth}}成长值-->
+<!--                        {{#  } }}-->
+<!--                    </script>-->
 
                     <script type="text/html" id="sign_daily-operation">
                         <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
@@ -141,7 +141,7 @@
                     <script type="text/html" id="user">
                         <img src="{{d.avatar}}" style="height:80px;width: 80px" class="image-show">
                         <div class="layui-input-inline"  style="text-align: left">
-                            <p>会员编号:{{d.user_id}}</p>
+                            <p>会员编号:{{d.sn}}</p>
                             <p>昵称:{{d.nickname}}</p>
                             <p>手机号:{{d.mobile}}</p>
                             <p>性别:{{d.sex}}</p>
@@ -320,7 +320,7 @@
 
                 var tablecols  = [
                     {field: 'days', title: '连续天数', templet: '#daysTpl',width:300}
-                    , {field: 'integral', title: '连续奖励', templet: '#integralTpl',width:400}
+                    , {field: 'award_tips', title: '连续奖励',width:400}
                     , {title: '操作', align: 'center', fixed: 'right', toolbar: '#sign_daily-operation',width:350}
                 ];
                 var page = false;
@@ -331,7 +331,7 @@
                         {type:'numbers',title:'序号'}
                         , {field: 'user', title: '会员信息', align: 'center',templet:'#user',width:400}
                         , {field: 'days', title: '连续天数',width:100}
-                        , {field: 'reward', title: '签到奖励',templet:'#integral',width:250}
+                        , {field: 'reward_tips', title: '签到奖励',templet:'#integral',width:250}
                         , {field: 'continuous_reward', title: '连续奖励',templet:'#continuous_integral',width:250}
                         , {fixed: 'right', field:'sign_time',title:'签到时间',width:250}
 
@@ -341,10 +341,10 @@
                 table.render({
                     elem: '#sign_daily-lists'
                     , url: url  //模拟接口
-                    ,initSort:{
-                        field:'days' //排序字段，对应cols设定的各字段名
-                        ,type:'asc'   //排序方式 asc:升序、desc：降序、null：默认排序
-                    }
+                    // ,initSort:{
+                    //     field:'days' //排序字段，对应cols设定的各字段名
+                    //     ,type:'asc'   //排序方式 asc:升序、desc：降序、null：默认排序
+                    // }
                     , cols:  [tablecols]
                     , page: page
                     , text: {none: '暂无数据！'}

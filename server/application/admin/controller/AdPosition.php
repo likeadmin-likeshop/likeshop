@@ -108,7 +108,6 @@ class AdPosition extends AdminBase
             $result = $this->validate($post, 'app\admin\validate\AdPosition.del');
 
             if ($result === true) {
-//            dd($result);
                 $result = AdPositionLogic::del($delData, $client, $attr);
                 if ($result) {
                     $this->_success('删除成功');

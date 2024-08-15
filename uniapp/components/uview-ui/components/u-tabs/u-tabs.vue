@@ -5,7 +5,7 @@
 		<!-- $u.getRect()对组件根节点无效，因为写了.in(this)，故这里获取内层接点尺寸 -->
 		<view :id="id">
 			<scroll-view scroll-x class="u-scroll-view" :scroll-left="scrollLeft" scroll-with-animation>
-				<view class="u-scroll-box" :class="{'u-tabs-scorll-flex': !isScroll}">
+				<view class="u-scroll-box" :class="{'u-tabs-scorll-flex': !isScroll}" :style="{height: height + 'rpx'}">
 					<view class="u-tab-item u-line-1" :id="'u-tab-item-' + index" v-for="(item, index) in list" :key="index" @tap="clickTab(index)"
 					 :style="[tabItemStyle(index)]">
 						<u-badge :count="item[count] || item['count'] || 0" :offset="offset" size="mini"></u-badge>
@@ -94,7 +94,7 @@
 			// 菜单底部移动的bar的宽度，单位rpx
 			barWidth: {
 				type: [String, Number],
-				default: 40
+				default: 60
 			},
 			// 移动bar的高度
 			barHeight: {
@@ -202,6 +202,7 @@
 					'transition-duration': `${this.barFirstTimeMove ? 0 : this.duration }s`,
 					'background-color': this.activeColor,
 					height: this.barHeight + 'rpx',
+					opacity: this.barFirstTimeMove ? 0 : 1,
 					// 设置一个很大的值，它会自动取能用的最大值，不用高度的一半，是因为高度可能是单数，会有小数出现
 					'border-radius': `${this.barHeight / 2}px`
 				};
@@ -253,6 +254,8 @@
 			},
 			// 查询tab的布局信息
 			getTabRect() {
+				
+				console.log(1)
 				// 创建节点查询
 				let query = uni.createSelectorQuery().in(this);
 				// 历遍所有tab，这里是执行了查询，最终使用exec()会一次性返回查询的数组结果

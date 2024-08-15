@@ -44,4 +44,19 @@ class OrderGoods extends Model
         return $data['image'];
     }
 
+    //退款状态
+    public static function getRefundStatus($type)
+    {
+        $data = [
+            self::REFUND_STATUS_NO => '未申请退款',
+            self::REFUND_STATUS_APPLY => '申请退款',
+            self::REFUND_STATUS_WAIT => '等待退款',
+            self::REFUND_STATUS_SUCCESS => '退款成功',
+        ];
+
+        if ($type === true) {
+            return $data;
+        }
+        return $data[$type] ?? '未知';
+    }
 }

@@ -26,6 +26,9 @@ use app\api\server\UserServer;
 use app\common\logic\AccountLogLogic;
 use app\common\model\AccountLog;
 use app\common\model\NoticeSetting;
+use app\common\model\UserAuth;
+use app\common\model\UserLevel;
+use app\common\server\FileServer;
 use app\common\server\WeChatServer;
 use app\common\logic\LogicBase;
 use app\common\model\Client_;
@@ -83,6 +86,9 @@ class LoginLogic extends LogicBase
 
         //生成会员分销扩展表
         DistributionLogic::createUserDistribution($user->id);
+        // 生成分销会员基础表
+        \app\common\logic\DistributionLogic::add($user->id);
+
         //注册赠送
         self::registerAward($user->id);
         //消息通知
@@ -140,7 +146,7 @@ class LoginLogic extends LogicBase
         }
 
         if ($user_info['disable']) {
-            return self::dataError('该用户被禁用');
+            return self::dataError('账号已被禁用');
         }
 
 
@@ -233,7 +239,7 @@ class LoginLogic extends LogicBase
         }
 
         if ($user_info['disable']) {
-            return self::dataError('该用户被禁用');
+            return self::dataError('账号已被禁用');
         }
 
         //创建会话
@@ -303,7 +309,7 @@ class LoginLogic extends LogicBase
         }
 
         if ($user_info['disable']) {
-            return self::dataError('该用户被禁用');
+            return self::dataError('账号已被禁用');
         }
 
         //创建会话
@@ -505,12 +511,10 @@ class LoginLogic extends LogicBase
             $user_info = UserServer::updateUser($user, $post['client'], $user_id);
         }
 
-        if (empty($user_info)) {
-            return self::dataError('登录失败:user');
-        }
-
-        if ($user_info['disable']) {
-            return self::dataError('该用户被禁用');
+        //验证用户信息
+        $check_res = self::checkUserInfo($user_info);
+        if (true !== $check_res) {
+            return self::dataError($check_res);
         }
 
         //创建会话
@@ -583,7 +587,7 @@ class LoginLogic extends LogicBase
         }
 
         if ($user_info['disable']) {
-            return '该用户被禁用';
+            return '账号已被禁用';
         }
 
         return true;
@@ -680,6 +684,114 @@ class LoginLogic extends LogicBase
 
         unset($user_info['id'], $user_info['disable']);
         return self::dataSuccess('登录成功', $user_info);
+    }
+
+    /**
+     * @notes 更新用户头像昵称
+     * @param $post
+     * @param $user_id
+     * @return array
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     * @author ljj
+     * @date 2023/2/1 3:45 下午
+     */
+    public static function updateUser($post,$user_id)
+    {
+//        $user = Db::name('user')->where(['id'=>$user_id])->find();
+//        if ($user['is_new_user'] == 0) {
+//            return self::dataError('非新用户无法使用此接口更新用户信息');
+//        }
+        Db::name('user')->where(['id'=>$user_id])->update(['nickname'=>$post['nickname'],'avatar'=>UrlServer::setFileUrl($post['avatar']),'is_new_user'=>0]);
+        return self::dataSuccess('操作成功');
+    }
+    
+    
+    /**
+     * @notes 小程序端绑定微信
+     * @param array $params
+     * @return bool
+     * @author lbzy
+     * @datetime 2023-11-29 10:57:29
+     */
+    public function mnpAuthLogin(array $params)
+    {
+        try {
+            //通过code获取微信openid
+            $config = WeChatServer::getMnpConfig();
+            $app = Factory::miniProgram($config);
+            $response = $app->auth->session($params['code']);
+            if (empty($response['openid'])) {
+                throw new Exception('获取openID失败');
+            }
+            
+            $userAuth = UserAuth::where('openid', $response['openid'])->findOrEmpty();
+            if (isset($userAuth['id'])) {
+                if ($userAuth['user_id'] == $params['user_id']) {
+                    return true;
+                }
+                throw new \Exception('该微信已绑定其他用户');
+            }
+            
+            UserAuth::create([
+                'user_id'       => $params['user_id'],
+                'openid'        => $response['openid'],
+                'create_time'   => time(),
+                'unionid'       => $response['unionid'] ?? '',
+                'client'        => Client_::mnp,
+            ]);
+            
+            return true;
+            
+        } catch (\Exception  $e) {
+            self::$error = $e->getMessage();
+            return false;
+        }
+    }
+    
+    /**
+     * @notes 公众号端绑定微信
+     * @param array $params
+     * @return bool
+     * @author lbzy
+     * @datetime 2023-11-29 10:57:24
+     */
+    public function oaAuthLogin(array $params)
+    {
+        try {
+            //通过code获取微信openid
+            $config = WeChatServer::getOaConfig();
+            $app = Factory::officialAccount($config);
+            $response = $app
+                ->oauth
+                ->scopes(['snsapi_userinfo'])
+                ->getAccessToken($params['code']);
+            if (empty($response['openid'])) {
+                throw new Exception();
+            }
+            
+            $userAuth = UserAuth::where('openid', $response['openid'])->findOrEmpty();
+            if (isset($userAuth['id'])) {
+                if ($userAuth['user_id'] == $params['user_id']) {
+                    return true;
+                }
+                throw new \Exception('该微信已绑定其他用户');
+            }
+            
+            UserAuth::create([
+                'user_id'       => $params['user_id'],
+                'openid'        => $response['openid'],
+                'create_time'   => time(),
+                'unionid'       => $response['unionid'] ?? '',
+                'client'        => Client_::oa,
+            ]);
+            
+            return true;
+            
+        } catch (\Exception  $e) {
+            self::$error = $e->getMessage();
+            return false;
+        }
     }
 
 }

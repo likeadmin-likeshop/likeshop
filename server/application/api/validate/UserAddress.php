@@ -34,7 +34,6 @@ class UserAddress extends Validate
         'city_id' => 'require',
         'district_id' => 'require',
         'address'       => 'require',
-        'is_default'    => 'require',
     ];
 
     protected $message = [
@@ -47,7 +46,6 @@ class UserAddress extends Validate
         'city_id.require'       => '请选择完整地址',
         'district_id.require'   => '请选择完整地址',
         'address.require'       => '详细地址不能为空',
-        'is_default.require'    => '是否默认不能为空',
         'province.require'      => '省不能为空',
         'city.require'          => '市不能为空',
         'district.require'      => '区不能为空',

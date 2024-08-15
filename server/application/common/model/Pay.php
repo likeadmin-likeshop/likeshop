@@ -66,7 +66,7 @@ class Pay extends Model
             self::WECHAT_PAY => '微信支付',
             self::ALI_PAY => '支付宝支付',
             self::BALANCE_PAY => '余额支付',
-            self::OFFLINE_PAY => '线下支付',
+            // self::OFFLINE_PAY => '线下支付',
         ];
 
         if ($type === true) {

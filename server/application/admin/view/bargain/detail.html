@@ -59,7 +59,7 @@
                 </div>
                 <div class="layui-form-item" style="margin-bottom:0;">
                     <label class="layui-form-label">购买方式：</label>
-                    <div class="layui-input-block">任意金额可购买</div>
+                    <div class="layui-input-block">{$detail.payment_where}</div>
                 </div>
                 <div class="layui-form-item" style="margin-bottom:0;">
                     <label class="layui-form-label">已砍次数：</label>
@@ -79,7 +79,7 @@
                 <table id="table-lists-order" lay-filter="table-lists-order"></table>
                 <script type="text/html" id="table-goods-order">
                     <div>
-                        <img src="{{d.domain}}{{d.goods_snap.image}}" alt="图片" style="width:60px;height:60px;float:left;" class="image-show">
+                        <img src="{{d.goods_snap.goods_iamge}}" alt="图片" style="width:60px;height:60px;float:left;" class="image-show">
                         <div class="layui-inline">
                             <div>{{d.goods_snap.name}}</div>
                             <div>{{d.goods_snap.spec_value_str}}&nbsp; ￥{{d.goods_snap.price}}</div>

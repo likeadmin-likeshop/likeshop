@@ -40,11 +40,12 @@
 		onShow() {
 			this.getCartNum()
 		},
-		onShareAppMessage() {
+		onShareAppMessage() {	
 			const shareInfo = Cache.get('shareInfo')
 			return {
 				title: shareInfo.mnp_share_title,
-				path: "pages/index/index?invite_code=" + this.inviteCode
+				path: "pages/index/index?invite_code=" + this.inviteCode,
+				imageUrl: shareInfo.mnp_share_image,
 			};
 		},
 		methods: {

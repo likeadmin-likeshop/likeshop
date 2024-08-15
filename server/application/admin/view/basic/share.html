@@ -66,7 +66,7 @@
                        <div class="layui-form-item" style="margin-bottom:0;">
                            <label for="h5_share_intro" class="layui-form-label">分享简介：</label>
                            <div class="layui-input-inline">
-                               <input type="text" id="h5_share_intro" name="h5_share_intro" value="{$config.h5.h5_share_title}" autocomplete="off" class="layui-input">
+                               <input type="text" id="h5_share_intro" name="h5_share_intro" value="{$config.h5.h5_share_intro}" autocomplete="off" class="layui-input">
                            </div>
                        </div>
                        <div class="layui-form-item">
@@ -107,6 +107,24 @@
                            <label class="layui-form-label"></label>
                            <div class="layui-input-block">
                                <div class="layui-form-mid layui-word-aux">小程序商城分享页面时，显示的分享标题</div>
+                           </div>
+                       </div>
+                       <!-- 小程序分享图片 -->
+                       <div class="layui-form-item" style="margin-bottom:0;">
+                           <label class="layui-form-label">分享图片：</label>
+                           <div class="layui-input-inline">
+                               <div class="" style="height:80px;line-height:80px;">
+                                   <input name="mnp_share_image" type="hidden" value="{$config.mnp.mnp_share_image}" >
+                                   {if !empty($config.mnp.mnp_share_image)}
+                                   <div class="goods-img-add" style="display: none"></div>
+                                   <div class="goods-li">
+                                       <img class="goods-img" style="width: auto;height: 50px" src="{$config.file_url}{$config.mnp.mnp_share_image}">
+                                       <a class="goods-img-del-x" style="display: none">x</a>
+                                   </div>
+                                   {else}
+                                   <div class="goods-img-add"></div>
+                                   {/if}
+                               </div>
                            </div>
                        </div>
                    </div>
@@ -177,7 +195,7 @@ layui.config({
         var image = $(this).attr('src');
         like.showImg(image,600);
     });
-    //  删除按钮的显示与隐藏
+    //删除按钮的显示与隐藏
     $(document).on('mouseover', '.goods-img', function () {
         $(this).next().show();
     });

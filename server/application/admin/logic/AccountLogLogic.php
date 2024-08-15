@@ -25,8 +25,11 @@ use app\common\model\DistributionOrder;
 use think\Db;
 use think\helper\Time;
 
-class AccountLogLogic{
-    public static function lists($get){
+class AccountLogLogic
+{
+    
+    public static function lists($get)
+    {
         $source_type = '';
         $where = [];
         switch ($get['type']){//记录类型
@@ -76,6 +79,8 @@ class AccountLogLogic{
             $item['create_time'] = date('Y-m-d H:i:s',$item['create_time']);
             // 获取来源单号
             $item['order_sn'] = Db::name('order')->where(['del'=>0, 'id'=>$item['source_id']])->value('order_sn');
+            // + -
+            $item['change_amount'] = $item['change_type'] == 1 ? "+{$item['change_amount']}" : "-{$item['change_amount']}";
         }
         return ['count'=>$count,'lists'=>$list];
     }

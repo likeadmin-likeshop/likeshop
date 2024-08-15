@@ -17,17 +17,22 @@
 // | author: likeshop.cn.team
 // +----------------------------------------------------------------------
 namespace app\admin\logic;
-use app\admin\model\User;
+
+use app\api\cache\TokenCache;
 use app\common\logic\AccountLogLogic;
+use app\common\logic\LogicBase;
 use app\common\logic\UserLevelLogic;
 use app\common\model\AccountLog;
 use app\common\model\Order;
 use app\common\model\Pay;
+use app\common\model\User;
+use app\common\model\UserLevel;
 use app\common\server\UrlServer;
 use think\Db;
 use think\Exception;
 
-class UserLogic{
+class UserLogic extends LogicBase
+{
     /**
      * 列表
      * @param $get
@@ -90,6 +95,7 @@ class UserLogic{
         $group_list = db::name('user_group')->where(['del'=>0])->column('name','id');
 
         foreach ($user_list as &$item){
+            $item['total_amount'] = round($item['user_money'] + $item['earnings'], 2);
             $item['group_name'] = '-';
             $item['level_name'] = '无等级';
             //会员所属分组
@@ -108,22 +114,14 @@ class UserLogic{
                 $item['abs_avatar'] = '/static/common/image/default/user.png';
             }
 
-            $item['referrer_nickname'] = '';
-            $item['referrer_sn'] = '';
-            $item['referrer_mobile'] = '';
-            $item['referrer_avatar'] = '';
-            $item['referrer_level_name'] = '-';
-            if(isset($all_user_list[$item['first_leader']])){
-                 $referrer_user = $all_user_list[$item['first_leader']];
-                 $item['referrer_nickname'] = $referrer_user['nickname'];
-                 $item['referrer_sn'] = $referrer_user['sn'];
-                 $item['referrer_mobile'] = $referrer_user['mobile'];
-                 $item['referrer_avatar'] = UrlServer::getFileUrl($referrer_user['avatar']);
-                 if(isset($user_level[$referrer_user['level']])){
-                     $item['referrer_level_name'] =$user_level[$referrer_user['level']];
+            // 上级推荐人
+            $item['first_leader_info'] = User::getUserInfo($item['first_leader']);
 
-                 }
-            }
+            //推荐下级人数
+            $item['fans'] = User::where([
+                ['first_leader|second_leader', '=', $item['id']],
+                ['del', '=', 0]
+            ])->count();
 
 
             if(isset($group_list[$item['group_id']])){
@@ -283,6 +281,45 @@ class UserLogic{
         return Db::name('user')->where(['id'=>$post['user_ids']])->update(['group_id'=>$post['group_id']]);
     }
 
+    public static function  fans($params)
+    {
+        $where = [];
+        // 一级
+        if ($params['type'] == 'one') {
+            $where[] = ['first_leader', '=', $params['id']];
+        }
+        // 二级粉丝
+        if ($params['type'] == 'two') {
+            $where[] = ['second_leader', '=', $params['id']];
+        }
+        if(isset($params['keyword']) && !empty($params['keyword'])) {
+            $where[] = [$params['field'], 'like', '%'. $params['keyword'] . '%'];
+        }
+
+        $lists = User::field('id,sn,nickname,avatar,first_leader')
+            ->where($where)
+            ->page($params['page'], $params['limit'])
+            ->select()
+            ->toArray();
+
+        $count = User::field('id,sn,nickname,avatar,first_leader')
+            ->where($where)
+            ->count();
+
+        foreach($lists as &$item) {
+            $item['avatar'] = empty($item['avatar']) ? '' : UrlServer::getFileUrl($item['avatar']);
+            $item['first_leader_info'] = User::getUserInfo($item['first_leader']);
+            $item['fans'] = User::where([
+                ['first_leader|second_leader', '=', $item['id']],
+                ['del', '=', 0]
+            ])->count();
+        }
+        return [
+            'lists' => $lists,
+            'count' => $count,
+        ];
+    }
+
     /*
      * 用户账户调整
      */
@@ -292,7 +329,7 @@ class UserLogic{
             $update_data = [];
             $account_log = [];
             //余额调整
-            if (isset($post_data['money_handle'])) {
+            if ($post_data['type'] == 'money') {
                 $number = $post_data['money'];
                 $change_type = 1;
                 $source_type = AccountLog::admin_add_money;
@@ -311,7 +348,7 @@ class UserLogic{
                 ];
             }
             //积分调整
-            if (isset($post_data['integral_handle'])) {
+            if ($post_data['type'] == 'integral') {
                 $number = $post_data['integral'];
                 $change_type = 1;
                 $source_type = AccountLog::admin_add_integral;
@@ -331,7 +368,7 @@ class UserLogic{
                 ];
             }
             //成长值调整
-            if (isset($post_data['growth_handle'])) {
+            if ($post_data['type'] == 'growth') {
                 $number = $post_data['growth'];
                 $change_type = 1;
                 $source_type = AccountLog::admin_add_growth;
@@ -351,6 +388,25 @@ class UserLogic{
                 ];
             }
 
+            //佣金调整
+            if ($post_data['type'] == 'earnings') {
+                $number = $post_data['earnings'];
+                $change_type = 1;
+                $source_type = AccountLog::admin_inc_earnings;
+                $money_sql = Db::raw('earnings + ' . $post_data['earnings']);
+                if ($post_data['earnings_handle'] == 0) {
+                    $change_type = 2;
+                    $source_type = AccountLog::admin_reduce_earnings;
+                    $money_sql = Db::raw('earnings - ' . $post_data['earnings']);
+                }
+                $update_data['earnings'] = $money_sql;
+                $account_log[] = [
+                    'number'        => $number,
+                    'change_type'   => $change_type,
+                    'source_type'   => $source_type,
+                    'remark'        => $post_data['earnings_remark'],
+                ];
+            }
 
             Db::name('user')->where('id', $post_data['id'])->update($update_data);
             foreach ($account_log as $item => $value){
@@ -368,7 +424,6 @@ class UserLogic{
     }
 
 
-    //todo 会员等级调整记录待完成
     public static function adjustLevel($post_data){
 
         return Db::name('user')->where('id',$post_data['id'])->update(['level'=>$post_data['level']]);
@@ -383,8 +438,9 @@ class UserLogic{
     /*
      * 获取等级
      */
-    public static function getLevelList(){
-        return Db::name('user_level')->where(['del'=>0])->field('id,name')->select();
+    public static function getLevelList()
+    {
+        return UserLevel::getSelectList();
     }
 
     /*
@@ -400,6 +456,27 @@ class UserLogic{
         }
         $post['update_time'] = time();
         $post['birthday'] = strtotime($post['birthday']);
+
+        //如果用户被禁用,设置当前用户token超时
+        if ($post['disable'] == 1) {
+            //设置token超时
+            Db::name('session')
+                ->where(['user_id' => $user['id']])
+                ->update(['expire_time' => time()]);
+
+            //清除token缓存
+            $tokens = Db::name('session')
+                ->where(['user_id' => $user['id']])
+                ->select();
+
+            if(count($tokens) > 0) {
+                foreach ($tokens as $item) {
+                    $token_cache = new TokenCache($item['token']);
+                    $token_cache->del();
+                }
+            }
+        }
+
         return $user->allowField(true)->save($post);
     }
 
@@ -550,4 +627,176 @@ class UserLogic{
     ];
     return $data;
   }
+
+    public static function userLists()
+    {
+        $where[] = ['del', '=', 0];
+        // 用户信息
+        if (isset($params['keyword']) && !empty($params['keyword'])) {
+            $where[] = ['sn|nickname', 'like', '%'. $params['keyword'] .'%'];
+        }
+
+        $lists = \app\common\model\User::field('id,sn,nickname,id as distribution')
+            ->where($where)
+            ->page($params['page'], $params['limit'])
+            ->select()
+            ->toArray();
+        $count = User::where($where)->count();
+
+        return [
+            'count' => $count,
+            'lists' => $lists,
+        ];
+    }
+
+    public static function adjustFirstLeader($params)
+    {
+        Db::startTrans();
+        try {
+            switch($params['type']) {
+                // 指定推荐人
+                case 'assign':
+                    $formatData = self::assignFirstLeader($params);
+                    break;
+                // 设置推荐人为系统,即清空上级
+                case 'system':
+                    $formatData = self::clearFirstLeader($params);
+                    break;
+            }
+
+            $user = User::findOrEmpty($params['id']);
+            // 旧关系链
+            if (!empty($user->ancestor_relation)) {
+                $old_ancestor_relation = $user->id . ',' .$user->ancestor_relation;
+            } else {
+                $old_ancestor_relation = $user->id;
+            }
+
+            // 更新当前用户的分销关系
+            User::where(['id' => $params['id']])->update($formatData);
+
+            //更新当前用户下级的分销关系
+            $data = [
+                'second_leader' => $formatData['first_leader'],
+                'third_leader' => $formatData['second_leader'],
+                'update_time'  => time()
+            ];
+            User::where(['first_leader' => $params['id']])->update($data);
+
+            //更新当前用户下下级的分销关系
+            $data = [
+                'third_leader' => $formatData['first_leader'],
+                'update_time'  => time()
+            ];
+            User::where(['second_leader' => $params['id']])->update($data);
+
+            //更新当前用户所有后代的关系链
+            Db::name('user')
+                ->where("find_in_set({$params['id']},ancestor_relation)")
+                ->exp('ancestor_relation', "replace(ancestor_relation,'{$old_ancestor_relation}','" . trim("{$params['id']},{$formatData['ancestor_relation']}", ',') . "')")
+                ->update();
+
+            Db::commit();
+            return true;
+        } catch(\Exception $e) {
+            Db::rollback();
+            self::$error = $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function assignFirstLeader($params)
+    {
+        if (empty($params['first_id'])) {
+            throw new \think\Exception('请选择推荐人');
+        }
+        $firstLeader = User::field(['id', 'first_leader', 'second_leader', 'third_leader', 'ancestor_relation'])
+            ->where('id', $params['first_id'])
+            ->findOrEmpty()
+            ->toArray();
+        if(empty($firstLeader)) {
+            throw new \think\Exception('推荐人不存在');
+        }
+        if ($params['first_id'] == $params['id']) {
+            throw new \think\Exception('不能指定上级是自己');
+        }
+        $ancestorArr = explode(',', trim($firstLeader['ancestor_relation']));
+        if(!empty($ancestorArr) && in_array($params['id'], $ancestorArr)) {
+            throw new \think\Exception('不能指定推荐人为自己的下级');
+        }
+
+        // 上级
+        $first_leader_id = $firstLeader['id'];
+        // 上上级
+        $second_leader_id = $firstLeader['first_leader'];
+        // 上上上级
+        $third_leader_id = $firstLeader['second_leader'];
+        // 拼接关系链
+        $firstLeader['ancestor_relation'] = $firstLeader['ancestor_relation'] ?? ''; // 清空null值及0
+        $my_ancestor_relation = $first_leader_id. ',' . $firstLeader['ancestor_relation'];
+        // 去除两端逗号
+        $my_ancestor_relation = trim($my_ancestor_relation, ',');
+        $data = [
+            'first_leader' => $first_leader_id,
+            'second_leader' => $second_leader_id,
+            'third_leader' => $third_leader_id,
+            'ancestor_relation' => $my_ancestor_relation,
+            'update_time'  => time()
+        ];
+        return $data;
+    }
+
+    public static function clearFirstLeader($params)
+    {
+        $data = [
+            'first_leader' => 0,
+            'second_leader' => 0,
+            'third_leader' => 0,
+            'ancestor_relation' => '',
+            'update_time'  => time()
+        ];
+        return $data;
+    }
+
+    public static function getInfo($id)
+    {
+        $user =  User::field('id,sn,level,nickname,avatar,birthday,group_id,sex,mobile,create_time,login_time,user_money,user_growth,earnings,first_leader')
+            ->findOrEmpty($id);
+        if($user->isEmpty()) {
+            return [];
+        }
+
+        $user =$user->toArray();
+        $orderWhere = [
+            'user_id' => $id,
+            'del' => 0,
+            'pay_status' => 1
+        ];
+        // 上级推荐人
+        $user['first_leader_info'] = User::getUserInfo($user['first_leader']);
+        // 推荐下级人数
+        $user['fans'] = User::where([
+            ['first_leader|second_leader', '=', $user['id']],
+            ['del', '=', 0],
+        ])->count();
+        // 总资产
+        $user['assets'] = $user['user_money'] + $user['earnings'];
+        // 总订单数
+        $user['order_num'] = Order::where($orderWhere)->count();
+        // 总消费金额
+        $user['total_amount'] = Order::where($orderWhere)->sum('order_amount');
+        $user['total_amount'] = round($user['total_amount'] ,2);
+        // 平均消费单价
+        $user['avg_amount'] = Order::where($orderWhere)->avg('order_amount');
+        $user['avg_amount'] = round($user['avg_amount'], 2);
+        // 头像
+        $user['avatar'] = UrlServer::getFileUrl($user['avatar']);
+        // 用户等级
+        $levelName = UserLevel::where('id', $user['level'])->value('name');
+        $user['level_name'] = empty($levelName) ? '无等级' : $levelName;
+        // 会员分组
+        $user['user_group'] = Db::name('user_group')->where('id', $user['group_id'])->value('name');
+
+        return $user;
+    }
 }

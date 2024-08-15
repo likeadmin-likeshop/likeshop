@@ -182,9 +182,11 @@ class AliPayServer
             if (false === $verify) {
                 throw new \Exception('异步通知验签失败');
             }
+
             if (!in_array($data['trade_status'], ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
                 return true;
             }
+
             $extra['transaction_id'] = $data['trade_no'];
             //验证订单是否已支付
             switch ($data['passback_params']) {
@@ -231,15 +233,15 @@ class AliPayServer
 
     /**
      * Notes: 退款
-     * @param $order_sn 订单号
-     * @param $order_amount 金额
+     * @param string $order_sn 订单号
+     * @param string $order_amount 金额
      * @author 段誉(2021/3/25 10:24)
      * @return \Alipay\EasySDK\Payment\Common\Models\AlipayTradeRefundResponse
      * @throws \Exception
      */
-    public function refund($order_sn, $order_amount)
+    public function refund($order_sn, $order_amount, $params = [])
     {
-        return Factory::payment()->common()->refund($order_sn, $order_amount);
+        return Factory::payment()->common()->refund($order_sn, $order_amount, $params);
     }
 
 

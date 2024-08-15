@@ -20,11 +20,10 @@
         "topthink/framework": "5.1.*",
         "topthink/think-captcha": "2.0.*",
         "overtrue/wechat": "~4.0",
-        "mtdowling/cron-expression": "^1.2",
+        "dragonmantank/cron-expression": "3.1",
         "topthink/think-helper": "1.0.*",
         "rmccue/requests": "^1.8",
         "alibabacloud/client": "^1.5",
-        "endroid/qr-code": "^2.5",
         "ext-json": "*",
         "ext-curl": "*",
         "yly-openapi/yly-openapi-sdk": "v1.0.2",
@@ -33,7 +32,9 @@
         "qcloud/cos-sdk-v5": "^2.1",
         "alipaysdk/easysdk": "^2.2",
         "tencentcloud/tencentcloud-sdk-php": "^3.0",
-        "ext-fileinfo": "*"
+        "topthink/think-image": "^1.0",
+        "ext-openssl": "*",
+        "endroid/qr-code": "2.5.1"
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +45,10 @@
         "think-path": "thinkphp"
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "topthink/think-installer": true,
+            "easywechat-composer/easywechat-composer": false
+        }
     }
 }

@@ -105,7 +105,7 @@ class User extends AdminBase
             }
             $this->_error($result);
         }
-        $this->assign('info',UserLogic::getUser($id));
+        $this->assign('info',UserLogic::getInfo($id));
         $this->assign('user_level',UserLogic::getLevelList());
         return $this->fetch();
 
@@ -130,11 +130,19 @@ class User extends AdminBase
     /*
      * 会员详情
      */
-    public function info($id){
+    public function infoOld($id){
         $detail = UserLogic::getUser($id,false,true);
         $this->assign('detail',$detail);
 
         return $this->fetch();
+    }
+
+    public function info(){
+        $id = $this->request->get('id', '', 'intval');
+        $detail = UserLogic::getInfo($id);
+        return view('', [
+            'detail' => $detail
+        ]);
     }
 
     public function getList(){
@@ -150,6 +158,18 @@ class User extends AdminBase
         return $this->fetch();
     }
 
+    public function fans()
+    {
+        if ($this->request->isPost()) {
+            $params = $this->request->post();
+            $result = UserLogic::fans($params);
+            return $this->_success('', $result);
+        }
+
+        $id = $this->request->get('id/d');
+        return view('', ['id' => $id]);
+    }
+
         /**
      * 转账记录
      */
@@ -163,5 +183,36 @@ class User extends AdminBase
         $this->_success('', $data);
       }
       return $this->fetch();
+    }
+
+    public function adjustFirstLeader()
+    {
+        if($this->request->isPost()) {
+            $params = $this->request->post();
+            $result = UserLogic::adjustFirstLeader($params);
+            if ($result) {
+                return $this->_success('调整成功');
+            }
+            return $this->_error(UserLogic::getError());
+        }
+
+        $id = $this->request->get('id/d');
+        $user =  \app\common\model\User::field('id,sn,nickname,first_leader')->findOrEmpty($id)->toArray();
+        $firstLeader = \app\common\model\User::getUserInfo($user['first_leader']);
+        return view('', [
+            'user_id' => $id,
+            'user' => $user,
+            'first_leader' => $firstLeader
+        ]);
+    }
+
+    public function userLists()
+    {
+        if ($this->request->isPost()) {
+            $params = $this->request->post();
+            $lists = UserLogic::userLists($params);
+            return $this->_success('', $lists);
+        }
+        return view();
     }
 }

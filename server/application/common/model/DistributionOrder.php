@@ -60,10 +60,12 @@ class DistributionOrder extends Model
      */
     public static function updateOrderStatus($distribution_id, $status)
     {
+        $time = time();
         return self::where('id', $distribution_id)
             ->update([
                 'status' => $status,
-                'update_time' => time()
+                'settlement_time' => $time,
+                'update_time' => $time
             ]);
     }
 

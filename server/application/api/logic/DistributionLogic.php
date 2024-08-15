@@ -49,7 +49,17 @@ class DistributionLogic
             $my_leader_id = $my_leader['id'];
             $my_first_leader = $my_leader['first_leader'];
             $my_third_leader = $my_leader['second_leader'];
+            $my_leader['ancestor_relation'] = boolval($my_leader['ancestor_relation']) ? $my_leader['ancestor_relation'] : '';
             $my_ancestor_relation = trim("{$my_leader_id},{$my_leader['ancestor_relation']}", ',');
+
+            $user = User::findOrEmpty($my_id);
+            // 旧关系链
+            if (!empty($user->ancestor_relation)) {
+                $old_ancestor_relation = $user->id . ',' .$user->ancestor_relation;
+            } else {
+                $old_ancestor_relation = $user->id;
+            }
+
             $data = [
                 'first_leader' => $my_leader_id,
                 'second_leader' => $my_first_leader,
@@ -81,7 +91,7 @@ class DistributionLogic
             //更新与我相关的所有关系链
             Db::name('user')
                 ->where("find_in_set({$my_id},ancestor_relation)")
-                ->exp('ancestor_relation', "replace(ancestor_relation,'{$my_id}','" . trim("{$my_id},{$my_ancestor_relation}", ',') . "')")
+                ->exp('ancestor_relation', "replace(ancestor_relation,'{$old_ancestor_relation}','" . trim("{$my_id},{$my_ancestor_relation}", ',') . "')")
                 ->update();
 
             //邀请会员赠送积分
@@ -560,5 +570,73 @@ class DistributionLogic
         return $is_distribution;
     }
 
+    public static function fixAncestorRelation()
+    {
+        Db::startTrans();
+        try {
+            $userList = User::select()->toArray();
+            if (empty($userList)) {
+                throw new \Exception('没有用户，无需修复');
+            }
 
+            $updateEmptyData = [];
+            $updateData = [];
+            foreach($userList as $user) {
+                $my_ancestor_relation = self::myAncestorRelation($user);
+                $updateEmptyData[] = ['id' => $user['id'], 'ancestor_relation' => ''];
+                $updateData[] = ['id' => $user['id'], 'ancestor_relation' => $my_ancestor_relation];
+            }
+            // 先清除所有关系链
+            (new User())->saveAll($updateEmptyData);
+            // 重新设置关系链
+            (new User())->saveAll($updateData);
+
+            Db::commit();
+            return [
+                "flag" => true,
+                "msg" => '修复成功'
+            ];
+        } catch (\Exception $e) {
+            Db::rollback();
+            return [
+                "flag" => false,
+                "msg" => $e->getMessage()
+            ];
+        }
+    }
+
+    public static function myAncestorRelation($user)
+    {
+        if (empty($user['first_leader'])) {
+            return '';
+        }
+
+        return trim(self::findAncestorRelation($user['first_leader']), ',');
+    }
+
+    public static function findAncestorRelation($id, $flag = true)
+    {
+        static $ancestor_relation = '';
+        if ($flag) {
+            $ancestor_relation = '';
+        }
+        $ancestor_relation .= $id . ',';
+        $user = User::findOrEmpty($id)->toArray();
+        if (empty($user['first_leader'])) {
+            return $ancestor_relation;
+        }
+        return self::findAncestorRelation($user['first_leader'], false);
+    }
+
+    /**
+     * @notes 获取背景海报
+     * @return array
+     * @author cjhao
+     * @date 2021/11/29 12:00
+     */
+    public static function getPoster(){
+        $poster = ConfigServer::get('invite', 'poster', '/images/share/share_user_bg.png');
+        $poster = empty($poster) ? $poster : UrlServer::getFileUrl($poster);
+        return ['poster'=>$poster];
+    }
 }

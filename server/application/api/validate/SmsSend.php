@@ -29,11 +29,12 @@ use think\{
 class SmsSend extends Validate
 {
     protected $rule = [
-        'mobile' => 'require|checkSms',
+        'mobile' => 'require|mobile|checkSms',
         'key' => 'checkMobile',
     ];
     protected $message = [
         'mobile.require' => '请输入手机号码',
+        'mobile.mobile' => '请输入正确的手机号码',
     ];
 
     protected function checkSms($value, $rule, $data)

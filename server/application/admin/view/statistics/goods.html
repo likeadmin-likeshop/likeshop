@@ -3,29 +3,42 @@
 
 <div class="layui-col-md12">
     <div class="layui-fluid">
-
-        <div class="layui-form" lay-filter="">
+        <div class="layui-form" >
+            <!--搜索区-->
             <div class="layui-card" >
                 <div class="layui-card-body">
-                    <div class="layui-input-inline">
-                        <div class="layui-card-header" >概况</div>
-                    </div>
-                    <div class="layui-input-inline" style="left: 50px">
-                        <div class="layui-input-inline">
-                            <select name="city" lay-verify="required" lay-filter="days">
-                                <option value="today" >今日实时</option>
-                                <option value="ago_seven" >近7天</option>
-                                <option value="ago_fifteen" >近15天</option>
-                            </select>
+                    <div class="layui-inline">
+                        <div class="layui-btn-group">
+                            <button type="button"  day="1" class="layui-btn layui-btn-sm layui-btn-primary day">今天</button>
+                            <button type="button" id="seven"  day="7" class="layui-btn layui-btn-sm layui-btn-normal day">近7天</button>
+                            <button type="button"  day="15" class="layui-btn layui-btn-sm layui-btn-primary day">近15天</button>
                         </div>
-
                     </div>
-                    <div class="layui-input-inline " id="days" style="white-space: nowrap;left:70px">
-                        {$res.start} 至 {$res.end}
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间筛选:</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" name="start_time" class="layui-input" id="start_time"
+                                       placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-input-inline" style="width: 5px;">
+                            <label class="layui-form-mid">-</label>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_time" class="layui-input" id="end_time"
+                                   placeholder="" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-sm layuiadmin-btn-ad {$view_theme_color}" lay-submit lay-filter="search">筛选</a>
+                        <a class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-primary " lay-submit lay-filter="clear-search">清空</a>
                     </div>
                 </div>
             </div>
-
+            <!--统计数据-->
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-sm6 layui-col-md3" >
                     <div class="layui-card" >
@@ -33,7 +46,7 @@
                             商品浏览量
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" >
-                            <p class="layuiadmin-big-font" id="goods_click">{$res.goods_click}</p>
+                            <p class="layuiadmin-big-font" id="goods_click">0</p>
                         </div>
                     </div>
                 </div>
@@ -43,7 +56,7 @@
                             商品收藏量
                         </div>
                         <div class="layui-card-body layuiadmin-card-list">
-                            <p class="layuiadmin-big-font" id="goods_collect">{$res.goods_collect}</p>
+                            <p class="layuiadmin-big-font" id="goods_collect">0</p>
                         </div>
                     </div>
                 </div>
@@ -53,27 +66,14 @@
                             商品销量
                         </div>
                         <div class="layui-card-body layuiadmin-card-list">
-                            <p class="layuiadmin-big-font" id="goods_sale">{$res.goods_sale}</p>
+                            <p class="layuiadmin-big-font" id="goods_sale">0</p>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <!--统计图表-->
             <div class="layui-card" style="margin-top:20px">
                 <div class="layui-card-body">
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline layui-card-header" style="">商品趋势分析</div>
-                        <div class="layui-input-inline" style="right: 100px">
-                            <select  lay-verify="required"  lay-filter="goods">
-                                <option value="ago_seven">近7天</option>
-                                <option value="ago_fifteen">近15天</option>
-                            </select>
-                        </div>
-                        <div class="layui-input-inline" id="goods_days" style="white-space: nowrap;top:8px;right:80px">
-                            {$res.start_seven} 至 {$res.end_seven}
-                        </div>
-                    </div>
-
                     <div class="layui-form-item">
                         <div id="goodsCharts" style="width: 100%;height: 80vh;"> </div>
                     </div>
@@ -85,20 +85,19 @@
 
 
 <script>
-
-
     layui.config({
         version:"{$front_version}",
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index','table','like','echarts','form'], function(){
+    }).use(['index','table','like','echarts','form', 'laydate'], function(){
         var $ = layui.$
             ,form = layui.form
             ,like = layui.like
-            ,echarts = layui.echarts;
+            ,echarts = layui.echarts
+            ,laydate = layui.laydate;
 
-
+        const defaultSearch = {start_time:'{$time.days_ago7[0]}', end_time:'{$time.days_ago7[1]}'};
         const color = ["#FFC005", "#00CA69","#0090FF"];
         const hexToRgba = (hex, opacity) => {
             let rgbaColor = "";
@@ -111,66 +110,95 @@
             return rgbaColor;
         };
 
-        like.ajax({
-            url: '{:url("statistics/goods")}',
-            data:{'goods':'ago_seven'},
-            type: "post",
-            success: function (res) {
-                var xData = res.data.days;
-                var pvData = res.data.echarts_goods_click;
-                var collectData = res.data.echarts_goods_collect;
-                var saleData = res.data.echarts_goods_sale;
-                var option = setOption(xData, pvData, collectData, saleData);
-                var goodsCharts = echarts.init(document.getElementById('goodsCharts'));
-                goodsCharts.setOption(option, true);
-                window.addEventListener('resize', function () {
-                    goodsCharts.resize()
-                });
+
+        // 首次加载数据
+        loadData(defaultSearch);
+
+        //监听搜索
+        form.on('submit(search)', function(data) {
+            formattingDate();
+            loadData(data.field);
+        });
+
+        //清空查询
+        form.on('submit(clear-search)', function() {
+            formattingDate();
+            $('#seven').trigger("click");
+            loadData(defaultSearch);
+        });
+
+        // 日期时间范围
+        laydate.render({
+            elem: '#start_time'
+            ,theme: '#1E9FFF'
+            , value: "{$time.days_ago7[0]}"
+        });
+
+        laydate.render({
+            elem: '#end_time'
+            ,theme: '#1E9FFF'
+            ,value: "{$time.days_ago7[1]}"
+        });
+
+        // 切换快捷日期
+        $('.day').click(function() {
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+            $(this).removeClass('layui-btn-primary');
+            $(this).addClass('layui-btn-normal');
+            var day = $(this).attr('day');
+            switch (day) {
+                case '1':
+                    $('#start_time').val('{$time.today[0]}');
+                    $('#end_time').val('{$time.today[1]}');
+                    break;
+                case '7':
+                    $('#start_time').val('{$time.days_ago7[0]}');
+                    $('#end_time').val('{$time.days_ago7[1]}');
+                    break;
+                case '15':
+                    $('#start_time').val('{$time.days_ago15[0]}');
+                    $('#end_time').val('{$time.days_ago15[1]}');
+                    break;
             }
         });
 
 
-
-        form.on('select(goods)', function(data){
+        // 加载数据
+        function loadData(data) {
             like.ajax({
                 url: '{:url("statistics/goods")}',
-                data: {'goods':data.value},
-                type: "post",
+                data: data,
+                type: "get",
                 success: function (res) {
-                    $('#goods_days').html(res.data.start+  ' 至 ' +res.data.end );
+                    $('#goods_click').html(res.data.click);
+                    $('#goods_sale').html(res.data.sale);
+                    $('#goods_collect').html(res.data.collect);
                     var xData = res.data.days;
-                    var pvData = res.data.echarts_goods_click;
-                    var collectData = res.data.echarts_goods_collect;
-                    var saleData = res.data.echarts_goods_sale;
-                    var option = setOption(xData, pvData, collectData, saleData);
-                    var goodsCharts = echarts.init(document.getElementById('goodsCharts'));
+                    var pvData = res.data.echarts_click;
+                    var collectData = res.data.echarts_collect;
+                    var saleData = res.data.echarts_sale;
+                    let option = setOption(xData, pvData, collectData, saleData);
+                    let goodsCharts = echarts.init(document.getElementById('goodsCharts'));
                     goodsCharts.setOption(option, true);
                     window.addEventListener('resize', function () {
                         goodsCharts.resize()
                     });
                 }
             });
-        });
+        }
 
+        // 格式化快捷日期
+        function formattingDate() {
+            $('.day').removeClass('layui-btn-normal');
+            $('.day').removeClass('layui-btn-primary');
+            $('.day').addClass('layui-btn-primary');
+        }
 
-        form.on('select(days)', function(data){
-            like.ajax({
-                url:'{:url("statistics/goods")}',
-                data:{'days':data.value},
-                type:"post",
-                success:function(res)
-                {
-                    $('#days').html(res.data.start+  ' 至 ' +res.data.end );
-                    $('#goods_click').html(res.data.goods_click);
-                    $('#goods_sale').html(res.data.goods_sale);
-                    $('#goods_collect').html(res.data.goods_collect);
-                }
-            });
-        });
-
-        //图表设置
+        //　设置图表
         function setOption(xData, pvData, collectData, saleData) {
-             option = {
+            option = {
                 backgroundColor: '#fff',
                 color: color,
                 legend: {

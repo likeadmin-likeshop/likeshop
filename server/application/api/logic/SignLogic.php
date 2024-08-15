@@ -21,6 +21,7 @@ use app\common\logic\AccountLogLogic;
 use app\common\model\AccountLog;
 use app\common\server\UrlServer;
 use think\Db;
+use think\Exception;
 use think\helper\Time;
 use app\common\server\ConfigServer;
 class SignLogic
@@ -160,109 +161,130 @@ class SignLogic
     }
     //签到接口
     public static function sign($user_id){
+        try{
+            Db::startTrans();
+            $sign_list = Db::name('sign_daily')
+                ->where(['del'=>0,'type'=>2])
+                ->order('type asc,days asc')
+                ->column('*','days');
+            //签到记录
+            $last_sign = Db::name('user_sign')
+                ->where(['del'=>0,'user_id'=>$user_id])
+                ->order('id desc')
+                ->find();
+            $now = time();
+            $total_integral = 0;                    //签到赠送的积分
+            $total_growth = 0;                      //签到赠送的成长值
+            $continuous_integral = 0;               //连续签到积分
+            $continuous_growth = 0;                 //连续签到成长值
 
-        $sign_list = Db::name('sign_daily')
-                    ->where(['del'=>0])
-                    ->order('type asc,days asc')
-                    ->column('*','days');
-        $start_sign = current($sign_list);      //第一次签到规则
-        $end_sign = end($sign_list);     //最后一次签到规则
-        //签到记录
-        $last_sign = Db::name('user_sign')
-                    ->where(['del'=>0,'user_id'=>$user_id])
-                    ->order('id desc')
-                    ->find();
-        $now = time();
-        $total_integral = 0;                    //签到赠送的积分
-        $total_growth = 0;                      //签到赠送的成长值
-
-        $sign_add = [];
-        $sign_day = 1;                  //累计签到天数
-        //有签到记录，说明之前有签到
-        if($last_sign){
-
-            $sign_day = $last_sign['days'] + 1;
-            $sign = $sign_list[$sign_day] ?? [];
-            $continuous_integral = 0;               //连续签到奖励积分
-            $continuous_growth = 0;                 //连续签到奖励成长值
-
-            //累计签到天数,额外奖励
-            if($sign){
-                if($sign['integral_status'] && $sign['integral'] > 0){
-                    $total_integral+=$sign['integral'];
-                }
-                if($sign['growth_status'] && $sign['growth'] > 0){
-                    $total_growth+=$sign['growth'];
-                }
-            }
-            if($start_sign && $start_sign['integral_status'] && $start_sign['integral'] > 0){
-                $total_integral+=$start_sign['integral'];
-            }
-            if($start_sign && $start_sign['growth_status'] && $start_sign['growth'] > 0){
-                $total_growth+=$start_sign['growth'];
-            }
-            $sign_add = [
-                'user_id'               => $user_id,
-                'days'                  => $sign_day,
-                'integral'              => $total_integral,
-                'growth'                => $total_growth,
-                'continuous_integral'   => $continuous_integral,
-                'continuous_growth'     => $continuous_growth,
-                'sign_time'             => $now,
-                'create_time'           => $now,
-            ];
-
-
-        }else{  //第一次签到
-            $one_day_sign = $sign_list['1'] ?? [];
-            //连续一天的奖励
-            if($one_day_sign && $one_day_sign['integral_status'] && $one_day_sign['integral'] > 0){
-                $total_integral+=$one_day_sign['integral'];
-            }
-            if($one_day_sign && $one_day_sign['growth_status'] && $one_day_sign['growth'] > 0){
-                $total_growth+=$one_day_sign['growth'];
-            }
-
+            $sign_day = 1;                  //累计签到天数
             //每天签到的奖励
-            if($start_sign && $start_sign['integral_status'] && $start_sign['integral'] > 0){
-                $total_integral+=$start_sign['integral'];
+            $everyday_sign = Db::name('sign_daily')
+                ->where(['del'=>0,'type'=>1])
+                ->find();
+
+            //有签到记录，说明之前有签到
+            if($last_sign){
+
+                $sign_day = $last_sign['days'] + 1;
+                $sign = $sign_list[$sign_day] ?? [];
+                //累计签到天数,额外奖励
+                if($sign){
+                    if($sign['integral_status'] && $sign['integral'] > 0){
+                        $total_integral+=$sign['integral'];
+                        $continuous_integral = $sign['integral'];
+                    }
+                    if($sign['growth_status'] && $sign['growth'] > 0){
+                        $total_growth+=$sign['growth'];
+                        $continuous_growth =$sign['growth'];
+                    }
+                }
+                //每天签到奖励
+                if($everyday_sign){
+                    if($everyday_sign['integral_status'] && $everyday_sign['integral'] > 0){
+                        $total_integral+=$everyday_sign['integral'];
+                    }
+                    if($everyday_sign && $everyday_sign['growth_status'] && $everyday_sign['growth'] > 0){
+                        $total_growth+=$everyday_sign['growth'];
+                    }
+                }
+                $sign_add = [
+                    'user_id'               => $user_id,
+                    'days'                  => $sign_day,
+                    'integral'              => $everyday_sign['integral'],
+                    'growth'                => $everyday_sign['growth'],
+                    'continuous_integral'   => $continuous_integral,
+                    'continuous_growth'     => $continuous_growth,
+                    'sign_time'             => $now,
+                    'create_time'           => $now,
+                ];
+
+            }else{
+
+                //连续一天的奖励
+                $one_day_sign = $sign_list['1'] ?? [];
+                if($one_day_sign){
+                    if($one_day_sign['integral_status'] && $one_day_sign['integral'] > 0){
+                        $total_integral+=$one_day_sign['integral'];
+                        $continuous_integral = $one_day_sign['integral'];
+                    }
+                    if($one_day_sign && $one_day_sign['growth_status'] && $one_day_sign['growth'] > 0){
+                        $total_growth+=$one_day_sign['growth'];
+                        $continuous_growth = $one_day_sign['growth'];
+                    }
+                }
+
+                if($everyday_sign){
+                    if($everyday_sign['integral_status'] && $everyday_sign['integral'] > 0){
+                        $total_integral+=$everyday_sign['integral'];
+                    }
+                    if($everyday_sign['growth_status'] && $everyday_sign['growth'] > 0){
+                        $total_growth+=$everyday_sign['growth'];
+                    }
+                }
+                $sign_add = [
+                    'user_id'               => $user_id,
+                    'days'                  => $sign_day,
+                    'integral'              => $everyday_sign['integral_status'] ? $everyday_sign['integral'] : 0,
+                    'continuous_integral'   => $continuous_integral,
+                    'growth'                => $everyday_sign['growth_status'] ? $everyday_sign['growth'] : 0,
+                    'continuous_growth'     => $continuous_growth,
+                    'sign_time'             => $now,
+                    'create_time'           => $now,
+                ];
             }
-            if($start_sign && $start_sign['growth_status'] && $start_sign['growth'] > 0){
-                $total_growth+=$start_sign['growth'];
+            Db::name('user_sign')->insert($sign_add);
+
+            if($total_integral){
+                Db::name('user')
+                    ->where(['del'=>0 , 'id'=>$user_id])
+                    ->setInc('user_integral',$total_integral);
+                AccountLogLogic::AccountRecord($user_id,$total_integral,1, AccountLog::sign_in_integral);
             }
-          
-            $sign_add = [
-                'user_id'       => $user_id,
-                'days'          => $sign_day,
-                'integral'      => $total_integral,
-                'growth'        => $total_growth,
-                'sign_time'     => $now,
-                'create_time'   => $now,
+            if($total_growth){
+                //用户成长值
+                Db::name('user')
+                    ->where(['del'=>0 , 'id'=>$user_id])
+                    ->setInc('user_growth',$total_growth);
+                AccountLogLogic::AccountRecord($user_id,$total_growth,1,AccountLog::sign_give_growth);
+
+            }
+
+            Db::commit();
+            return [
+                'integral'  => $total_integral,
+                'growth'    => $total_growth,
+                'days'      => $sign_day,
             ];
-        }
-        Db::name('user_sign')->insert($sign_add);
 
-        if($total_integral){
-            Db::name('user')
-                ->where(['del'=>0 , 'id'=>$user_id])
-                ->setInc('user_integral',$total_integral);
-            AccountLogLogic::AccountRecord($user_id,$total_integral,1, AccountLog::sign_in_integral);
-        }
-        if($total_growth){
-            //用户成长值
-            Db::name('user')
-                ->where(['del'=>0 , 'id'=>$user_id])
-                ->setInc('user_growth',$total_growth);
-            AccountLogLogic::AccountRecord($user_id,$total_growth,1,AccountLog::sign_give_growth);
+
+        }catch (Exception $e){
+            Db::rollback();
+            return $e->getMessage();
 
         }
 
-
-        return [
-            'integral'  => $total_integral,
-            'growth'    => $total_growth,
-            'days'      => $sign_day,
-        ];
 
     }
 }

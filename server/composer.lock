@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2daddfbe605bec274304eee12ba8eaf7",
+    "content-hash": "3fb93ccb42932731607c56f18bd77253",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -562,6 +562,73 @@
             "time": "2017-06-12T01:10:27+00:00"
         },
         {
+            "name": "dragonmantank/cron-expression",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dragonmantank/cron-expression.git",
+                "reference": "7a8c6e56ab3ffcc538d05e8155bb42269abf1a0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/7a8c6e56ab3ffcc538d05e8155bb42269abf1a0c",
+                "reference": "7a8c6e56ab3ffcc538d05e8155bb42269abf1a0c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^7.2|^8.0",
+                "webmozart/assert": "^1.7.0"
+            },
+            "replace": {
+                "mtdowling/cron-expression": "^1.0"
+            },
+            "require-dev": {
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-webmozart-assert": "^0.12.7",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cron\\": "src/Cron/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris@ctankersley.com",
+                    "homepage": "https://github.com/dragonmantank"
+                }
+            ],
+            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
+            "keywords": [
+                "cron",
+                "schedule"
+            ],
+            "support": {
+                "issues": "https://github.com/dragonmantank/cron-expression/issues",
+                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/dragonmantank",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-24T19:55:57+00:00"
+        },
+        {
             "name": "easywechat-composer/easywechat-composer",
             "version": "1.4.0",
             "source": {
@@ -1066,11 +1133,11 @@
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "lib/"
-                ],
                 "files": [
                     "lib/common/customFunctions.php"
+                ],
+                "classmap": [
+                    "lib/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1094,7 +1161,7 @@
             ],
             "support": {
                 "issues": "https://github.com/khanamiryan/php-qrcode-detector-decoder/issues",
-                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/master"
+                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/1"
             },
             "time": "2017-01-13T09:11:46+00:00"
         },
@@ -1189,61 +1256,6 @@
                 "source": "https://github.com/Seldaek/monolog/tree/2.2.0"
             },
             "time": "2020-12-14T13:15:25+00:00"
-        },
-        {
-            "name": "mtdowling/cron-expression",
-            "version": "v1.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mtdowling/cron-expression.git",
-                "reference": "9be552eebcc1ceec9776378f7dcc085246cacca6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mtdowling/cron-expression/zipball/9be552eebcc1ceec9776378f7dcc085246cacca6",
-                "reference": "9be552eebcc1ceec9776378f7dcc085246cacca6",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0|~5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Cron\\": "src/Cron/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
-            "keywords": [
-                "cron",
-                "schedule"
-            ],
-            "support": {
-                "issues": "https://github.com/mtdowling/cron-expression/issues",
-                "source": "https://github.com/mtdowling/cron-expression/tree/v1.2.3"
-            },
-            "abandoned": "dragonmantank/cron-expression",
-            "time": "2019-12-28T04:23:06+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -1366,6 +1378,16 @@
                 "issues": "https://github.com/myclabs/php-enum/issues",
                 "source": "https://github.com/myclabs/php-enum/tree/1.7.7"
             },
+            "funding": [
+                {
+                    "url": "https://github.com/mnapoli",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/myclabs/php-enum",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-11-14T18:14:52+00:00"
         },
         {
@@ -2642,16 +2664,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.20.0",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41"
+                "reference": "5bbc823adecdae860bb64756d639ecfec17b050a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/f4ba089a5b6366e453971d3aad5fe8e897b37f41",
-                "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/5bbc823adecdae860bb64756d639ecfec17b050a",
+                "reference": "5bbc823adecdae860bb64756d639ecfec17b050a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2663,13 +2685,16 @@
             "require": {
                 "php": ">=7.1"
             },
+            "provide": {
+                "ext-ctype": "*"
+            },
             "suggest": {
                 "ext-ctype": "For best performance"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2677,12 +2702,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2707,9 +2732,23 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.20.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.27.0"
             },
-            "time": "2020-10-23T14:02:19+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
@@ -3567,6 +3606,56 @@
             "time": "2018-10-05T00:43:21+00:00"
         },
         {
+            "name": "topthink/think-image",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/top-think/think-image.git",
+                "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/top-think/think-image/zipball/8586cf47f117481c6d415b20f7dedf62e79d5512",
+                "reference": "8586cf47f117481c6d415b20f7dedf62e79d5512",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-gd": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*",
+                "topthink/framework": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "think\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "yunwuxin",
+                    "email": "448901948@qq.com"
+                }
+            ],
+            "description": "The ThinkPHP5 Image Package",
+            "support": {
+                "issues": "https://github.com/top-think/think-image/issues",
+                "source": "https://github.com/top-think/think-image/tree/master"
+            },
+            "time": "2016-09-29T06:05:43+00:00"
+        },
+        {
             "name": "topthink/think-installer",
             "version": "v2.0.1",
             "source": {
@@ -3616,6 +3705,70 @@
                 "source": "https://github.com/top-think/think-installer/tree/v2.0.1"
             },
             "time": "2020-10-27T05:43:17+00:00"
+        },
+        {
+            "name": "webmozart/assert",
+            "version": "1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webmozarts/assert.git",
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-ctype": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan": "<0.12.20",
+                "vimeo/psalm": "<4.6.1 || 4.6.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5.13"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.10-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webmozart\\Assert\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bernhard Schussek",
+                    "email": "bschussek@gmail.com"
+                }
+            ],
+            "description": "Assertions to validate method input/output with nice error messages.",
+            "keywords": [
+                "assert",
+                "check",
+                "validate"
+            ],
+            "support": {
+                "issues": "https://github.com/webmozarts/assert/issues",
+                "source": "https://github.com/webmozarts/assert/tree/1.11.0"
+            },
+            "time": "2022-06-03T18:03:27+00:00"
         },
         {
             "name": "xin/container",
@@ -3749,8 +3902,9 @@
     "platform": {
         "php": ">=7.0.0",
         "ext-json": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-openssl": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

@@ -26,14 +26,11 @@ use think\Validate;
 class Login extends Validate
 {
     protected $rule = [
-        'code' => 'require|captcha',
         'account' => 'require',
         'password' => 'require|password',
     ];
 
     protected $message = [
-        'code.require' => '验证码不能为空',
-        'code.captcha' => '验证码错误',
         'account.require' => '账号不能为空',
         'password.require' => '密码不能为空',
         'password.password' => '账号密码错误',

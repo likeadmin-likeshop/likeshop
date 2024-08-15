@@ -94,7 +94,7 @@ class LoginPassword extends ApiBase
     {
         $post = $this->request->post();
         $post['message_key'] = 'ZHMM';
-        $result = $this->validate($post, 'app\api\validate\LoginPassword');
+        $result = $this->validate($post, 'app\api\validate\LoginPassword.forget');
         if ($result === true) {
             return LoginPasswordLogic::forget($post);
         }

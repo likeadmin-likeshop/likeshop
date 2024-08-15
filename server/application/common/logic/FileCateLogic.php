@@ -138,7 +138,7 @@ class FileCateLogic
             if ($v['pid'] == $pid) {
                 $temp['id'] = $v['id'];
                 $temp['field'] = 'id';
-                $temp['title'] = self::handleFileName($v['name'], 4);
+                $temp['title'] = $v['name'];
                 $temp['children'] = self::cateListToTree($lists, $v['id']);
                 $temp['spread'] = true;
                 $tree[] = $temp;
@@ -174,15 +174,6 @@ class FileCateLogic
             }
         }
         return $tree;
-    }
-
-    //分类名超出隐藏
-    public static function handleFileName($str, $length)
-    {
-        if (mb_strlen($str) > $length) {
-            return mb_substr($str,0, $length) . '..';
-        }
-        return $str;
     }
 
 }

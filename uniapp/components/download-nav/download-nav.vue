@@ -1,5 +1,5 @@
 <template>
-	<view class="download-nav-container row-between" v-if="showDownload">
+	<view class="download-nav-container row-between" v-if="showDownload" :style="{top: top + 'px'}">
 		<view class="sm white">
 		    {{appConfig.download_doc}}
 		</view>
@@ -16,6 +16,12 @@
     import {mapGetters} from 'vuex'
 	export default {
 		name:"download-nav",
+		props: {
+			top: {
+				type: Number,
+				default: 0
+			}
+		},
 		data() {
 			return {
 				showDownload: true

@@ -1,8 +1,26 @@
 <?php
+// +----------------------------------------------------------------------
+// | likeshop开源商城系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | gitee下载：https://gitee.com/likeshop_gitee
+// | github下载：https://github.com/likeshop-github
+// | 访问官网：https://www.likeshop.cn
+// | 访问社区：https://home.likeshop.cn
+// | 访问手册：http://doc.likeshop.cn
+// | 微信公众号：likeshop技术社区
+// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
+// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | likeshop团队版权所有并拥有最终解释权
+// +----------------------------------------------------------------------
+// | author: likeshop.cn.team
+// +----------------------------------------------------------------------
 
 namespace app\admin\logic;
 
 
+use app\admin\model\Coupon;
 use app\common\model\Luckdraw;
 use app\common\model\LuckdrawRecord;
 use app\common\server\ConfigServer;
@@ -36,7 +54,8 @@ class LuckDrawLogic
         $model = new Luckdraw();
         $count = $model->where($where)->count();
         $lists = $model->field(true)->where($where)
-            ->order(['sort'=>'desc'])
+            ->append(['prize_name'])
+            ->order(['sort'=>'desc', 'id' => 'desc'])
             ->page($get['page'], $get['limit'])
             ->select();
 
@@ -65,8 +84,7 @@ class LuckDrawLogic
     public static function add($post)
     {
         try {
-            $name_text = ['', '积分', '谢谢惠顾', '优惠券'];
-            $post['name'] = $name_text[$post['prize_type']];
+            $post['name'] = Luckdraw::getPrizeDesc($post['prize_type']);
             $post['image'] = !empty($post['image']) ? $post['image'] : '';
 
             $model = new Luckdraw();
@@ -74,7 +92,7 @@ class LuckDrawLogic
                 'prize_type'   => $post['prize_type'],
                 'name'         => $post['name'],
                 'image'        => $post['image'],
-                'number'       => $post['number'],
+                'number'       => self::getPrizeValue($post),
                 'sort'         => $post['sort'],
                 'probability'  => $post['probability'],
                 'status'       => $post['status'],
@@ -97,8 +115,7 @@ class LuckDrawLogic
     public static function edit($post)
     {
         try {
-            $name_text = ['', '积分', '谢谢惠顾', '优惠券'];
-            $post['name'] = $name_text[$post['prize_type']];
+            $post['name'] = Luckdraw::getPrizeDesc($post['prize_type']);
             $post['image'] = !empty($post['image']) ? $post['image'] : '';
 
             $model = new Luckdraw();
@@ -106,7 +123,7 @@ class LuckDrawLogic
                 'prize_type'   => $post['prize_type'],
                 'name'         => $post['name'],
                 'image'        => $post['image'],
-                'number'       => $post['number'],
+                'number'       => self::getPrizeValue($post),
                 'sort'         => $post['sort'],
                 'probability'  => $post['probability'],
                 'status'       => $post['status'],
@@ -155,19 +172,26 @@ class LuckDrawLogic
     {
         if ($post['status'] == 1) {
             $model = new Luckdraw();
-            $count = $model->field(true)
+            $prizes = $model->field(true)
                 ->where(['is_delete' => 0, 'status'=>1])
                 ->order(['id'=>'desc', 'sort'=>'desc'])
-                ->count();
-            if ($count < 8) {
-                static::$error = '请设置最少8个抽奖商品再来启动';
+                ->select();
+            if (count($prizes) != 8) {
+                static::$error = '抽奖限制8个抽奖奖品';
+                return false;
+            }
+            $probability = array_column($prizes->toArray(), 'probability');
+            if (array_sum($probability) > 100) {
+                static::$error = '中奖概率合计不能大于100%';
                 return false;
             }
         }
 
         ConfigServer::set('luckdraw', 'limit', $post['limit']);
+        ConfigServer::set('luckdraw', 'need', $post['need']);
         ConfigServer::set('luckdraw', 'rule', $post['rule']);
         ConfigServer::set('luckdraw', 'status', $post['status']);
+        ConfigServer::set('luckdraw', 'show_win', $post['show_win']);
         return true;
     }
 
@@ -185,6 +209,7 @@ class LuckDrawLogic
             ->with('user')
             ->order('id', 'desc')
             ->page($get['page'], $get['limit'])
+            ->append(['send_desc'])
             ->select();
 
         return ['count'=>$count, 'list'=>$lists];
@@ -231,4 +256,45 @@ class LuckDrawLogic
             return false;
         }
     }
+
+
+    /**
+     * @notes 优惠券列表
+     * @return Coupon[]
+     * @author 段誉
+     * @date 2022/2/15 10:18
+     */
+    public static function coupon()
+    {
+        $where[] = ['del', '=', 0];
+        $where[] = ['status', '=', 1];
+        $where[] = ['get_type', '=', 2];
+        return Coupon::where($where)->order('id desc')->select();
+    }
+
+
+    /**
+     * @notes 获取奖品数值
+     * @param $param
+     * @return int|mixed
+     * @author 段誉
+     * @date 2022/2/15 14:14
+     */
+    public static function getPrizeValue($param)
+    {
+        $number = 0;
+        switch ($param['prize_type']) {
+            case Luckdraw::PRIZE_INTEGRAL:
+                $number = $param['integral'];
+                break;
+            case Luckdraw::PRIZE_COUPON:
+                $number = $param['coupon'];
+                break;
+            case Luckdraw::PRIZE_BALANCE:
+                $number = $param['balance'];
+                break;
+        }
+        return $number;
+    }
+
 }

@@ -154,7 +154,7 @@ class StatLogic
             $user_pv = Db::name('stat')
                 ->where('create_time', '<=', $where_end)
                 ->where('create_time', '>=', $where_start)
-                ->value('today_user_pv');
+                ->sum('count');
 
             $echarts_order_amount[] = $order_amount ?:0;
             $echarts_user_pv[] = $user_pv ?:0;

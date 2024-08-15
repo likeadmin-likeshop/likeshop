@@ -192,9 +192,36 @@ class Order extends AdminBase
         if(true === $result){
             $result = OrderLogic::orderPrint($id);
             if(true === $result){
-                $this->success('打印机成功，如未出小票，请检查打印机是否在线');
+                $this->success('打印成功，如未出小票，请检查打印机是否在线');
             }
         }
         $this->_error($result);
+    }
+
+    /**
+     * @notes 修改快递单号
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @author suny
+     * @date 2021/11/08 16:06 下午
+     */
+    public function change_delivery()
+    {
+        $get = $this->request->get();
+        if($this->request->isAjax() && $this->request->isPost())
+        {
+            $post = $this->request->post();
+            $result = OrderLogic::changeDelivery($post);
+            if ($result) {
+                $this->_success('操作成功');
+            }
+        }
+
+        $detail = OrderLogic::getDelivery($get);
+        $this->assign('detail', $detail);
+        $this->assign('express', OrderLogic::express());
+        return $this->fetch();
     }
 }

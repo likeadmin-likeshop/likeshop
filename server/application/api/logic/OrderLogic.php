@@ -29,14 +29,22 @@ use app\common\logic\{
     PayNotifyLogic
 };
 use app\common\model\{AccountLog,
+    AfterSale,
+    AfterSale as CommonAfterSale,
     BargainLaunch,
     Client_,
+    Goods,
+    GoodsItem,
     MessageScene_,
     OrderLog,
     Pay,
     Order as CommonOrder,
+    SelffetchShop,
+    SelffetchVerifier,
+    Team,
     TeamFound,
-    UserLevel};
+    UserLevel,
+    Verification};
 use app\common\server\{ConfigServer, UrlServer};
 use think\Db;
 use think\Exception;
@@ -46,6 +54,7 @@ use expressage\{
 };
 use think\facade\Env;
 use think\facade\Hook;
+use think\facade\Validate;
 
 
 class OrderLogic extends LogicBase
@@ -96,8 +105,8 @@ class OrderLogic extends LogicBase
 
             //用户地址
             $user_address = UserAddressLogic::getOrderUserAddress($post, $user_id);
-            //运费
-            $total_shipping_price = FreightLogic::calculateFreight($goods_lists, $user_address);
+            //运费(自提订单不需要运费)
+            $total_shipping_price = ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? 0 :FreightLogic::calculateFreight($goods_lists, $user_address);
             //订单金额
             $total_amount = $total_goods_price;
             //订单应付金额
@@ -138,6 +147,31 @@ class OrderLogic extends LogicBase
 
             $order_amount += $total_shipping_price;//应付订单金额+运费
             $total_amount += $total_shipping_price;//订单金额+运费
+            
+            // 门店自提显示上次提货人信息
+            if($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF){
+                $selffetch_info = Order::where([ 'user_id'=>$user['id'], 'delivery_type'=>CommonOrder::DELIVERY_STATUS_SELF ])
+                    ->field('consignee,mobile,selffetch_shop_id')
+                    ->order('id desc')
+                    ->findOrEmpty()->toArray();
+                //上一次提货人
+                $selffetch_field = [
+                    'id', 'name', 'image', 'contact', 'mobile',
+                    'province', 'city', 'district', 'longitude', 'address', 'latitude',
+                    'business_start_time', 'business_end_time', 'weekdays', 'remark',
+                    'status',
+                ];
+                $self_fetch_info = [
+                    'selffetch_shop_id' => $selffetch_info['selffetch_shop_id'] ?? '',
+                    'contact'           => $selffetch_info['consignee'] ?? '',
+                    'mobile'            => $selffetch_info['mobile'] ?? '',
+                    'selffetch_shop'    => SelffetchShop::where('status', 1)
+                        ->field($selffetch_field)
+                        ->append([ 'shop_address' ])
+                        ->order('id desc')
+                        ->find($selffetch_info['selffetch_shop_id'] ?? 0),
+                ];
+            }
 
             $result = [
                 'order_type'        => self::$order_type,
@@ -161,6 +195,7 @@ class OrderLogic extends LogicBase
                 'integral_switch'   => $integral_switch,//积分抵扣开关
                 'integral_config'   => $integral_config,//积分抵扣配置
                 'integral_desc'     => $integral_desc,//积分抵扣描述
+                'selffetch_info'    => $self_fetch_info ?? null,
             ];
 
             return self::dataSuccess('', $result);
@@ -220,6 +255,15 @@ class OrderLogic extends LogicBase
             return $goods_info;
         }
 
+        // 赠送积分
+        if ($goods_info['give_integral_type'] == 1) {
+            $goods_info['give_integral_num'] += ($goods_info['give_integral'] * $goods_info['goods_num']);
+        } elseif ($goods_info['give_integral_type'] == 2) {
+            $proportion = $goods_info['give_integral'] / 100;
+            $give_integral_num = $proportion * $goods_info['goods_price'];
+            $goods_info['give_integral_num'] += ($give_integral_num * $goods_info['goods_num']);
+        }
+
         //会员折扣价格,不参与商品活动
         $level_discount = UserLevel::get($level)['discount'] ?? 0;
         if ($goods_info['is_member'] == 1 && $level_discount > 0) {
@@ -230,15 +274,6 @@ class OrderLogic extends LogicBase
             $goods_info['member_discount'] = $level_discount;
             $goods_info['is_show_member'] = 1;
             return $goods_info;
-        }
-
-        // 赠送积分
-        if ($goods_info['give_integral_type'] == 1) {
-            $goods_info['give_integral_num'] += ($goods_info['give_integral'] * $goods_info['goods_num']);
-        } elseif ($goods_info['give_integral_type'] == 2) {
-            $proportion = $goods_info['give_integral'] / 100;
-            $give_integral_num = $proportion * $goods_info['goods_price'];
-            $goods_info['give_integral_num'] += ($give_integral_num * $goods_info['goods_num']);
         }
 
         return $goods_info;
@@ -372,19 +407,23 @@ class OrderLogic extends LogicBase
             if ($discount > $sub_price) {
                 $discount = $sub_price;
             }
-            $good['discount_price'] = $discount;//每个商品优惠的金额
 
             //用于判断当前是否为最后一个商品
             if (($check_num + 1) == $goods_count) {
-                $discount = $coupon['money'] - $total_discount;
+                $discount = round($coupon['money'] - round($total_discount, 2), 2);
                 //当前可获得优惠大于当前订单商品时
                 if ($discount > $sub_price) {
                     $discount = $sub_price;
                 }
             }
+
+            //商品优惠金额
+            $good['discount_price'] = $discount;//每个商品优惠的金额
+
             $check_num += 1;
             $total_discount += $discount;
         }
+
         return [
             'goods' => $goods,
             'total_discount' => round($total_discount, 2),
@@ -449,7 +488,7 @@ class OrderLogic extends LogicBase
         g.is_integral,g.is_member,g.give_integral_type,g.give_integral,g.free_shipping_type,
         g.free_shipping,g.free_shipping_template_id,i.image as spec_image,
         i.spec_value_str,i.spec_value_ids,i.price as goods_price,i.volume,i.stock,
-        i.weight,g.first_category_id,g.second_category_id,g.third_category_id';
+        i.weight,g.first_category_id,g.second_category_id,g.third_category_id,g.is_express,g.is_selffetch';
 
         $goods = Db::name('goods g')
             ->join('goods_item i', 'g.id = i.goods_id')
@@ -480,16 +519,27 @@ class OrderLogic extends LogicBase
             $user_address = $data['address'];
             $user = User::get($user_id);
 
-            if (empty($data['address'])) {
+            if ($post['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF && empty($data['address'])) {
                 throw  new Exception('请选择收货地址');
             }
 
-            //余额支付,是否满足支付金额
-            if ($data['pay_way'] == Pay::BALANCE_PAY){
-                $user_money = $user['user_money'];
-                if($user_money < $data['order_amount']){
-                    throw new  Exception('账户余额不足');
-                }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && empty($post['selffetch_shop_id'])) {
+                throw  new Exception('自提门店不能为空');
+            }
+//            if (isset($post['selffetch_shop_id']) && !empty($post['selffetch_shop_id'])) {
+//                $selffetch_shop = SelffetchShop::find($post['selffetch_shop_id'])->toArray();
+//                if (strtotime($selffetch_shop['business_start_time']) > time() || strtotime($selffetch_shop['business_end_time']) < time()) {
+//                    throw  new Exception('不在门店营业时间,无法下单');
+//                }
+//            }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && empty($post['consignee'])) {
+                throw  new Exception('取货人不能为空');
+            }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && empty($post['mobile'])) {
+                throw  new Exception('联系电话不能为空');
+            }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && !Validate::mobile($post['mobile'])) {
+                throw  new Exception('联系电话格式不正确');
             }
 
             //用户当前积分 - 用户使用的积分
@@ -517,15 +567,54 @@ class OrderLogic extends LogicBase
                 }
             }
 
-            $order = self::addOrder($user_id, $data, $order_source, $user_address);
+
+            //验证订单商品是否支持对应的配送方式
+            $is_express = ConfigServer::get('delivery_type', 'is_express', 1);
+            $is_selffetch = ConfigServer::get('delivery_type', 'is_selffetch', 0);
+            $item_ids = implode(',',array_column($post['goods'],'item_id'));
+            $goods_ids = implode(',',GoodsItem::where('id','in', $item_ids)->column('goods_id'));
+            $goods = Goods::where('id','in', $goods_ids)->select();
+            $goods_name = [];
+            //门店自提
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) {
+                if ($is_selffetch == 0) {
+                    throw new Exception('暂未开启门店自提配送方式');
+                }
+                foreach ($goods as $val) {
+                    if ($val['is_selffetch'] == 0) {
+                        $goods_name[] = $val['name'];
+                    }
+                }
+                if (!empty($goods_name)) {
+//                    throw new Exception('商品：'.implode('、',$goods_name).'不支持门店自提！');
+                    throw new Exception('订单存在不支持门店自提的商品！');
+                }
+            }elseif ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_EXPRESS) { //快递配送
+                if ($is_express == 0) {
+                    throw new Exception('暂未开启快递配送方式');
+                }
+                foreach ($goods as $val) {
+                    if ($val['is_express'] == 0) {
+                        $goods_name[] = $val['name'];
+                    }
+                }
+                if (!empty($goods_name)) {
+//                    throw new Exception('商品：'.implode('、',$goods_name).'不支持快递配送！');
+                    throw new Exception('订单存在不支持快递配送的商品！');
+                }
+            }
+
+
+            $extra = [
+                'delivery_type'=>$post['delivery_type'],
+                'selffetch_shop_id'=>($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? $post['selffetch_shop_id'] : '',
+                'consignee'=>($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? $post['consignee'] : '',
+                'mobile'=>($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? $post['mobile'] : ''
+            ];
+            $order = self::addOrder($user_id, $data, $order_source, $user_address, $extra);
             $order_id = $order['order_id'];
             self::addOrderGoods($order_id, $goods_lists);
             self::addOrderAfter($order_id, $user_id, $type, $data);
-
-            //支付方式为余额支付,扣除余额,更新订单状态,支付状态
-            if ($data['pay_way'] == Pay::BALANCE_PAY || $data['order_amount'] == 0) {
-                PayNotifyLogic::handle('order', $order['order_sn'], []);
-            }
 
             // 砍价订单处理
             if (isset($post['bargain_launch_id']) and $post['bargain_launch_id'] > 0) {
@@ -571,32 +660,62 @@ class OrderLogic extends LogicBase
         );
 
         //订单主表记录
-        $order_data = [
-            'order_type'       => $data['order_type'],
-            'order_sn'         => createSn('order', 'order_sn', '', 4),
-            'user_id'          => $user_id,
-            'order_source'     => $order_source,
-            'consignee'        => $user_address['contact'],
-            'province'         => $user_address['province_id'],
-            'city'             => $user_address['city_id'],
-            'district'         => $user_address['district_id'],
-            'address'          => $user_address['address'],
-            'mobile'           => $user_address['telephone'],
-            'goods_price'      => $data['total_goods_price'],
-            'order_amount'     => $data['order_amount'],//应付金额
-            'total_amount'     => $data['total_amount'],//订单总金额
-            'shipping_price'   => $data['shipping_price'],//店铺订单运费
-            'total_num'        => $data['total_num'],//店铺订单商品数量
-            'user_remark'      => $data['remark'],
-            'create_time'      => time(),
-            'discount_amount'  => $data['discount_amount'] ?? 0,//优惠券优惠金额
-            'pay_way'          => $data['pay_way'],
-            'integral_amount'  => $data['integral_amount'] ?? 0,
-            'use_integral'     => $data['user_use_integral'],
-            'team_id'          => $extra['team_id'] ?? 0,
-            'team_found_id'    => $extra['found_id'] ?? 0,
-            'attach_values'    => json_encode($attach_values, JSON_UNESCAPED_UNICODE)
-        ];
+        if ($extra['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) {
+            $order_data = [
+                'order_type'       => $data['order_type'],
+                'order_sn'         => createSn('order', 'order_sn', '', 4),
+                'user_id'          => $user_id,
+                'order_source'     => $order_source,
+                'consignee'        => $extra['consignee'],
+                'mobile'           => $extra['mobile'],
+                'goods_price'      => $data['total_goods_price'],
+                'order_amount'     => $data['order_amount'],//应付金额
+                'total_amount'     => $data['total_amount'],//订单总金额
+                'shipping_price'   => $data['shipping_price'],//店铺订单运费
+                'total_num'        => $data['total_num'],//店铺订单商品数量
+                'user_remark'      => $data['remark'],
+                'create_time'      => time(),
+                'discount_amount'  => $data['discount_amount'] ?? 0,//优惠券优惠金额
+                'pay_way'          => $data['pay_way'],
+                'integral_amount'  => $data['integral_amount'] ?? 0,
+                'use_integral'     => $data['user_use_integral'],
+                'team_id'          => $extra['team_id'] ?? 0,
+                'team_found_id'    => $extra['found_id'] ?? 0,
+                'attach_values'    => json_encode($attach_values, JSON_UNESCAPED_UNICODE),
+                'delivery_type'    => $extra['delivery_type'],
+                'selffetch_shop_id'=> $extra['selffetch_shop_id'],
+                'pickup_code'      => create_verifier_sn('order','pickup_code','6', '')
+            ];
+        }else {
+            $order_data = [
+                'order_type'       => $data['order_type'],
+                'order_sn'         => createSn('order', 'order_sn', '', 4),
+                'user_id'          => $user_id,
+                'order_source'     => $order_source,
+                'consignee'        => $user_address['contact'],
+                'province'         => $user_address['province_id'],
+                'city'             => $user_address['city_id'],
+                'district'         => $user_address['district_id'],
+                'address'          => $user_address['address'],
+                'mobile'           => $user_address['telephone'],
+                'goods_price'      => $data['total_goods_price'],
+                'order_amount'     => $data['order_amount'],//应付金额
+                'total_amount'     => $data['total_amount'],//订单总金额
+                'shipping_price'   => $data['shipping_price'],//店铺订单运费
+                'total_num'        => $data['total_num'],//店铺订单商品数量
+                'user_remark'      => $data['remark'],
+                'create_time'      => time(),
+                'discount_amount'  => $data['discount_amount'] ?? 0,//优惠券优惠金额
+                'pay_way'          => $data['pay_way'],
+                'integral_amount'  => $data['integral_amount'] ?? 0,
+                'use_integral'     => $data['user_use_integral'],
+                'team_id'          => $extra['team_id'] ?? 0,
+                'team_found_id'    => $extra['found_id'] ?? 0,
+                'attach_values'    => json_encode($attach_values, JSON_UNESCAPED_UNICODE),
+                'delivery_type'    => $extra['delivery_type']
+            ];
+        }
+
 
         //有使用优惠券并且有优惠金额,把优惠券id保存到订单表中
         if ($data['coupon_id'] > 0 && $data['discount_amount'] > 0){
@@ -755,7 +874,7 @@ class OrderLogic extends LogicBase
         $lists = $order->where(['del' => 0, 'user_id' => $user_id])
             ->where($where)
             ->with(['orderGoods'])
-            ->field('id,order_sn,order_status,pay_status,order_amount,order_status,order_type,shipping_status,create_time')
+            ->field('id,order_sn,order_status,pay_status,order_amount,order_status,order_type,shipping_status,create_time,delivery_type,team_found_id,pay_time,pay_way')
             ->page($page, $size)
             ->order('id desc')
             ->select();
@@ -770,6 +889,26 @@ class OrderLogic extends LogicBase
                 $image = empty($order_good_info['spec_image']) ? $order_good_info['image'] : $order_good_info['spec_image'];
                 $order_goods['image'] = $image;
             }
+
+            //查看提货码按钮
+            $list['pickup_btn'] = ($list['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY && $list['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? 1 : 0;
+            //订单状态描述
+            $list['order_status_desc'] = ($list['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY && $list['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? '待取货' : CommonOrder::getOrderStatus($list['order_status']);
+            if ($list['order_type'] == CommonOrder::TEAM_ORDER){
+                $found = Db::name('team_found')->where(['id' => $list['team_found_id']])->find();
+                if ($found['status'] == Team::STATUS_SUCCESS){
+                    $list['pickup_btn'] = ($list['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY && $list['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? 1 : 0;
+                    $list['order_status_desc'] = ($list['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY && $list['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? '待取货' : CommonOrder::getOrderStatus($list['order_status']);
+                }else {
+                    $list['pickup_btn'] = 0;
+                    $list['order_status_desc'] = ($list['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY) ? Team::getStatusDesc($found['status']) : CommonOrder::getOrderStatus($list['order_status']);
+                }
+            }
+
+
+
+            //订单类型
+            $list['order_type_desc'] = ($list['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? '自提订单' : CommonOrder::getOrderType($list['order_type']);
         }
 
         $data = [
@@ -823,6 +962,26 @@ class OrderLogic extends LogicBase
             if ($order['order_status'] == CommonOrder::STATUS_FINISH && $refund_time > $now && $item['refund_status'] == \app\common\model\OrderGoods::REFUND_STATUS_NO) {
                 $item['refund_btn'] = 1;
             }
+            //过了取消订单的时间，可对所有商品进行售后操作
+            if ($order['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY && $item['refund_status'] == \app\common\model\OrderGoods::REFUND_STATUS_NO) {
+                //多长时间内允许客户取消
+                $cancel_limit = ConfigServer::get('trading', 'customer_cancel_limit', 0);
+                $limit_time = strtotime($order['pay_time']) + $cancel_limit * 60;
+                if ($limit_time < time()) {
+                    $item['refund_btn'] = 1;
+                }
+            }
+            if ($order['order_status'] == CommonOrder::STATUS_WAIT_RECEIVE && $item['refund_status'] == \app\common\model\OrderGoods::REFUND_STATUS_NO) {
+                $item['refund_btn'] = 1;
+            }
+            //售后状态
+            $item['after_status_desc'] = '';
+            if (in_array($item['refund_status'],[\app\common\model\OrderGoods::REFUND_STATUS_APPLY,\app\common\model\OrderGoods::REFUND_STATUS_WAIT])) {
+                $item['after_status_desc'] = '售后中';
+            }
+            if ($item['refund_status'] == \app\common\model\OrderGoods::REFUND_STATUS_SUCCESS) {
+                $item['after_status_desc'] = '售后成功';
+            }
 
             $goods_info = json_decode($item['goods_info'], true);
             $item['goods_name'] = $goods_info['goods_name'];
@@ -838,10 +997,35 @@ class OrderLogic extends LogicBase
                 'status' => $team['status'],
             ];
         }
+
+        //订单类型
+        $order['order_type_desc'] = ($order['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? '自提订单' : CommonOrder::getOrderType($order['order_type']);
+
+        //订单状态
+        $order['order_status_desc'] = ($order['order_status'] == CommonOrder::STATUS_WAIT_DELIVERY && $order['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? '待取货' : CommonOrder::getOrderStatus($order['order_status']);
+
+        //自提门店
+        $order['selffetch_shop'] = SelffetchShop::where('id',$order['selffetch_shop_id'])
+            ->field('id,name,province,city,district,address,business_start_time,business_end_time')
+            ->append(['shop_address'])
+            ->hidden(['province','city','district','address'])
+            ->find();
+
+        //拼团状态
+        $order['team_status'] = Db::name('team_found')->where(['id' => $order['team_found_id']])->value('status');
+
+
         return $order;
     }
-
-
+    
+    static function wxReceiveDetail($id, $user_id)
+    {
+        $order = Order::where('id', $id)->where('user_id', $user_id)->findOrEmpty()->toArray();
+        
+        return [
+            'transaction_id'    => $order['transaction_id'] ?? '',
+        ];
+    }
 
 
     /**
@@ -866,11 +1050,24 @@ class OrderLogic extends LogicBase
             return self::dataError('很抱歉!订单无法取消');
         }
 
+        if ($order['pay_status'] == Pay::ISPAID) {
+            $cancel_limit = ConfigServer::get('trading', 'customer_cancel_limit', 0);
+            $limit_time = $order->getData('pay_time') + $cancel_limit * 60;
+            if ($limit_time < time()) {
+                return self::dataError('很抱歉!订单已无法取消');
+            }
+        }
+
         if ($order['order_type'] == CommonOrder::TEAM_ORDER && $order['pay_status'] == Pay::ISPAID){
             $found = Db::name('team_found')->where(['id' => $order['team_found_id']])->find();
             if ($found['status'] == 0){
                 return self::dataError('已支付的拼团订单需要等待拼团得出结果后才能取消喔~');
             }
+        }
+
+        $after_sale = Db::name('after_sale')->where(['order_id'=>$order_id])->find();
+        if (!empty($after_sale)) {
+            return self::dataError('存在售后订单，无法取消');
         }
 
         Db::startTrans();
@@ -981,7 +1178,7 @@ class OrderLogic extends LogicBase
         $order = $order->alias('o')
             ->join('order_goods og', 'o.id = og.order_id')
             ->join('goods g','g.id = og.goods_id')
-            ->where(['o.id' => $id, 'user_id' => $user_id, 'pay_status' => CommonOrder::STATUS_WAIT_DELIVERY, 'o.del' => 0])
+            ->where(['o.id' => $id, 'user_id' => $user_id, 'pay_status' => Pay::ISPAID, 'o.del' => 0])
             ->field('o.id,order_status,total_num,image,consignee,mobile,province,city,district,address,pay_time,confirm_take_time,o.shipping_status,shipping_time,o.delivery_id')
             ->append(['delivery_address'])
             ->find();
@@ -1006,7 +1203,7 @@ class OrderLogic extends LogicBase
         ];
 
         if ($order) {
-            $order_delivery = Db::name('delivery')->where(['order_id' => $id])->field('invoice_no,shipping_name,shipping_id')->find();
+            $order_delivery = Db::name('delivery')->where(['order_id' => $id])->find();
             $express = ConfigServer::get('express', 'way', '', '');
             //已发货
             if ($express && $order['shipping_status']) {
@@ -1025,7 +1222,16 @@ class OrderLogic extends LogicBase
                     //快递编码
                     $shipping_code = Db::name('express')->where(['id' => $order_delivery['shipping_id']])->value($shipping_field);
                     //获取物流轨迹
-                    $expressage->logistics($shipping_code, $order_delivery['invoice_no']);
+                    if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
+                        if ($express === 'kdniao') {
+                            $expressage->logistics($shipping_code, $order_delivery['invoice_no'], substr($order_delivery['mobile'],-4));
+                        } else {
+                            $expressage->logistics($shipping_code, $order_delivery['invoice_no'], $order_delivery['mobile']);
+                        }
+                    }else {
+                        $expressage->logistics($shipping_code, $order_delivery['invoice_no']);
+                    }
+
                     $traces = $expressage->logisticsFormat();
 
                     //获取不到物流轨迹时
@@ -1108,4 +1314,215 @@ class OrderLogic extends LogicBase
         return true;
     }
 
+
+    /**
+     * @notes 核销订单列表
+     * @param $type
+     * @param $user_id
+     * @param $page
+     * @param $size
+     * @return array
+     * @author ljj
+     * @date 2021/8/18 3:58 下午
+     */
+    public static function verificationLists($type, $user_id, $page, $size)
+    {
+        $order = new Order();
+        $where[] = ['o.verification_status', '=', $type];
+        $where[] = ['o.del', '=', 0];
+        $where[] = ['o.delivery_type', '=', CommonOrder::DELIVERY_STATUS_SELF];
+        $where[] = ['sv.user_id', '=', $user_id];
+        $where[] = ['o.order_status', '=', CommonOrder::STATUS_WAIT_DELIVERY];
+        $where[] = ['sv.status', '=', 1];
+        $where[] = ['sv.del', '=', 0];
+
+        if ($type == CommonOrder::NOT_WRITTEN_OFF) {
+            $count = $order->alias('o')
+                ->join('selffetch_shop ss', 'ss.id = o.selffetch_shop_id')
+                ->join('selffetch_verifier sv', 'sv.selffetch_shop_id = o.selffetch_shop_id')
+                ->where($where)
+                ->count();
+
+            $lists = $order->alias('o')
+                ->join('selffetch_shop ss', 'ss.id = o.selffetch_shop_id')
+                ->join('selffetch_verifier sv', 'sv.selffetch_shop_id = o.selffetch_shop_id')
+                ->where($where)
+                ->with(['orderGoods'])
+                ->field('o.id,o.consignee,o.verification_status,o.create_time')
+                ->page($page, $size)
+                ->order('o.id desc')
+                ->select();
+        }else {
+            $count = Verification::where(['handle_id'=>$user_id,'verification_scene'=>Verification::TYPE_USER])->count();
+
+            $lists = $order->where('id','in', implode(',',Verification::where(['handle_id'=>$user_id,'verification_scene'=>Verification::TYPE_USER])->column('order_id')))
+                ->with(['orderGoods'])
+                ->field('id,consignee,verification_status,create_time')
+                ->page($page, $size)
+                ->order('id desc')
+                ->select();
+        }
+
+        if ($count == 0) {
+            return [
+                'list' => [],
+                'page' => $page,
+                'size' => $size,
+                'count' => $count,
+                'more' => is_more($count, $page, $size)
+            ];
+        }
+
+        foreach ($lists as $list){
+            foreach ($list['order_goods'] as &$order_goods){
+                $order_good_info = json_decode($order_goods['goods_info'], true);
+                $order_goods['goods_name'] = $order_good_info['goods_name'];
+                $order_goods['spec_value'] = $order_good_info['spec_value_str'];
+                $order_goods['image'] = empty($order_good_info['spec_image']) ? UrlServer::getFileUrl($order_good_info['image']) : UrlServer::getFileUrl($order_good_info['spec_image']);
+            }
+
+            $list['verification_status_desc'] = CommonOrder::getVerificationStatus($list['verification_status']);
+        }
+
+        return [
+            'list' => $lists,
+            'page' => $page,
+            'size' => $size,
+            'count' => $count,
+            'more' => is_more($count, $page, $size)
+        ];
+    }
+
+
+    /**
+     * @notes 提货核销
+     * @param $post
+     * @return bool|string
+     * @author ljj
+     * @date 2021/8/18 4:36 下午
+     */
+    public static function verification($post)
+    {
+        $info = CommonOrder::where('pickup_code',$post['pickup_code'])
+            ->with(['orderGoods'])
+            ->field('id,consignee,verification_status,create_time')
+            ->find();
+        $info['verification_status_desc'] = CommonOrder::getVerificationStatus($info['verification_status']);
+        foreach ($info['order_goods'] as &$order_goods){
+            $order_good_info = json_decode($order_goods['goods_info'], true);
+            $order_goods['goods_name'] = $order_good_info['goods_name'];
+            $order_goods['spec_value'] = $order_good_info['spec_value_str'];
+            $order_goods['image'] = empty($order_good_info['spec_image']) ? UrlServer::getFileUrl($order_good_info['image']) : UrlServer::getFileUrl($order_good_info['spec_image']);
+        }
+
+        return $info;
+    }
+
+    /**
+     * @notes 确认提货
+     * @param $post
+     * @return bool|string
+     * @author ljj
+     * @date 2021/8/18 7:01 下午
+     */
+    public static function verificationConfirm($post)
+    {
+        // 启动事务
+        Db::startTrans();
+        try {
+            $order = Order::find($post['id']);
+            if (empty($order)) {
+                throw  new Exception('订单不存在');
+            }
+            if ($order['order_status'] != CommonOrder::STATUS_WAIT_DELIVERY) {
+                throw  new Exception('订单不允许提货');
+            }
+            if ($order['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF) {
+                throw  new Exception('不是自提订单，不允许提货');
+            }
+            if ($order['verification_status'] == CommonOrder::WRITTEN_OFF) {
+                throw  new Exception('订单已核销');
+            }
+
+            $selffetch_verifier = SelffetchVerifier::where(['user_id'=>$post['user_id'],'selffetch_shop_id'=>$order['selffetch_shop_id'],'status'=>1,'del'=>0])->find();
+            if (empty($selffetch_verifier)) {
+                return '非门店核销员，无法核销订单';
+            }
+    
+            foreach ($order->order_goods as $goods) {
+                $where = [
+                    [ 'order_goods_id', '=', $goods['id'] ],
+                    [ 'order_id', '=', $goods['order_id'] ],
+                    [ 'status', 'in', CommonAfterSale::CanNotVerificationStatusArr() ],
+                    [ 'del', '=', 0 ],
+                ];
+        
+                $after_sale = CommonAfterSale::where($where)->findOrEmpty();
+        
+                if (! $after_sale->isEmpty()) {
+                    RETURN '有商品处于售后中，不能核销';
+                }
+            }
+
+            //添加核销记录
+            $snapshot = [
+                'sn' => $selffetch_verifier['sn'],
+                'name' => $selffetch_verifier['name']
+            ];
+            $verification = new Verification;
+            $verification->order_id = $order['id'];
+            $verification->selffetch_shop_id = $order['selffetch_shop_id'];
+            $verification->handle_id = $post['user_id'];
+            $verification->verification_scene = Verification::TYPE_USER;
+            $verification->snapshot = json_encode($snapshot);
+            $verification->create_time = time();
+            $verification->save();
+
+            //更新订单状态
+            $order->order_status = CommonOrder::STATUS_FINISH;
+            $order->verification_status = CommonOrder::WRITTEN_OFF;
+            $order->update_time = time();
+            $order->confirm_take_time = time();
+            $order->save();
+
+            //订单日志
+            OrderLogLogic::record(
+                OrderLog::TYPE_USER,
+                OrderLog::USER_VERIFICATION,
+                $order['id'],
+                $post['user_id'],
+                OrderLog::USER_VERIFICATION
+            );
+
+            // 赠送成长值和积分
+            Hook::listen('give_reward', [
+                'order_id' => $order['id'],
+                'scene'    => 3, //3=订单完成
+            ]);
+
+            // 提交事务
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * @notes 获取配送方式
+     * @return array
+     * @author ljj
+     * @date 2021/8/19 7:17 下午
+     */
+    public static function getDeliveryType()
+    {
+        $is_express = ConfigServer::get('delivery_type', 'is_express', 1);
+        $is_selffetch = ConfigServer::get('delivery_type', 'is_selffetch', 0);
+        return [
+            'is_express' => $is_express,
+            'is_selffetch' => $is_selffetch,
+        ];
+    }
 }

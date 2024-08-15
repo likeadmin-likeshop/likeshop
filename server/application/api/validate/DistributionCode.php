@@ -21,6 +21,8 @@
 namespace app\api\validate;
 
 
+use app\admin\logic\UserSettingLogic;
+use app\common\server\ConfigServer;
 use think\Db;
 use think\Validate;
 
@@ -46,30 +48,41 @@ class DistributionCode extends Validate
      */
     protected function checkCode($code, $other, $data)
     {
-        $my_first_leader = Db::name('user')
-            ->where(['id' => $data['user_id']])
-            ->value('first_leader');
-        if ($my_first_leader) {
-            return '已有邀请人';
-        }
-        $first_leader = Db::name('user')
-            ->field(['is_distribution', 'id', 'ancestor_relation'])
-            ->where(['distribution_code' => $code])
-            ->find();
-        if (empty($first_leader)) {
-            return '请填写有效的邀请码';
-        }
-        if ($first_leader['is_distribution'] == 0) {
-            return '对方不是分销会员';
-        }
-        if ($first_leader['id'] == $data['user_id']) {
-            return '不能邀请自己';
-        }
-        $ancestor_relation = explode(',', $first_leader['ancestor_relation']);
-        if (!empty($ancestor_relation) && in_array($data['user_id'], $ancestor_relation)) {
-            return '不能填写所有下级的任意一人的邀请码';
+        $config = UserSettingLogic::getConfig();
+        if(!$config['is_open']) {
+            return '系统已关闭邀请功能';
         }
 
+        $user = \app\common\model\User::where(['id'=>$data['user_id'], 'del'=>0])->findOrEmpty();
+        if($user->isEmpty()) {
+            return '无法获取当前用户信息';
+        }
+        if(!empty($user['first_leader'])) {
+            return '已有邀请人';
+        }
+
+        $firstLader = \app\common\model\User::field('id,is_distribution,level,ancestor_relation')
+            ->where('distribution_code', $code)
+            ->findOrEmpty();
+        if($firstLader->isEmpty()) {
+            return '无效的邀请码';
+        }
+        if($firstLader['id'] == $data['user_id']) {
+            return '不能填自己的邀请码';
+        }
+
+        // qualifications-邀请资格 【1-全部用户 2-指定等级用户】
+        $invite_appoint_user = ConfigServer::get('invite', 'invite_appoint_user', []);
+        if(in_array(2, $config['qualifications']) && !in_array($firstLader['level'],$invite_appoint_user)) {
+            return '邀请下级资格未达到要求';
+        }
+
+        // 如果当前用户id出现在邀请人的祖先链路中，代表当前用户是已经是邀请人的上级或祖先级，同时意味着邀请人是当前用户的后代级别
+        // 不能将自己的上级设置为自己的后代级用户
+        $ancestorArr = explode(',', $firstLader['ancestor_relation']);
+        if(!empty($ancestorArr) && in_array($data['user_id'], $ancestorArr)) {
+            return '不能填写自己下级的邀请码';
+        }
         return true;
     }
 }

@@ -24,7 +24,7 @@ class UserLevel extends Validate{
     protected $rule = [
         'id'                    => 'require',
         'name'                  => 'require|unique:user_level,name^del',
-        'growth_value'          => 'require',
+        'growth_value'          => 'require|egt:0',
 //        'remark'                => 'require',
         'image'                 => 'require',
         'background_image'      => 'require',
@@ -35,6 +35,7 @@ class UserLevel extends Validate{
         'name.require'                  => '请输入等级名称',
         'name.unique'                   => '等级名称已存在',
         'growth_value.require'          => '请输入成长值',
+        'growth_value.egt'              => '成长值必须大于等于零',
         'remark.require'                => '请输入等级说明',
         'image.require'                 => '请上传等级图标',
         'background_image.require'      => '请上传等级背景图',

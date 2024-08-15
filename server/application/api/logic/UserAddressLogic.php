@@ -132,14 +132,14 @@ class UserAddressLogic
         try {
             Db::startTrans();
 
-            if ($post['is_default'] == 1){
+            if (isset($post['is_default']) && $post['is_default'] == 1){
                 Db::name('user_address')
                     ->where(['del'=> 0 ,'user_id'=>$user_id])
                     ->update(['is_default'=>0]);
             }else{
                 $is_first = Db::name('user_address')
                     ->where(['del'=> 0 ,'user_id'=>$user_id])
-                    ->select();
+                    ->find();
                 if (empty($is_first)){
                     $post['is_default'] = 1;
                 }
@@ -153,7 +153,7 @@ class UserAddressLogic
                 'city_id'       =>  $post['city_id'],
                 'district_id'   =>  $post['district_id'],
                 'address'       =>  $post['address'],
-                'is_default'    =>  $post['is_default'],
+                'is_default'    =>  $post['is_default'] ?? 0,
                 'create_time'   =>  time()
             ];
 
@@ -194,7 +194,7 @@ class UserAddressLogic
                 'city_id'       =>  $post['city_id'],
                 'district_id'   =>  $post['district_id'],
                 'address'       =>  $post['address'],
-                'is_default'    =>  $post['is_default'],
+                'is_default'    =>  $post['is_default'] ?? 0,
                 'update_time'   =>  time()
             ];
 
@@ -267,8 +267,22 @@ class UserAddressLogic
         $data = '';
         $list = Db::name('dev_region')->where('level',$level)->select();
         foreach ($list as $k => $v){
-            if ($keyword == $v['name'] || strpos($keyword,$v['name']) !== false){
+            if ($keyword == $v['name']){
                 $data = $v['id'];
+            }
+        }
+        if (empty($data)) {
+            foreach ($list as $k => $v) {
+                if (strpos($v['name'], $keyword) !== false) {
+                    $data = $v['id'];
+                }
+            }
+            if (empty($data)) {
+                foreach ($list as $v) {
+                    if (strpos($keyword, $v['name']) !== false) {
+                        $data = $v['id'];
+                    }
+                }
             }
         }
         return $data;

@@ -1,0 +1,46 @@
+{layout name="layout1" /}
+
+<style>
+    .layui-input-block { line-height: 39px; }
+</style>
+
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员编号：</label>
+            <div class="layui-input-block">{$detail.user.sn}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员昵称：</label>
+            <div class="layui-input-block">{$detail.user.nickname}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员等级：</label>
+            <div class="layui-input-block">{$detail.user.level.name ?: '未知'}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号码：</label>
+            <div class="layui-input-block">{$detail.user.mobile ?: '未知'}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">真实姓名：</label>
+            <div class="layui-input-block">{$detail.real_name}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">现住区域：</label>
+            <div class="layui-input-block">{$detail.region}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">申请原因：</label>
+            <div class="layui-input-block">{$detail.reason}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">申请状态：</label>
+            <div class="layui-input-block">{$detail.status_text}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审核说明：</label>
+            <div class="layui-input-block">{$detail.denial_reason}</div>
+        </div>
+    </div>
+</div>

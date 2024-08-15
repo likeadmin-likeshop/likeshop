@@ -104,6 +104,7 @@ class SeckillGoods extends Validate{
         $seckill_goods = Db::name('seckill_goods')
                 ->where(['goods_id'=>$goods_ids,'seckill_id'=>$data['seckill_id']])
                 ->where('id','not in',$seckill_ids)
+                ->where('del', 0)
                 ->find();
 
         if($seckill_goods){

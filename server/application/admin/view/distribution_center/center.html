@@ -1,0 +1,152 @@
+{layout name="layout1" /}
+<style>
+    .title {
+        font-size: 16px;
+        text-align: center;
+    }
+    .data {
+        margin-top: 10px;
+        font-size: 20px;
+        text-align: center;
+    }
+    .layui-table {
+        /*width: 500px;*/
+        margin-left: 10px;
+    }
+    html,
+    body {
+        height: 100%;
+    }
+    #content {
+        height: 100%;
+        background: #f8f8f8;
+        padding: 15px;
+    }
+    .center {
+        text-align: center !important;
+    }
+</style>
+<div id="content">
+    <div class="layui-card">
+        <div class="layui-card-header">佣金概览</div>
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-col-md2 title">
+                    累计已入账佣金/元
+                </div>
+                <div class="layui-col-md2 title">
+                    今日入账佣金/元
+                </div>
+                <div class="layui-col-md2 title">
+                    待结算佣金/元
+                </div>
+                <div class="layui-col-md2 title">
+                    今日新增待结算佣金/元
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 data">
+                    {$data.earnings.total_success}
+                </div>
+                <div class="layui-col-md2 data">
+                    {$data.earnings.total_today_success}
+                </div>
+                <div class="layui-col-md2 data">
+                    {$data.earnings.total_wait}
+                </div>
+                <div class="layui-col-md2 data">
+                    {$data.earnings.total_today_wait}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-header">分销会员概览</div>
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-col-md2 title">
+                    分销会员/人
+                </div>
+                <div class="layui-col-md2 title">
+                    分销会员占比/百分比
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 data">
+                    {$data.members.members}
+                </div>
+                <div class="layui-col-md2 data">
+                    {$data.members.proportion} %
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">分销商品排行榜</div>
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150" class="center">
+                    <col>
+                    <col width="200" class="center">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="center">排名</th>
+                    <th>商品名称</th>
+                    <th class="center">已入账佣金</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $data.topGoods as $key=>$item }
+                <tr>
+                    <td class="center">{$key+1}</td>
+                    <td> <img src="{$item.goods_image}" style="height:60px;width: 60px;margin-right:5px;" class="image-show">{$item.goods_name}</td>
+                    <td class="center">{$item.total_money}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">分销会员排行榜</div>
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150" class="center">
+                    <col>
+                    <col width="200" class="center">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="center">排名</th>
+                    <th>会员名称</th>
+                    <th class="center">已入账佣金</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $data.topMembers as $key=>$item }
+                <tr>
+                    <td class="center">{$key+1}</td>
+                    <td> <img src="{$item.avatar}" style="height:60px;width: 60px;margin-right:5px;" class="image-show">{$item.nickname}</td>
+                    <td class="center">{$item.total_money}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/lib/' //静态资源所在路径
+    }).use(['table'], function(){
+        let table = layui.table;
+    });
+</script>

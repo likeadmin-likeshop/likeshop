@@ -43,7 +43,7 @@
                             <div class="layui-form-item">
                                 <label for="duration" class="layui-form-label" style="width:110px;">足迹气泡时长：</label>
                                 <div class="layui-input-inline" style="width:220px;">
-                                    <input type="number" id="duration" name="duration" value="{$set.footprint_duration}" autocomplete="off" class="layui-input">
+                                    <input type="number" id="duration" name="duration" lay-verify="duration"  value="{$set.footprint_duration}" autocomplete="off" class="layui-input">
                                     <p style="color:#ccc;font-size: 13px;">查询多长时间范围内的足迹信息</p>
                                 </div>
                                 <div class="layui-input-inline" style="line-height: 38px;">分钟</div>
@@ -86,7 +86,14 @@
             , form = layui.form
             , like = layui.like
             ,element = layui.element;
-
+        form.render();
+        form.verify({
+            duration: function (value){
+                if(value < 0){
+                    return '足迹气泡时长不能小于零分钟';
+                }
+            }
+        });
         // 编辑气泡
         $(document).on('click', '.edit-bubble', function () {
             var id = $(this).attr('data-id');

@@ -20,6 +20,7 @@
 namespace app\api\validate;
 
 
+use app\common\model\Order as CommonOrder;
 use think\Db;
 use think\Validate;
 
@@ -29,10 +30,11 @@ class Team extends Validate
         'item_id' => 'require|integer|checkTeamGoods',
         'goods_num' => 'require|integer',
         'action' => 'require',
-        'pay_way' =>'require|in:1,2,3',
+        //'pay_way' =>'require|in:1,2,3',
         'found_id' => 'checkTeamFound',
         'order_id' => 'require',
         'team_id' => 'require|checkTeam',
+        'delivery_type' => 'require|in:'.CommonOrder::DELIVERY_STATUS_EXPRESS.','.CommonOrder::DELIVERY_STATUS_SELF,
     ];
 
     protected $message = [
@@ -40,15 +42,16 @@ class Team extends Validate
         'goods_num.require' => '请选择商品数量',
         'goods_num.integer' => '商品数量错误',
         'action.require' => '订单错误',
-        'pay_way.require' => '支付方式错误',
+        //'pay_way.require' => '支付方式错误',
         'found_id.require' => '参数缺失',
         'order_id.require' => '参数缺失',
         'team_id.require' => '参数缺失',
+        'delivery_type.require' => '配送方式不能为空',
     ];
 
     protected function sceneAdd()
     {
-        $this->only(['action', 'pay_way', 'goods_num', 'item_id', 'found_id', 'team_id']);
+        $this->only(['action', 'goods_num', 'item_id', 'found_id', 'team_id']);
     }
 
 

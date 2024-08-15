@@ -231,6 +231,9 @@ class BargainLogic extends LogicBase {
             Db::name('bargain_knife')
                  ->insert($bargain_knife);
 
+            //更新助力次数
+            Db::name('bargain_launch')->where('id',$bargain_launch_id)->update(['help_number'=>['inc',1]]);
+
             //砍价进度条
             $progress = round($bargain['floor_price'] / $current_price,2);
 

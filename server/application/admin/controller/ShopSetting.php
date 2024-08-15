@@ -111,7 +111,9 @@ class ShopSetting extends AdminBase
             'min_withdraw' => ConfigServer::get('withdraw', 'min_withdraw'),
             'max_withdraw' => ConfigServer::get('withdraw', 'max_withdraw'),
             'poundage' => ConfigServer::get('withdraw', 'poundage'),
-            'type' => ConfigServer::get('withdraw', 'type') ? ConfigServer::get('withdraw', 'type') : []
+            'type' => ConfigServer::get('withdraw', 'type') ? ConfigServer::get('withdraw', 'type') : [],
+            'transfer_way' => ConfigServer::get('withdraw', 'transfer_way',1),
+
         ];
         $this->assign('config', $config);
         return $this->fetch();
@@ -124,11 +126,15 @@ class ShopSetting extends AdminBase
         if(empty($post['type'])) {
           return $this->_error('至少选择一种提现方式');
         }
+        if ($post['poundage'] > 100 || $post['poundage'] < 0) {
+            return $this->_error('提现手续费须在0-100区间内');
+        }
         if ($post) {
             ConfigServer::set('withdraw', 'min_withdraw', $post['min_withdraw']);//最低提现
             ConfigServer::set('withdraw', 'max_withdraw', $post['max_withdraw']);//最高提现
             ConfigServer::set('withdraw', 'poundage', $post['poundage']);//提现手续费
             ConfigServer::set('withdraw', 'type', $post['type']);//提现方式
+            ConfigServer::set('withdraw', 'transfer_way', $post['transfer_way']);//微信零钱接口
             $this->_success('操作成功');
         }
     }

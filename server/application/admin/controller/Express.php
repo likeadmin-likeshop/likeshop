@@ -29,9 +29,9 @@ class Express extends AdminBase
     /**
      * lists
      * @return mixed
-     * @throws \think\exception\DbException
-     * @throws db\exception\DataNotFoundException
-     * @throws db\exception\ModelNotFoundException
+     * @throws @\think\exception\DbException
+     * @throws @db\exception\DataNotFoundException
+     * @throws @db\exception\ModelNotFoundException
      */
     public function lists()
     {
@@ -44,6 +44,9 @@ class Express extends AdminBase
     /**
      * 添加
      * @return mixed
+     * @throws @\think\exception\DbException
+     * @throws @db\exception\DataNotFoundException
+     * @throws @db\exception\ModelNotFoundException
      */
     public function add()
     {
@@ -66,6 +69,11 @@ class Express extends AdminBase
      * 编辑
      * @param $id
      * @return mixed
+     * @throws @\think\Exception
+     * @throws @\think\exception\DbException
+     * @throws @\think\exception\PDOException
+     * @throws @db\exception\DataNotFoundException
+     * @throws @db\exception\ModelNotFoundException
      */
     public function edit($id)
     {
@@ -89,8 +97,8 @@ class Express extends AdminBase
     /**
      * 删除
      * @param $delData
-     * @throws \think\Exception
-     * @throws \think\exception\PDOException
+     * @throws @\think\Exception
+     * @throws @\think\exception\PDOException
      */
     public function del($delData)
     {

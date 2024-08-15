@@ -18,12 +18,18 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\logic;
+use app\common\model\DistributionGoods;
+use app\common\model\GoodsItem;
 use app\common\server\UrlServer;
 use think\Db;
 use think\Exception;
+use think\facade\Hook;
 
 class GoodsLogic
 {
+    
+    public static $error = '';
+    
     /*
      * 商品统计
      */
@@ -70,6 +76,26 @@ class GoodsLogic
                     break;
             }
         }
+        $activity_goods = self::activityGoods();
+        $seckill_goods = $activity_goods['seckill_goods'];
+        $team_goods = $activity_goods['team_goods'];
+        $bargain_goods = $activity_goods['bargain_goods'];
+        if(isset($get['goods_type']) && $get['goods_type']){
+            switch ($get['goods_type']){
+                case 1:
+                    $where[] = ['id','not in',$activity_goods['activity_goods']];
+                    break;
+                case 2:
+                    $where[] = ['id','in',$seckill_goods];
+                    break;
+                case 3:
+                    $where[] = ['id','in',$team_goods];
+                    break;
+                case 4:
+                    $where[] = ['id','in',$bargain_goods];
+                    break;
+            }
+        }
 
         if (isset($get['keyword']) && $get['keyword']) {
             $where[] = ['name', 'like', '%' . $get['keyword'] . '%'];
@@ -82,6 +108,11 @@ class GoodsLogic
         }
         if(isset($get['category_id']) && $get['category_id']){
             $where[] = ['first_category_id|second_category_id|third_category_id','=',$get['category_id']];
+        }
+        if(isset($get['delivery_type']) && $get['delivery_type'] == 1){
+            $where[] = ['is_express','=',1];
+        }elseif (isset($get['delivery_type']) && $get['delivery_type'] == 2) {
+            $where[] = ['is_selffetch','=',1];
         }
 
         $goods_count = Db::name('goods')
@@ -123,6 +154,15 @@ class GoodsLogic
             if($item['shareholder_ratio'] > 0) $item['shareholder_ratio_desc'] = $item['shareholder_ratio'] /100 .'%';
 
             $item['image'] = UrlServer::getFileUrl($item['image']);
+
+            $item['attribute'] = '普通商品';
+            if(in_array($item['id'],$seckill_goods)){
+                $item['attribute'] = '秒杀商品';
+            }elseif (in_array($item['id'],$team_goods)){
+                $item['attribute'] = '拼团商品';
+            }elseif (in_array($item['id'],$bargain_goods)){
+                $item['attribute'] = '砍价商品';
+            }
         }
 
         return ['count' => $goods_count, 'list' => $goods_list];
@@ -175,20 +215,17 @@ class GoodsLogic
 
         $goods_category_list = Db::name('goods_category')->where(['del'=>0])->column('name','id');
 
-        $exportTitle = ['商品名称', '商品分类', '是否开启分销', '一级佣金比例', '二级佣金比例', '三级佣金比例', 'SKU最低价', 'SKU最高价', '总库存', '总销量', '新品推荐', '好物优选', '猜你喜欢', '排序', '发布时间'];
+        $exportTitle = ['商品名称', '商品分类', '是否开启分销', 'SKU最低价', 'SKU最高价', '总库存', '总销量', '新品推荐', '好物优选', '猜你喜欢', '排序', '发布时间'];
         $exportExt = 'xls';
         $exportData = [];
         foreach($goods_list_export as $item) {
             $cateName = self::getCateName($goods_category_list, $item); // 商品分类
             $isCommission = $item['is_commission'] ? '开启' : '关闭';
-            $firstRatio = $item['first_ratio'] > 0 ? $item['first_ratio'].'%' : 0;
-            $secondRatio = $item['second_ratio'] > 0 ? $item['second_ratio'].'%' : 0;
-            $threeRatio = $item['three_ratio'] > 0 ? $item['three_ratio'].'%' : 0;
             $isNew = $item['is_new'] ? '是' : '否';
             $isBest = $item['is_best'] ? '是' : '否';
             $isLike = $item['is_like'] ? '是' : '否';
             $createTime = date('Y-m-d H:i:s',$item['create_time']);
-            $exportData[] = [$item['name'], $cateName, $isCommission, $firstRatio, $secondRatio, $threeRatio, $item['min_price'], $item['max_price'], $item['stock'], $item['total_sales_sum'], $isNew, $isBest, $isLike, $item['sort'], $createTime];
+            $exportData[] = [$item['name'], $cateName, $isCommission, $item['min_price'], $item['max_price'], $item['stock'], $item['total_sales_sum'], $isNew, $isBest, $isLike, $item['sort'], $createTime];
         }
 
         return ['exportTitle'=> $exportTitle, 'exportData' => $exportData, 'exportExt'=>$exportExt, 'exportName'=>'商品列表'.date('Y-m-d H:i:s')];
@@ -199,12 +236,21 @@ class GoodsLogic
      */
     public static function del($id)
     {
+        try {
+            $data = [
+                'del' => 1,
+                'update_time' => time()
+            ];
+            Db::name('goods')->where(['del' => 0, 'id' => $id])->update($data);
 
-        $data = [
-            'del' => 1,
-            'update_time' => time()
-        ];
-        return Db::name('goods')->where(['del' => 0, 'id' => $id])->update($data);
+            // 下架或删除商品，更新商品收藏
+            Hook::listen('update_collect', ['goods_id' => $id]);
+
+            return true;
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     /**
      * 添加商品
@@ -228,7 +274,8 @@ class GoodsLogic
             } else {
                 $max_price = max($post['price']);
                 $min_price = min($post['price']);
-                $market_price = max($post['market_price']);
+                $min_price_key = array_search($min_price,$post['price']);
+                $market_price = $post['market_price'][$min_price_key];
                 $total_stock = array_sum($post['stock']);
             }
             $free_shipping = $post['free_shipping_type'] == 2 ? $post['free_shipping']: '';
@@ -273,27 +320,23 @@ class GoodsLogic
                 'stock'                     => $total_stock,
                 'status'                    => $post['status'],
                 'virtual_sales_sum'         => $post['virtual_sales_sum'],
+                'virtual_click'             => $post['virtual_click'] ?? 0,
                 'stock_warn'                => $post['stock_warn'],
                 'is_show_stock'             => $post['is_show_stock'],
                 'free_shipping_type'        => $post['free_shipping_type'],
                 'free_shipping'             => $free_shipping,
                 'free_shipping_template_id' => $free_shipping_template_id,
-                'is_commission'             => $post['is_commission'],
-                'first_ratio'               => $post['first_ratio'],
-                'second_ratio'              => $post['second_ratio'],
-                'three_ratio'               => $post['three_ratio'],
                 'is_new'                    => isset($post['is_new']) && $post['is_new'] == 'on' ? 1 : 0,
                 'is_best'                   => isset($post['is_best']) && $post['is_best'] == 'on' ? 1 : 0,
                 'is_like'                   => isset($post['is_like']) && $post['is_like'] == 'on' ? 1 : 0,
-//                'is_share_bouns'            => $post['is_share_bouns'],
-//                'region_ratio'              => $post['region_ratio'],
-//                'shareholder_ratio'         => $post['shareholder_ratio'],
                 'is_integral'               => $post['is_integral'],
                 'is_member'                 => $post['is_member'],
                 'give_integral_type'        => $give_integral_type,
                 'give_integral'             => $give_integral,
                 'spec_type'                 => $post['spec_type'],
-                'create_time'               => $time
+                'create_time'               => $time,
+                'is_express'                   => isset($post['is_express']) && $post['is_express'] == 'on' ? 1 : 0,
+                'is_selffetch'                   => isset($post['is_selffetch']) && $post['is_selffetch'] == 'on' ? 1 : 0,
             ];
             $goods_id = Db::name('goods')->insertGetId($data);
 
@@ -405,6 +448,9 @@ class GoodsLogic
 
         try {
             Db::startTrans();
+    
+            $oldItemIds = GoodsItem::where('goods_id', $post['id'])->column('id');
+            
             $time = time();
 
             //算出最大最小价格
@@ -414,12 +460,13 @@ class GoodsLogic
                 $market_price = $post['one_market_price'];
                 $total_stock = $post['one_stock'];
             } else {
+
                 $max_price = max($post['price']);
                 $min_price = min($post['price']);
-                $market_price = max($post['market_price']);
+                $min_price_key = array_search($min_price,$post['price']);
+                $market_price = $post['market_price'][$min_price_key];
                 $total_stock = array_sum($post['stock']);
             }
-
 
             $free_shipping = $post['free_shipping_type'] == 2 ? $post['free_shipping']: '';
             $free_shipping_template_id = $post['free_shipping_type'] == 3 ? $post['free_shipping_template_id']: '';
@@ -467,32 +514,33 @@ class GoodsLogic
                 'stock'                     => $total_stock,
                 'status'                    => $post['status'],
                 'virtual_sales_sum'         => $post['virtual_sales_sum'],
+                'virtual_click'             => $post['virtual_click'] ?? 0,
                 'stock_warn'                => $post['stock_warn'],
                 'is_show_stock'             => $post['is_show_stock'],
                 'free_shipping_type'        => $post['free_shipping_type'],
                 'free_shipping'             => $free_shipping,
                 'free_shipping_template_id' => $free_shipping_template_id,
-                'is_commission'             => $post['is_commission'],
-                'first_ratio'               => $post['first_ratio'],
-                'second_ratio'              => $post['second_ratio'],
-                'three_ratio'               => $post['three_ratio'],
                 'is_new'                    => isset($post['is_new']) && $post['is_new'] == 'on' ? 1 : 0,
                 'is_best'                   => isset($post['is_best']) && $post['is_best'] == 'on' ? 1 : 0,
                 'is_like'                   => isset($post['is_like']) && $post['is_like'] == 'on' ? 1 : 0,
-//                'is_share_bouns'            => $post['is_share_bouns'],
-//                'region_ratio'              => $post['region_ratio'],
-//                'shareholder_ratio'         => $post['shareholder_ratio'],
                 'is_integral'               => $post['is_integral'],
                 'is_member'                 => $post['is_member'],
                 'give_integral_type'        => $give_integral_type,
                 'give_integral'             => $give_integral,
                 'spec_type'                 => $post['spec_type'],
-                'update_time'               => $time
+                'update_time'               => $time,
+                'is_express'                => isset($post['is_express']) && $post['is_express'] == 'on' ? 1 : 0,
+                'is_selffetch'              => isset($post['is_selffetch']) && $post['is_selffetch'] == 'on' ? 1 : 0,
             ];
 
             Db::name('goods')
                 ->where(['id' => $post['goods_id']])
                 ->update($data);
+
+            // 下架或删除商品，更新商品收藏
+            if ($data['status'] != 1) {
+                Hook::listen('update_collect', ['goods_id' => $post['goods_id']]);
+            }
 
             //重新更新图片表
             Db::name('goods_image')
@@ -506,6 +554,7 @@ class GoodsLogic
                 ];
             }
             Db::name('goods_image')->insertAll($data);
+            
 
             //写入规格表
             if ($post['spec_type'] == 1) {
@@ -549,6 +598,7 @@ class GoodsLogic
                         'spec_value_ids'    => $goods_spec_value_id,
                         'spec_value_str'    => '默认',
                         'market_price'      => $post['one_market_price'],
+                        'cost_price'        => $post['one_cost_price'],
                         'price'             => $post['one_price'],
                         'stock'             => $post['one_stock'],
                         'volume'            => $post['one_volume'],
@@ -678,6 +728,16 @@ class GoodsLogic
                         ->delete();
                 }
             }
+            
+            $newItemIds = GoodsItem::where('goods_id', $post['id'])->column('id');
+            $destroyIds = DistributionGoods::where('goods_id', $post['goods_id'])->column('id');
+    
+            // 删除原来的分销设置
+            if ($oldItemIds != $newItemIds && $destroyIds) {
+                DistributionGoods::destroy($destroyIds);
+                self::$error = '商品信息修改成功,该商品属于分销商品，请重新设置分销信息';
+            }
+            
             Db::commit();
             return true;
         } catch (Exception $e) {
@@ -767,10 +827,10 @@ class GoodsLogic
         try {
 
             if ($type == 0) {
-                $res = Db::name('team_activity')->whereIn('goods_id', $ids)
-                    ->where(['status' => 1])->find();
-                if ($res) {
-                    return '该商品正在参与拼团，请先关闭后才允许下架';
+                $activity_goods = GoodsLogic::activityGoods()['activity_goods'];
+                $diff_goods = array_diff($activity_goods,$ids);
+                if($activity_goods != $diff_goods){
+                    return '该商品正在参与活动，请先关闭后才允许下架';
                 }
             }
 
@@ -778,6 +838,10 @@ class GoodsLogic
                 'status'      => $type,
                 'update_time' => time()
             ]);
+
+            // 下架或删除商品，更新商品收藏
+            Hook::listen('update_collect', ['goods_id' => $ids]);
+
             return $result ? true : '上架失败';
         } catch (\Exception $e) {
             return '上架失败';
@@ -807,5 +871,38 @@ class GoodsLogic
         }
 
         return '';
+    }
+
+
+    /**
+     * @notes 获取有活动中商品
+     * @return array
+     * @author cjhao
+     * @date 2022/1/19 9:52
+     */
+    public static function activityGoods(){
+        //秒杀验证
+        $seckill_goods = Db::name('seckill_goods')
+            ->where(['del'=>0])
+            ->column('goods_id');
+
+        //拼团活动验证
+        $team_goods = Db::name('team_activity')
+            ->where(['del'=>0])
+            ->column('goods_id');
+
+        // 砍价活动验证
+        $bargain_goods = Db::name('bargain')
+            ->where(['del'=>0])
+            ->column('goods_id');
+
+        $activity_goods = array_merge($seckill_goods,$team_goods,$bargain_goods);
+
+        return [
+            'activity_goods'    => $activity_goods,
+            'seckill_goods'     => $seckill_goods,
+            'team_goods'        => $team_goods,
+            'bargain_goods'     => $bargain_goods,
+        ];
     }
 }

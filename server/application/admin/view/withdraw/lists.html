@@ -286,7 +286,8 @@
                 if(res.code == 1)
                 {
                   layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000}, function(){
-                    parent.location.reload();
+                      // 关闭对话框
+                      location.reload();
                   });
                 }
               }

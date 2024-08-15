@@ -19,6 +19,8 @@
 
 namespace app\admin\validate;
 
+use app\common\model\AfterSale as CommonAfterSale;
+use app\common\model\OrderGoods;
 use app\common\model\Team;
 use think\Db;
 use think\Validate;
@@ -72,6 +74,18 @@ class Order extends Validate
         if ($order['order_status'] > \app\common\model\Order::STATUS_WAIT_DELIVERY) {
             return '此订单不可取消';
         }
+    
+        $where = [
+            [ 'order_id', '=', $order['id'] ],
+            [ 'status', 'in', CommonAfterSale::CanNotVerificationStatusArr() ],
+            [ 'del', '=', 0 ],
+        ];
+    
+        $after_sale = CommonAfterSale::where($where)->findOrEmpty();
+    
+        if (! $after_sale->isEmpty()) {
+            return "订单存在售后，不能取消";
+        }
 
         if ($order['order_type'] == \app\common\model\Order::TEAM_ORDER) {
             $found = Db::name('team_found')->where(['id' => $order['team_found_id']])->find();
@@ -112,6 +126,10 @@ class Order extends Validate
         if ($order['del'] == 1){
             return '订单已删除';
         }
+        
+        if ($order['order_status'] == \app\common\model\Order::STATUS_CLOSE) {
+            return '订单已关闭，无法再发货';
+        }
 
         if ($order['shipping_status'] == 1) {
             return '此订单已发货';
@@ -121,6 +139,23 @@ class Order extends Validate
             $found = Db::name('team_found')->where(['id' => $order['team_found_id']])->find();
             if ($found['status'] != Team::STATUS_SUCCESS){
                 return '已支付的拼团订单需要等待拼团成功后才能发货';
+            }
+        }
+        
+        $order_goods = OrderGoods::where('order_id', $value)->select()->toArray();
+    
+        foreach ($order_goods as $goods) {
+            $where = [
+                [ 'order_goods_id', '=', $goods['id'] ],
+                [ 'order_id', '=', $goods['order_id'] ],
+                [ 'status', 'in', CommonAfterSale::CanNotVerificationStatusArr() ],
+                [ 'del', '=', 0 ],
+            ];
+        
+            $after_sale = CommonAfterSale::where($where)->findOrEmpty();
+        
+            if (! $after_sale->isEmpty()) {
+                return "商品：{$goods['goods_name']} 当前处于售后中，不能发货";
             }
         }
 

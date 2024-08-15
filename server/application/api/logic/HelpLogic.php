@@ -28,18 +28,21 @@ class HelpLogic
     public static function lists($id, $page, $size)
     {
         $where[] = [
-            ['del', '=', 0],
-            ['is_show', '=', 1],
+            ['h.del', '=', 0],
+            ['h.is_show', '=', 1],
+            ['c.is_show', '=', 1],
+            ['c.del', '=', 0],
         ];
 
         if (!empty($id)){
             $where[] = ['cid', '=', $id];
         }
 
-        $res = DB::name('help')
+        $res = DB::name('help')->alias('h')
+            ->join('help_category c', 'c.id = h.cid')
             ->where($where)
-            ->field('id,title,synopsis,image,visit,create_time')
-            ->order(['create_time' => 'desc']);
+            ->field('h.id,h.title,h.synopsis,h.image,h.visit,h.create_time')
+            ->order(['h.create_time' => 'desc']);
 
         $help_count = $res->count();
         $help = $res->page($page, $size)->select();
@@ -91,7 +94,7 @@ class HelpLogic
         $recommend_list = [];
         if(2 == $client){
             $recommend_list = Db::name('help')
-                ->where([['del','=','0'], ['id','<>',$id]])
+                ->where([['del','=','0'], ['id','<>',$id], ['is_show', '=', 1]])
                 ->field('id,title,image,visit')
                 ->order('visit desc')
                 ->limit(5)

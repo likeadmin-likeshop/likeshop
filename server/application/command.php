@@ -26,6 +26,8 @@
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
 
+use app\common\command\WechatMiniExpressSendSync;
+
 return [
     'app\common\command\Crontab',
     'app\common\command\OrderClose',
@@ -35,4 +37,9 @@ return [
     'app\common\command\TeamEnd',//处理已过成团时间的拼团
     'app\common\command\OrderFinish',//自动确认收货(待收货订单)
     'app\common\command\BargainEnd',
+    'app\common\command\Password',
+    'app\common\command\WechatMerchantTransfer',//商家转账到零钱查询
+    
+    // 微信小程序发货同步
+    WechatMiniExpressSendSync::class,
 ];

@@ -56,6 +56,10 @@
                     <div class="width-160">{$detail.shipping.shipping_name | default="未知"}</div>
                     <label class="layui-form-label ">快递单号:</label>
                     <div class="width-160">{$detail.shipping.invoice_no | default= "未知"}</div>
+
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-normal " lay-submit
+                        lay-filter="change_delivery">修改物流信息
+                </button>
                 {else/}
                     <label class="layui-form-label ">配送方式:</label>
                     <div class="width-160">无需快递</div>
@@ -172,6 +176,49 @@
             like.showImg(src,600);
         });
 
+        // 修改快递单号
+        form.on('submit(change_delivery)', function(data){
+            var id = {$detail:id};
+            layer.open({
+                type: 2
+                ,title: '物流信息'
+                ,content: '{:url("order/change_delivery")}?id='+id
+                ,area: ['60%', '60%']
+                ,btn: ['保存', '取消']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submitID = 'change_delivery-submit'
+                        ,submit = layero.find('iframe').contents().find('#'+ submitID)
+                        ,goods_ids = iframeWindow.callbackdata();
+                    //监听提交
+                    iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                        var field = data.field;
+                        field.goods_ids = goods_ids;
+                        like.ajax({
+                            url:'{:url("order/change_delivery")}',
+                            data:field,
+                            type:"post",
+                            success:function(res)
+                            {
+                                if(res.code == 1)
+                                {
+                                    layui.layer.msg(res.msg, {
+                                        offset: '15px'
+                                        , icon: 1
+                                        , time: 1000
+                                    });
+                                    layer.close(index); //关闭弹层
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+
+                    submit.trigger('click');
+                }
+            })
+        });
+        
         $('#back').click(function () {
             var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
             parent.layer.close(index);

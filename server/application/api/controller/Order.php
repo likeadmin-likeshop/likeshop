@@ -21,6 +21,8 @@ namespace app\api\controller;
 
 use app\api\logic\OrderLogic;
 use app\common\model\Client_;
+use app\common\server\ConfigServer;
+use app\common\server\WechatMiniExpressSendSyncServer;
 use think\Db;
 
 /**
@@ -60,10 +62,6 @@ class Order extends ApiBase
         if ($action == 'info') {
             $this->_success('', $info['data']);
         }
-
-        if ($this->client != Client_::pc && empty($post['pay_way'])) {
-            $this->_error('请联系管理员配置支付方式');
-        }
         
         $order = OrderLogic::add($this->user_id, $info['data'], $post);
         return $order;
@@ -82,6 +80,17 @@ class Order extends ApiBase
             $this->_error('订单不存在了!', '');
         }
         $this->_success('获取成功', $order_detail);
+    }
+    
+    /**
+     * @notes 微信确认收货 获取详情
+     * @return \think\response\Json
+     * @author lbzy
+     * @datetime 2023-09-05 09:51:41
+     */
+    function wxReceiveDetail()
+    {
+        return $this->_success('获取成功', OrderLogic::wxReceiveDetail(input('order_id/d'), $this->user_id));
     }
 
     //取消订单
@@ -131,4 +140,82 @@ class Order extends ApiBase
         $this->_error($tips);
     }
 
+
+    /**
+     * @notes 核销订单列表
+     * @author ljj
+     * @date 2021/8/18 3:58 下午
+     */
+    public function verificationLists()
+    {
+        $type = $this->request->get('type',\app\common\model\Order::NOT_WRITTEN_OFF);
+        $lists = OrderLogic::verificationLists($type, $this->user_id, $this->page_no, $this->page_size);
+        $this->_success('获取成功', $lists);
+    }
+
+
+    /**
+     * @notes 提货核销
+     * @author ljj
+     * @date 2021/8/18 4:36 下午
+     */
+    public function verification()
+    {
+        $post = $this->request->post();
+        $post['user_id'] = $this->user_id;
+        $check = $this->validate($post, 'app\api\validate\Order.verification');
+        if (true !== $check) {
+            $this->_error($check);
+        }
+        $result = OrderLogic::verification($post);
+        $this->_success('获取成功',$result);
+    }
+
+    /**
+     * @notes 确认提货
+     * @author ljj
+     * @date 2021/8/18 7:02 下午
+     */
+    public function verificationConfirm()
+    {
+        $post = $this->request->post();
+        $post['user_id'] = $this->user_id;
+        $result = OrderLogic::verificationConfirm($post);
+        if (true !== $result) {
+            $this->_error($result);
+        }
+        $this->_success('提货成功');
+    }
+
+    /**
+     * @notes 获取配送方式
+     * @author ljj
+     * @date 2021/8/19 7:17 下午
+     */
+    public function getDeliveryType()
+    {
+        $data = OrderLogic::getDeliveryType();
+        $this->_success('获取成功',$data);
+    }
+    
+    /**
+     * @notes 微信同步发货 查询
+     * @return \think\response\Json
+     * @author lbzy
+     * @datetime 2023-09-07 15:27:17
+     */
+    function wechatSyncCheck()
+    {
+        $id     = $this->request->get('id');
+        
+        $order  = \app\common\model\Order::where('id', $id)->where('user_id', $this->user_id)->findOrEmpty();
+        
+        $result = WechatMiniExpressSendSyncServer::wechatSyncCheck($order);
+        
+        if (! $result) {
+            $this->_error('获取失败');
+        }
+    
+        $this->_success('成功', $result);
+    }
 }

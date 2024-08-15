@@ -1,11 +1,58 @@
 {layout name="layout1" /}
+<style>
+    .layui-form-label{
+        width: 140px;
+    }
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
 
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+</style>
 <div class="layui-col-md12">
     <div class="layui-fluid">
     <div class="layui-card">
 
         <div class="layui-card-body" >
+            <div class="layui-card-body">
+                <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                    <div class="layui-colla-item">
+                        <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                        <div class="layui-colla-content layui-show">
+                            <p>*填写的备案信息将会在小程序里展示，请填写完整信息</p>
+                            <p>*上传的资质信息将会在小程序里显示，请上传清晰的图片</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="layui-form" lay-filter="">
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>备案信息</legend>
+                    </fieldset>
+                </div>
                 <div class="layui-form-item layui-col-sm6 layui-col-md4">
                     <label class="layui-form-label">版权信息：</label>
                     <div class="layui-input-block">
@@ -28,6 +75,53 @@
                     <div class=" layui-form-mid layui-word-aux" style="left:110px">域名信息备案系统链接。http://beian.miit.gov.cn/</div>
                 </div>
 
+
+                <div class="layui-form-item">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>资质信息</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">营业执照：</label>
+                    <div class="layui-inline" >
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="business_license" type="hidden" value="{$config.business_license}" >
+                            {if !empty($config.business_license)}
+                            <div class="img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.business_license}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="img-add"></div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-bottom: 0px">
+                    <label class="layui-form-label">其他资质：</label>
+                    <div class="" style="height:80px;line-height:80px">
+                        <ul>
+                            {if !empty($config.other_qualifications)}
+                            {foreach $config.other_qualifications as $val}
+                            <li class="goods-li">
+                                <input name="other_qualifications[]" type="hidden" value="{$val}">
+                                <img class="goods-img goods_image" src="{$val}">
+                                <a class="goods-img-del-x" style="display: none;">x</a>
+                            </li>
+                            {/foreach}
+                            {/if}
+                        </ul>
+                        <div class="goods-img-add" lay-verify="other_qualifications"></div>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <span style="color: #a3a3a3;font-size: 9px">最多上传5张</span>
+                </div>
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="setmnp">确认</button>
@@ -39,6 +133,13 @@
     </div>
     </div>
 </div>
+<script type="text/html" id="template-goods-image">
+    <li class="goods-li">
+        <input name="other_qualifications[]" type="hidden" value="{image-src}">
+        <img class="goods-img goods_image" src="{image-src}">
+        <a class="goods-img-del-x" style="display: none;">x</a>
+    </li>
+</script>
 
 
 <script>
@@ -95,6 +196,60 @@
             });
         });
 
+
+        //上传图片
+        like.imageUpload('.img-add', function (uri, element) {
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="'+ uri[0] + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+
+
+
+        like.imageUpload('.goods-img-add', function (uris, element) {
+            var count = element.prev().children().length;
+
+            count = !count ? 0:count;
+            if (count+uris.length > 5) {
+                layer.msg('最多最能选中5张图片');
+                return;
+            }
+            uris = uris.reverse();
+            for(var i in uris){
+                var uri = uris[i];
+                var template_goods_image = $('#template-goods-image').html();
+                element.prev().append(template_goods_image.replace('{image-src}', like.getUrlFileName(uri, '{$storageUrl}')).replace('{image-src}', uri));
+            }
+        }, true);
     });
 
 </script>

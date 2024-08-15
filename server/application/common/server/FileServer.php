@@ -50,7 +50,7 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
-    
+
             // 验证是否是图片文件
             if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的图像文件');
@@ -108,22 +108,28 @@ class FileServer extends ServerBase
                 $config['engine']['local'] = [];
             }
 
+
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
-    
+            $fileName = $StorageDriver->getFileName();
+            $fileInfo = $StorageDriver->getFileInfo();
+
             // 验证是否是图片文件
             if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的图像文件');
             }
 
-            if (!$StorageDriver->upload($save_dir)) {
-                throw new Exception('图片上传失败' . $StorageDriver->getError());
+            // 校验上传文件后缀
+            $ext = pathinfo($fileInfo['name'], PATHINFO_EXTENSION);
+            if (!in_array(strtolower($ext), config('project.file_image'))) {
+                throw new Exception("上传图片不允许上传{$ext}文件");
             }
 
-            // 图片上传路径
-            $fileName = $StorageDriver->getFileName();
-            // 图片信息
-            $fileInfo = $StorageDriver->getFileInfo();
+            // 上传文件
+            $save_dir = $save_dir . '/' .  date('Ymd');
+            if (!$StorageDriver->upload($save_dir)) {
+                throw new Exception($StorageDriver->getError());
+            }
 
             // 记录图片信息
             $data = [
@@ -167,20 +173,25 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
-    
+            $fileName = $StorageDriver->getFileName();
+            $fileInfo = $StorageDriver->getFileInfo();
+
             // 验证是否是视频
             if (! check_is_video($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的视频文件');
             }
 
-            if (!$StorageDriver->upload($save_dir)) {
-                throw new Exception('图片上传失败' . $StorageDriver->getError());
+            // 校验上传文件后缀
+            $ext = pathinfo($fileInfo['name'], PATHINFO_EXTENSION);
+            if (!in_array(strtolower($ext), config('project.file_video'))) {
+                throw new Exception("上传视频不允许上传{$ext}文件");
             }
 
-            // 图片上传路径
-            $fileName = $StorageDriver->getFileName();
-            // 图片信息
-            $fileInfo = $StorageDriver->getFileInfo();
+            // 上传文件
+            $save_dir = $save_dir . '/' .  date('Ymd');
+            if (!$StorageDriver->upload($save_dir)) {
+                throw new Exception($StorageDriver->getError());
+            }
 
             // 记录图片信息
             $data = [
@@ -263,28 +274,32 @@ class FileServer extends ServerBase
     public static function lists($pag_no, $page_size,  $cate_id = 0, $type = '')
     {
         try {
-            $where['del'] = 0;
-            if ($type) $where['type'] = $type;
-
-            if ($cate_id != 0) {
-                $where['cate_id'] = $cate_id;
+            $where[] = ['del', '=', 0];
+            if ($type) {
+                $where[] = ['type', '=', $type];
+            }
+            if (!empty($cate_id) and $cate_id > 0) {
+                $lists = Db::name('file_cate')->where(['del' => 0])->select();
+                $lists = !empty($lists) ? $lists : [];
+                $childs = self::getChildCid($lists, $cate_id, true);
+                array_push($childs, $cate_id);
+                $where[] = ['cate_id', 'in', $childs];
             }
 
-            $count = Db::name('file')
-                ->where($where)
-                ->count();
             $lists = Db::name('file')
                 ->field(['name', 'uri', 'id'])
+                ->withAttr('uri', function ($value) {
+                    return UrlServer::getFileUrl($value);
+                })
                 ->where($where)
-                ->page($pag_no, $page_size)
                 ->order(['id' => 'desc'])
-                ->select();
+                ->paginate([
+                    'page'      => $pag_no,
+                    'list_rows' => $page_size,
+                    'var_page' => 'page'
+                ])->toArray();
 
-            foreach ($lists as &$item) {
-                $item['uri'] = UrlServer::getFileUrl($item['uri']);
-            }
-
-            return ['count' => $count, 'lists' => $lists];
+            return $lists;
 
         } catch (\Exception $e) {
             return [];
@@ -351,20 +366,15 @@ class FileServer extends ServerBase
 
             $StorageDriver = new StorageDriver($config);
             $StorageDriver->setUploadFile('file');
-    
-            // 视频上传路径
-            $fileName = $StorageDriver->getFileName();
-            // 视频信息
-            $fileInfo = $StorageDriver->getFileInfo();
-    
-            // 验证是否是视频
-            if (! check_is_video($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
-                throw new Exception('不是有效的视频文件');
-            }
 
             if (!$StorageDriver->upload($save_dir)) {
                 throw new Exception('视频上传失败' . $StorageDriver->getError());
             }
+
+            // 视频上传路径
+            $fileName = $StorageDriver->getFileName();
+            // 视频信息
+            $fileInfo = $StorageDriver->getFileInfo();
 
             //名字长度太长
             if (strlen($fileInfo['name']) > 128) {
@@ -388,5 +398,32 @@ class FileServer extends ServerBase
             $message = lang($e->getMessage()) ?? $e->getMessage();
             return self::dataError('上传视频失败:' . $message);
         }
+    }
+
+
+
+
+    /**
+     * @notes 获取后代分类
+     * @param $lists
+     * @param $cid
+     * @param $clear
+     * @return array
+     * @author 段誉
+     * @date 2022/3/22 14:29
+     */
+    public static function getChildCid($lists, $cid, $clear)
+    {
+        static $temp = [];
+        if($clear) {
+            $temp = [];
+        }
+        foreach($lists as $item) {
+            if($item['pid'] == $cid) {
+                $temp[] = $item['id'];
+                self::getChildCid($lists, $item['id'], false);
+            }
+        }
+        return $temp;
     }
 }

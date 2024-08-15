@@ -32,19 +32,18 @@ use think\Validate;
 class SignDaily extends Validate
 {
     protected $rule = [
-        'integral'      =>'require|integer|gt:0',   //积分
-        'growth'      =>'require|integer|gt:0',   //成长值
-//        'coupon'        =>'require',
-        'days'          =>'require|integer|gt:0|checkDays|editDays',   //连续签到天数
+        'integral'      =>'requireIf:integral_status,on|integer|gt:0',   //积分
+        'growth'        =>'requireIf:growth_status,on|integer|gt:0',   //成长值
+        'days'          =>'require|integer|gt:0|checkDays',   //连续签到天数
         'instructions'  =>'require'
     ];
 
     protected $message = [
-        'integral.require'      =>'积分不能为空',
+        'integral.requireIf'      =>'积分不能为空',
         'integral.integer'      =>'积分必须为整数',
         'integral.gt'          =>'积分必须大于0',
 
-        'growth.require'      =>'成长值不能为空',
+        'growth.requireIf'      =>'成长值不能为空',
         'growth.integer'      =>'成长值必须为整数',
         'growth.gt'          =>'成长值必须大于0',
 
@@ -56,23 +55,21 @@ class SignDaily extends Validate
 
     public function sceneAdd()
     {
-        $this->only(['integral','days'])
-            ->remove('instructions')
-            ->remove('days','editDays');
+        $this->only(['integral','days','growth'])
+            ->remove('instructions');
 
     }
 
     public function sceneEdit()
     {
-        $this->only(['integral','days'])
-            ->remove('instructions')
-            ->remove('days','checkDays');
+        $this->only(['integral','days','growth'])
+            ->remove('instructions');
 
     }
 
     public function sceneSign()
     {
-        $this->only(['integral','instructions'])
+        $this->only(['integral','growth','instructions'])
         ->remove('days');
     }
 
@@ -89,6 +86,12 @@ class SignDaily extends Validate
      */
     public function checkDays($value,$rule,$data)
     {
+        if(!isset($data['integral_status']) && !isset($data['growth_status'])){
+            return '请选择积分奖励或成才值奖励';
+        }
+        if(isset($data['id'])){
+            $where[] = ['id','<>',$data['id']];
+        }
         $where[] = ['days','=',$value];
         $where[] = ['del','=',0];
         $sign_daily =  Db::name('sign_daily')->where($where)
@@ -99,28 +102,6 @@ class SignDaily extends Validate
         return true;
     }
 
-    /**
-     * 判断编辑时连续签到天数是否已存在
-     * @param $value
-     * @param $rule
-     * @param $data
-     * @return bool|string
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function editDays($value,$rule,$data)
-    {
 
-        $where[] = ['id','<>',$data['id']];
-        $where[] = ['days','=',$value];
-        $where[] = ['del','=',0];
-            $sign_daily = Db::name('sign_daily')->where($where)
-                ->find();
-            if ($sign_daily){
-                return '该连续签到天数已存在';
-            }
-            return true;
-    }
 
 }

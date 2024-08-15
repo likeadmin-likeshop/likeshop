@@ -42,7 +42,7 @@ class GoodsBrand extends Validate
         'name.unique'             => '该名称已存在',
         'initial.require'         => '品牌首字母不能为空',
         'sort.integer'            => '排序请输入整数',
-        'sort.egt'                => '排序值必须大于0',
+        'sort.egt'                => '排序值不合法',
     ];
 
     /**

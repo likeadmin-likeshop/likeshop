@@ -26,7 +26,7 @@ use app\common\model\User;
 
 class Distribution extends ApiBase
 {
-
+    public $like_not_need_login = ['fixAncestorRelation'];
     /**
      * 填写邀请码
      */
@@ -110,9 +110,7 @@ class Distribution extends ApiBase
     public function order()
     {
         $get = $this->request->get();
-        $page = $this->request->get('page_no', $this->page_no);
-        $size = $this->request->get('page_size', $this->page_size);
-        $this->_success('', DistributionLogic::order($this->user_id, $get, $page, $size));
+        $this->_success('', DistributionLogic::order($this->user_id, $get, $this->page_no, $this->page_size));
     }
 
 
@@ -124,9 +122,7 @@ class Distribution extends ApiBase
      */
     public function monthBill()
     {
-        $page = $this->request->get('page_no', $this->page_no);
-        $size = $this->request->get('page_size', $this->page_size);
-        $this->_success('', DistributionLogic::getMonthBill($this->user_id, $page, $size));
+        $this->_success('', DistributionLogic::getMonthBill($this->user_id, $this->page_no, $this->page_size));
     }
 
     /**
@@ -135,9 +131,7 @@ class Distribution extends ApiBase
     public function monthDetail()
     {
         $get = $this->request->get();
-        $page = $this->request->get('page_no', $this->page_no);
-        $size = $this->request->get('page_size', $this->page_size);
-        $this->_success('', DistributionLogic::getMonth($get, $this->user_id, $page, $size));
+        $this->_success('', DistributionLogic::getMonth($get, $this->user_id, $this->page_no, $this->page_size));
     }
 
 
@@ -147,15 +141,36 @@ class Distribution extends ApiBase
      */
     public function check()
     {
-        $user = User::get($this->user_id);
-        if ($user['freeze_distribution'] == 1) {
-            $this->_error('您已被冻结');
-        }
-
-        if ($user['is_distribution'] == 1) {
+        $distribution = \app\common\model\Distribution::where('user_id', $this->user_id)->findOrEmpty()->toArray();
+        if (!empty($distribution) && $distribution['is_distribution'] == 1) {
             $this->_success('', '', 10001);//已是分销会员
         } else {
             $this->_success('', '',20001);//未是分销会员
         }
+    }
+
+    /**
+     * 修复旧的关系链
+     */
+    public function fixAncestorRelation()
+    {
+        $result = DistributionLogic::fixAncestorRelation();
+        if ($result['flag']) {
+            $this->_success($result['msg']);
+        }
+        $this->_error($result['msg']);
+    }
+
+
+    /**
+     * @notes 获取背景海报
+     * @return Json
+     * @author cjhao
+     * @date 2021/11/29 11:35
+     */
+    public function getPoster()
+    {
+        $result = DistributionLogic::getPoster();
+        $this->_success('',$result);
     }
 }

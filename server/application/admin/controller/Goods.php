@@ -19,8 +19,10 @@
 
 
 namespace app\admin\controller;
+use app\common\model\Order as CommonOrder;
 use app\admin\logic\{GoodsBrandLogic, GoodsCategoryLogic, GoodsLogic, SupplierLogic,FreightLogic,CommonLogic};
 use think\Db;
+use think\facade\Hook;
 
 class Goods extends AdminBase
 {
@@ -45,6 +47,7 @@ class Goods extends AdminBase
         $this->assign('statistics',GoodsLogic::statistics());
         $this->assign('category_list', GoodsCategoryLogic::categoryTreeeTree());
         $this->assign('supplier_list',SupplierLogic::getSupplierList());
+        $this->assign('delivery_type', CommonOrder::getDeliveryType(true));
         return $this->fetch();
     }
 
@@ -134,6 +137,11 @@ class Goods extends AdminBase
                         $this->_error($result);
                     }
                 }
+                // 校验规格
+                $total_stock = array_sum(array_column($spec_lists, 'stock'));
+                if ($total_stock <= 0) {
+                    $this->_error('至少有一个规格的库存大于0');
+                }
             }
 
             //添加商品
@@ -211,6 +219,11 @@ class Goods extends AdminBase
                         $this->_error($result);
                     }
                 }
+                // 校验规格
+                $total_stock = array_sum(array_column($spec_lists, 'stock'));
+                if ($total_stock <= 0) {
+                    $this->_error('至少有一个规格的库存大于0');
+                }
             }
 
             if ($post['status'] == 0) {
@@ -232,7 +245,7 @@ class Goods extends AdminBase
             if ($result !== true) {
                 $this->_error('添加失败:' . $result);
             }
-            $this->_success('修改成功');
+            $this->_success(GoodsLogic::$error ? : '修改成功');
         }
 
         $this->assign('category_lists', json_encode(GoodsCategoryLogic::getAllTree(), JSON_UNESCAPED_UNICODE));
@@ -274,6 +287,8 @@ class Goods extends AdminBase
         $field_value = $this->request->post('value');
         $result = CommonLogic::changeTableValue($table,$pk_name,$pk_value,$field,$field_value);
         if($result === true){
+            // 下架或删除商品，更新商品收藏
+            Hook::listen('update_collect', ['goods_id' => $pk_value]);
             $this->_success('修改成功');
         }
         $this->_error($result);

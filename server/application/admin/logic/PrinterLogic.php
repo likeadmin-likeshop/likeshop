@@ -55,7 +55,7 @@ class PrinterLogic{
 
             case 3:
                 $list = ConfigServer::get('printer', 'yly_template', []);
-                $list['file_url'] = UrlServer::getFileUrl('');
+                $list['file_url'] = UrlServer::getFileUrl('/');
                 break;
         }
 
@@ -340,6 +340,7 @@ class PrinterLogic{
         $order = [
             'order_sn'          => date("Ymd").'88888888888',
             'create_time'       => date('Y-m-d H:i:s'),
+            'delivery_type'     => 1,
             'consignee'         => '张先生',
             'mobile'            => '138888888888',
             'delivery_address'  => '广东省广州市天河区XXXX科技园',
@@ -367,6 +368,7 @@ class PrinterLogic{
                     'total_price'   => '88888',
                 ],
             ],
+            'selffetch_shop'    => [],
             'total_amount'      => '888888',  //商品总价
             'discount_amount'   => '80',      //优惠金额
             'shipping_price'    => '12',      //应付

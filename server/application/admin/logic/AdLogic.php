@@ -57,7 +57,7 @@ class AdLogic
             ->count();
         $ad_list = $ad->where($where)
             ->page($get['page'], $get['limit'])
-            ->order('id desc')
+            ->order(['sort' => 'desc', 'id' => 'desc'])
             ->select();
 
         $position = AdPosition::where('del', 0)->column('id,name', 'id');
@@ -139,6 +139,7 @@ class AdLogic
             'status'        => $post['status'],
             'category_id'   => $post['category_id'] ?? 0,
             'create_time'   => $time,
+            'sort'          => $post['sort'] ?? 50,
         ];
 
         return $ad->allowField(true)->save($data);
@@ -181,7 +182,7 @@ class AdLogic
             'category_id'   => $post['category_id'] ?? 0,
             'status'        => $post['status'],
             'update_time'   => $time,
-
+            'sort'          => $post['sort'] ?? 50,
         ];
         return $ad->allowField(true)->save($data, ['id' => $post['id']]);
     }
@@ -227,6 +228,16 @@ class AdLogic
             $info['goods'] = $goods;
         }
         $info['abs_image'] = UrlServer::getFileUrl($info['image']);
+
+        $info['position_desc'] = '';
+        if (isset($info['pid'])) {
+            $position = Db::name('ad_position')
+                ->field('width, height')
+                ->where(['id' => $info['pid']])
+                ->find();
+            $info['position_desc'] = '建议上传广告图片宽*高, '.$position['width'].'px*'.$position['height'].'px';
+        }
+
         return $info;
     }
 

@@ -19,7 +19,7 @@
             <div class="layui-form-item" style="margin-bottom: 0;">
                 <label class="layui-form-label" style="width:200px;"><font color="red">*</font>砍价成功下单有效时长：</label>
                 <div class="layui-input-inline">
-                    <input type="number" name="payment_limit_time" value="{$payment_limit_time}" onkeyup="value=value.replace(/[^\d]/g,'')"  autocomplete="off" class="layui-input">
+                    <input type="number" name="payment_limit_time" value="{$payment_limit_time}" onkeyup="value=value.replace(/[^\d]/g,'')"  autocomplete="off" class="layui-input" min="0">
                 </div>
                 <div class="layui-form-mid layui-word-aux">分钟</div>
             </div>

@@ -19,6 +19,7 @@
 
 namespace app\common\logic;
 
+use app\admin\logic\DistributionLevelLogic;
 use app\api\logic\GoodsLogic;
 use app\api\logic\OrderLogic;
 use app\api\logic\TeamLogic;
@@ -69,23 +70,18 @@ class PayNotifyLogic
         //增加会员消费累计额度
         $user = User::get($order['user_id']);
         $user->total_order_amount = ['inc', $order['order_amount']];
-
-        //余额支付,扣除余额
-        if ($order['pay_way'] == Pay::BALANCE_PAY) {
-            $user->user_money = ['dec', $order['order_amount']];
-            $user->save();
-            AccountLogLogic::AccountRecord($order['user_id'], $order['order_amount'], 2, AccountLog::balance_pay_order, '', $order['id'], $order_sn);
-        } else {
-            $user->save();
+        $user->save();
+        
+        // 更改订单状态
+        $orderData = [
+            'pay_status'        => Pay::ISPAID,
+            'pay_time'          => $time,
+            'order_status'      => Order::STATUS_WAIT_DELIVERY,
+            'transaction_id'    => $extra['transaction_id'] ?? '',
+        ];
+        if (! Order::where('id', $order->id)->where('pay_status', Pay::UNPAID)->update($orderData)) {
+            throw new \Exception('订单更改状态失败');
         }
-
-        $order->pay_status = Pay::ISPAID;
-        $order->pay_time = $time;
-        $order->order_status = Order::STATUS_WAIT_DELIVERY;
-        if (isset($extra['transaction_id'])) {
-            $order->transaction_id = $extra['transaction_id'];
-        }
-        $order->save();
 
         //扣除库存
         $deduct_type = ConfigServer::get('trading','deduct_type', 1);
@@ -108,11 +104,17 @@ class PayNotifyLogic
             TeamLogic::updateTeam($order['id']);
         }
 
-        //拼购,砍价的订单不参与分销分佣
+        // 普通订单参与分销
         if ($order['order_type'] == Order::NORMAL_ORDER){
-            DistributionServer::commission($order['id']);
+            // 生成分销订单
+            DistributionOrderGoodsLogic::add($order['id']);
+
+            // 更新分销会员等级
+            DistributionLevelLogic::updateDistributionLevel($order['user_id']);
         }
 
+        //下单奖励积分(每天首单)
+        IntegralLogic::rewardIntegral($user['id'], $order['id']);
 
         //发送通知
         Hook::listen('notice', [
@@ -131,7 +133,7 @@ class PayNotifyLogic
                 'nickname'      => $user->nickname,
                 'order_sn'      => $order->order_sn,
                 'order_amount'  => $order->order_amount,
-                'time'          => $order->create_time,
+                'time'          => date('Y-m-d H:i', strtotime($order->create_time)),
                 'total_num'     => $order->total_num.'件',
                 'goods_name'    => omit_str(($order->order_goods[0]['goods_name'] ?? '商品'), 8)
             ]

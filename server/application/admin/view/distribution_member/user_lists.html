@@ -1,0 +1,133 @@
+{layout name="layout1" /}
+<style>
+    .search {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .search .layui-form-label {
+        width: 60px;
+        text-align: right;
+    }
+    .btns {
+        margin-top: 15px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!--搜索区域-->
+            <div class="search layui-form">
+                <div class="layui-inline">
+                    <div class="layui-form-label">用户信息</div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="keyword" name="keyword" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-label">分销状态</div>
+                    <div class="layui-input-inline">
+                        <select name="is_distribution" id="is_distribution"  placeholder="请选择" >
+                            <option value="all">全部</option>
+                            <option value="1">分销会员</option>
+                            <option value="0">非分销会员</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary layui-bg-blue" lay-submit lay-filter="search">搜索</button>
+                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
+                </div>
+            </div>
+            <!--数据表格-->
+            <table id="lists" lay-filter="lists"></table>
+            <!--自定义模板-->
+            <script type="text/html" id="user-info">
+                <img src="{{d.avatar}}" style="height:60px;width: 60px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>用户编号:{{d.user_sn}}</p>
+                    <p style="width: 300px;text-overflow:ellipsis;overflow: hidden">用户昵称:{{d.nickname}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="level-info">
+                {{d.level_name}}({{d.weights}})级
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/lib/'
+    }).use(['table', 'form'], function () {
+        let $ = layui.$
+            , form = layui.form
+            , table = layui.table;
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('lists', {
+                where: field,
+                page: {curr: 1}
+            });
+        });
+
+        // 获取选中的用户信息
+        window.user_selected = function user_selected()
+        {
+            var checkStatus = table.checkStatus('lists');
+            return checkStatus.data[0]; //获取选中行的数据
+        }
+
+        //清空查询
+        form.on('submit(reset)', function(){
+            $('#keyword').val('');
+            $('#is_distribution').val('all');
+            form.render('select');
+            //刷新列表
+            table.reload('lists', {
+                where: [], page: {curr: 1}
+            });
+        });
+
+        // 数据表格渲染
+        table.render({
+            elem: '#lists'
+            ,url: '{:url("distribution_member/userLists")}' //数据接口
+            ,method: 'post'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {type: 'radio'}
+                ,{field: 'sn', title: '用户编号', width:380}
+                ,{field: 'nickname', title: '用户昵称', width:180}
+                ,{field: 'distribution', title: '是否分销会员', width:120}
+            ]]
+            , text: {none: '暂无数据！'}
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            },
+            response: {
+                statusCode: 1
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+    });
+
+
+</script>

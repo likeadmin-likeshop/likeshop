@@ -19,45 +19,33 @@
 
 namespace app\common\model;
 
-use think\Db;
+
 use think\Model;
 
 class Goods extends Model
 {
-    /**
-     * User: 意象信息科技 mjf
-     * Desc: 获取以规格id为键的商品信息
-     * @param string $field
-     * @return array
-     */
-    public static function getColumnGoods($field = '*')
-    {
-        $info = Db::name('goods_item i')
-            ->join('goods g', 'g.id = i.goods_id')
-            ->column($field, 'i.id');
-
-        return $info;
-    }
+    const STATUS_RECYCLE = -1; // 回收站
+    const STATUS_STORAGE = 0; // 下架(仓库中)
+    const STATUS_SELL = 1; // 上架 (销售中)
 
     /**
-     * User: 意象信息科技 mjf
-     * Desc: 通过规格id获取商品信息
-     * @param $item_id
-     * @param string $field
-     * @return array|\PDOStatement|string|Model|null
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
+     * @notes 获取商品状态
+     * @param $state
+     * @return string|string[]
+     * @author 段誉
+     * @date 2022/1/12 10:384
      */
-    public static function getOneByItem($item_id, $field = '*')
+    public static function getStatusDesc($state)
     {
-       $info = Db::name('goods_item i')
-            ->field($field)
-            ->join('goods g', 'g.id = i.goods_id')
-            ->where('i.id', $item_id)
-            ->find();
-
-       return $info;
+        $data = [
+            self::STATUS_SELL => '上架',
+            self::STATUS_STORAGE => '下架',
+            self::STATUS_RECYCLE => '回收站',
+        ];
+        if ($state === true) {
+            return $data;
+        }
+        return $data[$state] ?? '';
     }
 
 }

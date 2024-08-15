@@ -92,6 +92,18 @@ class AfterSale extends Validate
         if (!$after_sale) {
             return '订单信息错误';
         }
+    
+        //验证订单是否已生成分佣订单且分佣, 有的不允许再发起售后
+        $distribution = Db::name('distribution_order_goods')->alias('d')
+            ->join('order_goods og', 'og.id = d.order_goods_id')
+            ->where('og.order_id', $value)
+            ->where('og.item_id', $after_sale['item_id'])
+            ->where('d.status', '=', DistributionOrder::STATUS_SUCCESS)
+            ->find();
+    
+        if ($distribution) {
+            return '已发生分佣, 无法重新申请售后';
+        }
 
         //商家拒绝,商家拒收货可以重新发起申请
         $able = [
@@ -112,10 +124,10 @@ class AfterSale extends Validate
         $where = [];
         $where[] = ['o.id', '=', $value];
         $where[] = ['g.item_id', '=', $data['item_id']];
-        $where[] = ['o.order_status', 'in', [\app\common\model\Order::STATUS_WAIT_RECEIVE, \app\common\model\Order::STATUS_FINISH]];
+        $where[] = ['o.order_status', 'in', [\app\common\model\Order::STATUS_WAIT_DELIVERY, \app\common\model\Order::STATUS_WAIT_RECEIVE, \app\common\model\Order::STATUS_FINISH]];
 
         $order = Db::name('order o')
-            ->field('o.order_status,o.confirm_take_time,g.refund_status')
+            ->field('o.order_status,o.confirm_take_time,g.refund_status,o.create_time,o.pay_time')
             ->join('order_goods g', 'o.id = g.order_id')
             ->where($where)
             ->find();
@@ -134,6 +146,16 @@ class AfterSale extends Validate
 
         if ($order['refund_status'] == OrderGoods::REFUND_STATUS_SUCCESS) {
             return '此订单商品已退款成功';
+        }
+
+        //过了取消订单的时间，可对所有商品进行售后操作
+        if ($order['order_status'] == \app\common\model\Order::STATUS_WAIT_DELIVERY) {
+            //多长时间内允许客户取消
+            $cancel_limit = ConfigServer::get('trading', 'customer_cancel_limit', 0);
+            $limit_time = $order['pay_time'] + $cancel_limit * 60;
+            if ($limit_time > time()) {
+                return '此订单暂不可申请售后';
+            }
         }
 
         $refund_days = ConfigServer::get('after_sale', 'refund_days', 0);

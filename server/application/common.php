@@ -727,6 +727,11 @@ if (!function_exists('unzip')) {
 if (!function_exists('del_target_dir')) {
     function del_target_dir($path, $delDir)
     {
+        //没找到，不处理
+        if (!file_exists($path)) {
+            return false;
+        }
+
         $handle = opendir($path);
         if ($handle) {
             while (false !== ($item = readdir($handle))) {
@@ -820,9 +825,233 @@ if (!function_exists('omit_str')) {
     }
 }
 
+/**
+ * @notes 生成核销员码
+ * @param $table
+ * @param string $field
+ * @param int $length
+ * @param string $prefix
+ * @return string
+ * @throws \think\db\exception\DataNotFoundException
+ * @throws \think\db\exception\ModelNotFoundException
+ * @throws \think\exception\DbException
+ * @author ljj
+ * @date 2021/8/16 4:29 下午
+ */
+function create_verifier_sn($table, $field = 'sn', $length = 8, $prefix = '')
+{
+    $rand_str = '';
+    for ($i = 0; $i < $length; $i++) {
+        $rand_str .= mt_rand(0, 9);
+    }
+    $sn = $prefix . $rand_str;
+    if (Db::name($table)->where([$field => $sn])->find()) {
+        return create_verifier_sn($table, $field = 'sn', $length = 8, $prefix = '');
+    }
+    return $sn;
+}
+
+
+/**
+ * 百度地图BD09坐标---->中国正常GCJ02坐标
+ * 腾讯地图用的也是GCJ02坐标
+ * @param double $lat 纬度
+ * @param double $lng 经度
+ * @return array();
+ */
+function Convert_BD09_To_GCJ02($lat, $lng)
+{
+    $x_pi = 3.14159265358979324 * 3000.0 / 180.0;
+    $x = $lng - 0.0065;
+    $y = $lat - 0.006;
+    $z = sqrt($x * $x + $y * $y) - 0.00002 * sin($y * $x_pi);
+    $theta = atan2($y, $x) - 0.000003 * cos($x * $x_pi);
+    $lng = $z * cos($theta);
+    $lat = $z * sin($theta);
+    return array('lng' => $lng, 'lat' => $lat);
+}
+
+
+/**
+ * @notes 发起一个post请求
+ * @param $url
+ * @param array $data
+ * @return bool|string
+ * @author 张无忌
+ * @date 2021/9/13 14:39
+ */
+function curl_post($url, $data=[]) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json'
+    ));
+    return curl_exec($ch);
+}
+
+/**
+ * @notes 获取服务端ip
+ * @return array|false|mixed|string
+ * @author 段誉
+ * @date 2021/10/9 15:29
+ */
+function get_server_ip()
+{
+    if (!isset($_SERVER)) {
+        return getenv('SERVER_ADDR');
+    }
+
+    if($_SERVER['SERVER_ADDR']) {
+        return $_SERVER['SERVER_ADDR'];
+    }
+
+    return $_SERVER['LOCAL_ADDR'];
+}
+
+
+/**
+ * @notes 发起一个get请求
+ * @param $url
+ * @return bool|string|void
+ * @author heshihu
+ * @date 2021/9/17 14:18
+ */
+function curl_get($url){
+
+    $header = array(
+        'Accept: application/json',
+    );
+    $curl = curl_init();
+    //设置抓取的url
+    curl_setopt($curl, CURLOPT_URL, $url);
+    //设置头文件的信息作为数据流输出
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    // 超时设置,以秒为单位
+    curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+
+    // 超时设置，以毫秒为单位
+    curl_setopt($curl, CURLOPT_TIMEOUT_MS, 500000);
+
+    // 设置请求头
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+    //设置获取的信息以文件流的形式返回，而不是直接输出。
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    //执行命令
+    $data = curl_exec($curl);
+
+    // 显示错误信息
+    if (curl_error($curl)) {
+        print "Error: " . curl_error($curl);
+    } else {
+        return $data;
+        curl_close($curl);
+    }
+}
+
+
+/**
+ * @notes 获取两个时间戳区间
+ * @param $start_date
+ * @param $end_date
+ * @return array
+ * @author 段誉
+ * @date 2022/4/27 10:53
+ */
+function get_date_range($start_date, $end_date)
+{
+    $start_date = $start_date ?: time();
+    $end_date = $end_date ?: time();
+
+    if ($start_date > $end_date) {
+        list($start_date, $end_date) = [$end_date, $start_date];
+    }
+
+    // 计算时间差
+    $diff = get_date_diff(date('Y-m-d', $start_date), date('Y-m-d', $end_date));
+
+    $date = [];
+    $day_extend = [];
+    $type = 'day';
+    if ($diff['year'] > 0) {
+        $type = 'year';
+        // 两个时间相差年份,取开始至结束间的年份
+        $date[] = date('Y', $start_date);
+        while (date('Y', $start_date = strtotime('+1 year', $start_date)) <= date('Y', $end_date)) {
+            $date[] = date('Y', $start_date);
+        }
+    } elseif ($diff['month'] > 0) {
+        $type = 'month';
+        // 两个时间相差月份，取开始至结束的月份
+        $date[] = date('Y-m', $start_date);
+        while (($start_date = strtotime('+1 month', $start_date)) <= $end_date) {
+            $date[] = date('Y-m', $start_date);
+        }
+        $date[] = date('Y-m', $end_date);
+    } else {
+        // 两个时间相差天数,取得开始至结束天数,以年月日格式
+        $days = ($end_date - $start_date) / 86400 + 1;
+        for ($i = 0; $i < $days; $i++) {
+            $date[] = date('Y-m-d', $start_date + (86400 * $i));
+            $day_extend[] = date('m-d', $start_date + (86400 * $i));
+        }
+    }
+
+    // 获取月份时可能会有重复
+    $date = array_unique($date);
+
+    return ['type' => $type, 'data' => $date, 'day_extend' => $day_extend];
+}
+
+
+
+/**
+ * @notes 获取两个日期的时间差
+ * @param $start
+ * @param $end
+ * @return array
+ * @author 段誉
+ * @date 2022/4/27 11:04
+ */
+function get_date_diff($start, $end)
+{
+    $start = $start ?: date('Y-m-d', time());
+    $end = $end ?: date('Y-m-d', time());
+
+    if (strtotime($start) > strtotime($end)) {
+        list($start, $end) = [$end, $start];
+    }
+
+    // 分别取得年月日
+    list($Y1, $m1, $d1) = explode('-', $start);
+    list($Y2, $m2, $d2) = explode('-', $end);
+    $Y = $Y2 - $Y1; // 年
+    $m = $m2 - $m1; // 月
+    $d = $d2 - $d1; // 日
+
+    if ($d < 0) {
+        $d += (int)date('t', strtotime("-1 month $end"));
+        $m--;
+    }
+
+    if ($m < 0) {
+        $m += 12;
+        $Y--;
+    }
+
+    return array('year' => $Y, 'month' => $m, 'day' => $d);
+}
+
 function check_is_image($image) : bool
 {
-    
+
     try {
         if (function_exists('exif_imagetype')) {
             $ImageType =  exif_imagetype($image);
@@ -833,20 +1062,16 @@ function check_is_image($image) : bool
     } catch (\Exception $e) {
         return false;
     }
-    
+
     return in_array($ImageType, [1, 2, 3, 6]);
 }
 
 function check_is_video($video) : bool
 {
     $type = mime_content_type($video);
-    
+
     return strpos($type, 'video') !== false;
 }
-
-
-
-
 
 
 

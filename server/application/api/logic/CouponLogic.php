@@ -355,12 +355,14 @@ class CouponLogic{
                     $coupon_item['use_time_tips'] = '';
                     switch ($coupon_item['use_time_type']){
                         case 2:
-                            $coupon_item['use_time'] = $coupon_item['get_coupon_time']+86400*$coupon_item['use_time'];
-                            $coupon_item['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$coupon_item['use_time']);
+                            $coupon_item['use_time_start'] = $coupon_item['get_coupon_time']+86400;
+                            $coupon_item['use_time_end'] = $coupon_item['get_coupon_time']+86400*$coupon_item['use_time'];
+                            $coupon_item['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$coupon_item['use_time_end']);
                             break;
                         case 3:
-                            $coupon_item['use_time'] = $coupon_item['get_coupon_time'] + 86400 * $coupon_item['use_time']+86400;
-                            $coupon_item['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$coupon_item['use_time']);
+                            $coupon_item['use_time_start'] = $coupon_item['get_coupon_time'] + 86400;
+                            $coupon_item['use_time_end'] = $coupon_item['get_coupon_time'] + 86400 * $coupon_item['use_time']+86400;
+                            $coupon_item['use_time_tips'] = '有效期至:'.date('Y.m.d H:i',$coupon_item['use_time_end']);
                             break;
                         default:
                             $coupon_item['use_time_tips'] = date('Y.m.d H:i',$coupon_item['use_time_start']).'-'.date('Y.m.d H:i',$coupon_item['use_time_end']);
@@ -382,19 +384,22 @@ class CouponLogic{
 
                     //验证优惠券是否过期
                     $now = time();
-                    if($coupon_item['use_time_type'] == 1){
+                    if($coupon_item['use_time_type'] == 1 || $coupon_item['use_time_type'] == 3){
                         if($coupon_item['use_time_start'] > $now || $coupon_item['use_time_end'] < $now){
                             $coupon_info['tips'] = '优惠券不在使用时间范围内';
                             $coupon['unusable'][] = $coupon_info;
                             continue;
                         }
-                    }else{
-                        if($coupon_item['use_time'] - $now <= 0){
+                    }
+
+                    if ($coupon_item['use_time_type'] == 2) {
+                        if ($now >= $coupon_item['use_time_end']) {
                             $coupon_info['tips'] = '优惠券不在使用时间范围内';
                             $coupon['unusable'][] = $coupon_info;
                             continue;
                         }
                     }
+
                     //当前优惠券的商品id
                     $goods_ids = array_column($goods_price_array,'goods_id');
 

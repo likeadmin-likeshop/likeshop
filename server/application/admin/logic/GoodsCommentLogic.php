@@ -63,10 +63,19 @@ class GoodsCommentLogic{
             $where[] = ['gc.create_time','<=',strtotime($get['end_time'])];
         }
 
+        // 评价类型-虚拟评价/真实评价
+        if (isset($get['comment_type']) && $get['comment_type'] != '') {
+            if ($get['comment_type'] == 1) {
+                $where[] = ['virtual_data', 'null', ''];
+            } else {
+                $where[] = ['virtual_data', 'not null', ''];
+            }
+        }
+
         $res = Db::name('goods_comment gc')
             ->join('goods g','g.id = gc.goods_id')
             ->leftjoin('goods_item gi','gi.id = gc.item_id')
-            ->join('user u','u.id = gc.user_id')
+            ->leftjoin('user u','u.id = gc.user_id')
             ->where('gc.del',0)
             ->where($where)
             ->withAttr('comment_image', function ($value, $data){
@@ -80,7 +89,7 @@ class GoodsCommentLogic{
             })
             ->field('u.id as user_id,u.nickname,u.mobile,u.sex,u.create_time,g.name,gi.spec_value_str
             ,gc.goods_comment,gc.comment,gc.create_time as comment_time,gc.status,u.avatar,g.image,gc.reply,u.sn,u.level
-            ,gc.id')
+            ,gc.id,gc.virtual_data')
             ->order('gc.create_time','desc')
             ->append(['comment_image']);
         $count = $res->count();
@@ -92,6 +101,19 @@ class GoodsCommentLogic{
 
 
         foreach ($lists as &$item){
+
+            $item['comment_type'] = '真实评价';
+            // 虚拟评论
+            if (empty($item['user_id']) && !empty($item['virtual_data'])) {
+                $virtual_data = json_decode($item['virtual_data'], JSON_UNESCAPED_UNICODE);
+                $item['sn'] = $virtual_data['sn'] ?? '';
+                $item['nickname'] = $virtual_data['nickname'] ?? '';
+                $item['level'] = $virtual_data['level'] ?? '';
+                $item['avatar'] = $virtual_data['avatar'] ?? '';
+                $item['create_time'] = $virtual_data['comment_time'] ?? time();
+                $item['comment_type'] = '虚拟评价';
+            }
+
             $item['level_name'] = $user_level[$item['level']] ?? '无等级';
             switch($item['sex']){
                 case 0:
@@ -103,7 +125,6 @@ class GoodsCommentLogic{
                 case 2:
                     $item['sex'] ='女';
                     break;
-
             }
 
             if($item['goods_comment'] > 3){

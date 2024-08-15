@@ -27,6 +27,7 @@ use app\common\model\OrderGoods;
 use app\common\model\OrderLog;
 use app\common\logic\OrderLogLogic;
 use app\common\model\Pay;
+use app\common\model\SelffetchShop;
 use app\common\model\UserLevel;
 use app\common\server\ConfigServer;
 use app\common\server\UrlServer;
@@ -164,8 +165,12 @@ class OrderLogic
                 $order_goods['image'] =  empty($order_good_info['spec_image']) ?
                     UrlServer::getFileUrl($order_good_info['image']) : UrlServer::getFileUrl($order_good_info['spec_image']);
             }
-            $list['delivery_type'] = Order::getDeliveryType($list['delivery_type']);
+            $list['delivery_type_desc'] = Order::getDeliveryType($list['delivery_type']);
             $list['user_level'] = $list['user']['level']['name'] ?? '无等级';
+
+            if ($list['delivery_type'] == 2) {
+                $list['shop_name'] = SelffetchShop::where('id',$list['selffetch_shop_id'])->value('name');
+            }
         }
         return ['count' => $count, 'lists' => $lists];
     }
@@ -294,7 +299,12 @@ class OrderLogic
             $order_goods['spec_value'] = $info['spec_value_str'];
             $order_goods['goods_image'] = empty($info['spec_image']) ?
                             UrlServer::getFileUrl($info['image']) : UrlServer::getFileUrl($info['spec_image']);
+
+            $order_goods['refund_status_desc'] = OrderGoods::getRefundStatus($order_goods['refund_status']);
         }
+
+        $result['shop_name'] = SelffetchShop::where('id',$result['selffetch_shop_id'])->value('name');
+
         return $result;
     }
 
@@ -445,7 +455,7 @@ class OrderLogic
                 'params' => [
                     'order_sn' => $order->order_sn,
                     'nickname' => $nickname,
-                    'time'     => date('Y-m-d H:i:s'),
+                    'time'     => date('Y-m-d H:i'),
                     'invoice_no'    => $data['invoice_no'] ?? '',
                     'shipping_name' => $delivery_data['shipping_name'] ?? '无需快递',
                     'goods_name'    => omit_str($order['order_goods'][0]['goods_name'] ?? '商品', 8)
@@ -539,7 +549,7 @@ class OrderLogic
     {
         $orderModel = new Order();
         $order = $orderModel->alias('o')
-            ->field('invoice_no,shipping_name,shipping_id,o.shipping_status')
+            ->field('invoice_no,shipping_name,shipping_id,o.shipping_status,o.mobile')
             ->join('delivery d', 'd.order_id = o.id')
             ->where(['o.id' => $order_id])
             ->find();
@@ -567,7 +577,16 @@ class OrderLogic
             ->value($shipping_field);
 
         //获取物流轨迹
-        $expressage->logistics($shipping_code, $order['invoice_no']);
+        if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
+            if ($express === 'kdniao') {
+                $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'],-4));
+            } else {
+                $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
+            }
+        }else {
+            $expressage->logistics($shipping_code, $order['invoice_no']);
+        }
+
         $traces = $expressage->logisticsFormat();
         if ($traces == false) {
             $traces[] = [$expressage->getError()];
@@ -613,15 +632,13 @@ class OrderLogic
             //打印机配置
             $printer_config = Db::name('printer_config')->where(['status'=>1])->find();
             //打印机列表
-            $printer_list = Db::name('printer')->where(['type'=>$printer_config['id'],'del'=>0])->select();
+            $printer_list = Db::name('printer')->where(['type'=>$printer_config['id'],'status'=>1,'del'=>0])->select();
 
             if(empty($printer_config) || empty($printer_list)){
                 throw new Exception('请先配置打印机');
             }
             $yly_print = new YlyPrinter($printer_config['client_id'],$printer_config['client_secret']);
-
             $order = self::getPrintOrder($id);
-
             $template_config = ConfigServer::get('printer', 'yly_template', []);
             $yly_print->ylyPrint($printer_list,$order,$template_config);
 
@@ -640,6 +657,13 @@ class OrderLogic
         }
     }
 
+    /**
+     * @notes 获取订单信息
+     * @param $id
+     * @return array
+     * @author cjhao
+     * @date 2021/9/26 11:43
+     */
     public static function getPrintOrder($id){
         $order = new Order();
         $result = $order
@@ -647,8 +671,14 @@ class OrderLogic
             ->where('id', $id)
             ->append(['delivery_address'])
             ->find();
-
-
+        $selffetch_shop = [];
+        if(Order::DELIVERY_STATUS_SELF == $result->delivery_type){
+            $selffetch_shop = SelffetchShop::where(['id'=>$result->selffetch_shop_id])
+                            ->field('id,name,province,city,district,address')
+                            ->append(['shop_address'])
+                            ->find();
+        }
+        $result->selffetch_shop = $selffetch_shop;
         foreach ($result['order_goods'] as &$order_goods) {
             $info = json_decode($order_goods['goods_info'], true);
             $order_goods['name'] = $info['goods_name'];
@@ -658,4 +688,52 @@ class OrderLogic
         return $result->toArray();
     }
 
+    /**
+     * @notes 获取发货单
+     * @param $get
+     * @return array|\PDOStatement|string|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @author suny
+     * @date 2021/11/08 16:06 下午
+     */
+    public static function getDelivery($get)
+    {
+        return Db::name('delivery')
+            ->where(['order_id' => $get['id']])
+            ->find();
+    }
+    /**
+     * @notes 修改物流信息
+     * @param $get
+     * @return array|string|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @author suny
+     * @date 2021/11/08 16:07 下午
+     */
+    public static function changeDelivery($post)
+    {
+        $delivery = Db::name('delivery')
+            ->where(['id' => $post['id']])
+            ->find();
+        if(!$delivery){
+            return false;
+        }
+        $express = Db::name('express')
+            ->where(['id' => $post['shipping_id']])
+            ->find();
+
+        $data = [
+            'shipping_id' => $post['shipping_id'],
+            'shipping_name' => $express['name'],
+            'invoice_no' => $post['invoice_no'],
+        ];
+        Db::name('delivery')
+            ->where(['id' => $post['id']])
+            ->update($data);
+        return true;
+    }
 }

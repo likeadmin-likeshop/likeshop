@@ -8,9 +8,10 @@ class Kdniao extends Expressage
 {
 
 
-    public function logistics($code, $number)
+    public function logistics($code, $number, $extra = "")
     {
-        $request_daata = "{'OrderCode':'','ShipperCode':'$code','LogisticCode':'$number'}";
+        //$customer,付费的模式下,顺丰快递需要快递单号对应的寄件人或收件人的手机号后四位数字
+        $request_daata = "{'OrderCode':'','ShipperCode':'$code','LogisticCode':'$number','CustomerName':'$extra'}";
 
         $datas = array(
             'EBusinessID' => $this->app,
@@ -34,7 +35,6 @@ class Kdniao extends Expressage
 
         if(isset($result['Traces'])){
             $this->logistics_info = $result['Traces'];
-            $this->logistics_info;
         }
         $this->error = json_encode($result, JSON_UNESCAPED_UNICODE);
         return false;

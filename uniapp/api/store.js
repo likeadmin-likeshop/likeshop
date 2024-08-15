@@ -14,7 +14,7 @@ export function getMenu(data) {
 
 //广告位
 export function getAdList(data) {
-	return request.get('ad/lists', {
+	return request.get('ad_content/lists', {
 		params: data
 	});
 }
@@ -151,6 +151,21 @@ export function getNoticeLists(params) {
 
 export function getPoster(data) {
 	return request.get("share/sharegoods", {
+		params: data
+	});
+}
+
+// 门店自提列表
+
+export function getStoreList(data) {
+	return request.get("selffetch_shop/lists", {
+		params: data
+	});
+}
+
+// 直播列表
+export function getLiveRoom(data) {
+	return request.get("live_room/lists", {
 		params: data
 	});
 }

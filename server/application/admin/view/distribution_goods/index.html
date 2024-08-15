@@ -1,0 +1,282 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height:auto;
+    }
+    .search {
+        margin-top: 15px;
+    }
+    .search .layui-form-label {
+        width: 60px;
+        text-align: right;
+    }
+    .btns {
+        margin-top: 15px;
+    }
+    .layui-inline {
+        margin-top: 10px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!--操作提示-->
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*设置分销商品的佣金比例；</p>
+                    </div>
+                </div>
+            </div>
+            <!--搜索区域-->
+            <div class="search layui-form">
+                <div class="layui-inline">
+                    <div class="layui-form-label">商品信息</div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="keyword" name="keyword" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-label">分销状态</div>
+                    <div class="layui-input-inline">
+                        <select name="is_distribution" id="is_distribution"  placeholder="请选择" >
+                            <option value="all">全部</option>
+                            <option value="0">不参与</option>
+                            <option value="1">参与</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary layui-bg-blue" lay-submit lay-filter="search">搜索</button>
+                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
+                </div>
+            </div>
+            <!--功能按钮-->
+            <div class="btns" style="margin-bottom: 15px;">
+                <buttion class="layui-btn layui-btn-sm layui-bg-blue" id="join">参与分销</buttion>
+                <buttion class="layui-btn layui-btn-sm layui-bg-red" id="cancel">取消分销</buttion>
+            </div>
+            <!--数据表格-->
+            <table id="lists" lay-filter="lists"></table>
+            <!--工具条模板-->
+            <script type="text/html" id="operate">
+                <a class="layui-btn layui-btn-xs layui-bg-blue" lay-event="set">设置佣金</a>
+                {{#  if(d.distribution_flag){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="cancel">取消分销</a>
+                {{#  } else { }}
+                <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="join">参与分销</a>
+                {{#  } }}
+            </script>
+            <!--自定义模板-->
+            <script type="text/html" id="goods-info">
+                <img src="{{d.image}}" style="height:60px;width: 60px" class="image-show">
+                <div class="layui-input-inline"  style="text-align: left;">
+                    <p>商品编号:{{d.code}}</p>
+                    <p style="width: 300px;text-overflow:ellipsis;overflow: hidden">商品名称:{{d.name}}</p>
+                </div>
+            </script>
+            <script type="text/html" id="goods-price">
+                ¥ {{d.min_price}} - ¥ {{d.max_price}}
+            </script>
+            <script type="text/html" id="goods-distribution">
+                {{#  if(d.distribution_flag){ }}
+                参与
+                {{#  } else { }}
+                不参与
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['table', 'form', 'like'], function () {
+        let $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , table = layui.table;
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('lists', {
+                where: field,
+                page: {curr: 1}
+            });
+        });
+
+        //清空查询
+        form.on('submit(reset)', function(){
+            $('#keyword').val('');
+            $('#platform_cate_id').val('all');
+            $('#shop_cate_id').val('all');
+            $('#is_distribution').val('all');
+            form.render('select');
+            //刷新列表
+            table.reload('lists', {
+                where: [], page: {curr: 1}
+            });
+        });
+
+        // 数据表格渲染
+        table.render({
+            elem: '#lists'
+            ,url: '{:url("distribution_goods/index")}' //数据接口
+            ,method: 'post'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {type:'checkbox'}
+                ,{templet: '#goods-info', title: '商品信息', width:500}
+                ,{templet: '#goods-price', title: '价格', width:300}
+                ,{templet: '#goods-distribution', title: '分销状态', width: 150}
+                ,{title: '操作', toolbar: '#operate'}
+            ]]                    , text: {none: '暂无数据！'}
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists, //解析数据列表
+                };
+            },
+            response: {
+                statusCode: 1
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        // 工具条事件
+        table.on('tool(lists)', function(obj){
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+            if(layEvent === 'cancel'){ // 取消分销
+                layer.confirm('确定要取消吗?', function(index){
+                    layer.close(index);
+                    like.ajax({
+                        url: "{:url('distribution_goods/isDistribution')}",
+                        data: {ids: [obj.data.id],is_distribution:0},
+                        type: "post",
+                        success:function(res) {
+                            if(res.code === 1) {
+                                layui.layer.msg(res.msg);
+                                layer.close(index);
+                                table.reload("lists");
+                            }
+                        }
+                    });
+                });
+            } else if(layEvent === 'join'){ // 参与分销
+                layer.confirm('确定要参与吗?', function(index){
+                    layer.close(index);
+                    like.ajax({
+                        url: "{:url('distribution_goods/isDistribution')}",
+                        data: {ids: [obj.data.id],is_distribution:1},
+                        type: "post",
+                        success:function(res) {
+                            if(res.code === 1) {
+                                layui.layer.msg(res.msg);
+                                layer.close(index);
+                                table.reload("lists");
+                            }
+                        }
+                    });
+                });
+            } else if(layEvent === 'set'){ // 设置佣金
+                id = obj.data.id;
+                // 弹窗显示添加页
+                layer.open({
+                    type: 2
+                    ,title: "设置佣金"
+                    ,content: "{:url('distribution_goods/set')}?id=" + id
+                    ,area: ["90%", "90%"]
+                    ,btn: ["确定", "取消"]
+                    ,yes: function(index, layero){
+                        var iframeWindow = window["layui-layer-iframe" + index];
+                        var submit = layero.find("iframe").contents().find("#setSubmit");
+                        iframeWindow.layui.form.on("submit(setSubmit)", function(data){
+                            like.ajax({
+                                url: "{:url('distribution_goods/set')}",
+                                data: data.field,
+                                type: "post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg);
+                                        layer.close(index);
+                                        table.reload("lists");
+                                    }
+                                }
+                            });
+                            return false;
+                        });
+                        submit.trigger("click");
+                    }
+                });
+            }
+        });
+
+        // 功能按钮
+        $('#cancel').click(function() { // 批量取消分销
+            var checkStatus = table.checkStatus('lists');
+            if (checkStatus.data.length == 0) {
+                layer.msg('请先选择商品');
+                return false;
+            }
+            // 提取选中行id
+            let ids = [];
+            checkStatus.data.forEach(function($item) {
+                ids.push($item['id']);
+            });
+            like.ajax({
+                url: "{:url('distribution_goods/isDistribution')}",
+                data: {ids: ids,is_distribution:0},
+                type: "post",
+                success:function(res) {
+                    if(res.code === 1) {
+                        layui.layer.msg(res.msg);
+                        table.reload("lists");
+                    }
+                }
+            });
+        });
+
+        $('#join').click(function() { // 批量参与分销
+            var checkStatus = table.checkStatus('lists');
+            if (checkStatus.data.length == 0) {
+                layer.msg('请先选择商品');
+                return false;
+            }
+            // 提取选中行id
+            let ids = [];
+            checkStatus.data.forEach(function($item) {
+                ids.push($item['id']);
+            });
+            like.ajax({
+                url: "{:url('distribution_goods/isDistribution')}",
+                data: {ids: ids,is_distribution:1},
+                type: "post",
+                success:function(res) {
+                    if(res.code === 1) {
+                        layui.layer.msg(res.msg);
+                        table.reload("lists");
+                    }
+                }
+            });
+        });
+    });
+
+
+</script>

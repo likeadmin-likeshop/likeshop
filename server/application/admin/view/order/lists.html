@@ -34,16 +34,16 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-body">
-        <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
-            <div class="layui-colla-item">
-                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
-                <div class="layui-colla-content layui-show">
-                    <p>*会员商城下单列表。</p>
-                    <p>*订单状态有待付款，待发货，待收货，已完成，已关闭。</p>
-                    <p>*待付款订单取消后则为已关闭。待付款订单支付后则为待发货。待发货订单发货后则为待收货。待收货订单收货后则为已完成。</p>
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*会员商城下单列表。</p>
+                        <p>*订单状态有待付款，待发货，待收货，已完成，已关闭。</p>
+                        <p>*待付款订单取消后则为已关闭。待付款订单支付后则为待发货。待发货订单发货后则为待收货。待收货订单收货后则为已完成。</p>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
         <div class="layui-tab layui-tab-card" lay-filter="tab-all">
 
@@ -185,16 +185,22 @@
                                 {{#  } }}
 
 
-                                {{#  if(d.order_status == 1){ }}
+                                {{#  if(d.order_status == 1 && d.delivery_type != 2){ }}
                                 <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="delivery">发货</a>
                                 {{#  } }}
+                                {{#  if(d.order_status == 1 && d.delivery_type == 2 && d.verification_status == 0){ }}
+                                <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="verification">提货核销</a>
+                                {{#  } }}
 
-                                {{#  if(d.order_status == 2){ }}
+                                {{#  if(d.order_status == 2 && d.delivery_type != 2){ }}
                                 <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="express">物流查询</a>
                                 <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="confirm">确认收货</a>
                                 {{#  } }}
+                                {{#  if(d.verification_status == 1 && d.delivery_type == 2){ }}
+                                <a class="layui-btn layui-btn-normal layui-btn-sm operation-btn" lay-event="verification_query">核销查询</a>
+                                {{#  } }}
 
-                                {{#  if(d.order_status == 3){ }}
+                                {{#  if(d.order_status == 3 && d.delivery_type != 2){ }}
                                 <a class="layui-btn layui-btn-primary layui-btn-sm operation-btn" lay-event="express">物流查询</a>
                                 {{#  } }}
 
@@ -240,10 +246,19 @@
                         <!--收货信息-->
                         <script type="text/html" id="delivery">
                             <div style="text-align: left">
+                                {{#  if(d.delivery_type != 2){ }}
                                 <p>收货人:{{d.consignee}}</p>
                                 <p>手机号码:{{d.mobile}}</p>
                                 <p>收货地址:{{d.delivery_address}}</p>
-                                <p>配送方式:{{d.delivery_type}}</p>
+                                <p>配送方式:{{d.delivery_type_desc}}</p>
+                                {{#  } }}
+                                {{#  if(d.delivery_type == 2){ }}
+                                <p>配送方式:{{d.delivery_type_desc}}</p>
+                                <p>自提门店:{{d.shop_name}}</p>
+                                <p>收货人:{{d.consignee}}</p>
+                                <p>手机号码:{{d.mobile}}</p>
+                                <p>提货码:{{d.pickup_code}}</p>
+                                {{#  } }}
                             </div>
                         </script>
 
@@ -498,11 +513,37 @@
             if(obj.event === 'delivery'){
                 layer.open({
                     type: 2
-                    ,title: '订单发货'
-                    ,content: '{:url("order/delivery")}?id='+id
-                    ,area: ['90%', '90%']
-                    ,yes: function(index, layero){
+                    , title: '订单发货'
+                    , content: '{:url("order/delivery")}?id='+id
+                    , area: ['90%', '90%']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'delivery-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
 
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            like.ajax({
+                                url: '{:url("order/deliveryHandle")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        }, function() {
+                                            layer.close(index); //关闭弹层
+                                            table.reload('order-lists');//刷新
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
                     }
                 })
             }
@@ -578,7 +619,7 @@
 
             }
 
-
+            //小票打印
             if(obj.event ==='print'){
                 layer.confirm('确定要打印订单吗？', function(index){
                     like.ajax({
@@ -604,6 +645,58 @@
 
                 })
 
+            }
+
+            //提货核销
+            if(obj.event === 'verification'){
+                layer.open({
+                    type: 2
+                    , title: '提货核销'
+                    , content: '{:url("verification/verification")}?id='+id
+                    , area: ['90%', '90%']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'verification-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            like.ajax({
+                                url: '{:url("verification/verification")}',
+                                data: field,
+                                type: "post",
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        }, function() {
+                                            layer.close(index); //关闭弹层
+                                            table.reload('order-lists');//刷新
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+
+            //核销查询
+            if(obj.event === 'verification_query'){
+                layer.open({
+                    type: 2
+                    ,title: '核销查询'
+                    ,content: '{:url("verification/verificationQuery")}?id='+id
+                    ,area: ['90%', '90%']
+                    ,yes: function(index, layero){
+
+                    }
+                })
             }
         });
     });

@@ -41,6 +41,7 @@ class ActivityAreaLogic
         $list = $goods->alias('G')
             ->join('activity_goods AG', 'G.id = AG.goods_id')
             ->where($where)
+            ->page($page, $size)
             ->field('G.id,G.name,G.image,G.min_price as price,sales_sum+virtual_sales_sum as sales_sum,G.market_price,AG.activity_id')
             ->select();
 

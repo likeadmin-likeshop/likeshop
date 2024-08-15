@@ -49,7 +49,7 @@ class WeChat extends ApiBase
         $url = $this->request->get('url');
         $result = WeChatLogic::jsConfig($url);
         if ($result['code'] != 1) {
-            $this->_error('', ['config' => $result['data']]);
+            $this->_error( $result['msg'] ?? '', ['config' => $result['data']]);
         }
         $this->_success('', ['config' => $result['data']]);
     }
@@ -57,7 +57,8 @@ class WeChat extends ApiBase
 
     public function index()
     {
-        WeChatLogic::index();
+        $params = $this->request->get();
+        WeChatLogic::index($params);
     }
 
 }

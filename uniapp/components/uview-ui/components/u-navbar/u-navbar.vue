@@ -3,18 +3,23 @@
 		<view class="u-navbar" :style="[navbarStyle]" :class="[{ 'u-navbar-fixed': isFixed, 'u-border-bottom': borderBottom }, customClass]">
 			<view class="u-status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 			<view class="u-navbar-inner" :style="[navbarInnerStyle]">
-				<view class="u-back-wrap" v-if="isBack" @tap="goBack">
-					<view class="u-icon-wrap">
-						<u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
+				<view class="u-navbar-left">
+					<view class="u-back-wrap" v-if="isBack" @tap="goBack">
+						<view class="u-icon-wrap">
+							<u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
+						</view>
+						<view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">{{ backText }}</view>
 					</view>
-					<view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">{{ backText }}</view>
+					<view v-else class="u-back-wrap">
+						<slot name="left"></slot>
+					</view>
 				</view>
 				<view class="u-navbar-content-title" v-if="title" :style="[titleStyle]">
 					<view
 					    class="u-title u-line-1"
 					    :style="{
 							color: titleColor,
-							fontSize: titleSize + 'rpx',
+							fontSize: titleSize,
 							fontWeight: titleBold ? 'bold' : 'normal'
 						}">
 						{{ title }}
@@ -124,7 +129,7 @@
 			// 标题的字体大小
 			titleSize: {
 				type: [String, Number],
-				default: 32
+				default: '16px'
 			},
 			isBack: {
 				type: [Boolean, String],

@@ -40,6 +40,7 @@ class UserPrivilege extends AdminBase{
     public function add(){
         if($this->request->isAjax()){
             $post = $this->request->post();
+            $post['del'] = 0;
             $result = $this->validate($post,'app\admin\validate\UserPrivilege.add');
             if($result === true){
                 UserPrivilegeLogic::add($post);
@@ -57,6 +58,7 @@ class UserPrivilege extends AdminBase{
     public function edit($id){
         if($this->request->isAjax()){
             $post = $this->request->post();
+            $post['del'] = 0;
             $result = $this->validate($post,'app\admin\validate\UserPrivilege.edit');
             if($result === true){
                 UserPrivilegeLogic::edit($post);

@@ -1,0 +1,89 @@
+.layui-icon-file:before {
+    content: "\e623";
+}
+
+.add-border {
+    border-radius: 5px;
+    border: 2px solid #3B91FF;
+    background-color: #f1f5fa;
+}
+
+.white-border {
+    border: 2px solid #ffffff;
+}
+
+.img-border {
+    width: 130px;
+    height: 130px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.container {
+    display: flex;
+    justify-content: flex-start;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #FFFFFF;
+}
+
+.cate-box {
+    flex-shrink: 0;
+    border-right: 1px #EEEEEE solid;
+    width: 200px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    height: 55px;
+    min-height: 55px;
+    align-items: center;
+    padding: 0 30px;
+    position: fixed;
+    bottom: 0;
+    left: 201px;
+    right: 0;
+    border-top: 1px solid #EEEEEE;
+    background-color: #FFFFFF;
+}
+
+.footer #page {
+    margin: 0 20px;
+}
+
+.gallery {
+    flex: 1;
+}
+
+.gallery .img-lists li {
+    display: inline-block;
+    margin: 5px;
+}
+
+.gallery .img-lists .file-image {
+    width: 80%;
+    height: 80%;
+    vertical-align: middle;
+    /*transform: scale(0.98);*/
+    object-fit: contain;
+}
+
+.gallery .img-lists .file-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100px;
+}
+
+/*分类名称*/
+.layui-tree-txt {
+    width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+}

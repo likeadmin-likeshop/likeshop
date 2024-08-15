@@ -68,57 +68,6 @@ class CrontabLogic
     }
 
     /**
-     * 操作
-     * @param $operation
-     * @param $id
-     * @return bool|string
-     * @throws Exception
-     * @throws \think\exception\PDOException
-     */
-    public static function operation($operation, $id)
-    {
-        try {
-            $cron = Db::name('dev_crontab')
-                ->where(['id' => $id])
-                ->find();
-            if ($cron['type'] == 1 && CronExpression::isValidExpression($cron['expression']) === false) {
-                throw  new  Exception("规则设置错误"); //定时任务运行规则错误，不执行
-            }
-
-            switch ($operation) {
-                case  'start':
-                case 'restart':
-                    Db::name('dev_crontab')
-                        ->where(['id' => $id])
-                        ->update(['status' => 1]);
-                    break;
-                case 'stop':
-                    Db::name('dev_crontab')
-                        ->where(['id' => $id])
-                        ->update(['status' => 2]);
-                default;
-            }
-            /*$count = Db::name('dev_crontab')
-                ->where(['status' => 1])
-                ->count();
-
-
-            $crontab_server = new CrontabServer();
-            if ($count == 0) {
-                $crontab_server->run(true);
-            } else {
-                $crontab_server->run(false);
-            }*/
-            return true;
-        } catch (Exception $e) {
-            Db::name('dev_crontab')
-                ->where(['id' => $id])
-                ->update(['status' => 3, 'error' => $e->getMessage()]);
-            return $e->getMessage();
-        }
-    }
-
-    /**
      * 获取接下来几次执行时间
      * @param $get
      * @return array

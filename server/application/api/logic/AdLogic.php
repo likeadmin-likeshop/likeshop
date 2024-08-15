@@ -32,6 +32,7 @@ class AdLogic
             ->join('ad_position ap', 'a.pid = ap.id')
             ->where(['pid' => $pid, 'ap.client' => $client, 'a.status' => 1, 'a.del' => 0, 'ap.status' => 1, 'ap.del' => 0])
             ->field('a.*')
+            ->order(['sort' => 'desc', 'id' => 'desc'])
             ->select();
 
         $list = [];
@@ -60,6 +61,7 @@ class AdLogic
                 'link_type' => $ad['link_type'],
                 'params'    => $params,
                 'is_tab'    => $is_tab,
+                'sort'      => $ad['sort'],
             ];
         }
         return $list;

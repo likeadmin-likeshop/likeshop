@@ -141,5 +141,26 @@ class IndexLogic{
     }
 
 
+    /**
+     * @notes 版权资质
+     * @param $shop_id
+     * @return int|mixed|string|null
+     * @author ljj
+     * @date 2022/2/22 3:09 下午
+     */
+    public static function copyright()
+    {
+        $business_license = ConfigServer::get('copyright', 'business_license');
+        $other_qualifications = ConfigServer::get('copyright', 'other_qualifications',[]);
+        if (!empty($business_license)) {
+            array_unshift($other_qualifications,$business_license);
+        }
+        if (!empty($other_qualifications)) {
+            foreach ($other_qualifications as &$val) {
+                $val = UrlServer::getFileUrl($val);
+            }
+        }
 
+        return $other_qualifications;
+    }
 }

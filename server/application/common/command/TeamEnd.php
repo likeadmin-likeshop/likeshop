@@ -50,6 +50,7 @@ class TeamEnd extends Command
         //关闭活动
         $activity = Db::name('team_activity')
             ->where('end_time', '<=', $now)
+            ->where('del', '=', 0)
             ->select();
         //更新商品is_team
         $team_ids = array_column($activity, 'team_id');

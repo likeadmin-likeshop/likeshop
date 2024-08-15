@@ -1,0 +1,75 @@
+{layout name="layout2" /}
+<style>
+    .layui-form {
+        margin: 5px;
+    }
+    .layui-form-label {
+        width: 120px;
+        text-align: left;
+        padding-left:30px;
+        color: #6a6f6c !important;
+    }
+    .layui-input-block {
+        width: 300px;
+        line-height: 38px;
+    }
+    .layui-btn {
+        margin-top: 5px;
+    }
+    select {
+        width: 300px;
+    }
+    .layui-input {
+        width: 300px;
+    }
+</style>
+<form class="layui-form">
+    <input type="hidden" name="user_id" value="{$user.user_id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户编号</label>
+        <div class="layui-input-block">
+            {$user.user_sn}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户昵称</label>
+        <div class="layui-input-block">
+            {$user.user_nickname}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">当前分销等级</label>
+        <div class="layui-input-block">
+            {$user.level_name}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分销等级</label>
+        <div class="layui-inline">
+            <select name="level_id" id="level_id"  placeholder="请选择" >
+                {foreach $levels as $val }
+                <option value="{$val.id}">{$val.name}({$val.weights})级</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block layui-hide">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit" id="formSubmit">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    layui.config({
+        version: "{$front_version}",
+        base: '/static/lib/'
+    }).use(['element', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , layer = layui.layer
+            , element = layui.element;
+    });
+</script>

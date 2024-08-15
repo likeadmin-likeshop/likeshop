@@ -12,6 +12,7 @@ import {
 import Cache from '@/utils/cache'
 const state = {
 	config: Cache.get(CONFIG) || {
+		app_agreement: 0,
 		center_setting: {},
 		index_setting: {},
 		navigation_menu: [],

@@ -1,0 +1,112 @@
+{layout name="layout2" /}
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<div class="layui-card">
+
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">核销员:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="nickname" id="nickname" placeholder="请输入用户昵称/编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-ad {$view_theme_color}" lay-submit lay-filter="ad-search">查询</button>
+                <button class="layui-btn layui-btn-sm layuiadmin-btn-ad layui-btn-primary " lay-submit lay-filter="ad-clear-search">重置</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-card-body">
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+
+        <script type="text/html" id="image">
+            <div class="goods-content">
+                <div style="display: flex;align-items: center" class="goods-data">
+                    <img src="{{ d.avatar }}" style="height:80px;width: 80px" class="image-show layui-col-md4">
+                </div>
+            </div>
+        </script>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like','laydate','table'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,laydate = layui.laydate
+            ,table = layui.table;
+
+        //监听搜索
+        form.on('submit(ad-search)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('test', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        //清空查询
+        form.on('submit(ad-clear-search)', function(){
+            $('#nickname').val('');
+            //刷新列表
+            table.reload('test', {
+                where: [],
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        table.render({
+            elem: '#test'
+            ,url:'{:url("selffetch_verifier/userLists")}'
+            ,cols: [[
+                {type:'radio'}
+                ,{field:'id', title: 'ID', sort: true, width:100, height:100}
+                ,{field:'sn', title: '用户编号'}
+                ,{field:'nickname', title: '用户昵称'}
+                ,{field:'avatar', title: '用户头像',templet:'#image'}
+                ,{field:'mobile', title: '联系电话'}
+            ]]
+            ,page: true
+            , text: {none: '暂无数据！'}
+            , parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists,
+                };
+            }
+            ,done: function(res, curr, count){
+                // 解决操作栏因为内容过多换行问题
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        //头工具栏事件
+        table.on('radio(test)', function(obj){
+            var data = obj.data; //获取选中行状态
+            var parent$ = window.parent.layui.jquery;
+            parent$('#user_id').val(data.id);
+            parent$('#user_name').html(data.nickname);
+        });
+    });
+
+</script>

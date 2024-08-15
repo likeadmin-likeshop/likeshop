@@ -4,6 +4,54 @@ layui.define(["jquery", "form", "upload"], function (exports) {
     $ = layui.$;
     upload = layui.upload;
     var ojb = {
+        tableLists: function (elem, url, cols, where,page = true) {
+        where = where === undefined ? {} : where;
+        page = page === undefined ? true : page;
+        layui.use(['table'], function () {
+            var table = layui.table;
+            table.render({
+                elem: elem
+                , url: url
+                , cols: [cols]
+                , where: where
+                , text: {none: '暂无相关数据'}
+                , response: {
+                    statusCode: 1
+                }
+                , page: page
+                , parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count,
+                        "data": res.data.lists
+                    };
+                }
+                , done: function() {
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+        });
+    },
+        eventClick: function (active) {
+            $(document).on("click", ".layEvent", function () {
+                var type = $(this).attr("lay-event");
+                var obj  = $(this).attr("lay-data");
+
+                active[type] ? active[type].call(this, obj) : "";
+            });
+
+            layui.use(["table"], function () {
+                layui.table.on("tool(like-table-lists)", function(obj){
+                    var type = obj.event;
+                    active[type] ? active[type].call(this, obj) : "";
+                });
+            });
+        },
         ajax: function (json) {
             var load_index = null;
             if (json.beforeSend === undefined) {
@@ -56,7 +104,8 @@ layui.define(["jquery", "form", "upload"], function (exports) {
                 }
             };
             $.ajax(json)
-        }, imageUpload: function (element, upload_call_back,css, area, title) {
+        },
+        imageUpload: function (element, upload_call_back,css, area, title) {
             var area = (area === undefined) ? ["90%", "90%"] : area;
             var title = (title === undefined) ? "上传图片" : title;
             var css = css === undefined ? false : css;
@@ -71,18 +120,25 @@ layui.define(["jquery", "form", "upload"], function (exports) {
                 if(css === true){
                     click_element = click_element.parent();
                 }
-                var windows = layer.open({type: 2, title: title, content: image_upload_url, area: area});
-                window.callback = function (uri) {
+                var windows = parent.layer.open({
+                    type: 2,
+                    title: title,
+                    content: image_upload_url,
+                    area: area,
+                    shadeClose: true
+                });
+                parent.window.callback = function (uri) {
                     upload_call_back(uri, click_element);
                     return uri
                 };
-                window.callbackSetUri = function (uri) {
+                parent.window.callbackSetUri = function (uri) {
                     upload_call_back(uri, click_element);
                     layer.close(windows);
                     return uri
                 }
             })
-        }, showImg: function (url, xp) {
+        },
+        showImg: function (url, xp) {
             function getImageWidth(url, callback) {
                 var img = new Image();
                 img.src = url;

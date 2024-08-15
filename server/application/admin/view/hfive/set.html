@@ -1,0 +1,92 @@
+{layout name="layout1" /}
+<style>
+  .layui-form-label {
+      width: 120px;
+      text-align: left;
+  }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>H5商城设置</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-form-label">渠道状态</div>
+                    <div class="layui-input-block">
+                        <input type="radio" name="is_open" value="0" title="关闭" {if !$config.is_open}checked{/if} />
+                        <input type="radio" name="is_open" value="1" title="开启" {if $config.is_open}checked{/if} />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-label">关闭后访问页面</div>
+                    <div class="layui-input-block">
+                        <input type="radio" name="page" value="1" title="空白页" {if $config.page == 1}checked{/if} />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-label"></div>
+                    <div class="layui-inline">
+                        <input type="radio" name="page" value="2" title="自定义页面" {if $config.page == 2}checked{/if} />
+                    </div>
+                    <div class="layui-inline" style="width: 420px;">
+                        <input type="text" name="page_url" value="{$config.page_url}" placeholder="请输入完整的url" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-label">H5商城链接</div>
+                    <div class="layui-inline" style="width: 280px;">
+                        <input type="text" style="border:none" id="h5_url" value="{$config.h5_url}" class="layui-input" readonly />
+                    </div>
+                    <button class="layui-btn layui-btn-xs layui-btn-primary" id="copy">复制</button>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-label"></div>
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="set">设置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form', 'layer'], function(){
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        form.on('submit(set)', function (data) {
+            $.ajax({
+                url:'{:url("hfive/set")}',
+                type: 'post',
+                data: data.field,
+                success:function(res) {
+                    layer.msg(res.msg);
+                }
+            });
+        });
+
+        // 复制
+        $('#copy').click(function() {
+            var input = document.getElementById('h5_url');
+            input.select();
+            document.execCommand("Copy");
+            layer.msg('复制成功');
+        });
+    });
+</script>

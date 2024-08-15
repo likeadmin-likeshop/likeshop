@@ -19,7 +19,7 @@
 
 namespace app\api\logic;
 
-use app\common\logic\{LogicBase, AfterSaleLogLogic};
+use app\common\logic\{LogicBase, AfterSaleLogLogic, OrderGoodsLogic};
 use app\common\model\{AfterSale, AfterSaleLog, Goods, NoticeSetting, Order, OrderGoods};
 use app\common\server\AreaServer;
 use app\common\server\ConfigServer;
@@ -45,7 +45,7 @@ class AfterSaleLogic extends LogicBase
         switch ($type) {
             case 'normal':
                 $where[] = ['g.refund_status', '=', OrderGoods::REFUND_STATUS_NO];
-                $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH]];
+                $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_DELIVERY, Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH]];
                 $order = new Order();
                 $count = $order->alias('o')
                     ->field('o.id,o.confirm_take_time,o.order_status,o.create_time')
@@ -109,17 +109,17 @@ class AfterSaleLogic extends LogicBase
                 break;
             case 'apply':
                 $where[] = ['g.refund_status', 'in', [OrderGoods::REFUND_STATUS_APPLY, OrderGoods::REFUND_STATUS_WAIT]];
-                $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH]];
+                $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_DELIVERY, Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH]];
                 $where[] = ['a.del', '=', 0];
                 break;
             case 'finish':
                 $where[] = ['g.refund_status', '=', OrderGoods::REFUND_STATUS_SUCCESS];
                 $where[] = ['a.del', '=', 0];
-                $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH, Order::STATUS_CLOSE]];
+                $where[] = ['o.order_status', 'in', [Order::STATUS_WAIT_DELIVERY, Order::STATUS_WAIT_RECEIVE, Order::STATUS_FINISH, Order::STATUS_CLOSE]];
                 break;
         }
 
-        $field = 'g.order_id,g.goods_id,g.item_id,g.goods_num,g.goods_price,g.goods_info,a.status,a.refund_type,a.id as after_sale_id,a.create_time';
+        $field = 'g.order_id,g.goods_id,g.item_id,g.goods_num,g.goods_price,g.goods_info,a.status,a.refund_type,a.id as after_sale_id,a.create_time,a.refund_price';
 
         $count = Db::name('order_goods g')
             ->field($field)
@@ -164,6 +164,7 @@ class AfterSaleLogic extends LogicBase
                     'type_text' => AfterSale::getRefundTypeDesc($item['refund_type']),
                     'desc' => AfterSale::getStatusDesc($item['status']),
                     'able_apply' => 1,
+                    'refund_price' => $item['refund_price'],
                 ],
                 'time' => date('Y-m-d H:i', $item['create_time']),
             ];
@@ -191,7 +192,7 @@ class AfterSaleLogic extends LogicBase
                 ->join('order o', 'o.id = g.order_id')
                 ->where(['order_id' => $post['order_id'], 'g.item_id' => $post['item_id']])
                 ->find();
-
+            
             $data = [
                 'sn' => createSn('after_sale', 'sn', '', 4),
                 'user_id' => $user_id,
@@ -204,7 +205,7 @@ class AfterSaleLogic extends LogicBase
                 'refund_remark' => isset($post['remark']) ? trim($post['remark']) : '',
                 'refund_image' => isset($post['img']) ? $post['img'] : '',
                 'refund_type' => $post['refund_type'],
-                'refund_price' => $order_goods['total_pay_price'],
+                'refund_price' => $order_goods['total_pay_price'] + OrderGoodsLogic::getRefundExpressMoney($order_goods['id']),
                 'create_time' => time(),
             ];
 
@@ -251,18 +252,20 @@ class AfterSaleLogic extends LogicBase
     {
         $goods = Db::name('order_goods')
             ->where(['order_id' => $order_id, 'item_id' => $item_id])
-            ->hidden('id,spec_value_ids,create_time')
+            ->hidden('spec_value_ids,create_time')
             ->find();
 
         $info = json_decode($goods['goods_info'], true);
         $goods['goods_name'] = $info['goods_name'];
         $goods['spec_value'] = $info['spec_value_str'];
         $goods['image'] = isset($info['image']) ? UrlServer::getFileUrl($info['image']) : '';
+        $goods['refund_express_money'] = OrderGoodsLogic::getRefundExpressMoney($goods['id']);
 
         $data = [
             'goods' => $goods,
             'reason' => AfterSale::getReasonLists(),
         ];
+        
         return $data;
     }
 
@@ -324,7 +327,7 @@ class AfterSaleLogic extends LogicBase
         $after_sale = new \app\api\model\AfterSale();
 
         $detail = $after_sale
-            ->field('id,sn,order_goods_id,refund_reason,refund_image,refund_type,refund_price,create_time,status')
+            ->field('id,sn,order_goods_id,refund_reason,refund_image,refund_type,refund_price,create_time,status,refund_remark')
             ->with(['order_goods'])
             ->where(['id' => $get['id'], 'del' => 0])
             ->find();

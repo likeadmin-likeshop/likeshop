@@ -31,7 +31,7 @@ class Ad extends Validate
         'pid'       => 'require',
         'image'     => 'require',
         'link_type' => 'checkLink',
-
+        'sort'      => 'egt:0',
     ];
 
     protected $message = [
@@ -42,6 +42,7 @@ class Ad extends Validate
         'client.require'    => '请选择广告终端',
         'pid.require'       => '请选择广告位置',
         'image.require'     => '请上传广告图片',
+        'sort.egt'          => '请输入大于等于0的排序值',
 
 
 

@@ -1,0 +1,47 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-item .layui-form-label { width: 132px; }
+    .layui-form-item .layui-input-inline { width: 280px; }
+</style>
+
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>发件人模板：</label>
+        <div class="layui-input-inline">
+            <select name="sender_id" lay-verify="required">
+                <option value=""></option>
+                {volist name="sender" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>电子面单模板：</label>
+        <div class="layui-input-inline">
+            <select name="tempid" lay-verify="required">
+                <option value=""></option>
+                {volist name="template" id="vo"}
+                <option value="{$vo.id}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form','like_area','like'], function(){
+
+
+    })
+</script>

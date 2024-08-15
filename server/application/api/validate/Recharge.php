@@ -24,11 +24,9 @@ use think\Validate;
 class Recharge extends Validate{
     protected $rule = [
         'id'        => 'checkRecharge',
-        'money'     => 'checkRecharge',
-        'pay_way'   => 'require',
+        'money'     => 'checkRecharge'
     ];
     protected $message = [
-        'pay_way.require'   => '请选择支付方式',
     ];
     protected function checkRecharge($value,$rule,$data){
         $open_racharge = ConfigServer::get('recharge','open_racharge',0);

@@ -66,12 +66,16 @@ class SeckillLogic{
             }
             //该秒杀商品的全部规格
             $seckill_goods_item = Db::name('seckill_goods')
-                            ->where(['seckill_id'=>$item['seckill_id'],'goods_id'=>$item['goods_id']])
+                            ->where(['seckill_id'=>$item['seckill_id'],'goods_id'=>$item['goods_id'],'del'=>0])
                             ->column('*','id');
-            foreach ($seckill_goods_item as $seckill_id => $seckill_item){
 
+            // 秒杀商品销量
+            $item['sales_sum'] = 0;
+            foreach ($seckill_goods_item as $seckill_id => $seckill_item){
                 if(isset($seckill_goods_list[$seckill_id])){
                     $price_array[] = $seckill_goods_list[$seckill_id]['price'];
+                    // 秒杀商品销量
+                    $item['sales_sum'] += $seckill_goods_list[$seckill_id]['sales_sum'];
                 }
             }
 

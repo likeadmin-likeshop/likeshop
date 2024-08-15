@@ -1,0 +1,75 @@
+{layout name="layout2" /}
+
+<link rel="stylesheet" href="/static/admin/css/goods.css" media="all">
+
+<div class="layui-form" lay-filter="layuiadmin-form-cate" id="layuiadmin-form-cate" style="padding: 20px 30px 0 0;">
+
+    <input type="hidden" name="id" value="{$detail.id}">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>核销员名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" lay-verType="tips"  placeholder="" autocomplete="off" class="layui-input" value="{$detail.name}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>用户昵称：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <div style="display: flex;">
+                <div style="border-radius: 50%;border: 1px solid #d2d2d2;overflow: hidden;"><img src="{$detail.avatar}" style="width: 80px;height: 80px;"></div>
+                <div style="padding-left: 10px;font-size: 18px;line-height: 40px;">
+                    <p>{$detail.user_sn}</p>
+                    <p>{$detail.nickname}</p>
+                </div>
+            </div>
+            <div class=" layui-form-mid layui-word-aux" >编辑时不能重新选择商城用户，可停用核销员或删除核销员</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>自提门店：</label>
+        <div class="layui-input-block" style="width: 190px">
+            <select name="selffetch_shop_id" id="selffetch_shop_id">
+                {foreach $shop_lists as $item}
+                <option value="{$item.id}" {if $detail.selffetch_shop_id == $item.id}selected=""{/if}>{$item.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>联系电话：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="mobile" lay-verify="required" lay-verType="tips"  placeholder="" autocomplete="off" class="layui-input" value="{$detail.mobile}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>核销员状态：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="0" title="停用" {if $detail.status==0}checked=""{/if}>
+            <input type="radio" name="status" value="1" title="启用" {if $detail.status==1}checked=""{/if}>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-cate-submit" id="edit-cate-submit" value="确认">
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like','laydate'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,laydate = layui.laydate;
+
+    })
+</script>

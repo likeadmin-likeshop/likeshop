@@ -60,7 +60,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">每充值1元赠送积分：</label>
                             <div class="layui-input-inline">
-                                <input type="text"  name="give_integral" autocomplete="off" class="layui-input give_integral">
+                                <input type="text"  name="give_integral"  lay-verify="give_integral"   autocomplete="off" class="layui-input give_integral">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -70,7 +70,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">每充值1元赠送成长值：</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="give_growth" autocomplete="off" class="layui-input give_growth">
+                                <input type="text" name="give_growth" lay-verify="give_growth"  autocomplete="off" class="layui-input give_growth">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -80,7 +80,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">最低充值金额：</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="min_money" autocomplete="off" class="layui-input min_money">
+                                <input type="text" name="min_money"   lay-verify="min_money"  autocomplete="off" class="layui-input min_money">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -125,6 +125,24 @@
             active[type] ? active[type].call(this) : '';
         });
 
+        form.render();
+        form.verify({
+            give_integral: function (value){
+                if(value < 0){
+                    return '赠送积分不能小于零';
+                }
+            },
+            give_growth: function (value){
+                if(value < 0){
+                    return '赠送成长值不能小于零';
+                }
+            },
+            min_money: function (value){
+                if(value < 0){
+                    return '最低充值金额不能小于零';
+                }
+            }
+        });
         //事件
         var active = {
             add: function(){

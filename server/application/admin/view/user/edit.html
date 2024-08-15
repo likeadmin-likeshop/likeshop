@@ -88,6 +88,17 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">禁用状态：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="disable" value="0" title="启用" {if $info.disable == 0}checked{/if} >
+            <input type="radio" name="disable" value="1" title="禁用"  {if $info.disable == 1}checked{/if} >
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class=" layui-form-mid layui-word-aux">禁用后用户将无法正常登录</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">生日：</label>
         <div class="layui-input-inline">
             <input class="layui-input" value="{$info.birthday}" autocomplete="off"   name="birthday" id="birthday" type="text" placeholder="请输入生日" >

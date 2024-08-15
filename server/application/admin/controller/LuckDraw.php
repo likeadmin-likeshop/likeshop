@@ -1,10 +1,28 @@
 <?php
+// +----------------------------------------------------------------------
+// | likeshop开源商城系统
+// +----------------------------------------------------------------------
+// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
+// | gitee下载：https://gitee.com/likeshop_gitee
+// | github下载：https://github.com/likeshop-github
+// | 访问官网：https://www.likeshop.cn
+// | 访问社区：https://home.likeshop.cn
+// | 访问手册：http://doc.likeshop.cn
+// | 微信公众号：likeshop技术社区
+// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
+// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
+// | 禁止对系统程序代码以任何目的，任何形式的再发布
+// | likeshop团队版权所有并拥有最终解释权
+// +----------------------------------------------------------------------
+// | author: likeshop.cn.team
+// +----------------------------------------------------------------------
 
 namespace app\admin\controller;
 
 
 use app\admin\logic\LuckDrawLogic;
 use app\common\server\ConfigServer;
+use app\common\model\Luckdraw as LuckdrawModel;
 
 class LuckDraw extends AdminBase
 {
@@ -24,8 +42,10 @@ class LuckDraw extends AdminBase
         // 获取抽奖设置信息
         $this->assign('setConfig', [
             'limit'  => ConfigServer::get('luckdraw', 'limit', 0),
+            'need'  => ConfigServer::get('luckdraw', 'need', 0),
             'rule'   => ConfigServer::get('luckdraw', 'rule', ''),
-            'status' => ConfigServer::get('luckdraw', 'status', 0)
+            'status' => ConfigServer::get('luckdraw', 'status', 0),
+            'show_win' => ConfigServer::get('luckdraw', 'show_win', 0)
         ]);
 
         return $this->fetch();
@@ -49,7 +69,8 @@ class LuckDraw extends AdminBase
             $error = LuckDrawLogic::getError() ?: '新增失败';
             $this->_error($error);
         }
-
+        $this->assign('prizes', LuckdrawModel::getPrizeDesc(true));
+        $this->assign('coupon', LuckDrawLogic::coupon());
         return $this->fetch();
     }
 
@@ -73,6 +94,8 @@ class LuckDraw extends AdminBase
         }
 
         $id = $this->request->get('id');
+        $this->assign('prizes', LuckdrawModel::getPrizeDesc(true));
+        $this->assign('coupon', LuckDrawLogic::coupon());
         $this->assign('detail', LuckDrawLogic::detail($id));
         return $this->fetch();
     }

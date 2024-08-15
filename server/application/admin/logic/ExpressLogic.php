@@ -32,9 +32,9 @@ class ExpressLogic
      * 列表
      * @param $get
      * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
+     * @throws @\think\db\exception\DataNotFoundException
+     * @throws @\think\db\exception\ModelNotFoundException
+     * @throws @\think\exception\DbException
      */
     public static function lists($get)
     {
@@ -61,26 +61,33 @@ class ExpressLogic
         return ['lists' => $lists, 'count' => $count];
     }
 
+    /**
+     * @notes 获取所有快递公司
+     * @date 2021/9/26 10:40
+     */
+    public static function all()
+    {
+        return Db::name('express')
+            ->where(['del'=>0])
+            ->select();
+    }
 
     /**
      * 添加
      * @param $post
-     * @return array|\PDOStatement|string|\think\Model|null
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
+     * @return array|string|null
      */
     public static function addExpress($post)
     {
         $time = time();
         $data = [
-            'name' => $post['name'],
-            'icon' => $post['icon'],
-            'website' => $post['website'],
-            'code' => $post['code'],
-            'code100' => $post['code100'],
-            'codebird' => $post['codebird'],
-            'sort' => $post['sort'],
+            'name'        => $post['name'],
+            'icon'        => $post['icon'],
+            'website'     => $post['website'],
+            'code'        => $post['code'],
+            'code100'     => $post['code100'],
+            'codebird'    => $post['codebird'],
+            'sort'        => $post['sort'],
             'create_time' => $time
         ];
         $result = Db::name('express')->insert($data);
@@ -90,10 +97,10 @@ class ExpressLogic
     /**
      * 获取信息
      * @param $id
-     * @return array|\PDOStatement|string|\think\Model|null
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
+     * @return array|string|null
+     * @throws @\think\db\exception\DataNotFoundException
+     * @throws @\think\db\exception\ModelNotFoundException
+     * @throws @\think\exception\DbException
      */
     public static function info($id)
     {
@@ -108,18 +115,18 @@ class ExpressLogic
      * @param $post
      * @return int|string
      * @throws Exception
-     * @throws \think\exception\PDOException
+     * @throws @\think\exception\PDOException
      */
     public static function editExpress($post)
     {
         $data = [
-            'name' => $post['name'],
-            'icon' => $post['icon'],
-            'website' => $post['website'],
-            'code' => $post['code'],
-            'code100' => $post['code100'],
-            'codebird' => $post['codebird'],
-            'sort' => $post['sort'],
+            'name'        => $post['name'],
+            'icon'        => $post['icon'],
+            'website'     => $post['website'],
+            'code'        => $post['code'],
+            'code100'     => $post['code100'],
+            'codebird'    => $post['codebird'],
+            'sort'        => $post['sort'],
             'update_time' => time()
         ];
         Db::name('express')->where(['id' => $post['id']])->update(['name' => $post['name'],]);

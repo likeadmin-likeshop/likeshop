@@ -22,6 +22,12 @@ CREATE TABLE `ls_account_log`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员账户流水记录表';
 
 -- ----------------------------
+-- Records of ls_account_log
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_activity_area
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_activity_area`;
@@ -38,6 +44,12 @@ CREATE TABLE `ls_activity_area`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '活动区域表';
 
 -- ----------------------------
+-- Records of ls_activity_area
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_activity_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_activity_goods`;
@@ -50,6 +62,12 @@ CREATE TABLE `ls_activity_goods`  (
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '活动区域商品表';
+
+-- ----------------------------
+-- Records of ls_activity_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_ad
@@ -75,6 +93,12 @@ CREATE TABLE `ls_ad`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '广告表';
 
 -- ----------------------------
+-- Records of ls_ad
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_ad_position
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_ad_position`;
@@ -97,7 +121,7 @@ CREATE TABLE `ls_ad_position`  (
 -- Records of ls_ad_position
 -- ----------------------------
 BEGIN;
-INSERT INTO `ls_ad_position` VALUES (1, '首页轮播广告', 1, 1, 300, 200, '描述', 1, 1583301143, 1608288900, 0), (2, '首页轮播广告', 1, 2, 300, 200, '描述', 1, 1583301143, 0, 0), (4, '商品分类页轮播广告', 1, 1, 200, 200, '描述', 1, 1583421780, 0, 0), (5, '商品分类页轮播广告', 1, 2, 200, 200, '描述', 1, 1583421798, 0, 0), (7, '新闻资讯轮播广告', 1, 1, 100, 100, '描述', 1, 1583301143, 0, 0), (8, '新闻资讯轮播广告', 1, 2, 100, 100, '描述', 1, 1583421712, 0, 0), (10, '帮助轮播广告', 1, 1, 300, 300, '描述', 1, 1594344568, 1608189794, 0), (11, '帮助轮播广告', 1, 2, 300, 300, '描述', 1, 1594345267, 0, 0), (14, '秒杀广告位', 0, 1, 0, 0, '', 1, 1598931871, 1608189791, 0), (15, '热销榜单', 0, 1, 0, 0, '', 1, 1599035781, 0, 0), (16, '秒杀页广告', 0, 2, 300, 300, '', 1, 1599552304, 0, 0), (17, '热销广告位', 0, 2, 300, 300, '', 1, 1599552322, 0, 0), (18, '首页热销榜单广告', 1, 2, 300, 200, '描述', 1, 1583301143, 0, 0), (19, '首页新品推荐广告', 1, 2, 300, 200, '描述', 1, 1583301143, 0, 0), (20, '首页好物优选广告', 1, 2, 300, 200, '描述', 1, 1583301143, 0, 0), (21, '首页商品分类广告', 1, 2, 238, 636, '描述', 1, 1583301143, 0, 0), (22, '新品推荐广告位', 0, 1, 0, 0, '', 1, 1618558761, 0, 0), (23, '优惠券', 0, 1, 750, 300, '', 1, 1619149954, 0, 0);
+INSERT INTO `ls_ad_position` VALUES (1, '首页轮播广告', 1, 1, 750, 340, '描述', 1, 1583301143, 1608288900, 0), (2, '首页轮播广告', 1, 2, 1020, 440, '描述', 1, 1583301143, 0, 0), (4, '商品分类页轮播广告', 1, 1, 750, 284, '描述', 1, 1583421780, 0, 0), (7, '新闻资讯轮播广告', 1, 1, 750, 300, '描述', 1, 1583301143, 0, 0), (8, '新闻资讯轮播广告', 1, 2, 1180, 240, '描述', 1, 1583421712, 0, 0), (10, '帮助轮播广告', 1, 1, 750, 300, '描述', 1, 1594344568, 1608189794, 0), (11, '帮助轮播广告', 1, 2, 1180, 240, '描述', 1, 1594345267, 0, 0), (14, '秒杀广告位', 0, 1, 750, 300, '', 1, 1598931871, 1608189791, 0), (15, '热销榜单', 0, 1, 750, 300, '', 1, 1599035781, 0, 0), (16, '秒杀页广告', 0, 2, 1180, 240, '', 1, 1599552304, 0, 0), (17, '热销广告位', 0, 2, 1180, 240, '', 1, 1599552322, 0, 0), (18, '首页热销榜单广告', 1, 2, 1180, 240, '描述', 1, 1583301143, 0, 0), (19, '首页新品推荐广告', 1, 2, 1180, 240, '描述', 1, 1583301143, 0, 0), (20, '首页好物优选广告', 1, 2, 1180, 240, '描述', 1, 1583301143, 0, 0), (21, '首页商品分类广告', 1, 2, 224, 636, '描述', 1, 1583301143, 0, 0), (22, '新品推荐广告位', 0, 1, 750, 300, '', 1, 1618558761, 0, 0), (23, '首页中部广告', 0, 1, 750, 180, '', 1, 1619149954, 0, 0);
 COMMIT;
 
 -- ----------------------------
@@ -122,6 +146,12 @@ CREATE TABLE `ls_admin`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `account`(`account`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台管理员表';
+
+-- ----------------------------
+-- Records of ls_admin
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_after_sale
@@ -157,6 +187,12 @@ CREATE TABLE `ls_after_sale`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '售后表';
 
 -- ----------------------------
+-- Records of ls_after_sale
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_after_sale_log
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_after_sale_log`;
@@ -171,6 +207,12 @@ CREATE TABLE `ls_after_sale_log`  (
   `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '售后日志表';
+
+-- ----------------------------
+-- Records of ls_after_sale_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_article
@@ -192,7 +234,13 @@ CREATE TABLE `ls_article`  (
   `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1;已删除',
   `likes` int(11) NULL DEFAULT 0 COMMENT '点赞数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章表';
+
+-- ----------------------------
+-- Records of ls_article
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_article_category
@@ -207,7 +255,13 @@ CREATE TABLE `ls_article_category`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `del` int(10) NULL DEFAULT 0 COMMENT '删除标志:0-未删除.1-已删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章分类表';
+
+-- ----------------------------
+-- Records of ls_article_category
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_bargain
@@ -229,7 +283,13 @@ CREATE TABLE `ls_bargain`  (
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '活动状态[0=已结束, 1=进行中]',
   `del` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除[0=否， 1=是]',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价活动商品';
+
+-- ----------------------------
+-- Records of ls_bargain
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_bargain_item
@@ -243,7 +303,13 @@ CREATE TABLE `ls_bargain_item`  (
   `floor_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '砍价活动底价',
   `first_knife_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '首刀的价格,不能高于商品价,不能低于底价',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价活动商品规格表';
+
+-- ----------------------------
+-- Records of ls_bargain_item
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_bargain_knife
@@ -255,13 +321,19 @@ CREATE TABLE `ls_bargain_knife`  (
   `launch_id` int(10) UNSIGNED NOT NULL COMMENT '砍价发起ID',
   `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
   `surplus_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '砍掉后剩余金额',
-  `help_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '阻力砍掉金额',
+  `help_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '助力砍掉金额',
   `help_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '助力砍价时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `bargain_id`(`bargain_id`) USING BTREE,
   INDEX `launch_id`(`launch_id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价助力表';
+
+-- ----------------------------
+-- Records of ls_bargain_knife
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_bargain_launch
@@ -285,7 +357,13 @@ CREATE TABLE `ls_bargain_launch`  (
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '当前砍价状态[0=进行中，1=砍成功，2=砍失败，3=活动提前结束(保留)]',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `bargain_id`(`bargain_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价发起表';
+
+-- ----------------------------
+-- Records of ls_bargain_launch
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_cart
@@ -306,6 +384,12 @@ CREATE TABLE `ls_cart`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表';
 
 -- ----------------------------
+-- Records of ls_cart
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_config
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_config`;
@@ -317,6 +401,12 @@ CREATE TABLE `ls_config`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置表';
+
+-- ----------------------------
+-- Records of ls_config
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_coupon
@@ -348,6 +438,12 @@ CREATE TABLE `ls_coupon`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券表';
 
 -- ----------------------------
+-- Records of ls_coupon
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_coupon_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_coupon_goods`;
@@ -358,6 +454,12 @@ CREATE TABLE `ls_coupon_goods`  (
   `create_time` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券商品管理表';
+
+-- ----------------------------
+-- Records of ls_coupon_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_coupon_list
@@ -376,6 +478,12 @@ CREATE TABLE `ls_coupon_list`  (
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除;1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户优惠券';
+
+-- ----------------------------
+-- Records of ls_coupon_list
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_delivery
@@ -406,6 +514,12 @@ CREATE TABLE `ls_delivery`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '发货单表';
 
 -- ----------------------------
+-- Records of ls_delivery
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_dev_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_auth`;
@@ -424,13 +538,13 @@ CREATE TABLE `ls_dev_auth`  (
   `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
   `partner_id` int(11) NOT NULL DEFAULT 0 COMMENT '机构id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 246 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
+) ENGINE = InnoDB AUTO_INCREMENT = 280 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
 
 -- ----------------------------
 -- Records of ls_dev_auth
 -- ----------------------------
 BEGIN;
-INSERT INTO `ls_dev_auth` VALUES (1, 1, 1, 18, '权限管理', '', '', 95, 0, 1597593692, 1608102122, 0, 0), (2, 1, 0, 1, '菜单权限', '', 'auth/lists', 50, 0, 1597593762, 1612594453, 0, 0), (3, 2, 0, 2, '添加菜单', '', 'auth/add', 50, 0, 1597593846, 1597636533, 0, 0), (4, 2, 0, 2, '编辑菜单', '', 'auth/edit', 50, 0, 1597593909, 1597636533, 0, 0), (5, 2, 0, 2, '删除', '', 'auth/del', 50, 0, 1597594342, NULL, 0, 0), (6, 1, 0, 1, '管理员', '', 'admin/lists', 51, 0, 1597594526, 1597636523, 0, 0), (7, 2, 0, 6, '添加管理员', '', 'admin/add', 50, 0, 1597594556, NULL, 0, 0), (8, 2, 0, 6, '编辑管理员', '', 'admin/edit', 50, 0, 1597594595, 1597594610, 0, 0), (9, 2, 0, 6, '删除管理员', '', 'admin/del', 50, 0, 1597594639, NULL, 0, 0), (10, 1, 0, 1, '角色', '', 'role/lists', 50, 0, 1597596178, 1597635420, 0, 0), (12, 2, 0, 6, '管理员列表', '', 'admin/lists', 51, 0, 1597631850, 1597636529, 0, 0), (13, 2, 0, 2, '菜单列表', '', 'menu/lists', 51, 0, 1597632028, 1597632039, 0, 0), (14, 2, 0, 10, '角色列表', '', 'role/lists', 50, 0, 1597632555, NULL, 0, 0), (15, 2, 0, 10, '添加角色', '', 'role/add', 50, 0, 1597632944, NULL, 0, 0), (16, 2, 0, 10, '编辑角色', '', 'role/edit', 50, 0, 1597632999, NULL, 0, 0), (17, 1, 0, 18, '基础设置', '', '', 99, 0, 1597633276, 1608102098, 0, 0), (18, 1, 0, 0, '设置', 'layui-icon-set', '', 79, 0, 1597633295, 1608102027, 0, 0), (19, 1, 0, 0, '个人', 'layui-icon-friends', 'my/password', 50, 0, 1597633558, 1608102250, 0, 0), (20, 1, 0, 19, '修改密码', '', 'my/password', 100, 0, 1597633582, 1606442853, 0, 0), (21, 1, 0, 17, '网站设置', '', 'basic/website', 99, 0, 1597658026, 1608467331, 0, 0), (22, 1, 0, 17, '版权备案', '', 'basic/copyright', 97, 0, 1597658101, 1608467338, 0, 0), (23, 2, 0, 21, '查看网站设置', '', 'basic/website', 51, 0, 1597658275, 1620454538, 0, 0), (24, 2, 0, 21, '修改网站设置', '', 'basic/setWebsite', 50, 0, 1597663008, NULL, 0, 0), (25, 2, 0, 22, '查看版权备案', '', 'basic/copyright', 51, 0, 1597663176, 1597663223, 0, 0), (26, 2, 0, 22, '修改版权备案', '', 'basic/setCopyright', 50, 0, 1597663205, NULL, 0, 0), (27, 2, 0, 2, '设置菜单权限状态', '', 'auth/status', 50, 0, 1597663631, NULL, 0, 0), (28, 2, 0, 20, '修改密码', '', 'my/password', 50, 0, 1597668756, NULL, 0, 0), (29, 1, 0, 0, '商品', 'layui-icon-cart-simple', '', 100, 0, 1602555146, 1616480700, 0, 0), (30, 1, 0, 29, '品牌管理', '', 'goodsBrand/lists', 95, 0, 1602555190, 1620288734, 0, 0), (31, 1, 0, 29, '分类管理', '', 'goodsCategory/lists', 97, 0, 1602555225, 1608102166, 0, 0), (32, 1, 0, 29, '供货商', '', 'supplier/lists', 93, 0, 1602559943, 1608102224, 0, 0), (33, 1, 0, 0, '会员', 'layui-icon-username', '', 95, 0, 1602570345, 1608101864, 0, 0), (34, 1, 0, 33, '会员管理', '', 'user/lists', 99, 0, 1602570372, 1608262169, 0, 0), (35, 1, 0, 33, '会员等级', '', 'userLevel/lists', 97, 0, 1602570437, 1608262182, 0, 0), (36, 1, 0, 33, '会员分组', '', 'userGroup/lists', 95, 0, 1602570466, 1608262193, 0, 0), (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 97, 0, 1602576261, 1608101850, 0, 0), (38, 1, 0, 37, '订单列表', '', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0), (39, 1, 0, 0, '营销', 'layui-icon-component', '', 93, 0, 1602579530, 1608101924, 0, 0), (40, 1, 0, 39, '会员签到', '', 'signDaily/lists', 50, 0, 1602647177, 1606963046, 0, 0), (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, 1608102230, 0, 0), (43, 1, 0, 56, '配送管理', '', 'freight/lists', 50, 0, 1602666008, 1603525668, 0, 0), (44, 1, 0, 29, '商品管理', '', 'goods/lists', 99, 0, 1603159926, 1610340209, 0, 0), (45, 1, 0, 37, '售后退款', '', 'afterSale/lists', 50, 0, 1603160367, 1605522422, 0, 0), (46, 1, 0, 0, '系统', 'layui-icon-util', '', 77, 0, 1603176542, 1608102244, 0, 0), (47, 1, 0, 46, '系统日志', '', 'log/lists', 49, 0, 1603176576, 1608344566, 0, 0), (48, 1, 0, 39, '优惠券', '', 'coupon/lists', 50, 0, 1603338116, NULL, 0, 0), (49, 1, 0, 0, '微信', 'layui-icon-login-wechat', '', 85, 0, 1603417725, 1608101989, 0, 0), (50, 1, 0, 49, '微信公众号', '', '', 99, 0, 1603417748, 1608193993, 0, 0), (51, 1, 0, 50, '公众号设置', '', 'oa/setoa', 99, 0, 1603417764, 1608193146, 0, 0), (52, 1, 0, 50, '菜单管理', '', 'oa/oamenu', 97, 0, 1603417789, 1608193168, 0, 0), (53, 1, 0, 49, '微信小程序', '', '', 97, 0, 1603417800, 1608194002, 0, 0), (54, 1, 0, 53, '小程序设置', '', 'mnp/setmnp', 99, 0, 1603417818, 1608193191, 0, 0), (55, 1, 0, 39, '会员充值', '', 'Recharge/lists', 50, 0, 1603511580, 1606963083, 0, 0), (56, 1, 0, 18, '商城设置', '', '', 97, 0, 1603524640, 1608102112, 0, 0), (57, 1, 0, 56, '交易设置', '', 'shopSetting/trading', 99, 0, 1603524686, 1608467395, 0, 0), (58, 1, 0, 56, '政策协议', '', 'shopSetting/policy', 50, 0, 1603524707, NULL, 0, 0), (59, 1, 0, 17, '支付设置', '', 'payConfig/lists', 95, 0, 1603779401, 1608467354, 0, 0), (60, 2, 0, 59, '支付设置列表', '', 'payConfig/lists', 50, 0, 1603779630, NULL, 0, 0), (61, 2, 0, 59, '编辑余额支付', '', 'payConfig/editBalance', 50, 0, 1603779649, NULL, 0, 0), (62, 2, 0, 59, '编辑公众号', '', 'payConfig/editOfficial', 50, 0, 1603779679, NULL, 0, 0), (63, 2, 0, 59, '编辑小程序', '', 'payConfig/editApplet', 50, 0, 1603779768, NULL, 0, 0), (64, 2, 0, 59, '编辑支付宝', '', 'payConfig/editAlipay', 50, 0, 1603779802, NULL, 0, 0), (65, 1, 0, 0, '内容', 'layui-icon-read', '', 89, 0, 1605172316, 1608101965, 0, 0), (66, 1, 0, 65, '广告', '', '', 50, 0, 1605172328, 1605522463, 0, 0), (67, 1, 0, 66, '广告管理', '', 'ad/lists', 50, 0, 1605172346, 1605172376, 0, 0), (68, 1, 0, 66, '广告位', '', 'adPosition/lists', 50, 0, 1605172428, 1612425380, 0, 0), (69, 1, 0, 65, '帮助', '', '', 50, 0, 1605177392, 1605522474, 0, 0), (70, 1, 0, 69, '帮助管理', '', 'help/lists', 50, 0, 1605177427, NULL, 0, 0), (71, 1, 0, 69, '帮助分类', '', 'helpCategory/lists', 50, 0, 1605177450, NULL, 0, 0), (72, 1, 0, 39, '限时秒杀', '', 'seckill/lists', 50, 0, 1605238672, 1605238700, 0, 0), (73, 1, 0, 65, '文章', '', '', 50, 0, 1605250150, 1605522487, 0, 0), (74, 1, 0, 73, '文章管理', '', 'article/lists', 50, 0, 1605250172, NULL, 0, 0), (75, 1, 0, 73, '文章分类', '', 'articleCategory/lists', 50, 0, 1605250217, NULL, 0, 0), (79, 1, 0, 17, '消息管理', '', 'message/config', 93, 1, 1605602385, 1619606627, 0, 0), (80, 1, 0, 17, '短信管理', '', 'sms/lists', 91, 0, 1605603890, 1608467380, 0, 0), (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0), (82, 1, 0, 81, '充值记录', '', 'rechargeLog/lists', 50, 0, 1605664912, NULL, 0, 0), (84, 1, 0, 81, '资金记录', '', 'accountLog/capitalList', 50, 0, 1605693585, 1605865218, 0, 0), (85, 1, 0, 0, '分销', 'layui-icon-template-1', '', 91, 0, 1605949476, 1608101938, 0, 0), (86, 1, 0, 85, '分销会员', '', 'distributionMember/index', 50, 0, 1605949513, 1612425311, 0, 0), (87, 1, 0, 81, '积分记录', '', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0), (88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0), (89, 1, 0, 39, '专区活动', '', 'Activity/Lists', 50, 0, 1606182362, 1606200704, 0, 0), (90, 1, 0, 56, '会员提现', '', 'shopSetting/withdraw', 50, 0, 1606357500, 1606361192, 0, 0), (91, 1, 0, 81, '佣金提现', '', 'withdraw/lists', 50, 0, 1606448795, 1606448834, 0, 0), (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0), (94, 1, 0, 92, '移动端商城', '', '', 90, 0, 1606449275, 1618996546, 0, 0), (98, 1, 0, 94, '首页', '', 'MenuDecorate/indexList', 100, 0, 1606449451, 1618996560, 0, 0), (99, 1, 0, 94, '我的', '', 'MenuDecorate/centerList', 90, 0, 1606449483, 1618996585, 0, 0), (102, 1, 0, 0, '数据', 'layui-icon-website', '', 81, 0, 1606449677, 1608102018, 0, 0), (103, 1, 0, 102, '会员', '', 'statistics/member', 100, 0, 1606449697, 1608719516, 0, 0), (104, 1, 0, 102, '商品', '', 'statistics/goods', 90, 0, 1606449713, 1608719471, 0, 0), (105, 1, 0, 102, '交易', '', 'statistics/deal', 80, 0, 1606449733, 1608719534, 0, 0), (106, 1, 0, 102, '访问', '', 'statistics/visit', 70, 0, 1606449750, 1610340707, 0, 0), (107, 1, 0, 85, '分销设置', '', 'distribution/setting', 50, 0, 1606459007, NULL, 0, 0), (108, 1, 0, 46, '计划任务', '', 'crontab/lists', 50, 0, 1606816642, 1612594363, 0, 0), (109, 1, 0, 17, 'APP设置', '', 'basic/app', 50, 0, 1606819436, NULL, 0, 0), (110, 1, 0, 33, '会员权益', '', 'UserPrivilege/lists', 50, 0, 1606891617, NULL, 0, 0), (112, 1, 0, 39, '邀请会员', '', 'MarketingConfig/invitedAwardConfig', 50, 0, 1606962893, 1606962961, 0, 0), (113, 1, 0, 39, '下单奖励', '', 'MarketingConfig/orderAwardConfig', 50, 0, 1606962912, 1606962981, 0, 0), (114, 1, 0, 39, '注册奖励', '', 'MarketingConfig/registerAwardConfig', 50, 0, 1606962930, 1606963010, 0, 0), (116, 1, 0, 50, '回复管理', '', 'WechatReply/lists', 95, 0, 1607139107, 1608193178, 0, 0), (117, 1, 0, 39, '积分抵扣', '', 'marketingConfig/integralDeduction', 50, 0, 1607149356, 1607149390, 0, 0), (118, 1, 0, 39, '足迹气泡', '', 'footprint/index', 40, 0, 1608100815, 1608100833, 0, 0), (120, 1, 0, 49, ' 开放平台', '', '', 50, 0, 1608200356, 1612425336, 0, 0), (121, 1, 0, 120, '开放平台', '', 'Op/config', 50, 0, 1608200416, 1612425325, 0, 0), (122, 1, 0, 81, '财务概况', '', 'finance/lists', 99, 0, 1608363142, 1608455635, 0, 0), (123, 1, 0, 56, '热门搜索', '', 'hotSearch/index', 50, 0, 1608607023, NULL, 0, 0), (124, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608972991, NULL, 0, 0), (126, 1, 0, 39, '拼团活动', '', '', 39, 0, 1610446839, NULL, 0, 0), (127, 1, 0, 126, '拼团商品', '', 'TeamActivity/lists', 50, 0, 1610446896, 1610609518, 0, 0), (128, 1, 0, 126, '拼团设置', '', 'TeamSet/index', 40, 0, 1610615099, 1611225677, 0, 0), (129, 1, 0, 126, '拼团列表', '', 'TeamFound/lists', 60, 0, 1610708300, 1610708335, 0, 0), (130, 1, 0, 17, '分享设置', '', 'Basic/share', 50, 0, 1611383497, NULL, 0, 0), (131, 1, 0, 39, '积分抽奖', '', 'LuckDraw/index', 50, 0, 1611909324, NULL, 0, 0), (132, 1, 0, 56, '小票打印', 'layui-icon-carousel', 'printer/lists', 50, 0, 1612523268, NULL, 0, 0), (133, 1, 0, 17, '上传设置', '', 'StorageConfig/lists', 50, 0, 1613966532, NULL, 0, 0), (134, 1, 0, 39, '砍价活动', '', '', 38, 0, 1614162640, 1614564318, 0, 0), (135, 1, 0, 134, '砍价商品', '', 'Bargain/activity', 50, 0, 1614162656, 1614162691, 0, 0), (136, 1, 0, 134, '砍价列表', '', 'Bargain/launch', 50, 0, 1614162679, 1614162705, 0, 0), (137, 1, 0, 134, '砍价设置', '', 'Bargain/set', 50, 0, 1614162729, NULL, 0, 0), (138, 1, 0, 56, '注册设置', '', 'shopSetting/setRegister', 50, 0, 1614247116, NULL, 0, 0), (139, 1, 0, 33, '转账记录', '', 'user/transferRecord', 50, 0, 1618631242, NULL, 0, 0), (140, 1, 0, 94, '分类', '', 'MenuDecorate/categoryLayout', 50, 0, 1618996720, NULL, 0, 0), (141, 1, 0, 94, '底部导航', '', 'MenuDecorate/bottomNavigation', 50, 0, 1619081174, NULL, 0, 0), (142, 1, 0, 17, '通知设置', '', 'noticeSetting/index', 50, 0, 1619599984, 1619767205, 0, 0), (143, 2, 0, 44, '发布商品', '', 'goods/add', 50, 0, 1620287053, 1620459609, 0, 0), (144, 2, 0, 44, '下架商品', '', 'goods/lowerStatus', 50, 0, 1620287244, 1620457755, 0, 0), (145, 2, 0, 44, '上架商品', '', 'goods/upperStatus', 50, 0, 1620287402, NULL, 0, 0), (146, 2, 0, 44, '删除商品', '', 'goods/del', 50, 0, 1620287582, NULL, 0, 0), (147, 2, 0, 44, '商品编辑', '', 'goods/edit', 50, 0, 1620287681, NULL, 0, 0), (148, 2, 0, 31, '添加商品分类', '', 'goodsCategory/add', 50, 0, 1620287936, NULL, 0, 0), (149, 2, 0, 31, '编辑商品分类', '', 'goodsCategory/edit', 50, 0, 1620288054, 1620288109, 0, 0), (150, 2, 0, 31, '删除商品分类', '', 'GoodsCategory/del', 50, 0, 1620288166, NULL, 0, 0), (151, 2, 0, 31, '修改品牌的显示状态', '', 'GoodsCategory/switchStatus', 50, 0, 1620288227, 1620288865, 0, 0), (152, 2, 0, 30, '添加品牌', '', 'GoodsBrand/add', 50, 0, 1620288357, 1620288546, 0, 0), (153, 2, 0, 30, '编辑品牌', '', 'GoodsBrand/edit', 50, 0, 1620288413, NULL, 0, 0), (154, 2, 0, 30, '删除品牌', '', 'GoodsBrand/del', 50, 0, 1620288445, NULL, 0, 0), (155, 2, 0, 30, '修改品牌的显示状态', '', 'goodsBrand/switchStatus', 50, 0, 1620288476, 1620288957, 0, 0), (156, 2, 0, 32, '新增供应商', '', 'Supplier/add', 50, 0, 1620289110, NULL, 0, 0), (157, 2, 0, 32, '编辑供应商信息', '', 'Supplier/edit', 50, 0, 1620289159, NULL, 0, 0), (158, 2, 0, 32, '删除供应商信息', '', 'Supplier/del', 50, 0, 1620289203, NULL, 0, 0), (159, 2, 0, 41, '删除所选商品', '', 'GoodsComment/del', 50, 0, 1620289441, NULL, 0, 0), (160, 2, 0, 41, '修改评论状态', '', 'GoodsComment/switchStatus', 50, 0, 1620289542, NULL, 0, 0), (161, 2, 0, 41, '回复商品评价', '', 'GoodsComment/reply', 50, 0, 1620289609, NULL, 0, 0), (162, 2, 0, 38, '订单详情', '', 'Order/detail', 50, 0, 1620289728, NULL, 0, 0), (163, 2, 0, 38, '取消订单', '', 'Order/cancel', 50, 0, 1620289823, NULL, 0, 0), (164, 2, 0, 38, '删除订单', '', 'Order/del', 50, 0, 1620289861, NULL, 0, 0), (165, 2, 0, 38, '发货操作', '', 'Order/deliveryHandle', 50, 0, 1620289953, 1620290152, 0, 0), (166, 2, 0, 38, '确认收货', '', 'Order/confirm', 50, 0, 1620290059, NULL, 0, 0), (167, 2, 0, 38, '物流信息', '', 'Order/express', 50, 0, 1620290194, NULL, 0, 0), (168, 2, 0, 38, '小票打印', '', 'Order/orderPrint', 50, 0, 1620290293, NULL, 0, 0), (169, 2, 0, 45, '同意', '', 'AfterSale/agree', 50, 0, 1620290761, NULL, 0, 0), (170, 2, 0, 45, '拒绝', '', 'AfterSale/refuse', 50, 0, 1620290820, NULL, 0, 0), (171, 2, 0, 45, '确认退货', '', 'AfterSale/confirm', 50, 0, 1620290898, NULL, 0, 0), (172, 2, 0, 45, '收货', '', 'AfterSale/take', 50, 0, 1620291017, NULL, 0, 0), (173, 2, 0, 45, '拒绝收货', '', 'AfterSale/refuseGoods', 50, 0, 1620291052, NULL, 0, 0), (174, 2, 0, 34, '设置分组', '', 'user/setGroup', 50, 0, 1620291399, NULL, 0, 0), (175, 2, 0, 34, '发放优惠劵', '', 'user/sendCouponList', 50, 0, 1620291466, NULL, 0, 0), (176, 2, 0, 34, '账户调整', '', 'user/adjustAccount', 50, 0, 1620291558, NULL, 0, 0), (177, 2, 0, 34, '等级调整', '', 'user/adjustLevel', 50, 0, 1620291595, NULL, 0, 0), (178, 2, 0, 34, '会员编辑', '', 'user/edit', 50, 0, 1620291645, NULL, 0, 0), (179, 2, 0, 35, '新增会员等级', '', 'UserLevel/add', 50, 0, 1620291857, NULL, 0, 0), (180, 2, 0, 35, '会员等级编辑', '', 'UserLevel/edit', 50, 0, 1620291917, NULL, 0, 0), (181, 2, 0, 35, '删除会员等级信息', '', 'UserLevel/del', 50, 0, 1620291998, NULL, 0, 0), (182, 2, 0, 36, '添加分组', '', 'UserGroup/add', 50, 0, 1620292180, NULL, 0, 0), (183, 2, 0, 36, '会员分组编辑', '', 'UserGroup/edit', 50, 0, 1620292236, NULL, 0, 0), (184, 2, 0, 36, '会员分组删除', '', 'UserGroup/del', 50, 0, 1620292271, NULL, 0, 0), (185, 2, 0, 110, '新增会员权益', '', 'UserPrivilege/add', 50, 0, 1620292353, NULL, 0, 0), (186, 2, 0, 110, '权益编辑', '', 'UserPrivilege/edit', 50, 0, 1620292390, NULL, 0, 0), (187, 2, 0, 110, '权益删除', '', 'UserPrivilege/del', 50, 0, 1620292442, NULL, 0, 0), (188, 2, 0, 40, '添加连续签到奖励', '', 'SignDaily/add', 50, 0, 1620292700, NULL, 0, 0), (189, 2, 0, 40, '编辑连续签到奖励', '', 'SignDaily/edit', 50, 0, 1620292760, NULL, 0, 0), (190, 2, 0, 40, '删除连续签到奖励', '', 'SignDaily/del', 50, 0, 1620292804, NULL, 0, 0), (191, 2, 0, 48, '添加优惠劵', '', 'Coupon/add', 50, 0, 1620292900, NULL, 0, 0), (192, 2, 0, 48, '编辑优惠劵', '', 'Coupon/edit', 50, 0, 1620292945, NULL, 0, 0), (193, 2, 0, 48, '删除优惠劵', '', 'Coupon/del', 50, 0, 1620292997, NULL, 0, 0), (194, 2, 0, 55, '新增充值方案', '', 'Recharge/add', 50, 0, 1620293163, NULL, 0, 0), (195, 2, 0, 55, '编辑充值方案', '', 'Recharge/edit', 50, 0, 1620293253, NULL, 0, 0), (196, 2, 0, 55, '删除充值方案', '', 'Recharge/del', 50, 0, 1620293327, NULL, 0, 0), (197, 2, 0, 55, '充值设置', '', 'Recharge/setRecharge', 50, 0, 1620293441, NULL, 0, 0), (198, 2, 0, 72, '新增秒杀商品', '', 'Seckill/addGoods', 50, 0, 1620293567, NULL, 0, 0), (199, 2, 0, 72, '编辑秒杀商品', '', 'Seckill/editGoods', 50, 0, 1620293631, NULL, 0, 0), (200, 2, 0, 72, '删除秒杀商品', '', 'Seckill/delGoods', 50, 0, 1620293701, NULL, 0, 0), (201, 2, 0, 72, '新增秒杀时间段', '', 'Seckill/addTime', 50, 0, 1620293852, NULL, 0, 0), (202, 2, 0, 72, '编辑秒杀时间段', '', 'Seckill/editTime', 50, 0, 1620293901, NULL, 0, 0), (203, 2, 0, 72, '删除秒杀时间段', '', 'Seckill/delTime', 50, 0, 1620294003, NULL, 0, 0), (204, 2, 0, 89, '新增活动专区', '', 'Activity/addActivity', 50, 0, 1620294124, NULL, 0, 0), (205, 2, 0, 89, '编辑活动专区', '', 'Activity/editActivity', 50, 0, 1620294165, NULL, 0, 0), (206, 2, 0, 89, '删除活动专区', '', 'Activity/delActivity', 50, 0, 1620294284, NULL, 0, 0), (207, 2, 0, 89, '新增专区商品', '', 'Activity/addGoods', 50, 0, 1620294353, NULL, 0, 0), (208, 2, 0, 89, '编辑活动商品', '', 'Activity/editGoods', 50, 0, 1620294510, NULL, 0, 0), (209, 2, 0, 89, '删除活动商品', '', 'Activity/delGoods', 50, 0, 1620294561, NULL, 0, 0), (210, 2, 0, 131, '添加奖品', '', 'LuckDraw/add', 50, 0, 1620294915, NULL, 0, 0), (211, 2, 0, 131, '编辑奖品', '', 'LuckDraw/edit', 50, 0, 1620294981, NULL, 0, 0), (212, 2, 0, 131, '删除奖品', '', 'LuckDraw/del', 50, 0, 1620295028, NULL, 0, 0), (213, 2, 0, 131, '奖品状态修改', '', 'LuckDraw/switchStatus', 50, 0, 1620295109, NULL, 0, 0), (215, 2, 0, 86, '添加分销会员', '', 'DistributionMember/addMember', 50, 0, 1620296713, NULL, 0, 0), (216, 2, 0, 86, '修改上级', '', 'DistributionMember/updateLeader', 50, 0, 1620296801, NULL, 0, 0), (217, 2, 0, 86, '冻结/解冻分销资格', '', 'DistributionMember/freeze', 50, 0, 1620296900, NULL, 0, 0), (218, 2, 0, 108, '添加定时任务', '', 'Crontab/add', 50, 0, 1620297935, NULL, 0, 0), (219, 2, 0, 108, '编辑定时任务', '', 'Crontab/edit', 50, 0, 1620297991, NULL, 0, 0), (220, 2, 0, 108, '删除定时任务', '', 'Crontab/del', 50, 0, 1620298100, NULL, 0, 0), (221, 2, 0, 108, '停止计划任务', '', 'Crontab/operation', 50, 0, 1620298235, NULL, 0, 0), (222, 2, 0, 118, '编辑', '', 'Footprint/edit', 50, 0, 1620444214, NULL, 0, 0), (223, 2, 0, 118, '设置', '', 'Footprint/set', 50, 0, 1620444271, NULL, 0, 0), (224, 2, 0, 107, '设置分销配置', '', 'Distribution/setDistribution', 50, 0, 1620444472, NULL, 0, 0), (225, 2, 0, 129, '拼团详情', '', 'TeamFound/detail', 50, 0, 1620454798, 1620454806, 0, 0), (226, 2, 0, 127, '新增拼团商品', '', 'TeamActivity/add', 50, 0, 1620454953, 1620454975, 0, 0), (227, 2, 0, 127, '编辑拼团商品', '', 'TeamActivity/edit', 50, 0, 1620455052, NULL, 0, 0), (228, 2, 0, 127, '删除拼团商品', '', 'TeamActivity/del', 50, 0, 1620455103, NULL, 0, 0), (229, 2, 0, 127, '切换状态', '', 'TeamActivity/switchStatus', 50, 0, 1620455185, NULL, 0, 0), (230, 2, 0, 127, '拼团列表', '', 'TeamActivity/teamOrder', 50, 0, 1620455602, NULL, 0, 0), (231, 2, 0, 128, '设置', '', 'TeamSet/set', 50, 0, 1620456076, NULL, 0, 0), (232, 2, 0, 135, '新增砍价商品', '', 'Bargain/add', 50, 0, 1620456477, NULL, 0, 0), (233, 2, 0, 135, '编辑商品信息', '', 'Bargain/edit', 50, 0, 1620456589, NULL, 0, 0), (234, 2, 0, 135, '删除商品', '', 'Bargain/del', 50, 0, 1620456704, NULL, 0, 0), (235, 2, 0, 135, '切换商品状态', '', 'Bargain/switchStatus', 50, 0, 1620456801, NULL, 0, 0), (236, 2, 0, 135, '砍价列表', '', 'Bargain/launch', 50, 0, 1620456945, NULL, 0, 0), (237, 2, 0, 135, '砍价列表详情', '', 'Bargain/detail', 50, 0, 1620457238, NULL, 0, 0), (238, 2, 0, 136, '砍价列表详情', '', 'Bargain/detail', 50, 0, 1620457351, NULL, 0, 0), (239, 2, 0, 67, '新增广告', '', 'Ad/add', 50, 0, 1620457497, NULL, 0, 0), (240, 2, 0, 67, '编辑广告', '', 'Ad/edit', 50, 0, 1620457550, NULL, 0, 0), (241, 2, 0, 67, '删除广告', '', 'Ad/del', 50, 0, 1620457615, NULL, 0, 0), (242, 1, 0, 81, '佣金记录', '', 'AccountLog/withdrawList', 50, 0, 1621066489, NULL, 0, 0), (243, 1, 0, 46, '系统缓存', '', 'cache/cache', 50, 0, 1623825710, NULL, 0, 0);
+INSERT INTO `ls_dev_auth` VALUES (1, 1, 1, 18, '权限管理', '', '', 95, 0, 1597593692, 1608102122, 0, 0), (2, 1, 0, 1, '菜单权限', '', 'auth/lists', 50, 0, 1597593762, 1612594453, 0, 0), (3, 2, 0, 2, '添加菜单', '', 'auth/add', 50, 0, 1597593846, 1597636533, 0, 0), (4, 2, 0, 2, '编辑菜单', '', 'auth/edit', 50, 0, 1597593909, 1597636533, 0, 0), (5, 2, 0, 2, '删除', '', 'auth/del', 50, 0, 1597594342, NULL, 0, 0), (6, 1, 0, 1, '管理员', '', 'admin/lists', 51, 0, 1597594526, 1597636523, 0, 0), (7, 2, 0, 6, '添加管理员', '', 'admin/add', 50, 0, 1597594556, NULL, 0, 0), (8, 2, 0, 6, '编辑管理员', '', 'admin/edit', 50, 0, 1597594595, 1597594610, 0, 0), (9, 2, 0, 6, '删除管理员', '', 'admin/del', 50, 0, 1597594639, NULL, 0, 0), (10, 1, 0, 1, '角色', '', 'role/lists', 50, 0, 1597596178, 1597635420, 0, 0), (12, 2, 0, 6, '管理员列表', '', 'admin/lists', 51, 0, 1597631850, 1597636529, 0, 0), (13, 2, 0, 2, '菜单列表', '', 'menu/lists', 51, 0, 1597632028, 1597632039, 0, 0), (14, 2, 0, 10, '角色列表', '', 'role/lists', 50, 0, 1597632555, NULL, 0, 0), (15, 2, 0, 10, '添加角色', '', 'role/add', 50, 0, 1597632944, NULL, 0, 0), (16, 2, 0, 10, '编辑角色', '', 'role/edit', 50, 0, 1597632999, NULL, 0, 0), (17, 1, 0, 18, '基础设置', '', '', 99, 0, 1597633276, 1608102098, 0, 0), (18, 1, 0, 0, '设置', 'layui-icon-set', '', 79, 0, 1597633295, 1608102027, 0, 0), (19, 1, 0, 0, '个人', 'layui-icon-friends', 'my/password', 50, 0, 1597633558, 1629367409, 0, 0), (20, 1, 0, 19, '修改密码', '', 'my/password', 100, 0, 1597633582, 1606442853, 0, 0), (21, 1, 0, 17, '网站设置', '', 'basic/website', 99, 0, 1597658026, 1608467331, 0, 0), (22, 1, 0, 17, '版权备案', '', 'basic/copyright', 97, 0, 1597658101, 1608467338, 0, 0), (23, 2, 0, 21, '查看网站设置', '', 'basic/website', 51, 0, 1597658275, 1620454538, 0, 0), (24, 2, 0, 21, '修改网站设置', '', 'basic/setWebsite', 50, 0, 1597663008, NULL, 0, 0), (25, 2, 0, 22, '查看版权备案', '', 'basic/copyright', 51, 0, 1597663176, 1597663223, 0, 0), (26, 2, 0, 22, '修改版权备案', '', 'basic/setCopyright', 50, 0, 1597663205, NULL, 0, 0), (27, 2, 0, 2, '设置菜单权限状态', '', 'auth/status', 50, 0, 1597663631, NULL, 0, 0), (28, 2, 0, 20, '修改密码', '', 'my/password', 50, 0, 1597668756, NULL, 0, 0), (29, 1, 0, 0, '商品', 'layui-icon-cart-simple', '', 100, 0, 1602555146, 1616480700, 0, 0), (30, 1, 0, 29, '品牌管理', '', 'goodsBrand/lists', 95, 0, 1602555190, 1620288734, 0, 0), (31, 1, 0, 29, '分类管理', '', 'goodsCategory/lists', 97, 0, 1602555225, 1608102166, 0, 0), (32, 1, 0, 29, '供货商', '', 'supplier/lists', 93, 0, 1602559943, 1608102224, 0, 0), (33, 1, 0, 0, '会员', 'layui-icon-username', '', 95, 0, 1602570345, 1608101864, 0, 0), (34, 1, 0, 33, '会员管理', '', 'user/lists', 99, 0, 1602570372, 1608262169, 0, 0), (35, 1, 0, 33, '会员等级', '', 'userLevel/lists', 97, 0, 1602570437, 1608262182, 0, 0), (36, 1, 0, 33, '会员分组', '', 'userGroup/lists', 95, 0, 1602570466, 1608262193, 0, 0), (37, 1, 0, 0, '订单', 'layui-icon-notice', '', 97, 0, 1602576261, 1608101850, 0, 0), (38, 1, 0, 37, '订单列表', '', 'order/lists', 50, 0, 1602576521, 1605522434, 0, 0), (39, 1, 0, 0, '营销', 'layui-icon-component', '', 93, 0, 1602579530, 1608101924, 0, 0), (40, 1, 0, 39, '会员签到', '', 'signDaily/lists', 50, 0, 1602647177, 1606963046, 0, 0), (41, 1, 0, 29, '商品评价', '', 'goodsComment/lists', 50, 0, 1602647268, 1608102230, 0, 0), (43, 1, 0, 56, '配送管理', '', 'freight/lists', 50, 0, 1602666008, 1603525668, 0, 0), (44, 1, 0, 29, '商品管理', '', 'goods/lists', 99, 0, 1603159926, 1610340209, 0, 0), (45, 1, 0, 37, '售后退款', '', 'afterSale/lists', 50, 0, 1603160367, 1605522422, 0, 0), (46, 1, 0, 0, '系统', 'layui-icon-util', '', 77, 0, 1603176542, 1608102244, 0, 0), (47, 1, 0, 46, '系统日志', '', 'log/lists', 49, 0, 1603176576, 1608344566, 0, 0), (48, 1, 0, 39, '优惠券', '', 'coupon/lists', 50, 0, 1603338116, NULL, 0, 0), (49, 1, 0, 0, '渠道', 'layui-icon-login-wechat', '', 85, 0, 1603417725, 1629443261, 0, 0), (50, 1, 0, 49, '微信公众号', '', '', 99, 0, 1603417748, 1608193993, 0, 0), (51, 1, 0, 50, '公众号设置', '', 'oa/setoa', 99, 0, 1603417764, 1608193146, 0, 0), (52, 1, 0, 50, '菜单管理', '', 'oa/oamenu', 97, 0, 1603417789, 1608193168, 0, 0), (53, 1, 0, 49, '微信小程序', '', '', 97, 0, 1603417800, 1608194002, 0, 0), (54, 1, 0, 53, '小程序设置', '', 'mnp/setmnp', 99, 0, 1603417818, 1608193191, 0, 0), (55, 1, 0, 39, '会员充值', '', 'Recharge/lists', 50, 0, 1603511580, 1606963083, 0, 0), (56, 1, 0, 18, '商城设置', '', '', 97, 0, 1603524640, 1608102112, 0, 0), (57, 1, 0, 56, '交易设置', '', 'shopSetting/trading', 99, 0, 1603524686, 1608467395, 0, 0), (58, 1, 0, 56, '政策协议', '', 'shopSetting/policy', 50, 0, 1603524707, NULL, 0, 0), (59, 1, 0, 17, '支付设置', '', 'payConfig/lists', 95, 0, 1603779401, 1608467354, 0, 0), (60, 2, 0, 59, '支付设置列表', '', 'payConfig/lists', 50, 0, 1603779630, NULL, 0, 0), (61, 2, 0, 59, '编辑余额支付', '', 'payConfig/editBalance', 50, 0, 1603779649, NULL, 0, 0), (62, 2, 0, 59, '编辑公众号', '', 'payConfig/editOfficial', 50, 0, 1603779679, NULL, 0, 0), (63, 2, 0, 59, '编辑小程序', '', 'payConfig/editApplet', 50, 0, 1603779768, NULL, 0, 0), (64, 2, 0, 59, '编辑支付宝', '', 'payConfig/editAlipay', 50, 0, 1603779802, NULL, 0, 0), (65, 1, 0, 0, '内容', 'layui-icon-read', '', 89, 0, 1605172316, 1608101965, 0, 0), (66, 1, 0, 65, '广告', '', '', 50, 0, 1605172328, 1605522463, 0, 0), (67, 1, 0, 66, '广告管理', '', 'ad/lists', 50, 0, 1605172346, 1605172376, 0, 0), (68, 1, 0, 66, '广告位', '', 'adPosition/lists', 50, 0, 1605172428, 1612425380, 0, 0), (69, 1, 0, 65, '帮助', '', '', 50, 0, 1605177392, 1605522474, 0, 0), (70, 1, 0, 69, '帮助管理', '', 'help/lists', 50, 0, 1605177427, NULL, 0, 0), (71, 1, 0, 69, '帮助分类', '', 'helpCategory/lists', 50, 0, 1605177450, NULL, 0, 0), (72, 1, 0, 39, '限时秒杀', '', 'seckill/lists', 50, 0, 1605238672, 1605238700, 0, 0), (73, 1, 0, 65, '文章', '', '', 50, 0, 1605250150, 1605522487, 0, 0), (74, 1, 0, 73, '文章管理', '', 'article/lists', 50, 0, 1605250172, NULL, 0, 0), (75, 1, 0, 73, '文章分类', '', 'articleCategory/lists', 50, 0, 1605250217, NULL, 0, 0), (79, 1, 0, 17, '消息管理', '', 'message/config', 93, 1, 1605602385, 1619606627, 0, 0), (80, 1, 0, 17, '短信管理', '', 'sms/lists', 91, 0, 1605603890, 1608467380, 0, 0), (81, 1, 0, 0, '财务', 'layui-icon-rmb', '', 83, 0, 1605664275, 1608102003, 0, 0), (82, 1, 0, 81, '充值记录', '', 'rechargeLog/lists', 50, 0, 1605664912, NULL, 0, 0), (84, 1, 0, 81, '资金记录', '', 'accountLog/capitalList', 50, 0, 1605693585, 1605865218, 0, 0), (85, 1, 0, 251, '分销', 'layui-icon-template-1', '', 91, 0, 1605949476, 1629097533, 0, 0), (86, 1, 0, 85, '分销会员', '', 'distributionMember/index', 50, 0, 1605949513, 1612425311, 1, 0), (87, 1, 0, 81, '积分记录', '', 'accountLog/IntegralList', 50, 0, 1606098520, NULL, 0, 0), (88, 1, 0, 81, '成长值变动', '', 'accountLog/growthList', 50, 0, 1606098580, 1606098609, 0, 0), (89, 1, 0, 39, '专区活动', '', 'Activity/Lists', 50, 0, 1606182362, 1606200704, 0, 0), (90, 1, 0, 56, '会员提现', '', 'shopSetting/withdraw', 50, 0, 1606357500, 1606361192, 0, 0), (91, 1, 0, 81, '佣金提现', '', 'withdraw/lists', 50, 0, 1606448795, 1606448834, 0, 0), (92, 1, 0, 0, '装修', 'layui-icon-cellphone', '', 87, 0, 1606449120, 1608101976, 0, 0), (94, 1, 0, 92, '移动端商城', '', '', 90, 0, 1606449275, 1618996546, 0, 0), (98, 1, 0, 94, '首页', '', 'MenuDecorate/indexList', 100, 0, 1606449451, 1618996560, 0, 0), (99, 1, 0, 94, '我的', '', 'MenuDecorate/centerList', 90, 0, 1606449483, 1618996585, 0, 0), (102, 1, 0, 0, '数据', 'layui-icon-website', '', 81, 0, 1606449677, 1608102018, 0, 0), (103, 1, 0, 102, '会员', '', 'statistics/member', 100, 0, 1606449697, 1608719516, 0, 0), (104, 1, 0, 102, '商品', '', 'statistics/goods', 90, 0, 1606449713, 1608719471, 0, 0), (105, 1, 0, 102, '交易', '', 'statistics/deal', 80, 0, 1606449733, 1608719534, 0, 0), (106, 1, 0, 102, '访问', '', 'statistics/visit', 70, 0, 1606449750, 1610340707, 0, 0), (107, 1, 0, 85, '分销设置', '', 'distribution/setting', 50, 0, 1606459007, NULL, 1, 0), (108, 1, 0, 46, '计划任务', '', 'crontab/lists', 50, 0, 1606816642, 1612594363, 0, 0), (109, 1, 0, 17, 'APP设置', '', 'basic/app', 50, 0, 1606819436, NULL, 0, 0), (110, 1, 0, 33, '会员权益', '', 'UserPrivilege/lists', 50, 0, 1606891617, NULL, 0, 0), (112, 1, 0, 39, '邀请会员', '', 'MarketingConfig/invitedAwardConfig', 50, 0, 1606962893, 1606962961, 0, 0), (113, 1, 0, 39, '首单奖励', '', 'MarketingConfig/orderAwardConfig', 50, 0, 1606962912, 1646732134, 0, 0), (114, 1, 0, 39, '注册奖励', '', 'MarketingConfig/registerAwardConfig', 50, 0, 1606962930, 1606963010, 0, 0), (116, 1, 0, 50, '回复管理', '', 'WechatReply/lists', 95, 0, 1607139107, 1608193178, 0, 0), (117, 1, 0, 39, '积分抵扣', '', 'marketingConfig/integralDeduction', 50, 0, 1607149356, 1607149390, 0, 0), (118, 1, 0, 39, '足迹气泡', '', 'footprint/index', 40, 0, 1608100815, 1608100833, 0, 0), (120, 1, 0, 49, ' 微信开放平台', '', '', 50, 0, 1608200356, 1629443343, 0, 0), (121, 1, 0, 120, '开放平台设置', '', 'Op/config', 50, 0, 1608200416, 1629443458, 0, 0), (122, 1, 0, 81, '财务概况', '', 'finance/lists', 99, 0, 1608363142, 1608455635, 0, 0), (123, 1, 0, 56, '热门搜索', '', 'hotSearch/index', 50, 0, 1608607023, NULL, 0, 0), (124, 1, 0, 56, '客服设置', '', 'ServiceConfig/config', 50, 0, 1608972991, NULL, 0, 0), (126, 1, 0, 39, '拼团活动', '', '', 39, 0, 1610446839, NULL, 0, 0), (127, 1, 0, 126, '拼团商品', '', 'TeamActivity/lists', 50, 0, 1610446896, 1610609518, 0, 0), (128, 1, 0, 126, '拼团设置', '', 'TeamSet/index', 40, 0, 1610615099, 1611225677, 0, 0), (129, 1, 0, 126, '拼团列表', '', 'TeamFound/lists', 60, 0, 1610708300, 1610708335, 0, 0), (130, 1, 0, 17, '分享设置', '', 'Basic/share', 50, 0, 1611383497, NULL, 0, 0), (131, 1, 0, 39, '积分抽奖', '', 'LuckDraw/index', 50, 0, 1611909324, NULL, 0, 0), (132, 1, 0, 56, '小票打印', 'layui-icon-carousel', 'printer/lists', 50, 0, 1612523268, NULL, 0, 0), (133, 1, 0, 17, '上传设置', '', 'StorageConfig/lists', 50, 0, 1613966532, NULL, 0, 0), (134, 1, 0, 39, '砍价活动', '', '', 38, 0, 1614162640, 1614564318, 0, 0), (135, 1, 0, 134, '砍价商品', '', 'Bargain/activity', 50, 0, 1614162656, 1614162691, 0, 0), (136, 1, 0, 134, '砍价列表', '', 'Bargain/launch', 50, 0, 1614162679, 1614162705, 0, 0), (137, 1, 0, 134, '砍价设置', '', 'Bargain/set', 50, 0, 1614162729, NULL, 0, 0), (138, 1, 0, 56, '注册设置', '', 'shopSetting/setRegister', 50, 0, 1614247116, NULL, 0, 0), (139, 1, 0, 33, '转账记录', '', 'user/transferRecord', 50, 0, 1618631242, NULL, 0, 0), (140, 1, 0, 94, '分类', '', 'MenuDecorate/categoryLayout', 50, 0, 1618996720, NULL, 0, 0), (141, 1, 0, 94, '底部导航', '', 'MenuDecorate/bottomNavigation', 50, 0, 1619081174, NULL, 0, 0), (142, 1, 0, 17, '通知设置', '', 'noticeSetting/index', 50, 0, 1619599984, 1619767205, 0, 0), (143, 2, 0, 44, '发布商品', '', 'goods/add', 50, 0, 1620287053, 1620459609, 0, 0), (144, 2, 0, 44, '下架商品', '', 'goods/lowerStatus', 50, 0, 1620287244, 1620457755, 0, 0), (145, 2, 0, 44, '上架商品', '', 'goods/upperStatus', 50, 0, 1620287402, NULL, 0, 0), (146, 2, 0, 44, '删除商品', '', 'goods/del', 50, 0, 1620287582, NULL, 0, 0), (147, 2, 0, 44, '商品编辑', '', 'goods/edit', 50, 0, 1620287681, NULL, 0, 0), (148, 2, 0, 31, '添加商品分类', '', 'goodsCategory/add', 50, 0, 1620287936, NULL, 0, 0), (149, 2, 0, 31, '编辑商品分类', '', 'goodsCategory/edit', 50, 0, 1620288054, 1620288109, 0, 0), (150, 2, 0, 31, '删除商品分类', '', 'GoodsCategory/del', 50, 0, 1620288166, NULL, 0, 0), (151, 2, 0, 31, '修改分类的显示状态', '', 'GoodsCategory/switchStatus', 50, 0, 1620288227, 1637909080, 0, 0), (152, 2, 0, 30, '添加品牌', '', 'GoodsBrand/add', 50, 0, 1620288357, 1620288546, 0, 0), (153, 2, 0, 30, '编辑品牌', '', 'GoodsBrand/edit', 50, 0, 1620288413, NULL, 0, 0), (154, 2, 0, 30, '删除品牌', '', 'GoodsBrand/del', 50, 0, 1620288445, NULL, 0, 0), (155, 2, 0, 30, '修改品牌的显示状态', '', 'goodsBrand/switchStatus', 50, 0, 1620288476, 1620288957, 0, 0), (156, 2, 0, 32, '新增供应商', '', 'Supplier/add', 50, 0, 1620289110, NULL, 0, 0), (157, 2, 0, 32, '编辑供应商信息', '', 'Supplier/edit', 50, 0, 1620289159, NULL, 0, 0), (158, 2, 0, 32, '删除供应商信息', '', 'Supplier/del', 50, 0, 1620289203, NULL, 0, 0), (159, 2, 0, 41, '删除所选商品', '', 'GoodsComment/del', 50, 0, 1620289441, NULL, 0, 0), (160, 2, 0, 41, '修改评论状态', '', 'GoodsComment/switchStatus', 50, 0, 1620289542, NULL, 0, 0), (161, 2, 0, 41, '回复商品评价', '', 'GoodsComment/reply', 50, 0, 1620289609, NULL, 0, 0), (162, 2, 0, 38, '订单详情', '', 'Order/detail', 50, 0, 1620289728, NULL, 0, 0), (163, 2, 0, 38, '取消订单', '', 'Order/cancel', 50, 0, 1620289823, NULL, 0, 0), (164, 2, 0, 38, '删除订单', '', 'Order/del', 50, 0, 1620289861, NULL, 0, 0), (165, 2, 0, 38, '发货操作', '', 'Order/deliveryHandle', 50, 0, 1620289953, 1620290152, 0, 0), (166, 2, 0, 38, '确认收货', '', 'Order/confirm', 50, 0, 1620290059, NULL, 0, 0), (167, 2, 0, 38, '物流信息', '', 'Order/express', 50, 0, 1620290194, NULL, 0, 0), (168, 2, 0, 38, '小票打印', '', 'Order/orderPrint', 50, 0, 1620290293, NULL, 0, 0), (169, 2, 0, 45, '同意', '', 'AfterSale/agree', 50, 0, 1620290761, NULL, 0, 0), (170, 2, 0, 45, '拒绝', '', 'AfterSale/refuse', 50, 0, 1620290820, NULL, 0, 0), (171, 2, 0, 45, '确认退货', '', 'AfterSale/confirm', 50, 0, 1620290898, NULL, 0, 0), (172, 2, 0, 45, '收货', '', 'AfterSale/take', 50, 0, 1620291017, NULL, 0, 0), (173, 2, 0, 45, '拒绝收货', '', 'AfterSale/refuseGoods', 50, 0, 1620291052, NULL, 0, 0), (174, 2, 0, 34, '设置分组', '', 'user/setGroup', 50, 0, 1620291399, NULL, 0, 0), (175, 2, 0, 34, '发放优惠劵', '', 'user/sendCouponList', 50, 0, 1620291466, NULL, 0, 0), (176, 2, 0, 34, '账户调整', '', 'user/adjustAccount', 50, 0, 1620291558, NULL, 0, 0), (177, 2, 0, 34, '等级调整', '', 'user/adjustLevel', 50, 0, 1620291595, NULL, 0, 0), (178, 2, 0, 34, '会员编辑', '', 'user/edit', 50, 0, 1620291645, NULL, 0, 0), (179, 2, 0, 35, '新增会员等级', '', 'UserLevel/add', 50, 0, 1620291857, NULL, 0, 0), (180, 2, 0, 35, '会员等级编辑', '', 'UserLevel/edit', 50, 0, 1620291917, NULL, 0, 0), (181, 2, 0, 35, '删除会员等级信息', '', 'UserLevel/del', 50, 0, 1620291998, NULL, 0, 0), (182, 2, 0, 36, '添加分组', '', 'UserGroup/add', 50, 0, 1620292180, NULL, 0, 0), (183, 2, 0, 36, '会员分组编辑', '', 'UserGroup/edit', 50, 0, 1620292236, NULL, 0, 0), (184, 2, 0, 36, '会员分组删除', '', 'UserGroup/del', 50, 0, 1620292271, NULL, 0, 0), (185, 2, 0, 110, '新增会员权益', '', 'UserPrivilege/add', 50, 0, 1620292353, NULL, 0, 0), (186, 2, 0, 110, '权益编辑', '', 'UserPrivilege/edit', 50, 0, 1620292390, NULL, 0, 0), (187, 2, 0, 110, '权益删除', '', 'UserPrivilege/del', 50, 0, 1620292442, NULL, 0, 0), (188, 2, 0, 40, '添加连续签到奖励', '', 'SignDaily/add', 50, 0, 1620292700, NULL, 0, 0), (189, 2, 0, 40, '编辑连续签到奖励', '', 'SignDaily/edit', 50, 0, 1620292760, NULL, 0, 0), (190, 2, 0, 40, '删除连续签到奖励', '', 'SignDaily/del', 50, 0, 1620292804, NULL, 0, 0), (191, 2, 0, 48, '添加优惠劵', '', 'Coupon/add', 50, 0, 1620292900, NULL, 0, 0), (192, 2, 0, 48, '编辑优惠劵', '', 'Coupon/edit', 50, 0, 1620292945, NULL, 0, 0), (193, 2, 0, 48, '删除优惠劵', '', 'Coupon/del', 50, 0, 1620292997, NULL, 0, 0), (194, 2, 0, 55, '新增充值方案', '', 'Recharge/add', 50, 0, 1620293163, NULL, 0, 0), (195, 2, 0, 55, '编辑充值方案', '', 'Recharge/edit', 50, 0, 1620293253, NULL, 0, 0), (196, 2, 0, 55, '删除充值方案', '', 'Recharge/del', 50, 0, 1620293327, NULL, 0, 0), (197, 2, 0, 55, '充值设置', '', 'Recharge/setRecharge', 50, 0, 1620293441, NULL, 0, 0), (198, 2, 0, 72, '新增秒杀商品', '', 'Seckill/addGoods', 50, 0, 1620293567, NULL, 0, 0), (199, 2, 0, 72, '编辑秒杀商品', '', 'Seckill/editGoods', 50, 0, 1620293631, NULL, 0, 0), (200, 2, 0, 72, '删除秒杀商品', '', 'Seckill/delGoods', 50, 0, 1620293701, NULL, 0, 0), (201, 2, 0, 72, '新增秒杀时间段', '', 'Seckill/addTime', 50, 0, 1620293852, NULL, 0, 0), (202, 2, 0, 72, '编辑秒杀时间段', '', 'Seckill/editTime', 50, 0, 1620293901, NULL, 0, 0), (203, 2, 0, 72, '删除秒杀时间段', '', 'Seckill/delTime', 50, 0, 1620294003, NULL, 0, 0), (204, 2, 0, 89, '新增活动专区', '', 'Activity/addActivity', 50, 0, 1620294124, NULL, 0, 0), (205, 2, 0, 89, '编辑活动专区', '', 'Activity/editActivity', 50, 0, 1620294165, NULL, 0, 0), (206, 2, 0, 89, '删除活动专区', '', 'Activity/delActivity', 50, 0, 1620294284, NULL, 0, 0), (207, 2, 0, 89, '新增专区商品', '', 'Activity/addGoods', 50, 0, 1620294353, NULL, 0, 0), (208, 2, 0, 89, '编辑活动商品', '', 'Activity/editGoods', 50, 0, 1620294510, NULL, 0, 0), (209, 2, 0, 89, '删除活动商品', '', 'Activity/delGoods', 50, 0, 1620294561, NULL, 0, 0), (210, 2, 0, 131, '添加奖品', '', 'LuckDraw/add', 50, 0, 1620294915, NULL, 0, 0), (211, 2, 0, 131, '编辑奖品', '', 'LuckDraw/edit', 50, 0, 1620294981, NULL, 0, 0), (212, 2, 0, 131, '删除奖品', '', 'LuckDraw/del', 50, 0, 1620295028, NULL, 0, 0), (213, 2, 0, 131, '奖品状态修改', '', 'LuckDraw/switchStatus', 50, 0, 1620295109, NULL, 0, 0), (215, 2, 0, 86, '添加分销会员', '', 'DistributionMember/addMember', 50, 0, 1620296713, NULL, 1, 0), (216, 2, 0, 86, '修改上级', '', 'DistributionMember/updateLeader', 50, 0, 1620296801, NULL, 1, 0), (217, 2, 0, 86, '冻结/解冻分销资格', '', 'DistributionMember/freeze', 50, 0, 1620296900, NULL, 1, 0), (218, 2, 0, 108, '添加定时任务', '', 'Crontab/add', 50, 0, 1620297935, NULL, 0, 0), (219, 2, 0, 108, '编辑定时任务', '', 'Crontab/edit', 50, 0, 1620297991, NULL, 0, 0), (220, 2, 0, 108, '删除定时任务', '', 'Crontab/del', 50, 0, 1620298100, NULL, 0, 0), (221, 2, 0, 108, '停止计划任务', '', 'Crontab/operation', 50, 0, 1620298235, NULL, 0, 0), (222, 2, 0, 118, '编辑', '', 'Footprint/edit', 50, 0, 1620444214, NULL, 0, 0), (223, 2, 0, 118, '设置', '', 'Footprint/set', 50, 0, 1620444271, NULL, 0, 0), (224, 2, 0, 107, '设置分销配置', '', 'Distribution/setDistribution', 50, 0, 1620444472, NULL, 1, 0), (225, 2, 0, 129, '拼团详情', '', 'TeamFound/detail', 50, 0, 1620454798, 1620454806, 0, 0), (226, 2, 0, 127, '新增拼团商品', '', 'TeamActivity/add', 50, 0, 1620454953, 1620454975, 0, 0), (227, 2, 0, 127, '编辑拼团商品', '', 'TeamActivity/edit', 50, 0, 1620455052, NULL, 0, 0), (228, 2, 0, 127, '删除拼团商品', '', 'TeamActivity/del', 50, 0, 1620455103, NULL, 0, 0), (229, 2, 0, 127, '切换状态', '', 'TeamActivity/switchStatus', 50, 0, 1620455185, NULL, 0, 0), (230, 2, 0, 127, '拼团列表', '', 'TeamActivity/teamOrder', 50, 0, 1620455602, NULL, 0, 0), (231, 2, 0, 128, '设置', '', 'TeamSet/set', 50, 0, 1620456076, NULL, 0, 0), (232, 2, 0, 135, '新增砍价商品', '', 'Bargain/add', 50, 0, 1620456477, NULL, 0, 0), (233, 2, 0, 135, '编辑商品信息', '', 'Bargain/edit', 50, 0, 1620456589, NULL, 0, 0), (234, 2, 0, 135, '删除商品', '', 'Bargain/del', 50, 0, 1620456704, NULL, 0, 0), (235, 2, 0, 135, '切换商品状态', '', 'Bargain/switchStatus', 50, 0, 1620456801, NULL, 0, 0), (236, 2, 0, 135, '砍价列表', '', 'Bargain/launch', 50, 0, 1620456945, NULL, 0, 0), (237, 2, 0, 135, '砍价列表详情', '', 'Bargain/detail', 50, 0, 1620457238, NULL, 0, 0), (238, 2, 0, 136, '砍价列表详情', '', 'Bargain/detail', 50, 0, 1620457351, NULL, 0, 0), (239, 2, 0, 67, '新增广告', '', 'Ad/add', 50, 0, 1620457497, NULL, 0, 0), (240, 2, 0, 67, '编辑广告', '', 'Ad/edit', 50, 0, 1620457550, NULL, 0, 0), (241, 2, 0, 67, '删除广告', '', 'Ad/del', 50, 0, 1620457615, NULL, 0, 0), (242, 1, 0, 81, '佣金记录', '', 'AccountLog/withdrawList', 50, 0, 1621066489, NULL, 0, 0), (243, 1, 0, 46, '系统缓存', '', 'cache/cache', 50, 0, 1623825710, NULL, 0, 0), (247, 1, 0, 49, 'H5商城', '', '', 50, 0, 1628935452, NULL, 0, 0), (248, 1, 0, 247, 'H5商城设置', '', 'hfive/set', 50, 0, 1628935480, NULL, 0, 0), (251, 1, 0, 0, '应用', 'layui-icon-release', '', 91, 0, 1629097481, 1629097510, 0, 0), (252, 1, 0, 251, '自提门店', '', '', 50, 0, 1629097571, NULL, 0, 0), (253, 1, 0, 252, '自提门店', '', 'SelffetchShop/lists', 50, 0, 1629182107, NULL, 0, 0), (254, 1, 0, 252, '核销员', '', 'SelffetchVerifier/lists', 50, 0, 1629182125, NULL, 0, 0), (255, 1, 0, 252, '提货核销', '', 'Verification/lists', 50, 0, 1629182145, NULL, 0, 0), (256, 1, 0, 56, '配送方式', '', 'freight/set', 98, 0, 1629196086, NULL, 0, 0), (257, 1, 0, 18, '地图设置', '', '', 50, 0, 1629463616, NULL, 0, 0), (258, 1, 0, 257, '腾讯地图设置', '', 'MapConfig/config', 50, 0, 1629463970, 1642069135, 0, 0), (259, 1, 0, 251, '快递助手', '', '', 50, 0, 1632734909, NULL, 0, 0), (260, 1, 0, 259, '面单设置', '', 'FaceSheet/setting', 50, 0, 1632734934, 1632796961, 0, 0), (261, 1, 0, 259, '批量打印', '', 'FaceSheetOrder/lists', 80, 0, 1632734959, NULL, 0, 0), (262, 1, 0, 259, '发件人模板', '', 'FaceSheetSender/lists', 70, 0, 1632734997, NULL, 0, 0), (263, 1, 0, 259, '电子面单模板', '', 'FaceSheet/lists', 60, 0, 1632735013, 1632796952, 0, 0), (264, 1, 0, 85, '分销概况', '', 'DistributionCenter/center', 100, 0, 1633661166, NULL, 0, 0), (265, 1, 0, 85, '分销订单', '', 'DistributionOrderGoods/index', 80, 0, 1633661434, NULL, 0, 0), (266, 1, 0, 85, '分销商品', '', 'DistributionGoods/index', 75, 0, 1633661509, NULL, 0, 0), (267, 1, 0, 85, '分销等级', '', 'DistributionLevel/index', 58, 0, 1633661671, 1633663214, 0, 0), (268, 1, 0, 85, '分销会员', '', 'DistributionMember/index', 65, 0, 1633661713, NULL, 0, 0), (269, 1, 0, 85, '分销申请', '', 'DistributionApply/lists', 60, 0, 1633661759, NULL, 0, 0), (270, 1, 0, 85, '结算设置 ', '', 'DistributionSetting/settlement', 55, 0, 1633661791, NULL, 0, 0), (271, 1, 0, 85, '基础设置', '', 'DistributionSetting/index', 50, 0, 1633661824, NULL, 0, 0), (272, 1, 0, 0, '用户设置', '', '', 50, 0, 1633674144, NULL, 1, 0), (273, 1, 0, 18, '用户设置', '', '', 50, 0, 1633674224, NULL, 0, 0), (274, 1, 0, 273, '用户设置', '', 'UserSetting/index', 50, 0, 1633674258, NULL, 0, 0), (275, 1, 0, 251, '小程序直播', '', '', 50, 0, 1634005313, NULL, 0, 0), (276, 1, 0, 275, '直播间', '', 'LiveRoom/lists', 50, 0, 1634005412, NULL, 0, 0), (277, 1, 0, 275, '直播商品', '', 'LiveGoods/lists', 50, 0, 1634005471, NULL, 0, 0), (278, 1, 0, 251, '评价助手', '', '', 50, 0, 1641898257, NULL, 0, 0), (279, 1, 0, 278, '评价商品', '', 'commentHelper/lists', 50, 0, 1641898276, NULL, 0, 0);
 COMMIT;
 
 -- ----------------------------
@@ -454,13 +568,13 @@ CREATE TABLE `ls_dev_crontab`  (
   `max_time` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '最大执行时长',
   `system` tinyint(4) NULL DEFAULT 0 COMMENT '是否系统任务：0-否；1-是；',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务表';
 
 -- ----------------------------
 -- Records of ls_dev_crontab
 -- ----------------------------
 BEGIN;
-INSERT INTO `ls_dev_crontab` VALUES (1, '结算分销订单\n', 1, '', 'distribution_order', '', 1, '0 23 * * *', '', 1606816709, 0, 0, '0', '0', 0), (2, '关闭超时订单', 1, '', 'order_close', '', 1, '* * * * *', '', 1606817054, 0, 0, '0', '0', 0), (3, '更新会员分销信息', 1, '', 'user_distribution', '', 1, '0 23 * * *', '', 1606816709, 0, 0, '0', '0', 0), (4, '结算拼团', 1, '', 'team_end', '', 1, '* * * * *', '', 1611046377, 0, 0, '0', '0', 0), (5, '自动确认收货', 1, '', 'order_finish', '', 1, '0 */10 * * *', '', 1612320626, 0, 0, '0', '0', 0), (6, '结束超时砍价订单', 1, '', 'bargain_end', '', 1, '* * * * *', '', 1614823523, 0, 0, '0', '0', 0);
+INSERT INTO `ls_dev_crontab` VALUES (1, '结算分销订单\n', 1, '', 'distribution_order', '', 1, '0 23 * * *', '', 1606816709, 0, 0, '0', '0', 0), (2, '关闭超时订单', 1, '', 'order_close', '', 1, '* * * * *', '', 1606817054, 0, 0, '0', '0', 0), (3, '更新会员分销信息', 1, '', 'user_distribution', '', 1, '0 23 * * *', '', 1606816709, 0, 0, '0', '0', 0), (4, '结算拼团', 1, '', 'team_end', '', 1, '* * * * *', '', 1611046377, 0, 0, '0', '0', 0), (5, '自动确认收货', 1, '', 'order_finish', '', 1, '0 */10 * * *', '', 1612320626, 0, 0, '0', '0', 0), (6, '结束超时砍价订单', 1, '', 'bargain_end', '', 1, '* * * * *', '', 1614823523, 0, 0, '0', '0', 0), (17, '微信小程序发货信息录入', 1, '', 'wechat_mini_express_send_sync', ' ', 1, '*/10 * * * *', ' ', 1676019182, 1676019182, 1676019182, '0', '0', 0);
 COMMIT;
 
 -- ----------------------------
@@ -498,7 +612,7 @@ CREATE TABLE `ls_dev_message_extend`  (
   `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '短信模板配置表';
 
 -- ----------------------------
 -- Records of ls_dev_message_extend
@@ -520,7 +634,7 @@ CREATE TABLE `ls_dev_navigation`  (
   `update_time` int(11) NULL DEFAULT NULL,
   `del` tinyint(1) NULL DEFAULT NULL COMMENT '删除标识[0-未删除 1-已删除]',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '底部导航配置表';
 
 -- ----------------------------
 -- Records of ls_dev_navigation
@@ -545,7 +659,7 @@ CREATE TABLE `ls_dev_notice_setting`  (
   `mnp_notice` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '小程序通知设置',
   `support` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '支持类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '通知设置表';
 
 -- ----------------------------
 -- Records of ls_dev_notice_setting
@@ -615,6 +729,111 @@ INSERT INTO `ls_dev_region` VALUES (659009, 650000, 2, '昆玉市', '昆玉', '0
 COMMIT;
 
 -- ----------------------------
+-- Table structure for ls_distribution
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_distribution`;
+CREATE TABLE `ls_distribution`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户id',
+  `level_id` int(11) NOT NULL COMMENT '分销会员等级id',
+  `is_distribution` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否分销会员 0-否 1-是',
+  `is_freeze` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否冻结 0-否 1-是',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `distribution_time` int(10) NULL DEFAULT NULL COMMENT '成为分销会员时间',
+  `mnp_qr_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '小程序分享二维码',
+  `h5_qr_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'h5分享二维码',
+  `app_qr_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'app分享二维码',
+  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `delete_time` int(10) NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分销表';
+
+-- ----------------------------
+-- Records of ls_distribution
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_distribution_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_distribution_goods`;
+CREATE TABLE `ls_distribution_goods`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) UNSIGNED NOT NULL COMMENT '商品id',
+  `item_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品规格id',
+  `level_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '分销会员等级id',
+  `self_ratio` decimal(10, 0) NULL DEFAULT NULL COMMENT '自购佣金比例',
+  `first_ratio` decimal(10, 2) NULL DEFAULT NULL COMMENT '一级佣金比例',
+  `second_ratio` decimal(10, 2) NULL DEFAULT NULL COMMENT '二级佣金比例',
+  `third_ratio` decimal(10, 2) NULL DEFAULT NULL COMMENT '三级佣金比例',
+  `is_distribution` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否参与分销 0-不参与 1-参与',
+  `rule` tinyint(1) NOT NULL COMMENT '佣金规则 1-按分销等级比例分佣 2-单独设置分佣比例',
+  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `delete_time` int(10) NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分销商品表';
+
+-- ----------------------------
+-- Records of ls_distribution_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_distribution_level
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_distribution_level`;
+CREATE TABLE `ls_distribution_level`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '等级名称',
+  `weights` tinyint(2) NOT NULL COMMENT '等级权重',
+  `first_ratio` float UNSIGNED NOT NULL DEFAULT 0 COMMENT '一级佣金比例',
+  `second_ratio` float UNSIGNED NOT NULL DEFAULT 0 COMMENT '二级佣金比例',
+  `third_ratio` float UNSIGNED NOT NULL DEFAULT 0 COMMENT '三级佣金比例',
+  `self_ratio` float UNSIGNED NOT NULL DEFAULT 0 COMMENT '自购佣金比例',
+  `is_default` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否默认等级 0-否 1-是',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '等级描述',
+  `update_relation` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '升级关系，1-OR关系 2-AND关系',
+  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `delete_time` int(10) NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分销等级表';
+
+-- ----------------------------
+-- Records of ls_distribution_level
+-- ----------------------------
+BEGIN;
+INSERT INTO `ls_distribution_level` VALUES (1, '默认等级', 1, 20, 10, 0, 0, 1, '默认等级', 1, NULL, NULL, NULL);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_distribution_level_update
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_distribution_level_update`;
+CREATE TABLE `ls_distribution_level_update`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT ' ',
+  `level_id` int(11) UNSIGNED NOT NULL COMMENT '分销会员等级id',
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '条件名称',
+  `value_int` int(11) NULL DEFAULT NULL COMMENT '整型条件值',
+  `value_decimal` decimal(10, 2) NULL DEFAULT NULL COMMENT '浮点型条件值',
+  `value_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '文本型条件值,主要用于存储json格式字符串',
+  `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分销等级升级条件表';
+
+-- ----------------------------
+-- Records of ls_distribution_level_update
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_distribution_member_apply
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_distribution_member_apply`;
@@ -626,11 +845,19 @@ CREATE TABLE `ls_distribution_member_apply`  (
   `city` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '城市',
   `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
   `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '申请原因',
+  `denial_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核原因',
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核不通过',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `delete_time` int(10) NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分销会员申请表';
+
+-- ----------------------------
+-- Records of ls_distribution_member_apply
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_distribution_order_goods
@@ -640,16 +867,27 @@ CREATE TABLE `ls_distribution_order_goods`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '记录编号',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `real_name` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
+  `real_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
+  `level_id` int(11) NULL DEFAULT NULL COMMENT '分销会员等级',
+  `level` int(11) NULL DEFAULT NULL COMMENT '分销层级',
+  `ratio` decimal(10, 2) NOT NULL COMMENT '佣金比例',
+  `order_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单ID',
   `order_goods_id` int(11) NOT NULL COMMENT '订单商品id',
   `goods_num` int(10) NOT NULL DEFAULT 1 COMMENT '商品数量',
   `money` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '佣金',
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态：1-待返佣；2-已结算；3-已失效；',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `settlement_time` int(10) NULL DEFAULT NULL COMMENT '结算时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id_source_id`(`user_id`) USING BTREE COMMENT '一个用户只有一个订单商品的分佣订单'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分销订单表';
+
+-- ----------------------------
+-- Records of ls_distribution_order_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_express
@@ -668,7 +906,61 @@ CREATE TABLE `ls_express`  (
   `create_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` int(11) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '快递公司表';
+
+-- ----------------------------
+-- Records of ls_express
+-- ----------------------------
+BEGIN;
+INSERT INTO `ls_express` VALUES (11, '圆通', 'images/express/YTO.png', 'www.yuantong.com', 'YTO', 'yuantong', 0, 'YTO', 0, 1690946702, NULL), (12, '中通', 'images/express/ZTO.png', 'https://www.zto.com/', 'ZTO', 'zhongtong', 0, 'ZTO', 0, 1690946729, NULL), (13, '申通', 'images/express/STO.png', 'http://www.sto.cn/', 'STO', 'shentong', 0, 'STO', 0, 1690946753, NULL), (14, '韵达', 'images/express/YD.png', 'http://www.yundaex.com/cn/index.php', 'YD', 'yunda', 0, 'YD', 0, 1690946796, NULL), (15, '德邦', 'images/express/DBL.png', 'https://www.deppon.com/', 'DBL', 'debangwuliu', 0, 'DBL', 0, 1690946821, NULL), (16, '百世', 'images/express/HTKY.png', 'https://www.800best.com/', 'HTKY', 'huitongkuaidi', 0, 'HTKY', 0, 1690946864, NULL), (17, '顺丰', 'images/express/SF.png', 'www.shunfeng.cn', 'SF', 'shunfeng', 0, 'SF', 0, 1690946899, NULL), (18, '极兔快递', 'images/express/JTSD.jpg', 'https://www.jtexpress.cn/', 'JTSD', 'jtexpress', 0, 'JTSD', 0, 1690946926, NULL), (19, '京东快递', 'images/express/JD.jpg', 'https://www.jdl.com/', 'JD', 'jd', 0, 'JD', 0, 1690946950, NULL), (20, '邮政标准快递', 'images/express/YZPY.png', 'https://www.ems.com.cn/', 'YZPY', 'youzhengguonei', 0, 'YZPY', 0, 1690947005, NULL);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_face_sheet_sender
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_face_sheet_sender`;
+CREATE TABLE `ls_face_sheet_sender`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发件人名称',
+  `mobile` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '发件人电话',
+  `province_id` int(10) UNSIGNED NOT NULL COMMENT '省ID',
+  `city_id` int(10) UNSIGNED NOT NULL COMMENT '市ID',
+  `district_id` int(10) UNSIGNED NOT NULL COMMENT '区ID',
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '详细地址',
+  `create_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电子面单发件人表';
+
+-- ----------------------------
+-- Records of ls_face_sheet_sender
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_face_sheet_template
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_face_sheet_template`;
+CREATE TABLE `ls_face_sheet_template`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `express_id` int(10) UNSIGNED NOT NULL COMMENT '快递公司ID',
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '模板名称',
+  `tempid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '模板ID',
+  `partner_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '电子面单账号',
+  `partner_key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '电子面单密码',
+  `net` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '网点标识',
+  `pay_type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '运费支付方式',
+  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '电子面单模板表';
+
+-- ----------------------------
+-- Records of ls_face_sheet_template
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_file
@@ -687,6 +979,12 @@ CREATE TABLE `ls_file`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件表';
 
 -- ----------------------------
+-- Records of ls_file
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_file_cate
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_file_cate`;
@@ -703,6 +1001,12 @@ CREATE TABLE `ls_file_cate`  (
   `type` tinyint(2) UNSIGNED NULL DEFAULT 1 COMMENT '0-其他 1-图片 2-视频',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件分类表';
+
+-- ----------------------------
+-- Records of ls_file_cate
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_footprint
@@ -736,7 +1040,13 @@ CREATE TABLE `ls_footprint_record`  (
   `template` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '模板信息',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '足迹气泡记录表';
+
+-- ----------------------------
+-- Records of ls_footprint_record
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_freight
@@ -753,6 +1063,12 @@ CREATE TABLE `ls_freight`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板表';
 
 -- ----------------------------
+-- Records of ls_freight
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_freight_config
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_freight_config`;
@@ -767,6 +1083,12 @@ CREATE TABLE `ls_freight_config`  (
   `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板配置表';
+
+-- ----------------------------
+-- Records of ls_freight_config
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods
@@ -791,6 +1113,7 @@ CREATE TABLE `ls_goods`  (
   `sales_sum` int(10) NULL DEFAULT 0 COMMENT '商品销量',
   `virtual_sales_sum` int(10) NULL DEFAULT 0 COMMENT '虚拟销量',
   `click_count` int(10) NULL DEFAULT 0 COMMENT '商品点击量',
+  `virtual_click` int(10) NULL DEFAULT 0 COMMENT '虚拟点击量',
   `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '商品规格:1-统一规格；2-多规格；',
   `max_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最高价格',
   `min_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '最低价格',
@@ -819,8 +1142,16 @@ CREATE TABLE `ls_goods`  (
   `create_time` int(10) NULL DEFAULT NULL COMMENT '商品创建时间',
   `update_time` int(10) NULL DEFAULT NULL COMMENT '商品更新时间',
   `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
+  `is_express` tinyint(1) NULL DEFAULT 1 COMMENT '是否开启快递配送:1-是;0-否;',
+  `is_selffetch` tinyint(1) NULL DEFAULT 0 COMMENT '是否开启上门自提:1-是;0-否;',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品主表';
+
+-- ----------------------------
+-- Records of ls_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_brand
@@ -839,6 +1170,12 @@ CREATE TABLE `ls_goods_brand`  (
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除,0-未删除,1-已删除',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品品牌';
+
+-- ----------------------------
+-- Records of ls_goods_brand
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_category
@@ -861,6 +1198,12 @@ CREATE TABLE `ls_goods_category`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类';
 
 -- ----------------------------
+-- Records of ls_goods_category
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_goods_click
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_click`;
@@ -870,7 +1213,13 @@ CREATE TABLE `ls_goods_click`  (
   `goods_id` int(11) NOT NULL COMMENT '产品id',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品点击表';
+
+-- ----------------------------
+-- Records of ls_goods_click
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_collect
@@ -882,7 +1231,13 @@ CREATE TABLE `ls_goods_collect`  (
   `goods_id` int(11) NOT NULL COMMENT '产品id',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品收藏表';
+
+-- ----------------------------
+-- Records of ls_goods_collect
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_comment
@@ -904,8 +1259,15 @@ CREATE TABLE `ls_goods_comment`  (
   `description_comment` tinyint(1) NULL DEFAULT NULL COMMENT '描述相符星级1 一星 2 二星 3三星 4四星 5五星',
   `status` tinyint(2) NULL DEFAULT 1 COMMENT '显示状态 0-隐藏 1-显示 ',
   `reply` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商家回复',
+  `virtual_data` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '虚拟用户信息,真实评论时为空',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品评论表';
+
+-- ----------------------------
+-- Records of ls_goods_comment
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_comment_image
@@ -916,7 +1278,13 @@ CREATE TABLE `ls_goods_comment_image`  (
   `goods_comment_id` int(10) NOT NULL COMMENT '商品评价id',
   `uri` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品评论图片表';
+
+-- ----------------------------
+-- Records of ls_goods_comment_image
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_image
@@ -928,6 +1296,12 @@ CREATE TABLE `ls_goods_image`  (
   `uri` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品轮播图表';
+
+-- ----------------------------
+-- Records of ls_goods_image
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_item
@@ -950,6 +1324,12 @@ CREATE TABLE `ls_goods_item`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品的SKU';
 
 -- ----------------------------
+-- Records of ls_goods_item
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_goods_sale
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_sale`;
@@ -960,7 +1340,13 @@ CREATE TABLE `ls_goods_sale`  (
   `goods_num` int(11) NULL DEFAULT 1 COMMENT '商品购买数量',
   `create_time` int(11) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品销量表';
+
+-- ----------------------------
+-- Records of ls_goods_sale
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_goods_spec
@@ -974,6 +1360,12 @@ CREATE TABLE `ls_goods_spec`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规格';
 
 -- ----------------------------
+-- Records of ls_goods_spec
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_goods_spec_value
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_goods_spec_value`;
@@ -984,6 +1376,12 @@ CREATE TABLE `ls_goods_spec_value`  (
   `value` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '规格属性值',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规格属性值表';
+
+-- ----------------------------
+-- Records of ls_goods_spec_value
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_help
@@ -1007,6 +1405,12 @@ CREATE TABLE `ls_help`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帮助表';
 
 -- ----------------------------
+-- Records of ls_help
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_help_category
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_help_category`;
@@ -1021,12 +1425,18 @@ CREATE TABLE `ls_help_category`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帮助分类表';
 
 -- ----------------------------
+-- Records of ls_help_category
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_luckdraw
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_luckdraw`;
 CREATE TABLE `ls_luckdraw`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `prize_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '奖品类型[1=积分，2=谢谢惠顾，3=优惠券]',
+  `prize_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '奖品类型[1=积分，2=谢谢惠顾，3=优惠券，4=余额]',
   `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '商品名称',
   `image` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图片',
   `number` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '奖品数量',
@@ -1037,7 +1447,13 @@ CREATE TABLE `ls_luckdraw`  (
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '积分抽奖奖品表';
+
+-- ----------------------------
+-- Records of ls_luckdraw
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_luckdraw_record
@@ -1051,9 +1467,18 @@ CREATE TABLE `ls_luckdraw_record`  (
   `prize_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '奖品名称',
   `prize_image` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '奖品图片',
   `number` int(10) UNSIGNED NOT NULL COMMENT '获得数量',
+  `need_integral` int(10) NULL DEFAULT 0 COMMENT '抽奖消耗积分',
+  `is_send` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否已奖',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '抽奖时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '积分抽奖记录表';
+
+-- ----------------------------
+-- Records of ls_luckdraw_record
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_menu_decorate
@@ -1072,13 +1497,13 @@ CREATE TABLE `ls_menu_decorate`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 147 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
+) ENGINE = InnoDB AUTO_INCREMENT = 150 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表';
 
 -- ----------------------------
 -- Records of ls_menu_decorate
 -- ----------------------------
 BEGIN;
-INSERT INTO `ls_menu_decorate` VALUES (107, '拼团活动', 1, '/images/menu/goods_combination.png', 1, '2', 9, 0, 1607568181, 1614234896, 0), (108, '热销榜单', 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607568204, 1614246273, 0), (109, '领券中心', 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568224, 1614234894, 0), (110, '积分签到', 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607568273, 1614234881, 0), (111, '会员中心', 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607568298, 1614234623, 0), (112, '我的收藏', 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607568323, 1614234624, 0), (113, '商城资讯', 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607568348, 1614234625, 0), (114, '帮助中心', 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607568367, 1614234627, 0), (115, '我的钱包', 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607568422, 1607568422, 0), (116, '分销推广', 2, '/images/menu/centre_user_promote.png', 1, '11', 9, 1, 1607568455, 1612707471, 0), (117, '我的优惠券', 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607568476, 1607568476, 0), (118, '等级服务', 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607568509, 1607568509, 0), (119, '我的收藏', 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607568546, 1607568546, 0), (120, '收货地址', 2, '/images/menu/centre_user_address.png', 1, '15', 5, 1, 1607568575, 1607568575, 0), (121, '帮助中心', 2, '/images/menu/centre_news_center.png', 1, '14', 4, 1, 1607568784, 1614251037, 0), (123, '限时秒杀', 1, '/images/menu/goods_seckill.png', 1, '1', 10, 1, 1607568882, 1614245540, 0), (142, '我的拼团', 2, '/images/menu/centre_team.png', 1, '18', 3, 1, 1614326692, 1614326838, 0), (143, '联系客服', 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1614326748, 1614330145, 0), (144, '砍价活动', 1, '/images/menu/bargain.png', 1, '13', 50, 1, 1614583931, 1614584541, 0), (145, '砍价记录', 2, '/images/menu/centre_bargain_record.png', 1, '19', 0, 1, 1614657593, 1615530292, 0), (146, '积分抽奖', 1, 'images/menu/luckly_wheel.png', 1, '12', 0, 1, 1615530029, 1615530029, 0);
+INSERT INTO `ls_menu_decorate` VALUES (107, '拼团活动', 1, '/images/menu/goods_combination.png', 1, '2', 9, 0, 1607568181, 1614234896, 0), (108, '热销榜单', 1, '/images/menu/hot_list.png', 1, '3', 8, 1, 1607568204, 1614246273, 0), (109, '领券中心', 1, '/images/menu/coupon_center.png', 1, '4', 7, 1, 1607568224, 1614234894, 0), (110, '积分签到', 1, '/images/menu/sign_up.png', 1, '5', 6, 1, 1607568273, 1614234881, 0), (111, '会员中心', 1, '/images/menu/user_vip.png', 1, '6', 5, 1, 1607568298, 1614234623, 0), (112, '我的收藏', 1, '/images/menu/user_collection.png', 1, '7', 4, 1, 1607568323, 1614234624, 0), (113, '商城资讯', 1, '/images/menu/news_center.png', 1, '8', 3, 1, 1607568348, 1614234625, 0), (114, '帮助中心', 1, '/images/menu/news_center1.png', 1, '9', 2, 1, 1607568367, 1614234627, 0), (115, '我的钱包', 2, '/images/menu/centre_user_wallet.png', 1, '10', 10, 1, 1607568422, 1607568422, 0), (116, '分销推广', 2, '/images/menu/centre_user_promote.png', 1, '11', 9, 1, 1607568455, 1612707471, 0), (117, '我的优惠券', 2, '/images/menu/centre_user_coupon.png', 1, '12', 8, 1, 1607568476, 1607568476, 0), (118, '等级服务', 2, '/images/menu/centre_user_vip.png', 1, '13', 7, 1, 1607568509, 1607568509, 0), (119, '我的收藏', 2, '/images/menu/centre_user_collection.png', 1, '16', 6, 1, 1607568546, 1607568546, 0), (120, '收货地址', 2, '/images/menu/centre_user_address.png', 1, '15', 5, 1, 1607568575, 1607568575, 0), (121, '帮助中心', 2, '/images/menu/centre_news_center.png', 1, '14', 4, 1, 1607568784, 1614251037, 0), (123, '限时秒杀', 1, '/images/menu/goods_seckill.png', 1, '1', 10, 1, 1607568882, 1614245540, 0), (142, '我的拼团', 2, '/images/menu/centre_team.png', 1, '18', 3, 1, 1614326692, 1614326838, 0), (143, '联系客服', 2, '/images/menu/centre_contact_offical.png', 1, '17', 2, 1, 1614326748, 1614330145, 0), (144, '砍价活动', 1, '/images/menu/bargain.png', 1, '13', 50, 1, 1614583931, 1614584541, 0), (145, '砍价记录', 2, '/images/menu/centre_bargain_record.png', 1, '19', 0, 1, 1614657593, 1615530292, 0), (146, '积分抽奖', 1, 'images/menu/luckly_wheel.png', 1, '12', 0, 1, 1615530029, 1615530029, 0), (149, '核销订单', 2, '/images/menu/check_order.png', 1, '20', 0, 1, 1629357185, 1629357185, 0);
 COMMIT;
 
 -- ----------------------------
@@ -1097,7 +1522,13 @@ CREATE TABLE `ls_notice`  (
   `send_type` tinyint(1) NULL DEFAULT NULL COMMENT '通知发送类型 1-系统通知 2-短信通知 3-微信模板 4-微信小程序',
   `extra` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '其他',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消息表';
+
+-- ----------------------------
+-- Records of ls_notice
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_order
@@ -1119,7 +1550,7 @@ CREATE TABLE `ls_order`  (
   `district` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '县区',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '地址',
   `mobile` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '手机',
-  `delivery_type` tinyint(1) NULL DEFAULT 1 COMMENT '配送方式;1-快递发货;2-上门自提;3-同城配送',
+  `delivery_type` tinyint(1) NULL DEFAULT 1 COMMENT '配送方式;1-快递发货;2-上门自提;',
   `goods_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '订单商品总价',
   `order_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '应付款金额',
   `discount_amount` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '优惠金额',
@@ -1129,6 +1560,8 @@ CREATE TABLE `ls_order`  (
   `shipping_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '发货状态',
   `shipping_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '运费',
   `shipping_time` int(11) NULL DEFAULT 0 COMMENT '最后新发货时间',
+  `wechat_mini_express_sync` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '微信小程序发货信息录入',
+  `wechat_mini_express_sync_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '录入时间',
   `transaction_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '第三方平台交易流水号',
   `user_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户备注',
   `confirm_take_time` int(10) NULL DEFAULT NULL COMMENT '确认收货时间',
@@ -1147,10 +1580,19 @@ CREATE TABLE `ls_order`  (
   `team_id` int(10) NULL DEFAULT 0 COMMENT '拼团活动id',
   `delivery_id` int(11) NULL DEFAULT 0 COMMENT '发货单ID',
   `attach_values` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '附带的值(赠送时机，赠送积分成长值什么的)Json格式',
+  `pickup_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '提货码',
+  `verification_status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '核销状态:0-待核销;1-已核销;',
+  `selffetch_shop_id` int(11) NULL DEFAULT 0 COMMENT '自提门店ID',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `order_sn`(`order_sn`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表';
+
+-- ----------------------------
+-- Records of ls_order
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_order_goods
@@ -1182,6 +1624,12 @@ CREATE TABLE `ls_order_goods`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单商品表';
 
 -- ----------------------------
+-- Records of ls_order_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_order_log
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_order_log`;
@@ -1195,6 +1643,12 @@ CREATE TABLE `ls_order_log`  (
   `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单日志表';
+
+-- ----------------------------
+-- Records of ls_order_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_order_refund
@@ -1219,6 +1673,12 @@ CREATE TABLE `ls_order_refund`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单退款表';
 
 -- ----------------------------
+-- Records of ls_order_refund
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_printer
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_printer`;
@@ -1235,7 +1695,13 @@ CREATE TABLE `ls_printer`  (
   `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除状态：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '打印机列表';
+
+-- ----------------------------
+-- Records of ls_printer
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_printer_config
@@ -1243,9 +1709,9 @@ CREATE TABLE `ls_printer`  (
 DROP TABLE IF EXISTS `ls_printer_config`;
 CREATE TABLE `ls_printer_config`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '打印机配置名称',
-  `client_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用id',
-  `client_secret` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用秘钥',
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '打印机配置名称',
+  `client_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用id',
+  `client_secret` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用秘钥',
   `type` tinyint(1) NOT NULL COMMENT '类型：1-易联云',
   `status` tinyint(1) NOT NULL COMMENT '是否开启',
   `update_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
@@ -1278,9 +1744,17 @@ CREATE TABLE `ls_recharge_order`  (
   `give_money` decimal(10, 2) NULL DEFAULT NULL COMMENT '赠送金额',
   `give_integral` int(10) NULL DEFAULT NULL COMMENT '赠送积分',
   `give_growth` int(10) NULL DEFAULT NULL COMMENT '赠送成长值',
+  `wechat_mini_express_sync` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '微信小程序发货信息录入',
+  `wechat_mini_express_sync_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '录入时间',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '充值订单表';
+
+-- ----------------------------
+-- Records of ls_recharge_order
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_recharge_template
@@ -1321,6 +1795,12 @@ CREATE TABLE `ls_role`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表';
 
 -- ----------------------------
+-- Records of ls_role
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_role_dev_auth_index
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_role_dev_auth_index`;
@@ -1328,7 +1808,13 @@ CREATE TABLE `ls_role_dev_auth_index`  (
   `role_id` int(11) NOT NULL,
   `menu_auth_id` int(11) NOT NULL,
   PRIMARY KEY (`role_id`, `menu_auth_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与权限表';
+
+-- ----------------------------
+-- Records of ls_role_dev_auth_index
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_search_record
@@ -1345,6 +1831,12 @@ CREATE TABLE `ls_search_record`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户热门搜索';
 
 -- ----------------------------
+-- Records of ls_search_record
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_seckill_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_seckill_goods`;
@@ -1359,7 +1851,13 @@ CREATE TABLE `ls_seckill_goods`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除；1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '秒杀商品表';
+
+-- ----------------------------
+-- Records of ls_seckill_goods
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_seckill_time
@@ -1373,13 +1871,70 @@ CREATE TABLE `ls_seckill_time`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除时间；1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '秒杀时间表';
 
 -- ----------------------------
 -- Records of ls_seckill_time
 -- ----------------------------
 BEGIN;
 INSERT INTO `ls_seckill_time` VALUES (2, '12:30', '13:57', 1607588851, 1607590085, 0), (3, '14:00', '17:00', 1607588879, 1607588879, 0), (4, '00:00', '07:58', 1607588904, 1607590036, 0), (5, '17:02', '23:55', 1607590112, 1607590112, 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_selffetch_shop
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_selffetch_shop`;
+CREATE TABLE `ls_selffetch_shop`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '门店名称',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '门店LOGO',
+  `contact` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '联系人',
+  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '联系电话',
+  `province` int(11) NOT NULL COMMENT '省',
+  `city` int(11) NULL DEFAULT NULL COMMENT '市',
+  `district` int(11) NULL DEFAULT NULL COMMENT '区',
+  `address` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '详细地址',
+  `longitude` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '经度',
+  `latitude` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '纬度',
+  `business_start_time` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '营业开始时间',
+  `business_end_time` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '营业结束时间',
+  `weekdays` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '营业周天,逗号隔开如 1,2,3,4,5,6,7',
+  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '门店状态:1-启用;0-停用;',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '门店简介',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除：1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '自提门店表';
+
+-- ----------------------------
+-- Records of ls_selffetch_shop
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_selffetch_verifier
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_selffetch_verifier`;
+CREATE TABLE `ls_selffetch_verifier`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `selffetch_shop_id` int(11) NOT NULL COMMENT '自取门店ID',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `sn` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '核销员编号',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '核销员名称',
+  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '联系电话',
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '核销员状态:1-启用;0-停用;',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
+  `del` tinyint(1) NULL DEFAULT 0 COMMENT '删除：1-是；0-否',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '核销员表';
+
+-- ----------------------------
+-- Records of ls_selffetch_verifier
+-- ----------------------------
+BEGIN;
 COMMIT;
 
 -- ----------------------------
@@ -1398,6 +1953,12 @@ CREATE TABLE `ls_session`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会话表';
 
 -- ----------------------------
+-- Records of ls_session
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_sign_daily
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_sign_daily`;
@@ -1413,7 +1974,7 @@ CREATE TABLE `ls_sign_daily`  (
   `del` tinyint(1) NOT NULL COMMENT '是否删除：0-否；1-是；',
   `growth` int(16) NULL DEFAULT NULL COMMENT '成长值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '签到规则表';
 
 -- ----------------------------
 -- Records of ls_sign_daily
@@ -1437,7 +1998,7 @@ CREATE TABLE `ls_sms_config`  (
   `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：0-关闭；1-开启',
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除；0-否；1-是',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '短信设置表';
 
 -- ----------------------------
 -- Records of ls_sms_config
@@ -1466,6 +2027,12 @@ CREATE TABLE `ls_sms_log`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '短信发送记录表';
 
 -- ----------------------------
+-- Records of ls_sms_log
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_stat
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_stat`;
@@ -1477,6 +2044,12 @@ CREATE TABLE `ls_stat`  (
   `create_time` int(10) UNSIGNED NOT NULL COMMENT '变动时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '统计表';
+
+-- ----------------------------
+-- Records of ls_stat
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_supplier
@@ -1499,6 +2072,12 @@ CREATE TABLE `ls_supplier`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供货商表';
 
 -- ----------------------------
+-- Records of ls_supplier
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_system_log
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_system_log`;
@@ -1513,7 +2092,13 @@ CREATE TABLE `ls_system_log`  (
   `param` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '请求数据',
   `ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Ip地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志表';
+
+-- ----------------------------
+-- Records of ls_system_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_team_activity
@@ -1536,7 +2121,13 @@ CREATE TABLE `ls_team_activity`  (
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`team_id`) USING BTREE,
   INDEX `goods_id`(`goods_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团活动表';
+
+-- ----------------------------
+-- Records of ls_team_activity
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_team_follow
@@ -1556,7 +2147,13 @@ CREATE TABLE `ls_team_follow`  (
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态0-待成团;1-成团成功;2-成团失败',
   `team_end_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '团结束时间 [拼团成功 / 拼团失败的时间]',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '参团表';
+
+-- ----------------------------
+-- Records of ls_team_follow
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_team_found
@@ -1577,7 +2174,13 @@ CREATE TABLE `ls_team_found`  (
   `status` tinyint(1) NULL DEFAULT 0 COMMENT '拼团状态0-待成团;1-拼团成功,2-拼团失败;',
   `team_end_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '团结束时间 [拼团成功 / 拼团失败的时间]',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '开团表';
+
+-- ----------------------------
+-- Records of ls_team_found
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_team_goods_item
@@ -1592,17 +2195,13 @@ CREATE TABLE `ls_team_goods_item`  (
   `sales_sum` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '已拼多少件',
   `del` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否已删除0否，1删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团商品关联表';
 
 -- ----------------------------
--- Table structure for ls_temp
+-- Records of ls_team_goods_item
 -- ----------------------------
-DROP TABLE IF EXISTS `ls_temp`;
-CREATE TABLE `ls_temp`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_user
@@ -1646,10 +2245,17 @@ CREATE TABLE `ls_user`  (
   `del` tinyint(10) NOT NULL DEFAULT 0 COMMENT '0为非删除状态，非0位删除时间',
   `user_growth` int(128) NULL DEFAULT 0 COMMENT '用户成长值',
   `earnings` decimal(10, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '佣金收益',
+  `is_new_user` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否是新注册用户:1-是;0-否;',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `distribution_code`(`distribution_code`) USING BTREE,
   UNIQUE INDEX `sn`(`sn`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表';
+
+-- ----------------------------
+-- Records of ls_user
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_user_address
@@ -1675,6 +2281,12 @@ CREATE TABLE `ls_user_address`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表';
 
 -- ----------------------------
+-- Records of ls_user_address
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_user_auth
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_auth`;
@@ -1689,6 +2301,12 @@ CREATE TABLE `ls_user_auth`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `openid`(`openid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户授权表';
+
+-- ----------------------------
+-- Records of ls_user_auth
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_user_distribution
@@ -1708,6 +2326,12 @@ CREATE TABLE `ls_user_distribution`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户分销信息表';
 
 -- ----------------------------
+-- Records of ls_user_distribution
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_user_file
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_file`;
@@ -1723,6 +2347,12 @@ CREATE TABLE `ls_user_file`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文件表';
 
 -- ----------------------------
+-- Records of ls_user_file
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for ls_user_group
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_user_group`;
@@ -1735,6 +2365,12 @@ CREATE TABLE `ls_user_group`  (
   `del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除；1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员分组表';
+
+-- ----------------------------
+-- Records of ls_user_group
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_user_level
@@ -1801,7 +2437,13 @@ CREATE TABLE `ls_user_sign`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0-否；1-是；',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员签到表';
+
+-- ----------------------------
+-- Records of ls_user_sign
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_user_transfer
@@ -1815,7 +2457,34 @@ CREATE TABLE `ls_user_transfer`  (
   `money` decimal(10, 2) UNSIGNED NOT NULL COMMENT '转账金额',
   `create_time` int(11) UNSIGNED NOT NULL COMMENT '转账时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员转账表';
+
+-- ----------------------------
+-- Records of ls_user_transfer
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for ls_verification
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_verification`;
+CREATE TABLE `ls_verification`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL COMMENT '订单ID',
+  `selffetch_shop_id` int(11) NOT NULL COMMENT '自提门店ID',
+  `handle_id` int(11) NOT NULL DEFAULT 0 COMMENT '操作人ID(0为系统核销)',
+  `verification_scene` tinyint(1) NOT NULL DEFAULT 0 COMMENT '核销场景:0-系统;1-管理员;2-会员;',
+  `snapshot` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '核销员数据快照',
+  `create_time` int(10) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '核销表';
+
+-- ----------------------------
+-- Records of ls_verification
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_wechat_reply
@@ -1835,7 +2504,13 @@ CREATE TABLE `ls_wechat_reply`  (
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1-是；0-否',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信公众号回复';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信公众号消息回复';
+
+-- ----------------------------
+-- Records of ls_wechat_reply
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ls_withdraw_apply
@@ -1844,16 +2519,17 @@ DROP TABLE IF EXISTS `ls_withdraw_apply`;
 CREATE TABLE `ls_withdraw_apply`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `sn` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '提现单号',
+  `batch_no` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商家批次单号',
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `real_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
   `account` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '账号',
-  `type` tinyint(1) NOT NULL COMMENT '类型：\r\n1-提现到钱包余额；\r\n2-提现到微信零钱；\r\n3-提现到微信收款码;\r\n4-提现到支付宝收款码',
+  `type` tinyint(1) NOT NULL COMMENT '类型：1-提现到钱包余额；2-提现到微信零钱；3-提现到微信收款码;4-提现到支付宝收款码',
   `money` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '提现金额',
   `left_money` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '用户可得的金额(扣除手续费后)',
   `money_qr_code` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '收款二维码',
   `poundage` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '手续费',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '提现申请备注',
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：\r\n1-待提现\r\n2-提现中\r\n3-提现成功\r\n4-提现失败',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态：1-待提现2-提现中3-提现成功4-提现失败',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
   `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
   `pay_desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '微信零钱支付信息',
@@ -1869,5 +2545,11 @@ CREATE TABLE `ls_withdraw_apply`  (
   `subbank` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提现银行支行',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '提现申请记录表';
+
+-- ----------------------------
+-- Records of ls_withdraw_apply
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

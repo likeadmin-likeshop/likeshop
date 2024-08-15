@@ -64,7 +64,7 @@ async function _wxMnpLogin() {
 		route
 	} = currentPage()
 	if(loginCode != 1) return
-	if (loginData.token) {
+	if (loginData.token && !loginData.is_new_user) {
 		store.commit('LOGIN', loginData)
 		onLoad && onLoad(options)
 		onShow && onShow()
@@ -76,9 +76,11 @@ async function _wxMnpLogin() {
 			})
 		}
 	} else {
+		const loginRoute = '/pages/login/login'
 		if (!tabbarList.includes(route)) {
+			if(loginRoute.includes(route)) return
 			uni.navigateTo({
-				url: '/pages/login/login'
+				url: loginRoute
 			})
 		}
 	}
@@ -87,11 +89,9 @@ async function _wxMnpLogin() {
 export const toLogin = trottle(_toLogin, 1000)
 // 去登录
 function _toLogin() {
-	//#ifdef APP-PLUS || MP-WEIXIN
 	uni.navigateTo({
 		url: '/pages/login/login'
 	});
-	//#endif
 	//#ifdef  H5
 	const pathLogin = 'pages/login/login'
 	let path = currentPage().route

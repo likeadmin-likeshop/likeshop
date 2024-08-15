@@ -77,7 +77,7 @@
     </div>
     <div class="layui-form-item layui-col-sm6  layui-col-md4">
         <label class="layui-form-label">排序：</label>
-        <div class="layui-input-block">
+        <div class="layui-input-inline">
             <input type="number" name="sort" value="{$info.sort}" placeholder="请输入排序" class="layui-input">
         </div>
     </div>
@@ -95,7 +95,7 @@
     </div>
     {/if}
     <div class="layui-form-item">
-        <label class="layui-form-label">是否推荐：</label>
+        <label class="layui-form-label">是否显示：</label>
         <div class="layui-input-inline">
             <input type="radio" name="is_show" value="1" title="显示" {if condition="$info['is_show'] eq 1" }checked{/if}>
             <input type="radio" name="is_show" value="0" title="不显示" {if condition="$info['is_show'] eq 0" }checked{/if}>

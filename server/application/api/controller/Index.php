@@ -27,7 +27,7 @@ use think\facade\Hook;
 use think\Db;
 class Index extends ApiBase
 {
-   public $like_not_need_login = ['test', 'lists', 'appInit', 'downLine', 'share', 'config','pcLists'];
+   public $like_not_need_login = ['test', 'lists', 'appInit', 'downLine', 'share', 'config','pcLists','copyright'];
     /**
      * note 首页接口
      * create_time 2020/10/21 19:05
@@ -79,8 +79,12 @@ class Index extends ApiBase
         switch ($client) {
             case Client_::mnp:
                 $config = ConfigServer::get('share', 'mnp', [
-                    'mnp_share_title' => ''
+                    'mnp_share_title' => '',
+                    'mnp_share_image' => ''
                 ]);
+                if (!empty($config['mnp_share_image']) and $config['mnp_share_image'] !== '') {
+                    $config['mnp_share_image'] = UrlServer::getFileUrl($config['mnp_share_image']);
+                }
                 break;
             case Client_::oa:
                 $config = ConfigServer::get('share', 'h5', [
@@ -160,10 +164,22 @@ class Index extends ApiBase
               // 'top_bg_image' => UrlServer::getFileUrl(ConfigServer::get('decoration', 'navigation_setting_top_bg_image', ''))
             ],
             // 首页底部导航菜单
-            'navigation_menu' => $navigation
+            'navigation_menu' => $navigation,
+            // 网站名称
+            'website_name' => ConfigServer::get('website', 'name')
         ];
         $this->_success('', $config);
     }
 
 
+    /**
+     * @notes 版权资质
+     * @author ljj
+     * @date 2022/2/22 3:09 下午
+     */
+    public function copyright()
+    {
+        $result = IndexLogic::copyright();
+        $this->_success('', $result);
+    }
 }

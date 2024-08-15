@@ -36,14 +36,6 @@
             </script>
             <script type="text/html" id="operation">
                 <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">编辑</a>
-                {{#  if(d.status == 1){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="stop">停止</a>
-                {{#  } }}
-                {{#  if(d.status == 2 ||d.status == 3){ }}
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="start">启动</a>
-                {{#  } }}
-                <!--<a class="layui-btn layui-btn-xs" lay-event="restart">
-                    <i class="layui-icon layui-icon-refresh"></i>重启</a>-->
                 {{#  if(d.system == 0){ }}
                 <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</a>
                 {{#  } }}
@@ -115,29 +107,8 @@
             var operation = obj.event;
             var id = obj.data['id'];
             switch (operation) {
-                case 'start':
-                case 'stop':
-                case 'restart':
-                    var data={'operation':operation,'id':id}
-                    like.ajax({
-                        url: '{:url("crontab/operation")}',
-                        data: data,
-                        type: "post",
-                        success: function (res) {
-                            if (res.code == 1) {
-                                layui.layer.msg(res.msg, {
-                                    offset: '15px'
-                                    , icon: 1
-                                    , time: 500
-                                },function(){
-                                    table.reload('crontab-lists'); //数据刷新
-                                });
-                            }
-                        }
-                    });
-                    break;
                 case 'delete':
-                    layer.confirm('确定定时任务？', function(index){
+                    layer.confirm('确定删除定时任务？', function(index){
                         like.ajax({
                             url:'{:url("crontab/del")}',
                             data:{'id':id},

@@ -35,11 +35,13 @@ class OrderLog extends Model
     const USER_DEL_ORDER        = 103;//删除订单
     const USER_CONFIRM_ORDER    = 104;//确认收货
     const USER_PAID_ORDER       = 105;//支付订单
+    const USER_VERIFICATION     = 106;//提货核销
 
     const SHOP_CANCEL_ORDER     = 201;//商家取消订单
     const SHOP_DEL_ORDER        = 202;//商家删除订单
     const SHOP_DELIVERY_ORDER   = 203;//商家发货
     const SHOP_CONFIRM_ORDER    = 204;//商家确认收货
+    const SHOP_VERIFICATION     = 205;//商家提货核销
 
     const SYSTEM_CANCEL_ORDER   = 301;//系统取消订单
     const SYSTEM_CONFIRM_ORDER  = 302;//系统确认订单
@@ -53,11 +55,13 @@ class OrderLog extends Model
             self::USER_DEL_ORDER        => '会员删除订单',
             self::USER_CONFIRM_ORDER    => '会员确认收货',
             self::USER_PAID_ORDER       => '会员支付订单',
+            self::USER_VERIFICATION     => '会员提货核销',
 
             self::SHOP_CANCEL_ORDER     => '商家取消订单',
             self::SHOP_DEL_ORDER        => '商家删除订单',
             self::SHOP_DELIVERY_ORDER   => '商家发货',
             self::SHOP_CONFIRM_ORDER    => '商家确认收货',
+            self::SHOP_VERIFICATION     => '商家提货核销',
 
             self::SYSTEM_CANCEL_ORDER   => '系统取消订单',
             self::SYSTEM_CONFIRM_ORDER  => '系统确认收货',

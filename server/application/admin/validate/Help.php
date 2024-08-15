@@ -20,6 +20,7 @@
 namespace app\admin\validate;
 
 use think\Validate;
+use app\admin\model\HelpCategory;
 
 class Help extends Validate
 {
@@ -27,7 +28,7 @@ class Help extends Validate
     protected $rule = [
         'id'        => 'require',
         'title'     => 'require|unique:help,title^del',
-        'cid'       => 'require',
+        'cid'       => 'require|checkCid',
     ];
 
     protected $message = [
@@ -51,4 +52,28 @@ class Help extends Validate
     {
         $this->only(['id']);
     }
+
+
+    /**
+     * @notes 校验分类
+     * @param $value
+     * @param $rule
+     * @param $data
+     * @return bool|string
+     * @author 段誉
+     * @date 2022/6/15 16:03
+     */
+    protected function checkCid($value, $rule, $data)
+    {
+        $cate = HelpCategory::where(['id' => $value])->find();
+        if (empty($cate)) {
+            return '所选分类不存在';
+        }
+        if ($cate["is_show"] != 1) {
+            return '该分类已被停用';
+        }
+        return true;
+    }
+
+
 }

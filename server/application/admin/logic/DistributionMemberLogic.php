@@ -1,488 +1,213 @@
 <?php
-// +----------------------------------------------------------------------
-// | likeshop开源商城系统
-// +----------------------------------------------------------------------
-// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | gitee下载：https://gitee.com/likeshop_gitee
-// | github下载：https://github.com/likeshop-github
-// | 访问官网：https://www.likeshop.cn
-// | 访问社区：https://home.likeshop.cn
-// | 访问手册：http://doc.likeshop.cn
-// | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
-// +----------------------------------------------------------------------
-// | author: likeshop.cn.team
-// +----------------------------------------------------------------------
-
 namespace app\admin\logic;
 
-use app\admin\model\DistributionMemberApply;
 use app\admin\model\User;
-use app\common\model\DistributionMember;
-use app\common\model\DistributionOrder;
-use app\common\model\Withdraw;
+use app\common\logic\LogicBase;
+use app\common\model\Distribution;
+use app\common\model\DistributionOrderGoods;
 use app\common\server\UrlServer;
-use think\Db;
-use think\Exception;
 
-class DistributionMemberLogic
+/**
+ * 分销会员逻辑层
+ * Class DistributionMemberLogic
+ * @package app\admin\logic\distribution
+ */
+class DistributionMemberLogic extends LogicBase
 {
     /**
-     * 分销会员列表
-     * @param $get
+     * @notes 分销会员列表
+     * @param $params
      * @return array
+     * @author Tab
      */
-    public static function memberLists($get)
+    public static function lists($params)
     {
-        $where = [];
-        $where[] = ['is_distribution', '=', 1];
-        if (!empty($get['search_key']) && !empty($get['keyword'])) {
-            $keyword = $get['keyword'];
-            if ($get['search_key'] == 'mobile') {
-                $where[] = ['mobile', 'like', '%' . $keyword . '%'];
-            } else {
-                $where[] = [$get['search_key'], 'like', '%' . $keyword . '%'];
-            }
+        $where = [
+            ['d.is_distribution', '=', 1]
+        ];
+        // 用户信息
+        if (isset($params['keyword']) && !empty($params['keyword'])) {
+            $where[] = ['u.sn|u.nickname', 'like', '%'. $params['keyword'] .'%'];
         }
-        //分销状态
-        if (isset($get['freeze_distribution']) && $get['freeze_distribution'] != '') {
-            $where[] = ['freeze_distribution', '=', $get['freeze_distribution']];
+        // 分销等级
+        if (isset($params['level_id']) && $params['level_id'] != 'all') {
+            $where[] = ['d.level_id', '=', $params['level_id']];
         }
-
-        $user = new User();
-        $count = $user->where($where)->count();
-
-        $lists = $user
-            ->where($where)
-            ->page($get['page'], $get['limit'])
-            ->append(['fans', 'distribution_order'])
-            ->hidden(['password,pay_password,salt'])
-            ->order('id desc')
-            ->select()->toArray();
-
-        $user_level = Db::name('user_level')->where(['del' => 0])->column('name', 'id');
-        $leader_ids = array_column($lists, 'first_leader');
-        $leaders = Db::name('user')
-            ->where('id', 'in', $leader_ids)
-            ->column('sn,nickname,mobile,level', 'id');
-
-        foreach ($lists as &$item) {
-            $item['level'] = $user_level[$item['level']] ?? '无等级';
-            $item['avatar'] = UrlServer::getFileUrl($item['avatar']);
-            $item['leader'] = $leaders[$item['first_leader']] ?? [];
-            if (!empty($item['leader'])) {
-                $leader_level = $item['leader']['level'] ?? 0;
-                $item['leader']['level'] = $user_level[$leader_level] ?? '无等级';
-            }
-            $item['distribution_num'] = $item['distribution_order']['num'] ?? 0;//分销订单数
-            $item['distribution_amount'] = $item['distribution_order']['amount'] ?? 0;//分销订单金额
-            $item['distribution_money'] = $item['distribution_order']['money'] ?? 0;//分销佣金
+        // 分销状态
+        if (isset($params['is_freeze']) && $params['is_freeze'] != 'all') {
+            $where[] = ['d.is_freeze', '=', $params['is_freeze']];
         }
-        return ['count' => $count, 'lists' => $lists];
-    }
-
-
-    /**
-     * 分销会员审核列表
-     * @param $get
-     * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public static function auditLists($get)
-    {
-        $where = [];
-        if (!empty($get['search_key']) && !empty($get['keyword'])) {
-            $keyword = $get['keyword'];
-            if ($get['search_key'] == 'mobile') {
-                $where[] = ['u.mobile', 'like', '%' . $keyword . '%'];
-            } else {
-                $where[] = [$get['search_key'], 'like', '%' . $keyword . '%'];
-            }
-        }
-        //审核状态
-        if (isset($get['status']) && $get['status'] != '') {
-            $where[] = ['status', '=', $get['status']];
-        }
-
 
         $field = [
-            'a.*', 'u.sn', 'u.nickname', 'u.mobile', 'u.level', 'u.sex', 'a.reason',
-            'u.create_time' => 'register_time', 'u.avatar', 'u.first_leader'
+            'u.id' => 'user_id',
+            'u.sn' => 'user_sn',
+            'u.avatar',
+            'u.nickname',
+            'dl.id' => 'level_id',
+            'dl.weights',
+            'dl.name' => 'level_name',
+            'd.is_freeze',
+            'd.distribution_time',
         ];
-
-        $count = Db::name('distribution_member_apply a')
-            ->join('user u', 'u.id = a.user_id')
-            ->where($where)
-            ->count();
-
-        $lists = Db::name('distribution_member_apply a')
+        $lists = Distribution::alias('d')
+            ->leftJoin('user u', 'u.id = d.user_id')
+            ->leftJoin('distribution_level dl', 'dl.id = d.level_id')
             ->field($field)
-            ->join('user u', 'u.id = a.user_id')
-            ->order('a.id desc')
-            ->page($get['page'], $get['limit'])
             ->where($where)
-            ->select();
+            ->order('u.id', 'desc')
+            ->page($params['page'], $params['limit'])
+            ->select()
+            ->toArray();
 
-        $user_level = Db::name('user_level')->where(['del' => 0])->column('name', 'id');
+        $count = Distribution::alias('d')
+            ->leftJoin('user u', 'u.id = d.user_id')
+            ->leftJoin('distribution_level dl', 'dl.id = d.level_id')
+            ->field($field)
+            ->where($where)
+            ->count();
 
-        $leader_ids = array_column($lists, 'first_leader');
-        $leaders = Db::name('user')
-            ->where('id', 'in', $leader_ids)
-            ->column('sn,nickname,mobile,level', 'id');
-
-        foreach ($lists as &$item) {
-            $item['level'] = $user_level[$item['level']] ?? '无等级';
-            $item['sex'] = self::getSexText($item['sex']);
-            $item['register_time'] = date('Y-m-d H:i:s', $item['register_time']);
-            $item['create_time'] = date('Y-m-d H:i:s', $item['create_time']);
-            $item['status_text'] = DistributionMember::getApplyStatus($item['status']);
-            $item['leader'] = $leaders[$item['first_leader']] ?? [];
-            $item['avatar'] = UrlServer::getFileUrl($item['avatar']);
-            if (!empty($item['leader'])) {
-                $leader_level = $item['leader']['level'] ?? 0;
-                $item['leader']['level'] = $user_level[$leader_level] ?? '无等级';
-            }
+        foreach($lists as &$item) {
+            $item['avatar'] = empty($item['avatar']) ? '' : UrlServer::getFileUrl($item['avatar']);
+            $item['earnings'] = DistributionOrderGoods::getEarnings($item['user_id']);
         }
-        return ['count' => $count, 'lists' => $lists];
+
+        return [
+            'count' => $count,
+            'lists' => $lists
+        ];
     }
-
-
-    public static function getSexText($value)
-    {
-        switch ($value) {
-            case 1:
-                return '男';
-            case 2:
-                return '女';
-            default:
-                return '未知';
-        }
-    }
-
 
     /**
-     * 审核通过
-     * @param $post
-     * @return bool|string
+     * @notes 用户列表
+     * @param $params
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author Tab
      */
-    public static function auditPass($post)
+    public static function getUserLists($params)
     {
-        Db::startTrans();
+        $where[] = ['del', '=', 0];
+        // 用户信息
+        if (isset($params['keyword']) && !empty($params['keyword'])) {
+            $where[] = ['sn|nickname', 'like', '%'. $params['keyword'] .'%'];
+        }
+
+        $lists = \app\common\model\User::field('id,sn,nickname,id as distribution')
+            ->where($where)
+            ->withSearch(['distribution'], $params)
+            ->page($params['page'], $params['limit'])
+            ->select()
+            ->toArray();
+        $count = \app\common\model\User::where($where)->withSearch(['distribution'], $params)->count();
+
+        return [
+            'count' => $count,
+            'lists' => $lists,
+        ];
+    }
+
+    /**
+     * @notes 开通分销会员
+     * @param $params
+     * @return bool
+     * @author Tab
+     */
+    public  static function open($params)
+    {
         try {
-            $apply = DistributionMemberApply::where('id', $post['id'])->find();
-            $apply->status = DistributionMember::STATUS_AUDIT_SUCCESS;
-            $apply->update_time = time();
-            $apply->save();
-
-            $user = \app\admin\model\User::where('id', $apply['user_id'])->find();
-            $user->is_distribution = 1;
-            $user->save();
-
-            Db::commit();
-            return true;
-        } catch (Exception $e) {
-            Db::rollback();
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * 审核拒绝
-     * @param $post
-     */
-    public static function auditRefuse($post)
-    {
-        $apply = DistributionMemberApply::where('id', $post['id'])->find();
-        $apply->status = DistributionMember::STATUS_AUDIT_ERROR;
-        $apply->save();
-        return true;
-    }
-
-    /**
-     * 冻结/解冻分销会员资格
-     * @param $post
-     */
-    public static function freeze($post)
-    {
-        $user = User::where('id', $post['id'])->find();
-        $user->freeze_distribution = 1;
-        if ($post['type'] == 'unfreeze'){
-            $user->freeze_distribution = 0;
-        }
-        $user->save();
-    }
-
-    /**
-     * 分销会员信息
-     * @param $get
-     * @return User
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public static function getMemberInfo($get)
-    {
-        $user_id = $get['id'];
-        $user_model = new User();
-        $user = $user_model->alias('u')
-            ->field('u.*,u.sn as user_sn')
-            ->leftJoin('distribution_order_goods d', 'd.user_id = u.id')
-            ->where('u.id', $user_id)
-            ->append(['distribution_order'])
-            ->hidden(['password', 'pay_password', 'salt'])
-            ->find();
-
-        $user['distribution_text'] = '否';
-        if ($user['is_distribution'] == 1) {
-            $user['distribution_text'] = '是';
-        }
-
-        //上级编号
-        $user['first_leader_sn'] = Db::name('user')
-            ->where('id', $user['first_leader'])
-            ->value('sn');
-        //直推会员数
-        $user['first_fans'] = Db::name('user')
-            ->where(['first_leader' => $user_id, 'del' => 0])
-            ->count();
-
-        $have_withdraw = Db::name('withdraw_apply')
-            ->where(['status' => Withdraw::STATUS_SUCCESS, 'user_id' => $user_id])
-            ->sum('money');
-
-        $user['distribution_num'] = $user['distribution_order']['num'] ?? 0;//分销订单数
-        $user['distribution_amount'] = $user['distribution_order']['amount'] ?? 0;//分销订单金额
-        $user['distribution_money'] = $user['distribution_order']['money'] ?? 0;//分销佣金
-        $user['have_withdraw'] = $have_withdraw;//已提现金额
-        return $user;
-    }
-
-
-    /**
-     * 粉丝列表(推广会员)
-     * @param $get
-     * @return array
-     */
-    public static function getFansLists($get)
-    {
-        $user_id = $get['id'];
-        $where = [];
-        if (!empty($get['search_key']) && !empty($get['keyword'])) {
-            $keyword = $get['keyword'];
-            $where[] = [$get['search_key'], 'like', '%' . $keyword . '%'];
-        }
-
-        $fans_type = $get['type'] ?? 'all';
-        if ($fans_type == 'all') {
-            $where[] = ['', 'exp', Db::raw("FIND_IN_SET($user_id, ancestor_relation)")];
-        } else {
-            $where[] = [$fans_type, '=', $user_id];
-        }
-
-        $user = new User();
-        $count = $user
-            ->where($where)
-            ->append(['fans', 'distribution_order'])
-            ->hidden(['password,pay_password,salt'])
-            ->count();
-
-        $lists = $user
-            ->where($where)
-            ->append(['fans', 'distribution_order'])
-            ->hidden(['password,pay_password,salt'])
-            ->page($get['page'], $get['limit'])
-            ->select()->toArray();
-
-        $user_level = Db::name('user_level')->where(['del' => 0])->column('name', 'id');
-        $leader_ids = array_column($lists, 'first_leader');
-        $leaders = Db::name('user')
-            ->where('id', 'in', $leader_ids)
-            ->column('sn,nickname,mobile,level', 'id');
-
-        foreach ($lists as &$item) {
-            $item['avatar'] = UrlServer::getFileUrl($item['avatar']);
-            $item['leader'] = $leaders[$item['first_leader']] ?? [];
-            if (!empty($item['leader'])) {
-                $leader_level = $item['leader']['level'] ?? 0;
-                $item['leader']['level'] = $user_level[$leader_level] ?? '无等级';
+            $user = User::where('id', $params['user_id'])->findOrEmpty()->toArray();
+            if(empty($user)) {
+                throw new \Exception('用户不存在');
             }
-            $item['distribution_num'] = $item['distribution_order']['num'] ?? 0;//分销订单数
-            $item['distribution_amount'] = $item['distribution_order']['amount'] ?? 0;//分销订单金额
-            $item['distribution_money'] = $item['distribution_order']['money'] ?? 0;//分销佣金
-        }
-
-        return ['count' => $count, 'lists' => $lists];
-    }
-
-
-    /**
-     * 分销收入明细
-     * @param $get
-     * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public static function getEarningsDetail($get)
-    {
-        $user_id = $get['id'];
-        $where = [];
-        $where[] = ['d.user_id', '=', $user_id];
-        $where[] = ['d.status', '=', DistributionOrder::STATUS_SUCCESS];
-
-        //记录时间
-        if (isset($get['start_time']) && $get['start_time'] != '') {
-            $where[] = ['d.create_time', '>=', strtotime($get['start_time'])];
-        }
-        if (isset($get['end_time']) && $get['end_time'] != '') {
-            $where[] = ['d.create_time', '<=', strtotime($get['end_time'])];
-        }
-
-        $count = Db::name('distribution_order_goods')->alias('d')
-            ->field('d.id as distribution_id, d.sn, o.order_sn, d.money, d.create_time')
-            ->join('order_goods og', 'og.id = d.order_goods_id')
-            ->join('order o', 'o.id = og.order_id')
-            ->where($where)
-            ->count();
-
-        $lists = Db::name('distribution_order_goods')->alias('d')
-            ->field('d.id as distribution_id, d.sn, o.order_sn, d.money, d.create_time')
-            ->join('order_goods og', 'og.id = d.order_goods_id')
-            ->join('order o', 'o.id = og.order_id')
-            ->where($where)
-            ->page($get['page'], $get['limit'])
-            ->select();
-
-        foreach ($lists as &$item) {
-            $item['create_time'] = date('Y-m-d H:i:s', $item['create_time']);
-            $item['type'] = '分销佣金';
-        }
-
-        return ['count' => $count, 'lists' => $lists];
-    }
-
-
-    /**
-     * 获取上级名称和编号
-     * @param $user_id
-     * @return string
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public static function getLeaderInfo($user_id)
-    {
-        $first_leader = Db::name('user u')
-            ->field('u1.nickname,u1.sn')
-            ->join('user u1', 'u1.id = u.first_leader')
-            ->where('u.id', $user_id)
-            ->find();
-
-        $leader_data = '无';
-        if ($first_leader) {
-            $leader_data = $first_leader['nickname'] . '(' . $first_leader['sn'] . ')';
-        }
-        return $leader_data;
-    }
-
-
-    //更新关系
-    public static function updateRelation($post)
-    {
-        Db::startTrans();
-        try{
-
-            $user_id = $post['user_id'];//需要调整上级的user_id
-            $referrer_sn =  $post['referrer_sn'];//新上级推荐人编号
-
-            //清空上级
-            $data = [
-                'first_leader' => 0,
-                'second_leader' => 0,
-                'third_leader' => 0,
-                'ancestor_relation' => '',
-            ];
-            $my_leader_id = 0;
-            $my_first_leader = 0;
-            $my_ancestor_relation = '';
-
-            if ($post['change_type'] == 'appoint'){
-                //指定上级
-                $my_leader = Db::name('user')->where(['sn' => $referrer_sn])->find();
-
-                //更新我的第一上级、第二上级、第三上级、关系链
-                $my_leader_id = $my_leader['id'];
-                $my_first_leader = $my_leader['first_leader'];
-                $my_third_leader = $my_leader['second_leader'];
-                $my_ancestor_relation = trim("{$my_leader_id},{$my_leader['ancestor_relation']}", ',');
+            $distribution = Distribution::where('user_id', $params['user_id'])->findOrEmpty()->toArray();
+            if(!empty($distribution) && $distribution['is_distribution'] == 1) {
+                throw new \Exception('用户已是分销会员');
+            }
+            if(!empty($distribution) && $distribution['is_distribution'] == 0) {
+                Distribution::where('user_id', $params['user_id'])->update([
+                    'is_distribution' => 1,
+                    'distribution_time' => time()
+                ]);
+            }
+            if(empty($distribution)) {
                 $data = [
-                    'first_leader' => $my_leader_id,
-                    'second_leader' => $my_first_leader,
-                    'third_leader' => $my_third_leader,
-                    'ancestor_relation' => $my_ancestor_relation,
+                    'user_id' => $params['user_id'],
+                    'level_id' => $params['level_id'],
+                    'is_distribution' => 1,
+                    'is_freeze' => 0,
+                    'remark' => '后台开通分销',
+                    'distribution_time' => time()
                 ];
+
+                Distribution::create($data);
             }
 
-            Db::name('user')->where(['id' => $user_id])->update($data);
-
-            //更新我向下一级的第二上级、第三上级
-            $data = [
-                'second_leader' => $my_leader_id,
-                'third_leader' => $my_first_leader,
-            ];
-            Db::name('user')->where(['first_leader' => $user_id])->update($data);
-
-            //更新我向下二级的第三级
-            $data = [
-                'third_leader' => $my_leader_id,
-            ];
-            Db::name('user')->where(['second_leader' => $user_id])->update($data);
-
-
-            //更新与我相关的所有关系链
-            Db::name('user')
-                ->where("find_in_set({$user_id},ancestor_relation)")
-                ->exp('ancestor_relation', "replace(ancestor_relation,'{$user_id}','" . trim("{$user_id},{$my_ancestor_relation}", ',') . "')")
-                ->update();
-
-            Db::commit();
             return true;
-        } catch (Exception $e){
-            Db::rollback();
-            return $e->getMessage();
+        } catch (\Exception $e) {
+            self::$error = $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function getUser($params)
+    {
+        $field = [
+            'u.id' => 'user_id',
+            'u.sn' => 'user_sn',
+            'u.nickname' => 'user_nickname',
+            'dl.name' => 'level_name',
+            'dl.weights',
+        ];
+        $info = Distribution::alias('d')
+            ->leftJoin('user u', 'u.id = d.user_id')
+            ->leftJoin('distribution_level dl', 'dl.id = d.level_id')
+            ->field($field)
+            ->where('d.user_id', $params['id'])
+            ->findOrEmpty()
+            ->toArray();
+
+        return $info;
+    }
+
+    /**
+     * @notes 分销会员等级调整
+     * @param $params
+     * @return bool
+     * @author Tab
+     */
+    public static function adjust($params)
+    {
+        try {
+            Distribution::where(['user_id' => $params['user_id']])->update([
+                'level_id' => $params['level_id']
+            ]);
+
+            return true;
+        } catch (\Exception $e) {
+            self::$error = $e->getMessage();
+            return false;
         }
     }
 
     /**
-     * Notes: 添加分销会员
-     * @author 张无忌(2021/1/11 16:49)
-     * @param $post
-     * @return bool|string
+     * @notes 冻结资格/恢复资格
+     * @param $params
+     * @return bool
+     * @author Tab
      */
-    public static function addMember($post)
+    public static function isFreeze($params)
     {
-        $userModel = new User();
-        // 根据会员编号查询用户
-        $user = $userModel->field('id,sn,is_distribution,distribution_add_remarks,del')
-            ->where(['sn'=>$post['sn']])->find();
-        // 校验用户
-        if (!$user) { return '该用户不存在!'; }
-        if ($user['del'] === 1) { return '该用户已被删除!'; }
-        if ($user['is_distribution']) { return '该用户已是分销会员,无需重复添加'; }
         try {
-            // 更新用户为分销会员
-            $result = $userModel->where(['id' => (int)$user['id']])->update([
-                'is_distribution'          => 1,
-                'distribution_add_remarks' => $post['remarks']
+            Distribution::where(['user_id' => $params['user_id']])->update([
+                'is_freeze' => $params['is_freeze']
             ]);
-            return $result ? true : '添加失败';
-        } catch (\Exception $e) {
-            return $e->getMessage();
+
+            return true;
+        } catch(\Exception $e) {
+            self::$error = $e->getMessage();
+            return false;
         }
     }
 }

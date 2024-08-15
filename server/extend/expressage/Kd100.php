@@ -7,9 +7,9 @@ use Requests;
 class Kd100 extends Expressage
 {
 
-    public function logistics($code, $number)
+    public function logistics($code, $number, $extra = "")
     {
-        $request_data = '{"com":"' . $code . '","num":"' . $number . '","from":"","phone":"","to":"","resultv2":"0","show":"0","order":"desc"}';
+        $request_data = '{"com":"' . $code . '","num":"' . $number . '","from":"","phone":"' . $extra . '","to":"","resultv2":"0","show":"0","order":"desc"}';
 
         $datas = array(
             'customer'  => $this->app,
@@ -26,7 +26,6 @@ class Kd100 extends Expressage
         $result = json_decode($result->body, true);
         if (isset($result['data'])) {
             $this->logistics_info = $result['data'];
-            $this->logistics_info;
         }
         $this->error = json_encode($result, JSON_UNESCAPED_UNICODE);
         return false;

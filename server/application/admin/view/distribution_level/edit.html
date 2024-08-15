@@ -1,0 +1,140 @@
+{layout name="layout2" /}
+<style>
+    .layui-form {
+        margin: 5px;
+    }
+    .layui-form-label {
+        width: 120px;
+        text-align: left;
+        padding-left:30px;
+        color: #6a6f6c !important;
+    }
+    .layui-input {
+        width: 300px;
+    }
+    .layui-textarea {
+        width: 300px;
+    }
+    .reqRed:before {
+        content: '*';
+        color: red;
+        margin-right: 5px;
+    }
+    .checkbox-width {
+        width: 120px;
+    }
+</style>
+<form class="layui-form">
+    <input type="hidden" name="id" value="{$detail.id}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">等级名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value="{$detail.name}" required  lay-verify="required" autocomplete="off" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">等级级别</label>
+        <div class="layui-inline">
+            <input type="number" min="2" name="weights" value="{$detail.weights}"  required  lay-verify="required" autocomplete="off" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            级
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">等级描述</label>
+        <div class="layui-input-block">
+            <textarea name="remark" class="layui-textarea">{$detail.remark}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">一级佣金比例</label>
+        <div class="layui-inline">
+            <input type="number" min="0" name="first_ratio" value="{$detail.first_ratio}" required  lay-verify="required" autocomplete="off" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            %
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">二级佣金比例</label>
+        <div class="layui-inline">
+            <input type="number" min="0" name="second_ratio" value="{$detail.second_ratio}" required  lay-verify="required" autocomplete="off" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            %
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">等级条件</label>
+        <div class="layui-inline">
+            <input type="radio" name="update_relation" value="1" {if $detail.update_relation == 1}checked{/if} title="满足以下任一条件">
+            <input type="radio" name="update_relation" value="2" {if $detail.update_relation == 2}checked{/if} title="满足以下全部条件">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline checkbox-width">
+            <input type="checkbox" lay-skin="primary" name="update_condition[]" value="singleConsumptionAmount" title="单笔消费金额" {if in_array('singleConsumptionAmount', $detail.update_condition.keys)}checked{/if}>
+        </div>
+        <div class="layui-inline">
+            <input type="number" min="0" name="singleConsumptionAmount" value="{$detail.update_condition.data.singleConsumptionAmount}" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            元
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline checkbox-width">
+            <input type="checkbox" lay-skin="primary" name="update_condition[]" value="cumulativeConsumptionAmount" title="累计消费金额" {if in_array('cumulativeConsumptionAmount', $detail.update_condition.keys)}checked{/if}>
+        </div>
+        <div class="layui-inline">
+            <input type="number" min="0" name="cumulativeConsumptionAmount" value="{$detail.update_condition.data.cumulativeConsumptionAmount}" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            元
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline checkbox-width">
+            <input type="checkbox" lay-skin="primary" name="update_condition[]" value="cumulativeConsumptionTimes" title="累计消费次数" {if in_array('cumulativeConsumptionTimes', $detail.update_condition.keys)}checked{/if}>
+        </div>
+        <div class="layui-inline">
+            <input type="number" min="0" name="cumulativeConsumptionTimes" value="{$detail.update_condition.data.cumulativeConsumptionTimes}" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            次
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline checkbox-width">
+            <input type="checkbox" lay-skin="primary" name="update_condition[]" value="returnedCommission" title="已结算佣金收入" {if in_array('returnedCommission', $detail.update_condition.keys)}checked{/if}>
+        </div>
+        <div class="layui-inline">
+            <input type="number" min="0" name="returnedCommission" value="{$detail.update_condition.data.returnedCommission}" class="layui-input" />
+        </div>
+        <div class="layui-inline">
+            元
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block layui-hide">
+            <button class="layui-btn" lay-submit lay-filter="editSubmit" id="editSubmit">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    layui.config({
+        version: "{$front_version}",
+        base: '/static/lib/'
+    }).use(['element', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , layer = layui.layer;
+    });
+</script>

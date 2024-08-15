@@ -75,6 +75,7 @@ class WithdrawLogic extends LogicBase
 
             $data = [
                 'sn' => createSn('withdraw_apply', 'sn'),
+                'batch_no' => createSn('withdraw_apply', 'batch_no','SJZZ'),
                 'user_id' => $user_id,
                 'type' => $post['type'],
                 'account' => $post['account'] ?? '',

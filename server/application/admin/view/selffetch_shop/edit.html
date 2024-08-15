@@ -1,0 +1,338 @@
+{layout name="layout2" /}
+<style>
+    .map-container {
+        width: 600px;
+        height: 400px;
+        margin-left:120px;
+        margin-top:20px;
+    }
+    .img-content{
+        height:80px;
+        line-height:80px
+    }
+    .img-container {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .img-src {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+    .layui-form-select dl {
+        z-index: 1001;
+    }
+</style>
+<link rel="stylesheet" href="/static/admin/css/goods.css" media="all">
+
+<div class="layui-form" lay-filter="layuiadmin-form-cate" id="layuiadmin-form-cate" style="padding: 20px 30px 0 0;">
+
+    <input type="hidden" name="id" value="{$detail.id}">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>门店名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required" lay-verType="tips"  placeholder="" autocomplete="off" class="layui-input" value="{$detail.name}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">门店LOGO：</label>
+        <div class="layui-input-inline">
+            <div class="img-content">
+                <input name="image" type="hidden" value="{$detail.image}">
+                <div class="img-add"  {if $detail.image } style="display: none" {/if} ></div>
+                {if !empty($detail.image)}
+                <div class="img-container">
+                    <img class="img-src" src="{$detail.image}">
+                    <a class="img-del-x">x</a>
+                </div>
+                {/if}
+            </div>
+            <div class=" layui-form-mid layui-word-aux"  style="white-space: nowrap">建议尺寸：100*100像素，jpg，jpeg，png图片类型</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>联系人：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="contact" lay-verify="required" lay-verType="tips"  placeholder="" autocomplete="off" class="layui-input" value="{$detail.contact}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>联系电话：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="mobile" lay-verify="required" lay-verType="tips"  placeholder="" autocomplete="off" class="layui-input" value="{$detail.mobile}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>门店地址：</label>
+        <input type="hidden" value="{$detail.province}" id="default_province">
+        <input type="hidden" value="{$detail.city}" id="default_city">
+        <input type="hidden" value="{$detail.district}" id="default_district">
+        <div class="layui-input-inline">
+            <select name="province" id="province" lay-filter="province" lay-verify="required"
+                    lay-verType="tips" switch-tab="0">
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="city" id="city" lay-filter="city" lay-verify="required">
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="district" id="district" lay-filter="district" lay-verify="required">
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>详细地址：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="address" lay-verify="required" lay-verType="tips"  placeholder="" autocomplete="off" class="layui-input" value="{$detail.address}">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-normal" id="search_map">搜索地图</button>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display:none;">
+        <div class="layui-input-inline " id ='position_id' style="width: 800px;">
+            <label class="layui-form-label" style="right:10px">地图坐标:</label>
+            <div class="layui-input-inline" style="width:200px;">
+                <input type="text" name="longitude" value="{$detail.longitude}" class="layui-input">
+            </div>
+            <div class=" layui-form-mid">经度</div>
+            <div class="layui-input-inline" style="width:200px;">
+                <input type="text" name="latitude" value="{$detail.latitude}" class="layui-input">
+            </div>
+            <div class=" layui-form-mid">纬度</div>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>地图定位：</label>
+        <div class="layui-input-block" style="margin-left:10px;">
+            <div class="map-container" id="map-container"></div>
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>营业周天：</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="weekdays[]" value="1" lay-skin="primary" title="周一" {if in_array(1,$detail.weekdays)}checked=""{/if}>
+            <input type="checkbox" name="weekdays[]" value="2" lay-skin="primary" title="周二" {if in_array(2,$detail.weekdays)}checked=""{/if}>
+            <input type="checkbox" name="weekdays[]" value="3" lay-skin="primary" title="周三" {if in_array(3,$detail.weekdays)}checked=""{/if}>
+            <input type="checkbox" name="weekdays[]" value="4" lay-skin="primary" title="周四" {if in_array(4,$detail.weekdays)}checked=""{/if}>
+            <input type="checkbox" name="weekdays[]" value="5" lay-skin="primary" title="周五" {if in_array(5,$detail.weekdays)}checked=""{/if}>
+            <input type="checkbox" name="weekdays[]" value="6" lay-skin="primary" title="周六" {if in_array(6,$detail.weekdays)}checked=""{/if}>
+            <input type="checkbox" name="weekdays[]" value="7" lay-skin="primary" title="周天" {if in_array(7,$detail.weekdays)}checked=""{/if}>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>营业时段：</label>
+        <div class="layui-input-inline">
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="business_start_time" name="business_start_time" lay-verify="required" value="{$detail.business_start_time}">
+            </div>
+        </div>
+        <div class="layui-input-inline" style="margin-right: 5px;width: 20px;">
+            <label class="layui-form-mid">—</label>
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="business_end_time" name="business_end_time" lay-verify="required" value="{$detail.business_end_time}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">门店简介：</label>
+        <div class="layui-input-block" style="margin-left: 110px">
+            <textarea name="remark" lay-verify="remark" style="width: 30%;" class="layui-textarea">{$detail.remark}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>门店状态：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="0" title="停用" {if $detail.status==0}checked=""{/if}>
+            <input type="radio" name="status" value="1" title="启用" {if $detail.status==1}checked=""{/if}>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="edit-cate-submit" id="edit-cate-submit" value="确认">
+    </div>
+</div>
+
+<!--<script type="text/javascript" src="https://map.qq.com/api/js?v=2.exp&key={$tx_map_key}"></script>-->
+<script src="https://map.qq.com/api/gljs?v=1.exp&key={$tx_map_key}&libraries=service"></script>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like','laydate','txMap','customTxMap'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+            ,laydate = layui.laydate
+            ,txMap = layui.txMap;
+        var customTxMap = layui.customTxMap;
+
+
+        /*************************图片处理**********************************************/
+        //上传图片
+        $(document).on('click', '.image-del-x', function () {
+            $(this).parent().prev().val('');
+            $(this).parent().siblings('.image-add').css('display','block');
+            $(this).parent().remove();
+            return false;
+        });
+        //上传图片
+        like.imageUpload('.img-add', function (uris, element) {
+            if(uris.length>1){
+                layer.msg('最多最能选中1张图片');
+                return;
+            }
+            var html = '<div class="img-container">\n' +
+                '<img class="img-src" ' +
+                'src="' + uris[0] + '">' +
+                '<a class="img-del-x">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uris[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.img-src', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+
+
+        /*************************省市区三级联动**********************************************/
+        var area = {$area_lists | raw};
+        var default_province = $("#default_province").val();
+        var default_city = $("#default_city").val();
+        var default_district = $("#default_district").val();
+
+        setSelectFirst(default_province);
+        setSelectSecond(default_city,default_province);
+        setSelectThird(default_district,default_city);
+
+        function setSelectFirst(default_id) {
+            var category_select_html = '';
+            for (var i in area) {
+                if (area[i]['level'] == 1) {
+                    category_select_html += '<option value="' + area[i]['id'] + '">' + area[i]['name'] + '</option>';
+                }
+            }
+            $('select[name="province"]').html(category_select_html);
+            $('select[name="province"]').val(default_id);
+            form.render('select');
+        }
+        function setSelectSecond(default_id, pid) {
+            pid = pid === undefined ? $('select[name="province"]').val() : pid;
+            $('select[name="city"]').html('');
+            $('select[name="district"]').html('');
+            var category_select_html = '';
+            for (var i in area) {
+                if (area[i]['pid'] == pid) {
+                    category_select_html += '<option value="' + area[i]['id'] + '">' + area[i]['name'] + '</option>';
+                }
+            }
+            $('select[name="city"]').html(category_select_html);
+            $('select[name="city"]').val(default_id);
+            form.render('select');
+        }
+        function setSelectThird(default_id, pid) {
+            pid = pid === undefined ? $('select[name="city"]').val() : pid;
+            $('select[name="district"]').html('');
+            var province = $('select[name="province"]').val();
+            var category_select_html = '';
+            for (var i in area) {
+                if (area[i]['pid'] == pid) {
+                    category_select_html += '<option value="' + area[i]['id'] + '">' + area[i]['name'] + '</option>';
+                }
+            }
+            $('select[name="district"]').html(category_select_html);
+            $('select[name="district"]').val(default_id);
+            form.render('select');
+        }
+
+        form.on('select(province)', function (data) {
+            setSelectSecond('', data.value);
+        });
+        form.on('select(city)', function (data) {
+            setSelectThird('', data.value);
+        });
+
+
+        /*************************日期时间**********************************************/
+        laydate.render({
+            elem: '#business_start_time'
+            ,type: 'time'
+            ,trigger: 'click'
+        });
+
+        laydate.render({
+            elem: '#business_end_time'
+            ,type: 'time'
+            ,trigger: 'click'
+        });
+
+
+        /*************************地图**********************************************/
+        // txMap.init("{$detail.latitude ?? ''}", "{$detail.longitude ?? ''}");
+        customTxMap.initMap('map-container',{$detail.longitude ?? ''},{$detail.latitude ?? ''});
+        //搜索地图
+        $("#search_map").click(function () {
+            var province = $("#province");
+            var city = $("#city");
+            var district = $("#district");
+            var address = $("input[name='address']").val();
+            if(province.val() == 0){
+                layer.open({icon:2,time:2000,content:"请选择省份"});
+                return;
+            }
+            if(city.val() == 0){
+                layer.open({icon:2,time:2000,content:"请选择市"});
+                return;
+            }
+            if(district.val() == 0){
+                layer.open({icon:2,time:2000,content:"请选择镇/区"});
+                return;
+            }
+            intactAddress = province.find("option:selected").text() + city.find("option:selected").text() + district.find("option:selected").text() + address;
+            customTxMap.searchMap(intactAddress);
+        })
+    })
+</script>

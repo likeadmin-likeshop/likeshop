@@ -22,7 +22,7 @@ use think\Db;
 
 class RechargeLogic{
     public static function templatelists(){
-        $list = Db::name('recharge_template')->where(['del'=>0])->select();
+        $list = Db::name('recharge_template')->where(['del'=>0])->order('id desc')->select();
         foreach ($list as &$item){
             $item['money'] && $item['money'] = '￥'.$item['money'];
             $item['give_money'] && $item['give_money'] = '￥'.$item['give_money'];
@@ -43,7 +43,7 @@ class RechargeLogic{
         ConfigServer::set('recharge','open_racharge',$post['open_racharge']);
         ConfigServer::set('recharge','give_integral',$post['give_integral']);
         ConfigServer::set('recharge','give_growth',$post['give_growth']);
-        ConfigServer::set('recharge','min_money',$post['min_money']);
+        ConfigServer::set('recharge','min_money', round($post['min_money'], 2));
     }
 
     public static function add($post){

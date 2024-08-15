@@ -25,8 +25,12 @@ use app\common\logic\IntegralLogic;
 use app\common\logic\LogicBase;
 use app\common\logic\PayNotifyLogic;
 use app\common\model\Client_;
+use app\common\model\Goods;
+use app\common\model\GoodsItem;
 use app\common\model\Order;
+use app\common\model\Order as CommonOrder;
 use app\common\model\Pay;
+use app\common\model\SelffetchShop;
 use app\common\model\Team;
 use app\common\model\TeamActivity;
 use app\common\model\TeamFollow;
@@ -38,6 +42,7 @@ use app\common\server\UrlServer;
 use think\Db;
 use think\Exception;
 use think\facade\Hook;
+use think\facade\Validate;
 
 /**
  * 拼团逻辑
@@ -59,7 +64,7 @@ class TeamLogic extends LogicBase
     private static $team_found = [];
     private static $team_activity = [];
 
-    protected static $error; //错误信息
+    public static $error; //错误信息
 
 
     /**
@@ -98,7 +103,7 @@ class TeamLogic extends LogicBase
                 ->count();
 
             $lists = $teamActivityModel->field('g.name,g.image,g.max_price,g.min_price,
-            t.team_id,t.goods_id,t.sales_sum,t.people_num,t.team_max_price,t.team_min_price,t.end_time')
+            t.team_id,t.goods_id,t.sales_sum,t.people_num,t.team_max_price,t.team_min_price,t.end_time,g.is_express,g.is_selffetch')
                 ->where($where)->alias('t')
                 ->join('Goods g', 'g.id = t.goods_id')
                 ->page($page, $size)
@@ -141,7 +146,7 @@ class TeamLogic extends LogicBase
         $field = 'i.id as item_id,g.id as goods_id,g.name as goods_name,g.status,g.del,g.image,i.stock,
         g.free_shipping_type,g.free_shipping,g.free_shipping_template_id,g.image, i.image as spec_image,
         i.spec_value_str,i.spec_value_ids,i.price as item_price,i.image as spec_image,i.volume,
-        i.weight,g.third_category_id,i.price as original_price,tg.team_id,tg.team_price as goods_price';
+        i.weight,g.third_category_id,i.price as original_price,tg.team_id,tg.team_price as goods_price,g.is_express,g.is_selffetch';
 
         $goods = $team_goods->alias('tg')
             ->field($field)
@@ -200,7 +205,8 @@ class TeamLogic extends LogicBase
             //用户地址
             $user_address = UserAddressLogic::getOrderUserAddress($post, $user_id);
             //运费
-            $total_shipping_price = FreightLogic::calculateFreight($goods_lists, $user_address);
+            $total_shipping_price = ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? 0 :FreightLogic::calculateFreight($goods_lists, $user_address);
+            //$total_shipping_price = FreightLogic::calculateFreight($goods_lists, $user_address);
             //订单金额
             $total_amount = $total_goods_price + $total_shipping_price;
             //订单应付金额
@@ -256,34 +262,66 @@ class TeamLogic extends LogicBase
             $goods_lists = $order_data['goods_lists'];
             $user_address = $order_data['address'];
 
-            self::addTeamOrderCheck($order_data);
+            self::addTeamOrderCheck($order_data,$post);
 
-            //拼团信息
-            $order_team = [
+
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && empty($post['selffetch_shop_id'])) {
+                throw  new Exception('自提门店不能为空');
+            }
+//            if (isset($post['selffetch_shop_id']) && !empty($post['selffetch_shop_id'])) {
+//                $selffetch_shop = SelffetchShop::find($post['selffetch_shop_id'])->toArray();
+//                if (strtotime($selffetch_shop['business_start_time']) > time() || strtotime($selffetch_shop['business_end_time']) < time()) {
+//                    throw  new Exception('不在门店营业时间,无法下单');
+//                }
+//            }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && empty($post['consignee'])) {
+                throw  new Exception('取货人不能为空');
+            }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && empty($post['mobile'])) {
+                throw  new Exception('联系电话不能为空');
+            }
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF && !Validate::mobile($post['mobile'])) {
+                throw  new Exception('联系电话格式不正确');
+            }
+
+
+            //验证订单商品是否支持对应的配送方式
+            $is_express = ConfigServer::get('delivery_type', 'is_express', 1);
+            $is_selffetch = ConfigServer::get('delivery_type', 'is_selffetch', 0);
+            $goods_id = GoodsItem::where('id','=', $post['item_id'])->value('goods_id');
+            $goods = Goods::where('id','=', $goods_id)->find()->toArray();
+            //门店自提
+            if ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) {
+                if ($is_selffetch == 0) {
+                    throw new Exception('暂未开启门店自提配送方式');
+                }
+                if ($goods['is_selffetch'] == 0) {
+                    throw new Exception('商品不支持门店自提！');
+                }
+            }elseif ($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_EXPRESS) { //快递配送
+                if ($is_express == 0) {
+                    throw new Exception('暂未开启快递配送方式');
+                }
+                if ($goods['is_express'] == 0) {
+                    throw new Exception('商品不支持快递配送！');
+                }
+            }
+
+
+            $extra = [
+                'delivery_type'=>$post['delivery_type'],
+                'selffetch_shop_id'=>($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? $post['selffetch_shop_id'] : '',
+                'consignee'=>($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? $post['consignee'] : '',
+                'mobile'=>($post['delivery_type'] == CommonOrder::DELIVERY_STATUS_SELF) ? $post['mobile'] : '',
                 'found_id' => $post['found_id'] ?? 0,
                 'team_id' => $post['team_id'] ?? 0,
             ];
-            $order = OrderLogic::addOrder($user_id, $order_data, $client, $user_address, $order_team);
+
+            $order = OrderLogic::addOrder($user_id, $order_data, $client, $user_address, $extra);
             $order_id = $order['order_id'];
             OrderLogic::addOrderGoods($order_id, $goods_lists);
             OrderLogic::addOrderAfter($order_id, $user_id, $type = '', $order_data);
-
-            //支付方式为余额支付,扣除余额,更新订单状态,支付状态
-            if ($order_data['pay_way'] == Pay::BALANCE_PAY || $order_data['order_amount'] == 0){
-                PayNotifyLogic::handle('order', $order['order_sn'], []);
-            }
-
-            //短信通知
-            Hook::listen('sms_send', [
-                'key'       => 'DDTJTZ',
-                'mobile'    => $user_address['telephone'],
-                'params'    => [
-                    'nickname'      => self::$user['mobile'],
-                    'order_sn'      => $order['order_sn'],
-                    'order_amount'   => $order['order_amount']
-                ],
-            ]);
-
+            
             Db::commit();
             return ['order_id' => $order_id, 'type' => 'order'];
 
@@ -303,10 +341,13 @@ class TeamLogic extends LogicBase
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public static function addTeamOrderCheck($order_data)
+    public static function addTeamOrderCheck($order_data,$post)
     {
-        if (empty($order_data['address'])) {
-            throw new Exception('请选择收货地址');
+//        if (empty($order_data['address'])) {
+//            throw new Exception('请选择收货地址');
+//        }
+        if ($post['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF && empty($order_data['address'])) {
+            throw  new Exception('请选择收货地址');
         }
 
         //余额支付,是否满足支付金额

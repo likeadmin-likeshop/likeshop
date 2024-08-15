@@ -39,13 +39,11 @@ class LogLogic
      */
     public static function lists($page_no, $size, $get)
     {
-
-        $where[] = ['create_time', 'between', Time::today()];
-
         if (isset($get['start_time']) && $get['start_time'] && isset($get['end_time']) && $get['end_time']) {
             $where[] = ['create_time', 'between', [strtotime($get['start_time']), strtotime($get['end_time'])]];
+        } else {
+            $where[] = ['create_time', 'between', Time::today()];
         }
-
 
         if (isset($get['account']) && $get['account']) {
             $where[] = ['account', 'like', "%{$get['account']}%"];
@@ -60,7 +58,6 @@ class LogLogic
             $where[] = ['ip', 'like', "%{$get['ip']}%"];
         }
 
-
         $lists = Db::name('system_log')
             ->where($where)
             ->page($page_no, $size)
@@ -74,6 +71,7 @@ class LogLogic
         $count = Db::name('system_log')
             ->where($where)
             ->count();
+
         return ['lists' => $lists, 'count' => $count];
     }
 }

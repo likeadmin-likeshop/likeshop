@@ -1,0 +1,121 @@
+{layout name="layout2" /}
+<style>
+    .layui-form {
+        margin: 5px;
+    }
+    .layui-form-label {
+        width: 90px;
+        text-align: right;
+        padding-left:30px;
+        color: #6a6f6c !important;
+    }
+    .layui-input-block {
+        line-height: 36px;
+    }
+    .layui-input {
+        width: 300px;
+    }
+    .layui-textarea {
+        width: 300px;
+    }
+    .reqRed:before {
+        content: '*';
+        color: red;
+        margin-right: 5px;
+    }
+</style>
+<form class="layui-form">
+    <input type="hidden" name="id" value="{$detail.goods.id}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品编号：</label>
+        <div class="layui-input-block">
+            {$detail.goods.code}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品名称：</label>
+        <div class="layui-input-block">
+            {$detail.goods.name}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">分销状态：</label>
+        <div class="layui-inline">
+            <input type="radio" name="is_distribution" value="0" title="不参与" {if $detail.goods.is_distribution == 0}checked{/if}>
+            <input type="radio" name="is_distribution" value="1" title="参与" {if $detail.goods.is_distribution == 1}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed">佣金规则：</label>
+        <div class="layui-inline">
+            <input type="radio" lay-filter="default" name="rule" value="1" title="默认分销等级佣金规则" {if isset($detail.goods.rule) && $detail.goods.rule == 1}checked{/if}>
+            <input type="radio" lay-filter="customize" name="rule" value="2" title="单独设置" {if isset($detail.goods.rule) && $detail.goods.rule == 2}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-inline">
+            <table class="layui-table {if $detail.goods.rule == 1}layui-hide{/if}">
+                <colgroup>
+                    <col width="200">
+                    <col width="200">
+                    <col width="200">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>分销等级</th>
+                    <th>商品规格</th>
+                    <th>价格</th>
+                    <th class="reqRed">一级佣金比例(%)</th>
+                    <th class="reqRed">二级佣金比例(%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $detail.ratio as $item }
+                <input type="hidden" name="items[]" value="{$item['item_id']}">
+                <input type="hidden" name="levels[]" value="{$item['level_id']}">
+                <tr>
+                    <td>{$item.level_name}</td>
+                    <td>{$item.spec_value_str}</td>
+                    <td>{$item.price}</td>
+                    <td>
+                        <input type="number" min="0" name="first_ratio[]" value="{$item.first_ratio}" class="layui-input" />
+                    </td>
+                    <td>
+                        <input type="number" min="0" name="second_ratio[]" value="{$item.second_ratio}" class="layui-input" />
+                    </td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block layui-hide">
+            <button class="layui-btn" lay-submit lay-filter="setSubmit" id="setSubmit">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['element', 'form'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , layer = layui.layer;
+
+        form.on('radio(default)', function(data){
+            $('.layui-table').addClass('layui-hide');
+        });
+        form.on('radio(customize)', function(data){
+            $('.layui-table').removeClass('layui-hide');
+        });
+    });
+</script>

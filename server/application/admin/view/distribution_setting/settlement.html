@@ -1,0 +1,94 @@
+{layout name="layout2" /}
+<style>
+    html,
+    body {
+        background: #f8f8f8;
+    }
+    .layui-panel {
+        margin: 5px;
+    }
+    .layui-form-label {
+        width: 120px;
+        text-align: left;
+        padding-left:30px;
+        color: #6a6f6c !important;
+    }
+    .layui-form {
+        padding: 15px;
+        background: #f8f8f8;
+    }
+</style>
+<!-- 表单 -->
+<form class="layui-form">
+    <div class="layui-card">
+        <div class="layui-card-header">结算设置</div>
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+                <label class="layui-form-label">佣金计算方式</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="cale_method" value="1" title="商品实际支付金额" {if $config.cale_method == 1}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block layui-word-aux">
+                    根据商品实际支付金额及相应的佣金比例计算佣金
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">结算时机</label>
+                <div class="layui-inline">
+                    <input type="radio" name="settlement" value="1" title="订单完成后" {if $config.settlement == 1}checked{/if}>
+                </div>
+                <div class="layui-inline">
+                    <input type="number" min="0" name="settlement_days" value="{$config.settlement_days}" class="layui-input" />
+                </div>
+                <div class="layui-inline">
+                    天
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block layui-word-aux">
+                    预估佣金结算后无法进行回收，请谨慎设置结算天数
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-bg-blue layui-btn layui-btn-sm" lay-submit lay-filter="*">保存设置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['element', 'form', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , layer = layui.layer;
+
+        form.on('submit(*)', function (data) {
+            like.ajax({
+                url: '{:url("distribution_setting/set")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg);
+                    }
+                },
+            });
+            return false; //阻止表单跳转
+        });
+
+    });
+</script>

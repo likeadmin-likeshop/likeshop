@@ -59,7 +59,7 @@ class GoodsCommentLogic{
                     ->where(['gc.del'=>0,'gc.status'=>1])
                     ->where($where)
                     ->page($page,$size)
-                    ->field('gc.id,goods_comment,service_comment,express_comment,comment,description_comment,reply,gc.create_time,u.nickname,avatar,gi.spec_value_str')
+                    ->field('gc.id,goods_comment,service_comment,express_comment,comment,description_comment,reply,gc.create_time,u.nickname,avatar,gi.spec_value_str,virtual_data')
                     ->group('gc.id')
                     ->order('gc.id desc')
                     ->select();
@@ -73,8 +73,17 @@ class GoodsCommentLogic{
 
         }
         foreach ($comment_lists as &$comment){
+
+            // 虚拟评论
+            if (empty($comment['user_id']) && !empty($comment['virtual_data'])) {
+                $virtual_data = json_decode($comment['virtual_data'], JSON_UNESCAPED_UNICODE);
+                $comment['avatar'] = $virtual_data['avatar'] ?? '';
+                $comment['nickname'] = $virtual_data['nickname'] ?? '';
+                $comment['create_time'] = $virtual_data['comment_time'] ?? time();
+            }
+
             $comment['avatar'] = UrlServer::getFileUrl($comment['avatar']);
-            $comment['create_time'] = date('Y-m-d H:i:d',$comment['create_time']);
+            $comment['create_time'] = date('Y-m-d H:i:s',$comment['create_time']);
 
             $comment['image'] = [];
             foreach ($iamge_list as $image){
@@ -258,7 +267,7 @@ class GoodsCommentLogic{
                     ->join('order_goods OG','O.id = OG.order_id')
                     ->join('goods G','OG.goods_id = G.id')
                     ->where($where)
-                    ->field('OG.id,OG.goods_id,item_id,OG.goods_price,goods_num,G.image,G.name as goods_name,OG.goods_info')
+                    ->field('OG.id,OG.goods_id,item_id,OG.goods_price,goods_num,G.image,G.name as goods_name,OG.goods_info,G.del,G.status')
                     ->page($page,$size)
                     ->order('O.id desc')
                     ->select();

@@ -1,0 +1,158 @@
+{layout name="layout1" /}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="add">新增电子面单模板</button>
+            </div>
+            <table id="like-table-lists" lay-filter="like-table-lists"></table>
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table','like','form'], function(){
+        var $ = layui.$
+            ,table = layui.table
+            ,like = layui.like;
+
+
+        // 渲染数据表格
+        table.render({
+            elem: '#like-table-lists'
+            ,url: '{:url("FaceSheet/lists")}'
+            ,cols: [[
+                {field: 'name', title: '模版名称',width:150, templet: '#table-goods'}
+                ,{field: 'express', title: '快递公司', align: 'center', width:150}
+                ,{field: 'create_time', title: '创建时间', width:170, align: 'center'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar: '#operation',width:150}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+
+        //事件
+        var active = {
+            add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '新增电子面单模板'
+                    ,content: '{:url("FaceSheet/add")}'
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            like.ajax({
+                                url:'{:url("FaceSheet/add")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                        layer.close(index);
+                                        table.reload('like-table-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            },
+            // 编辑
+            edit: function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '编辑电子面单模板'
+                    ,content: '{:url("FaceSheet/edit")}?id='+obj.data.id
+                    ,area: ['90%','90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'addSubmit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                            var field = data.field;
+                            field['id'] = obj.data.id;
+                            like.ajax({
+                                url:'{:url("FaceSheet/edit")}',
+                                data:field,
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        layui.layer.msg(res.msg, { offset:'15px', icon:1, time:1000 });
+                                        layer.close(index);
+                                        table.reload('like-table-lists');
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            },
+            // 删除
+            del: function (obj) {
+                layer.confirm('确定删除电子面单模板:'+'<span style="color: red">'+obj.data.name+'</span>', function(index) {
+                    like.ajax({
+                        url: '{:url("FaceSheet/del")}',
+                        data: {id:obj.data.id},
+                        type: "post",
+                        success: function (res) {
+                            if (res.code === 1) {
+                                layui.layer.msg(res.msg, {offset: '15px', icon: 1, time: 1000});
+                                layer.close(index);
+                                obj.del();
+                                table.reload('like-table-lists');
+                            }
+                        }
+                    });
+                    layer.close(index);
+                })
+            }
+        };
+
+        // 监听表格右侧工具条
+        table.on('tool(like-table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

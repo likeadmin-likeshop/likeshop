@@ -113,10 +113,12 @@
     </div>
     <div class="layui-form-item link page">
         <label class="layui-form-label">商城页面：</label>
-        <div class="layui-input-block">
-            {foreach $link_page as $item => $val}
-            <input type="radio" name="page" title="{$val.name}" value="{$item}" {if condition="$item eq 0"} checked{/if}>
-            {/foreach}
+        <div class="layui-input-inline">
+            <select name="page" style="width: 300px">
+                {foreach $link_page as $item => $val}
+                <option value="{$item}" >{$val.name}</option>
+                {/foreach}
+            </select>
         </div>
     </div>
     <div class="layui-form-item link goods">
@@ -164,6 +166,15 @@
             <input type="radio" name="status" value="0" title="停用" >
         </div>
     </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-inline">
+            <input type="number" value="50" name="sort"  placeholder="请输入排序" class="layui-input" min="0">
+            <div class="layui-form-mid layui-word-aux">默认50。数值越大越靠前</div>
+        </div>
+    </div>
+
     <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="add-ad-submit" id="add-ad-submit" value="确认">
     </div>

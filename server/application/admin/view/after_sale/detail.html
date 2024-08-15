@@ -80,7 +80,7 @@
 
         <div class="layui-form-item div-flex">
             <label class="layui-form-label ">配送方式:</label>
-            <div class="width-160">物流配送</div>
+            <div class="width-160">{$detail.order.delivery_type_text}</div>
             <label class="layui-form-label ">订单状态:</label>
             <div class="width-160">{$detail.order.order_status}</div>
         </div>
@@ -149,12 +149,6 @@
                     <td>{$goods.total_price}</td>
                 </tr>
                 {/foreach}
-                <tr>
-                    <td colspan="3"></td>
-                    <td style="text-align: left;">
-                        <div>退款金额:<span style="color: red">￥{$detail.refund_price}</span> </div>
-                    </td>
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -178,10 +172,6 @@
         <div class="layui-form-item div-flex">
             <label class="layui-form-label ">退货地址:</label>
             <div class="width-160 refund_address_text">{$detail.shop_address}</div>
-            <label class="layui-form-label ">入库方式:</label>
-            <div class="width-160"></div>
-            <label class="layui-form-label ">收货时间:</label>
-            <div class="width-160">{$detail.confirm_take_time}</div>
         </div>
         {/if}
 

@@ -33,11 +33,28 @@ class Luckdraw extends ApiBase
      */
     public function draw()
     {
+        $check = $this->validate(['user_id' => $this->user_id],'app\api\validate\Luckdraw');
+        if (true !== $check) {
+            $this->_error($check);
+        }
         $result = LuckdrawLogic::draw($this->user_id);
         if ($result) {
             $this->_success('OK', $result);
         }
         $error = LuckdrawLogic::getError() ?: '抽奖失败';
         $this->_error($error);
+    }
+
+
+
+    /**
+     * @notes 中奖列表
+     * @author 段誉
+     * @date 2022/2/17 15:41
+     */
+    public function winList()
+    {
+        $result = LuckdrawLogic::getWinList($this->page_no, $this->page_size);
+        $this->_success('OK', $result);
     }
 }

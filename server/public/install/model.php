@@ -310,6 +310,13 @@ class installModel
         /* Get mysql version. */
         $version = $this->getMysqlVersion();
 
+        /* check mysql sql_model */
+        if(!$this->checkSqlMode($version)) {
+            $return->result = 'fail';
+            $return->error = '请在mysql配置文件修改sql-mode添加NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+            return $return;
+        }
+
         /* If database no exits, try create it. */
         if ( !$this->dbExists()) {
             if ( !$this->createDB($version)) {
@@ -420,6 +427,29 @@ class installModel
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
         return substr($result->version, 0, 3);
+    }
+
+
+    /**
+     * @notes 检测数据库sql_mode
+     * @param $version
+     * @return bool
+     * @author 段誉
+     * @date 2021/8/27 17:17
+     */
+    public function checkSqlMode($version)
+    {
+        $sql = "SELECT @@global.sql_mode";
+        $result = $this->dbh->query($sql)->fetch();
+        $result = (array)$result;
+        if ($version >= 5.7) {
+            if ((strpos($result['@@global.sql_mode'],'NO_AUTO_CREATE_USER') !==false)
+                && (strpos($result['@@global.sql_mode'],'NO_ENGINE_SUBSTITUTION') !==false)) {
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     /**

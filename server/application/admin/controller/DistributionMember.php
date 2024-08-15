@@ -1,184 +1,105 @@
 <?php
-// +----------------------------------------------------------------------
-// | likeshop开源商城系统
-// +----------------------------------------------------------------------
-// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | gitee下载：https://gitee.com/likeshop_gitee
-// | github下载：https://github.com/likeshop-github
-// | 访问官网：https://www.likeshop.cn
-// | 访问社区：https://home.likeshop.cn
-// | 访问手册：http://doc.likeshop.cn
-// | 微信公众号：likeshop技术社区
-// | likeshop系列产品在gitee、github等公开渠道开源版本可免费商用，未经许可不能去除前后端官方版权标识
-// |  likeshop系列产品收费版本务必购买商业授权，购买去版权授权后，方可去除前后端官方版权标识
-// | 禁止对系统程序代码以任何目的，任何形式的再发布
-// | likeshop团队版权所有并拥有最终解释权
-// +----------------------------------------------------------------------
-// | author: likeshop.cn.team
-// +----------------------------------------------------------------------
-
 namespace app\admin\controller;
 
+use app\admin\logic\DistributionLevelLogic;
 use app\admin\logic\DistributionMemberLogic;
-use app\common\model\DistributionMember as DistributionMemberModel;
 
+/**
+ * 分销会员
+ * Class DistributionMember
+ * @package app\admin\controller\distribution
+ */
 class DistributionMember extends AdminBase
 {
-
     /**
-     * 分销会员列表/审核会员列表
-     * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
+     * @notes 分销会员列表
+     * @return \think\response\View
+     * @author Tab
      */
     public function index()
     {
-        if ($this->request->isAjax()) {
-            $get = $this->request->get();
-            $type = $get['type'] ?? 'member';
-            if ($type == 'member') {
-                $this->_success('获取成功', DistributionMemberLogic::memberLists($get));
-            }
-            $this->_success('获取成功', DistributionMemberLogic::auditLists($get));
+        if ($this->request->isPost()) {
+            $params = $this->request->post();
+            $result = DistributionMemberLogic::lists($params);
+            return $this->_success('', $result);
         }
-        $this->assign('status', DistributionMemberModel::getApplyStatus(true));
-        return $this->fetch('index');
+        $levels = DistributionLevelLogic::getLevels();
+        return view('', ['levels' => $levels]);
     }
 
     /**
-     * 审核分销会员
+     * @notes 开通分销会员
+     * @return \think\response\View
+     * @author Tab
      */
-    public function audit()
+    public function open()
     {
-        if ($this->request->isAjax()) {
-            $post = $this->request->post();
-            $check = $this->validate($post, 'app\admin\validate\DistributionMember.audit');
-            if (true !== $check) {
-                $this->_error($check);
+        if($this->request->isPost()) {
+            $params = $this->request->post();
+            $result = DistributionMemberLogic::open($params);
+            if($result) {
+                return $this->_success('开通成功');
             }
-
-            if ($post['type'] == 'pass') {
-                $res = DistributionMemberLogic::auditPass($post);
-            } else {
-                $res = DistributionMemberLogic::auditRefuse($post);
-            }
-
-            if ($res !== true) {
-                $this->_error('操作失败');
-            }
-            $this->_success('操作成功');
+            return $this->_error(DistributionMemberLogic::getError());
         }
-    }
-
-
-    //冻结/解冻分销资格
-    public function freeze()
-    {
-        if ($this->request->isAjax()) {
-            $post = $this->request->post();
-            $check = $this->validate($post, 'app\admin\validate\DistributionMember.freeze');
-            if (true !== $check) {
-                $this->_error($check);
-            }
-            DistributionMemberLogic::freeze($post);
-            $this->_success('操作成功');
-        }
-        $this->_error('操作失败');
+        $levels = DistributionLevelLogic::getLevels();
+        return view('', ['levels' => $levels]);
     }
 
     /**
-     * 分销会员详情(分销资料)
-     * @return mixed
+     * @notes 用户列表
+     * @return \think\response\Json|\think\response\View
      * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
+     * @author Tab
      */
-    public function info()
+    public function userLists()
     {
-        $get = $this->request->get();
-        $info = DistributionMemberLogic::getMemberInfo($get);
-        $this->assign('detail', $info);
-        return $this->fetch();
+        if ($this->request->isPost()) {
+            $params = $this->request->post();
+            $lists = DistributionMemberLogic::getUserLists($params);
+            return $this->_success('', $lists);
+        }
+        return view();
     }
 
     /**
-     * 推广会员
-     * @return mixed
+     * @notes 分销会员等级调整
+     * @return \think\response\Json|\think\response\View
+     * @author Tab
      */
-    public function fans()
+    public function adjust()
     {
-        $user_id = $this->request->get('id');
-        if ($this->request->isAjax()) {
-            $get = $this->request->get();
-            $this->_success('获取成功', DistributionMemberLogic::getFansLists($get));
-        }
-        $this->assign('user_id', $user_id);
-        return $this->fetch();
-    }
-
-
-    /**
-     * 分销收入明细
-     * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function earningsDetail()
-    {
-        $user_id = $this->request->get('id');
-        if ($this->request->isAjax()) {
-            $get = $this->request->get();
-            $this->_success('获取成功', DistributionMemberLogic::getEarningsDetail($get));
-        }
-        $this->assign('user_id', $user_id);
-        return $this->fetch();
-    }
-
-    //修改上级
-    public function updateLeader()
-    {
-        $user_id = $this->request->get('id');
-        if ($this->request->isAjax()) {
-            $post = $this->request->post();
-            $check = $this->validate($post, 'app\admin\validate\DistributionMember.updateLeader');
-            if (true !== $check) {
-                $this->_error($check);
+        if($this->request->isPost()) {
+            $params = $this->request->post();
+            $result = DistributionMemberLogic::adjust($params);
+            if($result) {
+                return $this->_success('调整成功');
             }
-            $res = DistributionMemberLogic::updateRelation($post);
-            if ($res === true){
-                $this->_success('操作成功');
-            }
-            $this->_error($res);
+            return $this->_error(DistributionMemberLogic::getError());
         }
-        $this->assign('first_leader',DistributionMemberLogic::getLeaderInfo($user_id));
-        $this->assign('user_id', $user_id);
-        return $this->fetch();
+        $params = $this->request->get();
+        $user = DistributionMemberLogic::getUser($params);
+        $levels = DistributionLevelLogic::getLevels();
+        return view('', [
+            'user' => $user,
+            'levels' => $levels
+        ]);
     }
 
     /**
-     * Notes: 添加分销会员
-     * @author 张无忌(2021/1/11 16:32)
+     * @notes 冻结资格/恢复资格
+     * @return \think\response\Json
+     * @author Tab
      */
-    public function addMember()
+    public function isFreeze()
     {
-        if ($this->request->isAjax()) {
-            $post = $this->request->post();
-            $check = $this->validate($post, 'app\admin\validate\DistributionMember.addMember');
-            if (true !== $check) {
-                $this->_error($check);
-            }
-
-            $result = DistributionMemberLogic::addMember($post);
-
-            if ($result === true) {
-                $this->_success('添加成功');
-            } else {
-                $this->_error($result);
-            }
+        $params = $this->request->post();
+        $result = DistributionMemberLogic::isFreeze($params);
+        if($result) {
+            return $this->_success('操作成功');
         }
-
-        return $this->fetch('distribution_member/add_member');
+        return $this->_error(DistributionMemberLogic::getError());
     }
 }

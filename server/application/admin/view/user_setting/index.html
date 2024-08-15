@@ -1,0 +1,212 @@
+{layout name="layout1" /}
+<style>
+    .layui-panel {
+        margin: 5px;
+    }
+    .layui-form-label {
+        width: 120px;
+        text-align: left;
+        padding-left:30px;
+    }
+    .goods-li {
+        float: left;
+        opacity: 1;
+        position: relative;
+    }
+
+    .goods-img {
+        width: 80px;
+        height: 80px;
+        padding: 4px;
+    }
+    .goods-img-del-x {
+        position: absolute;
+        z-index: 100;
+        top: -4px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 16px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background: hsla(0, 0%, 60%, .6);
+        border-radius: 10px;
+    }
+    .invite_appoint_user{
+        display: none;
+    }
+</style>
+<!-- 面板 -->
+<div class="layui-fluid">
+    <!-- 表单 -->
+    <form class="layui-card layui-form">
+        <!-- 字段集区块 -->
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>邀请下级</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邀请下级</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="is_open" value="0" title="关闭" {if $config.is_open == 0}checked{/if}>
+                        <input type="radio" name="is_open" value="1" title="开启" {if $config.is_open == 1}checked{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block layui-word-aux">
+                        关闭功能后用户之间不能建立新的上下级关系。
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邀请下级资格</label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="qualifications" lay-skin="primary" name="qualifications" value="1" title="全部用户" >
+                        <input type="radio" lay-filter="qualifications" lay-skin="primary" name="qualifications" value="2" title="指定会员" >
+                    </div>
+                    <div class="layui-input-block invite_appoint_user">
+                        {foreach $user_level as $key => $vo}
+                        <input type="checkbox" lay-skin="primary" name="invite_appoint_user[{$vo.id}]"  title="{$vo.name}" {if in_array($vo.id, $config.invite_appoint_user)}checked{/if}>
+                        {/foreach}
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block layui-word-aux">
+                        勾选全部用户可以邀请表示系统所有用户都有邀请下级的资格
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">成为下级的条件</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="condition" value="1" title="邀请码" {if $config.condition == 1}checked{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block layui-word-aux">
+                        用户登录后首次绑定邀请码建立上下级关系。包括扫码，点击分享链接，输入邀请码等场景。
+                    </div>
+                </div>
+                <!--自定义邀请海报：-->
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">自定义邀请海报：</label>
+                    <div class="layui-inline" >
+                        <div class="" style="height:80px;line-height:80px">
+                            <input name="poster" type="hidden" value="{$config.poster}" >
+                            {if !empty($config.poster)}
+                            <div class="goods-img-add" style="display: none"></div>
+                            <div class="goods-li">
+                                <img class="goods-img" src="{$config.poster}">
+                                <a class="goods-img-del-x" style="display: none">x</a>
+                            </div>
+                            {else}
+                            <div class="goods-img-add"></div>
+                            {/if}
+                        </div>
+                        <div class=" layui-form-mid layui-word-aux">自定义分销推广海报图片，建议尺寸：800*800像素</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-bg-blue layui-btn layui-btn-sm" lay-submit lay-filter="*">保存设置</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['element', 'form', 'like'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , like = layui.like
+            , layer = layui.layer;
+
+
+        var qualifications = {:json_encode($config.qualifications)};
+        if(Array.isArray(qualifications)){
+            if(qualifications.indexOf("1") > -1){
+                $("input[name=qualifications][value='1']").prop('checked',"true");
+            }else{
+                $("input[name=qualifications][value='2']").prop('checked',"true");
+                $('.invite_appoint_user').show();
+            }
+
+        }else{
+            var select = qualifications[Object.keys(qualifications)[0]];
+            $("input[name=qualifications][value="+select+"]").prop('checked',"true");
+            if(2 == select){
+                $('.invite_appoint_user').show();
+            }
+        }
+        form.render();
+        layui.form.on('radio(qualifications)', function(data){
+            var value = data.value;
+            if(1 == value){
+                $('.invite_appoint_user').hide();
+            }
+            if(2 == value){
+                $('.invite_appoint_user').show();
+            }
+        })
+        //上传图片
+        like.imageUpload('.goods-img-add', function (uri, element) {
+            var html = '<div class="goods-li">\n' +
+                '<img class="goods-img" ' +
+                'src="'+ uri[0] + '">' +
+                '<a class="goods-img-del-x" style="display: none">x</a>' +
+                '</div>';
+            element.prev().val(like.getUrlFileName(uri[0], '{$storageUrl}'));
+            element.parent().append(html);
+            element.css('display','none');
+        }, true);
+        //删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            $(this).parent().siblings('input').val('');
+            $(this).parent().prev().css('display','block');
+            $(this).parent().remove();
+        });
+        //显示图片
+        $(document).on('click', '.goods-img', function () {
+            var image = $(this).attr('src');
+            like.showImg(image,600);
+        });
+        //  删除按钮的显示与隐藏
+        $(document).on('mouseover', '.goods-img', function () {
+            $(this).next().show();
+        });
+        $(document).on('mouseout', '.goods-img', function () {
+            $(this).next().hide();
+        });
+        $(document).on('mouseover', '.goods-img-del-x', function () {
+            $(this).show();
+        });
+        $(document).on('mouseout', '.goods-img-del-x', function () {
+            $(this).hide();
+        });
+
+        form.on('submit(*)', function (data) {
+            like.ajax({
+                url: '{:url("user_setting/set")}'
+                , data: data.field
+                , type: 'post'
+                , success: function (res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg);
+                    }
+                }
+            });
+            return false; //阻止表单跳转
+        });
+
+    });
+</script>

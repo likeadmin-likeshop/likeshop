@@ -1,15 +1,19 @@
 {
     "name" : "LikeShop",
-    "appid" : "__UNI__6E0F3B6",
+    "appid" : "__UNI__17FB384",
     "description" : "",
-    "versionName" : "2.4",
+    "versionName" : "3.0.3",
     "versionCode" : 100,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
         "usingComponents" : true,
         "nvueCompiler" : "uni-app",
-        "compilerVersion" : 3,
+        "runtimeVersion" : "3.3.13", //指定版本  
+        "compilerVersion" : "3.3.13", //指定版本  
+        "compatible" : {
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
+        },
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
@@ -21,7 +25,9 @@
             "Payment" : {},
             "Share" : {},
             "VideoPlayer" : {},
-            "OAuth" : {}
+            "OAuth" : {},
+            "FaceID" : {},
+            "Geolocation" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -31,6 +37,7 @@
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
                     "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.CAMERA\"/>",
@@ -59,23 +66,26 @@
                 "privacyDescription" : {
                     "NSPhotoLibraryUsageDescription" : "您可以设置头像、保存图片到相册，还可以上传图片",
                     "NSPhotoLibraryAddUsageDescription" : "您可以设置头像、保存图片到相册，还可以上传图片",
-                    "NSCameraUsageDescription" : "您可以拍照设置头像、拍照上传图片"
-                }
+                    "NSCameraUsageDescription" : "您可以拍照设置头像、拍照上传图片",
+                    "NSUserTrackingUsageDescription" : "根据您的习惯为您推荐"
+                },
+                "idfa" : true,
+                "dSYMs" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "",
-                        "appsecret" : "",
-                        "UniversalLinks" : ""
+                        "appid" : "wxe900e56d8f36b6c0",
+                        "appsecret" : "6685551b554315efeb6573d82dd074c3",
+                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
                     }
                 },
                 "payment" : {
                     "weixin" : {
                         "__platform__" : [ "ios", "android" ],
-                        "appid" : "",
-                        "UniversalLinks" : ""
+                        "appid" : "wxe900e56d8f36b6c0",
+                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
                     },
                     "alipay" : {
                         "__platform__" : [ "ios", "android" ]
@@ -83,13 +93,22 @@
                 },
                 "share" : {
                     "weixin" : {
-                        "appid" : "",
-                        "UniversalLinks" : ""
+                        "appid" : "wxe900e56d8f36b6c0",
+                        "UniversalLinks" : "https://likeshop.yixiangonline.com/ulink/"
                     }
                 },
                 "ad" : {},
-                "push" : {
-                    "unipush" : {}
+                "push" : {},
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "",
+                        "appkey_android" : ""
+                    }
+                },
+                "geolocation" : {
+                    "system" : {
+                        "__platform__" : [ "ios", "android" ]
+                    }
                 }
             },
             "icons" : {
@@ -125,7 +144,8 @@
                 }
             },
             "splashscreen" : {
-                "androidStyle" : "common"
+                "androidStyle" : "common",
+                "useOriginalMsgbox" : true
             }
         },
         "uniStatistics" : {
@@ -136,14 +156,21 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wx75faf8824586138a",
         "setting" : {
             "urlCheck" : false,
-            "es6" : true
+            "es6" : true,
+            "minified" : true
         },
         "usingComponents" : true,
         "optimization" : {
             "subPackages" : true
+        },
+        "requiredPrivateInfos" : [ "getLocation", "chooseAddress" ],
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "你的位置信息将用于小程序位置接口的效果展示"
+            }
         }
     },
     "mp-alipay" : {
@@ -160,7 +187,7 @@
     },
     "h5" : {
         "title" : "加载中",
-        "domain" : "http://likeshopb2cos.yixiangonline.com/mobile/",
+        "domain" : "https://b2c.likeshop.cn/mobile/",
         "router" : {
             "base" : "/mobile/",
             "mode" : "history"
@@ -178,6 +205,18 @@
                         "^/api" : "/api/"
                     }
                 }
+            }
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "6NIBZ-6UGE3-4SM3K-YDO7X-Z5BUV-YBFVJ"
+                }
+            }
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
             }
         }
     }

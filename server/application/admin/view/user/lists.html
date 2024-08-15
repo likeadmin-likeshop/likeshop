@@ -1,4 +1,10 @@
 {layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height: auto;
+        white-space: normal;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-body">
@@ -99,26 +105,23 @@
             <script type="text/html" id="user-info">
                 <img src="{{d.abs_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
                 <div class="layui-input-inline" style="text-align:left;">
-                    <p>会员编号：{{d.sn}}</p>
-                    <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.nickname}}</p>
-                    <p>会员等级：{{d.level_name}}</p>
+                    <p>用户编号：{{d.sn}}</p>
+                    <p>用户昵称：{{d.nickname}}</p>
                 </div>
             </script>
 
-
-            <script type="text/html" id="referrer">
-                {{# if(d.first_leader){}}
-                <img src="{{d.referrer_avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
+            <script type="text/html" id="first-info">
+                {{# if(d.first_leader_info != '系统'){}}
+                <img src="{{d.first_leader_info.avatar}}" style="height:80px;width: 80px;margin-right: 10px;" class="image-show">
                 <div class="layui-input-inline" style="text-align:left;">
-                    <p>编号：{{d.referrer_sn}}</p>
-                    <p>手机号码：{{d.referrer_mobile}}</p>
-                    <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">昵称：{{d.referrer_nickname}}</p>
-                    <p>等级：{{d.referrer_level_name}}</p>
+                    <p>用户编号：{{d.first_leader_info.sn}}</p>
+                    <p style="width: 180px;text-overflow:ellipsis;overflow: hidden">用户昵称：{{d.first_leader_info.nickname}}</p>
                 </div>
                 {{# }else{ }}
-                -
+                {{d.first_leader_info}}
                 {{# } }}
             </script>
+
             <script type="text/html" id="account">
                 <div class="layui-input-inline">
                     <label>余额：{{d.user_money}}</label>
@@ -127,22 +130,25 @@
                 </div>
             </script>
 
+            <script type="text/html" id="wallet-info">
+                <div class="layui-input-inline" style="text-align:left;width: 240px">
+                    <p>总资产：{{d.total_amount}}</p>
+                    <p>可提现金额：{{d.earnings}}</p>
+                    <p>不可提现金额：{{d.user_money}}</p>
+                </div>
+            </script>
 
             <script type="text/html" id="user-operation">
                 <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="info">资料</a>
                 <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="edit">编辑</a>
                 <a class="layui-btn layui-btn-normal layui-btn-sm"  id="adjust_user" lay-event="adjust_user">账户调整</a>
                 <a class="layui-btn layui-btn-normal layui-btn-sm"  id="adjust_level" lay-event="adjust_level">等级调整</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm"  id="adjust_first_leader" lay-event="adjust_first_leader">推荐人调整</a>
 
             </script>
         </div>
     </div>
 </div>
-<style>
-    .layui-table-cell {
-        height: auto;
-    }
-</style>
 <script>
     layui.config({
         version:"{$front_version}",
@@ -359,13 +365,16 @@
             ,cols: [[
                 {type: 'checkbox'}
                 ,{field: 'id', width: 80, title: 'ID', sort: true, hide:true}
-                ,{field: 'avatar', title: '会员信息',width: 380,align: 'center', toolbar: '#user-info'}
-                ,{field: 'group_name', title: '会员分组',width: 100}
-                ,{field: 'referrals', title: '推荐人信息',align: 'center',width: 380,toolbar: '#referrer'}
-                ,{field: 'total_order_amount', title: '消费金额',width: 90}
-                ,{field: 'money', title: '账户余额',width: 120,toolbar: '#account'}
-                ,{field: 'login_time', title: '最后登录时间',width: 160}
-                ,{fixed: 'right', title: '操作', width: 340,toolbar: '#user-operation'}
+                ,{title: '用户信息',width: 380,align: 'center', toolbar: '#user-info'}
+                ,{field: 'level_name', title: '用户等级',align:"center",width: 100}
+                ,{field: 'group_name', title: '用户分组',align:"center",width: 100}
+                ,{field: 'user_growth', title: '成长值',align:"center",width: 100}
+                ,{title: '钱包信息',width: 240,align: 'center', templet: '#wallet-info'}
+                ,{field: 'total_order_amount',align:"center", title: '消费金额',width: 90}
+                ,{title: '上级推荐人',align: 'center',width: 380,toolbar: '#first-info'}
+                ,{field: 'fans', title: '推荐下级人数',align:"center",width: 120}
+                ,{field: 'create_time',align:"center", title: '注册时间',width: 200}
+                ,{fixed: 'right', title: '操作', width: 420,toolbar: '#user-operation'}
 
             ]]
             ,page:true
@@ -378,20 +387,12 @@
                     "data": res.data.lists, //解析数据列表
                 };
             }
-            , done: function fix() {
+            , done: function() {
+                // 解决操作栏因为内容过多换行问题
                 $(".layui-table-main tr").each(function (index, val) {
-                    $(".layui-table-fixed").each(function () {
-                        $($(this).find(".layui-table-body tbody tr")[index]).height($(val).height());
-                    });
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
                 });
-                $(".layui-table-header tr").each(function (index, val) {
-                    $(".layui-table-fixed").each(function () {
-                        $($(this).find(".layui-table-header thead tr")[index]).height($(val).height());
-                    });
-                });
-                window.onresize = function () {
-                    fix()
-                }
             }
         });
 
@@ -511,6 +512,49 @@
                             var field = data.field;
                             $.ajax({
                                 url:'{:url("user/adjustLevel")}',
+                                data:field,
+                                type:"post",
+                                success:function(res)
+                                {
+                                    if(res.code == 1)
+                                    {
+                                        layui.layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                        layer.close(index); //关闭弹层
+                                        table.reload('user-lists'); //数据刷新
+                                    }else{
+                                        layer.msg(res.msg, {
+                                            offset: '15px'
+                                            , icon: 2
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                })
+            }
+            if(obj.event === 'adjust_first_leader'){
+                var id = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: '推荐人调整'
+                    ,content: '{:url("user/adjustFirstLeader")}?id='+ id
+                    ,area: ['90%', '90%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submit = layero.find('iframe').contents().find('#formSubmit');
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(formSubmit)', function(data){
+                            var field = data.field;
+                            $.ajax({
+                                url:'{:url("user/adjustFirstLeader")}',
                                 data:field,
                                 type:"post",
                                 success:function(res)

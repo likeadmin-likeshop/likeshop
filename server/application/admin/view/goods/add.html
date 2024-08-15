@@ -6,7 +6,6 @@
         <li class="goods-tab" style="color: #6a6f6c">价格库存</li>
         <li class="goods-tab" style="color: #6a6f6c">商品详情</li>
         <li class="goods-tab" style="color: #6a6f6c">销售设置</li>
-        <li class="goods-tab" style="color: #6a6f6c">分销设置</li>
     </ul>
     <div class="layui-tab-content layui-form">
         <div class="layui-tab-item goods-content layui-show">
@@ -37,14 +36,12 @@
                             </select>
                         </div>
                         <div class="layui-input-inline">
-                            <select name="second_category_id" lay-filter="second_category" lay-verify="custom_required"
-                                    lay-verType="tips" switch-tab="0" verify-msg="请选择分类">
+                            <select name="second_category_id" lay-filter="second_category">
                                 <option value="">请选择分类</option>
                             </select>
                         </div>
                         <div class="layui-input-inline">
-                            <select name="third_category_id" lay-filter="third_category" lay-verify="custom_required"
-                                    lay-verType="tips" switch-tab="0" verify-msg="请选择分类">
+                            <select name="third_category_id" lay-filter="third_category">
                                 <option value="">请选择分类</option>
                             </select>
                         </div>
@@ -159,13 +156,13 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <div class="goods-spec-img-div"><input name="one_spec_image" type="hidden"
+                                        <div class="goods-one-spec-img-div"><input name="one_spec_image" type="hidden"
                                                                                value=""><img
                                                 src="/static/common/image/plug/goods-lists-add-image.png"
                                                 class="goods-one-spec-img-add"></div>
                                     </td>
                                     <td><input type="number" class="layui-input"
-                                               lay-verify="one_spec_required|one_market_price"
+                                               lay-verify="one_market_price"
                                                lay-verType="tips"
                                                autocomplete="off" switch-tab="1" verify-msg="请输入市场价"
                                                name="one_market_price"></td>
@@ -230,17 +227,29 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">虚拟销量：</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="virtual_sales_sum" autocomplete="off" class="layui-input">
+                    <input type="number" name="virtual_sales_sum" autocomplete="off" class="layui-input" min="0">
                 </div>
             </div>
+
+            <!--虚拟浏览量-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">虚拟浏览量：</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="virtual_click" autocomplete="off" class="layui-input" min="0">
+                </div>
+            </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">库存预警：</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="stock_warn" autocomplete="off" class="layui-input">
+                    <input type="number" name="stock_warn" autocomplete="off" class="layui-input" min="0">
                 </div>
             </div>
-            <div class="layui-form-item"><label class="layui-form-label"></label><span
-                    style="color: #a3a3a3;font-size: 9px">设置最低库存预警值，当库存低于预警值时会出现在库存预警商品列表页，0为不预警。</span></div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">设置最低库存预警值，当库存低于预警值时会出现在库存预警商品列表页，0为不预警。</span>
+            </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">库存显示：</label>
                 <div class="layui-input-block">
@@ -248,6 +257,15 @@
                     <input type="radio" name="is_show_stock" value="0" title="不显示" >
                 </div>
             </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="form-label-asterisk">*</span>配送方式：</label>
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="is_express" lay-skin="primary" title="快递发货">
+                    <input type="checkbox" name="is_selffetch" lay-skin="primary" title="门店自提">
+                </div>
+            </div>
+            <div class="layui-form-item"><label class="layui-form-label"></label><span
+                    style="color: #a3a3a3;font-size: 9px">1、商品至少需要选择一项配送方式；2、还需前往设置->配送方式开启相关配送方式。</span></div>
             <div class="layui-form-item">
                 <label class="layui-form-label">快递运费：</label>
                 <div class="layui-input-inline">
@@ -345,35 +363,6 @@
                 </div>
             </div>
         </div>
-        <div class="layui-tab-item">
-            <div class="layui-form-item">
-                <label class="layui-form-label">分销佣金：</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="is_commission" value="1" title="开启" checked>
-                    <input type="radio" name="is_commission" value="0" title="不开启" >
-                </div>
-            </div>
-            <div class="layui-form-item"><label class="layui-form-label"></label><span
-                    style="color: #a3a3a3;font-size: 9px">开启后商品可以参与分销佣金</span></div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">一级分销比例：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="first_ratio"  autocomplete="off" class="layui-input first_ratio">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">二级分销比例：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="second_ratio" autocomplete="off" class="layui-input second_ratio">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">三级分销比例：</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="three_ratio"  lay-verify="distribution" autocomplete="off" class="layui-input three_ratio">
-                </div>
-            </div>
-        </div>
         <div class="layui-form-item layui-hide">
             <input type="button" lay-submit lay-filter="goods-submit" id="goods-submit" value="确认">
         </div>
@@ -452,7 +441,7 @@
                 src="/static/common/image/plug/goods-lists-add-image.png"
                 class="goods-spec-img-add"></div>
     </td>
-    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_market_price" lay-verType="tips"
+    <td><input type="number" class="layui-input" lay-verify="more_market_price" lay-verType="tips"
                autocomplete="off" switch-tab="1" verify-msg="请输入市场价" name="market_price[]"></td>
     <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_price" lay-verType="tips"
                autocomplete="off" switch-tab="1" verify-msg="请输入价格" name="price[]"></td>
@@ -483,11 +472,12 @@
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'element', 'jquery', 'like', 'likeedit'], function () {
+    }).use(['index', 'element', 'jquery', 'like', 'likeedit', 'layedit'], function () {
         var $ = layui.$;
         var like = layui.like;
         var form = layui.form;
-        var likeedit = layui.likeedit;
+        // var likeedit = layui.likeedit;
+        var likeedit = layui.layedit;
 
         $('.first_ratio').bind('input propertychange', function() {
             var that = $(this);
@@ -507,23 +497,6 @@
             format(that,value)
 
         });
-        //格式化分销比例
-        function format(that,value){
-            value = value.replace(/[^0-9.]/g,'');
-
-            value = value.replace(/\.{2,}/g,".");
-            value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-
-            value = value.replace(/^(\-)*(\d+)\.(\d)(\d).*$/,'$1$2.$3$4');
-            if(value.indexOf(".")< 0 && value !=""){
-                value= parseFloat(value);
-            }
-            if(value > 100){
-                that.val(100);
-                return false;
-            }
-            that.val(value);
-        }
 
 
         //------------------------基本信息----------------------------------
@@ -959,6 +932,12 @@
         $(document).on('mouseleave', '.goods-spec-img-div', function () {
             $(this).find('.goods-one-spec-img-del-x').hide();
         });
+        $(document).on('mouseenter', '.goods-one-spec-img-div', function () {
+            $(this).find('.goods-one-spec-img-del-x').show();
+        });
+        $(document).on('mouseleave', '.goods-one-spec-img-div', function () {
+            $(this).find('.goods-one-spec-img-del-x').hide();
+        });
         $(document).on('click', '.goods-one-spec-img-del-x', function () {
             $(this).parent().html('<input type="hidden" name="one_spec_image"><img src="/static/common/image/plug/goods-lists-add-image.png" class="goods-one-spec-img-add">');
         });
@@ -1317,15 +1296,6 @@
                     }
                 }
             },
-            distribution:function (value,item) {
-                var first_ratio = parseFloat($('.first_ratio').val());
-                var second_ratio = parseFloat($('.second_ratio').val());
-                var three_ratio = parseFloat(value);
-                if(first_ratio + second_ratio + three_ratio > 100){
-                    return '分销比例不可超过100';
-                }
-
-            }
         });
         //------------------------数据验证----------------------------------
 
@@ -1381,19 +1351,13 @@
         $("input[name=status][value="+goods_info['base']['status']+"]").prop("checked",true);           //销售状态
         $("input[name=spec_type][value="+goods_info['base']['spec_type']+"]").prop('checked',"true");   //商品规格
         $('input[name="virtual_sales_sum"]').val(goods_info['base']['virtual_sales_sum']);              //虚拟销量
+        $('input[name="virtual_click"]').val(goods_info['base']['virtual_click']);                      //虚拟浏览量
         $('input[name="stock_warn"]').val(goods_info['base']['stock_warn']);                            //库存预警
 
         $("input[name=is_show_stock][value="+goods_info['base']['is_show_stock']+"]").prop("checked",true);     //是否显示库存
         $("input[name=free_shipping_type][value="+goods_info['base']['free_shipping_type']+"]").prop("checked",true);   //快递运费类型
         $('input[name="free_shipping"]').val(goods_info['base']['free_shipping']);                                      //运费
 
-        $("input[name=is_commission][value="+goods_info['base']['is_commission']+"]").prop("checked",true);     //分销设置
-        $("input[name=is_share_bouns][value="+goods_info['base']['is_share_bouns']+"]").prop("checked",true);   //区域股东分红
-        $('input[name="first_ratio"]').val(goods_info['base']['first_ratio']);                                  //一级分销
-        $('input[name="second_ratio"]').val(goods_info['base']['second_ratio']);                                //二级分销
-        $('input[name="three_ratio"]').val(goods_info['base']['three_ratio']);                                  //三级分销
-        $('input[name="region_ratio"]').val(goods_info['base']['region_ratio']);                                //区域股东分红
-        $('input[name="shareholder_ratio"]').val(goods_info['base']['shareholder_ratio']);                      //股东分红
         
         $("input[name=is_integral][value="+goods_info['base']['is_integral']+"]").prop("checked",true);   //积分抵扣
         $("input[name=is_member][value="+goods_info['base']['is_member']+"]").prop("checked",true);   //会员价是否开启
@@ -1414,6 +1378,15 @@
         }
         if(1 == goods_info['base']['is_like']){
             $("input[name=is_like]").prop("checked",true);
+        }
+
+
+        //渲染配送方式
+        if(1 == goods_info['base']['is_express']){
+            $("input[name=is_express]").prop("checked",true);
+        }
+        if(1 == goods_info['base']['is_selffetch']){
+            $("input[name=is_selffetch]").prop("checked",true);
         }
 
         form.render();

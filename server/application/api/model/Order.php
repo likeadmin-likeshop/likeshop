@@ -121,11 +121,13 @@ class Order extends Model
     public function getCancelBtnAttr($value, $data)
     {
         $btn = 0;
-        //多长时间内允许客户自动取消
-        $cancel_limit = ConfigServer::get('trading', 'customer_cancel_limit', 0);
-        $limit_time = $data['create_time'] + $cancel_limit * 60;
-        if ($limit_time < time()) {
-            return $btn = 0;
+        //多长时间内允许客户取消
+        if ($data['pay_status'] == Pay::ISPAID) {
+            $cancel_limit = ConfigServer::get('trading', 'customer_cancel_limit', 0);
+            $limit_time = $data['pay_time'] + $cancel_limit * 60;
+            if ($limit_time < time()) {
+                return $btn = 0;
+            }
         }
 
         if (($data['order_status'] == CommonOrder::STATUS_WAIT_PAY && $data['pay_status'] == Pay::UNPAID)
@@ -141,10 +143,10 @@ class Order extends Model
     public function getDeliveryBtnAttr($value, $data)
     {
         $btn = 0;
-        if ($data['order_status'] == CommonOrder::STATUS_WAIT_RECEIVE && $data['pay_status'] == Pay::ISPAID && $data['shipping_status'] == 1) {
+        if ($data['order_status'] == CommonOrder::STATUS_WAIT_RECEIVE && $data['pay_status'] == Pay::ISPAID && $data['shipping_status'] == 1 && $data['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF) {
             $btn = 1;
         }
-        if ($data['order_status'] == CommonOrder::STATUS_FINISH && $data['pay_status'] == Pay::ISPAID && $data['shipping_status'] == 1) {
+        if ($data['order_status'] == CommonOrder::STATUS_FINISH && $data['pay_status'] == Pay::ISPAID && $data['shipping_status'] == 1 && $data['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF) {
             $btn = 1;
         }
         return $btn;
@@ -157,7 +159,7 @@ class Order extends Model
     public function getTakeBtnAttr($value, $data)
     {
         $btn = 0;
-        if ($data['order_status'] == CommonOrder::STATUS_WAIT_RECEIVE && $data['pay_status'] == Pay::ISPAID && $data['shipping_status'] == 1) {
+        if ($data['order_status'] == CommonOrder::STATUS_WAIT_RECEIVE && $data['pay_status'] == Pay::ISPAID && $data['shipping_status'] == 1 && $data['delivery_type'] != CommonOrder::DELIVERY_STATUS_SELF) {
             $btn = 1;
         }
         return $btn;

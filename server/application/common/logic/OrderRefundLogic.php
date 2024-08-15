@@ -35,6 +35,7 @@ use app\common\server\WeChatServer;
 use think\Db;
 use think\Exception;
 use think\facade\Hook;
+use think\facade\Log;
 
 /**
  * 订单退款逻辑
@@ -68,36 +69,45 @@ class OrderRefundLogic
 
 
     /**
-     * Notes: 处理订单退款(事务在取消订单逻辑处)
+     * @notes 处理订单退款(事务在取消订单逻辑处)
      * @param $order
      * @param $order_amount
      * @param $refund_amount
-     * @author 段誉(2021/1/28 15:23)
+     * @return bool
      * @throws Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
+     * @author 段誉
+     * @date 2021/12/20 14:48
      */
     public static function refund($order, $order_amount, $refund_amount)
     {
-        //退款记录
+        // 退款记录
         $refund_id = self::addRefundLog($order, $order_amount, $refund_amount);
 
+        // 退款金额为0
+        if ($refund_amount <= 0) {
+            return false;
+        }
+
         switch ($order['pay_way']) {
-            //余额退款
+            // 余额退款
             case Pay::BALANCE_PAY:
                 self::balancePayRefund($order, $refund_amount);
                 break;
-            //微信退款
+            // 微信退款
             case Pay::WECHAT_PAY:
                 self::wechatPayRefund($order, $refund_id);
                 break;
-            //支付宝退款
+            // 支付宝退款
             case Pay::ALI_PAY:
                 self::aliPayRefund($order, $refund_id);
                 break;
         }
+
+        return true;
     }
 
 
@@ -133,8 +143,8 @@ class OrderRefundLogic
         $data = [
             'transaction_id' => $order['transaction_id'],
             'refund_sn' => $refund_log['refund_sn'],
-            'total_fee' => $refund_log['order_amount'] * 100,//订单金额,单位为分
-            'refund_fee' => intval($refund_log['refund_amount'] * 100),//退款金额
+            'total_fee' => intval(strval($refund_log['order_amount'] * 100)),//订单金额,单位为分
+            'refund_fee' => intval(strval($refund_log['refund_amount'] * 100)),//退款金额
         ];
         $result = WeChatPayServer::refund($config, $data);
 
@@ -170,14 +180,16 @@ class OrderRefundLogic
      */
     public static function aliPayRefund($order, $refund_id)
     {
-        $result = (new AliPayServer())->refund($order['order_sn'], $order['order_amount']);
-        $result = (array)$result;
+        $refund_log = Db::name('order_refund')->where(['id' => $refund_id])->find();
+        $result     = (new AliPayServer())->refund($order['order_sn'], $refund_log['refund_amount'], [ 'out_request_no' => $refund_log['refund_sn'] ]);
+        $result     = (array) $result;
 
         if ($result['code'] == '10000' && $result['msg'] == 'Success' && $result['fundChange'] == 'Y') {
             //更新退款日志记录
             $update_data = ['refund_msg' => json_encode($result['httpBody'], JSON_UNESCAPED_UNICODE)];
             Db::name('order_refund')->where(['id' => $refund_id])->update($update_data);
         } else {
+            Log::write($result, 'alipay_refund_error');
             throw new Exception('支付宝退款失败');
         }
     }
@@ -250,7 +262,7 @@ class OrderRefundLogic
 
         //更新订单状态
         $order = \app\common\model\Order::get(['id' => $order['id']]);
-        $order->pay_status = Pay::REFUNDED;
+//        $order->pay_status = Pay::REFUNDED;
         $order->refund_amount += $order_goods['total_pay_price'];//退款金额 + 以前的退款金额
         $order->refund_status = 1;//退款状态：0-未退款；1-部分退款；2-全部退款
 

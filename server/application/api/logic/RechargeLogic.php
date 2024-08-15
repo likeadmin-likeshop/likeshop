@@ -77,7 +77,7 @@ class RechargeLogic{
             'order_amount'  => $money,
             'order_source'  => $client,
             'pay_status'    => Pay::UNPAID,    //待支付状态；
-            'pay_way'       => $post['pay_way'],
+            'pay_way'       => $post['pay_way'] ?? 1,
             'template_id'   => $template['id'] ?? 0,
             'give_money'    => $give_money,
             'give_integral' => $integral,

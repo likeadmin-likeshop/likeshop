@@ -29,6 +29,7 @@ class UserLevelLogic{
         $list = Db::name('user_level')
                 ->where(['del'=>0])
                 ->page($get['page'], $get['limit'])
+                ->order('id desc')
                 ->select();
 
         foreach ($list as &$item){

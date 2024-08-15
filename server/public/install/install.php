@@ -49,6 +49,12 @@ if ($step == 4) {
     if (empty($post['prefix'])) {
         $canNext = false;
         $message = '数据表前缀不能为空';
+    } elseif(strpos($post['name'], '-') !== false) {
+        $canNext = false;
+        $message = '数据库名不能包含字符 -';
+    } elseif(strpos($post['user'], '-') !== false) {
+        $canNext = false;
+        $message = '数据用户名名不能包含字符 -';
     } elseif ($post['admin_user'] == '') {
         $canNext = false;
         $message = '请填写管理员用户名';

@@ -119,7 +119,9 @@ class Notice
             }
             $params['goods_name'] = $goods_name;
             $params['order_sn'] = $order['order_sn'];
-            $params['time'] = date('Y-m-d H:i', $order['create_time']);
+            if (empty($params['time'])) {
+                $params['time'] = date('Y-m-d H:i', $order['create_time']);
+            }
             $params['total_num'] = $order['total_num'];
             $params['order_amount'] = $order['order_amount'];
         }

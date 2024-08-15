@@ -118,18 +118,18 @@ class AfterSaleLogic
             ->group('a.id')
             ->select();
 
-        foreach ($lists as &$list) {
-            $list['order']['pay_way'] = Pay::getPayWay($list['order']['pay_way']);
-            $list['order']['order_status'] = Order::getOrderStatus($list['order']['order_status']);
-            $list['refund_type'] = AfterSale::getRefundTypeDesc($list['refund_type']);
-            $list['create_time'] = date('Y-m-d H:i:s', $list['create_time']);
-            $list['status'] = AfterSale::getStatusDesc($list['status']);
+        foreach ($lists as $key => $list) {
+            $lists[$key]['order']['pay_way'] = Pay::getPayWay($list['order']['pay_way']);
+            $lists[$key]['order']['order_status_text'] = Order::getOrderStatus($list['order']['order_status']);
+            $lists[$key]['refund_type'] = AfterSale::getRefundTypeDesc($list['refund_type']);
+            $lists[$key]['create_time'] = date('Y-m-d H:i:s', $list['create_time']);
+            $lists[$key]['status'] = AfterSale::getStatusDesc($list['status']);
 
-            foreach ($list['order_goods'] as &$good) {
+            foreach ($list['order_goods'] as $ko => $good) {
                 $info = json_decode($good['goods_info'], true);
-                $good['goods_name'] = $info['goods_name'];
-                $good['spec_value'] = $info['spec_value_str'];
-                $good['image'] = empty($info['spec_image']) ?
+                $lists[$key]['order_goods'][$ko]['goods_name'] = $info['goods_name'];
+                $lists[$key]['order_goods'][$ko]['spec_value'] = $info['spec_value_str'];
+                $lists[$key]['order_goods'][$ko]['image'] = empty($info['spec_image']) ?
                     UrlServer::getFileUrl($info['image']) : UrlServer::getFileUrl($info['spec_image']);
             }
         }
@@ -155,6 +155,7 @@ class AfterSaleLogic
         $result['status_text'] = AfterSale::getStatusDesc($result['status']);
         $result['order']['pay_way'] = Pay::getPayWay($result['order']['pay_way']);
         $result['order']['order_status'] = Order::getOrderStatus($result['order']['order_status']);
+        $result['order']['delivery_type_text'] = Order::getDeliveryType($result['order']['delivery_type']);
         $result['create_time'] = date('Y-m-d H:i:s', $result['create_time']);
 
         foreach ($result['order_goods'] as &$good) {

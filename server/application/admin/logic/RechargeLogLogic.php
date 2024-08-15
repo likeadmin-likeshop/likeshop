@@ -30,7 +30,7 @@ class RechargeLogLogic{
         if(isset($get['order_source']) && $get['order_source']){
             $where[] = ['order_source','=',$get['order_source']];
         }
-        if(isset($get['pay_status']) && $get['pay_status']){
+        if(isset($get['pay_status']) && ($get['pay_status'] == 0 || $get['pay_status'] == 1)){
             $where[] = ['pay_status','=',$get['pay_status']];
         }
         if(isset($get['pay_way']) && $get['pay_way']){

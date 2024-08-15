@@ -78,6 +78,7 @@ class BargainLogic
             ->where($where)
             ->with(['goods'])
             ->withCount(['launchPeopleNumber', 'successKnifePeopleNumber'])
+            ->order(['id' => 'desc'])
             ->page($get['page'], $get['limit'])
             ->select();
 
@@ -469,11 +470,11 @@ class BargainLogic
             ->with(['user.level'])
             ->find()->toArray();
 
-        $detail['domain'] = UrlServer::getFileUrl();
+        $detail['domain'] = UrlServer::getFileUrl('/');
         $detail['goods_snap']['goods_iamge'] = UrlServer::getFileUrl($detail['goods_snap']['goods_iamge']);
         $detail['launch_start_time'] = date('Y-m-d H:i:s',  $detail['launch_start_time']);
         $detail['launch_end_time'] = date('Y-m-d H:i:s',  $detail['launch_end_time']);
-        $detail['payment_where'] = $detail['bargain_snap']['payment_where'] == 1 ? '任意金额购买' : '固定金额购买';
+        $detail['payment_where'] = $detail['bargain_snap']['payment_where'] == 1 ? '砍到指定底价' : '任意金额';
         $detail['status'] = BargainLaunch::getStatusDesc($detail['status']);
         return $detail;
     }
@@ -495,10 +496,14 @@ class BargainLogic
             ->where('order_id', '>', 0)
             ->with(['user.level', 'order'])
             ->page($get['page'], $get['limit'])
-            ->select();
+            ->select()->toArray();
+
 
         foreach ($lists as &$item) {
             $item['order_status'] = Order::getOrderStatus($item['order']['order_status']);
+            if (!empty($item['goods_snap']['goods_iamge'])) {
+                $item['goods_snap']['goods_iamge'] = UrlServer::getFileUrl($item['goods_snap']['goods_iamge']);
+            }
         }
 
         return ['count'=>$count, 'lists'=>$lists];

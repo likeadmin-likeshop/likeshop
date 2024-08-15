@@ -52,12 +52,11 @@ class CommonLogic{
         ];
 
         if ($field == 'status' and $field_value == 0) {
-            $res = Db::name('team_activity')
-                ->where(['goods_id'=>$pk_value])
-                ->find();
-            if ($res) {
-                return '该商品正在参与拼团，请先关闭后才允许下架';
+            $activity_goods = GoodsLogic::activityGoods()['activity_goods'];
+            if(in_array($pk_value,$activity_goods)){
+                return '该商品正在参与活动，请先关闭后才允许下架';
             }
+
         }
 
         $result = Db::name($table)->where($where)->update($data);
@@ -85,6 +84,10 @@ class CommonLogic{
             ->where($where)
             ->page($get['page'], $get['limit'])
             ->column('*','id');
+        $activity_goods = GoodsLogic::activityGoods();
+        $seckill_goods = $activity_goods['seckill_goods'];
+        $team_goods = $activity_goods['team_goods'];
+        $bargain_goods = $activity_goods['bargain_goods'];
 
         foreach ($goods_list as &$item) {
             $item['goods_item'] = [];
@@ -94,6 +97,14 @@ class CommonLogic{
             }
             $item['create_time_desc'] = date('Y-m-d H:i:s',$item['create_time']);
             $item['image'] = UrlServer::getFileUrl($item['image']);
+            $item['attribute'] = '普通商品';
+            if(in_array($item['id'],$seckill_goods)){
+                $item['attribute'] = '秒杀商品';
+            }elseif (in_array($item['id'],$team_goods)){
+                $item['attribute'] = '拼团商品';
+            }elseif (in_array($item['id'],$bargain_goods)){
+                $item['attribute'] = '砍价商品';
+            }
         }
 
         if($is_item){

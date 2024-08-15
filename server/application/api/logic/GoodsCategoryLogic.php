@@ -36,7 +36,6 @@ class GoodsCategoryLogic{
         if ($cache) {
             return $cache;
         }
-        
         $lists = Db::name('goods_category')->where(['is_show'=>1,'del'=>0,'level'=>1])->order('sort desc')->column('id,name,pid,image,level','id');
         $level2 = Db::name('goods_category')->where(['is_show'=>1,'del'=>0,'level'=>2])->order('sort desc')->column('id,name,pid,image,level','id');
         $level3 = Db::name('goods_category')->where(['is_show'=>1,'del'=>0,'level'=>3])->order('sort desc')->field('id,name,pid,image,level')->select();
@@ -71,6 +70,9 @@ class GoodsCategoryLogic{
 //                continue;
 //
 //            }
+            if(!isset($list1['sons'])){
+                $lists[$key1]['sons'] = [];
+            }
             $lists[$key1]['image'] = UrlServer::getFileUrl($list1['image']);
             $lists[$key1]['type'] = 1;
         }

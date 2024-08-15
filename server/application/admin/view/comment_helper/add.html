@@ -1,0 +1,226 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label {
+        color: #6a6f6c;
+        width: 100px;
+    }
+</style>
+<link rel="stylesheet" href="/static/admin/css/goods.css" media="all">
+
+<div class="layui-form" lay-filter="layuiadmin-form-comment" id="layuiadmin-form-comment" style="padding: 20px 30px 0 0;">
+
+    <input type="hidden" name="goods_id" value="{$goods_id}">
+
+    <!--会员头像-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>会员头像：</label>
+        <div style="height:80px;line-height:80px">
+            <div class="master-image"></div>
+            <div class="goods-img-add goods-image" lay-verify="image" lay-verType="tips" switch-tab="0"
+                 verify-msg="选择图片"></div>
+        </div>
+    </div>
+
+    <!--会员昵称-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>会员昵称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="nickname" lay-verify="required" lay-verType="tips" placeholder="请输入会员昵称"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <!--会员等级-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>会员等级：</label>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <select id="level" name="level" style="height:80px;width: 80px">
+                    <option value=" ">请选择会员等级</option>
+                    {foreach $user_level as $item}
+                    <option value="{$item.id}">{$item.name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!--评价时间-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>评价时间：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="comment_time" class="layui-input time" autocomplete="off">
+        </div>
+    </div>
+
+    <!--评价等级-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>评价等级：</label>
+        <div class="layui-input-block">
+            <legend type="text" id="star"></legend>
+            <input type="hidden" name="score" id="score">
+        </div>
+    </div>
+
+    <!--评价图片-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">评价图片：</label>
+        <div class="" style="height:80px;line-height:80px">
+            <ul></ul>
+            <div class="goods-img-add" lay-verify="goods_image" lay-verType="tips" switch-tab="0"
+                 verify-msg="至少选择一张图片"></div>
+            <br><br>
+        </div>
+    </div>
+
+    <!--评价内容-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="form-label-asterisk">*</span>评价内容：</label>
+        <div class="layui-input-inline" style="width: 350px">
+            <textarea name="comment" placeholder="请输入评价内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-submit" id="add-submit" value="确认">
+    </div>
+</div>
+
+<script type="text/html" id="template-goods-image">
+    <li class="goods-li">
+        <input name="comment_image[]" type="hidden" value="{image-src}">
+        <img class="goods-img goods_image" src="{image-src}">
+        <a class="goods-img-del-x" style="display: none;">x</a></li>
+</script>
+<script>
+    layui.config({
+        version: "{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form', 'like', 'laydate', 'rate'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , rate = layui.rate
+            , like = layui.like
+            , laydate = layui.laydate;
+
+        // 星级评分
+        rate.render({
+            elem: '#star',
+            choose: function (value) {
+                $('#score').val(value);
+            },
+            text: true,
+            setText: function (value) {
+                if (value < 3 && value > 0) {
+                    this.span.text("差评")
+                } else if (value === 3) {
+                    this.span.text("中评")
+                } else if (value > 3) {
+                    this.span.text("好评")
+                } else {
+                    this.span.text("")
+                }
+            }
+        });
+
+        // 日期选择
+        lay('.time').each(function () {
+            laydate.render({
+                elem: this,
+                type: 'datetime',
+                trigger: 'click',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                max : getCurrentDate()
+            });
+        });
+
+        // 主图显示删除按钮
+        $(document).on('mouseenter', '.master-image', function () {
+            $(this).children('.goods-image-del').show();
+        })
+        $(document).on('mouseleave', '.master-image', function () {
+            $(this).children('.goods-image-del').hide();
+        });
+        $(document).on('click', '.master-image', function () {
+            var src = $(this).children('img').attr('src');
+            like.showImg(src, 400);
+        });
+
+        // 多图显示删除按钮
+        $(document).on('mouseenter', '.goods-li', function () {
+            $(this).children().last().show();
+        });
+        $(document).on('mouseleave', '.goods-li', function () {
+            $(this).children().last().hide();
+        });
+        $(document).on('click', '.goods-li', function () {
+            var src = $(this).children('img').attr('src');
+            like.showImg(src, 400);
+        });
+
+        // 删除图片
+        $(document).on('click', '.goods-img-del-x', function () {
+            if ($(this).hasClass('goods-image-del')) {
+                $(this).parent().next().show();
+                $(this).parent().children().remove();
+            }
+            $(this).parent().remove();
+            return false;
+        });
+
+        // 上传图片
+        like.imageUpload('.goods-img-add', function (uris, element) {
+            if (element.hasClass('goods-image')) {
+                if (uris.length > 1) {
+                    layer.msg('最多最能选中1张图片');
+                    return;
+                }
+                var html = '' +
+                    '<input name="avatar" type="hidden" value="' + like.getUrlFileName(uris[0], '{$storageUrl}') + '">' +
+                    '  <img class="goods-img" src="' + uris[0] + '">\n' +
+                    '<a class="goods-img-del-x goods-image-del">x</a>';
+                element.prev().append(html);
+                element.css('display', 'none');
+                return 0;
+            }
+            var count = element.prev().children().length;
+            count = !count ? 0 : count;
+            if (count + uris.length > 8) {
+                layer.msg('最多最能选中8张图片');
+                return;
+            }
+            uris = uris.reverse();
+            for (var i in uris) {
+                var uri = uris[i];
+                var template_goods_image = $('#template-goods-image').html();
+                element.prev().append(template_goods_image.replace('{image-src}', like.getUrlFileName(uri, '{$storageUrl}')).replace('{image-src}', uri));
+            }
+        }, true);
+
+
+
+        function getCurrentDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var nowDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (nowDate >= 0 && nowDate <= 9) {
+                nowDate = "0" + nowDate;
+            }
+
+            var strDate =  date.getFullYear() + seperator1 + month + seperator1 + nowDate;
+            var strTime = date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds();
+            var currentDate = strDate + " " + strTime;
+            return currentDate;
+        }
+
+    });
+
+
+</script>

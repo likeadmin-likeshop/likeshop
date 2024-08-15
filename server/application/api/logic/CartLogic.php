@@ -137,7 +137,7 @@ class CartLogic
     public static function lists($user_id)
     {
         $field = 'g.name,g.image,g.id as goods_id,g.status as g_status,g.del as g_del,
-        i.spec_value_str,i.price,i.image as item_image,c.goods_num,c.selected,c.id as cart_id,c.item_id';
+        i.spec_value_str,i.price,i.image as item_image,c.goods_num,c.selected,c.id as cart_id,c.item_id,i.stock as item_stock';
 
         $carts = Db::name('cart c')
             ->field($field)

@@ -1,0 +1,95 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-label{
+        width: 120px;
+    }
+    .reqRed::before {
+        content: '*';
+        color: red;
+        margin-right: 5px;
+    }
+    .left {
+        text-align: left;
+    }
+    .right {
+        text-align: right;
+    }
+</style>
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label right">用户编号：</label>
+        <div class="layui-input-block">
+            <label class="layui-form-label left">{$user.sn}</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label right">用户昵称：</label>
+        <div class="layui-input-block">
+            <label class="layui-form-label left">{$user.nickname}</label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label right">当前推荐人：</label>
+        <div class="layui-input-block">
+            {if is_array($first_leader)}
+            <label class="layui-form-label left">{$first_leader.nickname}({$first_leader.sn})</label>
+            {else}
+            <label class="layui-form-label left">{$first_leader}</label>
+            {/if}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label reqRed right">调整方式：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="type" value="assign" title="指定推荐人" checked>
+        </div>
+        <div class="layui-input-inline">
+            <input type="radio" name="type" value="system" title="设置推荐人为系统">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label right">选择推荐人：</label>
+        <div class="layui-inline">
+            <span id="user_selected"></span>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-sm layui-bg-blue" id="show-user">选择用户</button>
+        </div>
+    </div>
+
+    <input type="hidden" value="{$user_id}" name="id">
+    <input type="hidden"  name="first_id" id="first_id">
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="formSubmit" id="formSubmit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form', 'element', 'like'], function(){
+        var $ = layui.$,form = layui.form ;
+        var element = layui.element;
+        var like = layui.like;
+
+        $('#show-user').click(function() {
+            layer.open({
+                type: 2
+                ,title: "选择用户"
+                ,content: "{:url('user/userLists')}"
+                ,area: ["90%", "90%"]
+                ,btn: ["确定", "取消"]
+                ,yes: function(index, layero){
+                    var iframeWindow = window["layui-layer-iframe" + index];
+                    let user_selected = iframeWindow.user_selected();
+                    $('#user_selected').html(user_selected.nickname + '(' + user_selected.sn + ')');
+                    $('#first_id').val(user_selected.id);
+                    layer.close(index);
+                }
+            });
+            return false;
+        });
+    })
+</script>

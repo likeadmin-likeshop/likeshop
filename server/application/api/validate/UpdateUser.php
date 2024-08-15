@@ -46,6 +46,12 @@ class UpdateUser extends Validate
     {
         $allow_field = ['nickname', 'sex', 'avatar', 'mobile'];
         if (in_array($value, $allow_field)) {
+            if ($value == 'mobile') {
+                $result = Db::name('user')->where([['mobile','=',$data['value']],['id','<>',$data['user_id']]])->find();
+                if ($result) {
+                    return '此手机号已被使用';
+                }
+            }
             return true;
         }
         return '操作失败';

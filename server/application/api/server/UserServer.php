@@ -25,6 +25,7 @@ use app\api\logic\DistributionLogic;
 use app\api\logic\LoginLogic;
 use app\common\model\Client_;
 use app\common\model\NoticeSetting;
+use app\common\model\UserLevel;
 use app\common\server\storage\Driver as StorageDriver;
 use app\common\server\UrlServer;
 use think\Db;
@@ -64,7 +65,7 @@ class UserServer
             $avatar = '';     //头像路径
 
             if (empty($avatar_url)) {
-                $avatar = ConfigServer::get('website', 'user_image', '');
+                $avatar = ConfigServer::get('website', 'user_image');
             } else {
                 if ($config['default'] == 'local') {
                     $file_name = md5($openid . $time) . '.jpeg';
@@ -84,7 +85,9 @@ class UserServer
                 'avatar'            => $avatar,
                 'create_time'       => $time,
                 'distribution_code' => generate_invite_code(),//分销邀请码
-                'is_distribution'   => DistributionLogic::isDistributionMember()
+                'is_distribution'   => DistributionLogic::isDistributionMember(),
+                // 微信新用户
+                'is_new_user'       => 1,
             ];
 
             if (empty($nickname)) {
@@ -106,6 +109,8 @@ class UserServer
 
             //生成会员分销扩展表
             DistributionLogic::createUserDistribution($user_id);
+            // 生成分销会员基础表
+            \app\common\logic\DistributionLogic::add($user_id);
             //消息通知
             Hook::listen('notice', ['user_id' => $user_id, 'scene' => NoticeSetting::REGISTER_SUCCESS_NOTICE]);
 
@@ -115,11 +120,11 @@ class UserServer
             Db::commit();
 
             $user_info = Db::name('user')
-                ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code'])
+                ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code','is_new_user'])
                 ->where(['id' => $user_id])
                 ->find();
             if (empty($user_info['avatar'])) {
-                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image', ''));
+                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image'));
             } else {
                 $user_info['avatar'] = UrlServer::getFileUrl($user_info['avatar']);
             }
@@ -221,11 +226,11 @@ class UserServer
 
             $user_info = Db::name('user')
                 ->where(['id' => $user_info['id']])
-                ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code'])
+                ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code','is_new_user'])
                 ->find();
 
             if (empty($user_info['avatar'])) {
-                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image', ''));
+                $user_info['avatar'] = UrlServer::getFileUrl(ConfigServer::get('website', 'user_image'));
             } else {
                 $user_info['avatar'] = UrlServer::getFileUrl($user_info['avatar']);
             }

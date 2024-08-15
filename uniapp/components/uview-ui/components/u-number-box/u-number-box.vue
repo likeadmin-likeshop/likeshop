@@ -138,16 +138,14 @@
 			positiveInteger: {
 				type: Boolean,
 				default: true
-			},
-            asyncChange: {
-                type: Boolean,
-                default: false
-            }
+			}
 		},
 		watch: {
 			value(v1, v2) {
+				console.log(v1,v2)
 				// 只有value的改变是来自外部的时候，才去同步inputVal的值，否则会造成循环错误
 				if(!this.changeFromInner) {
+					if(this.inputVal == v1) return
 					this.inputVal = v1;
 					// 因为inputVal变化后，会触发this.handleChange()，在其中changeFromInner会再次被设置为true，
 					// 造成外面修改值，也导致被认为是内部修改的混乱，这里进行this.$nextTick延时，保证在运行周期的最后处
@@ -176,9 +174,7 @@
 						})
 					}
 				}
-                if(this.asyncChange) {
-                    return;
-                }
+				if(this.isFistVal) return
 				// 发出change事件
 				this.handleChange(value, 'change');
 			}
@@ -189,10 +185,12 @@
 				timer: null, // 用作长按的定时器
 				changeFromInner: false, // 值发生变化，是来自内部还是外部
 				innerChangeTimer: null, // 内部定时器
+				isFistVal:true
 			};
 		},
 		created() {
 			this.inputVal = Number(this.value);
+			this.isFistVal = false
 		},
 		computed: {
 			getCursorSpacing() {
@@ -274,14 +272,8 @@
 				if (value < this.min || value > this.max) {
 					return;
 				}
-                
-                if(this.asyncChange) {
-                  this.$emit("change", value)
-                }
-                else {
-                  this.inputVal = value;
-                  this.handleChange(value, type);
-                }
+				this.inputVal = value;
+				this.handleChange(value, type);
 			},
 			// 处理用户手动输入的情况
 			onBlur(event) {
@@ -332,12 +324,10 @@
 
 <style lang="scss" scoped>
 	@import "../../libs/css/style.components.scss";
-
 	.u-numberbox {
 		display: inline-flex;
 		align-items: center;
 	}
-
 	.u-number-input {
 		position: relative;
 		text-align: center;
@@ -347,7 +337,6 @@
 		align-items: center;
 		justify-content: center;
 	}
-
 	.u-icon-plus,
 	.u-icon-minus {
 		width: 60rpx;
@@ -355,20 +344,16 @@
 		justify-content: center;
 		align-items: center;
 	}
-
 	.u-icon-plus {
 		border-radius: 0 8rpx 8rpx 0;
 	}
-
 	.u-icon-minus {
 		border-radius: 8rpx 0 0 8rpx;
 	}
-
 	.u-icon-disabled {
 		color: #c8c9cc !important;
 		background: #f7f8fa !important;
 	}
-
 	.u-input-disabled {
 		color: #c8c9cc !important;
 		background-color: #f2f3f5 !important;

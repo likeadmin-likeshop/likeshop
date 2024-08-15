@@ -53,6 +53,51 @@ class Ad extends Model{
                     'path'      => '/pages/user/user',
                     'is_tab'    => 1,
                 ],
+                [
+                    'name'      => '积分签到',
+                    'path'      => '/bundle/pages/user_sign/user_sign',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '会员中心',
+                    'path'      => '/pages/user_vip/user_vip',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '积分抽奖',
+                    'path'      => '/bundle/pages/luckly_wheel/luckly_wheel',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '限时秒杀',
+                    'path'      => '/bundle/pages/goods_seckill/goods_seckill',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '拼团活动',
+                    'path'      => '/bundle/pages/goods_combination/goods_combination',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '砍价活动',
+                    'path'      => '/bundle/pages/bargain/bargain',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '热销榜单',
+                    'path'      => '/bundle/pages/hot_list/hot_list',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '商城资讯',
+                    'path'      => '/pages/news_list/news_list',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '帮助中心',
+                    'path'      => '/pages/news_list/news_list?type=1',
+                    'is_tab'    => 0,
+                ],
             ],
             self::pc        => [
                 [
@@ -68,6 +113,36 @@ class Ad extends Model{
                 [
                     'name'      => '个人中心',
                     'path'      => '/user/profile',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '热销榜单',
+                    'path'      => '/goods_list/1',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '新品推荐',
+                    'path'      => '/goods_list/2',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '好物优选',
+                    'path'      => '/goods_list/3',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '限时秒杀',
+                    'path'      => '/seckill',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '商城资讯',
+                    'path'      => '/news_list',
+                    'is_tab'    => 0,
+                ],
+                [
+                    'name'      => '帮助中心',
+                    'path'      => '/help_center',
                     'is_tab'    => 0,
                 ],
             ],

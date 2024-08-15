@@ -48,10 +48,20 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">评价类型:</label>
+                                <div class="layui-input-block">
+                                    <select name="comment_type" id="comment_type" placeholder="请选择商品状态">
+                                        <option value="">全部</option>
+                                        <option value="1">真实评价</option>
+                                        <option value="2">虚拟评价</option>
+                                    </select>
+                                </div>
+                            </div>
 
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">评论时间：</label>
+                            <label class="layui-form-label">评价时间：</label>
                             <div class="layui-input-inline">
                                 <div class="layui-input-inline">
                                     <input type="text" name="start_time" class="layui-input" id="start_time"
@@ -102,8 +112,11 @@
                         </script>
 
                         <script type="text/html" id="comment_image">
+                            {{# if(d.comment !== null) { }}
+                                <p>{{d.comment}}</p>
+                            {{#  } }}
                             {{#  layui.each(d.comment_image, function(index, item){ }}
-                                <img src="{{item}}" class="image-show" alt="评论图片" style="width:50px;height:50px;float:left;margin-right:5px;">
+                                <img src="{{item}}" class="image-show" alt="评价图片" style="width:50px;height:50px;float:left;margin-right:5px;">
                             {{#  }); }}
                         </script>
 
@@ -181,6 +194,7 @@
             $('#goods_comment').val('');
             $('#start_time').val('');  //清空输入框
             $('#end_time').val('');  //清空输入框
+            $('#comment_type').val('');  //清空输入框
             //刷新列表
             form.render('select');
             table.reload('goods_comment-lists', {
@@ -205,13 +219,13 @@
                     {type: 'checkbox',title: '当页全选'},
                     {field: 'user', title: '会员信息',templet:'#user',width:310},
                     {field: 'goods', title: '商品信息',templet:'#goods',width:320},
+                    {field: 'comment_type', title: '评价类型', align: 'center', width:100},
                     {field: 'goods_comment', title: '评分等级', align: 'center',width:100},
-                    // {field: 'comment', title: '评价内容',templet:'#comment',width:250},
-                    {field: 'comment', title: '买家评价',width:200},
-                    {field: 'commentImage', title: '评论图片',width:200, templet:"#comment_image"},
+                    // {field: 'comment', title: '买家评价',width:200},
+                    {field: 'commentImage', title: '评价内容',width:200, templet:"#comment_image"},
                     {field: 'reply', title: '商家回复',width:200},
                     {field: 'status', title: '显示状态', align: 'center',width:100},
-                    {field: 'comment_time', title: '评论时间', align: 'center',width:200},
+                    {field: 'comment_time', title: '评价时间', align: 'center',width:200},
                     {fixed: 'right', title: '操作', align: 'center', toolbar: '#comment-operation',width:200},
                 ]]
                 , page: true

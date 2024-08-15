@@ -34,12 +34,19 @@ class Freight extends AdminBase
     {
         if ($this->request->isAjax()) {
             $post = $this->request->post();
-            $post['type'] = isset($post['type']) && $post['type'] == 'on' ? 1 : 0;
-            ConfigServer::set('express', 'is_express', $post['type']);
+            $post['is_express'] = isset($post['is_express']) && $post['is_express'] == 'on' ? 1 : 0;
+            $post['is_selffetch'] = isset($post['is_selffetch']) && $post['is_selffetch'] == 'on' ? 1 : 0;
+            if ($post['is_express'] === 0 && $post['is_selffetch'] === 0) {
+                $this->_error('至少保留一种配送方式');
+            }
+            ConfigServer::set('delivery_type', 'is_express', $post['is_express']);
+            ConfigServer::set('delivery_type', 'is_selffetch', $post['is_selffetch']);
             $this->_success('操作成功');
         }
-        $type = ConfigServer::get('express', 'is_express');
-        $this->assign('type', $type);
+        $is_express = ConfigServer::get('delivery_type', 'is_express', 1);
+        $is_selffetch = ConfigServer::get('delivery_type', 'is_selffetch', 0);
+        $this->assign('is_express', $is_express);
+        $this->assign('is_selffetch', $is_selffetch);
         return $this->fetch();
     }
 
@@ -140,4 +147,5 @@ class Freight extends AdminBase
     {
         return $this->fetch();
     }
+
 }

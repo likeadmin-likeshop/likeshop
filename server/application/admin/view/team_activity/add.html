@@ -203,7 +203,7 @@
         form.verify({
             people_num: function(value){
                 if(parseInt(value) < 2){
-                    return '拼团人数需大于2';
+                    return '拼团人数需大于等于2';
                 }
             },
             time_limit: function(value){

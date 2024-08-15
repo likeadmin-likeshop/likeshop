@@ -1,19 +1,23 @@
 <template name="protocol-popup">
 	<view @touchmove.stop.prevent="clear" v-show="showPopup">
+		<view class="popup_mask1" @touchmove.stop.prevent="clear"></view>
 		<view class="popup_mask" @touchmove.stop.prevent="clear"></view>
+		
 		<view class="popup_content">
-			<view class="title">{{title}}</view>
-			<view class="explain_text">
-				请你务必认真阅读、充分理解“服务协议”和“隐私政策”各条款，包括但不限于：为了向你提供数据、分享等服务所要获取的权限信息。
-				<view class="line">你可以阅读<navigator :url="protocolPath" class="path" hover-class="navigator-hover">《服务协议》
-					</navigator>和<navigator :url="policyPath" class="path" hover-class="navigator-hover">《隐私政策》
-					</navigator>了解详细信息。如您同意，请点击"同意"开始接受我们的服务。
-				</view>
+			<view class="title">{{ title }}</view>
+			<view class="content">
+				请你务必审慎阅读、充分理解“服务协议”和“隐私政策”各条款，包括但不限于：为了更好的向你提供服务，我们需要收集你的设备标识、操作日志等信息用于分析、优化应用性能。你可阅读
+				<text class="link" @click="linkClick(1)">《服务协议》</text>和
+				<text class="link" @click="linkClick(2)">《隐私政策》</text>
+				了解详细信息。如果你同意，请点击下面按钮开始接受我们的服务。
 			</view>
-
-			<view class="button">
-				<view @tap="back">暂不使用</view>
-				<view @tap="confirm">同意</view>
+			<view class="btn">
+				<view class="flex-1">
+					<button class="plain" @click="back">拒绝，仅浏览</button>
+				</view>
+				<view class="flex-1">
+					<button @click="confirm">同意并继续</button>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -25,7 +29,7 @@
 		props: {
 			title: {
 				type: String,
-				default: "服务协议和隐私政策"
+				default: "用户使用及隐私保护政策提示"
 			},
 			// 协议路径
 			protocolPath: {
@@ -49,22 +53,30 @@
 		created: function() {
 			var that = this;
 			console.log("lyg-popup created");
-			uni.getStorage({
-				key: this.policyStorageKey,
-				success: (res) => {
-					if (res.data) {
-						that.showPopup = false;
-						uni.showTabBar({});
-					}
-				},
-				fail: function(e) {
-					that.showPopup = true;
-					uni.hideTabBar({});
-					console.log(e)
-				}
-			});
+			const platform = uni.getSystemInfoSync().osName
+			const agree = uni.getStorageSync(this.policyStorageKey)
+			if (platform === 'android' || agree) {
+				this.showPopup = false;
+				uni.showTabBar({})
+			} else {
+				this.showPopup = true;
+				uni.hideTabBar({})
+			}
 		},
 		methods: {
+			// 查看隐私协议或服务协议
+			linkClick (num) {
+				switch (num) {
+					case 1:
+						// 跳转服务协议
+						this.$Router.push(this.protocolPath)
+						break
+					case 2:
+						// 跳转隐私政策
+						this.$Router.push(this.policyPath)
+						break
+				}
+			},
 			// 禁止滚动
 			clear() {
 				return;
@@ -87,12 +99,8 @@
 			confirm() {
 				this.showPopup = false;
 				this.$emit('popupState', true);
-
-				uni.setStorage({
-					key: this.policyStorageKey,
-					data: true
-				});
-				uni.showTabBar({});
+				uni.showTabBar({})
+				uni.setStorageSync(this.policyStorageKey, true)
 			}
 		}
 	};
@@ -109,12 +117,21 @@
 		transition-property: opacity;
 		transition-duration: 0.3s;
 		opacity: 0;
-		z-index: 98;
-
+		z-index: 1299;
 	}
 
 	.popup_mask {
 		opacity: 1;
+	}
+	
+	.popup_mask1 {
+		position: fixed;
+		bottom: 0;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1298;
+		background-color: #ffffff;
 	}
 
 	.popup_content {
@@ -130,40 +147,41 @@
 		min-height: 400upx;
 		background: #ffffff;
 		width: 80%;
-		z-index: 99;
+		z-index: 1300;
 
 		.title {
 			text-align: center;
-			font-size: 34upx;
-			padding: 10upx 0 0 0;
+			line-height: 120rpx;
+			font-size: 32rpx;
+			font-weight: 600;
 		}
-
-		.explain_text {
-			font-size: 30upx;
-			padding: 30upx 30upx 40upx 30upx;
-			line-height: 38upx;
-
-			.line {
-				display: block;
-
-				.path {
-					color: #007aff;
-					display: inline-block;
-					text-align: center;
-				}
+		
+		.content {
+			padding: 0 32rpx;
+			text-indent: 1em;
+		
+			.link {
+				color: #4982db;
 			}
 		}
-
-		.button {
+		
+		.btn {
 			display: flex;
-			padding: 20upx;
-			align-items: center;
-			font-size: 34upx;
-			justify-content: space-around;
-			border-top: 1upx solid #f2f2f2;
-
-			view {
-				text-align: center;
+			flex: 1;
+			margin-top: 30rpx;
+			
+			>view {
+				margin: 20rpx;
+				flex: 1;
+			}
+			button {
+				color: $-color-white;
+				background-color: $-color-primary;
+			}
+			.plain {
+				color: $-color-primary;
+				background-color: $-color-white;
+				border: 1px solid $-color-primary;
 			}
 		}
 	}

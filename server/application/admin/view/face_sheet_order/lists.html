@@ -1,0 +1,359 @@
+{layout name="layout1" /}
+
+<style>
+    .layui-table-cell { height: auto; }
+    .print {
+        position: absolute;
+        left: 50px;
+        top: 5px;
+        font-weight: 600;
+        width: 198px;
+        color: #000;
+    }
+    .print-success { color: green; }
+    .print-total { color: red; }
+    .layui-layer.layui-layer-loading {
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        padding: 20px 30px;
+        width: 200px;
+        background: #FFFFFF;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+
+        <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4; margin-bottom: 30px;">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                <div class="layui-colla-content layui-show">
+                    <p>* 批量打印待发货的订单，电子面单打印后会自动标识订单为已发货，避免二次打印；</p>
+                    <p>* 拼团中的订单需要等待拼团成功后才能发货；</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form" style="padding-top: 20px;">
+            <div class="layui-form-item">
+                <div class="layui-row">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单搜索:</label>
+                        <div class="layui-input-block">
+                            <select name="keyword_type">
+                                <option value="order_sn">订单编号</option>
+                                <option value="user_sn">会员编码</option>
+                                <option value="nickname">会员昵称</option>
+                                <option value="consignee">收货人姓名</option>
+                                <option value="consignee_mobile">收货人手机号码</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="keyword" id="keyword" placeholder="请输入搜索内容" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商品名称:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="goods_name" id="goods_name" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">下单时间:</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-input-inline">
+                                <input type="text" name="start_time" class="layui-input" id="start_time"
+                                       placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-input-inline" style="margin-right: 5px;width: 20px;">
+                            <label class="layui-form-mid">至</label>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_time" class="layui-input" id="end_time"
+                                   placeholder="" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" lay-submit lay-filter="search">查询</button>
+                        <button class="layui-btn layui-btn-sm layuiadmin-btn layui-btn-primary " lay-submit lay-filter="clear-search">清空查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-sm layuiadmin-btn {$view_theme_color}" data-type="batch">打印电子面单</button>
+            </div>
+            <table id="like-table-lists" lay-filter="like-table-lists"></table>
+            <script type="text/html" id="table-goods">
+                {{#  layui.each(d.orderGoods, function(index, item){ }}
+                    <div>
+                        <img src="{{item.image}}" alt="img" style="width: 50px; height: 50px;">
+                        <div class="layui-inline">
+                            <p>{{item.goods_name}}</p>
+                            <p>{{item.spec_value_str}} {{item.goods_price}} x{{item.goods_num}}</p>
+                        </div>
+                    </div>
+                {{#  }); }}
+            </script>
+            <script type="text/html" id="table-order_type">
+                    {{d.order_type}}
+                    {{#  if(d.team_found_status === 0){ }}
+                        (<span style="color: red;">未成功</span>)
+                    {{#  } }}
+            </script>
+            <script type="text/html" id="table-collect">
+                <p>收货人：{{d.consignee}}</p>
+                <p>手机号码：{{d.mobile}}</p>
+                <p>收货地址：{{d.address}}</p>
+            </script>
+            <script type="text/html" id="operation">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="print">打印电子面单</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index','table','like','form', 'laydate'], function(){
+        var $ = layui.$
+            ,table = layui.table
+            ,like = layui.like
+            ,form = layui.form
+            ,laydate = layui.laydate;
+
+        // 开始时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#start_time'
+            ,trigger: 'click'
+        });
+
+        // 结束时间
+        laydate.render({
+            type: 'datetime'
+            ,elem: '#end_time'
+            ,trigger: 'click'
+        });
+
+
+        // 渲染数据表格
+        table.render({
+            elem: '#like-table-lists'
+            ,url: '{:url("FaceSheetOrder/lists")}'
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field: 'order_sn', title: '订单编号', width:180, align:'center'}
+                ,{field: 'orderType', title: '订单类型', width:160, align:'center', templet:'#table-order_type'}
+                ,{field: 'user', title: '买家信息', width:150}
+                ,{field: 'goodsInfo', title: '商品信息', width:250, templet:'#table-goods'}
+                ,{field: 'total_num', title: '商品数量', width:100, align: 'center'}
+                ,{field: 'order_amount', title: '实付金额', width:100, align: 'center'}
+                ,{field: 'delivery_type', title: '配送方式', width:100, align: 'center'}
+                ,{field: 'collect', title: '收货信息', width:200, templet: '#table-collect'}
+                ,{field: 'order_status', title: '订单状态', width:100, align: 'center'}
+                ,{field: 'create_time', title: '下单时间', width:170, align: 'center'}
+                ,{fixed: 'right', title: '操作', align: 'center', toolbar:'#operation', width:150}
+            ]]
+            ,page:true
+            ,text: {none: '暂无数据！'}
+            ,parseData: function(res){
+                return {
+                    "code":res.code,
+                    "msg":res.msg,
+                    "count": res.data.count,
+                    "data": res.data.lists
+                };
+            }
+            ,done: function(){
+                $(".layui-table-main tr").each(function (index, val) {
+                    $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                    $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+
+        //事件
+        var active = {
+            batch: function() {
+                var checkStatus = table.checkStatus('like-table-lists').data;
+                if (checkStatus.length <= 0) {
+                    layer.msg("请选择要打印的订单");
+                    return false;
+                }
+
+                var senderId = 0;
+                var tempid = 0;
+
+                layer.open({
+                    type: 2
+                    , title: '请选择打印模版'
+                    , content: '{:url("FaceSheetOrder/select")}'
+                    , area: ['500px', '500px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'addSubmit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            senderId = data.field['sender_id'];
+                            tempid = data.field['tempid'];
+                            if (!senderId || !tempid) {
+                                return false;
+                            }
+                            layer.close(index);
+                        });
+                        submit.trigger('click');
+
+                        if (!senderId || !tempid) {
+                            return false;
+                        }
+
+                        var indexLoad = layer.load(2, {
+                            shade: [0.6,'#000'],
+                            content: '<div class="print"> 正在打印中，请不要刷新</div>'
+                        });
+
+                        setTimeout(function () {
+                            var printNum = 0;
+                            try {
+                                checkStatus.forEach(function (item) {
+                                    $.ajax({
+                                        url: '{:url("FaceSheetOrder/print")}',
+                                        data: {"order_id": item.id, "tempid": tempid, "sender_id": senderId},
+                                        type: "post",
+                                        async: false,
+                                        success: function (res) {
+                                            if (res.code === 1) {
+                                                printNum++;
+                                                if (printNum === checkStatus.length) {
+                                                    setTimeout(function () {
+                                                        layer.close(indexLoad);
+                                                        layer.msg('打印完成', {icon: 1});
+                                                        table.reload('like-table-lists');
+                                                    }, 1000);
+                                                }
+                                            } else {
+                                                layer.close(indexLoad);
+                                                throw new Error(res.msg);
+                                            }
+                                        }
+                                    });
+                                });
+                            } catch(e){
+                                layer.msg(e.message || '未知错误,终止打印', {icon: 2});
+                                table.reload('like-table-lists');
+                            }
+                        }, 500);
+                    }
+                });
+
+            },
+            print: function (obj) {
+                var senderId = 0;
+                var tempid = 0;
+
+                layer.open({
+                    type: 2
+                    , title: '请选择打印模版'
+                    , content: '{:url("FaceSheetOrder/select")}'
+                    , area: ['500px', '500px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'addSubmit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            senderId = data.field['sender_id'];
+                            tempid = data.field['tempid'];
+                            if (!senderId || !tempid) {
+                                return false;
+                            }
+                            layer.close(index);
+
+                        });
+                        submit.trigger('click');
+
+                        if (!senderId || !tempid) {
+                            return false;
+                        }
+
+                        var indexLoad = layer.load(2, {
+                            shade: [0.6,'#000'],
+                            content: '<div class="print"> 正在打印中，请不要刷新</div>'
+                        });
+
+                        setTimeout(function () {
+                            $.ajax({
+                                url:'{:url("FaceSheetOrder/print")}',
+                                data: {"order_id":obj.data.id, "tempid":tempid, "sender_id":senderId},
+                                type:"post",
+                                success:function(res) {
+                                    if(res.code === 1) {
+                                        setTimeout(function () {
+                                            layer.close(indexLoad);
+                                            layer.msg('打印完成', {icon: 1});
+                                            table.reload('like-table-lists');
+                                        }, 2000);
+                                    } else {
+                                        layer.close(indexLoad);
+                                        setTimeout(function () {
+                                            layer.msg(res.msg || '未知错误,终止打印', {icon: 2});
+                                            table.reload('like-table-lists');
+                                        }, 1000);
+                                    }
+                                }
+                            });
+                        }, 500)
+                    }
+                });
+            }
+        };
+
+        // 监听表格右侧工具条
+        table.on('tool(like-table-lists)', function(obj){
+            var type = obj.event;
+            active[type] ? active[type].call(this, obj) : '';
+        });
+
+        // 绑定点击按钮事件
+        $('.layui-btn.layuiadmin-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //监听搜索
+        form.on('submit(search)', function(data){
+            var field = data.field;
+            table.reload('like-table-lists', {
+                where: field,
+                page: { curr: 1 }
+            });
+        });
+
+        // 监听重置搜素
+        form.on('submit(clear-search)', function(){
+            $('#goods_name').val('');
+            $('#keyword').val('');
+            $('#start_time').val('');
+            $('#end_time').val('');
+            form.render('select');
+            table.reload('like-table-lists', {where: [], page: { curr: 1} });
+        });
+
+    });
+</script>

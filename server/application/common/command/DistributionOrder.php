@@ -19,8 +19,15 @@
 
 namespace app\common\command;
 
+use app\admin\logic\DistributionLevelLogic;
 use app\common\logic\AccountLogLogic;
-use app\common\model\{AccountLog, AfterSale, NoticeSetting, Order, User, DistributionOrder as DistributionOrderModel};
+use app\common\model\{AccountLog,
+    AfterSale,
+    Distribution,
+    NoticeSetting,
+    Order,
+    User,
+    DistributionOrder as DistributionOrderModel};
 use app\common\server\ConfigServer;
 use think\console\Command;
 use think\console\Input;
@@ -47,15 +54,9 @@ class DistributionOrder extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        //查看分销配置是否开启
-        $setting = ConfigServer::get('distribution', 'is_open', 1);
-        if ($setting != 1) {
-            return true;
-        }
-
         //售后时间(未过售后时间的分销订单不处理)
-        $after_sale_time = ConfigServer::get('after_sale', 'refund_days', 7);
-        $after_sale_time = $after_sale_time * 24 * 60 * 60;
+        $after_sale_time = ConfigServer::get('distribution', 'settlement_days', 7);
+        $after_sale_time = intval($after_sale_time * 24 * 60 * 60);
         $now = time();
 
         Db::startTrans();
@@ -77,18 +78,18 @@ class DistributionOrder extends Command
             }
 
             foreach ($orders as $order) {
-                
-                $user = User::get($order['user_id']);
+                $distribution = Distribution::where('user_id', $order['user_id'])->findOrEmpty()->toArray();
 
                 //当前分佣订单是否可结算   //非分销会员或已被冻结的分销会员不参与分佣
-                if ( false === self::isSettle($order) || empty($user)
-                    || $user['is_distribution'] != 1
-                    || $user['freeze_distribution'] == 1
+                if ( false === self::isSettle($order) || empty($distribution)
+                    || $distribution['is_distribution'] != 1
+                    || $distribution['is_freeze'] == 1
                 ) {
                     continue;
                 }
 
                 //增加佣金
+                $user = User::findOrEmpty($order['user_id']);
                 $user->earnings = ['inc', $order['money']];
                 $user->update_time = time();
                 $user->save();
@@ -106,6 +107,9 @@ class DistributionOrder extends Command
 
                 //更新分销订单状态
                 DistributionOrderModel::updateOrderStatus($order['distribution_id'], DistributionOrderModel::STATUS_SUCCESS);
+
+                // 更新分销会员等级
+                DistributionLevelLogic::updateDistributionLevel($order['user_id']);
 
                 //通知会员
                 Hook::listen('notice', [

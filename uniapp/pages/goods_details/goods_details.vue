@@ -1,11 +1,12 @@
 <template>
 	<view class="goods-details">
+		<navbar title="商品详情" :background="{background: `rgba(256,256,256,${percent})`}" :titleColor="`rgba(0,0,0,${percent})`" :immersive="true"></navbar>
 		<!-- #ifdef H5 -->
-		<download-nav v-if="showDownload"></download-nav>
+		<download-nav v-if="showDownload" :top="44"></download-nav>
 		<!-- #endif -->
 		<loading-view v-if="isFirstLoading"></loading-view>
 		<view class="contain" v-if="!isNull">
-			<bubble-tips top="40rpx"></bubble-tips>
+			<bubble-tips top="180rpx"></bubble-tips>
 			<product-swiper :imgUrls="swiperList" :video="goodsDetail.video"></product-swiper>
 			<!-- 秒杀 -->
 			<view class="seckill row-between" v-if="goodsType == 1">
@@ -13,11 +14,16 @@
 					<view class="row white info">
 						<view style="align-items: baseline;" class="row ml20">
 							<view class="mr10">秒杀价</view>
-							<price-format :subscript-size="32" :first-size="46" :second-size="32"
-								:price="checkedGoods.price || goodsDetail.price" :weight="500"></price-format>
+							<price-format :first-size="46" :second-size="32" :subscript-size="32"
+								:price="goodsDetail.min_price" :weight="500"></price-format>
+							<template v-if="goodsDetail.min_price != goodsDetail.max_price">
+								<text style="font-size: 46rpx;">-</text>
+								<price-format :first-size="46" :second-size="32" :subscript-size="32"
+									:show-subscript="false" :price="goodsDetail.max_price" :weight="500"></price-format>
+							</template>
 							<view class="ml10">
 								<price-format :subscript-size="30" :line-through="true" :first-size="30"
-									:second-size="30" :price="checkedGoods.market_price || goodsDetail.market_price">
+									:second-size="30" :price="goodsDetail.market_price">
 								</price-format>
 							</view>
 						</view>
@@ -36,7 +42,8 @@
 						<view style="align-items: baseline;" class="row">
 							<view class="mr10">拼团价</view>
 							<price-format :subscript-size="32" :first-size="46" :second-size="32"
-								:price="checkedGoods.team_price || team.team_min_price" :weight="500"></price-format>
+								:price="team.team_min_price" :weight="500"></price-format>
+							<text class="xs">起</text>
 						</view>
 						<view class="mr20 row group-num">
 							<view class="group-icon">
@@ -57,21 +64,27 @@
 					<view class="price row flex1">
 						<view class="primary mr10">
 							<price-format :first-size="46" :second-size="32" :subscript-size="32"
-								:price="checkedGoods.price || goodsDetail.price" :weight="500"></price-format>
+								:price="goodsDetail.min_price" :weight="500"></price-format>
+							<template v-if="goodsDetail.min_price != goodsDetail.max_price">
+								<text style="font-size: 46rpx;">-</text>
+								<price-format :first-size="46" :second-size="32" :subscript-size="32"
+									:show-subscript="false" :price="goodsDetail.max_price" :weight="500"></price-format>
+							</template>
 						</view>
 						<view class="line-through muted md">
-							<price-format :price="checkedGoods.market_price || goodsDetail.market_price"></price-format>
+							<price-format :price="goodsDetail.market_price"></price-format>
 						</view>
 					</view>
 					<image class="icon-share" src="/static/images/icon_share.png" @tap="showShareBtn = true"></image>
 				</view>
-				<view class="row" v-if="!goodsType && (checkedGoods.member_price || goodsDetail.member_price)">
+				<view class="row" v-if="!goodsType && (goodsDetail.member_price)">
 					<view class="vip-price row">
 						<view class="price-name xxs">会员价</view>
 						<view style="padding: 0 11rpx">
-							<price-format :price="checkedGoods.member_price || goodsDetail.member_price "
-								:first-size="26" :second-size="26" :subscript-size="22" :weight="500" color="#7B3200">
+							<price-format :price="goodsDetail.member_price " :first-size="26" :second-size="26"
+								:subscript-size="22" :weight="500" color="#7B3200">
 							</price-format>
+							<text class="xxs" style="color: #7B3200;">起</text>
 						</view>
 					</view>
 				</view>
@@ -81,7 +94,7 @@
 						v-if="goodsType == 1"></image>
 				</view>
 				<view class="row-between xs lighter" style="padding: 0 24rpx 20rpx">
-					<text v-if="goodsDetail.stock !== true">库存: {{ checkedGoods.stock || goodsDetail.stock }}件</text>
+					<text v-if="goodsDetail.stock !== true">库存: {{ goodsDetail.stock }}件</text>
 					<text>销量: {{ goodsDetail.sales_sum }}件</text>
 					<text>浏览量: {{ goodsDetail.click_count }}次</text>
 				</view>
@@ -170,7 +183,7 @@
 				<view class="line1 mr20" style="flex: 1;">{{ checkedGoods.spec_value_str || '默认' }}</view>
 				<image class="icon-sm" src="/static/images/arrow_right.png"></image>
 			</view>
-			<navigator class="mt20" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=2">
+			<navigator class="mt20" hover-class="none" url="/bundle/pages/server_explan/server_explan?type=2">
 				<view class="row bg-white" style="padding: 24rpx 24rpx;">
 					<view class="text lighter flex1">售后保障</view>
 					<image class="icon-sm" src="/static/images/arrow_right.png"></image>
@@ -201,7 +214,7 @@
 				<view class="con row-center muted" v-else>暂无评价</view>
 			</view>
 
-			<view class="goods-like mt20 bg-white">
+			<view class="goods-like mt20 bg-white" v-if="goodsLike.length">
 				<goods-like :list="goodsLike"></goods-like>
 			</view>
 			<view class="details mt20 bg-white">
@@ -212,7 +225,7 @@
 			</view>
 			<view class="footer row bg-white fixed">
 				<navigator class="btn column-center" hover-class="none"
-					url="/pages/bundle/contact_offical/contact_offical">
+					url="/bundle/pages/contact_offical/contact_offical">
 					<image class="icon-md" src="/static/images/icon_contact.png"></image>
 					<text class="xxs lighter">客服</text>
 				</navigator>
@@ -229,7 +242,8 @@
 					<u-badge v-if="cartNum" bgColor="#FF2C3C" :offset="[8, 10]" :count="cartNum"></u-badge>
 				</navigator>
 				<view v-if="btnText.yellow" class="add-cart br60 white mr10 md ml20" @tap="showSpecFun(1)">
-					{{ btnText.yellow }}</view>
+					{{ btnText.yellow }}
+				</view>
 				<view class="right-buy br60 white mr20 ml10 md" @tap="showSpecFun(2)">{{ btnText.red }}</view>
 			</view>
 		</view>
@@ -245,10 +259,20 @@
 			:showConfirm="popupType == 3" @buynow="onBuy" @addcart="onAddCart" @change="onChangeGoods"
 			:group="Boolean(isGroup)" :red-btn-text="btnText.red" :yellow-btn-text="btnText.yellow"
 			@confirm="onConfirm"></spec-popup>
-
-		<share-popup :show="showShareBtn" @close="showShareBtn = false" :goods-id="id" :img-url="goodsDetail.image"
-			:summary="goodsDetail.remark" :share-title="goodsDetail.name"></share-popup>
-		<float-tab></float-tab>
+			
+		<share-popup v-model="showShareBtn" 
+			:share-id="id" 
+			pagePath="pages/goods_details/goods_details" 
+			:type="1" 
+			:config="{
+				avatar: userInfo.avatar,
+				nickname: userInfo.nickname,
+				image: goodsDetail.poster || goodsDetail.image,
+				price: goodsDetail.min_price,
+				marketPrice: goodsDetail.market_price,
+				name: goodsDetail.name
+		}">
+		</share-popup>
 		<!-- 领券 -->
 		<u-popup v-model="showCoupon" mode="bottom" border-radius="14">
 			<view>
@@ -266,21 +290,24 @@
 			</view>
 		</u-popup>
 
-		<view class="share-money" :class="{ show: showShare && goodsDetail.commission_price > 0 && goodsType == 0}">
+		<view class="share-money" :class="{ show: showCommission && enableCommission}">
 			<view class="row-end">
-				<view class="share-close row-center" @tap="showShare=false">
+				<view class="share-close row-center" @tap="showCommission=false">
 					<u-icon name="close" size="16" color="#fff"></u-icon>
 				</view>
 			</view>
 			<view class="share-con mt10" @tap="showShareBtn=true">
 				<view class="primary" style="font-size: 45rpx;">
-					{{goodsDetail.commission_price}}<text class="xs">元</text>
+					{{distribution.earnings}}<text class="xs">元</text>
 				</view>
 				<view class="lighter xxs">
 					好友下单最高可赚
 				</view>
 			</view>
 		</view>
+		
+		<u-back-top :scroll-top="scrollTop" :top="1000" :customStyle="{ backgroundColor: '#FFF', color: '#000', boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.1)'}"></u-back-top>
+		
 	</view>
 </template>
 
@@ -303,7 +330,8 @@
 		mapGetters
 	} from 'vuex';
 	import {
-		arraySlice
+		arraySlice,
+		trottle
 	} from '@/utils/tools';
 	import {
 		toLogin
@@ -319,12 +347,14 @@
 	export default {
 		data() {
 			return {
+				scrollTop: 0,
+				percent: 0,
 				isFirstLoading: true,
 				isNull: false,
 				showSpec: false,
 				showCoupon: false,
 				showShareBtn: false,
-				showShare: true,
+				showCommission: true,
 				popupType: '',
 				swiperList: [],
 				goodsDetail: {},
@@ -341,10 +371,12 @@
 				teamFound: [],
 				isGroup: 0,
 				id: '',
-				showDownload: false
+				showDownload: false,
+				distribution: {}
 			};
 		},
 		onLoad(options) {
+			this.onPageScroll = trottle(this.onPageScroll, 500, this)
 			if (options && options.scene) {
 				let scene = strToParams(decodeURIComponent(options.scene));
 				console.log(scene, decodeURIComponent(options.scene))
@@ -370,6 +402,14 @@
 		onShow() {
 			this.getGoodsDetailFun();
 		},
+		onPageScroll(e) {
+			const top = uni.upx2px(100)
+			const {
+				scrollTop
+			} = e
+			this.percent = scrollTop / top > 1 ? 1 : scrollTop / top
+			this.scrollTop = scrollTop
+		},
 		methods: {
 			...mapActions(['getCartNum']),
 			async getGoodsDetailFun() {
@@ -385,7 +425,8 @@
 						content,
 						comment,
 						like,
-						activity
+						activity,
+						distribution
 					} = data;
 					let {
 						info,
@@ -402,7 +443,7 @@
 					if (team_found) {
 						team_found = arraySlice(team_found, [], 2);
 					}
-
+					this.distribution = distribution || {}
 					this.goodsDetail = data;
 					this.swiperList = goods_image;
 					this.comment = comment;
@@ -501,7 +542,7 @@
 					num: goodsNum
 				}];
 				const params = {
-					goods
+					goods,
 				};
 				this.showSpec = false;
 				goodsType == 2 ? (params.teamId = team.team_id) : '';
@@ -509,6 +550,7 @@
 				uni.navigateTo({
 					url: '/pages/confirm_order/confirm_order?data=' + encodeURIComponent((JSON.stringify(params)))
 				})
+				console.log(1111)
 			},
 			onConfirm(e) {
 				const {
@@ -600,12 +642,22 @@
 			},
 			getTeamCountTime() {
 				return time => time - Date.now() / 1000;
+			},
+			enableCommission() {
+				const {
+					goodsType,
+					distribution: {
+						earnings,
+						is_show
+					}
+				} = this
+				return goodsType == 0 && earnings > 0 && is_show == 1
 			}
 		}
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.goods-details {
 		padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 
@@ -662,6 +714,7 @@
 			.vip-price {
 				margin: 0 24rpx;
 				background-color: #FFE9BA;
+				color: #FFD4B7;
 				line-height: 36rpx;
 				border-radius: 6rpx;
 				overflow: hidden;
@@ -669,7 +722,6 @@
 				.price-name {
 					background-color: #101010;
 					padding: 3rpx 12rpx;
-					color: #FFD4B7;
 					position: relative;
 					overflow: hidden;
 
@@ -755,7 +807,7 @@
 		}
 
 		.spec {
-			padding: 24rpx 24rpx;
+			padding: 24rpx;
 
 			.text {
 				width: 100rpx;

@@ -56,33 +56,45 @@ class UrlServer
             if (isset($uri[0])) {
                 $uri[0] != '/' && $uri = '/' . $uri;
             }
-
+            
             $protocol = is_https() ? 'https://' : 'http://';
             $file_url = config('project.file_domain');
+            if ($file_url[strlen($file_url) - 1] == '/') {
+                $file_url = substr($file_url,0,strlen($file_url)-1);
+                
+                $port = request()->port();
+                $port = in_array($port, [ '80', '443' ])  ? '' : ":{$port}";
+                
+                $file_url .= $port;
+            }
+            
             return $protocol . $file_url . $uri;
 
         } else {
 
-            $config = ConfigServer::get('storage_engine',  $engine);
+            $config = ConfigServer::get('storage_engine',$engine);
             $domain = isset($config['domain']) ? $config['domain'] : 'http://';
+            if ($domain[strlen($domain) - 1] == '/') {
+                $domain = substr($domain,0,strlen($domain)-1);
+            }
             return $domain . $uri;
         }
     }
 
     /**
      * NOTE: 设置文件路径转相对路径
+     * @author: 张无忌
      * @param string $uri
      * @return mixed
-     * @author: 张无忌
      */
-    public static function setFileUrl($uri = '')
+    public static function setFileUrl($uri='')
     {
         $engine = ConfigServer::get('storage', 'default', 'local');
         if ($engine === 'local') {
             $domain = request()->domain();
-            return str_replace($domain . '/', '', $uri);
+            return str_replace($domain.'/', '', $uri);
         } else {
-            $config = ConfigServer::get('storage_engine',  $engine);
+            $config = ConfigServer::get('storage_engine', $engine);
             return str_replace($config['domain'], '', $uri);
         }
     }

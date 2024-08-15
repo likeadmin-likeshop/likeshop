@@ -1,0 +1,56 @@
+{layout name="layout2" /}
+<style>
+    .layui-form-item .layui-form-label { width: 90px; }
+    .layui-form-item .layui-input-inline { width: 380px; }
+</style>
+
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>发件人：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="name" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>发件人电话：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="mobile" lay-verify="required|phone" lay-vertype="tips" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>发件人地区：</label>
+        <div class="layui-input-inline" style="width: 120px;">
+            <select name="province_id" lay-filter="province" lay-verify="required"></select>
+        </div>
+        <div class="layui-input-inline" style="width: 120px;">
+            <select name="city_id" lay-filter="city" lay-verify="required"></select>
+        </div>
+        <div class="layui-input-inline" style="width: 120px;">
+            <select name="district_id" lay-verify="required"></select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>发件人地址：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="address" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="addSubmit" id="addSubmit" value="确认">
+    </div>
+</div>
+
+<script src="__PUBLIC__/static/common/js/area.js"></script>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form','like_area','like'], function(){
+        var like_area = layui.like_area;
+
+        //三级联动
+        like_area.init('province','city','district','province_id','city_id','district_id');
+    })
+</script>

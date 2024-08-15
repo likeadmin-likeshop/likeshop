@@ -72,6 +72,20 @@ class Login extends Validate
         }
         //标记验证码已验证
         $sms_logic->cancelCode();
+
+        $user_info = Db::name('user')
+            ->field(['disable'])
+            ->where(['account|mobile' => $data['account']])
+            ->find();
+
+        if(empty($user_info)) {
+            return '登录失败:user';
+        }
+
+        if ($user_info['disable']) {
+            return '账号已被禁用';
+        }
+
         return true;
     }
 
@@ -101,7 +115,7 @@ class Login extends Validate
             return false;
         }
         if ($admin_info['disable']) {
-            return '账号被禁用';
+            return '账号已被禁用';
         }
         $password = create_password($password, $admin_info['salt']);
         if ($password != $admin_info['password']) {

@@ -60,12 +60,31 @@ class Share extends ApiBase
     {
         $id = $this->request->get('id');
         $url = $this->request->get('url');
-        $client = $this->client;
         $result = $this->validate(['id' => $id, 'url' => $url], 'app\api\validate\Bargain.share');
         if (true === $result) {
-            $result = ShareLogic::shareBargain($this->user_id, $id, $url, $client);
+            $result = ShareLogic::shareBargain($this->user_id, $id, $url, $this->client);
             $this->_success($result['msg'], $result['data'], $result['code']);
         }
         $this->_error($result);
+    }
+
+    /**
+     * @notes 获取二维码
+     * @author cjhao
+     * @date 2021/11/25 10:47
+     */
+    public function getMnQrcode()
+    {
+        $get = $this->request->get();
+        $result = $this->validate($get,'app\api\validate\MakeMnQrcode');
+        if(true === $result){
+            $result = ShareLogic::getMnQrcode($this->user_id,$get);
+            if(1 === $result['code']){
+                $this->_success('',$result['data']);
+            }
+            $this->_error($result['msg']);
+        }
+        $this->_error($result);
+
     }
 }

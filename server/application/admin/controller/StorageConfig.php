@@ -54,7 +54,7 @@ class StorageConfig extends AdminBase
                     'status' => $default == 'aliyun' ? 1 : 0
                 ],
                 [
-                    'name'   => '腾讯云OSS',
+                    'name'   => '腾讯云COS',
                     'path'   => '存储在腾讯云，请前往腾讯云开通存储服务',
                     'engine' => 'qcloud',
                     'status' => $default == 'qcloud' ? 1 : 0

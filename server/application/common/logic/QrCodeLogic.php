@@ -240,7 +240,7 @@ class QrCodeLogic extends LogicBase{
     //获取分享海报背景
     public function getSharePosterBg()
     {
-        $share_bg = ConfigServer::get('distribution', 'share_poster');
+        $share_bg = ConfigServer::get('invite', 'poster');
         // 获取存储引擎
         $config = [
             'default' => ConfigServer::get('storage', 'default', 'local'),
@@ -289,6 +289,7 @@ class QrCodeLogic extends LogicBase{
         try {
             $save_dir = 'uploads/qr_code/user_share/';
             $background_img = $this->getSharePosterBg();
+
             !file_exists($save_dir) && mkdir($save_dir, 0777, true);
 
             $save_key = 'uid'.$user['id'].$url_type.$client;

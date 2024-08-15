@@ -124,7 +124,7 @@ class AdPositionLogic
             'width' => $post['width'],
             'height' => $post['height'],
             'status' => $post['status'],
-            'attr' => 0,
+            'attr' => $post['attr'],
             'update_time' => $time,
 
         ];

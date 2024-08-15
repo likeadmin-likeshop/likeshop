@@ -193,7 +193,7 @@
             }
             if (obj.event === 'del') {
                 var name = obj.data.name;
-                layer.confirm('确定删除会员等级：<span style="color: red">' + name + '</span>' + '，被删除等级的会员将会根据成长值重新分配等级。', function (index) {
+                layer.confirm('确定删除会员等级：<span style="color: red">' + name + '</span>' , function (index) {
                     like.ajax({
                         url: '{:url("user_level/del")}',
                         data: {id: id},

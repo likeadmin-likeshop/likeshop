@@ -20,6 +20,7 @@
 
 namespace app\api\controller;
 use app\api\logic\LoginLogic;
+use app\api\validate\WechatLoginValidate;
 use app\common\server\ConfigServer;
 
 class Account extends ApiBase
@@ -163,7 +164,7 @@ class Account extends ApiBase
             $this->_error($check);
         }
         $data = LoginLogic::oaLogin($post);
-        $this->_success($data['msg'], $data['data'], $data['code']);
+        $this->_success($data['msg'], $data['data'], $data['code'], $data['show']);
     }
 
     /**
@@ -255,5 +256,71 @@ class Account extends ApiBase
         $this->_success($data['msg'], $data['data'], $data['code'], $data['show']);
     }
 
-
+    /**
+     * @notes 更新用户头像昵称
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     * @author ljj
+     * @date 2023/2/1 3:46 下午
+     */
+    public function updateUser()
+    {
+        $post = $this->request->post();
+        if (!isset($post['avatar']) || empty($post['avatar'])) {
+            $this->_error('参数缺失');
+        }
+        if (!isset($post['nickname']) || empty($post['nickname'])) {
+            $this->_error('参数缺失');
+        }
+        $data = LoginLogic::updateUser($post,$this->user_id);
+        $this->_success($data['msg'], $data['data'], $data['code'], $data['show']);
+    }
+    
+    /**
+     * @notes 小程序绑定微信
+     * @return void
+     * @author lbzy
+     * @datetime 2023-11-29 09:43:24
+     */
+    public function mnpAuthLogin()
+    {
+        $params = $this->request->post();
+        
+        if (empty($params['code'])) {
+            $this->_error('参数缺失');
+        }
+        
+        $params['user_id'] = $this->user_id;
+        $result = (new LoginLogic())->mnpAuthLogin($params);
+        if ($result === false) {
+            $this->_error(LoginLogic::getError());
+        }
+        
+        $this->_success('绑定成功');
+        
+    }
+    
+    /**
+     * @notes 公众号绑定微信
+     * @return void
+     * @author lbzy
+     * @datetime 2023-11-29 09:43:16
+     */
+    public function oaAuthLogin()
+    {
+        $params = $this->request->post();
+        
+        if (empty($params['code'])) {
+            $this->_error('参数缺失');
+        }
+        
+        $params['user_id'] = $this->user_id;
+        
+        $result = (new LoginLogic())->oaAuthLogin($params);
+        if ($result === false) {
+            $this->_error(LoginLogic::getError());
+        }
+    
+        $this->_success('绑定成功');
+    }
 }

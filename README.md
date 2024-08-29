@@ -22,7 +22,7 @@
 ### 🐳快速部署
 安装启动 [docker](https://www.docker.com/) 之后，在终端运行以下命令即可体验。<br>
   ```shell
-   docker run -d --name likeshop  -p 20208:80 -e MYSQL_ROOT_PASSWORD=root  likeshop/php-b2c:latest
+   docker run -d --name likeshop  -p 20208:80 -e MYSQL_ROOT_PASSWORD=root  registry.cn-guangzhou.aliyuncs.com/likeshop/php-b2c:latest
   ```
 如果需要自定义参数永久挂载数据，在终端运行以下命令，其中"[]"改成自定义参数。
 ```shell
@@ -31,7 +31,7 @@ docker run -d --name likeshop\
 -v 【主机存储项目代码文件路径】:/var/www/html/likeshop\
 -p 【访问端口】:80\
 -e MYSQL_ROOT_PASSWORD=【Mysql密码】\
-likeshop/b2c:latest
+registry.cn-guangzhou.aliyuncs.com/likeshop/php-b2c:latest
 ```
 ### ⚠️注意
 1.如果出现无法访问，请等待1分钟，docker部署每次会下载最新源码。<br>
@@ -165,7 +165,6 @@ likeshop单商户商城系统具备PC商城、H5商城、微信小程序商城�
 
 likeshop单商户商城系统包含分销裂变，限时秒杀，拼团活动，砍价活动，优惠券，大转盘抽奖，每日签到，小票打印，积分商城，会员价，微信零钱到账，系统通知/短信通知/APP推送/微信模板消息/小程序消息提醒等常用丰富的营销模块。
 
-![功能清单缩略图.png](/server/public/readme/gitee/cpjs.png?v=2)
 
 联系客服获取完整PDF、Excel版本产品功能对照表。
 

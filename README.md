@@ -108,9 +108,9 @@ likeshop开源不代表不收费，健康合理大大方方的收费方式能够
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 
 ### 加入微信群 | QQ群
-![qun.png](/server/public/readme/gitee/qun.png)
+![qun.jpg](/server/public/readme/gitee/qun.jpg)
 
-QQ群：1群 ~~371752229~~（已满），2群 704997444（已满），3群 273164521
+QQ群：192683602
 
 
 

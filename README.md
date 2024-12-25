@@ -1,5 +1,5 @@
- <a href="https://www.likeshop.cn">![likeshop全开源商城](/server/public/readme/likeshop.png)</a><br>
-<a href="https://www.mddai.cn">![码多多AI](/server/public/readme/chatmoney.png)</a><br>
+ <a href="https://www.likeshop.cn">![likeshop全开源商城](https://server.likeshop.cn/uploads/gitad/likeshop.png)</a><br>
+<a href="https://www.mddai.cn">![码多多AI](https://server.likeshop.cn/uploads/gitad/mdd.png)</a><br>
  <h1 align="center">likeshop全开源商城系统</h1>
  <h4 align="center">🚀快速开发  🛠️代码易懂  ✅方便二开  🧑‍💻源码全开源</h4> 
  <p align="center">

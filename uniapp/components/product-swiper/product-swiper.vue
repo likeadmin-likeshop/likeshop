@@ -150,7 +150,7 @@ export default {
           this.showPlay = true;
           this.videoContext.stop();
           this.videoContexts.stop();
-        } catch (error) {
+        } catch (err) {
           console.log("err==>", err);
         }
       }

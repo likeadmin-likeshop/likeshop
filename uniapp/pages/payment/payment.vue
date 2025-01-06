@@ -205,7 +205,7 @@
 		},
 
 		onUnload() {
-			this.handPayResult('fail')
+			//this.handPayResult('fail')
 		},
 	}
 </script>

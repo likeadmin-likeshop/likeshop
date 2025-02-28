@@ -48,14 +48,15 @@ class AfterSaleLogic
         $where = [];
 
         $where[] = ['a.del', '=', 0];
-        //订单类型
-        if ($get['type'] != '') {
-            $where[] = ['status', '=', $get['type']];
+        
+        // 订单类型
+        if (isset($get['type']) && $get['type'] !== '') {
+            $where[] = ['status', '=', intval($get['type'])];
         }
 
-        //订单搜素
+        // 订单搜索
         if (!empty($get['search_key']) && !empty($get['keyword'])) {
-            $keyword = $get['keyword'];
+            $keyword = addslashes(trim($get['keyword']));
             switch ($get['search_key']) {
                 case 'sn':
                     $where[] = ['a.sn', 'like', '%' . $keyword . '%'];
@@ -78,15 +79,16 @@ class AfterSaleLogic
             }
         }
 
-        if (isset($get['status']) && $get['status'] != '') {
-            $where[] = ['a.status', '=', $get['status']];
+        // 状态过滤
+        if (isset($get['status']) && $get['status'] !== '') {
+            $where[] = ['a.status', '=', intval($get['status'])];
         }
 
-        //下单时间
-        if (isset($get['start_time']) && $get['start_time'] != '') {
+        // 下单时间
+        if (isset($get['start_time']) && $get['start_time'] !== '') {
             $where[] = ['a.create_time', '>=', strtotime($get['start_time'])];
         }
-        if (isset($get['end_time']) && $get['end_time'] != '') {
+        if (isset($get['end_time']) && $get['end_time'] !== '') {
             $where[] = ['a.create_time', '<=', strtotime($get['end_time'])];
         }
 
@@ -94,6 +96,7 @@ class AfterSaleLogic
         a.user_id,a.refund_type,a.create_time,a.refund_price,
         o.order_status,o.pay_way';
 
+        // 使用预编译查询
         $count = $after_sale
             ->alias('a')
             ->join('order o', 'o.id = a.order_id')
@@ -104,6 +107,9 @@ class AfterSaleLogic
             ->group('a.id')
             ->count();
 
+        $page = max(1, intval($get['page']));
+        $limit = max(1, intval($get['limit']));
+        
         $lists = $after_sale
             ->alias('a')
             ->field($field)
@@ -112,7 +118,7 @@ class AfterSaleLogic
             ->join('order_goods g', 'g.id = a.order_goods_id')
             ->with(['order_goods', 'user', 'order'])
             ->where($where)
-            ->page($get['page'], $get['limit'])
+            ->page($page, $limit)
             ->order('a.id desc')
             ->append(['user.base_avatar', 'order_goods.base_image'])
             ->group('a.id')

@@ -376,7 +376,7 @@ class installModel
      */
     public function connectDB()
     {
-        $dsn = "mysql:host={$this->host}; port={$this->port}";
+        $dsn = "mysql:host={$this->host};port={$this->port}";
         try {
             $dbh = new PDO($dsn, $this->user, $this->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);

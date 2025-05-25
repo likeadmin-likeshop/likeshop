@@ -84,6 +84,8 @@ class PaymentLogic extends LogicBase
                 $res = WeChatPayServer::unifiedOrder($from, $order, $order_source);
                 if (false === $res) {
                     self::$error = WeChatPayServer::getError();
+                } else {
+                    PayNotifyLogic::handle('order', $order['order_sn'], []);
                 }
                 break;
 
@@ -94,6 +96,7 @@ class PaymentLogic extends LogicBase
                     self::$error = $aliPay->getError();
                 } else {
                     self::$return_code = 10001;//特殊状态码,用于前端判断
+                    PayNotifyLogic::handle('order', $order['order_sn'], []);
                 }
                 break;
             case Pay::BALANCE_PAY:

@@ -264,7 +264,7 @@ export default {
         logout() {
             //  退出登录
             userLogout({
-                token: this.token
+                token: this.app.token
             }).then((res) => {
                 if (res.code == 1) {
                     this.$store.commit('LOGOUT')
@@ -513,7 +513,7 @@ export default {
         uni.$off('uAvatarCropper')
     },
     computed: {
-        ...mapState(['token']),
+        ...mapState(['app']),
         ...mapGetters(['appConfig'])
     }
 }

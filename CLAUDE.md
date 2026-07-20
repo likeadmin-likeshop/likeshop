@@ -11,7 +11,7 @@
 - `server/`：PHP 7.x + ThinkPHP 5.1 单体工程。
 - admin：`server/application/admin/` 中的服务端渲染后台，使用 Think 模板、Layui/Layui Admin、jQuery；没有独立 admin 前端工程。
 - mobile：`uniapp/` 中的 Vue 2 + uni-app + Vuex + uView JavaScript 工程，面向 H5、微信小程序和 App。
-- PC 商城：只有路由、配置和部署接入点；当前仓库没有 PC 商城源码或 `server/public/pc/`。
+- PC 商城：最新 `php-b2c` Nuxt 2/Vue 2 源码位于 `pc/`；`server/public/pc/` 是生成部署目录。
 - `server/public/mobile/`：H5 编译产物，不是源码。
 - 当前业务代码没有可用自动化测试套件，也没有完整的前端 CLI 开发、lint 或 type-check 流程。
 
@@ -47,6 +47,8 @@
 - `code = 1` 成功，`code = 0` 业务失败，`code = -1` 登录失效。
 - 分页沿用 `page_no/page_size`，默认 15，最大 100。
 - 新接口先添加/修改 `uniapp/api/` 封装，页面不要直接拼完整 URL。
+- `GET /api/account/captcha` 提供一次性图形验证码；发送短信的 `sms/send`、`user/send` 及账号密码登录 `account/login` 必须同时提交 `captcha_key` 与 `captcha`。
+- admin 登录使用 `admin/account/captcha` 获取一次性验证码，后台登录请求同样必须提交 `captcha_key` 与 `captcha`。
 
 ### Admin
 
@@ -60,13 +62,13 @@
 
 ## PC 商城边界
 
-管理后台不是 PC 商城。当前代码仅在以下位置预留 PC 前台能力：
+管理后台不是 PC 商城。PC 前台源码位于 `pc/`，后端接入位于以下位置：
 
 - `server/route/route.php` 的 `/pc/:any`。
 - `server/application/index/controller/Index.php` 的桌面模板选择。
-- admin 的 PC 配置入口和数据库开关。
+- admin 的 PC 配置入口和数据库开关；PC 构建使用 Nuxt 2 的 `npm run generate`，发布脚本会将 `dist/` 复制到 `server/public/pc/`。
 
-没有 PC 源码时，先向用户确认源码来源和目标技术栈，不能在不存在的工程上实现页面，也不能把 H5 或 admin 冒充 PC 商城。新建 PC 商城属于架构级任务，必须先确定 API、账号、支付、SEO 与部署方案。
+PC 页面需求直接在 `pc/` 源码中实现，必须保持现有 API、账号、支付、SEO 和 `/pc/` history 部署约定；不要修改生成后的 `server/public/pc/` 代替源码。
 
 ## 后端开发规则
 
@@ -107,7 +109,7 @@
 6. mobile 变更检查页面注册与多平台分支；发布产物仅在明确发布任务中更新。
 7. 执行可用验证，明确报告无法运行的检查。
 
-跨端开发计划至少写明：用户入口、API、权限、数据/配置、兼容性、验证方式、是否交付编译产物。架构演进顺序建议为：先固化环境和关键业务基线，再补测试，再拆分非破坏性 build/deploy，之后才做公共逻辑收敛、PC 商城选型和 PHP/ThinkPHP 升级。该路线不是自动授权。
+跨端开发计划至少写明：用户入口、API、权限、数据/配置、兼容性、验证方式、是否交付编译产物。当前 PC 迁入已完成首轮，后续架构演进应先固化环境和关键业务基线，再补测试、拆分非破坏性 build/deploy，之后才做公共逻辑收敛和 PHP/ThinkPHP 升级。该路线不是自动授权。
 
 ## 安全与变更边界
 

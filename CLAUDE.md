@@ -70,6 +70,14 @@
 
 PC 页面需求直接在 `pc/` 源码中实现，必须保持现有 API、账号、支付、SEO 和 `/pc/` history 部署约定；不要修改生成后的 `server/public/pc/` 代替源码。
 
+PC 本地构建/启动约定：
+
+- 已验证 Node `16.20.2` + npm `8.19.4`；Nuxt 2/webpack 4 不要优先使用 Node 24/npm 11。
+- 在 `pc/` 使用 `npm ci --legacy-peer-deps --no-audit --no-fund` 安装。不要混用 npm 与 pnpm；pnpm 的 `node_modules/.pnpm/` 会使 npm 产生错误的 `ERESOLVE` 依赖树。
+- `npm run dev` 启动开发服务，默认访问 `http://localhost:1800/pc/`。
+- `npm run generate` 生成静态产物到 `pc/dist/`；确认发布后再运行 `bash autoRelease.sh` 复制到 `server/public/pc/`。
+- `npm run build` + `npm run start` 是 Nuxt Node 生产运行方式，不替代静态发布。旧 `package-lock.json` 如含 `registry.nlark.com`/旧淘宝源，需先修复锁文件下载地址。
+
 ## 后端开发规则
 
 - 保持 PHP 7.x / ThinkPHP 5.1 兼容，不使用 PHP 8 专属语法。

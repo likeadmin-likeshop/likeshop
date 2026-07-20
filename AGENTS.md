@@ -144,6 +144,15 @@ admin 是 `server/` 内的服务端渲染模块，不存在独立安装或前端
 
 PC 页面修改应优先复用 `pc/` 现有 API、路由、Nuxt 插件和 Element UI 约定；涉及后端新字段时同步检查移动端兼容响应、登录/支付、SEO 与部署路径。不要把 admin 当作 PC 商城，也不要直接在 `server/public/pc/` 的构建产物中手写源码。
 
+### PC 构建与本地启动
+
+- 已验证的本地环境为 Node `16.20.2` + npm `8.19.4`；Nuxt 2/webpack 4 不要优先使用 Node 24/npm 11。
+- 依赖安装优先使用锁文件：在 `pc/` 执行 `npm ci --legacy-peer-deps --no-audit --no-fund`。不要在同一目录混用 npm 和 pnpm；pnpm 生成的 `node_modules/.pnpm/` 会导致 npm 扫描错误的依赖树并触发 `ERESOLVE`。
+- `pc/package-lock.json` 是 npm 6 时代的 `lockfileVersion: 1`。如果锁文件仍含 `registry.nlark.com` 或 `registry.npm.taobao.org`，先将下载地址迁移到可用镜像，再安装；单纯设置 npm registry 不一定覆盖锁文件中的 `resolved` 地址。
+- 本地开发执行 `npm run dev`，默认端口为 `1800`，访问 `http://localhost:1800/pc/`；`router.base` 固定为 `/pc/`。
+- 生产静态构建执行 `npm run generate`，产物在 `pc/dist/`，应检查 `dist/index.html`、`dist/200.html` 和 `dist/_nuxt/`。
+- `npm run build` 是 Nuxt 的 Node 生产构建，需配合 `npm run start`；它不是静态发布命令。静态发布仍使用 `npm run generate`，确认发布后再在 Git Bash/WSL 中运行 `bash autoRelease.sh`。
+
 ## Mobile / uni-app 架构
 
 ### 技术栈与入口

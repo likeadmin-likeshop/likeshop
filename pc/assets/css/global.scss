@@ -1,0 +1,346 @@
+
+body,
+button,
+code,
+dd,
+div,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+li,
+ol,
+pre,
+td,
+textarea,
+th,
+ul {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+body {
+  background-color: $-color-body;
+  font-size: 14px;
+  color: $-color-black;
+}
+
+
+.bold {
+  font-weight: bold;
+}
+
+/* 定义字体颜色 */
+.primary {
+  color: $-color-primary;
+}
+
+.bg-primary {
+  background-color: $-color-primary;
+}
+
+.bg-white {
+  background-color: $-color-white;
+}
+
+.bg-body {
+  background-color: $-color-body;
+}
+
+.bg-gray {
+  background-color: $-color-border;
+}
+
+
+.black {
+  color: $-color-black;
+}
+
+.white {
+  color: $-color-white;
+}
+
+.normal {
+  color: $-color-normal;
+}
+
+.lighter {
+  color: $-color-lighter;
+}
+
+.muted {
+  color: $-color-muted;
+}
+
+
+/* 定义字体大小 */
+
+.xxl {
+  font-size: 18px;
+}
+
+.xl {
+  font-size: 17px;
+}
+
+.lg {
+  font-size: 16px;
+}
+
+.md {
+  font-size: 15px;
+}
+
+.nr {
+  font-size: 14px;
+}
+
+.sm {
+  font-size: 13px;
+}
+
+.xs {
+  font-size: 12px;
+}
+
+.xxs {
+  font-size: 11px;
+}
+
+//******外边距原子样式******/
+.mr8 {
+  margin-right: 8px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mr16 {
+  margin-right: 16px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.ml8 {
+  margin-left: 8px;
+}
+
+.ml10 {
+  margin-left: 10px;
+}
+
+.ml16 {
+  margin-left: 16px;
+}
+
+.ml20 {
+  margin-left: 20px;
+}
+
+.mt8 {
+  margin-top: 8px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt16 {
+  margin-top: 16px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mb8 {
+  margin-bottom: 8px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb16 {
+  margin-bottom: 16px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+/* 定义常用的弹性布局 */
+
+.flex1 {
+  flex: 1;
+}
+
+.flexnone {
+  flex: none;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.row-around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.column-around {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.column-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.column-between {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+
+/* 超出隐藏 */
+.line1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line2 {
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 中划线 */
+.line-through {
+  text-decoration: line-through;
+}
+
+// 触手
+.pointer {
+  cursor: pointer;
+}
+
+
+.wrapper1180 {
+  width: 1180px;
+  margin: 0 auto;
+  // overflow: hidden;
+}
+
+a {
+  color: $-color-black;
+}
+a, a:hover {
+  text-decoration: none;
+}
+img {
+  display: block;
+  flex: none;
+}
+ul, li, ol {
+  list-style: none;
+}
+
+
+//修改elementui tab样式
+.el-tabs {
+  .el-tabs__nav-wrap::after {
+    height: 1px;
+  }
+  .el-tabs__nav-scroll {
+    padding-left: 20px;
+    .el-tabs__item {
+      font-weight: normal;
+    }
+  }
+}
+
+
+.el-message-box__message {
+  white-space: pre-line;
+}
+body .el-tabs__content {
+  overflow: inherit;
+}
+
+body .el-popover {
+  min-width: 80px;
+}
+
+.pagination .el-pagination.is-background  .btn-prev,
+.pagination .el-pagination.is-background  .btn-next ,
+.pagination .el-pagination.is-background .el-pager li{
+  background: #fff;
+  padding: 0 10px;
+}

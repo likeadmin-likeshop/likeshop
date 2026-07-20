@@ -1,0 +1,38 @@
+{
+  "name": "LikeShop-PC",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/style-resources": "^1.0.0",
+    "axios": "^0.21.1",
+    "cookie-universal-nuxt": "^2.1.4",
+    "cookieparser": "^0.1.0",
+    "core-js": "^3.8.3",
+    "element-ui": "^2.15.0",
+    "js-cookie": "^2.2.1",
+    "nuxt": "^2.14.12",
+    "qrcodejs2": "0.0.2",
+    "swiper": "5.2.0",
+    "vue-awesome-swiper": "^4.1.1",
+    "vue-baidu-map": "^0.21.22"
+  },
+  "devDependencies": {
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "~1.32.8",
+    "sass-loader": "10"
+  },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": 1800
+    }
+  }
+}

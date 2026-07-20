@@ -1,0 +1,93 @@
+{
+  "id": "2399990",
+  "name": "likeshop_pc_shop",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20318900",
+      "name": "icon_order",
+      "font_class": "icon_order",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "20215028",
+      "name": "shouhou",
+      "font_class": "shouhou",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "20215029",
+      "name": "peisong",
+      "font_class": "peisong",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "20215030",
+      "name": "fuwu",
+      "font_class": "fuwu",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "20179589",
+      "name": "自营",
+      "font_class": "ziying",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "20179548",
+      "name": "正品",
+      "font_class": "zhengpin",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "20179252",
+      "name": "top",
+      "font_class": "top",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "11488015",
+      "name": "coupons",
+      "font_class": "coupons",
+      "unicode": "e74a",
+      "unicode_decimal": 59210
+    },
+    {
+      "icon_id": "11488128",
+      "name": "service",
+      "font_class": "service",
+      "unicode": "e764",
+      "unicode_decimal": 59236
+    },
+    {
+      "icon_id": "11488143",
+      "name": "survey",
+      "font_class": "survey",
+      "unicode": "e767",
+      "unicode_decimal": 59239
+    },
+    {
+      "icon_id": "11494511",
+      "name": "collection",
+      "font_class": "collection",
+      "unicode": "e79d",
+      "unicode_decimal": 59293
+    },
+    {
+      "icon_id": "12011694",
+      "name": "cart-Empty",
+      "font_class": "cart-Empty",
+      "unicode": "e7b2",
+      "unicode_decimal": 59314
+    }
+  ]
+}

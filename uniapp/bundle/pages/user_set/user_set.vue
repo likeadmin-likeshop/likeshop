@@ -92,6 +92,11 @@
                         <view class="xs">{{ tips }}</view>
                     </view>
                 </view>
+                <captcha-input
+                    v-model="mobileCaptchaCode"
+                    ref="captchaMobile"
+                    @captcha-key="mobileCaptchaKey = $event"
+                />
                 <view class="modify-row row" v-if="userInfo.mobile">
                     <view style="width: 71px">新手机号</view>
                     <input v-model="new_mobile" placeholder="请输入新的手机号码" />
@@ -158,6 +163,11 @@
                         <view class="xs">{{ tips }}</view>
                     </view>
                 </view>
+                <captcha-input
+                    v-model="pwdCaptchaCode"
+                    ref="captchaPwd"
+                    @captcha-key="pwdCaptchaKey = $event"
+                />
                 <view class="modify-row row">
                     <view style="width: 71px">设置密码</view>
                     <input type="password" v-model="pwd" placeholder="请输入新密码" />
@@ -187,6 +197,7 @@ import { SMSType } from '@/utils/type'
 import { mapState, mapGetters } from 'vuex'
 import { uploadFile, isWeixinClient, trottle } from '@/utils/tools'
 import { getWxCode, getUserProfile } from '@/utils/login'
+import CaptchaInput from '@/components/captcha-input/captcha-input.vue'
 
 const FieldType = {
     NONE: '',
@@ -197,6 +208,9 @@ const FieldType = {
 }
 export default {
     name: 'userProfile',
+    components: {
+        CaptchaInput
+    },
     data() {
         return {
             version: version,
@@ -216,7 +230,11 @@ export default {
             pwd: '',
             comfirmPwd: '',
             smsType: SMSType.FINDPWD,
-            code: ''
+            code: '',
+            mobileCaptchaCode: '',
+            mobileCaptchaKey: '',
+            pwdCaptchaCode: '',
+            pwdCaptchaKey: ''
         }
     },
     methods: {
@@ -302,15 +320,34 @@ export default {
         // 发送短信
         $sendSms(type) {
             if (!this.canSendSms) return
+            const isPassword = this.smsType == SMSType.FINDPWD
+            const captchaCode = isPassword ? this.pwdCaptchaCode : this.mobileCaptchaCode
+            const captchaKey = isPassword ? this.pwdCaptchaKey : this.mobileCaptchaKey
+            if (!captchaCode || !captchaKey) {
+                this.$toast({ title: '请输入有效的图形验证码' })
+                return
+            }
             sendSms({
-                mobile: this.userInfo.mobile || this.new_mobile,
-                key: this.smsType
+                mobile: this.smsType == SMSType.CHANGE_MOBILE
+                    ? this.new_mobile
+                    : (this.userInfo.mobile || this.new_mobile),
+                key: this.smsType,
+                captcha_key: captchaKey,
+                captcha: captchaCode
             }).then((res) => {
                 if (res.code == 1) {
                     this.$toast({
                         title: res.msg
                     })
                     this.$refs.uCode.start()
+                } else {
+                    const ref = isPassword ? this.$refs.captchaPwd : this.$refs.captchaMobile
+                    ref && ref.refresh()
+                    if (isPassword) {
+                        this.pwdCaptchaCode = ''
+                    } else {
+                        this.mobileCaptchaCode = ''
+                    }
                 }
             })
         },
@@ -327,6 +364,7 @@ export default {
             this.new_mobile = ''
             this.showMobile = true
             this.smsType = this.userInfo.mobile ? SMSType.CHANGE_MOBILE : SMSType.BIND
+            this.$nextTick(() => this.$refs.captchaMobile && this.$refs.captchaMobile.refresh())
         },
         $changeUserMobile() {
             if (!this.smsCode) {
@@ -398,6 +436,7 @@ export default {
             this.smsCode = ''
             this.smsType = SMSType.FINDPWD
             this.showPwd = true
+            this.$nextTick(() => this.$refs.captchaPwd && this.$refs.captchaPwd.refresh())
         },
         $forgetPwd() {
             let { smsCode, pwd, comfirmPwd } = this

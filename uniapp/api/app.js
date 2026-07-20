@@ -76,6 +76,11 @@ export function sendSms(data) {
   return request.post("sms/send", { ...data, client });
 }
 
+// 获取图形验证码
+export function getCaptcha() {
+  return request.get('account/captcha');
+}
+
 // Html5 注册账号
 export function register(data) {
   return request.post("account/register", { ...data, client });

@@ -23,6 +23,13 @@
           />
         </view>
         <view class="input row" style="padding: 15rpx">
+          <captcha-input
+            v-model="captchaCode"
+            ref="captcha"
+            @captcha-key="captchaKey = $event"
+          />
+        </view>
+        <view class="input row" style="padding: 15rpx">
           <u-input
             v-model="smsCode"
             style="flex: 1"
@@ -86,8 +93,12 @@ import { forgetPwd, sendSms } from "@/api/app.js";
 import { ACCESS_TOKEN } from "@/config/app.js";
 import { SMSType } from "@/utils/type.js";
 import { mapMutations } from "vuex";
+import CaptchaInput from '@/components/captcha-input/captcha-input.vue';
 export default {
   name: "forgetPwd",
+  components: {
+    CaptchaInput
+  },
   data() {
     return {
       mobile: "",
@@ -96,6 +107,8 @@ export default {
       //   comfirmPwd: "",
       time: 59,
       canSendSms: true,
+      captchaCode: '',
+      captchaKey: '',
     };
   },
   onLoad() {},
@@ -178,12 +191,18 @@ export default {
       if (this.canSendSms == false) {
         return;
       }
+      if (!this.captchaCode || !this.captchaKey) {
+        this.$toast({ title: '请输入有效的图形验证码' });
+        return;
+      }
       // if (!this.mobile) {
       //   return;
       // }
       sendSms({
         mobile: this.mobile,
         key: SMSType.FINDPWD,
+        captcha_key: this.captchaKey,
+        captcha: this.captchaCode,
       }).then((res) => {
         if (res.code == 1) {
           this.canSendSms = false;
@@ -191,6 +210,9 @@ export default {
             title: res.msg,
           });
           this.$refs.countDown.start();
+        } else {
+          this.$refs.captcha && this.$refs.captcha.refresh();
+          this.captchaCode = '';
         }
       });
     },

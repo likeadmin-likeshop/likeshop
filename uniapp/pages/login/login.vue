@@ -126,6 +126,11 @@
                                 >忘记密码</navigator
                             >
                         </view>
+                        <captcha-input
+                            v-model="accountCaptchaCode"
+                            ref="accountCaptcha"
+                            @captcha-key="accountCaptchaKey = $event"
+                        />
                     </view>
                     <view v-if="loginType == 1">
                         <view class="input row" style="padding: 15rpx">
@@ -137,6 +142,11 @@
                                 :input-border="false"
                             />
                         </view>
+                        <captcha-input
+                            v-model="captchaCode"
+                            ref="captcha"
+                            @captcha-key="captchaKey = $event"
+                        />
                         <view class="input row" style="padding: 15rpx">
                             <u-input
                                 v-model="smsCode"
@@ -272,11 +282,15 @@ import { SMSType } from '@/utils/type'
 import Cache from '@/utils/cache'
 import { BACK_URL } from '@/config/cachekey'
 import { getWxCode, getUserProfile } from '@/utils/login'
+import CaptchaInput from '@/components/captcha-input/captcha-input.vue'
 const loginType = {
     ACCOUNT_LOGIN: 0,
     SMS_CODE_LOGIN: 1
 }
 export default {
+    components: {
+        CaptchaInput
+    },
     data() {
         return {
             password: '',
@@ -288,6 +302,10 @@ export default {
             time: 59,
             canSendSms: true,
             telephone: '',
+            captchaCode: '',
+            captchaKey: '',
+            accountCaptchaCode: '',
+            accountCaptchaKey: '',
             text: '',
             showLoginPop: false,
             isAgree: false,
@@ -378,13 +396,24 @@ export default {
                 return
             }
             if (this.loginType == 0) {
+                if (!this.accountCaptchaCode || !this.accountCaptchaKey) {
+                    this.$toast({
+                        title: '请输入有效的图形验证码'
+                    })
+                    return
+                }
                 const { code, data } = await accountLogin({
                     account,
                     password,
-                    client: client
+                    client: client,
+                    captcha_key: this.accountCaptchaKey,
+                    captcha: this.accountCaptchaCode
                 })
                 if (code == 1) {
                     this.loginHandle(data)
+                } else {
+                    this.$refs.accountCaptcha && this.$refs.accountCaptcha.refresh()
+                    this.accountCaptchaCode = ''
                 }
             } else {
                 if (!telephone) {
@@ -451,10 +480,18 @@ export default {
                 })
                 return
             }
+            if (!this.captchaCode || !this.captchaKey) {
+                this.$toast({
+                    title: '请输入有效的图形验证码'
+                })
+                return
+            }
 
             sendSms({
                 mobile: this.telephone,
-                key: SMSType.LOGIN
+                key: SMSType.LOGIN,
+                captcha_key: this.captchaKey,
+                captcha: this.captchaCode
             }).then((res) => {
                 if (res.code == 1) {
                     this.canSendSms = false
@@ -462,6 +499,9 @@ export default {
                     this.$toast({
                         title: res.msg
                     })
+                } else {
+                    this.$refs.captcha && this.$refs.captcha.refresh()
+                    this.captchaCode = ''
                 }
             })
         },

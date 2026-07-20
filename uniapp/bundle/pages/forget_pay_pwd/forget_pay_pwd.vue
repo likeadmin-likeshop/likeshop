@@ -5,6 +5,11 @@
                 <view class="input-label md normal">手机号</view>
                 <u-input class="flex1" v-model="mobile" />
             </view>
+            <captcha-input
+                v-model="captchaCode"
+                ref="captcha"
+                @captcha-key="captchaKey = $event"
+            />
             <view class="input-item row">
                 <view class="input-label md normal">验证码</view>
                 <u-input class="flex1" v-model="code" placeholder="请输入验证码" />
@@ -59,14 +64,20 @@
 <script>
 import { retrievePayPassword, send } from '@/api/user'
 import { mapGetters } from 'vuex'
+import CaptchaInput from '@/components/captcha-input/captcha-input.vue'
 export default {
+    components: {
+        CaptchaInput
+    },
     data() {
         return {
             time: 59,
             showCount: false,
             setPwd: '',
             comfirmPwd: '',
-            code: ''
+            code: '',
+            captchaCode: '',
+            captchaKey: ''
         }
     },
     onLoad() {},
@@ -127,6 +138,12 @@ export default {
                 mobile: this.userInfo.mobile
             }
             if (this.showCount) return
+            if (!this.captchaCode || !this.captchaKey) {
+                this.$toast({ title: '请输入有效的图形验证码' })
+                return
+            }
+            data.captcha_key = this.captchaKey
+            data.captcha = this.captchaCode
             send(data).then((res) => {
                 if (res.code == 1) {
                     this.$toast({
@@ -134,6 +151,9 @@ export default {
                     })
                     this.showCount = true
                     this.$refs.countDown.start()
+                } else {
+                    this.$refs.captcha && this.$refs.captcha.refresh()
+                    this.captchaCode = ''
                 }
             })
         }

@@ -25,6 +25,18 @@
         </view>
 
         <view
+            class="input row"
+            style="padding: 15rpx"
+            v-if="appConfig.register_setting"
+        >
+          <captcha-input
+            v-model="captchaCode"
+            ref="captcha"
+            @captcha-key="captchaKey = $event"
+          />
+        </view>
+
+        <view
           class="input row"
           style="padding: 15rpx"
           v-if="appConfig.register_setting"
@@ -164,9 +176,13 @@ import { register, sendSms } from "@/api/app.js";
 import { ACCESS_TOKEN } from "@/config/app.js";
 import { SMSType } from "@/utils/type.js";
 import { mapMutations, mapGetters } from "vuex";
+import CaptchaInput from '@/components/captcha-input/captcha-input.vue';
 
 export default {
   name: "register",
+  components: {
+    CaptchaInput
+  },
   created() {},
   data() {
     return {
@@ -177,6 +193,8 @@ export default {
       passwordConfirm: "",
       canSendSms: true,
       time: 59,
+      captchaCode: '',
+      captchaKey: '',
       primaryColor: "#FF2C3C",
       showModel: false,
     };
@@ -192,6 +210,7 @@ export default {
         if (
           this.mobile.length !== 11 ||
           !this.smsCode ||
+          !this.captchaCode ||
           !this.password ||
           !this.passwordConfirm
         ) {
@@ -266,12 +285,24 @@ export default {
       if (this.canSendSms == false) {
         return;
       }
+      if (!this.captchaCode || !this.captchaKey) {
+        this.$toast({ title: '请输入有效的图形验证码' });
+        return;
+      }
 
-      sendSms({ mobile: this.mobile, key: SMSType.REGISTER }).then((res) => {
+      sendSms({
+        mobile: this.mobile,
+        key: SMSType.REGISTER,
+        captcha_key: this.captchaKey,
+        captcha: this.captchaCode
+      }).then((res) => {
         if (res.code == 1) {
           this.canSendSms = false;
           this.$toast(res.msg);
           this.$refs.countDown.start();
+        } else {
+          this.$refs.captcha && this.$refs.captcha.refresh();
+          this.captchaCode = '';
         }
       });
     },

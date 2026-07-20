@@ -27,7 +27,7 @@ use think\Validate;
 class ChangeMobile extends Validate
 {
     protected $rule = [
-        'client'        => 'require|in:'. Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
+        'client'        => 'require|in:'. Client_::mnp . ','. Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
         'mobile'        => 'require|mobile',
         'new_mobile'    => 'require|mobile|checkMobile',
     ];
@@ -74,12 +74,8 @@ class ChangeMobile extends Validate
             return '请填写验证码';
         }
 
-        $mobile = $data['new_mobile'];
-        if(isset($data['action']) && 'change' == $data['action']){
-            $mobile = $data['mobile'];
-        }
-       
-        $sms_logic = new SmsLogic($data['message_key'],$mobile, $data['code']);
+        // The change/bind SMS is sent to the new number, so verify that number.
+        $sms_logic = new SmsLogic($data['message_key'], $data['new_mobile'], $data['code']);
         $check = $sms_logic->checkCode();
 
         //检查验证码是否正确

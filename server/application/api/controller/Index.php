@@ -166,7 +166,10 @@ class Index extends ApiBase
             // 首页底部导航菜单
             'navigation_menu' => $navigation,
             // 网站名称
-            'website_name' => ConfigServer::get('website', 'name')
+            'website_name' => ConfigServer::get('website', 'name'),
+            'site_statistic' => [
+                'clarity_app_id' => ConfigServer::get('site_statistic', 'clarity_app_id', '')
+            ]
         ];
         $this->_success('', $config);
     }

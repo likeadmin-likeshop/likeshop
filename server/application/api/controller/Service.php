@@ -17,12 +17,26 @@
 // | author: likeshop.cn.team
 // +----------------------------------------------------------------------
 namespace app\api\controller;
+use app\admin\logic\ServiceConfigLogic;
 use app\api\logic\ServiceLogic;
 
 class Service extends ApiBase {
     public $like_not_need_login = ['lists'];
     public function lists(){
-        $list = ServiceLogic::getConfig();
+        $legacy = ServiceLogic::getConfig();
+        $newConfig = ServiceConfigLogic::getConfig();
+        $list = isset($newConfig['config']) ? $newConfig['config'] : [];
+
+        // Keep the 3.0.3 response keys while clients migrate to per-platform config.
+        $pc = isset($list['pc']) && is_array($list['pc']) ? $list['pc'] : [];
+        $pc['way'] = $pc['way'] ?? 1;
+        $pc['qr_code'] = $pc['qr_code'] ?? $legacy['image'];
+        $pc['phone'] = $pc['phone'] ?? $legacy['phone'];
+        $pc['business_time'] = $pc['business_time'] ?? $legacy['time'];
+        $pc['remarks'] = $pc['remarks'] ?? $legacy['wechat'];
+        $list['pc'] = $pc;
+
+        $list = array_merge($legacy, $list);
         $this->_success('获取成功',$list);
     }
 }

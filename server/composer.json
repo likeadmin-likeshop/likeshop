@@ -34,7 +34,8 @@
         "tencentcloud/tencentcloud-sdk-php": "^3.0",
         "topthink/think-image": "^1.0",
         "ext-openssl": "*",
-        "endroid/qr-code": "2.5.1"
+        "endroid/qr-code": "2.5.1",
+        "ext-gd": "*"
     },
     "autoload": {
         "psr-4": {

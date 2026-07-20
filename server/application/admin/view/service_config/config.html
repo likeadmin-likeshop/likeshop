@@ -36,68 +36,116 @@
 </style>
 <div class="layui-fluid">
     <div class="layui-card">
-        <div class="layui-card-body">
-            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
-                    <div class="layui-colla-content layui-show">
-                       <p> *设置商城客服联系信息</p>
-                       <p> *小程序客服在微信小程序后台开通</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--        -->
         <div class="layui-card-body" pad15>
-            <div class="layui-form" lay-filter="">
 
+            <form class="layui-form" lay-filter="formTest">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">客服微信号：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="wechat" value="{$config.wechat}" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+                    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                        <ul class="layui-tab-title">
+                            <?php $iii = 0; foreach($titles['config'] as $config_key => $config_info): ?>
+                            <li class="<?php if ($iii==0){ echo('layui-this'); } ?>"> {$config_info.title}</li>
+                            <?php $iii++;endforeach; ?>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <!-- -->
+                            <?php $jjj = 0; foreach($titles['config'] as $config_key => $config_info): ?>
+                            <div class="layui-tab-item <?php if ($jjj==0){ echo('layui-show'); } ?> layui-tab-item-{$config_key}">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">客服方式</label>
+                                    <div class="layui-input-block">
+                                        <?php foreach($titles['ways'] as $way_key => $way_info): ?>
+                                            <?php if (in_array($way_key, $titles['config'][$config_key]['ways'])): ?>
+                                                <?php $way_checked = $config[$config_key]['way'] == $way_key ? 'checked' : ''; ?>
+                                                <input type="radio" name="{$config_key}[way]" value="{$way_key}" title="{$way_info.title}" lay-filter="change-way" {$way_checked}>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-name">
+                                    <label class="layui-form-label">平台名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="{$config_key}[name]" value="<?php echo $config[$config_key]['name']; ?>"  placeholder="请输入平台名称" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-remarks">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="{$config_key}[remarks]" value="<?php echo $config[$config_key]['remarks']; ?>"  placeholder="请输入备注" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-phone">
+                                    <label class="layui-form-label">客服电话</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="{$config_key}[phone]" value="<?php echo $config[$config_key]['phone']; ?>"  placeholder="请输入客服电话" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-business_time">
+                                    <label class="layui-form-label">服务时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="{$config_key}[business_time]" value="<?php echo $config[$config_key]['business_time']; ?>" placeholder="请输入服务时间" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-qr_code">
+                                    <label class="layui-form-label">客服图片：</label>
+                                    <div class="layui-input-block">
+                                        <?php
+                                            $qr_code = $config[$config_key]['qr_code'] ?? '';
+                                            $qr_code_has = ! empty($qr_code);
+                                        ?>
+                                        <div class="img-content">
+                                            <input name="{$config_key}[qr_code]" type="hidden" value="{$qr_code}">
+                                            <div class="img-add" {if $qr_code_has } style="display: none" {/if}></div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">客服电话：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="phone"  lay-verType="tips"  value="{$config.phone}" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"></label>
-                        <span style="color: #a3a3a3;font-size: 9px">客服电话</span>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">服务时间：</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="time" value="{$config.time}" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"></label>
-                        <span style="color: #a3a3a3;font-size: 9px">服务时间。例如：周一到周六9：00-19：00</span>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">客服图片：</label>
-                    <div class="layui-input-block">
-                        <div class="img-content">
-                            <input name="image" type="hidden" value="{$config.image}">
-                            <div class="img-add" {if $config.image } style="display: none" {/if}></div>
-                        {if !empty($config.image)}
-                        <div class="img-container">
-                            <img class="img-src" src="{$config.file_url}{$config.image}">
-                            <a class="img-del-x">x</a>
+                                            {if $qr_code_has}
+                                            <div class="img-container">
+                                                <img class="img-src" src="{$qr_code}">
+                                                <a class="img-del-x">x</a>
+                                            </div>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-enterprise_id">
+                                    <label class="layui-form-label">企业ID</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="{$config_key}[enterprise_id]" value="<?php echo $config[$config_key]['enterprise_id']; ?>"  placeholder="请输入企业ID" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-kefu_link">
+                                    <label class="layui-form-label">企业客服链接</label>
+                                    <div class="layui-input-inline" >
+                                        <input type="text" name="{$config_key}[kefu_link]" value="<?php echo $config[$config_key]['kefu_link']; ?>" placeholder="请输入企业客服链接" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-kefu_system">
+                                    <label class="layui-form-label">&nbsp;</label>
+                                    <div class="layui-input-block" >
+                                        请参考部署文档配置系统客服
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-kefu_mnp">
+                                    <label class="layui-form-label">&nbsp;</label>
+                                    <div class="layui-input-block">
+                                        需前往小程序后台绑定客服人员
+                                    </div>
+                                </div>
+                                <div class="layui-form-item item-config layui-hide item-enterprise-tips">
+                                    <label class="layui-form-label">&nbsp;</label>
+                                    <div class="layui-input-inline" >
+                                        如何接入企业微信客服请查看
+                                        <a target="_blank" style="color: #1E9FFF" href="<?php echo $titles['config'][$config_key]['enterprise_set_url'] ?? ''; ?>">企业微信客服指南</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php $jjj++;endforeach; ?>
                         </div>
-                        {/if}
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn layui-btn-sm {$view_theme_color}" lay-submit lay-filter="set">确定</button>
+                <div class="layui-form-item">
+                    <button class="layui-btn {$view_theme_color}" lay-submit lay-filter="set">保存全部</button>
                 </div>
-            </div>
-
+            </form>
         </div>
     </div>
 </div>
@@ -109,10 +157,12 @@
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index','table','like','form'], function(){
+    }).use(['index','table','like','form', 'element'], function(){
         var $ = layui.$
             ,form = layui.form
             ,like = layui.like;
+        var element = layui.element;
+
         //上传图片
         like.imageUpload('.img-add', function (uris, element) {
             if(uris.length>1){
@@ -139,6 +189,50 @@
             var image = $(this).attr('src');
             like.showImg(image,600);
         });
+
+        // 显示和隐藏配置
+        function showConfig()
+        {
+            var data1 = form.val("formTest");
+            dealPlatConfig('mnp', data1['mnp[way]']);
+            dealPlatConfig('oa', data1['oa[way]']);
+            dealPlatConfig('h5', data1['h5[way]']);
+            dealPlatConfig('pc', data1['pc[way]']);
+            dealPlatConfig('app', data1['app[way]']);
+        }
+        form.on('radio(change-way)', function (data){
+            showConfig();
+        });
+
+        function dealPlatConfig(plat, value) {
+            $('.layui-tab-item-' + plat + ' .item-config').addClass('layui-hide');
+            if (value == "1") {
+                $('.layui-tab-item-' + plat + ' .item-name').removeClass('layui-hide');
+                $('.layui-tab-item-' + plat + ' .item-remarks').removeClass('layui-hide');
+                $('.layui-tab-item-' + plat + ' .item-phone').removeClass('layui-hide');
+                $('.layui-tab-item-' + plat + ' .item-business_time').removeClass('layui-hide');
+                $('.layui-tab-item-' + plat + ' .item-qr_code').removeClass('layui-hide');
+            }
+            if (value == "2") {
+                $('.layui-tab-item-' + plat + ' .item-phone').removeClass('layui-hide');
+            }
+            if (value == "3") {
+                // $('.layui-tab-item-' + plat + ' .item-kefu_system').removeClass('layui-hide');
+            }
+            if (value == "4") {
+                $('.layui-tab-item-' + plat + ' .item-enterprise_id').removeClass('layui-hide');
+                $('.layui-tab-item-' + plat + ' .item-kefu_link').removeClass('layui-hide');
+                $('.layui-tab-item-' + plat + ' .item-enterprise-tips').removeClass('layui-hide');
+            }
+            if (value == "5") {
+                $('.layui-tab-item-' + plat + ' .item-kefu_mnp').removeClass('layui-hide');
+            }
+        }
+
+        $(function (){
+            showConfig();
+        })
+
         form.on('submit(set)', function (data) {
             like.ajax({
                 url: '{:url("ServiceConfig/config")}'
@@ -150,24 +244,11 @@
                             offset: '15px'
                             , icon: 1
                             , time: 1000
-                        },function () {
-                            location.href = location.href;
                         });
                     }
                 }
             });
-        });
-
-
-        // //验证手机或座机
-        var mobile = /^1[3|5|7|8]\d{9}$/,phone = /^0\d{2,3}-?\d{7,8}$/, other = /^400-[016789]\d{2}-\d{4}$/;
-        form.verify({
-            tellphone: function(value){
-                var flag = mobile.test(value) || phone.test(value) || other.test(value);
-                if(!flag){
-                    return '请输入正确座机号码或手机号';
-                }
-            }
+            return false;
         });
 
     });

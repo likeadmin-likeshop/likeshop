@@ -21,6 +21,7 @@ namespace app\api\validate;
 use app\api\logic\LoginLogic;
 use app\api\model\User;
 use app\common\model\NoticeSetting;
+use app\common\server\CaptchaService;
 use think\{
     Db,
     Validate
@@ -31,6 +32,8 @@ class SmsSend extends Validate
     protected $rule = [
         'mobile' => 'require|mobile|checkSms',
         'key' => 'checkMobile',
+        'captcha_key' => 'require',
+        'captcha' => 'require|checkCaptcha',
     ];
     protected $message = [
         'mobile.require' => '请输入手机号码',
@@ -57,6 +60,7 @@ class SmsSend extends Validate
         switch ($value) {
             case 'ZCYZ':    //注册验证
             case 'BDSJHM':  //绑定手机号码
+            case 'BGSJHM':  //变更手机号码
                 if ($user) return '该手机号码已存在';
                 break;
             case 'YZMDL':   //验证码登录
@@ -67,13 +71,30 @@ class SmsSend extends Validate
                 }
                 break;
             case 'ZHMM':    //找回密码
-            case 'BGSJHM':  //变更手机号码
             case 'ZHZFMM':  // 找回支付密码
                 if (empty($user)) return '手机号码不存在';
                 break;
 
         }
         return true;
+    }
+
+    /**
+     * Verify and consume the one-time image captcha.
+     *
+     * @param string $captcha
+     * @param string $rule
+     * @param array $data
+     * @return string|true
+     */
+    public function checkCaptcha($captcha, $rule, $data)
+    {
+        unset($rule);
+        $key = trim($data['captcha_key'] ?? '');
+        if (CaptchaService::verify($key, (string)$captcha)) {
+            return true;
+        }
+        return '图形验证码错误';
     }
 
 }

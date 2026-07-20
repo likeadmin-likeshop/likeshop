@@ -23,12 +23,21 @@ namespace app\admin\controller;
 
 use app\admin\logic\LoginLogic;
 use app\admin\validate\Login;
+use app\common\server\CaptchaService;
 use think\facade\Url;
 
 class Account extends AdminBase
 {
 
-    public $like_not_need_login = ['login'];
+    public $like_not_need_login = ['login', 'captcha'];
+
+    /**
+     * Generate a one-time image captcha for the admin login page.
+     */
+    public function captcha()
+    {
+        $this->_success('OK', CaptchaService::create());
+    }
 
     /**
      * 登录
@@ -46,6 +55,7 @@ class Account extends AdminBase
             $this->_error($result);
         }
         $this->assign('account', cookie('account'));
+        $this->assign('captcha', CaptchaService::create());
 
         //首页配置
         $this->assign('config', LoginLogic::config());

@@ -548,6 +548,12 @@ INSERT INTO `ls_dev_auth` VALUES (1, 1, 1, 18, '权限管理', '', '', 95, 0, 15
 COMMIT;
 
 -- ----------------------------
+-- PC latest: site statistics permission
+INSERT INTO `ls_dev_auth` (`type`, `system`, `pid`, `name`, `icon`, `uri`, `sort`, `disable`, `create_time`, `update_time`, `del`, `partner_id`)
+SELECT 1, 0, 17, '站点统计', '', 'SiteStatistic/set', 50, 0, UNIX_TIMESTAMP(), NULL, 0, 0
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM `ls_dev_auth` WHERE `uri` = 'SiteStatistic/set');
+
 -- Table structure for ls_dev_crontab
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_dev_crontab`;

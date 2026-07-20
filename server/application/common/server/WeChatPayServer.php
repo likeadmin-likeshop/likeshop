@@ -186,7 +186,7 @@ class WeChatPayServer
 //                    'out_trade_no' => $order['order_sn'],
                     'total_fee' => $order['order_amount'] * 100, // 单位：分
                     'notify_url' => $notify_url,
-                    'openid' => $auth['openid'],
+                    'openid' => $auth['openid'] ?? '',
                     'attach' => 'order'
                 ];
                 break;
@@ -197,7 +197,7 @@ class WeChatPayServer
 //                    'out_trade_no' => $order['order_sn'],
                     'total_fee' => $order['order_amount'] * 100, // 单位：分
                     'notify_url' => $notify_url,
-                    'openid' => $auth['openid'],
+                    'openid' => $auth['openid'] ?? '',
                     'attach' => 'recharge'
                 ];
                 break;

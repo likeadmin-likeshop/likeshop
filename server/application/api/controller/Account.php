@@ -21,12 +21,26 @@
 namespace app\api\controller;
 use app\api\logic\LoginLogic;
 use app\api\validate\WechatLoginValidate;
+use app\common\server\CaptchaService;
 use app\common\server\ConfigServer;
+use Exception;
+use think\response\Json;
 
 class Account extends ApiBase
 {
 
-    public $like_not_need_login = ['register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+    public $like_not_need_login = ['captcha', 'register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+
+    /**
+     * Generate a one-time image captcha for SMS flows.
+     *
+     * @return Json
+     * @throws Exception
+     */
+    public function captcha(): Json
+    {
+        return $this->_success('OK', CaptchaService::create());
+    }
 
 
     /**

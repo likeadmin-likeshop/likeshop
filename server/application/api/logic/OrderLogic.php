@@ -1222,14 +1222,10 @@ class OrderLogic extends LogicBase
                     //快递编码
                     $shipping_code = Db::name('express')->where(['id' => $order_delivery['shipping_id']])->value($shipping_field);
                     //获取物流轨迹
-                    if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
-                        if ($express === 'kdniao') {
-                            $expressage->logistics($shipping_code, $order_delivery['invoice_no'], substr($order_delivery['mobile'],-4));
-                        } else {
-                            $expressage->logistics($shipping_code, $order_delivery['invoice_no'], $order_delivery['mobile']);
-                        }
-                    }else {
-                        $expressage->logistics($shipping_code, $order_delivery['invoice_no']);
+                    if ($express === 'kdniao') {
+                        $expressage->logistics($shipping_code, $order_delivery['invoice_no'], substr($order_delivery['mobile'], -4));
+                    } else {
+                        $expressage->logistics($shipping_code, $order_delivery['invoice_no'], $order_delivery['mobile']);
                     }
 
                     $traces = $expressage->logisticsFormat();
@@ -1282,6 +1278,7 @@ class OrderLogic extends LogicBase
                     'tips' => '订单提交成功',
                     'time' => $order['pay_time']
                 ],
+                'express' => $express,
             ];
             return $order_traces;
         }

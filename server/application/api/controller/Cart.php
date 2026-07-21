@@ -57,7 +57,7 @@ class Cart extends ApiBase
         if ($check !== true) {
             $this->_error($check);
         }
-        $res = CartLogic::change($post['cart_id'], $post['goods_num']);
+        $res = CartLogic::change($post['cart_id'], $post['goods_num'], $this->user_id);
         if ($res === true) {
             $this->_success();
         }

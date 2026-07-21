@@ -234,7 +234,7 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(edit-submit)', function(data){
                             var field = data.field;
-                            $.ajax({
+                            like.ajax({
                                 url:'{:url("user/edit")}',
                                 data:field,
                                 type:"post",

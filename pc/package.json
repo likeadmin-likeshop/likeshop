@@ -17,6 +17,7 @@
     "core-js": "^3.8.3",
     "element-ui": "^2.15.0",
     "js-cookie": "^2.2.1",
+    "jsencrypt": "^3.3.0",
     "nuxt": "^2.14.12",
     "qrcodejs2": "0.0.2",
     "swiper": "5.2.0",

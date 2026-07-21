@@ -23,13 +23,31 @@ use app\api\logic\LoginLogic;
 use app\api\validate\WechatLoginValidate;
 use app\common\server\CaptchaService;
 use app\common\server\ConfigServer;
+use app\common\server\PasswordCryptoService;
+use app\common\server\ConsumeTokenService;
 use Exception;
 use think\response\Json;
 
 class Account extends ApiBase
 {
 
-    public $like_not_need_login = ['captcha', 'register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+    public $like_not_need_login = ['captcha', 'passwordkey', 'register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+
+    public function passwordKey(): Json
+    {
+        return $this->_success('OK', PasswordCryptoService::createSession());
+    }
+
+    /**
+     * Issue the short-lived ticket required by protected API requests.
+     */
+    public function consumeToken(): Json
+    {
+        return $this->_success('OK', ConsumeTokenService::issue(
+            $this->request->header('token'),
+            $this->user_id
+        ));
+    }
 
     /**
      * Generate a one-time image captcha for SMS flows.

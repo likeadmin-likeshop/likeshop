@@ -22,6 +22,8 @@ namespace app\api\http\middleware;
 
 use app\api\cache\TokenCache;
 use app\api\validate\Token as TokenValidate;
+use app\common\server\PasswordCryptoService;
+use app\common\server\ConsumeTokenService;
 
 class Login
 {
@@ -36,12 +38,24 @@ class Login
 
         //允许跨域调用
         header('Access-Control-Allow-Origin: *');
-        header("Access-Control-Allow-Headers: Authorization, Sec-Fetch-Mode, DNT, X-Mx-ReqToken, Keep-Alive, User-Agent, If-Match, If-None-Match, If-Unmodified-Since, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Accept-Language, Origin, Accept-Encoding,Access-Token,token");
+        header("Access-Control-Allow-Headers: Authorization, Sec-Fetch-Mode, DNT, X-Mx-ReqToken, Keep-Alive, User-Agent, If-Match, If-None-Match, If-Unmodified-Since, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Accept-Language, Origin, Accept-Encoding,Access-Token,token,X-Consume-Token");
         header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, post');
         header('Access-Control-Max-Age: 1728000');
         header('Access-Control-Allow-Credentials:true');
         if (strtoupper($request->method()) == "OPTIONS") {
             return response();
+        }
+
+        try {
+            PasswordCryptoService::decryptRequest($request);
+        } catch (\RuntimeException $e) {
+            return json([
+                'code' => 0,
+                'msg' => $e->getMessage(),
+                'data' => [],
+                'show' => 1,
+                'time' => 0,
+            ]);
         }
 
 
@@ -57,6 +71,9 @@ class Login
         //token缓存，直接通过
         if (!$token_cache->isEmpty()) {
             $request->user_info = $token_cache->get(600);
+            if (!$this->isNotNeedLogin($request) && !ConsumeTokenService::validate($request, $token, $request->user_info['id'])) {
+                return $this->consumeTokenError();
+            }
             return $next($request);
         }
 
@@ -65,6 +82,9 @@ class Login
         $result = $token_validate->check(['token' => $token]);
         if ($result === true) {
             $request->user_info = $token_cache->set(600);
+            if (!$this->isNotNeedLogin($request) && !ConsumeTokenService::validate($request, $token, $request->user_info['id'])) {
+                return $this->consumeTokenError();
+            }
             return $next($request);
         }
 
@@ -76,6 +96,17 @@ class Login
         //登录失败
         action('dispatch/dispatch_error', ['msg' => $token_validate->getError(), 'code' => -1]);
 
+    }
+
+    private function consumeTokenError()
+    {
+        return json([
+            'code' => 0,
+            'msg' => '消费Token无效或已过期',
+            'data' => ['error' => 'consume_token_invalid'],
+            'show' => 1,
+            'time' => 0,
+        ]);
     }
 
 

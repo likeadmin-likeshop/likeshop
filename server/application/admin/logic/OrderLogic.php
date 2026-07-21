@@ -577,14 +577,10 @@ class OrderLogic
             ->value($shipping_field);
 
         //获取物流轨迹
-        if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
-            if ($express === 'kdniao') {
-                $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'],-4));
-            } else {
-                $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
-            }
-        }else {
-            $expressage->logistics($shipping_code, $order['invoice_no']);
+        if ($express === 'kdniao') {
+            $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'],-4));
+        } else {
+            $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
         }
 
         $traces = $expressage->logisticsFormat();

@@ -40,7 +40,7 @@
 
 `uniapp 页面 -> uniapp/api/*.js -> utils/request.js -> /api/<controller>/<action> -> API Login middleware -> ApiBase controller -> validate/logic -> common model/server`
 
-- token 使用 `token` header。
+- 登录 token 使用 `token` header；消费票据功能开启时，需登录接口还要求 `X-Consume-Token`。
 - controller 继承 `ApiBase`。
 - 免登录 action 配置在 `$like_not_need_login`。
 - 统一返回 `code/msg/data/show/time`。
@@ -49,6 +49,8 @@
 - 新接口先添加/修改 `uniapp/api/` 封装，页面不要直接拼完整 URL。
 - `GET /api/account/captcha` 提供一次性图形验证码；发送短信的 `sms/send`、`user/send` 及账号密码登录 `account/login` 必须同时提交 `captcha_key` 与 `captcha`。
 - admin 登录使用 `admin/account/captcha` 获取一次性验证码，后台登录请求同样必须提交 `captcha_key` 与 `captcha`。
+- 密码传输统一使用 `account/passwordKey` 获取短时公钥（API 和 admin 各自模块路径）；密码字段以 `RSA:` 前缀密文提交，并携带 `password_key_id`。服务端在 API/Admin 的 Login middleware 中解密后再进入 controller 校验和业务逻辑，密钥默认 120 秒且只消费一次。新增密码字段必须加入 `PasswordCryptoService` 及三端公共请求层的字段白名单。
+- `server/.env` 的 `[consume_token] enabled` 控制用户 API 的附加消费票据校验，默认关闭；`ttl_seconds` 被限制在 1 到 600 秒。PC/uni-app 从 `POST /api/account/consumeToken` 签发短时、会话绑定且 TTL 内可复用的票据，统一请求层负责缓存和注入。开启前先部署新 PC/mobile 构建，多实例环境使用共享缓存。
 
 ### Admin
 

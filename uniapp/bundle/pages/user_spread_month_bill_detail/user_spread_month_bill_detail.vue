@@ -202,7 +202,7 @@ export default {
 <style lang="scss">
 .user-spread-month-bill .header {
   height: 240rpx;
-  background-color: $-color-primary;
+  background-color: $ls-color-primary;
   padding-top: 60rpx;
 }
 
@@ -226,7 +226,7 @@ export default {
 
 .user-spread-month-bill .content .order-container .order-item .order-header {
   padding: 20rpx 30rpx;
-  border-bottom: $-solid-border;
+  border-bottom: $ls-solid-border;
 }
 
 .user-spread-month-bill .content .order-container .order-item .order-header .guide-shop-btn {
@@ -238,7 +238,7 @@ export default {
 
 .user-spread-month-bill .content .order-container .order-item .order-content {
   padding: 20rpx 30rpx 20rpx 20rpx;
-  border-bottom: $-solid-border;
+  border-bottom: $ls-solid-border;
 }
 
 .user-spread-month-bill .content .order-container .order-item .order-content .order-goods-img {

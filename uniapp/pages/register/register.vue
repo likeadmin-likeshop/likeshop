@@ -322,7 +322,7 @@ page {
       height: 100rpx;
       border-radius: 10rpx;
       width: 670rpx;
-      border: $-solid-border;
+      border: $ls-solid-border;
       margin-top: 30rpx;
     }
     .input-item {
@@ -343,10 +343,10 @@ page {
         height: 29px;
         width: 88px;
         flex: none;
-        border: 1px solid $-color-primary;
+        border: 1px solid $ls-color-primary;
         cursor: pointer;
         .seconds {
-          color: $-color-primary;
+          color: $ls-color-primary;
         }
       }
     }
@@ -363,7 +363,7 @@ page {
   padding: 60rpx 0 70rpx 0;
 }
 .agreement {
-  color: $-color-primary;
+  color: $ls-color-primary;
 }
 .inactive {
   opacity: 0.5;

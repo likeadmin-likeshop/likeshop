@@ -6,7 +6,7 @@
     >
       <view
         v-for="(item, index) in cartLists"
-        :key="index"
+        :key="item.cart_id + '-' + cartQuantityRenderKey"
         class="cart-list mb20"
         v-show="!(cartType != 1)"
       >
@@ -158,6 +158,9 @@ export default {
       cartLists: [],
       delPopup: false,
       totalPrice: "",
+      cartQuantitySync: {},
+      cartQuantityReloadPending: false,
+      cartQuantityRenderKey: 0,
     };
   },
 
@@ -225,6 +228,11 @@ export default {
     },
 
     getCartListFun() {
+      if (Object.keys(this.cartQuantitySync).length) {
+        this.cartQuantityReloadPending = true;
+        uni.stopPullDownRefresh();
+        return;
+      }
       getCartList().then((res) => {
         uni.stopPullDownRefresh({
           success: (res) => {},
@@ -275,17 +283,85 @@ export default {
     },
 
     countChange({ value }, cartId, item) {
-      console.log("countChange", value, cartId, item);
+      value = Number(value);
+      const previousNumber = Number(item.goods_num);
+      item.goods_num = value;
+      this.updateCartTotal();
+
+      let syncState = this.cartQuantitySync[cartId];
+      if (!syncState) {
+        syncState = {
+          desired: value,
+          synced: previousNumber,
+          pending: false,
+          item,
+        };
+        this.$set(this.cartQuantitySync, cartId, syncState);
+      }
+      syncState.desired = value;
+      this.syncCartQuantity(cartId);
+    },
+
+    syncCartQuantity(cartId) {
+      const syncState = this.cartQuantitySync[cartId];
+      if (!syncState || syncState.pending) return;
+
+      const goodsNum = syncState.desired;
+      syncState.pending = true;
       changeGoodsCount({
         cart_id: cartId,
-        goods_num: value,
-      }).then((res) => {
-        if (res.code == 1) {
-          this.getCartListFun();
-        } else {
-          this.getCartListFun();
+        goods_num: goodsNum,
+      })
+        .then((res) => {
+          syncState.pending = false;
+          if (res.code != 1) {
+            syncState.item.goods_num = syncState.synced;
+            this.cartQuantityReloadPending = true;
+            this.$delete(this.cartQuantitySync, cartId);
+            this.updateCartTotal();
+            this.finishCartQuantitySync();
+            return;
+          }
+
+          syncState.synced = goodsNum;
+          if (syncState.desired != goodsNum) {
+            this.syncCartQuantity(cartId);
+            return;
+          }
+
+          this.$delete(this.cartQuantitySync, cartId);
+          this.finishCartQuantitySync();
+        })
+        .catch(() => {
+          syncState.pending = false;
+          syncState.item.goods_num = syncState.synced;
+          this.cartQuantityReloadPending = true;
+          this.$delete(this.cartQuantitySync, cartId);
+          this.updateCartTotal();
+          this.finishCartQuantitySync();
+        });
+    },
+
+    finishCartQuantitySync() {
+      if (Object.keys(this.cartQuantitySync).length) return;
+
+      if (this.cartQuantityReloadPending) {
+        this.cartQuantityReloadPending = false;
+        this.cartQuantityRenderKey++;
+        this.getCartListFun();
+        return;
+      }
+      this.getCartNum();
+    },
+
+    updateCartTotal() {
+      const total = this.cartLists.reduce((amount, item) => {
+        if (item.selected == 1 && item.cart_status == 0) {
+          return amount + Number(item.price) * Number(item.goods_num);
         }
-      });
+        return amount;
+      }, 0);
+      this.totalPrice = total.toFixed(2);
     },
 
     goToConfirm() {
@@ -335,20 +411,20 @@ export default {
       margin: 20rpx 20rpx 0;
       border-radius: 10rpx;
       // &.invalid {
-      // 	background-color: $-color-body;
+      // 	background-color: $ls-color-body;
       // }
     }
 
     .select {
       height: 80rpx;
       padding: 0 20rpx;
-      border-bottom: $-solid-border;
+      border-bottom: $ls-solid-border;
     }
   }
 
   .cart-null {
     .btn {
-      border: 1px solid $-color-primary;
+      border: 1px solid $ls-color-primary;
       width: 184rpx;
       margin-left: auto;
       margin-right: auto;

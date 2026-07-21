@@ -348,7 +348,7 @@ export default {
                     position: absolute;
                     background-color: #ee0a24;
                     border: 2rpx solid #ffffff;
-                    color: $-color-primary;
+                    color: $ls-color-primary;
                     border-radius: 100%;
                     top: 6rpx;
                     right: 0rpx;
@@ -398,7 +398,7 @@ export default {
     .title {
         height: 88rpx;
         padding: 0 30rpx;
-        border-bottom: $-dashed-border;
+        border-bottom: $ls-dashed-border;
     }
 
     .nav {
@@ -418,8 +418,8 @@ export default {
             height: 28rpx;
             border-radius: 28rpx;
             box-sizing: border-box;
-            border: 1rpx solid $-color-primary;
-            color: $-color-primary;
+            border: 1rpx solid $ls-color-primary;
+            color: $ls-color-primary;
             position: absolute;
             left: 33rpx;
             top: -10rpx;

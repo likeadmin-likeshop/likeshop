@@ -262,7 +262,7 @@
 					justify-content: center;
 					padding: 20rpx 0;
 					font-size: 26rpx;
-					color: $-color-muted;
+					color: $ls-color-muted;
 				}
 			}
 
@@ -276,7 +276,7 @@
 					height: 120rpx;
 
 					&:nth-child(n+2) {
-						border-top: $-dashed-border;
+						border-top: $ls-dashed-border;
 					}
 
 					&-content {
@@ -287,12 +287,12 @@
 
 						&-name {
 							font-size: 28rpx;
-							color: $-color-black;
+							color: $ls-color-black;
 						}
 
 						&-tips {
 							font-size: 22rpx;
-							color: $-color-muted;
+							color: $ls-color-muted;
 						}
 					}
 				}
@@ -307,7 +307,7 @@
 				margin-top: 10rpx;
 				font-size: 22rpx;
 				background-color: #FFFFFF;
-				color: $-color-normal;
+				color: $ls-color-normal;
 			}
 
 			&-submit {

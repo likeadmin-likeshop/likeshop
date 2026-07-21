@@ -64,7 +64,7 @@
 							<image class="express-icon" src="../../static/images/logistics_transit.png"></image>
 							<view class="express-line"></view>
 						</view>
-						<view class="express-right muted">
+						<view class="express-right muted" v-if="express == 'kd100'">
 							<view class="title bold sm ">{{delivery.title}}</view>
 							<view class="xs" v-if="delivery.traces[0][0]">
 								{{delivery.traces[0][0]}}
@@ -76,6 +76,13 @@
 								{{delivery.traces[0][2]}}
 							</view>
 						</view>
+						<view class="express-right muted" v-else>
+							<view class="title bold sm ">{{delivery.title}}</view>
+							<view class="xs" v-if="delivery.traces[0][2]">
+								{{delivery.traces[0][2]}}
+							</view>
+							<view class="xs" v-if="delivery.traces[0][1]">{{delivery.traces[0][1]}}</view>
+						</view>
 					</view>
 					<block v-for="(item, index) in delivery.traces" :key="index">
 						<view class="express-item row" v-if="index >= 1">
@@ -83,10 +90,14 @@
 								<view class="express-doted"></view>
 								<view class="express-line"></view>
 							</view>
-							<view class="express-right muted">
+							<view class="express-right muted" v-if="express == 'kd100'">
 								<view class="sm" v-if="item[0]">{{item[0]}}</view>
 								<view class="sm" v-if="item[1]">{{item[1]}}</view>
 								<view class="sm" v-if="item[2]">{{item[2]}}</view>
+							</view>
+							<view class="express-right muted" v-else>
+								<view class="sm" v-if="item[2]">{{item[2]}}</view>
+								<view class="sm" v-if="item[1]">{{item[1]}}</view>
 							</view>
 						</view>
 					</block>
@@ -134,6 +145,7 @@
 				finish: {},
 				order: {},
 				take: {},
+				express: '',
 				isFirstLoading: true
 			};
 		},
@@ -156,7 +168,8 @@
 						delivery,
 						finish,
 						order,
-						take
+						take,
+						express
 					}
 				} = await orderTraces(this.id)
 				if (code == 1) {
@@ -166,6 +179,7 @@
 					this.finish = finish
 					this.order = order
 					this.take = take
+					this.express = express
 					this.isFirstLoading = false
 				} else {
 					setTimeout(() => uni.navigateBack(), 1000);

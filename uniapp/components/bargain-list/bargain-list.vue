@@ -105,7 +105,7 @@
 <style lang="scss">
     .bargain-list-container {
         .bargain-list {
-            background-color: $-color-white;
+            background-color: $ls-color-white;
             .header {
                 height: 80rpx;
                 padding: 20rpx 20rpx;
@@ -126,7 +126,7 @@
                     // 继续砍价 按钮
                     height: 62rpx;
                     padding: 0 44rpx;
-                    background-color: $-color-primary;
+                    background-color: $ls-color-primary;
                 }
                 .purchase-btn {
                     // 直接购买

@@ -774,7 +774,7 @@
 					padding: 0 18rpx;
 					border-radius: 6rpx;
 					box-sizing: border-box;
-					background-color: $-color-primary;
+					background-color: $ls-color-primary;
 					color: #fff;
 					white-space: nowrap;
 					overflow: hidden;
@@ -817,7 +817,7 @@
 		.evaluation {
 			.title {
 				height: 100rpx;
-				border-bottom: $-solid-border;
+				border-bottom: $ls-solid-border;
 				padding: 0 24rpx;
 			}
 
@@ -895,14 +895,14 @@
 			}
 
 			.right-buy {
-				background-color: $-color-primary;
+				background-color: $ls-color-primary;
 			}
 		}
 
 		.group-play {
 			.title {
 				padding: 20rpx 28rpx;
-				border-bottom: $-solid-border;
+				border-bottom: $ls-solid-border;
 			}
 
 			.steps {
@@ -935,7 +935,7 @@
 				padding: 20rpx 24rpx;
 
 				&:not(:last-of-type) {
-					border-bottom: $-solid-border;
+					border-bottom: $ls-solid-border;
 				}
 
 				.group-btn {

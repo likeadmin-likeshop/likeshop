@@ -535,7 +535,7 @@
             .bargain-panel {
                 margin-top: 30rpx;
                 padding: 24rpx 24rpx 20rpx;
-                background-color: $-color-white;
+                background-color: $ls-color-white;
                 box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.06);
                 border-radius: 20rpx;
                 .bargain-panel-header {
@@ -558,7 +558,7 @@
                     }
                 }
                 .invite-btn1 {
-                    background-color: $-color-primary;
+                    background-color: $ls-color-primary;
                     height: 84rpx;
                     margin-top: 36rpx;
                     box-shadow: 0px 3px 10px rgba(235, 36, 51, 0.5);
@@ -580,7 +580,7 @@
                     .invite-friend-btn {
                         width: 316rpx;
                         height: 84rpx;
-                        background-color: $-color-primary;
+                        background-color: $ls-color-primary;
                     }
                 }
                 .bargain-code-content {
@@ -603,13 +603,13 @@
                 .btn-container {
                     margin-top: 40rpx;
                     .help-knife-btn {
-                        background-color: $-color-primary;
+                        background-color: $ls-color-primary;
                         height: 84rpx;
                         box-shadow: 0px 3px 10px rgba(235, 36, 51, 0.5);
                     }
                     .knife-btn {
                         height: 84rpx;
-                        background-color: $-color-white;
+                        background-color: $ls-color-white;
                         border: 1px solid #BBBBBB;
                         margin-top: 30rpx;
                     }
@@ -617,7 +617,7 @@
                 .code-content {
                     margin-top: 30rpx;
                     padding: 27rpx 24rpx;
-                    background-color: $-color-white;                       
+                    background-color: $ls-color-white;                       
                     .user-item {
                         padding: 15rpx 0;
                         margin-top: 10rpx;
@@ -633,13 +633,13 @@
                 }
                 .choose-content {
                     padding: 30rpx 20rpx;
-                    background-color: $-color-white;
+                    background-color: $ls-color-white;
                     border-radius: 10px;
                 }
             }
             .lunch-btn {
                 height: 84rpx;
-                background-color: $-color-primary;
+                background-color: $ls-color-primary;
                 box-shadow: 0px 3px 10px rgba(235, 36, 51, 0.5);
             }
         }
@@ -663,7 +663,7 @@
                 .spec-active-item {
                     padding: 8rpx 28rpx;
                     color: white;
-                    background-color: $-color-primary;
+                    background-color: $ls-color-primary;
                 }
             }
             .pickup-number {
@@ -711,7 +711,7 @@
         }
         .share-pop-container {
             height: 500rpx;
-            background-color: $-color-white;
+            background-color: $ls-color-white;
         }
     }
 </style>

@@ -264,7 +264,7 @@
 
 		.save-btn {
 			// @include background_color();
-			background-color: $-color-primary;
+			background-color: $ls-color-primary;
 			color: #fff;
 			margin-top: 20rpx;
 		}

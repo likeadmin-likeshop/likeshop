@@ -585,7 +585,7 @@ export default {
         justify-content: center;
         width: 80rpx;
         height: 80rpx;
-        border: $-solid-border;
+        border: $ls-solid-border;
         border-radius: 50%;
         font-size: 32rpx;
         background-color: #ffffff;
@@ -660,7 +660,7 @@ export default {
 
                         &.active {
                             width: 20rpx;
-                            background-color: $-color-primary;
+                            background-color: $ls-color-primary;
                         }
                     }
                 }
@@ -780,7 +780,7 @@ export default {
 
                 .coupon-right {
                     padding-left: 30rpx;
-                    border-left: 1rpx dashed $-color-primary;
+                    border-left: 1rpx dashed $ls-color-primary;
                 }
             }
         }
@@ -823,7 +823,7 @@ export default {
 
                 .price {
                     width: 160rpx;
-                    border-right: 1px dashed $-color-primary;
+                    border-right: 1px dashed $ls-color-primary;
                     height: 100%;
                 }
             }

@@ -17,26 +17,26 @@
 
 /* 行为相关颜色 */
 //主题色
-$-color-primary: #FF2C3C;
+$ls-color-primary: #FF2C3C;
 //主要边框颜色
-$-color-border: #E5E5E5;
+$ls-color-border: #E5E5E5;
 //黑色
-$-color-black:#101010;
+$ls-color-black:#101010;
 //白色
-$-color-white: #ffffff;
+$ls-color-white: #ffffff;
 //字体主色
-$-color-normal: #333333;
+$ls-color-normal: #333333;
 //字体浅色
-$-color-lighter: #666666;
+$ls-color-lighter: #666666;
 //字体更浅色
-$-color-muted: #999999;
+$ls-color-muted: #999999;
 
 //背景色
-$-color-body: #F6F6F6;
+$ls-color-body: #F6F6F6;
 
 //边框
-$-solid-border: 1px solid $-color-border;
-$-dashed-border: 1px dashed $-color-border;
+$ls-solid-border: 1px solid $ls-color-border;
+$ls-dashed-border: 1px dashed $ls-color-border;
 
 
 
@@ -68,4 +68,3 @@ $u-border-color: #e4e7ed;
 $u-bg-color: #f3f4f6;
 $u-form-item-border-color: #dcdfe6;
 $u-form-item-height: 70rpx;
-

@@ -192,7 +192,7 @@ export default {
                 width: 176rpx;
                 height: 58rpx;
                 flex: none;
-                border: 1px solid $-color-primary;
+                border: 1px solid $ls-color-primary;
             }
         }
 

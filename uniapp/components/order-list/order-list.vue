@@ -463,14 +463,14 @@ export default {
 
     .order-footer {
       height: 100rpx;
-      border-top: $-solid-border;
+      border-top: $ls-solid-border;
       padding: 0 24rpx;
 
       .plain {
         border: 1px solid #bbbbbb;
 
         &.red {
-          border-color: $-color-primary;
+          border-color: $ls-color-primary;
         }
       }
     }

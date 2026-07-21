@@ -152,7 +152,7 @@
 		.list {
 			.item {
 				padding: 20rpx 30rpx;
-				border-bottom: $-solid-border;
+				border-bottom: $ls-solid-border;
 				align-items: flex-start;
 				.avatar {
 					width: 68rpx;

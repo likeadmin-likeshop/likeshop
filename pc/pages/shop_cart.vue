@@ -21,7 +21,7 @@
           <div
             class="item row"
             v-for="(item, index) in shopCartList"
-            :key="index"
+            :key="item.cart_id"
           >
             <div class="check-box">
               <el-checkbox
@@ -44,6 +44,7 @@
             <div class="num row-center">
               <number-box
                 :min="1"
+                :max="+item.item_stock"
                 v-model="item.goods_num"
                 @change="changeShopCartCount($event, item.cart_id)"
                 @input="changeShopCartCount($event, item.cart_id)"
@@ -175,7 +176,9 @@ export default {
     return {
       checkAll: false,
       isIndeterminate: false,
-      checkoutCount: 0
+      checkoutCount: 0,
+      cartQuantitySync: {},
+      cartQuantityReloadPending: false
     };
   },
   mounted() {},
@@ -203,6 +206,10 @@ export default {
   methods: {
     ...mapActions(["getPublicData"]),
     async getCartList() {
+      if (Object.keys(this.cartQuantitySync).length) {
+        this.cartQuantityReloadPending = true;
+        return;
+      }
       let res = await this.$get("cart/lists");
       if (res.code == 1) {
         this.shopCartList = Object.assign([], res.data.lists);
@@ -242,16 +249,90 @@ export default {
         this.getCartList();
       }
     },
-    async changeShopCartCount(number, cartId) {
-      // cart/change
-      let res = await this.$post("cart/change", {
-        cart_id: cartId,
-        goods_num: number
-      });
-      if (res.code == 1) {
-        this.getCartList();
-        this.getPublicData();
+    changeShopCartCount(number, cartId) {
+      number = Number(number);
+      const item = this.shopCartList.find(item => item.cart_id == cartId);
+      if (!item || item.goods_num == number) return;
+
+      const previousNumber = Number(item.goods_num);
+      item.goods_num = number;
+      item.sub_price = (Number(item.price) * number).toFixed(2);
+      this.updateCartTotal();
+
+      let syncState = this.cartQuantitySync[cartId];
+      if (!syncState) {
+        syncState = {
+          desired: number,
+          synced: previousNumber,
+          pending: false,
+          item
+        };
+        this.$set(this.cartQuantitySync, cartId, syncState);
       }
+      syncState.desired = number;
+      this.syncCartQuantity(cartId);
+    },
+    async syncCartQuantity(cartId) {
+      const syncState = this.cartQuantitySync[cartId];
+      if (!syncState || syncState.pending) return;
+
+      const goodsNum = syncState.desired;
+      syncState.pending = true;
+      try {
+        const res = await this.$post("cart/change", {
+          cart_id: cartId,
+          goods_num: goodsNum
+        });
+        syncState.pending = false;
+        if (res.code != 1) {
+          syncState.item.goods_num = syncState.synced;
+          syncState.item.sub_price = (
+            Number(syncState.item.price) * syncState.synced
+          ).toFixed(2);
+          this.cartQuantityReloadPending = true;
+          this.$delete(this.cartQuantitySync, cartId);
+          this.updateCartTotal();
+          this.finishCartQuantitySync();
+          return;
+        }
+
+        syncState.synced = goodsNum;
+        if (syncState.desired != goodsNum) {
+          this.syncCartQuantity(cartId);
+          return;
+        }
+      } catch (error) {
+        syncState.pending = false;
+        syncState.item.goods_num = syncState.synced;
+        syncState.item.sub_price = (
+          Number(syncState.item.price) * syncState.synced
+        ).toFixed(2);
+        this.cartQuantityReloadPending = true;
+        this.updateCartTotal();
+      }
+
+      this.$delete(this.cartQuantitySync, cartId);
+      this.finishCartQuantitySync();
+    },
+    finishCartQuantitySync() {
+      if (Object.keys(this.cartQuantitySync).length) return;
+
+      if (this.cartQuantityReloadPending) {
+        this.cartQuantityReloadPending = false;
+        this.getCartList();
+      }
+      this.getPublicData();
+    },
+    updateCartTotal() {
+      const summary = this.shopCartList.reduce((result, item) => {
+        if (item.selected && item.cart_status == 0) {
+          result.amount += Number(item.price) * Number(item.goods_num);
+          result.count += Number(item.goods_num);
+        }
+        return result;
+      }, { amount: 0, count: 0 });
+      this.totalAmount = summary.amount.toFixed(2);
+      this.totalNum = summary.count;
     },
     async goodsDelete(cartId) {
       let res = await this.$post("cart/del", {

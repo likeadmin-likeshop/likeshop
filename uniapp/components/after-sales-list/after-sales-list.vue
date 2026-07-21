@@ -396,7 +396,7 @@ export default {
       .btn {
         padding: 9rpx 34rpx;
         font-family: PingFang SC;
-        border: 1px solid $-color-primary;
+        border: 1px solid $ls-color-primary;
       }
 
       .grey-btn {

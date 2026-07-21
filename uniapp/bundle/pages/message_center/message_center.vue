@@ -70,7 +70,7 @@ export default {
   .message-item {
     padding: 32rpx 0;
     &:not(:last-of-type) {
-        border-bottom: $-solid-border;
+        border-bottom: $ls-solid-border;
     }
     .item-info {
       font-size: 32rpx;

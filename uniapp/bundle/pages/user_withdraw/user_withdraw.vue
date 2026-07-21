@@ -382,7 +382,7 @@
 				border-radius: 20rpx;
 
 				.input {
-					border-bottom: $-solid-border;
+					border-bottom: $ls-solid-border;
 
 					input {
 						width: 100%;
@@ -410,7 +410,7 @@
 
 				.input-item {
 					padding: 28rpx 0 30rpx;
-					border-bottom: $-solid-border;
+					border-bottom: $ls-solid-border;
 				}
 
 				.input-label {

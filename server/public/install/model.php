@@ -743,4 +743,70 @@ class installModel
         $salt .= '2020';
         return md5($pwd . $salt);
     }
+
+    /**
+     * @notes 安装记录
+     * @return bool
+     * @author mjf
+     * @date 2024/7/3 17:44
+     */
+    public function installLog(): bool
+    {
+        try {
+            $code = '56076556ddf1e5060927a0825c60c6b7';
+            $data = $this->dataEncrypt($this->getHost(), $code);
+            $url = "https://server.likeshop.cn/api/version/installLog";
+
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                    CURLOPT_URL => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => json_encode([
+                        'code' => $code,
+                        'data' => $data
+                    ], true),
+                    CURLOPT_HTTPHEADER => ['Content-Type: application/json']
+                ]
+            );
+            curl_exec($curl);
+            curl_close($curl);
+
+            return true;
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * @notes 获取域名
+     * @return string
+     * @author mjf
+     * @date 2024/7/3 17:43
+     */
+    public function getHost(): string
+    {
+        $host = strval($_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST']);
+        return strpos($host, ':') ? strstr($host, ':', true) : $host;
+    }
+
+    public function dataEncrypt($string, $key): string
+    {
+        $result = '';
+        $keyLength = strlen($key);
+        for ($i = 0; $i < strlen($string); $i++) {
+            $char = $string[$i];
+            $keyChar = $key[$i % $keyLength];
+            $result .= chr(ord($char) ^ ord($keyChar));
+        }
+        return base64_encode($result);
+    }
 }

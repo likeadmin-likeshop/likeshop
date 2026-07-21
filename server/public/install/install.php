@@ -91,6 +91,10 @@ if ($step == 4) {
         $step = 3;
 }
 
+if ($step == 5) {
+    $modelInstall->installLog();
+}
+
 // 取得安装成功的表
 $successTables = $modelInstall->getSuccessTable();
 

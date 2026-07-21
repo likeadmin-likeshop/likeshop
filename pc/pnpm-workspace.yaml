@@ -1,0 +1,4 @@
+allowBuilds:
+  core-js: set this to true or false
+  nuxt: set this to true or false
+  swiper: set this to true or false

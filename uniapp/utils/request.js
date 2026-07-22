@@ -6,6 +6,7 @@ import Cache from './cache'
 import { TOKEN, BACK_URL } from '../config/cachekey'
 import { baseURL } from '../config/app'
 import { getWxCode, toLogin, wxMnpLogin } from './login'
+import { createConsumeToken, clearConsumeToken } from './consumeToken'
 
 const passwordFields = [
     'password', 'password2', 'password_confirm', 'passwordConfirm',
@@ -68,6 +69,9 @@ service.interceptors.request.use(
         }
         config.header = config.header || {}
         config.header.token = config.header.token || Cache.get(TOKEN)
+        if (config.header.token) {
+            config.header['X-Consume-Token'] = await createConsumeToken(config.header.token)
+        }
         return config
     },
     (error) => {
@@ -81,8 +85,11 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     async (response) => {
         if (response.data) {
-            const { code, show, msg } = response.data
+            const { code, show, msg, data } = response.data
             const { route, options } = currentPage()
+            if (code == 0 && data && data.error === 'consume_token_invalid') {
+                clearConsumeToken()
+            }
             if (code == 0 && show && msg) {
                 uni.showToast({
                     title: msg,

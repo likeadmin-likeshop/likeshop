@@ -23,6 +23,7 @@ use app\api\logic\LoginLogic;
 use app\api\validate\WechatLoginValidate;
 use app\common\server\CaptchaService;
 use app\common\server\ConfigServer;
+use app\common\server\ConsumeTokenService;
 use app\common\server\PasswordCryptoService;
 use Exception;
 
@@ -34,6 +35,17 @@ class Account extends ApiBase
     public function passwordKey()
     {
         $this->_success('OK', PasswordCryptoService::createSession());
+    }
+
+    /**
+     * Issue the short-lived ticket required by protected API requests.
+     */
+    public function consumeToken()
+    {
+        $this->_success('OK', ConsumeTokenService::issue(
+            $this->request->header('token'),
+            $this->user_id
+        ));
     }
 
     /**

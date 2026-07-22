@@ -1,6 +1,7 @@
 import { Message } from 'element-ui';
 import JSEncrypt from 'jsencrypt'
 import config from '~/config/app'
+import { createConsumeToken, clearConsumeToken } from '~/utils/consumeToken'
 
 const passwordFields = [
   'password', 'password2', 'password_confirm', 'passwordConfirm',
@@ -40,6 +41,9 @@ export default function ({ $axios, redirect, app, store }, inject) {
       data.password_key_id = response.data.key_id || response.data.keyId
       requestConfig.data = data
     }
+    if (requestConfig.headers.token) {
+      requestConfig.headers['X-Consume-Token'] = await createConsumeToken(requestConfig.headers.token)
+    }
     return requestConfig
   })
   $axios.onResponse((response) => {
@@ -48,6 +52,9 @@ export default function ({ $axios, redirect, app, store }, inject) {
       show,
       msg
     } = response.data;
+    if (code == 0 && response.data.data && response.data.data.error === 'consume_token_invalid') {
+      clearConsumeToken()
+    }
     if (code == 0 && show && msg) {
       Message({
         message: msg,

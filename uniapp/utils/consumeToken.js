@@ -1,5 +1,3 @@
-import Cache from './cache'
-import { TOKEN } from '../config/cachekey'
 import { baseURL } from '../config/app'
 
 let cachedToken = ''
@@ -48,10 +46,6 @@ function issue(loginToken) {
             return
           }
           reject(new Error(result.msg || '消费票据签发失败'))
-          return
-        }
-        if (Cache.get(TOKEN) !== loginToken) {
-          resolve('')
           return
         }
         const token = result.data && result.data.token ? result.data.token : ''

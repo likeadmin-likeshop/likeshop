@@ -41,7 +41,7 @@ class Login extends Validate
     protected $rule = [
         'account' => 'require',
         'password' => 'require|password',
-        'client' => 'require|in:' . Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
+        'client' => 'require|in:' . Client_::mnp . ',' . Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
         'captcha_key' => 'require',
         'captcha' => 'require|checkCaptcha',
         'code'=>'require|checkCode',
@@ -51,7 +51,7 @@ class Login extends Validate
         'account.require' => '请输入账号或手机号',
         'password.require' => '请输入密码',
         'password.password' => '密码错误',
-        'client.in' => '当前只支持h5和app登录',
+        'client.in' => '当前客户端不支持登录',
         'code.require'=>'请输入验证码',
     ];
 

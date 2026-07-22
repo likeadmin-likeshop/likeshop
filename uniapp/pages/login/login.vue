@@ -13,10 +13,13 @@
         </u-sticky>
         <!-- #endif -->
         <!-- #ifdef MP-WEIXIN -->
-        <view class="mpwx-login">
+        <view class="mpwx-login" v-if="isPhonelogin == 1">
             <image class="logo" :src="appConfig.shop_login_logo" mode="heightFix"></image>
             <button size="lg" class="white flex row-center btn" @click="mnpLoginFun">
                 <text>用户一键登录</text>
+            </button>
+            <button size="lg" class="flex row-center phonebtn" @click="isPhonelogin = 0">
+                <text>账号密码登录</text>
             </button>
             <view class="mt20" style="width: 100%">
                 <u-checkbox v-model="isAgree" shape="circle">
@@ -50,8 +53,7 @@
             @update="handleSubmitInfo"
         />
         <!--  #endif -->
-        <!-- #ifndef MP-WEIXIN -->
-        <view class="account-login">
+        <view class="account-login" v-if="!isMnp || isPhonelogin == 0">
             <image class="logo" :src="appConfig.shop_login_logo"></image>
             <block v-if="isPhonelogin == 1">
                 <button
@@ -215,6 +217,9 @@
                         <view class="lighter" @click="changeLoginType">{{
                             loginType == 0 ? '短信验证码登录' : '账号登录'
                         }}</view>
+                        <!-- #ifdef MP-WEIXIN -->
+                        <view class="lighter" @click="isPhonelogin = 1">微信一键登录</view>
+                        <!-- #endif -->
                         <navigator class="lighter" url="/pages/register/register" hover-class="none"
                             >注册账号</navigator
                         >
@@ -232,7 +237,6 @@
         </view>
       </view> -->
         </view>
-        <!--  #endif -->
         <!-- 阅读协议弹框 -->
         <u-modal
             :value="showModel"
@@ -557,6 +561,12 @@ export default {
     },
     computed: {
         ...mapGetters(['appConfig']),
+        isMnp() {
+            // #ifdef MP-WEIXIN
+            return true
+            // #endif
+            return false
+        },
         inactive() {
             if (this.loginType == 0) {
                 return !this.account || !this.password ? true : false
@@ -590,6 +600,13 @@ page {
                 width: 100%;
                 margin: 80rpx auto 0;
                 height: 100rpx;
+            }
+            .phonebtn {
+                border: $ls-solid-border;
+                margin-top: 50rpx;
+                width: 100%;
+                height: 100rpx;
+                background-color: #fff;
             }
         }
 

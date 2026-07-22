@@ -2,8 +2,8 @@
 return [
     'file_domain' => \think\facade\Env::get('project.file_domain', 'likeshop.yixiangonline.com'),
     'sms' => \think\facade\Env::get('project.sms', true),
-    'version' => \think\facade\Env::get('project.version', '3.0.3.20231204'),
-    'front_version' => \think\facade\Env::get('project.version', '3.0.3.20231204'),
+    'version' => \think\facade\Env::get('project.version', '3.5.1'),
+    'front_version' => \think\facade\Env::get('project.version', '3.5.1'),
 
     // 文件上传限制 (图片)
     'file_image' => [

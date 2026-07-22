@@ -8,7 +8,7 @@
 
 ## 项目定位与当前基线
 
-Likeshop 是单商户 B2C 商城。当前仓库是免费企业版 `v3.0.3`，包含一个 ThinkPHP 单体服务端、服务端渲染的 PC 管理后台，以及一个 Vue 2 uni-app 移动商城源码。
+Likeshop 是单商户 B2C 商城。当前仓库是免费企业版 `v3.5.1`，包含一个 ThinkPHP 单体服务端、服务端渲染的 PC 管理后台，以及一个 Vue 2 uni-app 移动商城源码。
 
 - 服务端：PHP `>= 7.0`、ThinkPHP `5.1.*`、MySQL，Composer 管理依赖。
 - 管理后台：admin 模块服务端渲染，Think 模板 + Layui/Layui Admin + jQuery；不是 Vue/React 独立工程。

@@ -6,7 +6,7 @@
 
 ## 项目记忆
 
-这是 Likeshop 单商户 B2C 商城免费企业版 `v3.0.3`，不是参考项目 `php-amdj` 的新技术栈：
+这是 Likeshop 单商户 B2C 商城免费企业版 `v3.5.1`，不是参考项目 `php-amdj` 的新技术栈：
 
 - `server/`：PHP 7.x + ThinkPHP 5.1 单体工程。
 - admin：`server/application/admin/` 中的服务端渲染后台，使用 Think 模板、Layui/Layui Admin、jQuery；没有独立 admin 前端工程。

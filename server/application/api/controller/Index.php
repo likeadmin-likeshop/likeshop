@@ -145,6 +145,7 @@ class Index extends ApiBase
             'download_doc'     => ConfigServer::get('app', 'download_doc', ''),//app下载文案
             'cate_style'       => ConfigServer::get('decoration', 'layout_no', 1),//分类页面风格
             'static_assets' => [
+              'bundle_base' => UrlServer::getFileUrl('/static/mobile/bundle-images/'),
               'bg_hometop' => UrlServer::getFileUrl($mobileStaticPath . 'bg_hometop.png'),
               'bg_packet_img' => UrlServer::getFileUrl($mobileStaticPath . 'bg_packet_img.png'),
               'bg_seckill' => UrlServer::getFileUrl($mobileStaticPath . 'bg_seckill.png'),

@@ -112,7 +112,7 @@ export default {
     border-radius: 10rpx;
     padding-bottom: 20rpx;
     &.seckill {
-        background-color: $-color-white;
+        background-color: $ls-color-white;
         background-image: url(../../static/images/home_seckill_bg.png);
     }
 

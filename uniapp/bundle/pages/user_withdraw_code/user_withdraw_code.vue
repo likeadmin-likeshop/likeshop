@@ -130,7 +130,7 @@ export default {
                 color: #666666;
             }
             .error-status {
-                color: $-color-primary;
+                color: $ls-color-primary;
             }
             &:not(:last-of-type) {
                 border-bottom: var(--border);

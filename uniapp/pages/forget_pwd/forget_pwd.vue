@@ -211,7 +211,7 @@ export default {
             height: 100rpx;
             border-radius: 10rpx;
             width: 670rpx;
-            border: $-solid-border;
+            border: $ls-solid-border;
             margin-top: 30rpx;
         }
     }

@@ -667,7 +667,7 @@ export default {
     top: 0;
     width: 100%;
     height: 200rpx;
-    background-color: $-color-primary;
+    background-color: $ls-color-primary;
     z-index: 0;
 }
 
@@ -737,7 +737,7 @@ export default {
 }
 
 .footer .plain.red {
-    border: 1px solid $-color-primary;
+    border: 1px solid $ls-color-primary;
 }
 
 .tips-dialog {
@@ -829,7 +829,7 @@ export default {
 }
 
 .receive-info-item:nth-child(n + 2) {
-    border-top: $-dashed-border;
+    border-top: $ls-dashed-border;
 }
 .address-card {
     padding: 30rpx;

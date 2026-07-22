@@ -340,20 +340,20 @@ export default {
       margin: 20rpx 20rpx 0;
       border-radius: 10rpx;
       // &.invalid {
-      // 	background-color: $-color-body;
+      // 	background-color: $ls-color-body;
       // }
     }
 
     .select {
       height: 80rpx;
       padding: 0 20rpx;
-      border-bottom: $-solid-border;
+      border-bottom: $ls-solid-border;
     }
   }
 
   .cart-null {
     .btn {
-      border: 1px solid $-color-primary;
+      border: 1px solid $ls-color-primary;
       width: 184rpx;
       margin-left: auto;
       margin-right: auto;

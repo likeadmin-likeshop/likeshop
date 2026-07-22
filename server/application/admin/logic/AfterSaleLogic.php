@@ -49,13 +49,13 @@ class AfterSaleLogic
 
         $where[] = ['a.del', '=', 0];
         // 售后状态
-        if ($get['type'] != '') {
+        if (isset($get['type']) && $get['type'] !== '') {
             $where[] = [ 'a.status', '=', (int) $get['type'] ];
         }
 
         //订单搜素
         if (!empty($get['search_key']) && !empty($get['keyword'])) {
-            $keyword = $get['keyword'];
+            $keyword = trim($get['keyword']);
             switch ($get['search_key']) {
                 case 'sn':
                     $where[] = ['a.sn', 'like', '%' . $keyword . '%'];
@@ -78,15 +78,15 @@ class AfterSaleLogic
             }
         }
 
-        if (isset($get['status']) && $get['status'] != '') {
+        if (isset($get['status']) && $get['status'] !== '') {
             $where[] = [ 'a.status', '=', (int) $get['status'] ];
         }
 
         //下单时间
-        if (isset($get['start_time']) && $get['start_time'] != '') {
+        if (isset($get['start_time']) && $get['start_time'] !== '') {
             $where[] = ['a.create_time', '>=', strtotime($get['start_time'])];
         }
-        if (isset($get['end_time']) && $get['end_time'] != '') {
+        if (isset($get['end_time']) && $get['end_time'] !== '') {
             $where[] = ['a.create_time', '<=', strtotime($get['end_time'])];
         }
 
@@ -104,6 +104,9 @@ class AfterSaleLogic
             ->group('a.id')
             ->count();
 
+        $page = max(1, (int) (isset($get['page']) ? $get['page'] : 1));
+        $limit = max(1, (int) (isset($get['limit']) ? $get['limit'] : 10));
+
         $lists = $after_sale
             ->alias('a')
             ->field($field)
@@ -112,8 +115,8 @@ class AfterSaleLogic
             ->join('order_goods g', 'g.id = a.order_goods_id')
             ->with(['order_goods', 'user', 'order'])
             ->where($where)
-            ->page($get['page'], $get['limit'])
-            ->orderRaw('a.id desc')
+            ->page($page, $limit)
+            ->order('a.id desc')
             ->append(['user.base_avatar', 'order_goods.base_image'])
             ->group('a.id')
             ->select();

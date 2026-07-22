@@ -680,7 +680,7 @@ page {
             }
         }
         .phonebtn {
-            border: $-solid-border;
+            border: $ls-solid-border;
             margin-top: 50rpx;
             width: 100%;
             height: 100rpx;
@@ -689,7 +689,7 @@ page {
             height: 100rpx;
             border-radius: 10rpx;
             width: 670rpx;
-            border: $-solid-border;
+            border: $ls-solid-border;
             margin-top: 30rpx;
         }
         .account-login {
@@ -715,7 +715,7 @@ page {
             }
 
             .sms-btn {
-                border: 1px solid $-color-primary;
+                border: 1px solid $ls-color-primary;
                 width: 176rpx;
                 height: 60rpx;
                 box-sizing: border-box;
@@ -738,7 +738,7 @@ page {
     padding: 60rpx 0 70rpx 0;
 }
 .agreement {
-    color: $-color-primary;
+    color: $ls-color-primary;
 }
 .inactive {
     opacity: 0.5;

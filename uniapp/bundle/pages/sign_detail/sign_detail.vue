@@ -103,7 +103,7 @@ export default {
 .sign-detail-container .sign-item {
   padding: 18rpx 30rpx;
   background-color: #fff;
-  border-bottom: $-solid-border;
+  border-bottom: $ls-solid-border;
 }
 
 .sign-type {

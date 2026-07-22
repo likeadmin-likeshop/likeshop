@@ -567,7 +567,7 @@ export default {
                 .usual-tools-header {
                     height: 100rpx;
                     line-height: 44rpx;
-                    border-bottom: $-solid-border;
+                    border-bottom: $ls-solid-border;
                 }
                 .usual-content {
                     padding: 40rpx 0;
@@ -610,7 +610,7 @@ export default {
                     margin-top: 60rpx;
                     .form-item {
                         padding: 24rpx 0 24rpx 30rpx;
-                        border: $-solid-border;
+                        border: $ls-solid-border;
                         margin: 0 34rpx 30rpx;
                         .label {
                             width: 150rpx;
@@ -647,7 +647,7 @@ export default {
                     padding: 60rpx 0 22rpx;
                     /* margin: 0 8px; */
                     width: 100%;
-                    border-bottom: $-solid-border;
+                    border-bottom: $ls-solid-border;
                     .apply-result-img {
                         width: 100rpx;
                         height: 100rpx;
@@ -707,7 +707,7 @@ van-field textarea {
 }
 
 .main .user-result-box .user-result-content  .apply-fail-reason {
-    color: $-color-primary;
+    color: $ls-color-primary;
     line-height: 36rpx;
     margin-top: 10rpx;
 }
@@ -719,7 +719,7 @@ van-field textarea {
     padding-bottom: 30rpx;
     width: 580rpx;
     border-radius: 6rpx;
-    background-color: $-color-white;
+    background-color: $ls-color-white;
 }
 
 .inviteformContain .title { 

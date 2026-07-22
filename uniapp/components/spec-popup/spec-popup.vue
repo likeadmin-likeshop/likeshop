@@ -405,7 +405,7 @@ export default {
     padding: 30rpx 20rpx;
     padding-right: 70rpx;
     align-items: flex-start;
-    border: $-solid-border;
+    border: $ls-solid-border;
     .vip-price {
       margin: 0 24rpx;
       background-color: #ffe9ba;
@@ -453,14 +453,14 @@ export default {
         border: 1px solid #f4f4f4;
 
         // &.checked {
-        // 	background-color: $-color-primary;
+        // 	background-color: $ls-color-primary;
         // 	color: #fff;
         // }
 
         &.checked {
           background-color: #ffe9eb;
-          color: $-color-primary;
-          border-color: $-color-primary;
+          color: $ls-color-primary;
+          border-color: $ls-color-primary;
         }
 
         &.disabled {

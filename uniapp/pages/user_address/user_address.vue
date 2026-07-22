@@ -276,7 +276,7 @@ export default {
             padding: 0 30rpx;
             .address {
                 padding: 20rpx 0;
-                border-bottom: $-solid-border;
+                border-bottom: $ls-solid-border;
             }
             .operation {
                 height: 80rpx;

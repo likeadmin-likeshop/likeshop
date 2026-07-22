@@ -248,7 +248,7 @@
 					margin-left: 30rpx;
 				}
 
-				border-bottom: $-solid-border;
+				border-bottom: $ls-solid-border;
 			}
 
 			.tip {
@@ -279,7 +279,7 @@
 					height: 150rpx;
 					border-radius: 10rpx;
 					margin-bottom: 16rpx;
-					border: 1px solid $-color-primary;
+					border: 1px solid $ls-color-primary;
 
 					&:not(:nth-of-type(3n)) {
 						margin-right: 24rpx;

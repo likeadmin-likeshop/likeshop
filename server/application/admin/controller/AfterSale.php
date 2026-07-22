@@ -32,6 +32,22 @@ class AfterSale extends AdminBase
     {
         if ($this->request->isAjax()) {
             $get = $this->request->get();
+
+            $rules = [
+                'type|售后状态' => 'number',
+                'status|状态' => 'number',
+                'search_key|搜索类型' => 'in:sn,order_sn,goods_name,user_sn,nickname,user_mobile',
+                'keyword|关键词' => 'length:1,50',
+                'start_time|开始时间' => 'date',
+                'end_time|结束时间' => 'date',
+                'page|页码' => 'require|number',
+                'limit|每页数量' => 'require|number',
+            ];
+            $validate = new \think\Validate($rules);
+            if (!$validate->check($get)) {
+                $this->_error($validate->getError());
+            }
+
             $this->_success('', AfterSaleLogic::lists($get));
         }
         $this->assign('status', CommonAfterSale::getStatusDesc(true));

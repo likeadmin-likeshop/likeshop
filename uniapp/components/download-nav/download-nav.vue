@@ -58,7 +58,7 @@
         z-index: 871;
         top: 0;
         .primary-btn {
-            background-color: $-color-primary;
+            background-color: $ls-color-primary;
             height: 54rpx;
             width: 154rpx;
             margin-right: 30rpx;

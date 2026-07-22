@@ -101,7 +101,7 @@ export default {
     margin-top: 15rpx;
   }
   .btn-comfirm {
-    background-color: $-color-primary;
+    background-color: $ls-color-primary;
     color: white;
     height: 80rpx;
     line-height: 80rpx;

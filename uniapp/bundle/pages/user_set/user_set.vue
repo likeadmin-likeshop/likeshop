@@ -549,8 +549,8 @@ export default {
 
             .bd-btn {
                 padding: 8rpx 24rpx;
-                border: 1px solid $-color-primary;
-                color: $-color-primary;
+                border: 1px solid $ls-color-primary;
+                color: $ls-color-primary;
             }
         }
 
@@ -586,7 +586,7 @@ export default {
         padding-bottom: 30rpx;
         width: 580rpx;
         border-radius: 30rpx;
-        background-color: $-color-white;
+        background-color: $ls-color-white;
 
         .title {
             padding: 26rpx 0rpx;
@@ -598,10 +598,10 @@ export default {
             border-bottom: 1rpx solid #e5e5e5;
 
             .send-code-btn {
-                border: 1px solid $-color-primary;
+                border: 1px solid $ls-color-primary;
                 width: 184rpx;
                 height: 62rpx;
-                color: $-color-primary;
+                color: $ls-color-primary;
             }
         }
 

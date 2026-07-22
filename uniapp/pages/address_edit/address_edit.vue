@@ -295,7 +295,7 @@ export default {
             padding: 0 24rpx;
             height: 80rpx;
             &:not(:nth-of-type(3)) {
-                border-bottom: $-solid-border;
+                border-bottom: $ls-solid-border;
             }
             .label {
                 width: 150rpx;

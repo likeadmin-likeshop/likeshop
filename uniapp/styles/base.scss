@@ -4,9 +4,9 @@ page {
     /* 定义一些主题色及基础样式 */
     font-family: PingFang SC, Arial, Hiragino Sans GB, Microsoft YaHei, sans-serif;
     font-size: 28rpx;
-    color: $-color-normal;
+    color: $ls-color-normal;
 	padding-bottom: env(safe-area-inset-bottom);
-    background-color: $-color-body;
+    background-color: $ls-color-body;
 }
 
 .flex1{
@@ -25,41 +25,41 @@ page {
 }
 /* 定义字体颜色 */
 .primary {
-    color: $-color-primary;
+    color: $ls-color-primary;
 }
 
 .bg-primary {
-    background-color: $-color-primary;
+    background-color: $ls-color-primary;
 }
 .bg-white {
-    background-color: $-color-white;
+    background-color: $ls-color-white;
 }
 .bg-body {
-    background-color: $-color-body;
+    background-color: $ls-color-body;
 }
 .bg-gray {
-    background-color: $-color-border;
+    background-color: $ls-color-border;
 }
 
 
 .black {
-    color: $-color-black;
+    color: $ls-color-black;
 }
 
 .white {
-    color: $-color-white;
+    color: $ls-color-white;
 }
 
 .normal {
-    color: $-color-normal;
+    color: $ls-color-normal;
 }
 
 .lighter {
-    color: $-color-lighter;
+    color: $ls-color-lighter;
 }
 
 .muted {
-    color: $-color-muted;
+    color: $ls-color-muted;
 }
 
 /* 定义字体大小 */
@@ -278,10 +278,10 @@ page input {
 	font-size: 28rpx;
 }
 button[type=primary] {
-	background-color: $-color-primary;
+	background-color: $ls-color-primary;
 }
 .button-hover[type=primary] {
-	background-color: $-color-primary;
+	background-color: $ls-color-primary;
 }
 /* 按钮大小 */
 button[size="xs"]{
@@ -366,8 +366,8 @@ radio {
 	    width: 34rpx;
 	    height: 34rpx;
 		&.uni-radio-input-checked {
-			border: 1px solid $-color-primary !important;
-			background-color: $-color-primary !important;
+			border: 1px solid $ls-color-primary !important;
+			background-color: $ls-color-primary !important;
 		}
 	}
 } 
@@ -380,8 +380,8 @@ checkbox {
 	    width: 34rpx;
 	    height: 34rpx;
 		&.uni-checkbox-input-checked {
-		    border: 1px solid $-color-primary !important;
-		    background-color: $-color-primary !important;
+		    border: 1px solid $ls-color-primary !important;
+		    background-color: $ls-color-primary !important;
 		    color: #fff !important;
 			&::before {
 				font-size: 35rpx;
@@ -404,8 +404,8 @@ radio {
 	    width: 34rpx;
 	    height: 34rpx;
 		&.wx-radio-input-checked {
-			border: 1px solid $-color-primary !important;
-			background-color: $-color-primary !important;
+			border: 1px solid $ls-color-primary !important;
+			background-color: $ls-color-primary !important;
 		}
 	}
 } 
@@ -418,8 +418,8 @@ checkbox {
 	    width: 34rpx;
 	    height: 34rpx;
 		&.wx-checkbox-input-checked {
-		    border: 1px solid $-color-primary !important;
-		    background-color: $-color-primary !important;
+		    border: 1px solid $ls-color-primary !important;
+		    background-color: $ls-color-primary !important;
 		    color: #fff !important;
 			&::before {
 				font-size: 35rpx;

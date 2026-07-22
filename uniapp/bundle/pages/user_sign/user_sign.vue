@@ -216,7 +216,7 @@ export default {
 .user-sgin .main .contain .title .line {
     width: 8rpx;
     height: 34rpx;
-    background-color: $-color-primary;
+    background-color: $ls-color-primary;
 }
 
 .user-sgin .main .day-list {
@@ -275,7 +275,7 @@ export default {
     background: linear-gradient(270deg, rgba(249, 95, 47, 1) 0%, rgba(252, 67, 54, 1) 55%, rgba(255, 44, 60, 1) 100%);
 }
 .user-sgin .main .contain .task {
-    border-top: $-solid-border;
+    border-top: $ls-solid-border;
 }
 .user-sgin .main .contain .task .item {
     padding: 23rpx 30rpx;
@@ -290,10 +290,10 @@ export default {
 }
 .user-sgin .main .contain .task .item .btn {
     width: 154rpx;
-    border: 1px solid $-color-primary;
+    border: 1px solid $ls-color-primary;
 }
 .user-sgin .main .contain .task .item .con .num {
-    color: $-color-primary;
+    color: $ls-color-primary;
 }
 
 .score-detail-entry {
@@ -326,7 +326,7 @@ export default {
     font-weight: bold;
     padding-top: 90rpx;
     padding-bottom: 150rpx;
-    color: $-color-primary;
+    color: $ls-color-primary;
 }
 
 .desc {

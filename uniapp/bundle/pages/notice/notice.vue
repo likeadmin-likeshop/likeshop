@@ -130,7 +130,7 @@ export default {
     border-radius: 10rpx;
     .item-header {
       padding: 19rpx 0;
-      border-bottom: $-solid-border;
+      border-bottom: $ls-solid-border;
       .header-title {
         font-weight: bold;
       }

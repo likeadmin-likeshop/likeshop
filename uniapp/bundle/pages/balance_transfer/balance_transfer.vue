@@ -189,7 +189,7 @@ export default {
         padding: 30rpx 45rpx;
 
         .input {
-            border-bottom: $-solid-border;
+            border-bottom: $ls-solid-border;
             margin-top: 30rpx;
 
             input {
@@ -215,7 +215,7 @@ export default {
             padding: 26rpx 0;
 
             &:not(:last-of-type) {
-                border-bottom: $-solid-border;
+                border-bottom: $ls-solid-border;
             }
         }
     }

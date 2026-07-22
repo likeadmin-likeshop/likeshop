@@ -175,13 +175,13 @@
 				flex: 1;
 			}
 			button {
-				color: $-color-white;
-				background-color: $-color-primary;
+				color: $ls-color-white;
+				background-color: $ls-color-primary;
 			}
 			.plain {
-				color: $-color-primary;
-				background-color: $-color-white;
-				border: 1px solid $-color-primary;
+				color: $ls-color-primary;
+				background-color: $ls-color-white;
+				border: 1px solid $ls-color-primary;
 			}
 		}
 	}

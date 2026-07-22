@@ -137,7 +137,7 @@ export default {
 </script>
 <style lang="scss">
 .goods-combination {
-    background-color: $-color-primary;
+    background-color: $ls-color-primary;
     min-height: 100vh;
 
     .header .img {
@@ -164,7 +164,7 @@ export default {
                     flex: 1;
                     width: 475rpx;
                     .group {
-                        border: 1px solid $-color-primary;
+                        border: 1px solid $ls-color-primary;
                         border-radius: 4rpx;
                         .group-img {
                             padding: 2rpx 6rpx;

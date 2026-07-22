@@ -390,7 +390,7 @@ page {
                 justify-content: center;
                 padding: 20rpx 0;
                 font-size: 26rpx;
-                color: $-color-muted;
+                color: $ls-color-muted;
             }
         }
 
@@ -404,7 +404,7 @@ page {
                 height: 120rpx;
 
                 &:nth-child(n + 2) {
-                    border-top: $-dashed-border;
+                    border-top: $ls-dashed-border;
                 }
 
                 &-content {
@@ -415,12 +415,12 @@ page {
 
                     &-name {
                         font-size: 28rpx;
-                        color: $-color-black;
+                        color: $ls-color-black;
                     }
 
                     &-tips {
                         font-size: 22rpx;
-                        color: $-color-muted;
+                        color: $ls-color-muted;
                     }
                 }
             }
@@ -435,7 +435,7 @@ page {
             margin-top: 10rpx;
             font-size: 22rpx;
             background-color: #ffffff;
-            color: $-color-normal;
+            color: $ls-color-normal;
         }
 
         &-submit {

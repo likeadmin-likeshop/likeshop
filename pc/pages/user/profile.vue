@@ -55,6 +55,12 @@
           <el-form-item>
             <el-input v-model="telephone" placeholder="请输入新的手机号码" />
           </el-form-item>
+          <el-form-item>
+            <div class="row">
+              <el-input v-model="captchaCode" placeholder="图形验证码" />
+              <img :src="captchaImg" class="captcha-img" @click="getCaptchaImg" />
+            </div>
+          </el-form-item>
           <el-form-item >
             <div class="row">
               <el-input v-model="verifyCode" placeholder="短信验证码" />
@@ -76,6 +82,12 @@
         <el-form style="width: 50%;margin: 0 auto;">
           <el-form-item>
             <el-input v-model="mobile" placeholder="请输入手机号码" disabled />
+          </el-form-item>
+          <el-form-item>
+            <div class="row">
+              <el-input v-model="captchaCode" placeholder="图形验证码" />
+              <img :src="captchaImg" class="captcha-img" @click="getCaptchaImg" />
+            </div>
           </el-form-item>
           <el-form-item>
             <div class="row">
@@ -161,11 +173,26 @@ export default {
      smsType: SMSType.CHANGE_MOBILE,
      canSendNumber: true,
      canSendPwd: true,
-     fileList: []
+     fileList: [],
+     captchaCode: '',
+     captchaImg: '',
+     captchaKey: ''
    }
  },
  methods: {
    ...mapActions(['getPublicData']),
+    async getCaptchaImg() {
+      try {
+        const res = await this.$get('account/captcha')
+        if (res.code == 1) {
+          this.captchaImg = res.data.image || ''
+          this.captchaKey = res.data.key || ''
+        }
+      } catch (error) {
+        this.captchaImg = ''
+        this.captchaKey = ''
+      }
+    },
     async saveUserInfo() {
       let res = await this.$post("pc/changeUserInfo", {
         sex: this.radio,
@@ -182,20 +209,24 @@ export default {
     closeChangeNumber() {
       this.telephone = '';
       this.verifyCode = '';
+      this.captchaCode = '';
       this.showChangeNumber = false;
     },
     closePwdPop() {
       this.telephone = '';
       this.verifyCode = '';
+      this.captchaCode = '';
       this.showPwdPop = false;
     },
     openChangeNumber() {
         this.showChangeNumber = true;
         this.smsType = this.mobile ? SMSType.CHANGE_MOBILE : SMSType.BIND;
+        this.getCaptchaImg();
     },
     openChangePwdPop() {
       this.showPwdPop = true;
       this.smsType = SMSType.FINDPWD;
+      this.getCaptchaImg();
     },
     async sndSmsToPhone() {
       if((this.smsType == SMSType.CHANGE_MOBILE || this.smsType == SMSType.BIND) && !this.canSendNumber) {
@@ -211,17 +242,47 @@ export default {
         })
         return;
       }
-
-      let res = await this.$post("sms/send", {
-          mobile: this.smsType == SMSType.FINDPWD ? this.mobile : this.telephone,
-          key: this.smsType
-      });
-      if(res.code == 1) {
-        this.smsType == SMSType.CHANGE_MOBILE ? this.canSendNumber = false : this.canSendPwd = false;
+      if(!this.captchaCode) {
         this.$message({
-          message: '发送成功',
-          type: 'success'
+          message: '请输入图形验证码',
+          type: 'error'
         })
+        return;
+      }
+      if(!this.captchaKey) {
+        this.$message({
+          message: '图形验证码已失效，请重新获取',
+          type: 'error'
+        })
+        this.getCaptchaImg()
+        return;
+      }
+
+      let params = {
+          mobile: this.smsType == SMSType.FINDPWD ? this.mobile : this.telephone,
+          key: this.smsType,
+          captcha_key: this.captchaKey,
+          captcha: this.captchaCode
+      }
+      try {
+        let res = await this.$post("sms/send", params);
+        if(res.code == 1) {
+          if (this.smsType == SMSType.FINDPWD) {
+            this.canSendPwd = false;
+          } else {
+            this.canSendNumber = false;
+          }
+          this.$message({
+            message: '发送成功',
+            type: 'success'
+          })
+        } else {
+          this.getCaptchaImg()
+          this.captchaCode = ''
+        }
+      } catch (error) {
+        this.getCaptchaImg()
+        this.captchaCode = ''
       }
     },
     async changeUserMobile() {
@@ -324,6 +385,12 @@ export default {
 </script>
 
 <style lang="scss">
+  .captcha-img {
+    width: 100px;
+    height: 40px;
+    margin-left: 14px;
+    cursor: pointer;
+  }
   .user-profile {
     padding: 10px;
     .user-header {

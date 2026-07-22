@@ -33,6 +33,21 @@
 
                 <view class="input row" style="padding: 15rpx" v-if="appConfig.register_setting">
                     <u-input
+                        v-model="captchaCode"
+                        style="flex: 1"
+                        placeholder="请输入图形验证码"
+                        :input-border="false"
+                    />
+                    <image
+                        class="captcha-img"
+                        :src="captchaImg"
+                        mode="aspectFit"
+                        @click="getCaptchaImg"
+                    />
+                </view>
+
+                <view class="input row" style="padding: 15rpx" v-if="appConfig.register_setting">
+                    <u-input
                         v-model="smsCode"
                         style="flex: 1; width: 100%"
                         placeholder="请输入验证码"
@@ -168,7 +183,7 @@
 </template>
 
 <script>
-import { register, sendSms } from '@/api/app.js'
+import { register, sendSms, getCaptcha } from '@/api/app.js'
 import { ACCESS_TOKEN } from '@/config/app.js'
 import { SMSType } from '@/utils/type.js'
 import { mapMutations, mapGetters } from 'vuex'
@@ -187,11 +202,17 @@ export default {
             canSendSms: true,
             time: 59,
             primaryColor: '#FF2C3C',
-            showModel: false
+            showModel: false,
+            captchaCode: '',
+            captchaImg: '',
+            captchaKey: ''
         }
     },
     onLoad() {
         console.log(this.appConfig)
+        if (this.appConfig.register_setting) {
+            this.getCaptchaImg()
+        }
     },
     computed: {
         ...mapGetters(['appConfig']),
@@ -260,6 +281,18 @@ export default {
         countDownFinish() {
             this.canSendSms = true
         },
+        async getCaptchaImg() {
+            try {
+                const res = await getCaptcha()
+                if (res.code == 1) {
+                    this.captchaImg = res.data.image || ''
+                    this.captchaKey = res.data.key || ''
+                }
+            } catch (error) {
+                this.captchaImg = ''
+                this.captchaKey = ''
+            }
+        },
 
         sendSmsFun() {
             if (this.mobile.length !== 11) {
@@ -271,13 +304,37 @@ export default {
             if (this.canSendSms == false) {
                 return
             }
+            if (!this.captchaCode) {
+                this.$toast({
+                    title: '请输入图形验证码'
+                })
+                return
+            }
+            if (!this.captchaKey) {
+                this.$toast({
+                    title: '图形验证码已失效，请重新获取'
+                })
+                this.getCaptchaImg()
+                return
+            }
 
-            sendSms({ mobile: this.mobile, key: SMSType.REGISTER }).then((res) => {
+            sendSms({
+                mobile: this.mobile,
+                key: SMSType.REGISTER,
+                captcha_key: this.captchaKey,
+                captcha: this.captchaCode
+            }).then((res) => {
                 if (res.code == 1) {
                     this.canSendSms = false
                     this.$toast(res.msg)
                     this.$refs.countDown.start()
+                } else {
+                    this.getCaptchaImg()
+                    this.captchaCode = ''
                 }
+            }).catch(() => {
+                this.getCaptchaImg()
+                this.captchaCode = ''
             })
         }
     }
@@ -338,5 +395,10 @@ export default {
 }
 .inactive {
     opacity: 0.5;
+}
+.captcha-img {
+    width: 210rpx;
+    height: 90rpx;
+    margin-left: 20rpx;
 }
 </style>

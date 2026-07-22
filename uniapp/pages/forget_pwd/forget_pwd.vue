@@ -26,6 +26,20 @@
                 </view>
                 <view class="input row" style="padding: 15rpx">
                     <u-input
+                        v-model="captchaCode"
+                        style="flex: 1"
+                        placeholder="请输入图形验证码"
+                        :input-border="false"
+                    />
+                    <image
+                        class="captcha-img"
+                        :src="captchaImg"
+                        mode="aspectFit"
+                        @click="getCaptchaImg"
+                    />
+                </view>
+                <view class="input row" style="padding: 15rpx">
+                    <u-input
                         v-model="smsCode"
                         style="flex: 1"
                         placeholder="请输入验证码"
@@ -85,7 +99,7 @@
 </template>
 
 <script>
-import { forgetPwd, sendSms } from '@/api/app.js'
+import { forgetPwd, sendSms, getCaptcha } from '@/api/app.js'
 import { ACCESS_TOKEN } from '@/config/app.js'
 import { SMSType } from '@/utils/type.js'
 import { mapMutations } from 'vuex'
@@ -98,10 +112,15 @@ export default {
             resetPwd: '',
             //   comfirmPwd: "",
             time: 59,
-            canSendSms: true
+            canSendSms: true,
+            captchaCode: '',
+            captchaImg: '',
+            captchaKey: ''
         }
     },
-    onLoad() {},
+    onLoad() {
+        this.getCaptchaImg()
+    },
     computed: {
         inactive() {
             if (this.mobile.length !== 11 || !this.smsCode || !this.resetPwd) {
@@ -171,6 +190,18 @@ export default {
         countDownFinish() {
             this.canSendSms = true
         },
+        async getCaptchaImg() {
+            try {
+                const res = await getCaptcha()
+                if (res.code == 1) {
+                    this.captchaImg = res.data.image || ''
+                    this.captchaKey = res.data.key || ''
+                }
+            } catch (error) {
+                this.captchaImg = ''
+                this.captchaKey = ''
+            }
+        },
         sendSmsFun() {
             if (this.mobile.length !== 11) {
                 this.$toast({
@@ -181,12 +212,24 @@ export default {
             if (this.canSendSms == false) {
                 return
             }
-            // if (!this.mobile) {
-            //   return;
-            // }
+            if (!this.captchaCode) {
+                this.$toast({
+                    title: '请输入图形验证码'
+                })
+                return
+            }
+            if (!this.captchaKey) {
+                this.$toast({
+                    title: '图形验证码已失效，请重新获取'
+                })
+                this.getCaptchaImg()
+                return
+            }
             sendSms({
                 mobile: this.mobile,
-                key: SMSType.FINDPWD
+                key: SMSType.FINDPWD,
+                captcha_key: this.captchaKey,
+                captcha: this.captchaCode
             }).then((res) => {
                 if (res.code == 1) {
                     this.canSendSms = false
@@ -194,7 +237,13 @@ export default {
                         title: res.msg
                     })
                     this.$refs.countDown.start()
+                } else {
+                    this.getCaptchaImg()
+                    this.captchaCode = ''
                 }
+            }).catch(() => {
+                this.getCaptchaImg()
+                this.captchaCode = ''
             })
         }
     }
@@ -226,5 +275,10 @@ export default {
 }
 .inactive {
     opacity: 0.5;
+}
+.captcha-img {
+    width: 210rpx;
+    height: 90rpx;
+    margin-left: 20rpx;
 }
 </style>

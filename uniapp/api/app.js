@@ -37,6 +37,11 @@ export function accountLogin(data) {
     return request.post('account/login', { ...data, client })
 }
 
+// 图形验证码
+export function getCaptcha() {
+    return request.get('account/captcha')
+}
+
 export function getWechatConfig() {
     return request.get('wechat/config', {
         url: encodeURIComponent(wechat.signLink())

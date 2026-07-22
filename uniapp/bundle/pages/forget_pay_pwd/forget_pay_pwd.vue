@@ -6,6 +6,16 @@
                 <u-input class="flex1" v-model="mobile" />
             </view>
             <view class="input-item row">
+                <view class="input-label md normal">图形验证码</view>
+                <u-input class="flex1" v-model="captchaCode" placeholder="请输入图形验证码" />
+                <image
+                    class="captcha-img"
+                    :src="captchaImg"
+                    mode="aspectFit"
+                    @click="getCaptchaImg"
+                />
+            </view>
+            <view class="input-item row">
                 <view class="input-label md normal">验证码</view>
                 <u-input class="flex1" v-model="code" placeholder="请输入验证码" />
                 <view class="get-code xs br60 row-center primary" @tap="sendSms">
@@ -58,6 +68,7 @@
 
 <script>
 import { retrievePayPassword, send } from '@/api/user'
+import { getCaptcha } from '@/api/app'
 import { mapGetters } from 'vuex'
 export default {
     data() {
@@ -66,11 +77,28 @@ export default {
             showCount: false,
             setPwd: '',
             comfirmPwd: '',
-            code: ''
+            code: '',
+            captchaCode: '',
+            captchaImg: '',
+            captchaKey: ''
         }
     },
-    onLoad() {},
+    onLoad() {
+        this.getCaptchaImg()
+    },
     methods: {
+        async getCaptchaImg() {
+            try {
+                const res = await getCaptcha()
+                if (res.code == 1) {
+                    this.captchaImg = res.data.image || ''
+                    this.captchaKey = res.data.key || ''
+                }
+            } catch (error) {
+                this.captchaImg = ''
+                this.captchaKey = ''
+            }
+        },
         retrievePayPasswordFun() {
             let { setPwd, comfirmPwd, code } = this
             if (!code) {
@@ -123,10 +151,25 @@ export default {
             })
         },
         sendSms() {
-            let data = {
-                mobile: this.userInfo.mobile
-            }
             if (this.showCount) return
+            if (!this.captchaCode) {
+                this.$toast({
+                    title: '请输入图形验证码'
+                })
+                return
+            }
+            if (!this.captchaKey) {
+                this.$toast({
+                    title: '图形验证码已失效，请重新获取'
+                })
+                this.getCaptchaImg()
+                return
+            }
+            let data = {
+                mobile: this.userInfo.mobile,
+                captcha_key: this.captchaKey,
+                captcha: this.captchaCode
+            }
             send(data).then((res) => {
                 if (res.code == 1) {
                     this.$toast({
@@ -134,7 +177,13 @@ export default {
                     })
                     this.showCount = true
                     this.$refs.countDown.start()
+                } else {
+                    this.getCaptchaImg()
+                    this.captchaCode = ''
                 }
+            }).catch(() => {
+                this.getCaptchaImg()
+                this.captchaCode = ''
             })
         }
     },
@@ -178,6 +227,11 @@ export default {
 
         .btn {
             margin: 80rpx 30rpx 0;
+        }
+        .captcha-img {
+            width: 210rpx;
+            height: 90rpx;
+            margin-left: 20rpx;
         }
     }
 }

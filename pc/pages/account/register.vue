@@ -12,10 +12,10 @@
             <i class="el-icon-user" style="font-size: 18px" slot="prepend" />
           </el-input>
         </div>
-        <!-- <div class="register-form-item row">
-          <el-input class="form-input" placeholder="图形验证码" style="width: 264px" />
-          <div class="verify-code-img" />
-        </div> -->
+        <div class="register-form-item row" v-if="registerSetting">
+          <el-input v-model="captchaCode" class="form-input" placeholder="图形验证码" style="width: 264px" />
+          <img :src="captchaImg" class="verify-code-img" @click="getCaptchaImg" />
+        </div>
         <div class="register-form-item row" v-if="registerSetting">
           <el-input
             v-model="smsCode"
@@ -125,23 +125,75 @@ export default {
       againPwd: "",
       isAgree: false,
       canSend: true,
+      captchaCode: '',
+      captchaImg: '',
+      captchaKey: ''
     };
   },
+  mounted() {
+    if (this.registerSetting) {
+      this.getCaptchaImg()
+    }
+  },
   methods: {
+    async getCaptchaImg() {
+      try {
+        const res = await this.$get('account/captcha')
+        if (res.code == 1) {
+          this.captchaImg = res.data.image || ''
+          this.captchaKey = res.data.key || ''
+        }
+      } catch (error) {
+        this.captchaImg = ''
+        this.captchaKey = ''
+      }
+    },
     async sendSMSCode() {
       if (!this.canSend) {
         return;
       }
-      let res = await this.$post("sms/send", {
-        mobile: this.telephone,
-        key: SMSType.REGISTER,
-      });
-      if (res.code == 1) {
+      if (!this.telephone) {
         this.$message({
-          message: res.msg,
-          type: "success",
+          message: '请输入手机号',
+          type: 'error'
+        })
+        return
+      }
+      if (!this.captchaCode) {
+        this.$message({
+          message: '请输入图形验证码',
+          type: 'error'
+        })
+        return
+      }
+      if (!this.captchaKey) {
+        this.$message({
+          message: '图形验证码已失效，请重新获取',
+          type: 'error'
+        })
+        this.getCaptchaImg()
+        return
+      }
+      try {
+        let res = await this.$post("sms/send", {
+          mobile: this.telephone,
+          key: SMSType.REGISTER,
+          captcha_key: this.captchaKey,
+          captcha: this.captchaCode
         });
-        this.canSend = false;
+        if (res.code == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.canSend = false;
+        } else {
+          this.getCaptchaImg()
+          this.captchaCode = ''
+        }
+      } catch (error) {
+        this.getCaptchaImg()
+        this.captchaCode = ''
       }
     },
     async registerFun() {
@@ -219,7 +271,7 @@ export default {
           width: 100px;
           height: 40px;
           margin-left: 26px;
-          background-color: red;
+          cursor: pointer;
         }
         .sms-btn {
           margin-left: 16px;

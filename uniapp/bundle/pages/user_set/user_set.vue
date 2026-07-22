@@ -141,6 +141,20 @@
                     <view style="margin-left: 15px">{{ userInfo.mobile }}</view>
                 </view>
                 <view class="modify-row row">
+                    <view style="width: 142rpx">图形验证码</view>
+                    <input
+                        v-model="captchaCode"
+                        style="padding-left: 10rpx; width: 130rpx"
+                        placeholder="请输入"
+                    />
+                    <image
+                        class="captcha-img"
+                        :src="captchaImg"
+                        mode="aspectFit"
+                        @click="getCaptchaImg"
+                    />
+                </view>
+                <view class="modify-row row">
                     <view style="width: 142rpx">验证码</view>
                     <input
                         v-model="smsCode"
@@ -182,7 +196,7 @@
 <script>
 import { userLogout, getUserInfo, changeUserMobile, setUserInfo, setWechatInfo } from '@/api/user'
 import { version } from '@/config/app'
-import { sendSms, forgetPwd } from '@/api/app'
+import { sendSms, forgetPwd, getCaptcha } from '@/api/app'
 import { SMSType } from '@/utils/type'
 import { mapState, mapGetters } from 'vuex'
 import { uploadFile, isWeixinClient, trottle } from '@/utils/tools'
@@ -216,10 +230,25 @@ export default {
             pwd: '',
             comfirmPwd: '',
             smsType: SMSType.FINDPWD,
-            code: ''
+            code: '',
+            captchaCode: '',
+            captchaImg: '',
+            captchaKey: ''
         }
     },
     methods: {
+        async getCaptchaImg() {
+            try {
+                const res = await getCaptcha()
+                if (res.code == 1) {
+                    this.captchaImg = res.data.image || ''
+                    this.captchaKey = res.data.key || ''
+                }
+            } catch (error) {
+                this.captchaImg = ''
+                this.captchaKey = ''
+            }
+        },
         codeChange(text) {
             this.tips = text
         },
@@ -302,16 +331,37 @@ export default {
         // 发送短信
         $sendSms(type) {
             if (!this.canSendSms) return
+            if (!this.captchaCode) {
+                this.$toast({
+                    title: '请输入图形验证码'
+                })
+                return
+            }
+            if (!this.captchaKey) {
+                this.$toast({
+                    title: '图形验证码已失效，请重新获取'
+                })
+                this.getCaptchaImg()
+                return
+            }
             sendSms({
                 mobile: this.userInfo.mobile || this.new_mobile,
-                key: this.smsType
+                key: this.smsType,
+                captcha_key: this.captchaKey,
+                captcha: this.captchaCode
             }).then((res) => {
                 if (res.code == 1) {
                     this.$toast({
                         title: res.msg
                     })
                     this.$refs.uCode.start()
+                } else {
+                    this.getCaptchaImg()
+                    this.captchaCode = ''
                 }
+            }).catch(() => {
+                this.getCaptchaImg()
+                this.captchaCode = ''
             })
         },
         $getUserInfo() {
@@ -399,6 +449,7 @@ export default {
             this.smsCode = ''
             this.smsType = SMSType.FINDPWD
             this.showPwd = true
+            this.getCaptchaImg()
         },
         $forgetPwd() {
             let { smsCode, pwd, comfirmPwd } = this
@@ -602,6 +653,11 @@ export default {
                 width: 184rpx;
                 height: 62rpx;
                 color: $ls-color-primary;
+            }
+            .captcha-img {
+                width: 210rpx;
+                height: 90rpx;
+                margin-left: 20rpx;
             }
         }
 

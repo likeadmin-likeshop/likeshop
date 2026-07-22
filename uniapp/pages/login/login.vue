@@ -27,7 +27,7 @@
                     <text>用户一键登录</text>
                 </button>
 
-                <button size="lg" class="flex row-center phonebtn" @click="isPhonelogin = 0">
+                <button size="lg" class="flex row-center phonebtn" @click="showPhoneLogin">
                     <text>手机号登录</text>
                 </button>
                 <view class="mt20" style="width: 100%">
@@ -84,6 +84,20 @@
                                 >忘记密码</navigator
                             >
                         </view>
+                        <view class="input row" style="padding: 15rpx">
+                            <u-input
+                                v-model="captchaCode"
+                                style="flex: 1"
+                                placeholder="请输入图形验证码"
+                                :input-border="false"
+                            />
+                            <image
+                                class="captcha-img"
+                                :src="captchaImg"
+                                mode="aspectFit"
+                                @click="getCaptchaImg"
+                            />
+                        </view>
                     </view>
                     <view v-if="loginType == 1">
                         <view class="input row" style="padding: 15rpx">
@@ -93,6 +107,20 @@
                                 style="width: 100%"
                                 placeholder="请输入手机号"
                                 :input-border="false"
+                            />
+                        </view>
+                        <view class="input row" style="padding: 15rpx">
+                            <u-input
+                                v-model="captchaCode"
+                                style="flex: 1"
+                                placeholder="请输入图形验证码"
+                                :input-border="false"
+                            />
+                            <image
+                                class="captcha-img"
+                                :src="captchaImg"
+                                mode="aspectFit"
+                                @click="getCaptchaImg"
                             />
                         </view>
                         <view class="input row" style="padding: 15rpx">
@@ -193,7 +221,7 @@
                 </button>
                 <!-- #endif -->
 
-                <button size="lg" class="flex row-center phonebtn" @click="isPhonelogin = 0">
+                <button size="lg" class="flex row-center phonebtn" @click="showPhoneLogin">
                     <text>手机号登录</text>
                 </button>
 
@@ -251,6 +279,20 @@
                                 >忘记密码</navigator
                             >
                         </view>
+                        <view class="input row" style="padding: 15rpx">
+                            <u-input
+                                v-model="captchaCode"
+                                style="flex: 1"
+                                placeholder="请输入图形验证码"
+                                :input-border="false"
+                            />
+                            <image
+                                class="captcha-img"
+                                :src="captchaImg"
+                                mode="aspectFit"
+                                @click="getCaptchaImg"
+                            />
+                        </view>
                     </view>
                     <view v-if="loginType == 1">
                         <view class="input row" style="padding: 15rpx">
@@ -260,6 +302,20 @@
                                 style="width: 100%"
                                 placeholder="请输入手机号"
                                 :input-border="false"
+                            />
+                        </view>
+                        <view class="input row" style="padding: 15rpx">
+                            <u-input
+                                v-model="captchaCode"
+                                style="flex: 1"
+                                placeholder="请输入图形验证码"
+                                :input-border="false"
+                            />
+                            <image
+                                class="captcha-img"
+                                :src="captchaImg"
+                                mode="aspectFit"
+                                @click="getCaptchaImg"
                             />
                         </view>
                         <view class="input row" style="padding: 15rpx">
@@ -387,7 +443,8 @@ import {
     smsCodeLogin,
     opLogin,
     authLogin,
-    updateUser
+    updateUser,
+    getCaptcha
 } from '@/api/app'
 import { inputInviteCode } from '@/api/user'
 import wechath5 from '@/utils/wechath5'
@@ -417,7 +474,10 @@ export default {
             showLoginPop: false,
             isAgree: false,
             showModel: false,
-            isPhonelogin: 1
+            isPhonelogin: 1,
+            captchaCode: '',
+            captchaImg: '',
+            captchaKey: ''
         }
     },
 
@@ -452,6 +512,12 @@ export default {
         ...mapActions(['getUser']),
         countDownFinish() {
             this.canSendSms = true
+        },
+        showPhoneLogin() {
+            this.isPhonelogin = 0
+            if (this.loginType == loginType.ACCOUNT_LOGIN && !this.captchaImg) {
+                this.getCaptchaImg()
+            }
         },
         // 公众号获取code
         getCodeUrl() {
@@ -497,19 +563,42 @@ export default {
         },
         // 账号登录
         async loginFun() {
-            const { account, password, telephone, smsCode } = this
+            const { account, password, telephone, smsCode, captchaCode, captchaKey } = this
             if (!this.isAgree) {
                 this.showModel = true
                 return
             }
             if (this.loginType == 0) {
-                const { code, data } = await accountLogin({
-                    account,
-                    password,
-                    client: client
-                })
-                if (code == 1) {
-                    this.loginHandle(data)
+                if (!captchaCode) {
+                    this.$toast({
+                        title: '请输入图形验证码'
+                    })
+                    return
+                }
+                if (!captchaKey) {
+                    this.$toast({
+                        title: '图形验证码已失效，请重新获取'
+                    })
+                    this.getCaptchaImg()
+                    return
+                }
+                try {
+                    const { code, data } = await accountLogin({
+                        account,
+                        password,
+                        client: client,
+                        captcha_key: captchaKey,
+                        captcha: captchaCode
+                    })
+                    if (code == 1) {
+                        this.loginHandle(data)
+                    } else {
+                        this.getCaptchaImg()
+                        this.captchaCode = ''
+                    }
+                } catch (error) {
+                    this.getCaptchaImg()
+                    this.captchaCode = ''
                 }
             } else {
                 if (!telephone) {
@@ -569,9 +658,24 @@ export default {
                 this.loginType = loginType.SMS_CODE_LOGIN
             } else if (this.loginType == loginType.SMS_CODE_LOGIN) {
                 this.loginType = loginType.ACCOUNT_LOGIN
+                if (!this.captchaImg) {
+                    this.getCaptchaImg()
+                }
             }
         },
-        // 发送验证码
+        async getCaptchaImg() {
+            try {
+                const res = await getCaptcha()
+                if (res.code == 1) {
+                    this.captchaImg = res.data.image || ''
+                    this.captchaKey = res.data.key || ''
+                }
+            } catch (error) {
+                this.captchaImg = ''
+                this.captchaKey = ''
+            }
+        },
+        // 发送短信
         $sendSms() {
             if (this.canSendSms == false) {
                 return
@@ -582,10 +686,25 @@ export default {
                 })
                 return
             }
+            if (!this.captchaCode) {
+                this.$toast({
+                    title: '请输入图形验证码'
+                })
+                return
+            }
+            if (!this.captchaKey) {
+                this.$toast({
+                    title: '图形验证码已失效，请重新获取'
+                })
+                this.getCaptchaImg()
+                return
+            }
 
             sendSms({
                 mobile: this.telephone,
-                key: SMSType.LOGIN
+                key: SMSType.LOGIN,
+                captcha_key: this.captchaKey,
+                captcha: this.captchaCode
             }).then((res) => {
                 if (res.code == 1) {
                     this.canSendSms = false
@@ -593,7 +712,13 @@ export default {
                     this.$toast({
                         title: res.msg
                     })
+                } else {
+                    this.getCaptchaImg()
+                    this.captchaCode = ''
                 }
+            }).catch(() => {
+                this.getCaptchaImg()
+                this.captchaCode = ''
             })
         },
         // app微信登录
@@ -647,7 +772,7 @@ export default {
         },
         inactive() {
             if (this.loginType == 0) {
-                return !this.account || !this.password ? true : false
+                return !this.account || !this.password || !this.captchaCode ? true : false
             } else {
                 return this.telephone.length !== 11 || !this.smsCode ? true : false
             }
@@ -719,6 +844,12 @@ page {
                 width: 176rpx;
                 height: 60rpx;
                 box-sizing: border-box;
+            }
+
+            .captcha-img {
+                width: 210rpx;
+                height: 90rpx;
+                margin-left: 20rpx;
             }
 
             .wx-login {

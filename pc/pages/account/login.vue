@@ -21,10 +21,10 @@
                     </el-select>
                   </el-input>
                 </div>
-                <!-- <div class="login-form-item row">
-                  <el-input v-model="verifyCode" placeholder="图形验证码" style="width: 210px" />
-                  <div class="verify-code-img"></div>
-                </div> -->
+                <div class="login-form-item row">
+                  <el-input v-model="captchaCode" placeholder="图形验证码" style="width: 210px" />
+                  <img :src="captchaImg" class="verify-code-img" @click="getCaptchaImg" />
+                </div>
                 <div class="login-form-item row">
                   <el-input v-model="smsCode" placeholder="短信验证码" style="width: 210px" />
                   <el-button class="sms-btn" @click="sendSMSCode">
@@ -52,10 +52,10 @@
                     <i class="el-icon-more-outline" style="font-size: 18px" slot="prepend"/>
                   </el-input>
                 </div>
-                <!-- <div class="login-form-item row">
-                  <el-input v-model="verifyCode" placeholder="图形验证码" style="width: 210px" />
-                  <div class="verify-code-img"></div>
-                </div> -->
+                <div class="login-form-item row">
+                  <el-input v-model="captchaCode" placeholder="图形验证码" style="width: 210px" />
+                  <img :src="captchaImg" class="verify-code-img" @click="getCaptchaImg" />
+                </div>
               </div>
               <div class="option-box column">
                 <div class="row-between">
@@ -121,10 +121,14 @@ export default {
       isRemember: true,
       // 短信登陆或账号登陆 0 ==》 短信 1 ==》账号
       loginStatus: loginType.SMS,
-      canSend: true
+      canSend: true,
+      captchaCode: '',
+      captchaImg: '',
+      captchaKey: ''
     }
   },
   created() {
+    this.getCaptchaImg()
   },
   mounted() {
     let jsonPaser = JSON.parse(localStorage.getItem("ACCOUNT"));
@@ -137,8 +141,23 @@ export default {
     }
   },
   methods: {
+    async getCaptchaImg() {
+      try {
+        const res = await this.$get('account/captcha')
+        if (res.code == 1) {
+          this.captchaImg = res.data.image || ''
+          this.captchaKey = res.data.key || ''
+        }
+      } catch (error) {
+        this.captchaImg = ''
+        this.captchaKey = ''
+      }
+    },
     changeLoginType(type) {
       this.loginStatus = type
+      if (!this.captchaImg) {
+        this.getCaptchaImg()
+      }
       this.telephone = '';
       this.verifyCode = '';
       this.smsCode = '';
@@ -155,17 +174,49 @@ export default {
       if(!this.canSend) {
         return
       }
-      let res = await this.$post("sms/send", {
-        mobile: this.telephone,
-        key: SMSType.LOGIN,
-        client,
-      })
-      if(res.code == 1) {
+      if (!this.telephone) {
         this.$message({
-          message: res.msg,
-          type: 'success'
-        });
-        this.canSend = false;
+          message: '请输入手机号',
+          type: 'error'
+        })
+        return
+      }
+      if (!this.captchaCode) {
+        this.$message({
+          message: '请输入图形验证码',
+          type: 'error'
+        })
+        return
+      }
+      if (!this.captchaKey) {
+        this.$message({
+          message: '图形验证码已失效，请重新获取',
+          type: 'error'
+        })
+        this.getCaptchaImg()
+        return
+      }
+      try {
+        let res = await this.$post("sms/send", {
+          mobile: this.telephone,
+          key: SMSType.LOGIN,
+          client,
+          captcha_key: this.captchaKey,
+          captcha: this.captchaCode
+        })
+        if(res.code == 1) {
+          this.$message({
+            message: res.msg,
+            type: 'success'
+          });
+          this.canSend = false;
+        } else {
+          this.getCaptchaImg()
+          this.captchaCode = ''
+        }
+      } catch (error) {
+        this.getCaptchaImg()
+        this.captchaCode = ''
       }
     },
     async smsLogin() {
@@ -196,10 +247,27 @@ export default {
       }
     },
     async accountLogin() {
+      if (!this.captchaCode) {
+        this.$message({
+          message: '请输入图形验证码',
+          type: 'error'
+        })
+        return
+      }
+      if (!this.captchaKey) {
+        this.$message({
+          message: '图形验证码已失效，请重新获取',
+          type: 'error'
+        })
+        this.getCaptchaImg()
+        return
+      }
       let res = await this.$post('account/login', {
         account: this.account,
         password: this.password,
         client,
+        captcha_key: this.captchaKey,
+        captcha: this.captchaCode
       })
       if(res.code == 1) {
         const token = res.data.token
@@ -220,6 +288,9 @@ export default {
             account: '',
           }))
         }
+      } else {
+        this.getCaptchaImg()
+        this.captchaCode = ''
       }
     },
     ...mapMutations([
@@ -289,7 +360,7 @@ export default {
                   width: 100px;
                   height: 40px;
                   margin-left: 20px;
-                  background-color: red;
+                  cursor: pointer;
                 }
                 .sms-btn {
                   margin-left: 20px;

@@ -309,7 +309,7 @@ class installModel
 
         /* Get mysql version. */
         $version = $this->getMysqlVersion();
-    
+
         // 检查mysql版本
         if (version_compare($version, '5.7', '<')) {
             $return->result = 'fail';
@@ -732,7 +732,7 @@ class installModel
         $salt = substr(md5($time . $post['admin_user']), 0, 4);//随机4位密码盐
         $password = $this->createPassword($post['admin_password'], $salt);
 
-        $sql = "INSERT INTO `ls_admin` VALUES (1, 1, '{$post['admin_user']}', NULL, '{$post['admin_user']}', 
+        $sql = "INSERT INTO `ls_admin` VALUES (1, 1, '{$post['admin_user']}', NULL, '{$post['admin_user']}',
                 '{$password}', '{$salt}', 0, '{$time}', '{$time}', '{$time}', '', 0, 0);";
 
         return $sql;
@@ -761,7 +761,7 @@ class installModel
     public function installLog(): bool
     {
         try {
-            $code = '1311f694473fc6858ca76f502d4ae882';
+            $code = '56076556ddf1e5060927a0825c60c6b7';
             $data = $this->dataEncrypt($this->getHost(), $code);
 //            $url = "https://server.likeshop.cn/api/version/installLog";
             $url = "https://likeshoptc.yixiangonline.com/api/version/installLog";

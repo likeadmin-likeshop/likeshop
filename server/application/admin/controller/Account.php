@@ -24,13 +24,19 @@ namespace app\admin\controller;
 use app\admin\logic\LoginLogic;
 use app\admin\validate\Login;
 use app\common\server\CaptchaService;
+use app\common\server\PasswordCryptoService;
 use Exception;
 use think\facade\Url;
 
 class Account extends AdminBase
 {
 
-    public $like_not_need_login = ['login', 'captcha'];
+    public $like_not_need_login = ['login', 'captcha', 'passwordkey'];
+
+    public function passwordKey()
+    {
+        $this->_success('OK', PasswordCryptoService::createSession());
+    }
 
     /**
      * @notes 图形验证码

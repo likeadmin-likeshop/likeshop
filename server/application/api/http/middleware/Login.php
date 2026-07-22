@@ -22,6 +22,7 @@ namespace app\api\http\middleware;
 
 use app\api\cache\TokenCache;
 use app\api\validate\Token as TokenValidate;
+use app\common\server\PasswordCryptoService;
 
 class Login
 {
@@ -44,6 +45,17 @@ class Login
             return response();
         }
 
+        try {
+            PasswordCryptoService::decryptRequest($request);
+        } catch (\RuntimeException $e) {
+            return json([
+                'code' => 0,
+                'msg' => $e->getMessage(),
+                'data' => [],
+                'show' => 1,
+                'time' => 0,
+            ]);
+        }
 
         $token = $request->header('token');
 

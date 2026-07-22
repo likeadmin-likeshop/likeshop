@@ -85,6 +85,7 @@
     </footer>
 </div>
 <script src="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/layui/layui.js"></script>
+<script src="__PUBLIC__/static/common/js/jsencrypt.min.js?v={$front_version}"></script>
 </body>
 <script>
     if (self != top) {
@@ -139,7 +140,6 @@
 
         //提交
         form.on('submit(login)', function (obj) {
-            console.log(3434);
             login(obj);
         });
 

@@ -23,12 +23,18 @@ use app\api\logic\LoginLogic;
 use app\api\validate\WechatLoginValidate;
 use app\common\server\CaptchaService;
 use app\common\server\ConfigServer;
+use app\common\server\PasswordCryptoService;
 use Exception;
 
 class Account extends ApiBase
 {
 
-    public $like_not_need_login = ['captcha', 'register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+    public $like_not_need_login = ['captcha', 'passwordkey', 'register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+
+    public function passwordKey()
+    {
+        $this->_success('OK', PasswordCryptoService::createSession());
+    }
 
     /**
      * @notes 图形验证码

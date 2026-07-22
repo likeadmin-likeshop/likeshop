@@ -75,6 +75,15 @@
                     <input v-model="new_mobile" placeholder="请输入绑定手机号" />
                 </view>
                 <view class="modify-row row">
+                    <view style="width: 71px">图形验证码</view>
+                    <captcha-input
+                        class="flex1"
+                        v-model="mobileCaptchaCode"
+                        ref="captchaMobile"
+                        @captcha-key="mobileCaptchaKey = $event"
+                    />
+                </view>
+                <view class="modify-row row">
                     <view style="width: 71px">验证码</view>
                     <input
                         v-model="smsCode"
@@ -92,11 +101,6 @@
                         <view class="xs">{{ tips }}</view>
                     </view>
                 </view>
-                <captcha-input
-                    v-model="mobileCaptchaCode"
-                    ref="captchaMobile"
-                    @captcha-key="mobileCaptchaKey = $event"
-                />
                 <view class="modify-row row" v-if="userInfo.mobile">
                     <view style="width: 71px">新手机号</view>
                     <input v-model="new_mobile" placeholder="请输入新的手机号码" />
@@ -146,6 +150,15 @@
                     <view style="margin-left: 15px">{{ userInfo.mobile }}</view>
                 </view>
                 <view class="modify-row row">
+                    <view style="width: 142rpx">图形验证码</view>
+                    <captcha-input
+                        class="flex1"
+                        v-model="pwdCaptchaCode"
+                        ref="captchaPwd"
+                        @captcha-key="pwdCaptchaKey = $event"
+                    />
+                </view>
+                <view class="modify-row row">
                     <view style="width: 142rpx">验证码</view>
                     <input
                         v-model="smsCode"
@@ -163,11 +176,6 @@
                         <view class="xs">{{ tips }}</view>
                     </view>
                 </view>
-                <captcha-input
-                    v-model="pwdCaptchaCode"
-                    ref="captchaPwd"
-                    @captcha-key="pwdCaptchaKey = $event"
-                />
                 <view class="modify-row row">
                     <view style="width: 71px">设置密码</view>
                     <input type="password" v-model="pwd" placeholder="请输入新密码" />
@@ -238,6 +246,9 @@ export default {
         }
     },
     methods: {
+        isCaptchaError(res) {
+            return res && res.msg && res.msg.indexOf('图形验证码') !== -1
+        },
         codeChange(text) {
             this.tips = text
         },
@@ -340,7 +351,7 @@ export default {
                         title: res.msg
                     })
                     this.$refs.uCode.start()
-                } else {
+                } else if (this.isCaptchaError(res)) {
                     const ref = isPassword ? this.$refs.captchaPwd : this.$refs.captchaMobile
                     ref && ref.refresh()
                     if (isPassword) {
@@ -473,6 +484,11 @@ export default {
             forgetPwd(data).then((res) => {
                 if (res.code == 1) {
                     this.showPwd = false
+                    if (res.data && res.data.token) {
+                        this.$store.commit('LOGIN', {
+                            token: res.data.token
+                        })
+                    }
                     this.$toast({
                         title: '设置密码成功'
                     })

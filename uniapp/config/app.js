@@ -14,16 +14,16 @@ const IS_H5 = false
 /** S API BaseURL **/
 const baseURLMap = {
     // 开发环境
-    development: 'https://likeshop-open.yixiangonline.com',
+    development: 'https://php-b2copens.yixiangonline.com',
     // 生产环境https://php-b2c.likeshop.cn
-    production: IS_H5 ? location.origin : ''
+    production: IS_H5 ? location.origin : 'https://php-b2copens.yixiangonline.com'
 }
 
 const baseURL = SWITCH_DEVELOPMENT ? baseURLMap['development'] : baseURLMap[process.env.NODE_ENV]
 /** E API BaseURL **/
 
 module.exports = {
-    version: '3.0.3', // 版本号
+    version: '3.5.1', // 版本号
     baseURL, // API Base URL
     basePath: '/mobile'
 }

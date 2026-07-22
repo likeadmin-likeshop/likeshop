@@ -126,11 +126,13 @@
                                 >忘记密码</navigator
                             >
                         </view>
-                        <captcha-input
-                            v-model="accountCaptchaCode"
-                            ref="accountCaptcha"
-                            @captcha-key="accountCaptchaKey = $event"
-                        />
+                        <view class="input row" style="padding: 15rpx">
+                            <captcha-input
+                                v-model="accountCaptchaCode"
+                                ref="accountCaptcha"
+                                @captcha-key="accountCaptchaKey = $event"
+                            />
+                        </view>
                     </view>
                     <view v-if="loginType == 1">
                         <view class="input row" style="padding: 15rpx">
@@ -142,11 +144,13 @@
                                 :input-border="false"
                             />
                         </view>
-                        <captcha-input
-                            v-model="captchaCode"
-                            ref="captcha"
-                            @captcha-key="captchaKey = $event"
-                        />
+                        <view class="input row" style="padding: 15rpx">
+                            <captcha-input
+                                v-model="captchaCode"
+                                ref="captcha"
+                                @captcha-key="captchaKey = $event"
+                            />
+                        </view>
                         <view class="input row" style="padding: 15rpx">
                             <u-input
                                 v-model="smsCode"
@@ -343,6 +347,9 @@ export default {
     methods: {
         ...mapMutations(['LOGIN', 'LOGOUT']),
         ...mapActions(['getUser']),
+        isCaptchaError(res) {
+            return res && res.msg && res.msg.indexOf('图形验证码') !== -1
+        },
         countDownFinish() {
             this.canSendSms = true
         },
@@ -402,7 +409,7 @@ export default {
                     })
                     return
                 }
-                const { code, data } = await accountLogin({
+                const { code, data, msg } = await accountLogin({
                     account,
                     password,
                     client: client,
@@ -411,7 +418,7 @@ export default {
                 })
                 if (code == 1) {
                     this.loginHandle(data)
-                } else {
+                } else if (this.isCaptchaError({ msg })) {
                     this.$refs.accountCaptcha && this.$refs.accountCaptcha.refresh()
                     this.accountCaptchaCode = ''
                 }
@@ -499,7 +506,7 @@ export default {
                     this.$toast({
                         title: res.msg
                     })
-                } else {
+                } else if (this.isCaptchaError(res)) {
                     this.$refs.captcha && this.$refs.captcha.refresh()
                     this.captchaCode = ''
                 }

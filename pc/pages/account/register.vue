@@ -136,7 +136,13 @@ export default {
     }
   },
   methods: {
-    async getCaptchaImg() {
+    isCaptchaError(res) {
+      return res && res.msg && res.msg.indexOf('图形验证码') !== -1
+    },
+    async getCaptchaImg(clearCode = true) {
+      if (clearCode) {
+        this.captchaCode = ''
+      }
       try {
         const res = await this.$get('account/captcha')
         if (res.code == 1) {
@@ -186,9 +192,8 @@ export default {
           type: "success",
         });
         this.canSend = false;
-      } else {
+      } else if (this.isCaptchaError(res)) {
         this.getCaptchaImg()
-        this.captchaCode = ''
       }
     },
     async registerFun() {
@@ -267,6 +272,11 @@ export default {
           height: 40px;
           margin-left: 26px;
           cursor: pointer;
+          object-fit: cover;
+          border: 1px solid #dcdfe6;
+          border-radius: 4px;
+          box-sizing: border-box;
+          background-color: #f5f7fa;
         }
         .sms-btn {
           margin-left: 16px;

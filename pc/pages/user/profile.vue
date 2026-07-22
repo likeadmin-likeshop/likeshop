@@ -118,7 +118,7 @@
 import {SMSType, client, FieldType} from '~/utils/type'
 import CountDown from '~/components/public/countDown';
 import Cookies from 'js-cookie'
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import config from '~/config/app'
 export default {
   head() {
@@ -180,8 +180,17 @@ export default {
    }
  },
  methods: {
+   ...mapMutations([
+     'setToken'
+   ]),
    ...mapActions(['getPublicData']),
-    async getCaptchaImg() {
+    isCaptchaError(res) {
+      return res && res.msg && res.msg.indexOf('图形验证码') !== -1
+    },
+    async getCaptchaImg(clearCode = true) {
+      if (clearCode) {
+        this.captchaCode = ''
+      }
       try {
         const res = await this.$get('account/captcha')
         if (res.code == 1) {
@@ -271,9 +280,8 @@ export default {
           message: '发送成功',
           type: 'success'
         })
-      } else {
+      } else if (this.isCaptchaError(res)) {
         this.getCaptchaImg()
-        this.captchaCode = ''
       }
     },
     async changeUserMobile() {
@@ -346,8 +354,11 @@ export default {
           type: 'success'
         });
         this.showPwdPop = false;
-        const token = res.data.token
-        Cookies.set('token', token, { expires: 60 });
+        const token = res.data && res.data.token
+        if (token) {
+          Cookies.set('token', token, { expires: 60 });
+          this.setToken(token);
+        }
       }
     },
     async uploadFileSuccess(res, fileList) {
@@ -381,6 +392,11 @@ export default {
     height: 40px;
     margin-left: 14px;
     cursor: pointer;
+    object-fit: cover;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f5f7fa;
   }
   .user-profile {
     padding: 10px;

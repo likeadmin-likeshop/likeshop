@@ -48,7 +48,7 @@
         }
     });
     layui.form.on('submit(setmypass)',function (data) {
-        layui.$.ajax({
+        like.ajax({
             url: '{:url()}' //实际使用请改成服务端真实接口
             ,data: data.field
             ,type: 'post'

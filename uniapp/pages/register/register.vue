@@ -232,6 +232,9 @@ export default {
     },
   },
   methods: {
+    isCaptchaError(res) {
+      return res && res.msg && res.msg.indexOf('图形验证码') !== -1;
+    },
     changeChecked() {
       this.isAgree = !this.isAgree;
     },
@@ -300,7 +303,7 @@ export default {
           this.canSendSms = false;
           this.$toast(res.msg);
           this.$refs.countDown.start();
-        } else {
+        } else if (this.isCaptchaError(res)) {
           this.$refs.captcha && this.$refs.captcha.refresh();
           this.captchaCode = '';
         }

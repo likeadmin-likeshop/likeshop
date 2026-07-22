@@ -51,7 +51,14 @@ export default {
             this.inputValue = value
             this.$emit('input', value)
         },
+        clearInput() {
+            if (this.inputValue !== '') {
+                this.inputValue = ''
+                this.$emit('input', '')
+            }
+        },
         async refresh() {
+            this.clearInput()
             this.image = ''
             this.captchaKey = ''
             this.$emit('captcha-key', '')
@@ -73,8 +80,9 @@ export default {
 
 <style lang="scss">
 .captcha-input {
-    min-height: 88rpx;
+    min-height: 70rpx;
     width: 100%;
+    align-items: center;
 
     &__field {
         flex: 1;
@@ -85,14 +93,23 @@ export default {
         width: 190rpx;
         height: 70rpx;
         margin-left: 16rpx;
+        border: 1rpx solid #e5e5e5;
+        border-radius: 8rpx;
+        background-color: #f7f7f7;
     }
 
     &__placeholder {
         flex: none;
         width: 190rpx;
+        height: 70rpx;
+        line-height: 70rpx;
         color: #999;
         text-align: center;
         font-size: 24rpx;
+        margin-left: 16rpx;
+        border: 1rpx solid #e5e5e5;
+        border-radius: 8rpx;
+        background-color: #f7f7f7;
     }
 }
 </style>

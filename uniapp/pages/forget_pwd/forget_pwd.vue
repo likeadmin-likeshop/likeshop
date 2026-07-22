@@ -123,6 +123,9 @@ export default {
   },
   methods: {
     ...mapMutations(["LOGIN"]),
+    isCaptchaError(res) {
+      return res && res.msg && res.msg.indexOf('图形验证码') !== -1;
+    },
     goPage(name) {
       uni.navigateTo({
         url: name,
@@ -210,7 +213,7 @@ export default {
             title: res.msg,
           });
           this.$refs.countDown.start();
-        } else {
+        } else if (this.isCaptchaError(res)) {
           this.$refs.captcha && this.$refs.captcha.refresh();
           this.captchaCode = '';
         }

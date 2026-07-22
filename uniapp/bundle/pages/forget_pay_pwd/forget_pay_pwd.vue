@@ -5,11 +5,15 @@
                 <view class="input-label md normal">手机号</view>
                 <u-input class="flex1" v-model="mobile" />
             </view>
-            <captcha-input
-                v-model="captchaCode"
-                ref="captcha"
-                @captcha-key="captchaKey = $event"
-            />
+            <view class="input-item row">
+                <view class="input-label md normal">图形验证码</view>
+                <captcha-input
+                    class="flex1"
+                    v-model="captchaCode"
+                    ref="captcha"
+                    @captcha-key="captchaKey = $event"
+                />
+            </view>
             <view class="input-item row">
                 <view class="input-label md normal">验证码</view>
                 <u-input class="flex1" v-model="code" placeholder="请输入验证码" />
@@ -82,6 +86,9 @@ export default {
     },
     onLoad() {},
     methods: {
+        isCaptchaError(res) {
+            return res && res.msg && res.msg.indexOf('图形验证码') !== -1
+        },
         retrievePayPasswordFun() {
             let { setPwd, comfirmPwd, code } = this
             if (!code) {
@@ -151,7 +158,7 @@ export default {
                     })
                     this.showCount = true
                     this.$refs.countDown.start()
-                } else {
+                } else if (this.isCaptchaError(res)) {
                     this.$refs.captcha && this.$refs.captcha.refresh()
                     this.captchaCode = ''
                 }

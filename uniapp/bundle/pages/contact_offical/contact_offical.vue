@@ -1,157 +1,286 @@
 <template>
-     <view class="contact-offical">
-        <view class="header">
+    <view class="service">
+        <!-- Contain -->
+        <view class="service-contain">
+            <view class="header-image">
+                <u-image
+                    src="/bundle/static/images/service.png"
+                    width="100rpx"
+                    height="100rpx"
+                    shape="circle"
+                    style="margin-top: -50rpx"
+                    class="circle"
+                ></u-image>
+            </view>
+            <!-- type==1 二维码客服 -->
+            <view
+                class="flex lg mt40 row-center"
+                v-if="ServiceConfig.remarks && ServiceConfig.way == 1"
+            >
+                {{ ServiceConfig.remarks }}
+            </view>
+            <view class="flex code row-center" v-if="ServiceConfig.way == 1">
+                <u-image
+                    :src="ServiceConfig.qr_code"
+                    width="320rpx"
+                    height="320rpx"
+                    border-radius="20"
+                ></u-image>
+            </view>
+            <view
+                class="mt20 mb20 flex row-center xs muted"
+                v-if="ServiceConfig.phone && ServiceConfig.way == 1"
+            >
+                客服电话：{{ ServiceConfig.phone }}
+            </view>
+            <view
+                class="flex row-center xs mt10 muted mb20"
+                v-if="ServiceConfig.business_time && ServiceConfig.way == 1"
+            >
+                服务时间: {{ ServiceConfig.business_time }}
+            </view>
+            <!-- logo -->
 
-        </view>
-        <view class="content column-center">
-            <view class="content-view column-center bg-white">
-                <img class="content-img" :src="server.image" />
-                <view class="primary wechat-num lg">客服微信</view>
-                <view class="row-center copy-btn xxl white" @click="onCopy(server.wechat)">
-                    <image class="mr5" style="width: 32px;height: 25px;" :src="staticAsset('bundle/wechat-btn-icon.png')" />
-                    微信扫码添加
+            <template v-if="ServiceConfig.way != 1">
+                <view class="flex lg row-center mt20">
+                    {{ appConfig.name }}
                 </view>
-                <view class="mt20 normal xs" style="line-height: 35px">{{server.time}}</view>
-                <!-- #ifdef MP-WEIXIN -->
-                <button open-type="contact" class="sm row-center br60">
-                    <text style="line-height: 50px;">在线客服</text>
-                </button>
-                <!-- #endif -->
-                <!-- #ifndef MP-WEIXIN -->
-                <view class="sm row-center br60" @click="tipsShow()">
-                    <text style="line-height: 50px;">在线客服</text>
+                <view class="flex code row-center">
+                    <u-image
+                        :src="appConfig.shop_login_logo"
+                        width="200rpx"
+                        height="200rpx"
+                        border-radius="20"
+                    ></u-image>
                 </view>
-                <!-- #endif -->
-            </view>
-            <view class="xs white" style="margin-top: 40px;line-height: 49px;">
-                无法添加或疑难问题请联系工作人员
-            </view>
-            <view class="row white">
-                <view class="xs" style="line-height: 49px;">{{server.phone}}</view>
-                <!-- #ifdef H5 -->
-                <a class="ml10 phone-btn xs row-center white" :href="'tel:' + server.phone">拨打</a>
-                <!-- #endif -->
-                <!-- #ifdef MP-WEIXIN -->
-                <a class="ml10 phone-btn xs row-center white" @click="showTelTips">拨打</a>
-                <!-- #endif -->
-                <view class="ml5 copy-phone-btn xs row-center" @click="onCopy(server.phone)">复制</view>
+            </template>
+            <!-- type==2 电话客服 -->
+
+            <view class="mt20 flex row-center" v-if="ServiceConfig.phone && ServiceConfig.way == 2">
+                <view style="text-align: center" @click="handleCall">
+                    <view> 拨打客服热线 </view>
+                    <view style="text-decoration: underline">
+                        {{ ServiceConfig.phone }}
+                    </view>
+                </view>
             </view>
         </view>
-        <u-modal 
-        :content="content"
-        v-model="showPhoneCall"
-        show-cancel-button
-        confirm-text='呼叫'
-        :confirm-color="primaryColor"
-        @confirm="onCall"
-        >
-        </u-modal>
+        <view class="pt20" v-if="ServiceConfig.way == 1" @click="saveCode">
+            <view class="br20 copy-btn flex row-center white lg">
+                <text class="m-l-20">保存二维码</text>
+            </view>
+        </view>
+        <view class="pt20" v-if="ServiceConfig.way == 2" @click="handleCall">
+            <view class="br20 copy-btn flex row-center white lg">
+                <text class="ml20">拨打电话</text>
+            </view>
+        </view>
+        <!-- type==3 系统客服 -->
+
+        <view class="pt20" v-if="ServiceConfig.way == 3" @click="goService">
+            <view class="copy-btn br20 flex row-center white lg">
+                <text class="ml20">联系系统客服</text>
+            </view>
+        </view>
+        <!-- type==4 企业微信客服 -->
+        <view class="pt20" v-if="ServiceConfig.way == 4" @click="handleService">
+            <view class="copy-btn flex row-center white lg br20">
+                <text class="ml20">联系企业微信客服</text>
+            </view>
+        </view>
+        <view class="pt20" v-if="ServiceConfig.way == 5">
+            <!-- #ifdef MP-WEIXIN -->
+            <button
+                open-type="contact"
+                class="copy-btn icon-item white lg br20"
+                style="line-height: 88rpx"
+                v-if="ServiceConfig.way == 5"
+            >
+                <text style="line-height: 32rpx">联系微信小程序客服</text>
+            </button>
+            <!-- #endif -->
+        </view>
     </view>
 </template>
 
 <script>
-    import {getService} from "@/api/app"
-    import {copy} from '@/utils/tools'
-    export default {
-        name: 'contactOffical',
-        data() {
-            return {
-                server: {},
-                showPhoneCall: false,
-                content: '即将打电话给'
-            }
-        },
-        
-        onLoad() {
-            this.$getService()
-        },
-        
-        methods: {
-            $getService() {
-                getService().then(res => {
-                    if(res.code == 1) {
-                        this.server = res.data
-                    }
-                })
-            },
-            tipsShow() {
-                this.$toast({title: "该功能暂未开放"})       
-            },
-            onCopy(str) {
-                copy(str);
-            },
-            showTelTips() {
-                this.showPhoneCall = true;
-                this.content = '即将打电话给' + this.server.phone
-            },
-            onCall() {
-                wx.makePhoneCall({
-                    phoneNumber: this.server.phone.toString(),
-                    success(e) {
-                        console.log('成功', e)
-                    },
-                    fail(err) {
-                        console.log('失败', err)
-                    }
-                })
-            }
+import { getService } from '@/api/app'
+import { copy } from '@/utils/tools'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
+import { getClient } from '@/utils/tools'
+import { serviceEnum } from '@/utils/enum'
+
+export default {
+    name: 'contactOffical',
+    data() {
+        return {
+            ServiceConfig: {},
+            showPhoneCall: false,
+            content: '即将打电话给'
         }
+    },
+
+    onLoad() {
+        getService().then((res) => {
+            if (res.code == 1) {
+                this.ServiceConfig = res.data[serviceEnum[getClient()]] || {}
+                //#ifndef H5
+                this.downloadCode()
+                //#endif
+            }
+        })
+    },
+
+    methods: {
+        // 下载图片
+        downloadCode() {
+            uni.downloadFile({
+                url: this.ServiceConfig.qr_code, //仅为示例，并非真实的资源
+                success: (res) => {
+                    if (res.statusCode == 200) {
+                        this.tempFilePath = res.tempFilePath
+                    }
+                }
+            })
+        },
+        saveCode() {
+            //#ifdef H5
+            this.$toast({
+                title: '长按图片保存'
+            })
+            //#endif
+            //#ifndef H5
+            uni.saveImageToPhotosAlbum({
+                filePath: this.tempFilePath,
+                success: (res) => {
+                    this.$toast({
+                        title: '保存成功',
+                        icon: 'success'
+                    })
+                },
+                fail: (err) => {
+                    this.$toast({
+                        title: '保存失败'
+                    })
+                }
+            })
+            //#endif
+        },
+        handleCall() {
+            if (!this.ServiceConfig.phone) {
+                this.$toast('请在后台配置客服电话号码')
+                return
+            }
+            uni.makePhoneCall({
+                phoneNumber: this.ServiceConfig.phone,
+                success(res) {
+                    console.log(res)
+                },
+                fail(err) {
+                    console.log(err)
+                }
+            })
+        },
+        handleService() {
+            const _this = this
+            // #ifdef MP-WEIXIN
+            wx.openCustomerServiceChat({
+                extInfo: { url: _this.ServiceConfig.kefu_link },
+                corpId: _this.ServiceConfig.enterprise_id,
+                success(res) {
+                    console.log(res)
+                },
+                fail(err) {
+                    console.log(err)
+                    _this.$toast('请在后台配置企业微信客服')
+                }
+            })
+            // #endif
+            // #ifdef H5
+            if (!_this.ServiceConfig.kefu_link) {
+                _this.$toast('请在后台配置企业微信客服')
+                return
+            }
+            window.open(_this.ServiceConfig.kefu_link, '_self')
+            // #endif
+            // #ifdef APP-PLUS
+            plus.share.getServices((res) => {
+                console.log(res)
+
+                const wechat = res.find((i) => i.id === 'weixin')
+
+                if (wechat) {
+                    wechat.openCustomerServiceChat(
+                        {
+                            corpid: _this.ServiceConfig.enterprise_id, //第三步获取
+                            url: _this.ServiceConfig.kefu_link
+                        },
+                        (src) => {
+                            console.log('success:')
+                        },
+                        (err) => {
+                            console.log('error:')
+                        }
+                    )
+                } else {
+                    uni.showToast({
+                        title: '当前环境不支持',
+                        icon: 'error'
+                    })
+                }
+            })
+            // #endif
+        }
+    },
+    computed: {
+        ...mapGetters(['appConfig'])
     }
+}
 </script>
 
 <style lang="scss">
-    
-    .contact-offical {
-        min-height: 100vh;
-        background: linear-gradient(180deg, #F62318 0%, #F20407 100%);  
-        .header {
-            height: 383px;
-            width: 100%;
+.header-image {
+    display: flex;
+    justify-content: center;
+    .circle {
+        border-radius: 50%;
+        border: 6rpx solid #ffffff;
+    }
+}
+.service {
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../../static/images/service_bg.jpg);
+    background-size: 100% auto;
+    overflow: hidden;
+
+    &-contain {
+        width: 620rpx;
+        // height: 750rpx;
+        margin: 140rpx auto;
+        margin-bottom: 40rpx;
+        padding-bottom: 80rpx;
+        border-radius: 10px;
+        background-color: #ffffff;
+
+        .code {
+            border-radius: 20rpx;
+            padding-top: 60rpx;
         }
-        .content {
-            
-            
-            .content-view {
-                border: 5px solid #FA7949;
-                width: 310px;
-                border-radius: 10px;
-                margin-top: -350px;
-                .content-img {
-                    margin-top: 20px;
-                    height: 192px;
-                    width: 192px;
-                }
-                .wechat-num {
-                    line-height: 45px;
-                }
-                .copy-btn {
-                    background: linear-gradient(180deg, #FFA200 0%, #FF5E44 100%);
-                    width: 230px;
-                    height: 50px;
-                    border-radius: 50px;
-                    line-height: 49px;
-                    margin-top: 30px;
-                }
-                .contact-btn {
-                    width: 300rpx;
-                    height: 60rpx;
-                    margin-bottom: 20rpx;
-                }
-            }
-            .phone-btn {
-                background: linear-gradient(180deg, #FFA200 0%, #FF5E44 100%);
-                height: 24px;
-                width: 60px;
-                line-height: 33px;
-                border-radius: 50px;
-            }
-            .copy-phone-btn {
-                background-color: rgba($color: #fff, $alpha: 0.5);
-                height: 24px;
-                width: 60px;
-                line-height: 33px;
-                border-radius: 50px;
-            }
+
+        .phone {
+            padding: 0 20rpx;
+            text-decoration: underline;
         }
     }
+}
+.copy-btn {
+    margin: 0 80rpx;
+    height: 88rpx;
+    // @include background_linear(90deg, 0, 100%);
+    background: #000722;
+}
+.br20 {
+    border-radius: 20rpx;
+}
 </style>

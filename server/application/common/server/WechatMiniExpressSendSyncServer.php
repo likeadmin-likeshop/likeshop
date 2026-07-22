@@ -246,7 +246,8 @@ class WechatMiniExpressSendSyncServer
             // token失效 不标记失败 等下次执行
             if (isset($result['errcode']) && $result['errcode'] == 40001) {
                 Log::write("等待下次执行" . ($result_content ? : "发货录入发生错误"), 'wechat_mini_express_sync_check');
-                return false;
+//                return false;
+                return [];
             }
             Log::write($result_content ? : "发货录入发生错误", 'wechat_mini_express_sync_check');
             return [];

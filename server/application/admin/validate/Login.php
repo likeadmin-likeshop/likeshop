@@ -22,15 +22,12 @@ namespace app\admin\validate;
 use think\Db;
 use think\facade\Cache;
 use think\Validate;
-use app\common\server\CaptchaService;
 
 class Login extends Validate
 {
     protected $rule = [
         'account' => 'require',
         'password' => 'require|password',
-        'captcha_key' => 'require',
-        'captcha' => 'require|checkCaptcha',
     ];
 
     protected $message = [
@@ -38,19 +35,6 @@ class Login extends Validate
         'password.require' => '密码不能为空',
         'password.password' => '账号密码错误',
     ];
-
-    /**
-     * Verify and consume the one-time image captcha.
-     */
-    public function checkCaptcha($captcha, $rule, $data)
-    {
-        unset($rule);
-        $key = trim($data['captcha_key'] ?? '');
-        if (CaptchaService::verify($key, (string)$captcha)) {
-            return true;
-        }
-        return '图形验证码错误';
-    }
 
     /**
      * 账号密码验证码

@@ -43,6 +43,9 @@ class MnpLogic{
             'encoding_ses_key'      => ConfigServer::get('mnp', 'encoding_ses_key', ''),
             'encryption_type'       => ConfigServer::get('mnp', 'encryption_type', ''),
             'data_type'             => ConfigServer::get('mnp', 'data_type', ''),
+            
+            // 小程序同步发货开关 1开启 0关闭
+            'express_send_sync'     => ConfigServer::get('mnp', 'express_send_sync', 1),
         ];
         return $config;
     }
@@ -59,11 +62,13 @@ class MnpLogic{
             ConfigServer::set('mnp','qr_code',$post['qr_code']);
             ConfigServer::set('mnp','app_id',$post['app_id']);
             ConfigServer::set('mnp','secret',$post['app_secret']);
-//            ConfigServer::set('mnp','token',$post['token']);
-//            ConfigServer::set('mnp','encoding_ses_key',$post['encoding_ses_key']);
-//            ConfigServer::set('mnp','encryption_type',$post['encryption_type']);
-//            ConfigServer::set('mnp','data_type',$post['data_type']);
-
+            // ConfigServer::set('mnp','token',$post['token']);
+            // ConfigServer::set('mnp','encoding_ses_key',$post['encoding_ses_key']);
+            // ConfigServer::set('mnp','encryption_type',$post['encryption_type']);
+            // ConfigServer::set('mnp','data_type',$post['data_type']);
+    
+    
+            ConfigServer::set('mnp','express_send_sync', $post['express_send_sync'] ?? 1);
         }
         return true;
     }

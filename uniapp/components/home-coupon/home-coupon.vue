@@ -167,7 +167,7 @@
 
 					.coupon-right {
 						background-color: #E5E5E5;
-						color: $ls-color-muted;
+						color: $-color-muted;
 					}
 				}
 

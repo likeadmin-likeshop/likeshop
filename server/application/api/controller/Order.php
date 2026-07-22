@@ -212,10 +212,10 @@ class Order extends ApiBase
         
         $result = WechatMiniExpressSendSyncServer::wechatSyncCheck($order);
         
-        if (! $result) {
-            $this->_error('获取失败');
-        }
+//        if (! $result) {
+//            $this->_error('获取失败');
+//        }
     
-        $this->_success('成功', $result);
+        $this->_success('成功', $result ? : new \stdClass());
     }
 }

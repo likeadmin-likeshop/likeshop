@@ -30,7 +30,7 @@ export const getters = {
   isLogin: state => !!state.token,
   headTitle: state => state.config.name,
   favicon: state => state.config.web_favicon,
-  getSiteStatistics: state => state.config.site_statistic || {}
+  getSiteStatistics: state => state.config.site_statistic
 };
 
 export const actions = {

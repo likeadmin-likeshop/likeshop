@@ -27,7 +27,7 @@ use think\Validate;
 class ChangeMobile extends Validate
 {
     protected $rule = [
-        'client'        => 'require|in:'. Client_::mnp . ','. Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
+        'client'        => 'require|in:'. Client_::mnp. ','. Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
         'mobile'        => 'require|mobile',
         'new_mobile'    => 'require|mobile|checkMobile',
     ];
@@ -42,10 +42,11 @@ class ChangeMobile extends Validate
     ];
 
 
-//    public function sceneChange()
-//    {
-//        $this->only(['client', 'mobile', 'new_mobile']);
-//    }
+   // public function sceneChange()
+   // {
+   //     $this->only(['client', 'mobile', 'new_mobile']);
+   // }
+    
     public function sceneBinding(){
         $this->only(['client','new_mobile']);
     }
@@ -66,16 +67,20 @@ class ChangeMobile extends Validate
         }
 
         //非小程序端,更换手机号需要手机验证码
-//        if ($data['client'] == Client_::mnp) {
-//            return true;
-//        }
+       // if ($data['client'] == Client_::mnp) {
+       //     return true;
+       // }
 
         if (!isset($data['code'])) {
             return '请填写验证码';
         }
 
-        // The change/bind SMS is sent to the new number, so verify that number.
-        $sms_logic = new SmsLogic($data['message_key'], $data['new_mobile'], $data['code']);
+        $mobile = $data['new_mobile'];
+        // if(isset($data['action']) && 'change' == $data['action']){
+        //     $mobile = $data['mobile'];
+        // }
+       
+        $sms_logic = new SmsLogic($data['message_key'],$mobile, $data['code']);
         $check = $sms_logic->checkCode();
 
         //检查验证码是否正确

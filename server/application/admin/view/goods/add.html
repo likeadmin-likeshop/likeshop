@@ -146,7 +146,7 @@
                                     <th>规格图片</th>
                                     <th>市场价(元)</th>
                                     <th><span class="form-label-asterisk">*</span>价格(元)</th>
-                                    <th><span class="form-label-asterisk">*</span>成本价(元)</th>
+                                    <th>成本价(元)</th>
                                     <th><span class="form-label-asterisk">*</span>库存</th>
                                     <th>体积(m3)</th>
                                     <th>重量(kg)</th>
@@ -164,27 +164,24 @@
                                     <td><input type="number" class="layui-input"
                                                lay-verify="one_market_price"
                                                lay-verType="tips"
-                                               autocomplete="off" switch-tab="1" verify-msg="请输入市场价"
+                                               autocomplete="off" switch-tab="1"
                                                name="one_market_price"></td>
                                     <td><input type="number" class="layui-input"
-                                               lay-verify="one_spec_required|one_price"
                                                lay-verType="tips"
                                                autocomplete="off" switch-tab="1" verify-msg="请输入价格"
                                                name="one_price"></td>
                                     <td><input type="number" class="layui-input"
-                                               lay-verify="one_spec_required|one_cost_price"
                                                lay-verType="tips"
-                                               autocomplete="off" switch-tab="1" verify-msg="请输入成本价"
+                                               autocomplete="off" switch-tab="1"
                                                name="one_cost_price"></td>
                                     <td><input type="number" class="layui-input" lay-verify="one_spec_required|one_stock"
                                                lay-verType="tips"
                                                autocomplete="off" switch-tab="1" verify-msg="请输入库存" name="one_stock">
                                     </td>
-                                    <td><input type="number" class="layui-input" lay-verify="one_volume" lay-verType="tips"
-                                               name="one_volume" autocomplete="off" switch-tab="1" verify-msg="请输入体积"></td>
-                                    <td><input type="number" class="layui-input"
-                                               lay-verify="one_weight" name="one_weight"
-                                               lay-verType="tips" autocomplete="off" switch-tab="1" verify-msg="请输入重量">
+                                    <td><input type="number" class="layui-input" lay-verType="tips"
+                                               name="one_volume" autocomplete="off" switch-tab="1"></td>
+                                    <td><input type="number" class="layui-input" lay-verType="tips"
+                                               name="one_weight"autocomplete="off" switch-tab="1">
                                     </td>
                                     <td><input type="number" name="one_bar_code" class="layui-input"
                                                lay-verType="tips" autocomplete="off" switch-tab="1" verify-msg="请输入条码"></td>
@@ -248,6 +245,12 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
                 <span style="color: #a3a3a3;font-size: 9px">设置最低库存预警值，当库存低于预警值时会出现在库存预警商品列表页，0为不预警。</span>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">服务保障：</label>
+                <div class="layui-input-block" id="service">
+
+                </div>
             </div>
 
             <div class="layui-form-item">
@@ -426,7 +429,7 @@
         <th>规格图片</th>
         <th>市场价(元)</th>
         <th><span class="form-label-asterisk">*</span>价格(元)</th>
-        <th><span class="form-label-asterisk">*</span>成本价(元)</th>
+        <th>成本价(元)</th>
         <th><span class="form-label-asterisk">*</span>库存</th>
         <th>体积(m3)</th>
         <th>重量(kg)</th>
@@ -441,18 +444,18 @@
                 src="/static/common/image/plug/goods-lists-add-image.png"
                 class="goods-spec-img-add"></div>
     </td>
-    <td><input type="number" class="layui-input" lay-verify="more_market_price" lay-verType="tips"
-               autocomplete="off" switch-tab="1" verify-msg="请输入市场价" name="market_price[]"></td>
+    <td><input type="number" class="layui-input"lay-verType="tips"
+               autocomplete="off" switch-tab="1"name="market_price[]"></td>
     <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_price" lay-verType="tips"
                autocomplete="off" switch-tab="1" verify-msg="请输入价格" name="price[]"></td>
-    <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_cost_price" lay-verType="tips"
-               autocomplete="off" switch-tab="1" verify-msg="请输入成本价" name="cost_price[]"></td>
+    <td><input type="number" class="layui-input" lay-verType="tips"
+               autocomplete="off" switch-tab="1" name="cost_price[]"></td>
     <td><input type="number" class="layui-input" lay-verify="more_spec_required|more_stock" lay-verType="tips"
                autocomplete="off" switch-tab="1" verify-msg="请输入库存" name="stock[]"></td>
-    <td><input type="number" class="layui-input" lay-verify="more_volume" lay-verType="tips"
-               name="volume[]" autocomplete="off" switch-tab="1" verify-msg="请输入体积"></td>
-    <td><input type="number" class="layui-input" lay-verify="more_weight" lay-verType="tips"
-               name="weight[]" autocomplete="off" switch-tab="1" verify-msg="请输入重量"></td>
+    <td><input type="number" class="layui-input" lay-verType="tips"
+               name="volume[]" autocomplete="off" switch-tab="1"></td>
+    <td><input type="number" class="layui-input" lay-verType="tips"
+               name="weight[]" autocomplete="off" switch-tab="1" ></td>
     <td><input type="number" name="bar_code[]" class="layui-input"
                lay-verType="tips" autocomplete="off" switch-tab="1"></td>
     </tr>
@@ -667,6 +670,21 @@
             $('select[name="free_shipping_template_id"]').val(default_id);
             form.render('select');
         }
+        //渲染服务保障
+        var service_template = {$service_lists | raw};
+        setServiceTemplate([]);
+        function setServiceTemplate(checkedIds) {
+            var template_select_html = '';
+            for (var i in service_template) {
+                if (checkedIds.indexOf((service_template[i]['id']).toString()) !== -1){
+                    template_select_html += '<input type="checkbox" name="service_ids[]" lay-skin="primary" value="' + service_template[i]['id'] + '" title="' + service_template[i]['title'] + '" checked>';
+                } else {
+                    template_select_html += '<input type="checkbox" name="service_ids[]" lay-skin="primary" value="' + service_template[i]['id'] + '" title="' + service_template[i]['title'] + '">';
+                }
+            }
+            $('#service').html(template_select_html);
+            form.render('checkbox');
+        }
 
 
 
@@ -836,7 +854,7 @@
         //批量添加规格项绑定
         $(document).on('click', '.add-spec-value', function () {
             var add_spec_value = $(this);
-            layer.prompt({title: '输入规格值，多个请换行', formType: 2}, function (text, index) {
+            layer.prompt({title: '输入规格值，多个请换行', formType: 2,maxlength: 5000}, function (text, index) {
                 layer.close(index);
                 var specs = text.split('\n');
                 for (var i in specs) {
@@ -1314,6 +1332,7 @@
         setBrand(goods_info['base']['brand_id']);    //渲染品牌
         setSupplier(goods_info['base']['supplier_id']);    //渲染品供应商
         setFreightTemplate(goods_info['base']['free_shipping_template_id']);   //渲染运费模板
+        setServiceTemplate(goods_info['base']['service_ids']);   //渲染服务保障模板
         $('input[name="remark"]').val(goods_info['base']['remark']);
 
         var image_html = '';
@@ -1441,7 +1460,12 @@
             }
             setTableValue();
         }
-        likeedit.setContent(likeedit_index,goods_info['base']['content']);
+        // likeedit.setContent(likeedit_index,goods_info['base']['content']);
+        if (goods_info['base']['content'] == '<br>') {
+            likeedit.setContent(' 1')
+        } else {
+            likeedit.setContent(likeedit_index,goods_info['base']['content']);
+        }
         form.render();
         {/notempty}
             //------------------------编辑页面----------------------------------

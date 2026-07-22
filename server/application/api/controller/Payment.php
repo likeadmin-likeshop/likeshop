@@ -228,9 +228,9 @@ class Payment extends ApiBase
                 $item['pay_way'] = Pay::ALI_PAY;
             }
 
-            if (in_array($this->client, [Client_::mnp, Client_::oa]) && $item['code'] == 'alipay') {
-                unset($pay[$k]);
-            }
+//            if (in_array($this->client, [Client_::mnp, Client_::oa]) && $item['code'] == 'alipay') {
+//                unset($pay[$k]);
+//            }
             if($params['from'] == 'recharge' && $item['code'] == 'balance') {
                 unset($pay[$k]);
             }

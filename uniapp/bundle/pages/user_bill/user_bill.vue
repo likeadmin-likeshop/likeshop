@@ -165,9 +165,9 @@ export default {
             .bill-list {
                 .bill-item {
                     padding: 20rpx 30rpx;
-                    border-bottom: $ls-solid-border;
+                    border-bottom: $-solid-border;
                     .income {
-                        color: $ls-color-primary;
+                        color: $-color-primary;
                     }
                 }
             }

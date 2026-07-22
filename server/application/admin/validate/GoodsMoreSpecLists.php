@@ -24,12 +24,12 @@ use think\Validate;
 class GoodsMoreSpecLists extends Validate
 {
     protected $rule = [
-        'market_price'  => 'egt:0',
-        'price'         => 'require|egt:0.01',
-        'cost_price'    => 'require|egt:0.01',
+        'market_price'  => [],
+        'price'         => 'require|egt:0.01|checkExpress',
+        'cost_price'    => [],
         'stock'         => 'require|integer|egt:0',
-        'weight'        => 'egt:0',
-        'volume'        => 'egt:0',
+        'weight'        => [],
+        'volume'        => [],
     ];
 
     protected $message = [
@@ -47,6 +47,39 @@ class GoodsMoreSpecLists extends Validate
         'stock.integer'         => '库存必须为整数',
         'stock.egt'              => '库存必须大于或等于0',
     ];
+    
+    function checkExpress($value, $rule, $data)
+    {
+        $free_shipping_type = input('free_shipping_type');
+        
+        // 运费模版
+        if ($free_shipping_type != 3) {
+            return true;
+        }
+        
+        $freight = \app\common\model\Freight::where('id', input('free_shipping_template_id/d'))->findOrEmpty();
+        
+        if (empty($freight['id'])) {
+            return '运费模板不存在';
+        }
+        
+        switch ($freight['charge_way']) {
+            case 1:
+                if (empty($data['weight']) || $data['weight'] <= 0) {
+                    return '当前运费模板是按重量计算运费，规格：' . $data['spec_value_str'] .' 的重量必须大于0';
+                }
+                break;
+            case 2:
+                if (empty($data['volume']) || $data['volume'] <= 0) {
+                    return '当前运费模板是按体积计算运费，规格：' . $data['spec_value_str'] .' 的体积必须大于0';
+                }
+                break;
+            default:
+                break;
+        }
+        
+        return true;
+    }
 
 
 }

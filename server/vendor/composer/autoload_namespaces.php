@@ -9,5 +9,6 @@ return array(
     'Requests' => array($vendorDir . '/rmccue/requests/library'),
     'Qcloud\\Cos\\' => array($vendorDir . '/qcloud/cos-sdk-v5/src'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'BaconQrCode' => array($vendorDir . '/bacon/bacon-qr-code/src'),
 );

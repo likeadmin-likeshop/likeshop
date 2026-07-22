@@ -3,7 +3,7 @@
     .map-container {
         width: 600px;
         height: 400px;
-        margin-left:120px;
+        margin-left:100px;
         margin-top:20px;
     }
     .img-content{
@@ -130,7 +130,7 @@
     <div class="layui-form-item ">
         <label class="layui-form-label"><span class="form-label-asterisk">*</span>地图定位：</label>
         <div class="layui-input-block" style="margin-left:10px;">
-            <div class="map-container" id="map-container"></div>
+            <div id="map-container" style="width: 700px;height: 400px;margin-left: 120px;"></div>
         </div>
     </div>
 
@@ -312,7 +312,13 @@
 
         /*************************地图**********************************************/
         // txMap.init("{$detail.latitude ?? ''}", "{$detail.longitude ?? ''}");
-        customTxMap.initMap('map-container',{$detail.longitude ?? ''},{$detail.latitude ?? ''});
+        var longitude = "{$detail.longitude ?? ''}";
+        var latitude = "{$detail.latitude ?? ''}";
+        if (longitude.length > 0 && latitude.length > 0) {
+            customTxMap.initMap('map-container',longitude,latitude);
+        } else {
+            customTxMap.initMap('map-container');
+        }
         //搜索地图
         $("#search_map").click(function () {
             var province = $("#province");

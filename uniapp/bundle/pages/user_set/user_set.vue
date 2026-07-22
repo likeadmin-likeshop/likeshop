@@ -14,7 +14,7 @@
                         :src="
                             userInfo.avatar != ''
                                 ? userInfo.avatar
-                                : staticAsset('bundle/default_avatar.png')
+                                : '../../static/images/default_avatar.png'
                         "
                     >
                     </image>
@@ -42,20 +42,20 @@
                 <view class="md row" :class="{ muted: !userInfo.mobile }" style="flex: 1">
                     {{ userInfo.mobile ? userInfo.mobile : '未绑定' }}
                 </view>
-                <!-- #ifdef H5 || APP-PLUS -->
+
                 <view class="bd-btn br60 row-center" @click="showModifyMobile">
                     {{ userInfo.mobile ? '更换手机号' : '绑定手机号' }}
                 </view>
-                <!-- #endif -->
+
                 <!-- #ifdef MP-WEIXIN -->
-                <button
+                <!-- <button
                     class="bd-btn br60 row-center"
                     size="sm"
                     open-type="getPhoneNumber"
                     @getphonenumber="getPhoneNumber"
                 >
                     {{ userInfo.mobile ? '更换手机号' : '绑定手机号' }}
-                </button>
+                </button> -->
                 <!-- #endif -->
             </view>
             <view class="row-info row bdb-line">
@@ -73,15 +73,6 @@
                 <view class="modify-row row" v-else>
                     <view style="width: 71px">手机号</view>
                     <input v-model="new_mobile" placeholder="请输入绑定手机号" />
-                </view>
-                <view class="modify-row row">
-                    <view style="width: 71px">图形验证码</view>
-                    <captcha-input
-                        class="flex1"
-                        v-model="mobileCaptchaCode"
-                        ref="captchaMobile"
-                        @captcha-key="mobileCaptchaKey = $event"
-                    />
                 </view>
                 <view class="modify-row row">
                     <view style="width: 71px">验证码</view>
@@ -150,15 +141,6 @@
                     <view style="margin-left: 15px">{{ userInfo.mobile }}</view>
                 </view>
                 <view class="modify-row row">
-                    <view style="width: 142rpx">图形验证码</view>
-                    <captcha-input
-                        class="flex1"
-                        v-model="pwdCaptchaCode"
-                        ref="captchaPwd"
-                        @captcha-key="pwdCaptchaKey = $event"
-                    />
-                </view>
-                <view class="modify-row row">
                     <view style="width: 142rpx">验证码</view>
                     <input
                         v-model="smsCode"
@@ -205,7 +187,6 @@ import { SMSType } from '@/utils/type'
 import { mapState, mapGetters } from 'vuex'
 import { uploadFile, isWeixinClient, trottle } from '@/utils/tools'
 import { getWxCode, getUserProfile } from '@/utils/login'
-import CaptchaInput from '@/components/captcha-input/captcha-input.vue'
 
 const FieldType = {
     NONE: '',
@@ -216,9 +197,6 @@ const FieldType = {
 }
 export default {
     name: 'userProfile',
-    components: {
-        CaptchaInput
-    },
     data() {
         return {
             version: version,
@@ -238,17 +216,10 @@ export default {
             pwd: '',
             comfirmPwd: '',
             smsType: SMSType.FINDPWD,
-            code: '',
-            mobileCaptchaCode: '',
-            mobileCaptchaKey: '',
-            pwdCaptchaCode: '',
-            pwdCaptchaKey: ''
+            code: ''
         }
     },
     methods: {
-        isCaptchaError(res) {
-            return res && res.msg && res.msg.indexOf('图形验证码') !== -1
-        },
         codeChange(text) {
             this.tips = text
         },
@@ -331,34 +302,15 @@ export default {
         // 发送短信
         $sendSms(type) {
             if (!this.canSendSms) return
-            const isPassword = this.smsType == SMSType.FINDPWD
-            const captchaCode = isPassword ? this.pwdCaptchaCode : this.mobileCaptchaCode
-            const captchaKey = isPassword ? this.pwdCaptchaKey : this.mobileCaptchaKey
-            if (!captchaCode || !captchaKey) {
-                this.$toast({ title: '请输入有效的图形验证码' })
-                return
-            }
             sendSms({
-                mobile: this.smsType == SMSType.CHANGE_MOBILE
-                    ? this.new_mobile
-                    : (this.userInfo.mobile || this.new_mobile),
-                key: this.smsType,
-                captcha_key: captchaKey,
-                captcha: captchaCode
+                mobile: this.userInfo.mobile || this.new_mobile,
+                key: this.smsType
             }).then((res) => {
                 if (res.code == 1) {
                     this.$toast({
                         title: res.msg
                     })
                     this.$refs.uCode.start()
-                } else if (this.isCaptchaError(res)) {
-                    const ref = isPassword ? this.$refs.captchaPwd : this.$refs.captchaMobile
-                    ref && ref.refresh()
-                    if (isPassword) {
-                        this.pwdCaptchaCode = ''
-                    } else {
-                        this.mobileCaptchaCode = ''
-                    }
                 }
             })
         },
@@ -371,11 +323,11 @@ export default {
         },
         // 更换手机号
         showModifyMobile() {
-            this.smsCode = ''
-            this.new_mobile = ''
-            this.showMobile = true
-            this.smsType = this.userInfo.mobile ? SMSType.CHANGE_MOBILE : SMSType.BIND
-            this.$nextTick(() => this.$refs.captchaMobile && this.$refs.captchaMobile.refresh())
+            uni.navigateTo({ url: '/bundle/pages/bind_phone/bind_phone' })
+            // this.smsCode = ''
+            // this.new_mobile = ''
+            // this.showMobile = true
+            // this.smsType = this.userInfo.mobile ? SMSType.CHANGE_MOBILE : SMSType.BIND
         },
         $changeUserMobile() {
             if (!this.smsCode) {
@@ -447,7 +399,6 @@ export default {
             this.smsCode = ''
             this.smsType = SMSType.FINDPWD
             this.showPwd = true
-            this.$nextTick(() => this.$refs.captchaPwd && this.$refs.captchaPwd.refresh())
         },
         $forgetPwd() {
             let { smsCode, pwd, comfirmPwd } = this
@@ -484,11 +435,6 @@ export default {
             forgetPwd(data).then((res) => {
                 if (res.code == 1) {
                     this.showPwd = false
-                    if (res.data && res.data.token) {
-                        this.$store.commit('LOGIN', {
-                            token: res.data.token
-                        })
-                    }
                     this.$toast({
                         title: '设置密码成功'
                     })
@@ -603,8 +549,8 @@ export default {
 
             .bd-btn {
                 padding: 8rpx 24rpx;
-                border: 1px solid $ls-color-primary;
-                color: $ls-color-primary;
+                border: 1px solid $-color-primary;
+                color: $-color-primary;
             }
         }
 
@@ -640,7 +586,7 @@ export default {
         padding-bottom: 30rpx;
         width: 580rpx;
         border-radius: 30rpx;
-        background-color: $ls-color-white;
+        background-color: $-color-white;
 
         .title {
             padding: 26rpx 0rpx;
@@ -652,10 +598,10 @@ export default {
             border-bottom: 1rpx solid #e5e5e5;
 
             .send-code-btn {
-                border: 1px solid $ls-color-primary;
+                border: 1px solid $-color-primary;
                 width: 184rpx;
                 height: 62rpx;
-                color: $ls-color-primary;
+                color: $-color-primary;
             }
         }
 

@@ -38,15 +38,25 @@ class Withdraw extends Model
     const STATUS_SUCCESS  = 3; // 提现成功
     const STATUS_FAIL  = 4; //提现失败
 
-    //提现状态
-    public static function getStatusDesc($status = true)
+    //提现到微信零钱 是否待收款
+    static function wechatChangeIsWaitReceive($data)
     {
+        return intval($data['status'] == self::STATUS_ING && $data['type'] == self::TYPE_WECHAT_CHANGE);
+    }
+    
+    //提现状态
+    public static function getStatusDesc($status = true, $data = [])
+    {
+        
         $desc = [
             self::STATUS_WAIT => '待提现',
             self::STATUS_ING => '提现中',
             self::STATUS_SUCCESS => '提现成功',
             self::STATUS_FAIL => '提现失败'
         ];
+        if (isset($data['type']) && $data['type'] == static::TYPE_WECHAT_CHANGE) {
+            $desc[self::STATUS_ING] = '待收款';
+        }
         if ($status === true) {
             return $desc;
         }

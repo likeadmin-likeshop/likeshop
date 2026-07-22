@@ -65,4 +65,22 @@ class Withdraw extends ApiBase
         }
         $this->_success('', WithdrawLogic::info($get['id'], $this->user_id));
     }
+    
+    // 执行收款查询
+    public function receive()
+    {
+        $get = $this->request->post();
+        $check = $this->validate($get, 'app\api\validate\Withdraw.info');
+        if (true !== $check) {
+            $this->_error($check);
+        }
+        
+        $result = WithdrawLogic::receive($get['id'], $this->user_id);
+        
+        if($result === true) {
+            $this->_success('成功');
+        } else {
+            $this->_error((string) $result);
+        }
+    }
 }

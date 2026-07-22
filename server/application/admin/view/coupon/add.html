@@ -171,6 +171,9 @@
             <input type="radio" name="use_goods_type" lay-filter="select-goods" value="2" title="指定商品可用" >
             <input type="radio" name="use_goods_type" lay-filter="select-goods" value="3" title="指定商品不可用" >
         </div>
+        <div>
+            <button type="button" class="layui-btn" id="select-goods" style="margin-top: 10px;display: none">选择商品</button>
+        </div>
     </div>
 
     <div class="layui-form-item goods">
@@ -223,43 +226,48 @@
             });
         });
         form.on('radio(select-goods)', function (data) {
-            var value = data.value;
-            if(use_goods_type != value){
+            if (data.value != 1) {
+                $('#select-goods').show();
+                $('.goods').show();
+                if (goods_ids.length == 0) {
+                    $('.goods').hide();
+                }
+            } else {
+                $('#select-goods').hide();
+                $('.goods').hide();
                 $('.goods_info').html("");
                 goods_ids = [];
             }
-            $('.goods').hide();
-
-            if(value != 1){
-                layer.open({
-                    type: 2
-                    ,title: '选择商品'
-                    ,content: '{:url("common/selectGoods")}'
-                    ,area: ['90%', '90%']
-                    ,btn: ['确认', '取消']
-                    ,yes: function(index, layero){
-                        var data = window["layui-layer-iframe" + index].callbackdata();
-                        data.forEach(function(item,index,arr) {
-                           if(goods_ids.indexOf(item.id) == -1) {
-                               goods_ids.push(item.id);
-                               var goods_html = ' <tr>\n' +
-                                   '                    <td style="text-align: center">'+item.name+'</td>\n' +
-                                   '                    <td style="text-align: center">'+item.price+'</td>\n' +
-                                   '                    <td style="text-align: center">'+item.stock+'</td>\n' +
-                                   '                    <td style="text-align: center"> <a class="layui-btn layui-btn-danger layui-btn-sm" data-id="'+item.id+'">删除</a>\n' +
-                                   '                </tr>';
-                               $('.goods_info').append(goods_html);
-                           }
-
-                        })
-                        use_goods_type = value;
+        })
+        $('#select-goods').click(function () {
+            layer.open({
+                type: 2
+                ,title: '选择商品'
+                ,content: '{:url("common/selectGoodsCoupon")}?goods_ids='+goods_ids
+                ,area: ['90%', '90%']
+                ,btn: ['确认', '取消']
+                ,yes: function(index, layero){
+                    var data = window["layui-layer-iframe" + index].callbackdata();
+                    goods_ids = [];
+                    $('.goods_info').html(" ");
+                    data.forEach(function(item,index,arr) {
+                        if(goods_ids.indexOf(item.id) == -1) {
+                            goods_ids.push(item.id);
+                            var goods_html = ' <tr>\n' +
+                                '                    <td style="text-align: center">'+item.name+'</td>\n' +
+                                '                    <td style="text-align: center">'+item.price+'</td>\n' +
+                                '                    <td style="text-align: center">'+item.stock+'</td>\n' +
+                                '                    <td style="text-align: center"> <a class="layui-btn layui-btn-danger layui-btn-sm" data-id="'+item.id+'">删除</a>\n' +
+                                '                </tr>';
+                            $('.goods_info').append(goods_html);
+                        }
+                    })
+                    if (goods_ids.length > 0) {
                         $('.goods').show();
-
                     }
+                }
 
-                })
-            }
-
+            })
         })
 
         //删除商品

@@ -39,14 +39,7 @@ class Sms extends ApiBase{
     public function send(){
         $mobile = $this->request->post('mobile');
         $key = $this->request->post('key','ZCYZ');
-        $captcha_key = $this->request->post('captcha_key', '');
-        $captcha = $this->request->post('captcha', '');
-        $result = $this->validate([
-            'mobile' => $mobile,
-            'key' => $key,
-            'captcha_key' => $captcha_key,
-            'captcha' => $captcha,
-        ],'app\api\validate\SmsSend');
+        $result = $this->validate(['mobile'=>$mobile,'key'=>$key],'app\api\validate\SmsSend');
         if($result !== true){
             $this->_error($result);
         }

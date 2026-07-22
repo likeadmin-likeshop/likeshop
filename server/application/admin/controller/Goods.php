@@ -20,7 +20,13 @@
 
 namespace app\admin\controller;
 use app\common\model\Order as CommonOrder;
-use app\admin\logic\{GoodsBrandLogic, GoodsCategoryLogic, GoodsLogic, SupplierLogic,FreightLogic,CommonLogic};
+use app\admin\logic\{AssuranceServiceLogic,
+    GoodsBrandLogic,
+    GoodsCategoryLogic,
+    GoodsLogic,
+    SupplierLogic,
+    FreightLogic,
+    CommonLogic};
 use think\Db;
 use think\facade\Hook;
 
@@ -119,6 +125,7 @@ class Goods extends AdminBase
                 unset($spec_lists['spec_values']);
                 unset($spec_lists['spec_id']);
                 unset($spec_lists['spec_value_ids']);
+                unset($spec_lists['service_ids']);
                 $spec_lists = form_to_linear($spec_lists);
 
                 //规格验证
@@ -156,6 +163,7 @@ class Goods extends AdminBase
         $this->assign('brand_lists',json_encode(GoodsBrandLogic::getGoodsBrandList(),JSON_UNESCAPED_UNICODE));
         $this->assign('supplier_lists',json_encode(SupplierLogic::getSupplierList(),JSON_UNESCAPED_UNICODE));
         $this->assign('freight_lists',json_encode(FreightLogic::getFreightList(),JSON_UNESCAPED_UNICODE));
+        $this->assign('service_lists',json_encode(AssuranceServiceLogic::getAllLists(),JSON_UNESCAPED_UNICODE));
         return $this->fetch();
     }
 
@@ -201,6 +209,7 @@ class Goods extends AdminBase
                 unset($spec_lists['spec_values']);
                 unset($spec_lists['spec_id']);
                 unset($spec_lists['spec_value_ids']);
+                unset($spec_lists['service_ids']);
                 $spec_lists = form_to_linear($spec_lists);
 
                 //规格验证
@@ -253,6 +262,7 @@ class Goods extends AdminBase
         $this->assign('brand_lists',json_encode(GoodsBrandLogic::getGoodsBrandList(),JSON_UNESCAPED_UNICODE));
         $this->assign('supplier_lists',json_encode(SupplierLogic::getSupplierList(),JSON_UNESCAPED_UNICODE));
         $this->assign('freight_lists',json_encode(FreightLogic::getFreightList(),JSON_UNESCAPED_UNICODE));
+        $this->assign('service_lists',json_encode(AssuranceServiceLogic::getAllLists(),JSON_UNESCAPED_UNICODE));
         return $this->fetch('goods/add');
     }
 

@@ -30,7 +30,7 @@ use think\Validate;
 class SetWechatUser extends Validate
 {
     protected $rule = [
-        'nickname'  => 'require',
+        'nickname'  => [ 'require', 'max' => 32 ],
         'avatar'    => 'require',
         'sex'       => 'require',
     ];
@@ -39,6 +39,7 @@ class SetWechatUser extends Validate
         'nickname.require'  => '参数缺失',
         'avatar.require'    => '参数缺失',
         'sex.require'       => '参数缺失',
+        'nickname.max'      => '昵称长度不能超过32',
     ];
 
 }

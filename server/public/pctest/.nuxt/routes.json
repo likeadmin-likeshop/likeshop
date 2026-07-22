@@ -1,0 +1,205 @@
+[
+  {
+    "name": "category",
+    "path": "/category",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/category.vue",
+    "chunkName": "pages/category",
+    "_name": "_3ea589a2"
+  },
+  {
+    "name": "confirm_order",
+    "path": "/confirm_order",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/confirm_order.vue",
+    "chunkName": "pages/confirm_order",
+    "_name": "_42ad5aca"
+  },
+  {
+    "name": "get_coupons",
+    "path": "/get_coupons",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/get_coupons.vue",
+    "chunkName": "pages/get_coupons",
+    "_name": "_25713930"
+  },
+  {
+    "name": "help_center",
+    "path": "/help_center",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/help_center/index.vue",
+    "chunkName": "pages/help_center/index",
+    "_name": "_134b8ee2"
+  },
+  {
+    "name": "news_list",
+    "path": "/news_list",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/news_list/index.vue",
+    "chunkName": "pages/news_list/index",
+    "_name": "_5d6e9e99"
+  },
+  {
+    "name": "payment",
+    "path": "/payment",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/payment.vue",
+    "chunkName": "pages/payment",
+    "_name": "_e6e751dc"
+  },
+  {
+    "name": "seckill",
+    "path": "/seckill",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/seckill.vue",
+    "chunkName": "pages/seckill",
+    "_name": "_5e7acfbb"
+  },
+  {
+    "name": "shop_cart",
+    "path": "/shop_cart",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/shop_cart.vue",
+    "chunkName": "pages/shop_cart",
+    "_name": "_3e944155"
+  },
+  {
+    "name": "account-forget_pwd",
+    "path": "/account/forget_pwd",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/account/forget_pwd.vue",
+    "chunkName": "pages/account/forget_pwd",
+    "_name": "_f721259e"
+  },
+  {
+    "name": "account-login",
+    "path": "/account/login",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/account/login.vue",
+    "chunkName": "pages/account/login",
+    "_name": "_78d802da"
+  },
+  {
+    "name": "account-register",
+    "path": "/account/register",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/account/register.vue",
+    "chunkName": "pages/account/register",
+    "_name": "_61972d69"
+  },
+  {
+    "name": "help_center-help_center_detail",
+    "path": "/help_center/help_center_detail",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/help_center/help_center_detail.vue",
+    "chunkName": "pages/help_center/help_center_detail",
+    "_name": "_3cc28d9d"
+  },
+  {
+    "name": "news_list-news_list_detail",
+    "path": "/news_list/news_list_detail",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/news_list/news_list_detail.vue",
+    "chunkName": "pages/news_list/news_list_detail",
+    "_name": "_1135a8a2"
+  },
+  {
+    "name": "user-address",
+    "path": "/user/address",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/address/index.vue",
+    "chunkName": "pages/user/address/index",
+    "_name": "_dee98252"
+  },
+  {
+    "name": "user-after_sales",
+    "path": "/user/after_sales",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/after_sales/index.vue",
+    "chunkName": "pages/user/after_sales/index",
+    "_name": "_3bbfed8c"
+  },
+  {
+    "name": "user-collection",
+    "path": "/user/collection",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/collection.vue",
+    "chunkName": "pages/user/collection",
+    "_name": "_94478b24"
+  },
+  {
+    "name": "user-coupons",
+    "path": "/user/coupons",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/coupons.vue",
+    "chunkName": "pages/user/coupons",
+    "_name": "_7924e3ed"
+  },
+  {
+    "name": "user-evaluation",
+    "path": "/user/evaluation",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/evaluation/index.vue",
+    "chunkName": "pages/user/evaluation/index",
+    "_name": "_3b11618f"
+  },
+  {
+    "name": "user-order",
+    "path": "/user/order",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/order/index.vue",
+    "chunkName": "pages/user/order/index",
+    "_name": "_7f72d3b1"
+  },
+  {
+    "name": "user-profile",
+    "path": "/user/profile",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/profile.vue",
+    "chunkName": "pages/user/profile",
+    "_name": "_1ba39289"
+  },
+  {
+    "name": "user-user_wallet",
+    "path": "/user/user_wallet",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/user_wallet.vue",
+    "chunkName": "pages/user/user_wallet",
+    "_name": "_a8808466"
+  },
+  {
+    "name": "user-after_sales-after_sale_details",
+    "path": "/user/after_sales/after_sale_details",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/after_sales/after_sale_details.vue",
+    "chunkName": "pages/user/after_sales/after_sale_details",
+    "_name": "_bf1e67fa"
+  },
+  {
+    "name": "user-after_sales-apply_result",
+    "path": "/user/after_sales/apply_result",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/after_sales/apply_result.vue",
+    "chunkName": "pages/user/after_sales/apply_result",
+    "_name": "_16e81f78"
+  },
+  {
+    "name": "user-after_sales-apply_sale",
+    "path": "/user/after_sales/apply_sale",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/after_sales/apply_sale.vue",
+    "chunkName": "pages/user/after_sales/apply_sale",
+    "_name": "_2dcd09a4"
+  },
+  {
+    "name": "user-evaluation-evaluate",
+    "path": "/user/evaluation/evaluate",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/evaluation/evaluate.vue",
+    "chunkName": "pages/user/evaluation/evaluate",
+    "_name": "_5a3cc528"
+  },
+  {
+    "name": "user-order-detail",
+    "path": "/user/order/detail",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/user/order/detail.vue",
+    "chunkName": "pages/user/order/detail",
+    "_name": "_073ab202"
+  },
+  {
+    "name": "goods_details-id",
+    "path": "/goods_details/:id?",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/goods_details/_id.vue",
+    "chunkName": "pages/goods_details/_id",
+    "_name": "_58a0abe0"
+  },
+  {
+    "name": "goods_list-type",
+    "path": "/goods_list/:type?",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/goods_list/_type.vue",
+    "chunkName": "pages/goods_list/_type",
+    "_name": "_2f748b15"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/likeshop002/Desktop/project/likeshop_b2c/pc/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_2cc45644"
+  }
+]

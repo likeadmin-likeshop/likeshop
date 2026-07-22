@@ -49,19 +49,6 @@
                                placeholder="请输入密码"/>
                     </div>
                 </div>
-                <div class="form-box-item">
-                    <div class="icon">
-                        <img src="__PUBLIC__/static/common/image/login/login_code.png"/>
-                    </div>
-                    <div style="display: flex; align-items: center;">
-                        <input type="text" name="captcha" lay-verify="required" lay-vertype="tips"
-                               class="layui-input" style="border:none;width: 180px;padding-left: 20px;"
-                               placeholder="请输入图形验证码"/>
-                        <input type="hidden" name="captcha_key" value="{$captcha.key}"/>
-                        <img id="captcha" src="{$captcha.image}" alt="图形验证码"
-                             style="width: 120px;height: 42px;cursor:pointer;margin-left: 8px;"/>
-                    </div>
-                </div>
 
                 <div class="form-box-checked">
                     <div>
@@ -77,7 +64,6 @@
     </footer>
 </div>
 <script src="__PUBLIC__/static/plug/layui-admin/dist/layuiadmin/layui/layui.js"></script>
-<script src="__PUBLIC__/static/common/js/jsencrypt.min.js?v={$front_version}"></script>
 </body>
 <script>
     if (self != top) {
@@ -110,25 +96,14 @@
                             location.href = '../'; //后台主页
                         });
                     }
-                    refreshCaptcha();
+                    $('#captcha').attr('src', '{:captcha_src()}?t=' + new Date().getTime());
                 },
             });
         }
 
-        function refreshCaptcha() {
-            $.getJSON('{:url("account/captcha")}', function (res) {
-                if (res.code == 1) {
-                    $('#captcha').attr('src', res.data.image);
-                    $('[name="captcha_key"]').val(res.data.key);
-                    $('[name="captcha"]').val('');
-                }
-            });
-        }
-
-        $('#captcha').on('click', refreshCaptcha);
-
         //提交
         form.on('submit(login)', function (obj) {
+            console.log(3434);
             login(obj);
         });
 
@@ -143,7 +118,7 @@
                 $('#login').trigger('click');
             }
         });
-        $('[name="captcha"]').keyup(function (event) {
+        $('[name="code"]').keyup(function (event) {
             if (event.keyCode == 13) {
                 $('#login').trigger('click');
             }

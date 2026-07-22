@@ -100,6 +100,19 @@
                 <label class="layui-form-label"></label>
                 <span style="color: #a3a3a3;font-size: 9px">建议尺寸：宽400px*高400px。jpg，jpeg，png格式</span>
             </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">发货信息管理：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="express_send_sync" value="1" title="开启" {if $mnp.express_send_sync== 1} checked {/if} >
+                    <input type="radio" name="express_send_sync" value="0" title="关闭" {if $mnp.express_send_sync== 0} checked {/if} >
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <span style="color: #a3a3a3;font-size: 9px">小程序有订单发货管理时，请打开此开关，否则会导致订单资金冻结</span>
+            </div>
             <!--                开发者ID-->
             <div class="layui-form-item div-flex">
                 <fieldset class="layui-elem-field layui-field-title">

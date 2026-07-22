@@ -6,15 +6,6 @@
                 <u-input class="flex1" v-model="mobile" />
             </view>
             <view class="input-item row">
-                <view class="input-label md normal">图形验证码</view>
-                <captcha-input
-                    class="flex1"
-                    v-model="captchaCode"
-                    ref="captcha"
-                    @captcha-key="captchaKey = $event"
-                />
-            </view>
-            <view class="input-item row">
                 <view class="input-label md normal">验证码</view>
                 <u-input class="flex1" v-model="code" placeholder="请输入验证码" />
                 <view class="get-code xs br60 row-center primary" @tap="sendSms">
@@ -68,27 +59,18 @@
 <script>
 import { retrievePayPassword, send } from '@/api/user'
 import { mapGetters } from 'vuex'
-import CaptchaInput from '@/components/captcha-input/captcha-input.vue'
 export default {
-    components: {
-        CaptchaInput
-    },
     data() {
         return {
             time: 59,
             showCount: false,
             setPwd: '',
             comfirmPwd: '',
-            code: '',
-            captchaCode: '',
-            captchaKey: ''
+            code: ''
         }
     },
     onLoad() {},
     methods: {
-        isCaptchaError(res) {
-            return res && res.msg && res.msg.indexOf('图形验证码') !== -1
-        },
         retrievePayPasswordFun() {
             let { setPwd, comfirmPwd, code } = this
             if (!code) {
@@ -145,12 +127,6 @@ export default {
                 mobile: this.userInfo.mobile
             }
             if (this.showCount) return
-            if (!this.captchaCode || !this.captchaKey) {
-                this.$toast({ title: '请输入有效的图形验证码' })
-                return
-            }
-            data.captcha_key = this.captchaKey
-            data.captcha = this.captchaCode
             send(data).then((res) => {
                 if (res.code == 1) {
                     this.$toast({
@@ -158,9 +134,6 @@ export default {
                     })
                     this.showCount = true
                     this.$refs.countDown.start()
-                } else if (this.isCaptchaError(res)) {
-                    this.$refs.captcha && this.$refs.captcha.refresh()
-                    this.captchaCode = ''
                 }
             })
         }
@@ -199,7 +172,7 @@ export default {
                 width: 176rpx;
                 height: 58rpx;
                 flex: none;
-                border: 1px solid $ls-color-primary;
+                border: 1px solid $-color-primary;
             }
         }
 

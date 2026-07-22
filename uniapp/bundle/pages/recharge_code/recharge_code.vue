@@ -73,7 +73,7 @@
 				padding: 20rpx 30rpx;
 
 				&:not(:last-of-type) {
-					border-bottom: $ls-solid-border;
+					border-bottom: $-solid-border;
 				}
 			}
 		}

@@ -81,11 +81,11 @@
             });
         });
 
-        });
-        layui.define(['table', 'form'], function (exports) {
+    });
+    layui.define(['table', 'form'], function (exports) {
         var $ = layui.$
             , form = layui.form;
-            table = layui.table;
+        table = layui.table;
         //管理员管理
         table.render({
             id: 'goods-lists'
@@ -110,11 +110,11 @@
             }
         });
     })
-        var callbackdata = function () {
-            var data = table.checkStatus('goods-lists').data
+    var callbackdata = function () {
+        var data = table.checkStatus('goods-lists').data
             ,index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            return data;
-        }
+        parent.layer.close(index);
+        return data;
+    }
 
 </script>

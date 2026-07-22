@@ -32,11 +32,6 @@ export function getAddressLists() {
     return request.get('user_address/lists')
 }
 
-// 获取地区树（公开接口，页面按需加载）
-export function getRegionLists() {
-    return request.get('region/lists')
-}
-
 // 添加编辑地址
 export function editAddress(data) {
     return request.post('user_address/update', data)
@@ -228,13 +223,16 @@ export function setUserInfo(data) {
 }
 
 // 更换手机号
+// export function changeUserMobile(data) {
+//     // #ifdef MP-WEIXIN
+//     return request.post('user/getMobile', data)
+//     // #endif
+//     // #ifdef H5 || APP-PLUS
+//     return request.post('user/changeMobile', { ...data, client })
+//     // #endif
+// }
 export function changeUserMobile(data) {
-    // #ifdef MP-WEIXIN
-    return request.post('user/getMobile', data)
-    // #endif
-    // #ifdef H5 || APP-PLUS
     return request.post('user/changeMobile', { ...data, client })
-    // #endif
 }
 
 //会员中心
@@ -396,4 +394,12 @@ export function getCopyright() {
 // 绑定微信
 export function bindOawechat(data) {
     return request.post('account/oaAuthLogin', data)
+}
+// 小程序绑定微信
+export function bindMpwechat(data) {
+    return request.post('account/mnpAuthLogin', data)
+}
+
+export function withdrawReceive(data) {
+    return request.post('withdraw/receive', data)
 }

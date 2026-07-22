@@ -28,8 +28,8 @@ class SubscribeLogic
     public static function lists($scene)
     {
         $where = [
-            ['mnp_notice', '<>', ''],
-            ['type', '=', 1]
+            [ 'mnp_notice', '<>', '' ],
+            [ 'scene', 'in', $scene ],
         ];
         $lists = NoticeSetting::where($where)->field('mnp_notice')->limit(3)->select()->toArray();
 

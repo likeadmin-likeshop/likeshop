@@ -154,7 +154,7 @@ export default {
         .collection-item {
             padding: 20rpx;
             &:not(:last-of-type) {
-                border-bottom: $ls-solid-border;
+                border-bottom: $-solid-border;
             }
             .info {
                 flex: 1;
@@ -168,7 +168,7 @@ export default {
                 width: 148rpx;
                 height: 52rpx;
                 right: 20rpx;
-                border: 1px solid $ls-color-primary;
+                border: 1px solid $-color-primary;
                 display: flex;
                 justify-content: center;
                 align-items: center;

@@ -162,14 +162,14 @@ class OrderLogic extends LogicBase
                     'status',
                 ];
                 $self_fetch_info = [
-                    'selffetch_shop_id' => $selffetch_info['selffetch_shop_id'] ?? '',
-                    'contact'           => $selffetch_info['consignee'] ?? '',
-                    'mobile'            => $selffetch_info['mobile'] ?? '',
+                    'selffetch_shop_id' => $post['selffetch_shop_id'] ?? ($selffetch_info['selffetch_shop_id'] ?? ''),
+                    'contact'           => $post['consignee'] ?? ($selffetch_info['consignee'] ?? ''),
+                    'mobile'            => $post['mobile'] ?? ($selffetch_info['mobile'] ?? ''),
                     'selffetch_shop'    => SelffetchShop::where('status', 1)
                         ->field($selffetch_field)
                         ->append([ 'shop_address' ])
                         ->order('id desc')
-                        ->find($selffetch_info['selffetch_shop_id'] ?? 0),
+                        ->find($post['selffetch_shop_id'] ?? ($selffetch_info['selffetch_shop_id']) ?? ''),
                 ];
             }
 
@@ -874,7 +874,7 @@ class OrderLogic extends LogicBase
         $lists = $order->where(['del' => 0, 'user_id' => $user_id])
             ->where($where)
             ->with(['orderGoods'])
-            ->field('id,order_sn,order_status,pay_status,order_amount,order_status,order_type,shipping_status,create_time,delivery_type,team_found_id,pay_time,pay_way')
+            ->field('id,order_sn,order_status,pay_status,order_amount,order_status,order_type,shipping_status,create_time,delivery_type,team_found_id,pay_time,pay_way,transaction_id')
             ->page($page, $size)
             ->order('id desc')
             ->select();
@@ -941,7 +941,7 @@ class OrderLogic extends LogicBase
         ];
 
         $order_hidden = [
-            'user_id', 'order_source', 'city', 'district', 'address', 'shipping_status', 'shipping_code', 'transaction_id', 'del', 'province'
+            'user_id', 'order_source', 'city', 'district', 'address', 'shipping_status', 'shipping_code', 'del', 'province'
         ];
 
         $order->append($order_append)->hidden($order_hidden);
@@ -1006,7 +1006,7 @@ class OrderLogic extends LogicBase
 
         //自提门店
         $order['selffetch_shop'] = SelffetchShop::where('id',$order['selffetch_shop_id'])
-            ->field('id,name,province,city,district,address,business_start_time,business_end_time')
+            ->field('id,name,province,city,district,address,business_start_time,business_end_time,weekdays,image,mobile,longitude,latitude')
             ->append(['shop_address'])
             ->hidden(['province','city','district','address'])
             ->find();
@@ -1222,10 +1222,14 @@ class OrderLogic extends LogicBase
                     //快递编码
                     $shipping_code = Db::name('express')->where(['id' => $order_delivery['shipping_id']])->value($shipping_field);
                     //获取物流轨迹
-                    if ($express === 'kdniao') {
-                        $expressage->logistics($shipping_code, $order_delivery['invoice_no'], substr($order_delivery['mobile'], -4));
-                    } else {
-                        $expressage->logistics($shipping_code, $order_delivery['invoice_no'], $order_delivery['mobile']);
+                    if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
+                        if ($express === 'kdniao') {
+                            $expressage->logistics($shipping_code, $order_delivery['invoice_no'], substr($order_delivery['mobile'],-4));
+                        } else {
+                            $expressage->logistics($shipping_code, $order_delivery['invoice_no'], $order_delivery['mobile']);
+                        }
+                    }else {
+                        $expressage->logistics($shipping_code, $order_delivery['invoice_no']);
                     }
 
                     $traces = $expressage->logisticsFormat();
@@ -1278,7 +1282,6 @@ class OrderLogic extends LogicBase
                     'tips' => '订单提交成功',
                     'time' => $order['pay_time']
                 ],
-                'express' => $express,
             ];
             return $order_traces;
         }

@@ -120,7 +120,7 @@ class UserServer
             Db::commit();
 
             $user_info = Db::name('user')
-                ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code','is_new_user'])
+                ->field([ 'id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code','is_new_user', 'mobile' ])
                 ->where(['id' => $user_id])
                 ->find();
             if (empty($user_info['avatar'])) {
@@ -226,7 +226,7 @@ class UserServer
 
             $user_info = Db::name('user')
                 ->where(['id' => $user_info['id']])
-                ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code','is_new_user'])
+                ->field([ 'id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code','is_new_user', 'mobile' ])
                 ->find();
 
             if (empty($user_info['avatar'])) {

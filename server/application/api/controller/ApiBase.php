@@ -19,7 +19,6 @@
 
 namespace app\api\controller;
 
-use app\common\server\PasswordCryptoService;
 use think\App;
 use think\Controller;
 use think\exception\HttpResponseException;
@@ -94,7 +93,7 @@ class ApiBase extends Controller
             $result['debug'] = [
                 'request' => [
                     'get' => $this->request->get(),
-                    'post' => PasswordCryptoService::maskPasswordFields($this->request->post()),
+                    'post' => $this->request->post(),
                     'header' => $this->request->header(),
                 ]
             ];
@@ -135,7 +134,7 @@ class ApiBase extends Controller
             $result['debug'] = [
                 'request' => [
                     'get' => $this->request->get(),
-                    'post' => PasswordCryptoService::maskPasswordFields($this->request->post()),
+                    'post' => $this->request->post(),
                     'header' => $this->request->header(),
                 ]
             ];

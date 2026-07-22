@@ -23,11 +23,19 @@
                 <div class="layui-form-item ">
                     <label class="layui-form-label" style="white-space: nowrap;">短信验证注册手机：</label>
                     <div class="layui-input-block ">
-                        <input type="radio" name="open" value="0" title="关闭" {if condition="$config eq 0"}checked{/if}>
-                        <input type="radio" name="open" value="1" title="开启" {if condition="$config eq 1"}checked{/if}>
+                        <input type="radio" name="open" value="0" title="关闭" {if condition="$open eq 0"}checked{/if}>
+                        <input type="radio" name="open" value="1" title="开启" {if condition="$open eq 1"}checked{/if}>
                     </div>
                     <div class=" layui-form-mid layui-word-aux" style="white-space: nowrap">
                         会员手机号码注册账号时,是否需要短信验证码验证.默认关闭.
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label" style="white-space: nowrap;">强制绑定手机号：</label>
+                    <div class="layui-input-block ">
+                        <input type="radio" name="must_bind_mobile" value="0" title="关闭" {if condition="$must_bind_mobile eq 0"}checked{/if}>
+                        <input type="radio" name="must_bind_mobile" value="1" title="开启" {if condition="$must_bind_mobile eq 1"}checked{/if}>
                     </div>
                 </div>
 

@@ -1,0 +1,34 @@
+{layout name="layout2" /}
+<div class="layui-form" lay-filter="" style="padding: 30px;">
+    <!--服务名称-->
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">*</font>服务名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" lay-verify="required" lay-verType="tips" placeholder="请输入服务名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <!--说明-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">说明</label>
+        <div class="layui-input-block">
+            <textarea name="content"  placeholder="请输入保障说明" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="add-assurance_service-submit" id="add-assurance_service-submit" value="确认">
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,like = layui.like
+
+    });
+</script>

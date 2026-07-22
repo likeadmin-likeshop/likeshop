@@ -55,12 +55,6 @@
           <el-form-item>
             <el-input v-model="telephone" placeholder="请输入新的手机号码" />
           </el-form-item>
-          <el-form-item>
-            <div class="row">
-              <el-input v-model="captchaCode" placeholder="图形验证码" />
-              <img :src="captchaImg" class="captcha-img" @click="getCaptchaImg" />
-            </div>
-          </el-form-item>
           <el-form-item >
             <div class="row">
               <el-input v-model="verifyCode" placeholder="短信验证码" />
@@ -82,12 +76,6 @@
         <el-form style="width: 50%;margin: 0 auto;">
           <el-form-item>
             <el-input v-model="mobile" placeholder="请输入手机号码" disabled />
-          </el-form-item>
-          <el-form-item>
-            <div class="row">
-              <el-input v-model="captchaCode" placeholder="图形验证码" />
-              <img :src="captchaImg" class="captcha-img" @click="getCaptchaImg" />
-            </div>
           </el-form-item>
           <el-form-item>
             <div class="row">
@@ -118,7 +106,7 @@
 import {SMSType, client, FieldType} from '~/utils/type'
 import CountDown from '~/components/public/countDown';
 import Cookies from 'js-cookie'
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 import config from '~/config/app'
 export default {
   head() {
@@ -173,35 +161,11 @@ export default {
      smsType: SMSType.CHANGE_MOBILE,
      canSendNumber: true,
      canSendPwd: true,
-     fileList: [],
-     captchaCode: '',
-     captchaImg: '',
-     captchaKey: ''
+     fileList: []
    }
  },
  methods: {
-   ...mapMutations([
-     'setToken'
-   ]),
    ...mapActions(['getPublicData']),
-    isCaptchaError(res) {
-      return res && res.msg && res.msg.indexOf('图形验证码') !== -1
-    },
-    async getCaptchaImg(clearCode = true) {
-      if (clearCode) {
-        this.captchaCode = ''
-      }
-      try {
-        const res = await this.$get('account/captcha')
-        if (res.code == 1) {
-          this.captchaImg = res.data.image || ''
-          this.captchaKey = res.data.key || ''
-        }
-      } catch (error) {
-        this.captchaImg = ''
-        this.captchaKey = ''
-      }
-    },
     async saveUserInfo() {
       let res = await this.$post("pc/changeUserInfo", {
         sex: this.radio,
@@ -228,12 +192,10 @@ export default {
     openChangeNumber() {
         this.showChangeNumber = true;
         this.smsType = this.mobile ? SMSType.CHANGE_MOBILE : SMSType.BIND;
-        this.getCaptchaImg();
     },
     openChangePwdPop() {
       this.showPwdPop = true;
       this.smsType = SMSType.FINDPWD;
-      this.getCaptchaImg();
     },
     async sndSmsToPhone() {
       if((this.smsType == SMSType.CHANGE_MOBILE || this.smsType == SMSType.BIND) && !this.canSendNumber) {
@@ -249,39 +211,17 @@ export default {
         })
         return;
       }
-      if (!this.captchaCode) {
-        this.$message({
-          message: '请输入图形验证码',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.captchaKey) {
-        this.$message({
-          message: '图形验证码已失效，请重新获取',
-          type: 'error'
-        })
-        this.getCaptchaImg()
-        return
-      }
 
-      let params = {
+      let res = await this.$post("sms/send", {
           mobile: this.smsType == SMSType.FINDPWD ? this.mobile : this.telephone,
           key: this.smsType
-      }
-      if (this.smsType == SMSType.CHANGE_MOBILE || this.smsType == SMSType.BIND || this.smsType == SMSType.FINDPWD) {
-        params.captcha_key = this.captchaKey
-        params.captcha = this.captchaCode
-      }
-      let res = await this.$post("sms/send", params);
+      });
       if(res.code == 1) {
         this.smsType == SMSType.CHANGE_MOBILE ? this.canSendNumber = false : this.canSendPwd = false;
         this.$message({
           message: '发送成功',
           type: 'success'
         })
-      } else if (this.isCaptchaError(res)) {
-        this.getCaptchaImg()
       }
     },
     async changeUserMobile() {
@@ -354,11 +294,8 @@ export default {
           type: 'success'
         });
         this.showPwdPop = false;
-        const token = res.data && res.data.token
-        if (token) {
-          Cookies.set('token', token, { expires: 60 });
-          this.setToken(token);
-        }
+        const token = res.data.token
+        Cookies.set('token', token, { expires: 60 });
       }
     },
     async uploadFileSuccess(res, fileList) {
@@ -387,17 +324,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .captcha-img {
-    width: 100px;
-    height: 40px;
-    margin-left: 14px;
-    cursor: pointer;
-    object-fit: cover;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: #f5f7fa;
-  }
   .user-profile {
     padding: 10px;
     .user-header {

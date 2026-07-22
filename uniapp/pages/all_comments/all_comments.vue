@@ -257,7 +257,7 @@ export default {
             .evaluation-item {
                 padding: 20rpx;
                 &:not(:last-of-type) {
-                    border-bottom: $ls-solid-border;
+                    border-bottom: $-solid-border;
                 }
                 .avatar {
                     width: 60rpx;

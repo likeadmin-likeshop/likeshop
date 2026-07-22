@@ -40,7 +40,9 @@ class RechargeLogic{
 
     public static function recharge($user_id,$client,$post){
         $give_integral= ConfigServer::get('recharge', 'give_integral', 0);
+        $give_integral = empty($give_integral) ? 0 : $give_integral;
         $give_growth  = ConfigServer::get('recharge', 'give_growth', 0);
+        $give_growth = empty($give_growth) ? 0 : $give_growth;
 
         //选择运费模板
         if(isset($post['id'])){

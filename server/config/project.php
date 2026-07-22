@@ -1,9 +1,12 @@
 <?php
+
+use think\facade\Env;
+
 return [
-    'file_domain' => \think\facade\Env::get('project.file_domain', 'likeshop.yixiangonline.com'),
-    'sms' => \think\facade\Env::get('project.sms', true),
-    'version' => \think\facade\Env::get('project.version', '3.5.1'),
-    'front_version' => \think\facade\Env::get('project.version', '3.5.1'),
+    'file_domain'       => Env::get('project.file_domain', 'likeshop.yixiangonline.com'),
+    'sms'               => Env::get('project.sms', true),
+    'version'           => Env::get('project.version', '3.5.1.20250304'),
+    'front_version'     => Env::get('project.version', '3.5.1.20250304'),
 
     // 文件上传限制 (图片)
     'file_image' => [

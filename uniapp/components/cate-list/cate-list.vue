@@ -255,7 +255,7 @@
 					border: 1px solid transparent;
 					border-radius: 50%;
 					&.active {
-						border-color: $ls-color-primary;
+						border-color: $-color-primary;
 					}
 				}
 				.name {
@@ -279,7 +279,7 @@
 
 					&.active {
 						width: 20rpx;
-						background-color: $ls-color-primary;
+						background-color: $-color-primary;
 					}
 				}
 

@@ -170,7 +170,7 @@
 				&.active {
 					width: 16rpx;
 					border-radius: 8rpx;
-					background-color: $ls-color-primary;
+					background-color: $-color-primary;
 				}
 			}
 		}

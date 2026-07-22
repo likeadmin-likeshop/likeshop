@@ -21,20 +21,20 @@
         </view>
         <view class="nav row">
 			<navigator class="nav-item column-center" hover-class="none" url="/bundle/pages/balance_transfer/balance_transfer">
-			    <image :src="staticAsset('bundle/icon_yezz.png')"></image>
+			    <image src="../../static/images/icon_yezz.png"></image>
 			    <view class="mt10">余额转账</view>
 			</navigator>
             <navigator class="nav-item column-center" hover-class="none" url="/bundle/pages/user_bill/user_bill?type=0">
-                <image :src="staticAsset('bundle/icon_zhmx.png')"></image>
+                <image src="../../static/images/icon_zhmx.png"></image>
                 <view class="mt10">账户明细</view>
             </navigator>
 			
 			<navigator class="nav-item column-center" hover-class="none" url="/bundle/pages/transfer_record/transfer_record">
-			    <image :src="staticAsset('bundle/icon_zzjl.png')"></image>
+			    <image src="../../static/images/icon_zzjl.png"></image>
 			    <view class="mt10">转账记录</view>
 			</navigator>
             <navigator class="nav-item column-center" hover-class="none" url="/bundle/pages/recharge_code/recharge_code">
-                <image :src="staticAsset('bundle/icon_czjl.png')"></image>
+                <image src="../../static/images/icon_czjl.png"></image>
                 <view class="mt10">充值记录</view>
             </navigator>
         </view>
@@ -48,7 +48,7 @@
                     <view class="muted sm mt10">积分签到抵现金</view>
                     <navigator class="br60 bg-primary white join-btn row-center" url="/bundle/pages/user_sign/user_sign" hover-class="none">立即参与</navigator>
                 </view>
-                <image style="width:274rpx;height: 210rpx;" :src="staticAsset('bundle/img_activity_jifen.png')"></image>
+                <image style="width:274rpx;height: 210rpx;" src="../../static/images/img_activity_jifen.png"></image>
             </view>
         </view>
     </view>

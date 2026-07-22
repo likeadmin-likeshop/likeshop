@@ -35,7 +35,9 @@
         "topthink/think-image": "^1.0",
         "ext-openssl": "*",
         "endroid/qr-code": "2.5.1",
-        "ext-gd": "*"
+        "ext-fileinfo": "*",
+        "phpoffice/phpspreadsheet": "1.19.0",
+        "ext-bcmath": "*"
     },
     "autoload": {
         "psr-4": {

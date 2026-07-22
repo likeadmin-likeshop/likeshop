@@ -31,12 +31,11 @@ class Driver
     /**
      * 设置上传的文件信息
      * @param string $name
-     * @param array $extensions
      * @return mixed
      */
-    public function setUploadFile($name = 'iFile', array $extensions = [])
+    public function setUploadFile($name = 'iFile')
     {
-        return $this->engine->setUploadFile($name, $extensions);
+        return $this->engine->setUploadFile($name);
     }
 
     /**

@@ -50,19 +50,19 @@ class WechatMerchantTransfer extends Command
         }
 
         $lists = WithdrawApply::where(['type'=>Withdraw::TYPE_WECHAT_CHANGE,'status'=>Withdraw::STATUS_ING])
-            ->field('id,sn,batch_no,user_id,money')
+            ->order('id desc')
             ->select();
 
         foreach ($lists as $list) {
             $result = WechatMerchantTransferLogic::details($list);
             // 记录查询结果
             WithdrawApply::update(['update_time'=>time(),'pay_search_desc'=>json_encode($result, JSON_UNESCAPED_UNICODE)],['id'=>$list['id']]);
-            if(isset($result['detail_status'])) {
-                if ($result['detail_status'] == 'SUCCESS') {
+            if(isset($result['state'])) {
+                if ($result['state'] == 'SUCCESS') {
                     // 转账成功,标记提现申请单为提现成功,记录支付信息
-                    WithdrawApply::update(['status'=>3,'payment_no'=>$result['detail_id'],'payment_time'=>strtotime($result['update_time'])],['id'=>$list['id']]);
+                    WithdrawApply::update(['status'=>3,'payment_no'=>$result['transfer_bill_no'],'payment_time'=>strtotime($result['update_time'])],['id'=>$list['id']]);
                 }
-                if ($result['detail_status'] == 'FAIL') {
+                if ($result['state'] == 'FAIL') {
                     // 转账失败
                     WithdrawApply::update(['status'=>4],['id'=>$list['id']]);
                     //回退佣金
@@ -81,7 +81,7 @@ class WechatMerchantTransfer extends Command
                         $list['sn']
                     );
                 }
-                if ($result['detail_status'] == 'PROCESSING') {
+                if ($result['state'] == 'PROCESSING') {
                     return ['code' => 0, 'msg' => '正在处理中'];
                 }
             }else{

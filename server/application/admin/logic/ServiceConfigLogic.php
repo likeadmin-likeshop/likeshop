@@ -23,7 +23,7 @@ use think\Db;
 
 class ServiceConfigLogic
 {
-
+    
     public static function getConfig(): array
     {
         $titles = [
@@ -96,7 +96,7 @@ class ServiceConfigLogic
             'enterprise_id' => '',
             'kefu_link'     => '',
         ];
-
+        
         $config = [
             'mnp'   => ConfigServer::get('kefu_config', 'mnp', $defaultData),
             'oa'    => ConfigServer::get('kefu_config', 'oa', $defaultData),
@@ -104,7 +104,7 @@ class ServiceConfigLogic
             'pc'    => ConfigServer::get('kefu_config', 'pc', $defaultData),
             'app'   => ConfigServer::get('kefu_config', 'app', $defaultData),
         ];
-
+        
         if (!empty($config['mnp']['qr_code'])) {
             $config['mnp']['qr_code'] = UrlServer::getFileUrl($config['mnp']['qr_code']);
         }
@@ -120,7 +120,7 @@ class ServiceConfigLogic
         if (!empty($config['app']['qr_code'])) {
             $config['app']['qr_code'] = UrlServer::getFileUrl($config['app']['qr_code']);
         }
-
+        
         return [
             'config'    => $config,
             'titles'    => $titles,
@@ -130,7 +130,7 @@ class ServiceConfigLogic
     public static function setConfig($params)
     {
         Db::startTrans();
-
+        
         try {
             foreach($params as $key => $value) {
                 if(!in_array($key, ['mnp','oa','h5','pc','app'])) {
@@ -138,7 +138,7 @@ class ServiceConfigLogic
                 }
                 ConfigServer::set('kefu_config', $key, $value);
             }
-
+            
             // 提交事务
             Db::commit();
             return true;

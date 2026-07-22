@@ -97,7 +97,7 @@
             </view>
         </view>
         <view class="order-nav bg-white">
-            <view class="title row-between" @tap="goPage('/pages/user_order/user_order')">
+            <view class="title row-between" @tap="goPage('/bundle/pages/user_order/user_order')">
                 <view class="lg">我的订单</view>
                 <view class="muted sm row">
                     全部订单
@@ -107,7 +107,7 @@
             <view class="nav row">
                 <view
                     class="item column-center mb20"
-                    @tap="goPage('/pages/user_order/user_order?type=pay')"
+                    @tap="goPage('/bundle/pages/user_order/user_order?type=pay')"
                 >
                     <view class="icon-contain">
                         <view v-if="userInfo.wait_pay" class="badge xs row-center bg-white">
@@ -119,7 +119,7 @@
                 </view>
                 <view
                     class="item column-center mb20"
-                    @tap="goPage('/pages/user_order/user_order?type=delivery')"
+                    @tap="goPage('/bundle/pages/user_order/user_order?type=delivery')"
                 >
                     <view class="icon-contain">
                         <view v-if="userInfo.wait_delivery" class="badge xs row-center bg-white">
@@ -131,7 +131,7 @@
                 </view>
                 <view
                     class="item column-center mb20"
-                    @tap="goPage('/pages/user_order/user_order?type=delivery')"
+                    @tap="goPage('/bundle/pages/user_order/user_order?type=delivery')"
                 >
                     <view class="icon-contain">
                         <view v-if="userInfo.wait_take" class="badge xs row-center bg-white">
@@ -189,14 +189,6 @@
             </view>
         </view>
         <recommend />
-		<view class="xs muted" style="margin: 50rpx 0;">
-			<view class="row-center">
-				由 likeshop 提供免费开源商城系统
-			</view>
-			<view class="row-center">
-				© likeshop.cn
-			</view>
-		</view>
     </view>
 </template>
 
@@ -204,7 +196,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { getUser } from '@/api/user'
 import { getMenu } from '@/api/store'
-import { toLogin, wxMnpLogin } from '@/utils/login'
+import { toLogin } from '@/utils/login'
 import { menuJump, copy, setTabbar } from '@/utils/tools'
 import Cache from '@/utils/cache'
 const app = getApp()
@@ -305,7 +297,7 @@ export default {
 </script>
 <style lang="scss">
 .user {
-    background-color: #ff6b57;
+    background-image: url(../../static/images/my_topbg.png);
     background-size: 100% 420rpx;
     background-repeat: no-repeat;
     .header {
@@ -348,7 +340,7 @@ export default {
                     position: absolute;
                     background-color: #ee0a24;
                     border: 2rpx solid #ffffff;
-                    color: $ls-color-primary;
+                    color: $-color-primary;
                     border-radius: 100%;
                     top: 6rpx;
                     right: 0rpx;
@@ -398,7 +390,7 @@ export default {
     .title {
         height: 88rpx;
         padding: 0 30rpx;
-        border-bottom: $ls-dashed-border;
+        border-bottom: $-dashed-border;
     }
 
     .nav {
@@ -418,8 +410,8 @@ export default {
             height: 28rpx;
             border-radius: 28rpx;
             box-sizing: border-box;
-            border: 1rpx solid $ls-color-primary;
-            color: $ls-color-primary;
+            border: 1rpx solid $-color-primary;
+            color: $-color-primary;
             position: absolute;
             left: 33rpx;
             top: -10rpx;

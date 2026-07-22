@@ -81,7 +81,7 @@ class Kuaidi100
             }
 
             if ($data['template']['expressName'] != '顺丰快递') {
-                if (!$data['template']['partnerKey']) {
+                if (!$data['template']['partnerId']) {
                     throw new Exception('请设置电子面单客户账号partnerId');
                 }
                 if (!$data['template']['partnerKey']) {

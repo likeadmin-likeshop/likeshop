@@ -273,13 +273,13 @@ class WithdrawLogic
                 $result = WechatMerchantTransferLogic::details($withdraw);
                 // 记录查询结果
                 WithdrawApply::update(['update_time'=>time(),'pay_search_desc'=>json_encode($result, JSON_UNESCAPED_UNICODE)],['id'=>$withdraw['id']]);
-                if(isset($result['detail_status'])) {
-                    if ($result['detail_status'] == 'SUCCESS') {
+                if(isset($result['state'])) {
+                    if ($result['state'] == 'SUCCESS') {
                         // 转账成功,标记提现申请单为提现成功,记录支付信息
                         WithdrawApply::update(['status'=>3,'payment_no'=>$result['detail_id'],'payment_time'=>strtotime($result['update_time'])],['id'=>$withdraw['id']]);
                         return ['code' => 1, 'msg' => '提现成功'];
                     }
-                    if ($result['detail_status'] == 'FAIL') {
+                    if ($result['state'] == 'FAIL') {
                         // 转账失败
                         WithdrawApply::update(['status'=>4],['id'=>$withdraw['id']]);
                         //回退佣金

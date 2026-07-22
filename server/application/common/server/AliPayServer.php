@@ -129,8 +129,8 @@ class AliPayServer
             '订单:'.$order['order_sn'],
             $order['order_sn'],
             $order['order_amount'],
-            $domain.'/mobile/pages/user_order/user_order',
-            $domain.'/mobile/pages/user_order/user_order'
+            $domain.'/mobile/bundle/pages/user_order/user_order',
+            $domain.'/mobile/bundle/pages/user_order/user_order'
         );
         return $result->body;
     }
@@ -156,6 +156,8 @@ class AliPayServer
                     $result = $this->appPay($from, $order);
                     break;
                 case Client_::h5:
+                case Client_::mnp:
+                case Client_::oa:
                     $result = $this->wapPay($from, $order);
                     break;
                 default:

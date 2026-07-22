@@ -32,7 +32,6 @@
     "bundle": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
-    "minifyWXML": true,
     "userConfirmedUseCompilerModuleSwitch": false,
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,

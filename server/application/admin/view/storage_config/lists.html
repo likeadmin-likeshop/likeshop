@@ -4,11 +4,12 @@
         <div class="layui-card-body">
             <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">温馨提示：</h2>
                     <div class="layui-colla-content layui-show">
-                        <p>*商城图片存储方式设置。</p>
-                        <p>*只能有一种存储方式处于启用状态, 不要随意切换存储引擎以免图片失效。</p>
-                        <p>*如果所有存储方式都停用或设置错误都会导致图片上传失败。</p>
+                        <p>1.使用对象存储，需要将public目录下的资源文件保留原来目录路径传输到对象存储空间。</p>
+                        <p>2.请勿随意切换存储方式，可能导致图片无法查看。</p>
+                        <p>3.需要在对象存储后台设置域名跨域，否则图片生成场景无法使用，例海报合成等。</p>
+                        <p>4.需将对象存储的图片域名添加到微信小程序官方后台request合法域名和downloadFile合法域名。</p>
                     </div>
                 </div>
             </div>

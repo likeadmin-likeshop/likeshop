@@ -259,7 +259,7 @@ export default {
             }
             .item-active {
                 color: white;
-                background-color: $ls-color-primary;
+                background-color: $-color-primary;
                 border-radius: 100rpx;
                 height: 100%;
             }
@@ -272,7 +272,7 @@ export default {
                 line-height: 40rpx;
                 height: 100%;
                 .item-active {
-                    color: $ls-color-primary;
+                    color: $-color-primary;
                 }
             }
         }
@@ -304,7 +304,7 @@ export default {
                 text-align: right;
             }
             &:not(:nth-last-of-type(3)) {
-                border-bottom: $ls-solid-border;
+                border-bottom: $-solid-border;
             }
         }
     }

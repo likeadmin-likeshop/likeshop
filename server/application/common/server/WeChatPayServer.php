@@ -31,6 +31,7 @@ use Endroid\QrCode\QrCode;
 use http\Client;
 use think\Db;
 use think\Exception;
+use think\facade\Log;
 
 class WeChatPayServer
 {
@@ -107,7 +108,7 @@ class WeChatPayServer
 
                 //h5(非微信环境)
                 if ($order_source == Client_::h5) {
-                    $redirect_url = request()->domain().'/mobile/pages/user_order/user_order';
+                    $redirect_url = request()->domain().'/mobile/bundle/pages/user_order/user_order';
                     $redirect_url = urlencode($redirect_url);
                     $data = $result['mweb_url'].'&redirect_url='.$redirect_url;
                 }
@@ -124,6 +125,7 @@ class WeChatPayServer
             }
 
         } catch (Exception $e) {
+            Log::write('支付失败:' . $e->__toString());
             self::$error = '支付失败:' . $e->getMessage();
             return false;
         }

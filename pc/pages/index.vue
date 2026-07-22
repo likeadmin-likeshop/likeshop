@@ -136,9 +136,9 @@ import { paramsToStr } from "~/utils/tools";
 import ServerExplan from "../components/server-explan.vue";
 export default {
   head() {
-    const { clarity_app_id } = this.$store.getters.getSiteStatistics || {};
+    const { clarity_app_id } = this.$store.getters.getSiteStatistics;
 
-    if (process.client && clarity_app_id) {
+    if (clarity_app_id) {
       (function(c, l, a, r, i, t, y) {
         c[a] =
           c[a] ||

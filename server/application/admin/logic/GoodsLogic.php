@@ -335,8 +335,9 @@ class GoodsLogic
                 'give_integral'             => $give_integral,
                 'spec_type'                 => $post['spec_type'],
                 'create_time'               => $time,
-                'is_express'                   => isset($post['is_express']) && $post['is_express'] == 'on' ? 1 : 0,
-                'is_selffetch'                   => isset($post['is_selffetch']) && $post['is_selffetch'] == 'on' ? 1 : 0,
+                'is_express'                => isset($post['is_express']) && $post['is_express'] == 'on' ? 1 : 0,
+                'is_selffetch'              => isset($post['is_selffetch']) && $post['is_selffetch'] == 'on' ? 1 : 0,
+                'service_ids'               => implode(',',$post['service_ids'] ?? []),
             ];
             $goods_id = Db::name('goods')->insertGetId($data);
 
@@ -445,7 +446,6 @@ class GoodsLogic
      */
     public static function edit($post, $spec_lists)
     {
-
         try {
             Db::startTrans();
     
@@ -531,6 +531,7 @@ class GoodsLogic
                 'update_time'               => $time,
                 'is_express'                => isset($post['is_express']) && $post['is_express'] == 'on' ? 1 : 0,
                 'is_selffetch'              => isset($post['is_selffetch']) && $post['is_selffetch'] == 'on' ? 1 : 0,
+                'service_ids'               => implode(',',$post['service_ids'] ?? []),
             ];
 
             Db::name('goods')
@@ -779,6 +780,7 @@ class GoodsLogic
                 return '';
             })
             ->append(['abs_image','abs_video'])->find();
+        $info['base']['service_ids'] = explode(',',$info['base']['service_ids']);
         $info['base']['goods_image'] = Db::name('goods_image')
             ->where(['goods_id' => $goods_id])
             ->withAttr('abs_image', function ($value, $data) {
@@ -786,12 +788,7 @@ class GoodsLogic
             ->append(['abs_image'])
             ->select();
 
-        $info['item'] = Db::name('goods_item')
-            ->where(['goods_id' => $goods_id])
-            ->withAttr('abs_image', function ($value, $data) {
-                return UrlServer::getFileUrl($data['image']);
-            })->append(['abs_image'])
-            ->select();
+        $info['item'] = GoodsItem::where('goods_id', $goods_id)->append(['abs_image'])->select()->toArray();
 
         $info['spec'] = Db::name('goods_spec')
             ->where(['goods_id' => $goods_id])

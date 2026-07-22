@@ -40,7 +40,7 @@
 					<!-- 顶部收货地址 -->
 					<view class="express-address row" v-if="take.contacts">
 						<view class="express-left column-center">
-							<image class="express-icon" :src="finish.tips ? staticAsset('bundle/logistics_address.png') : staticAsset('bundle/logistics_address_gray.png')"></image>
+							<image class="express-icon" :src="finish.tips ? '../../static/images/logistics_address.png' : '../../static/images/logistics_address_gray.png'"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right">
@@ -50,7 +50,7 @@
 					</view>
 					<view class="express-item row" v-if="finish.tips">
 						<view class="express-left column-center">
-							<image class="express-icon" :src="staticAsset('bundle/logistics_success.png')"></image>
+							<image class="express-icon" src="../../static/images/logistics_success.png"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right">
@@ -61,10 +61,10 @@
 					</view>
 					<view class="express-item row" v-if="delivery.traces && delivery.traces.length">
 						<view class="express-left column-center">
-							<image class="express-icon" :src="staticAsset('bundle/logistics_transit.png')"></image>
+							<image class="express-icon" src="../../static/images/logistics_transit.png"></image>
 							<view class="express-line"></view>
 						</view>
-						<view class="express-right muted" v-if="express == 'kd100'">
+						<view class="express-right muted">
 							<view class="title bold sm ">{{delivery.title}}</view>
 							<view class="xs" v-if="delivery.traces[0][0]">
 								{{delivery.traces[0][0]}}
@@ -76,13 +76,6 @@
 								{{delivery.traces[0][2]}}
 							</view>
 						</view>
-						<view class="express-right muted" v-else>
-							<view class="title bold sm ">{{delivery.title}}</view>
-							<view class="xs" v-if="delivery.traces[0][2]">
-								{{delivery.traces[0][2]}}
-							</view>
-							<view class="xs" v-if="delivery.traces[0][1]">{{delivery.traces[0][1]}}</view>
-						</view>
 					</view>
 					<block v-for="(item, index) in delivery.traces" :key="index">
 						<view class="express-item row" v-if="index >= 1">
@@ -90,20 +83,16 @@
 								<view class="express-doted"></view>
 								<view class="express-line"></view>
 							</view>
-							<view class="express-right muted" v-if="express == 'kd100'">
+							<view class="express-right muted">
 								<view class="sm" v-if="item[0]">{{item[0]}}</view>
 								<view class="sm" v-if="item[1]">{{item[1]}}</view>
 								<view class="sm" v-if="item[2]">{{item[2]}}</view>
-							</view>
-							<view class="express-right muted" v-else>
-								<view class="sm" v-if="item[2]">{{item[2]}}</view>
-								<view class="sm" v-if="item[1]">{{item[1]}}</view>
 							</view>
 						</view>
 					</block>
 					<view class="express-item row" v-if="shipment.tips">
 						<view class="express-left column-center">
-							<image class="express-icon" :src="staticAsset('bundle/logistics_delivered.png')"></image>
+							<image class="express-icon" src="../../static/images/logistics_delivered.png"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right muted">
@@ -114,7 +103,7 @@
 					</view>
 					<view class="express-item row" v-if="buy.tips">
 						<view class="express-left column-center">
-							<image class="express-icon" :src="staticAsset('bundle/logistics_pay.png')"></image>
+							<image class="express-icon" src="../../static/images/logistics_pay.png"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right muted">
@@ -145,7 +134,6 @@
 				finish: {},
 				order: {},
 				take: {},
-				express: '',
 				isFirstLoading: true
 			};
 		},
@@ -168,8 +156,7 @@
 						delivery,
 						finish,
 						order,
-						take,
-						express
+						take
 					}
 				} = await orderTraces(this.id)
 				if (code == 1) {
@@ -179,7 +166,6 @@
 					this.finish = finish
 					this.order = order
 					this.take = take
-					this.express = express
 					this.isFirstLoading = false
 				} else {
 					setTimeout(() => uni.navigateBack(), 1000);

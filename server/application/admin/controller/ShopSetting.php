@@ -126,6 +126,9 @@ class ShopSetting extends AdminBase
         if(empty($post['type'])) {
           return $this->_error('至少选择一种提现方式');
         }
+        if ($post['min_withdraw'] <= 0) {
+            return $this->_error('最低提现金额不能小于0');
+        }
         if ($post['poundage'] > 100 || $post['poundage'] < 0) {
             return $this->_error('提现手续费须在0-100区间内');
         }
@@ -155,10 +158,13 @@ class ShopSetting extends AdminBase
         if ($this->request->isAjax()){
             $post = $this->request->post();
             ConfigServer::set('register_setting', 'open', $post['open']);
+            ConfigServer::set('register_setting', 'must_bind_mobile', $post['must_bind_mobile']);
             $this->_success('操作成功');
         }
-        $config = ConfigServer::get('register_setting', 'open', 0);
-        $this->assign('config', $config);
+        
+        $this->assign('open', ConfigServer::get('register_setting', 'open', 0));
+        $this->assign('must_bind_mobile', ConfigServer::get('register_setting', 'must_bind_mobile', 0));
+        
         return $this->fetch('register');
     }
 }

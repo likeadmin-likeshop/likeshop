@@ -3,7 +3,7 @@
 // | likeshop100%开源免费商用商城系统
 // +----------------------------------------------------------------------
 // | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-// | 开源版本可自由商用，保留版权即可
+// | 开源版本可自由商用，可去除界面版权logo
 // | 商业版本务必购买商业授权，以免引起法律纠纷
 // | 禁止对系统程序代码以任何目的，任何形式的再发布
 // | gitee下载：https://gitee.com/likeshop_gitee
@@ -21,7 +21,6 @@ namespace app\admin\controller;
 
 
 use app\admin\logic\LiveRoomLogic;
-use app\common\validate\Upload as UploadValidate;
 
 class LiveRoom extends AdminBase
 {
@@ -97,24 +96,7 @@ class LiveRoom extends AdminBase
     {
         if ($this->request->isPost()) {
             $file = request()->file('file');
-            if (empty($file)) {
-                return $this->_error('未找到上传文件的信息');
-            }
-
-            $validate = (new UploadValidate())->setAllowedExtensions(config('project.file_image'));
-            if (!$validate->check(['file' => $file])) {
-                return $this->_error($validate->getError());
-            }
-
-            $fileInfo = $file->getInfo();
-            if (!check_is_image($fileInfo['tmp_name'] ?? '')) {
-                return $this->_error('不是有效的图像文件');
-            }
-
             $info = $file->move( './uploads/temp');
-            if (empty($info)) {
-                return $this->_error($file->getError());
-            }
             $result = LiveRoomLogic::upload($info->getSaveName());
             if (is_string($result)) {
                 return $this->_error($result);

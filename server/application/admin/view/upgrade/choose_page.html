@@ -1,0 +1,140 @@
+{layout name="layout1" /}
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    .container p {
+        margin-top: 30px;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    .container button {
+        margin-top: 10px;
+        width: 300px;
+    }
+    .layui-btn + .layui-btn {
+        margin-left: 0;
+    }
+</style>
+<div class="container">
+    <p>系统是否进行过二次开发?</p>
+    <button class="layui-btn layui-btn-normal" id="update">未做过二次开发，直接更新</button>
+    <button class="layui-btn layui-btn-primary" id="secondary">已做过二次开发</button>
+    <button class="layui-btn layui-btn-primary" id="cancle">取消更新</button>
+</div>
+<script>
+
+    var versionData = [];
+
+    function setVersionData(data) {
+        versionData = data;
+    }
+
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','layer', 'like'], function() {
+        var layer = layui.layer;
+        var $ = layui.$;
+        var like = layui.like;
+
+
+        // 更新
+        $('#update').click(function() {
+            layer.confirm('一键更新导致的系统问题，欢迎前往社区反馈，请做好系统备份！', {
+                time: 0, //不自动关闭
+                btn: ['确定更新', '取消更新'],
+                title: '注意',
+                area: ['60%','60%'],
+                yes: function(index) {
+                    like.ajax({
+                        url:'{:url("Upgrade/handleUpgrade")}',
+                        data:versionData,
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 2000
+                                },function () {
+                                    layer.close(index);
+                                    window.parent.location.reload();
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        // 已做过二次开发
+        $('#secondary').click(function() {
+            layer.confirm('二次开发后请谨慎使用一键更新功能！\n' +
+                '\n' + '二次开发后一键更新导致的系统问题，官方无法处理，请做好系统备份', {
+                time: 0, //不自动关闭
+                btn: ['确定更新', '下载更新包,手动更新','取消更新'],
+                title: '注意',
+                area: ['60%','60%'],
+                yes: function(index) {
+                    like.ajax({
+                        url:'{:url("Upgrade/handleUpgrade")}',
+                        data:versionData,
+                        type:"post",
+                        success:function(res)
+                        {
+                            if(res.code == 1)
+                            {
+                                layui.layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 2000
+                                },function () {
+                                    layer.close(index);
+                                    window.parent.location.reload();
+                                });
+                            }
+                        }
+                    });
+                },
+                btn2: function(index, layero) {
+                    // 写入更新日志
+                    $.ajax({
+                        url: '{:url("upgrade/addUpdatePkgLog")}',
+                        type: 'post',
+                        data: versionData,
+                        success: function(res) {
+                            if(res.code == 1) {
+                                // 下载更新包
+                                window.location.href = res.data.link;
+                            }
+                        }
+                    });
+                },
+                btn3: function(index, layero) {
+                    layer.close(index);
+                }
+
+            });
+        });
+
+        // 取消更新
+        $('#cancle').click(function() {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭   
+        });
+
+    });
+
+
+</script>

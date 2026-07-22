@@ -22,7 +22,6 @@ namespace app\admin\http\middleware;
 
 use app\admin\logic\LoginLogic;
 use app\admin\server\LoginServer;
-use app\common\server\PasswordCryptoService;
 
 class Login
 {
@@ -34,22 +33,6 @@ class Login
      */
     public function handle($request, \Closure $next)
     {
-        try {
-            PasswordCryptoService::decryptRequest($request);
-        } catch (\RuntimeException $e) {
-            return json([
-                'code' => 0,
-                'msg' => $e->getMessage(),
-                'data' => [],
-                'show' => 1,
-                'time' => 0,
-            ]);
-        }
-
-        if (strtolower($request->action()) === 'passwordkey') {
-            return $next($request);
-        }
-
         //已登录的访问登录页
         if (session('admin_info') && !$this->isNotNeedLogin($request)) {
             return $next($request);

@@ -1,12 +1,5 @@
 var lock = {};
 var load = {};
-var passwordFields = [
-    "password", "password2", "password_confirm", "passwordConfirm",
-    "re_password", "repassword", "confirm_password", "confirmPassword",
-    "old_password", "oldPassword", "curr_password", "currPassword",
-    "new_password", "newPassword", "pay_password", "payPassword",
-    "origin_pay_password", "originPayPassword", "new_pay_password", "newPayPassword"
-];
 layui.define(["jquery", "form", "upload"], function (exports) {
     $ = layui.$;
     upload = layui.upload;
@@ -60,37 +53,6 @@ layui.define(["jquery", "form", "upload"], function (exports) {
             });
         },
         ajax: function (json) {
-            if (!json.passwordEncrypted && json.data && typeof json.data === "object") {
-                var fields = passwordFields.filter(function (field) {
-                    return typeof json.data[field] === "string" && json.data[field];
-                });
-                if (fields.length) {
-                    $.getJSON("/admin/account/passwordKey", function (res) {
-                        if (res.code !== 1 || !res.data || !res.data.key) {
-                            layer.msg(res.msg || "获取密码加密密钥失败", {icon: 2});
-                            return;
-                        }
-                        var encryptor = new JSEncrypt();
-                        encryptor.setPublicKey(res.data.key);
-                        var data = $.extend({}, json.data);
-                        for (var i = 0; i < fields.length; i++) {
-                            var encrypted = encryptor.encrypt(data[fields[i]]);
-                            if (!encrypted) {
-                                layer.msg("密码加密失败", {icon: 2});
-                                return;
-                            }
-                            data[fields[i]] = "RSA:" + encrypted;
-                        }
-                        data.password_key_id = res.data.key_id || res.data.keyId;
-                        json.data = data;
-                        json.passwordEncrypted = true;
-                        ojb.ajax(json);
-                    }).fail(function () {
-                        layer.msg("获取密码加密密钥失败", {icon: 2});
-                    });
-                    return;
-                }
-            }
             var load_index = null;
             if (json.beforeSend === undefined) {
                 if (lock[json.url.replace("/", "_")] !== undefined) {

@@ -3,7 +3,7 @@
     .map-container {
         width: 600px;
         height: 400px;
-        margin-left:120px;
+        margin-left:100px;
         margin-top:20px;
     }
     .layui-form-select dl {
@@ -90,7 +90,7 @@
     <div class="layui-form-item ">
         <label class="layui-form-label"><span class="form-label-asterisk">*</span>地图定位：</label>
         <div class="layui-input-block" style="margin-left:10px;">
-            <div class="map-container" id="map-container"></div>
+            <div id="map-container" style="width: 700px;height: 400px;margin-left: 120px;"></div>
         </div>
     </div>
 
@@ -150,8 +150,8 @@
         version:"{$front_version}",
         base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
     }).extend({
-        index: 'lib/index', //主入口模块
-    }).use(['index', 'form','like','laydate', 'txMap', 'customTxMap'], function(){
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form','like','laydate', 'txMap','customTxMap'], function(){
         var $ = layui.$
             ,form = layui.form
             ,like = layui.like

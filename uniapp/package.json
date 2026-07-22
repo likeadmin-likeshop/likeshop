@@ -10,7 +10,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "jsencrypt": "^3.3.0"
-  }
+  "dependencies": {}
 }

@@ -20,9 +20,12 @@
 namespace app\admin\logic;
 
 
+use app\common\model\NoticeSetting;
 use app\common\model\Pay;
+use app\common\model\User;
 use app\common\server\WeChatServer;
 use think\Db;
+use think\facade\Hook;
 
 /**
  * 功能: 商家转账到零钱
@@ -80,7 +83,11 @@ class WechatMerchantTransferLogic
         }
 
         // 用户授权信息(同一个用户可能有多条，取client最小的一条)
-        $userAuth = Db::name('user_auth')->where('user_id', $withdrawApply['user_id'])->order('client', 'asc')->find();
+        $userAuth = Db::name('user_auth')
+            ->where('user_id', $withdrawApply['user_id'])
+            ->where('client', $withdrawApply['client'])
+            ->order('client', 'asc')
+            ->find();
         if(!$userAuth) {
             // 无授权记录
             return [
@@ -94,40 +101,41 @@ class WechatMerchantTransferLogic
 
 
         //请求URL
-        $url = 'https://api.mch.weixin.qq.com/v3/transfer/batches';
+        $url = 'https://api.mch.weixin.qq.com/v3/fund-app/mch-transfer/transfer-bills';
         //请求方式
         $http_method = 'POST';
         //请求参数
         $data = [
-            'appid' => $config['app_id'],//申请商户号的appid或商户号绑定的appid（企业号corpid即为此appid）
-            'out_batch_no' => $withdrawApply['batch_no'],//商户系统内部的商家批次单号，要求此参数只能由数字、大小写字母组成，在商户系统内部唯一
-            'batch_name' => '提现至微信零钱',//该笔批量转账的名称
-            'batch_remark' => '提现至微信零钱',//转账说明，UTF8编码，最多允许32个字符
-            'total_amount' => $withdrawApply['left_money'] * 100,//转账金额单位为“分”。转账总金额必须与批次内所有明细转账金额之和保持一致，否则无法发起转账操作
-            'total_num' => 1,//一个转账批次单最多发起三千笔转账。转账总笔数必须与批次内所有明细之和保持一致，否则无法发起转账操作
-            'transfer_detail_list' => [
-                [//发起批量转账的明细列表，最多三千笔
-                    'out_detail_no' => $withdrawApply['sn'],//商户系统内部区分转账批次单下不同转账明细单的唯一标识，要求此参数只能由数字、大小写字母组成
-                    'transfer_amount' => $withdrawApply['left_money'] * 100,//转账金额单位为分
-                    'transfer_remark' => '提现至微信零钱',//单条转账备注（微信用户会收到该备注），UTF8编码，最多允许32个字符
-                    'openid' => $userAuth['openid'],//openid是微信用户在公众号appid下的唯一用户标识（appid不同，则获取到的openid就不同），可用于永久标记一个用户
-                ]]
+            'appid' => $config['app_id'],
+            'out_bill_no' => $withdrawApply['sn'],
+            'transfer_scene_id' => '1005',
+            'transfer_remark' => '提现',
+            'openid' => $userAuth['openid'],
+            'transfer_amount' => intval(bcmul($withdrawApply['left_money'], 100)),
+            'transfer_scene_report_infos' => [
+                [ 'info_type' => '岗位类型', 'info_content' => '邀请者' ],
+                [ 'info_type' => '报酬说明', 'info_content' => '邀请奖励提现' ],
+            ],
         ];
         if ($withdrawApply['left_money'] >= 2000) {
             if (empty($withdrawApply['real_name'])) {
                 throw new \Exception('转账金额 >= 2000元，收款用户真实姓名必填');
             }
-            $data['transfer_detail_list'][0]['user_name'] = self::getEncrypt($withdrawApply['real_name'],$config);
+            $data['user_name'] = $withdrawApply['real_name'];
         }
-
-        $token  = self::token($url,$http_method,$data,$config);//获取token
-        $result = self::https_request($url,json_encode($data),$token);//发送请求
+        
+        //获取token
+        $token  = self::token($url,$http_method,$data,$config);
+        //发送请求
+        $result = self::https_request($url,json_encode($data),$token);
         $result_arr = json_decode($result,true);
 
-        if(!isset($result_arr['create_time'])) {//批次受理失败
-            throw new \Exception($result_arr['message']);
+        if(!isset($result_arr['create_time'])) {
+            //批次受理失败
+            throw new \Exception($result_arr['message'] ?? $result['fail_reason'] ?? '零钱提现请求失败');
         }
-
+        $user = User::get($withdrawApply['user_id']);
+        
         //批次受理成功，更新提现申请单为提现中状态
         Db::name('withdraw_apply')
             ->where('id', $withdrawApply['id'])
@@ -136,6 +144,25 @@ class WechatMerchantTransferLogic
                 'update_time' => time(),
                 'pay_desc' => $result
             ]);
+        
+        //发送通知
+        Hook::listen('notice', [
+            'user_id'           => $user['id'],
+            'withdraw_money'    => bcadd($withdrawApply['left_money'], 0, 2),
+            'scene'             => NoticeSetting::USER_WITH_WITHDRAW_WAIT_RECEIVE,
+            'withdraw_time'     => date('Y-m-d H:i:s', $withdrawApply['create_time']),
+        ]);
+        //短信通知
+        Hook::listen('sms_send', [
+            'key'       => NoticeSetting::USER_WITH_WITHDRAW_WAIT_RECEIVE,
+            'user_id'   => $user['id'],
+            'mobile'                => $user['mobile'],
+            'params'    => [
+                'withdraw_money'        => bcadd($withdrawApply['left_money'], 0, 2),
+                'nickname'              => $user['nickname'],
+                'withdraw_time'         => date('Y-m-d H:i:s', $withdrawApply['create_time']),
+            ]
+        ]);
 
         return [
             'code' => 1,
@@ -251,7 +278,10 @@ class WechatMerchantTransferLogic
      */
     public static function details($withdrawApply)
     {
-        $userAuth = Db::name('user_auth')->where('user_id', $withdrawApply['user_id'])->order('client', 'asc')->find();
+        $userAuth = Db::name('user_auth')
+            ->where('user_id', $withdrawApply['user_id'])
+            ->where('client', $withdrawApply['client'])
+            ->order('client', 'asc')->find();
         if(!$userAuth) {
             // 无授权记录
             return [
@@ -268,7 +298,7 @@ class WechatMerchantTransferLogic
         ];
 
         //请求URL
-        $url = 'https://api.mch.weixin.qq.com/v3/transfer/batches/out-batch-no/'.$withdrawApply['batch_no'].'/details/out-detail-no/'.$withdrawApply['sn'];
+        $url = 'https://api.mch.weixin.qq.com/v3/fund-app/mch-transfer/transfer-bills/out-bill-no/'.$withdrawApply['sn'];
         //请求方式
         $http_method = 'GET';
         //请求参数

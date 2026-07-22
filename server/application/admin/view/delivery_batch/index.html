@@ -1,0 +1,184 @@
+{layout name="layout1" /}
+<style>
+    .layui-table-cell {
+        height:auto;
+    }
+    .goods-content>div:not(:last-of-type) {
+        border-bottom:1px solid #DCDCDC;
+    }
+    .goods-data::after{
+        display: block;
+        content: '';
+        clear: both;
+    }
+    .goods_name_hide{
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
+    }
+    .operation-btn {
+        margin: 5px;
+    }
+    .table-operate{
+        text-align: left;
+        font-size:14px;
+        padding:0 5px;
+        height:auto;
+        overflow:visible;
+        text-overflow:inherit;
+        white-space:normal;
+        word-break: break-all;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" lay-accordion="" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>*批量发货只适用于待发货的订单。</p>
+                        <p>*单次最多导入2000条。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab layui-tab-card" lay-filter="tab-all">
+
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto" filter>
+                        <div class="layui-row">
+                            <div class="layui-inline">发货文件</div>
+                            <div class="layui-inline"><input type="file" id="express-file"></div>
+                            <div class="layui-inline">
+                                <a href="javascript:;" class="layui-btn goods_name_hide" id="now-import">立即导入</a>
+                            </div>
+                            <div class="layui-inline" style="margin-left: 20px">
+                                <a href="{:url('DeliveryBatch/down', [ 'file' => 'delivery_batch_template' ])}" style="color: #1E9FFF;" target="_blank" class="">下载模版文件</a>
+                            </div>
+                            <div class="layui-inline" style="margin-left: 20px">
+                                <a href="{:url('DeliveryBatch/down', [ 'file' => 'delivery_batch_express_company' ])}" style="color: #1E9FFF;" target="_blank" class="">下载快递公司名称</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card-body">
+                        <table id="order-lists" lay-filter="order-lists"></table>
+
+                        <script type="text/html" id="order-operation" >
+                            <div class="table-operate">
+                                {{#  if(d.fail > 0){ }}
+                                    <a href="javascript:;" lay-event="downFail">下载失败订单</a>
+                                {{#  } }}
+                            </div>
+                        </script>
+
+                        <script type="text/html" id="order-operation2">
+                            {{d.success}} / {{d.fail}}
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use([ 'index', 'table', 'like', 'laydate', 'upload' ], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            , element = layui.element
+            , laydate = layui.laydate;
+        var listType = '';
+        // var upload = layui.upload;
+
+        $('#now-import').on('click', function () {
+            var formData = new FormData();
+            var files = $('#express-file')[0].files;
+            if (files.length <= 0) {
+                layer.msg('请选择文件', { icon : 2 });
+                return;
+            }
+            formData.append('file', files[0]);
+
+            $.ajax({
+                url: '{:url("DeliveryBatch/import")}',
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                error: function() {
+                    layer.msg('导入发生错误，请稍后再试!');
+                },
+                success: function(res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.msg(res.msg, { icon : 2 });
+                    } else {
+                        $('#express-file').val(null);
+                        layer.open({
+                            type :  2,
+                            shadeClose : false,
+                            area: ['80%', '300px'],
+                            title: '批量发货',
+                            content: '{:url("DeliveryBatch/delivery", "", false)}?id=' + res.data.id,
+                        });
+                    }
+                },
+                timeout: 15000
+            });
+        });
+
+        //获取列表
+        getList(listType);
+
+        function getList(type) {
+            table.render({
+                elem: '#order-lists'
+                , url: '{:url("DeliveryBatch/index")}'
+                , cols: [[
+                    {field:'filename',title: '文件名称'}
+                    , {field:'nums', title: '导入订单数'}
+                    , {field:'create_time', title: '发货时间'}
+                    , {title: '成功/失败',toolbar: '#order-operation2'}
+                    , {fixed: 'right', title: '操作', toolbar: '#order-operation'}
+                ]]
+                , page: true
+                , text: {none: '暂无数据！'}
+                , parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.count,
+                        "data": res.data.lists,
+                    };
+                }
+                ,done: function(res, curr, count){
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-main tr").each(function (index, val) {
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }
+            });
+        }
+
+        //监听工具条
+        table.on('tool(order-lists)', function (obj) {
+            var id = obj.data.id;
+            console.log(12345);
+            if (obj.event === 'downFail') {
+                window.open('{:url("DeliveryBatch/down2")}?id=' + id);
+            }
+        });
+    });
+</script>

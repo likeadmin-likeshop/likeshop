@@ -1,18 +1,18 @@
 {
     "name" : "LikeShop",
-    "appid" : "__UNI__E8F2641",
+    "appid" : "__UNI__6192F68",
     "description" : "",
-    "versionName" : "3.5.1",
+    "versionName" : "3.4.0",
     "versionCode" : 100,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
         "usingComponents" : true,
         "nvueCompiler" : "uni-app",
-        "runtimeVersion" : "3.3.13", //指定版本  
-        "compilerVersion" : "3.3.13", //指定版本  
+        "runtimeVersion" : "3.3.13", //指定版本
+        "compilerVersion" : "3.3.13", //指定版本
         "compatible" : {
-            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持  
+            "ignoreVersion" : true //true表示忽略版本检查提示框，HBuilderX1.9.0及以上版本支持
         },
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
@@ -42,6 +42,7 @@
                     "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.CAMERA\"/>",
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
                     "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
                     "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
@@ -160,9 +161,7 @@
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
-            "minified" : true,
-            "minifyWXML" : true,
-            "minifyWXSS" : true
+            "minified" : true
         },
         "usingComponents" : true,
         "optimization" : {
@@ -173,7 +172,8 @@
             "scope.userLocation" : {
                 "desc" : "你的位置信息将用于小程序位置接口的效果展示"
             }
-        }
+        },
+        "libVersion" : "latest"
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -198,6 +198,7 @@
         "devServer" : {
             "https" : false,
             "port" : 8080,
+            "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
                     "target" : "http://likeshop.yixiangonline.com",

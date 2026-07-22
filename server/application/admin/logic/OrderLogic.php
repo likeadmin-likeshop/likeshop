@@ -263,8 +263,8 @@ class OrderLogic
         $exportData = [];
         foreach ($lists as $item){
 //            halt($item);
-            $orderSn = 'SN'.$item['order_sn']; // 转字符串
-            $level = isset($userLevel[$item['user_level']]) ?  $userLevel[$item['user_level']] : '无等级';
+            $orderSn = $item['order_sn'] . "\t"; // 转字符串
+            $level = $userLevel[$item['user_level']] ?? '无等级';
             $deliveryType = Order::getDeliveryType($item['delivery_type']);
             $goodsStr = '';
             foreach($item['order_goods'] as $subItem) {
@@ -577,10 +577,14 @@ class OrderLogic
             ->value($shipping_field);
 
         //获取物流轨迹
-        if ($express === 'kdniao') {
-            $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'],-4));
-        } else {
-            $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
+        if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
+            if ($express === 'kdniao') {
+                $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'],-4));
+            } else {
+                $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
+            }
+        }else {
+            $expressage->logistics($shipping_code, $order['invoice_no']);
         }
 
         $traces = $expressage->logisticsFormat();

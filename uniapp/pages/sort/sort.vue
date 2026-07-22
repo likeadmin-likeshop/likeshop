@@ -74,7 +74,7 @@
 			.header {
 				box-sizing: border-box;
 				height: $header-height;
-				border-bottom: $ls-solid-border;
+				border-bottom: $-solid-border;
 
 				.search {
 					flex: 1;

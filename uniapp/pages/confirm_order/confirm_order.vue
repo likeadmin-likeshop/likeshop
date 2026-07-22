@@ -77,8 +77,9 @@ likeshop.cn.team // +-----------------------------------------------------------
                                 <text class="xs muted mt10">
                                     <text>营业时间：</text>
                                     <text
-                                        >{{ storeInfo.business_start_time }} -
-                                        {{ storeInfo.business_end_time }}</text
+                                        >{{ storeInfo.business_start_time.slice(0, 5) }}-{{
+                                            storeInfo.business_end_time.slice(0, 5)
+                                        }}</text
                                     >
                                 </text>
                             </template>
@@ -223,7 +224,13 @@ likeshop.cn.team // +-----------------------------------------------------------
         </view>
         <loading-view v-if="showLoading" background-color="transparent" :size="50"></loading-view>
         <loading-view v-if="isFirstLoading"></loading-view>
-        <u-popup v-model="showCoupon" border-radius="14" mode="bottom" closeable>
+        <u-popup
+            v-model="showCoupon"
+            border-radius="14"
+            mode="bottom"
+            closeable
+            safe-area-inset-bottom
+        >
             <view class="pop-title row-between">
                 <view class="title">优惠券</view>
             </view>
@@ -348,15 +355,13 @@ export default {
 
                 uni.$on('payment', (params) => {
                     setTimeout(() => {
-                        uni.$off('payment')
-
                         if (params.result) {
                             uni.redirectTo({
                                 url: `/pages/pay_result/pay_result?id=${params.order_id}`
                             })
                         } else {
                             uni.redirectTo({
-                                url: '/pages/user_order/user_order'
+                                url: '/bundle/pages/user_order/user_order'
                             })
                         }
                     }, 500)
@@ -364,6 +369,7 @@ export default {
 
                 uni.$on('store', (params) => {
                     this.storeInfo = params
+                    this.handleOrderMethods('info')
                 })
             })
             .catch((err) => {
@@ -434,7 +440,7 @@ export default {
         authWechatMessage() {
             return new Promise((resolve, reject) => {
                 getMnpNotice({
-                    scene: 1
+                    scene: '100,101'
                 })
                     .then(({ code, data, msg }) => {
                         if (code != 1) throw new Error(msg)
@@ -514,7 +520,6 @@ export default {
                     this.goodsLists = data.goods_lists
                     //TODO
                     if (data.selffetch_info) {
-                        console.log(456)
                         this.storeInfo = data.selffetch_info.selffetch_shop
                             ? data.selffetch_info.selffetch_shop
                             : {}

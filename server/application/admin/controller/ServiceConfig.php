@@ -27,7 +27,7 @@ class ServiceConfig extends AdminBase
             ServiceConfigLogic::setConfig($post);
             return $this->_success('设置成功');
         }
-
+        
         return $this->fetch('', ServiceConfigLogic::getConfig());
     }
 }

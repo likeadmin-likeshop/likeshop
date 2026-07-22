@@ -9,10 +9,6 @@
                     </el-input>
                 </div>
                 <div class="forget-form-item row">
-                    <el-input v-model="captchaCode" class="form-input" placeholder="图形验证码" style="width: 264px" />
-                    <img :src="captchaImg" class="verify-code-img" @click="getCaptchaImg" />
-                </div>
-                <div class="forget-form-item row">
                     <el-input v-model="smsCode" class="form-input" placeholder="短信验证码" style="width: 264px" />
                     <el-button class="sms-btn" @click="sendSMSCode">
                         <div v-if="canSend">获取验证码</div>
@@ -57,34 +53,10 @@ export default {
             smsCode: '',
             canSend: true,
             password: '',
-            againPwd: '',
-            captchaCode: '',
-            captchaImg: '',
-            captchaKey: ''
+            againPwd: ''
         }
     },
-    mounted() {
-        this.getCaptchaImg()
-    },
     methods: {
-        isCaptchaError(res) {
-            return res && res.msg && res.msg.indexOf('图形验证码') !== -1
-        },
-        async getCaptchaImg(clearCode = true) {
-            if (clearCode) {
-                this.captchaCode = ''
-            }
-            try {
-                const res = await this.$get('account/captcha')
-                if (res.code == 1) {
-                    this.captchaImg = res.data.image || ''
-                    this.captchaKey = res.data.key || ''
-                }
-            } catch (error) {
-                this.captchaImg = ''
-                this.captchaKey = ''
-            }
-        },
         async forgetFun() {
             if(!this.telephone) {
                 this.$message({
@@ -140,26 +112,9 @@ export default {
                 })
                 return;
             }
-            if (!this.captchaCode) {
-                this.$message({
-                    message: '请输入图形验证码',
-                    type: 'error'
-                })
-                return
-            }
-            if (!this.captchaKey) {
-                this.$message({
-                    message: '图形验证码已失效，请重新获取',
-                    type: 'error'
-                })
-                this.getCaptchaImg()
-                return
-            }
             let res = await this.$post("sms/send", {
                 mobile: this.telephone,
                 key: SMSType.FINDPWD,
-                captcha_key: this.captchaKey,
-                captcha: this.captchaCode
             });
             if(res.code == 1) {
                 this.canSend = false;
@@ -167,8 +122,6 @@ export default {
                     message: '发送成功',
                     type: 'success'
                 })
-            } else if (this.isCaptchaError(res)) {
-                this.getCaptchaImg()
             }
         }
     }
@@ -197,12 +150,7 @@ export default {
                     width: 100px;
                     height: 40px;
                     margin-left: 26px;
-                    cursor: pointer;
-                    object-fit: cover;
-                    border: 1px solid #dcdfe6;
-                    border-radius: 4px;
-                    box-sizing: border-box;
-                    background-color: #f5f7fa;
+                    background-color: red;
                 }
                 .sms-btn {
                     margin-left: 16px;

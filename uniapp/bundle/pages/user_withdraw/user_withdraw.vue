@@ -176,7 +176,7 @@
 	// | LikeShop100%开源免费商用电商系统
 	// +----------------------------------------------------------------------
 	// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-	// | 开源版本可自由商用，保留版权即可
+	// | 开源版本可自由商用，可去除界面版权logo
 	// | 商业版本务必购买商业授权，以免引起法律纠纷
 	// | 禁止对系统程序代码以任何目的，任何形式的再发布
 	// | Gitee下载：https://gitee.com/likeshop_gitee/likeshop
@@ -192,6 +192,7 @@
 		applyWithdraw,
 		getWithdrawConfig
 	} from "@/api/user";
+	import { getMnpNotice } from '@/api/app'
 	import {
 		uploadFile,
 		trottle
@@ -232,6 +233,33 @@
 
 
 		methods: {
+			        // 获取微信授权
+					authWechatMessage() {
+            return new Promise((resolve, reject) => {
+                getMnpNotice({
+                    scene: 113
+                })
+                    .then(({ code, data, msg }) => {
+                        if (code != 1) throw new Error(msg)
+                        return data
+                    })
+                    .then((data) => {
+                        if (!data.length) return reject()
+                        uni.requestSubscribeMessage({
+                            tmplIds: data,
+                            success(res) {
+                                resolve(res)
+                            },
+                            fail(err) {
+                                reject(err)
+                            }
+                        })
+                    })
+                    .catch((err) => {
+                        reject(err)
+                    })
+            })
+        },
 			allWithdraw(e) {
 				const {
 					widthDrawConfig
@@ -296,6 +324,10 @@
 					case withdrawType.ACCOUNT:
 						break;
 					case withdrawType.WECHAT:
+			this.authWechatMessage()
+                .catch((err) => {
+                    console.log(err)
+                })
 						break
 					case withdrawType.PAY_WECHAT:
 					case withdrawType.PAY_ALIPAY:
@@ -382,7 +414,7 @@
 				border-radius: 20rpx;
 
 				.input {
-					border-bottom: $ls-solid-border;
+					border-bottom: $-solid-border;
 
 					input {
 						width: 100%;
@@ -410,7 +442,7 @@
 
 				.input-item {
 					padding: 28rpx 0 30rpx;
-					border-bottom: $ls-solid-border;
+					border-bottom: $-solid-border;
 				}
 
 				.input-label {

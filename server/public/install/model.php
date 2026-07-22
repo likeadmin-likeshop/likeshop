@@ -309,6 +309,13 @@ class installModel
 
         /* Get mysql version. */
         $version = $this->getMysqlVersion();
+    
+        // 检查mysql版本
+        if (version_compare($version, '5.7', '<')) {
+            $return->result = 'fail';
+            $return->error = 'MYSQL数据库版本不能小于5.7';
+            return $return;
+        }
 
         /* check mysql sql_model */
         if(!$this->checkSqlMode($version)) {
@@ -376,7 +383,7 @@ class installModel
      */
     public function connectDB()
     {
-        $dsn = "mysql:host={$this->host};port={$this->port}";
+        $dsn = "mysql:host={$this->host}; port={$this->port}";
         try {
             $dbh = new PDO($dsn, $this->user, $this->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -744,6 +751,7 @@ class installModel
         return md5($pwd . $salt);
     }
 
+
     /**
      * @notes 安装记录
      * @return bool
@@ -753,9 +761,10 @@ class installModel
     public function installLog(): bool
     {
         try {
-            $code = '56076556ddf1e5060927a0825c60c6b7';
+            $code = '1311f694473fc6858ca76f502d4ae882';
             $data = $this->dataEncrypt($this->getHost(), $code);
-            $url = "https://server.likeshop.cn/api/version/installLog";
+//            $url = "https://server.likeshop.cn/api/version/installLog";
+            $url = "https://likeshoptc.yixiangonline.com/api/version/installLog";
 
             $curl = curl_init();
             curl_setopt_array($curl, [

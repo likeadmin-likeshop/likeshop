@@ -176,7 +176,7 @@ export default {
         }
         .btn {
             padding: 6rpx 34rpx;
-            border: 1px solid $ls-color-primary;
+            border: 1px solid $-color-primary;
         }
     }
 }
@@ -194,7 +194,7 @@ export default {
         .btn {
             width: 178rpx;
             height: 52rpx;
-            border: 1px solid $ls-color-primary;
+            border: 1px solid $-color-primary;
         }
     }
 }

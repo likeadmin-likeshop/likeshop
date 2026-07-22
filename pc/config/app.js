@@ -1,9 +1,10 @@
 
-// Set PC_API_BASE_URL for a separate API host during local development.
-// An empty production value keeps the PC build same-origin with /pc/.
-const configuredUrl = process.env.PC_API_BASE_URL || ''
+// 本地访问域名
+const testUrl = "https://php-b2c.yixiangonline.com"
+//线上域名
+const productUrl = ""
 const config = {
-  baseUrl: configuredUrl
+  baseUrl:  process.env.NODE_ENV == 'production' ? productUrl : testUrl
 }
 
 export default config

@@ -312,15 +312,8 @@ class User extends ApiBase
     public function send()
     {
         $mobile = $this->request->post('mobile');
-        $captcha = $this->request->post('captcha');
-        $captcha_key = $this->request->post('captcha_key');
         $key = 'ZHZFMM'; // 找回支付密码
-        $result = $this->validate([
-            'mobile' => $mobile,
-            'key' => $key,
-            'captcha' => $captcha,
-            'captcha_key' => $captcha_key,
-        ], 'app\api\validate\SmsSend');
+        $result = $this->validate(['mobile' => $mobile, 'key' => $key], 'app\api\validate\SmsSend');
         if ($result !== true) {
             $this->_error($result);
         }

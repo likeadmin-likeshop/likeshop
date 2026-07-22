@@ -76,6 +76,7 @@ class PaymentLogic extends LogicBase
         // 订单金额为0的情况，直接走支付回调接口
         if($order['order_amount'] == 0) {
             PayNotifyLogic::handle('order', $order['order_sn'], []);
+            self::$return_code = 20001;//特殊状态码,用于前端判断
             return $order['id'];
         }
 

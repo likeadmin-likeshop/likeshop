@@ -91,14 +91,9 @@ class CartLogic
     }
 
     //变动购物车数量
-    public static function change($cart_id, $goods_num, $user_id)
+    public static function change($cart_id, $goods_num)
     {
-        $where = ['id' => $cart_id, 'user_id' => $user_id];
-        $cart = Db::name('cart')->where($where)->find();
-
-        if (!$cart) {
-            return '购物车不存在';
-        }
+        $cart = Db::name('cart')->where(['id' => $cart_id])->find();
 
         if (self::checkStock($cart['item_id'], $goods_num)) {
             return '很抱歉,库存不足';
@@ -113,7 +108,7 @@ class CartLogic
             'goods_num' => $goods_num,
         ];
 
-        Db::name('cart')->where($where)->update($update);
+        Db::name('cart')->where(['id' => $cart_id])->update($update);
 
         return true;
     }

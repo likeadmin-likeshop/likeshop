@@ -22,8 +22,11 @@ namespace app\api\logic;
 
 
 use app\common\logic\{AccountLogLogic, LogicBase};
-use app\common\model\{AccountLog, User, Withdraw};
+use app\common\model\{AccountLog, Client_, User, Withdraw};
+use app\admin\logic\WechatMerchantTransferLogic;
+use app\admin\model\WithdrawApply;
 use app\common\server\ConfigServer;
+use app\common\server\WeChatServer;
 use think\Db;
 use think\Exception;
 
@@ -89,6 +92,7 @@ class WithdrawLogic extends LogicBase
                 'poundage' => $poundage,
                 'status' => 1, // 待提现
                 'create_time' => time(),
+                'client' => request()->user_info['client'],
             ];
             $withdraw_id = Db::name('withdraw_apply')->insertGetId($data);
 
@@ -129,9 +133,10 @@ class WithdrawLogic extends LogicBase
             ->select();
 
         foreach ($lists as &$item){
-            $item['desc'] = '提现至'.Withdraw::getTypeDesc($item['type']);
-            $item['create_time'] = date('Y-m-d H:i:s', $item['create_time']);
-            $item['status_text'] = Withdraw::getStatusDesc($item['status']);
+            $item['desc']                           = '提现至' . Withdraw::getTypeDesc($item['type']);
+            $item['create_time']                    = date('Y-m-d H:i:s', $item['create_time']);
+            $item['status_text']                    = Withdraw::getStatusDesc($item['status'], $item);
+            $item['wechat_change_wait_receive']     = Withdraw::wechatChangeIsWaitReceive($item);
         }
 
         $data = [
@@ -148,16 +153,45 @@ class WithdrawLogic extends LogicBase
     public static function info($id, $user_id)
     {
         $info = Db::name('withdraw_apply')
-            ->field('status, sn, create_time, type, money, left_money, poundage')
+            ->field('status, sn, create_time, type, money, left_money, poundage,pay_desc')
             ->where(['id' => $id, 'user_id' => $user_id])
             ->find();
 
         if (!$info){
             return [];
         }
-        $info['create_time'] = date('Y-m-d H:i:s', $info['create_time']);
-        $info['typeDesc'] = Withdraw::getTypeDesc($info['type']);
-        $info['statusDesc'] = Withdraw::getStatusDesc($info['status']);
+        $info['pay_config'] = [
+            'mch_id'    => WeChatServer::getPayConfig(Client_::mnp)['mch_id'] ?? '',
+            'oa_appid'  => ConfigServer::get('oa', 'app_id'),
+        ];
+        $info['wechat_change_wait_receive'] = Withdraw::wechatChangeIsWaitReceive($info);
+        $info['create_time']                = date('Y-m-d H:i:s', $info['create_time']);
+        $info['typeDesc']                   = Withdraw::getTypeDesc($info['type']);
+        $info['statusDesc']                 = Withdraw::getStatusDesc($info['status'], $info);
+        $info['pay_desc']                   = json_decode($info['pay_desc'], true) ? : new \stdClass();
+        
         return $info;
     }
+    
+    // 收款
+    public static function receive($id, $user_id)
+    {
+        $withdraw = Db::name('withdraw_apply')->where(['id' => $id, 'user_id' => $user_id])->find();
+        if (empty($withdraw['id'])) {
+            return '提现记录不存在';
+        }
+        if ($withdraw['status'] != Withdraw::STATUS_ING || $withdraw['type'] != Withdraw::TYPE_WECHAT_CHANGE){
+            return '当前状态不能收款';
+        }
+        
+        $update = [
+            'status'            => 3,
+            'update_time'       => time(),
+        ];
+        
+        WithdrawApply::update($update,[ [ 'id', '=', $withdraw['id'] ] ]);
+        
+        return true;
+    }
+    
 }

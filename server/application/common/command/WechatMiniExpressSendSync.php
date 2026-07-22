@@ -5,6 +5,7 @@ namespace app\common\command;
 use app\common\model\Order;
 use app\common\model\Pay;
 use app\common\model\RechargeOrder;
+use app\common\server\ConfigServer;
 use app\common\server\WechatMiniExpressSendSyncServer;
 use think\console\Command;
 use think\console\Input;
@@ -19,6 +20,11 @@ class WechatMiniExpressSendSync extends Command
     
     protected function execute(Input $input, Output $output)
     {
+        // 未开启发货同步
+        if (! ConfigServer::get('mnp', 'express_send_sync', 1)) {
+            return ;
+        }
+        
         // 订单
         static::order();
         // 用户充值

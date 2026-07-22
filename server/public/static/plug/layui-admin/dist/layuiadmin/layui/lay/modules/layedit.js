@@ -649,7 +649,7 @@ layui.define(["layer", "form", "code"], function(t) {
                 var d = m(i);
                 d.parentNode;
                 "<br>" == d.innerHTML && (i.selectNode(d), i.deleteContents()), i.insertNode(o), "img" == t && "<br>" == d.innerHTML && (l.execCommand("formatBlock", !1, "<p>"), l.execCommand("justifyCenter"), setTimeout(function() {
-                    body.focus()
+                    i.body.focus()
                 }, 10))
             }
         },

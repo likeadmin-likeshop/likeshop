@@ -1,0 +1,98 @@
+{layout name="layout1" /}
+
+<div class="layui-fluid">
+    <div class="layui-card" style="margin-top:10px">
+        <div class="layui-card-body">
+            <div class="layui-row layui-col-space20" style="display:flex;align-items: center;justify-content: center">
+                <div class="layui-col-xs3" style="text-align: right">
+                    <div>处理进度</div>
+                </div>
+                <div class="layui-col-xs6">
+                    <div class="layui-progress layui-progress-big" lay-filter="progress">
+                        <div class="layui-progress-bar" lay-percent="0%"></div>
+                    </div>
+                </div>
+                <div class="layui-col-xs3">
+                    <div id="text-in-import-icon" class="layui-hide">
+                        <i class="layui-icon layui-icon-ok" style="font-size: 18px; color: #1E9FFF;"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row layui-col-space20">
+                <div class="layui-col-xs6 layui-col-xs-offset3">
+                    <div>
+                        <span id="text-ready">准备批量发货...</span>
+                        <span id="text-in-import1" class="layui-hide">批量发货中...</span>
+                        导入：{$detail.nums}条
+                        <span> / 成功：<span id="text-success">0</span>条</span>
+                        <span> / 失败：<span id="text-fail">0</span>条</span>
+                        <a href="{:url('DeliveryBatch/down2')}?id={$detail.id}" class="layui-hide" id="text-fail-down" target="_blank" style="color: blue;margin-left: 10px">下载失败订单</a>
+                    </div>
+                    <div id="text-in-import2" class="layui-hide">发货处理中请耐心等待，期间请不要关闭对话框</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.config({
+        version:"{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use([ 'index', 'table', 'like', 'laydate' ], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , like = layui.like
+            , element = layui.element
+            , laydate = layui.laydate;
+        var listType = '';
+
+        $(function () {
+            $('#text-ready').addClass('layui-hide');
+            $('#text-in-import1').removeClass('layui-hide');
+            $('#text-in-import2').removeClass('layui-hide');
+            $('#text-in-import-icon').removeClass('layui-hide');
+            $.ajax({
+                url: '{:url("DeliveryBatch/delivery")}',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id : '{$detail.id}',
+                },
+                error: function() {
+                    layer.msg('导入发生错误，请稍后再试!');
+                },
+                success: function(res) {
+                    console.log(res);
+                },
+                timeout: 15000
+            });
+            var time1 = setInterval(function () {
+                $.ajax({
+                    url: '{:url("DeliveryBatch/detail", [ "id" => $detail["id"] ])}',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {},
+                    success: function(res) {
+                        if (res.code === 1) {
+                            element.progress('progress', res.data.detail.progress + '%');
+                            $('#text-success').html(res.data.detail.success);
+                            $('#text-fail').html(res.data.detail.fail);
+                            if (res.data.detail.status === 1) {
+                                clearInterval(time1);
+                                $('#text-in-import1').addClass('layui-hide');
+                                $('#text-in-import2').addClass('layui-hide');
+                                if (res.data.detail.fail > 0) {
+                                    $('#text-fail-down').removeClass('layui-hide');
+                                }
+                            }
+                        }
+                    },
+                    timeout: 15000
+                });
+            }, 1000);
+        })
+    });
+</script>

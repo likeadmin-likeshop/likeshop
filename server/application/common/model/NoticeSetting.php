@@ -62,6 +62,7 @@ class NoticeSetting extends Model
     const GET_GODE_LOGIN_NOTICE = 110;//验证码登录
     const BIND_MOBILE_NOTICE = 111;//绑定手机号
     const GET_BACK_PAY_CODE_NOTICE = 112;//找回支付密码
+    const USER_WITH_WITHDRAW_WAIT_RECEIVE = 113;// 提现待收款
 
 
     //通知平台
@@ -97,6 +98,7 @@ class NoticeSetting extends Model
         self::REGISTER_SUCCESS_NOTICE,
         self::INVITE_SUCCESS_NOTICE,
         self::GET_EARNINGS_NOTICE,
+        self::USER_WITH_WITHDRAW_WAIT_RECEIVE,
     ];
 
     //通知游客(还不存在当前系统的人)
@@ -130,6 +132,7 @@ class NoticeSetting extends Model
         'BGSJHM' => self::CHANGE_MOBILE_NOTICE,
         'BDSJHM' => self::BIND_MOBILE_NOTICE,
         'ZHZFMM' => self::GET_BACK_PAY_CODE_NOTICE,
+        'TXDSK' => self::USER_WITH_WITHDRAW_WAIT_RECEIVE,
     ];
 
 
@@ -156,6 +159,7 @@ class NoticeSetting extends Model
             self::GET_GODE_LOGIN_NOTICE => '验证码登录',
             self::BIND_MOBILE_NOTICE => '绑定手机号',
             self::GET_BACK_PAY_CODE_NOTICE => '找回支付密码',
+            self::USER_WITH_WITHDRAW_WAIT_RECEIVE => '确认收款',
 
             self::USER_PAID_NOTICE_PLATFORM => '会员支付下单通知平台',
             self::AFTER_SALE_NOTICE_PLATFORM => '会员发起售后退款通知',

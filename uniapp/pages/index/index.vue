@@ -37,6 +37,12 @@
                 </view>
             </u-navbar>
         </u-sticky>
+        <!-- #ifdef MP -->
+        <view class="capsule-tips flex" v-if="offTip">
+            <text class="m-r-10">添加到“我的小程序”</text>
+            <u-icon name="close" color="#FFFFFF" @click="clearIntervalFunc"></u-icon>
+        </view>
+        <!-- #endif -->
         <view class="flex1 row" v-if="showLogo">
             <navigator
                 hover-class="none"
@@ -242,10 +248,16 @@
                 <loading-footer :status="status"></loading-footer>
             </view>
         </view>
-
+        <!-- #ifdef H5 -->
+        <view class="record_number">
+            <a :href="appConfig.icp_link" style="color: #495770; text-decoration: none">
+                {{ appConfig.icp_number }}
+            </a>
+        </view>
+        <!-- #endif -->
         <u-popup class="coupons-popup" v-model="showCoupop" mode="center">
             <view class="wrap">
-                <image v-if="staticAsset('home_coupon_bg')" class="coupon-bg" :src="staticAsset('home_coupon_bg')"></image>
+                <image class="coupon-bg" src="/static/images/home_coupon_bg.png"></image>
                 <scroll-view :scroll-y="true" style="height: 460rpx; margin-top: 300rpx">
                     <view class="item" v-for="(item, index) in couponPopList" :key="item.id">
                         <image class="img" src="/static/images/pop_bg_coupon.png"></image>
@@ -337,8 +349,26 @@ export default {
             isDischarge: true,
             enable: true,
             isShowDownload: false,
+            offTip: false,
+
             showPrivacyPopup: false //微信用户隐私协议
         }
+    },
+    onReady() {
+        // #ifdef MP
+
+        const _this = this
+        wx.checkIsAddedToMyMiniProgram({
+            success(res) {
+                if (!res.added) {
+                    _this.offTip = true
+                    _this.clearTipAuto()
+                } else {
+                    return
+                }
+            }
+        })
+        // #endif
     },
     async onLoad(options) {
         // #ifdef MP-WEIXIN
@@ -424,6 +454,7 @@ export default {
     onReachBottom() {
         this.getBestListFun()
     },
+
     onPullDownRefresh() {
         this.getHomeFun()
         this.getMenuFun()
@@ -451,6 +482,18 @@ export default {
     methods: {
         ...mapMutations(['SETCONFIG']),
         ...mapActions(['getCartNum', 'getUser']),
+        clearIntervalFunc() {
+            this.offTip = false
+        },
+        clearTipAuto() {
+            let timeid = null
+            if (timeid) {
+                clearTimeout(timeid)
+            }
+            timeid = setTimeout(() => {
+                this.clearIntervalFunc()
+            }, 5000)
+        },
         // 网络重试刷新网络请求（解决在ios中首次进入时需要授权蜂窝加载空白页面问题
         async handleRetry() {
             console.log('网络重试刷')
@@ -563,12 +606,35 @@ export default {
 </script>
 
 <style lang="scss">
-.home-bg {
-    background-color: #ff6b57;
-    background-repeat: no-repeat;
+.capsule-tips {
+    color: #ffffff;
+    padding: 12rpx 18rpx;
+    border-radius: 14rpx;
+    background: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    z-index: 9999;
+    right: 25rpx;
+}
+.capsule-tips::after {
+    content: '';
+    border-bottom: 14rpx solid rgba(0, 0, 0, 0.7);
+    border-right: 14rpx solid transparent;
+    border-left: 14rpx solid transparent;
+    position: absolute;
+    top: -14rpx;
+    right: 88rpx;
+}
+// #ifdef H5
+::v-deep .home-bg {
+    background: url(../../static/images/bg_hometop.png) no-repeat;
     background-size: 100% auto;
 }
 
+// #endif
+.home-bg {
+    background: url(../../static/images/bg_hometop.png) no-repeat;
+    background-size: 100% auto;
+}
 .index {
     .live-play {
         position: fixed;
@@ -580,7 +646,7 @@ export default {
         justify-content: center;
         width: 80rpx;
         height: 80rpx;
-        border: $ls-solid-border;
+        border: $-solid-border;
         border-radius: 50%;
         font-size: 32rpx;
         background-color: #ffffff;
@@ -655,7 +721,7 @@ export default {
 
                         &.active {
                             width: 20rpx;
-                            background-color: $ls-color-primary;
+                            background-color: $-color-primary;
                         }
                     }
                 }
@@ -754,6 +820,7 @@ export default {
     }
 
     .coupon-pop-container {
+        // background-image: url(../../static/images/home_coupon_bg.png);
         width: 638rpx;
         height: 804rpx;
         background-size: 100% 100%;
@@ -774,7 +841,7 @@ export default {
 
                 .coupon-right {
                     padding-left: 30rpx;
-                    border-left: 1rpx dashed $ls-color-primary;
+                    border-left: 1rpx dashed $-color-primary;
                 }
             }
         }
@@ -817,7 +884,7 @@ export default {
 
                 .price {
                     width: 160rpx;
-                    border-right: 1px dashed $ls-color-primary;
+                    border-right: 1px dashed $-color-primary;
                     height: 100%;
                 }
             }
@@ -831,5 +898,10 @@ export default {
             border: 3px solid #f8d07c;
         }
     }
+}
+.record_number {
+    text-align: center;
+    padding: 30rpx;
+    font-size: 24rpx;
 }
 </style>

@@ -57,7 +57,8 @@ class WeChatLogic
             'updateAppMessageShareData',
             'updateTimelineShareData',
             'openAddress',
-            'scanQRCode'
+            'scanQRCode',
+            'requestMerchantTransfer',
         ];
         try {
             $data = $app->jssdk->getConfigArray($apis, $debug = false, $beta = false);

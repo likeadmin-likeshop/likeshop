@@ -17,10 +17,10 @@
 // +----------------------------------------------------------------------
 
 <template>
-	<view class="hot-list" :style="{ backgroundImage: 'url(' + staticAsset('bundle/hot_list_bg.png') + ')' }">
+	<view class="hot-list">
 		<view class="header">
 			<view class="title row mb20">
-				<image :src="staticAsset('bundle/icon_paixu.png')" class="icon mr20"></image>
+				<image src="../../static/images/icon_paixu.png" class="icon mr20"></image>
 				<text class="xs white">实时更新热销火爆商品</text>
 			</view>
 			<swipers :pid="15" height="284rpx" radius="10rpx"></swipers>
@@ -91,7 +91,7 @@
 </script>
 <style lang="scss">
 	.hot-list {
-		background-repeat: no-repeat;
+		background: url(../../static/images/hot_list_bg.png) no-repeat;
 		background-size: 100% 330rpx;
 		padding: 62rpx 30rpx 0;
 		min-height: 100vh;

@@ -52,6 +52,11 @@ class UpdateUser extends Validate
                     return '此手机号已被使用';
                 }
             }
+            If ($value == 'nickname') {
+                if (mb_strlen($data['value'], 'utf-8') > 32) {
+                    return '昵称最大长度32';
+                }
+            }
             return true;
         }
         return '操作失败';

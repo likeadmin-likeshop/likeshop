@@ -142,12 +142,12 @@
 		}
 
 		.copy-btn {
-			color: $ls-color-primary;
+			color: $-color-primary;
 		}
 
 		.save-btn {
 			color: #fff;
-			background-color: $ls-color-primary;
+			background-color: $-color-primary;
 		}
 	}
 </style>

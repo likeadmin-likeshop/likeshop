@@ -31,4 +31,14 @@ class Common extends AdminBase{
         $this->assign('category_list', $category_list);
         return $this->fetch();
     }
+    public function selectGoodsCoupon(){
+        if ($this->request->isAjax()){
+            $get = $this->request->get();
+            $goods_list = CommonLogic::getGoodsList($get,true);
+            $this->_success('',$goods_list);
+        }
+        $category_list = GoodsCategoryLogic::categoryTreeeTree();
+        $this->assign('category_list', $category_list);
+        return $this->fetch();
+    }
 }

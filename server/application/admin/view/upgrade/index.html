@@ -1,0 +1,245 @@
+{layout name="layout1" /}
+<style>
+    .doc{
+        color: red;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card layui-form">
+        <div class="layui-card-body">
+            <div class="layui-collapse like-layui-collapse" style="border:1px dashed #c4c4c4">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title like-layui-colla-title" style="background-color: #fff">操作提示</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p>* 版本更新需要逐个版本更新，更新前请备份好系统和数据库，更新成功后需要强制刷新站点；</p>
+                        <p>* 系统没有做二次开发，可以直接选择在线更新功能；</p>
+                        <p>* 系统已做二次开发，进行了功能修改，请谨慎选择在线更新功能，推荐以更新包的形式手动更新；</p>
+                        <p>* <a href="https://www.likeshop.cn/doc/13/97" target="_blank" class ="doc">关于v2.6.0及后续版本的升级说明（推荐阅读）</a></p>
+                        <p>* <font class="doc">更新至v2.6.3版本后,请执行 www.example.com/admin/distribution_center/updateTable, www.example.com为你的域名。</font></p>
+                        <p>* <font class="doc">更新至v2.6.3版本后,商品分销比例需在分销应用-分销-分销商品单独设置。</font></p>
+                        <p>* <font class="doc">更新至v2.6.4版本后,请执行 www.example.com/admin/distribution_order_goods/processOldData, www.example.com为你的域名。</font></p>
+                        <p>* <font class="doc">更新至v2.6.5版本后,请执行 www.example.com/api/distribution/fixAncestorRelation, www.example.com为你的域名。</font></p>
+                        <p>* <font class="doc">更新至v2.6.9版本后,地图更换为腾讯地图,请重新设置地图配置(设置->地图设置->腾讯地图设置)及自提门店地图定位(应用->自提门店)。</font></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="lists" lay-filter="lists"></table>
+            <script type="text/html" id="operation">
+
+                <!--一键更新-->
+                {{#  if(d.able_update === 1){ }}
+                    <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update">一键更新</a>
+                {{#  } }}
+
+                <!--服务端更新包-->
+                {{#  if(d.package_link != "undefined" && d.package_link != null && d.package_link != ""){ }}
+                    <a class="layui-btn layui-btn-sm layui-btn-primary" lay-event="download-server">下载服务端更新包</a>
+                {{#  } }}
+
+                <!--pc更新包-->
+                {{#  if(d.pc_package_link != "undefined" && d.pc_package_link != null && d.pc_package_link != ""){ }}
+                    <a class="layui-btn layui-btn-sm layui-btn-primary" lay-event="download-pc">下载pc更新包</a>
+                {{#  } }}
+
+                <!--uniapp更新包-->
+                {{#  if(d.uniapp_package_link != "undefined" && d.uniapp_package_link != null && d.uniapp_package_link != ""){ }}
+                    <a class="layui-btn layui-btn-sm layui-btn-primary" lay-event="download-uniapp">下载uniapp更新包</a>
+                {{#  } }}
+
+                <a class="layui-btn layui-btn-sm layui-btn-primary" lay-event="download-full">下载完整安装包</a>
+            </script>
+
+            <!--更新内容-->
+            <script type="text/html" id="content">
+                <div style="text-align: left">
+                    {{#  layui.each(d.add, function(index, item){ }}
+                    <li>
+                        <span>{{ item }}</span>
+                    <li>
+                        {{# }); }}
+
+                        {{# layui.each(d.optimize, function(index, item){ }}
+                    <li>
+                        <span>{{ item }}</span>
+                    </li>
+                    {{#  }); }}
+
+                    {{#  layui.each(d.repair, function(index, item){ }}
+                    <li>
+                        <span>{{ item }}</span>
+                    </li>
+                    {{#  }); }}
+                </div>
+            </script>
+
+            <!--版本-->
+            <script type="text/html" id="version">
+                {{#  if(d.new_version === 1){ }}
+                    <span style="color: red">new-</span><span>{{d.version_no}}</span>
+                {{#  } else { }}
+                    <span>{{d.version_no}}</span>
+                {{#  } }}
+                <p>{{d.version_str}}</p>
+            </script>
+
+            <!--更新注意提示-->
+            <script type="text/html" id="notice">
+                {{#  layui.each(d.notice, function(index, item){ }}
+                <li>
+                    <span>{{ item }}</span>
+                </li>
+                {{#  }); }}
+                <li>
+                    <span >{{ d.publish_content }}</span>
+                </li>
+            </script>
+
+        </div>
+    </div>
+</div>
+<style>
+    .layui-table-cell {
+        height: auto;
+    }
+</style>
+<script>
+    layui.config({
+        version: "{$front_version}",
+        base: '/static/plug/layui-admin/dist/layuiadmin/'
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['layer', 'table', 'index', 'like'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.$;
+        var like = layui.like;
+
+        // 列表渲染
+        table.render({
+            elem: '#lists'
+            , url: '{:url("upgrade/index")}' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'create_time', title: '发布日期', width: 200, align: 'center'}
+                , {field: 'version_no', title: '版本', width: 200, align: 'center', templet: '#version'}
+                , {field: 'content', title: '版本内容', width: 300, align: 'center', templet: '#content'}
+                , {field: 'notice', title: '注意事项', width: 300, align: 'center', templet: '#notice'}
+                , {title: '操作', align: 'center', width:600, toolbar: '#operation'}
+            ]]
+            , limit: 10
+            , limits: [10, 20, 30]
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.count, //解析数据长度
+                    "data": res.data.lists //解析数据列表
+                };
+            }
+            , response: {
+                "statusCode": 1
+            }
+            , done: function (res) {
+                setTimeout(function () {
+                    // 解决操作栏因为内容过多换行问题
+                    $(".layui-table-fixed-l .layui-table-body").removeAttr("style");
+                    $(".layui-table-fixed-r .layui-table-body").removeAttr("style");
+                    $(".layui-table-main tr").each(function (index, val) {
+                        // console.log($(val).height());
+                        $($(".layui-table-fixed-l .layui-table-body tbody tr")[index]).height($(val).height());
+                        $($(".layui-table-fixed-r .layui-table-body tbody tr")[index]).height($(val).height());
+                    });
+                }, 100)
+            }
+        });
+
+        // 监听行工具栏按钮
+        table.on('tool(lists)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            // 一键更新
+            if (layEvent === 'update') {
+                layer.open({
+                    type: 2,
+                    title: '请选择操作',
+                    content: '{:url("upgrade/choosePage")}',
+                    area: ['60%', '60%'],
+                    success: function(layero, index){
+                        var iframe = window['layui-layer-iframe'+index];
+                        iframe.setVersionData(obj.data);
+                    }
+                });
+            }
+
+
+            // 下载服务端更新包
+            if (layEvent === 'download-server') {
+                data.update_type = 2; //服务端更新包类型
+                like.ajax({
+                    url: '{:url("upgrade/addUpdatePkgLog")}',
+                    type: 'post',
+                    data: data,
+                    success: function(res) {
+                        if(res.code == 1) {
+                            // 下载更新包
+                            window.location.href = res.data.link;
+                        }
+                    }
+                });
+            }
+
+
+            //下载pc端更新包
+            if (layEvent === 'download-pc') {
+                data.update_type = 3; // pc端更新包类型
+                like.ajax({
+                    url: '{:url("upgrade/addUpdatePkgLog")}',
+                    type: 'post',
+                    data: data,
+                    success: function(res) {
+                        if(res.code == 1) {
+                            // 下载更新包
+                            window.location.href = res.data.link;
+                        }
+                    }
+                });
+            }
+
+            //下载uniapp更新包
+            if (layEvent === 'download-uniapp') {
+                data.update_type = 4;
+                like.ajax({
+                    url: '{:url("upgrade/addUpdatePkgLog")}',
+                    type: 'post',
+                    data: data,
+                    success: function(res) {
+                        if(res.code == 1) {
+                            // 下载更新包
+                            window.location.href = res.data.link;
+                        }
+                    }
+                });
+            }
+
+
+            // 下载完整安装包
+            if (layEvent === 'download-full') {
+                data.update_type = 6;
+                like.ajax({
+                    url: '{:url("upgrade/addUpdatePkgLog")}',
+                    type: 'post',
+                    data: data,
+                    success: function(res) {
+                        if(res.code == 1) {
+                            window.open(res.data.link);
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

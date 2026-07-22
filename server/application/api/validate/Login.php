@@ -27,7 +27,6 @@ use think\Db;
 use think\facade\Cache;
 use think\Validate;
 use app\common\logic\SmsLogic;
-use app\common\server\CaptchaService;
 class Login extends Validate
 {
 
@@ -41,9 +40,7 @@ class Login extends Validate
     protected $rule = [
         'account' => 'require',
         'password' => 'require|password',
-        'client' => 'require|in:' . Client_::mnp . ',' . Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
-        'captcha_key' => 'require',
-        'captcha' => 'require|checkCaptcha',
+        'client' => 'require|in:'. Client_::mnp . ','  . Client_::oa . ',' . Client_::ios . ',' . Client_::android. ',' .Client_::pc. ','. Client_::h5,
         'code'=>'require|checkCode',
     ];
 
@@ -51,7 +48,7 @@ class Login extends Validate
         'account.require' => '请输入账号或手机号',
         'password.require' => '请输入密码',
         'password.password' => '密码错误',
-        'client.in' => '当前客户端不支持登录',
+        'client.in' => '当前只支持h5和app登录',
         'code.require'=>'请输入验证码',
     ];
 
@@ -63,19 +60,6 @@ class Login extends Validate
     public function sceneCode()
     {
         $this->only(['account','code','client']);
-    }
-
-    /**
-     * Verify the one-time image captcha used by password login.
-     */
-    public function checkCaptcha($captcha, $rule, $data)
-    {
-        unset($rule);
-        $key = trim($data['captcha_key'] ?? '');
-        if (CaptchaService::verify($key, (string)$captcha)) {
-            return true;
-        }
-        return '图形验证码错误';
     }
 
 

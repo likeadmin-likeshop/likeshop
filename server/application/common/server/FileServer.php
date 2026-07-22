@@ -49,12 +49,10 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file', config('project.file_image'));
-
-            $fileInfo = $StorageDriver->getFileInfo();
-
+            $StorageDriver->setUploadFile('file');
+            
             // 验证是否是图片文件
-            if (! check_is_image($fileInfo['tmp_name'] ?? '')) {
+            if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的图像文件');
             }
 
@@ -112,13 +110,19 @@ class FileServer extends ServerBase
 
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file', config('project.file_image'));
+            $StorageDriver->setUploadFile('file');
             $fileName = $StorageDriver->getFileName();
             $fileInfo = $StorageDriver->getFileInfo();
-
+    
             // 验证是否是图片文件
             if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的图像文件');
+            }
+
+            // 校验上传文件后缀
+            $ext = pathinfo($fileInfo['name'], PATHINFO_EXTENSION);
+            if (!in_array(strtolower($ext), config('project.file_image'))) {
+                throw new Exception("上传图片不允许上传{$ext}文件");
             }
 
             // 上传文件
@@ -168,13 +172,20 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file', config('project.file_video'));
+            $StorageDriver->setUploadFile('file');
+            
             $fileName = $StorageDriver->getFileName();
             $fileInfo = $StorageDriver->getFileInfo();
-
+    
             // 验证是否是视频
             if (! check_is_video($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的视频文件');
+            }
+
+            // 校验上传文件后缀
+            $ext = pathinfo($fileInfo['name'], PATHINFO_EXTENSION);
+            if (!in_array(strtolower($ext), config('project.file_video'))) {
+                throw new Exception("上传视频不允许上传{$ext}文件");
             }
 
             // 上传文件
@@ -355,19 +366,23 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file', config('project.file_video'));
-
+            $StorageDriver->setUploadFile('file');
+    
+    
+            // 视频上传路径
             $fileName = $StorageDriver->getFileName();
+            // 视频信息
             $fileInfo = $StorageDriver->getFileInfo();
-
+    
             // 验证是否是视频
-            if (! check_is_video($fileInfo['tmp_name'] ?? '')) {
+            if (! check_is_video($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
                 throw new Exception('不是有效的视频文件');
             }
 
             if (!$StorageDriver->upload($save_dir)) {
                 throw new Exception('视频上传失败' . $StorageDriver->getError());
             }
+            
 
             //名字长度太长
             if (strlen($fileInfo['name']) > 128) {

@@ -67,7 +67,7 @@ class CouponLogic{
                 $item['coupon_type'] = '指定商品可用';
             }
             if($item['use_goods_type'] == 3){
-                $item['coupon_type'] = '定商品不可用';
+                $item['coupon_type'] = '指定商品不可用';
             }
             if($item['condition_type'] == 2){
                 $item['use_condition'] = '满'.floatval($item['condition_money']).'元减'.floatval($item['money']);
@@ -219,10 +219,10 @@ class CouponLogic{
                     $item['tips'] ='商品'.implode('、',$goods_name_array).'可用';
                     break;
                 case 3:
-                    $item['coupon_type'] = '指定商品可用';
+                    $item['coupon_type'] = '指定商品不可用';
                     $goods_ids = array_column($item['coupon_goods']->toarray(),'goods_id');
                     $goods_name_array = array_intersect_key($goods_list,array_flip($goods_ids));
-                    $item['tips'] ='商品'.implode('、',$goods_name_array).'可用';
+                    $item['tips'] ='商品'.implode('、',$goods_name_array).'不可用';
                     break;
             }
             //使用门槛

@@ -1051,7 +1051,7 @@ function get_date_diff($start, $end)
 
 function check_is_image($image) : bool
 {
-
+    
     try {
         if (function_exists('exif_imagetype')) {
             $ImageType =  exif_imagetype($image);
@@ -1062,16 +1062,15 @@ function check_is_image($image) : bool
     } catch (\Exception $e) {
         return false;
     }
-
+    
     return in_array($ImageType, [1, 2, 3, 6]);
 }
 
 function check_is_video($video) : bool
 {
     $type = mime_content_type($video);
-
+    
     return strpos($type, 'video') !== false;
 }
-
 
 

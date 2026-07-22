@@ -18,6 +18,7 @@
 // +----------------------------------------------------------------------
 namespace app\api\logic;
 use app\api\model\Goods;
+use app\common\model\AssuranceService;
 use app\common\model\Distribution;
 use app\common\model\DistributionGoods;
 use app\common\model\DistributionLevel;
@@ -167,7 +168,7 @@ class GoodsLogic{
         $goods->append(['comment'])->hidden(['Spec','GoodsSpecValue'])
             ->visible(['id','name','image','video','stock','remark','content','sales_sum','poster',
                 'click_count','min_price','max_price','market_price','is_collect','goods_spec','goods_image',
-                'goods_item','activity','member_price','is_express','is_selffetch','market_price']);
+                'goods_item','activity','member_price','is_express','is_selffetch','market_price','service_ids']);
 
         $market_price_array = array_column($goods->goods_item->toarray(),'market_price');
         $goods->market_price = max($market_price_array);
@@ -205,6 +206,9 @@ class GoodsLogic{
             'goods_id' => $id,
             'create_time' => time(),
         ]);
+
+        //保障服务
+        $goods['assurance_service'] = AssuranceService::where(['del' => 0,'id'=>explode(',',$goods['service_ids'])])->order('id','desc')->field('id,title,content')->select()->toArray();
 
         return $goods;
 

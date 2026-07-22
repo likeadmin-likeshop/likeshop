@@ -39,7 +39,7 @@
 		</view>
 		<u-popup class="pay-popup" v-model="showPopup" closeable round mode="center">
 			<view class="content bg-white">
-				<image class="img-icon" :src="staticAsset('bundle/recharge_success.png')"></image>
+				<image class="img-icon" src="../../static/images/recharge_success.png"></image>
 				<view class="xxl bold mt10">充值成功</view>
 				<view v-if="rechargeInfo.give_integral || rechargeInfo.give_growth" class="lg"
 					style="margin-top: 50rpx">恭喜您获得 <text><text class="primary"
@@ -58,7 +58,7 @@
 	// | LikeShop100%开源免费商用电商系统
 	// +----------------------------------------------------------------------
 	// | 欢迎阅读学习系统程序代码，建议反馈是我们前进的动力
-	// | 开源版本可自由商用，保留版权即可
+	// | 开源版本可自由商用，可去除界面版权logo
 	// | 商业版本务必购买商业授权，以免引起法律纠纷
 	// | 禁止对系统程序代码以任何目的，任何形式的再发布
 	// | Gitee下载：https://gitee.com/likeshop_gitee/likeshop
@@ -248,7 +248,7 @@
 					margin-left: 30rpx;
 				}
 
-				border-bottom: $ls-solid-border;
+				border-bottom: $-solid-border;
 			}
 
 			.tip {
@@ -279,7 +279,7 @@
 					height: 150rpx;
 					border-radius: 10rpx;
 					margin-bottom: 16rpx;
-					border: 1px solid $ls-color-primary;
+					border: 1px solid $-color-primary;
 
 					&:not(:nth-of-type(3n)) {
 						margin-right: 24rpx;

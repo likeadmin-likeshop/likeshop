@@ -130,6 +130,9 @@ class Order extends Validate
         if ($order['order_status'] == \app\common\model\Order::STATUS_CLOSE) {
             return '订单已关闭，无法再发货';
         }
+        if ($order['order_status'] != \app\common\model\Order::STATUS_WAIT_DELIVERY) {
+            return '当前订单状态不能发货';
+        }
 
         if ($order['shipping_status'] == 1) {
             return '此订单已发货';

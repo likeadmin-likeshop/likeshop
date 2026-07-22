@@ -335,7 +335,7 @@ class LoginLogic extends LogicBase
     public static function login($post)
     {
         $user_info = Db::name('user')
-            ->field(['id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code'])
+            ->field([ 'id', 'nickname', 'avatar', 'level', 'disable', 'distribution_code', 'mobile' ])
             ->where(['account|mobile' => $post['account']])
             ->find();
         $user_info['token'] = self::createSession($user_info['id'], $post['client']);

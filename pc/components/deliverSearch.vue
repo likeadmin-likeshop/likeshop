@@ -56,7 +56,7 @@
                             <el-timeline-item
                                 v-for="(item, index) in this.delivery.traces"
                                 :key="index"
-                                :timestamp="express == 'kd100' ? item[0] : item[2]"
+                                :timestamp="item[0]"
                             >
                                 <div class="muted">{{item[1]}}</div>
                             </el-timeline-item>
@@ -104,7 +104,6 @@ export default {
             deliverOrder: {},
             deliverShipment: {},
             deliverTake: {},
-            express: '',
             timeLineArray: []
         }
     },
@@ -130,7 +129,7 @@ export default {
             }
             let res = await this.$get("order/orderTraces", {params: data});
             if(res.code == 1) {
-                let {buy, delivery, finish, order, shipment, take, express} = res.data
+                let {buy, delivery, finish, order, shipment, take} = res.data
                 this.deliverBuy = buy;
                 this.delivery = delivery;
                 this.deliverFinish = finish;
@@ -141,7 +140,6 @@ export default {
                 this.timeLineArray.push(this.delivery);
                 this.timeLineArray.push(this.deliverShipment);
                 this.timeLineArray.push(this.deliverBuy);
-                this.express = express;
                 console.log(this.timeLineArray)
             }
         },

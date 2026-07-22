@@ -1,0 +1,74 @@
+{
+  "ActivityArea": {
+    "description": "Auto imported from components/activityArea.vue"
+  },
+  "AdItem": {
+    "description": "Auto imported from components/adItem.vue"
+  },
+  "AddressAdd": {
+    "description": "Auto imported from components/addressAdd.vue"
+  },
+  "AddressList": {
+    "description": "Auto imported from components/addressList.vue"
+  },
+  "AfterSalesList": {
+    "description": "Auto imported from components/afterSalesList.vue"
+  },
+  "CommentList": {
+    "description": "Auto imported from components/commentList.vue"
+  },
+  "CouponsList": {
+    "description": "Auto imported from components/couponsList.vue"
+  },
+  "DeliverSearch": {
+    "description": "Auto imported from components/deliverSearch.vue"
+  },
+  "EvaluationList": {
+    "description": "Auto imported from components/evaluationList.vue"
+  },
+  "GoodsList": {
+    "description": "Auto imported from components/goodsList.vue"
+  },
+  "InputExpress": {
+    "description": "Auto imported from components/inputExpress.vue"
+  },
+  "NullData": {
+    "description": "Auto imported from components/nullData.vue"
+  },
+  "OrderList": {
+    "description": "Auto imported from components/orderList.vue"
+  },
+  "PriceFormate": {
+    "description": "Auto imported from components/priceFormate.vue"
+  },
+  "SelffetchShopList": {
+    "description": "Auto imported from components/selffetchShopList.vue"
+  },
+  "UserWalletTable": {
+    "description": "Auto imported from components/userWalletTable.vue"
+  },
+  "LayoutAslideNav": {
+    "description": "Auto imported from components/layout/aslideNav.vue"
+  },
+  "LayoutCategory": {
+    "description": "Auto imported from components/layout/category.vue"
+  },
+  "LayoutFloatNav": {
+    "description": "Auto imported from components/layout/floatNav.vue"
+  },
+  "LayoutFooter": {
+    "description": "Auto imported from components/layout/footer.vue"
+  },
+  "LayoutHeader": {
+    "description": "Auto imported from components/layout/header.vue"
+  },
+  "PublicCountDown": {
+    "description": "Auto imported from components/public/countDown.vue"
+  },
+  "PublicNumberBox": {
+    "description": "Auto imported from components/public/numberBox.vue"
+  },
+  "PublicUpload": {
+    "description": "Auto imported from components/public/upload.vue"
+  }
+}

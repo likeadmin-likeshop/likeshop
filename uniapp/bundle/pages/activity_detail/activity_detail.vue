@@ -18,7 +18,7 @@
 
 <template>
 <view class="activity-detail-contain">
-        <view class="header row-start" v-if="goodsList.length">
+        <view class="header row-start" v-if="goodsList.length" :style="{ backgroundImage: 'url(' + staticAsset('bundle/activity_detail_bg.png') + ')' }">
             <text class="white header-title"> {{title}}  <text class="white xxs ml20">{{name}}</text></text>
         </view>
         <view class="content">
@@ -109,7 +109,6 @@ export default {
 </script>
 <style>
 .activity-detail-contain .header {
-    background-image: url(../../static/images/activity_detail_bg.png);
     background-size: 100% 100%;
     height: 340rpx;
     width: 100%;

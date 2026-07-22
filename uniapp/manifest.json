@@ -2,7 +2,7 @@
     "name" : "LikeShop",
     "appid" : "__UNI__E8F2641",
     "description" : "",
-    "versionName" : "3.0.3",
+    "versionName" : "3.5.1",
     "versionCode" : 100,
     "transformPx" : false,
     /* 5+App特有相关 */
@@ -160,7 +160,9 @@
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
-            "minified" : true
+            "minified" : true,
+            "minifyWXML" : true,
+            "minifyWXSS" : true
         },
         "usingComponents" : true,
         "optimization" : {

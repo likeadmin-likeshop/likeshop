@@ -40,7 +40,7 @@
 					<!-- 顶部收货地址 -->
 					<view class="express-address row" v-if="take.contacts">
 						<view class="express-left column-center">
-							<image class="express-icon" :src="finish.tips ? '../../static/images/logistics_address.png' : '../../static/images/logistics_address_gray.png'"></image>
+							<image class="express-icon" :src="finish.tips ? staticAsset('bundle/logistics_address.png') : staticAsset('bundle/logistics_address_gray.png')"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right">
@@ -50,7 +50,7 @@
 					</view>
 					<view class="express-item row" v-if="finish.tips">
 						<view class="express-left column-center">
-							<image class="express-icon" src="../../static/images/logistics_success.png"></image>
+							<image class="express-icon" :src="staticAsset('bundle/logistics_success.png')"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right">
@@ -61,7 +61,7 @@
 					</view>
 					<view class="express-item row" v-if="delivery.traces && delivery.traces.length">
 						<view class="express-left column-center">
-							<image class="express-icon" src="../../static/images/logistics_transit.png"></image>
+							<image class="express-icon" :src="staticAsset('bundle/logistics_transit.png')"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right muted" v-if="express == 'kd100'">
@@ -103,7 +103,7 @@
 					</block>
 					<view class="express-item row" v-if="shipment.tips">
 						<view class="express-left column-center">
-							<image class="express-icon" src="../../static/images/logistics_delivered.png"></image>
+							<image class="express-icon" :src="staticAsset('bundle/logistics_delivered.png')"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right muted">
@@ -114,7 +114,7 @@
 					</view>
 					<view class="express-item row" v-if="buy.tips">
 						<view class="express-left column-center">
-							<image class="express-icon" src="../../static/images/logistics_pay.png"></image>
+							<image class="express-icon" :src="staticAsset('bundle/logistics_pay.png')"></image>
 							<view class="express-line"></view>
 						</view>
 						<view class="express-right muted">

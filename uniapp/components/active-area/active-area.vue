@@ -17,7 +17,7 @@
 // +----------------------------------------------------------------------
 
 <template>
-	<view :class="'active-area ' + type">
+	<view :class="'active-area ' + type" :style="backgroundStyle">
 		<view class="a-header">
 			<slot name="header"></slot>
 		</view>
@@ -78,6 +78,12 @@
 				}
 			}
 		},
+		computed: {
+			backgroundStyle() {
+				const image = this.type === 'seckill' ? this.staticAsset('home_seckill_bg') : ''
+				return image ? { backgroundImage: `url(${image})` } : {}
+			}
+		},
 
 		beforeMount: function() {
 
@@ -94,7 +100,6 @@
 		padding-bottom: 20rpx;
 		&.seckill {
 			background-color: $ls-color-white;
-			background-image: url(../../static/images/home_seckill_bg.png);
 		}
 
 		.a-main {

@@ -117,11 +117,11 @@
 					case 1:
 						"";
 					case 2:
-						return '../../static/images/icon_cashOut_wait.png';
+						return this.staticAsset('bundle/icon_cashOut_wait.png');
 					case 3:
 						return '/static/images/icon_paySuccess.png';
 					case 4:
-						return '../../static/images/icon_payFail.png';
+						return this.staticAsset('bundle/icon_payFail.png');
 				}
 			}
 		}

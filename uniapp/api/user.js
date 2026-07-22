@@ -32,6 +32,11 @@ export function getAddressLists() {
     return request.get('user_address/lists')
 }
 
+// 获取地区树（公开接口，页面按需加载）
+export function getRegionLists() {
+    return request.get('region/lists')
+}
+
 // 添加编辑地址
 export function editAddress(data) {
     return request.post('user_address/update', data)

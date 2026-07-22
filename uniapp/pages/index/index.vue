@@ -245,7 +245,7 @@
 
         <u-popup class="coupons-popup" v-model="showCoupop" mode="center">
             <view class="wrap">
-                <image class="coupon-bg" src="/static/images/home_coupon_bg.png"></image>
+                <image v-if="staticAsset('home_coupon_bg')" class="coupon-bg" :src="staticAsset('home_coupon_bg')"></image>
                 <scroll-view :scroll-y="true" style="height: 460rpx; margin-top: 300rpx">
                     <view class="item" v-for="(item, index) in couponPopList" :key="item.id">
                         <image class="img" src="/static/images/pop_bg_coupon.png"></image>
@@ -563,17 +563,12 @@ export default {
 </script>
 
 <style lang="scss">
-// #ifdef H5
-::v-deep .home-bg {
-    background: url(../../static/images/bg_hometop.png) no-repeat;
+.home-bg {
+    background-color: #ff6b57;
+    background-repeat: no-repeat;
     background-size: 100% auto;
 }
 
-// #endif
-.home-bg {
-    background: url(../../static/images/bg_hometop.png) no-repeat;
-    background-size: 100% auto;
-}
 .index {
     .live-play {
         position: fixed;
@@ -759,7 +754,6 @@ export default {
     }
 
     .coupon-pop-container {
-        background-image: url(../../static/images/home_coupon_bg.png);
         width: 638rpx;
         height: 804rpx;
         background-size: 100% 100%;

@@ -15,6 +15,7 @@ const state = {
 		app_agreement: 0,
 		center_setting: {},
 		index_setting: {},
+		static_assets: {},
 		navigation_menu: [],
 		navigation_setting: {}
 	},

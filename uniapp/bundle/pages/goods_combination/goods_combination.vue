@@ -20,7 +20,7 @@
 	<view class="goods-combination">
 		<navbar title="拼团活动"></navbar>
 		<view class="header">
-			<image class="img" src="../../static/images/group_bg.png"></image>
+			<image class="img" :src="staticAsset('bundle/group_bg.png')"></image>
 		</view>
 		<view class="main bg-primary">
 			<view class="goods-list">
@@ -32,7 +32,7 @@
 						<view class="dec row">
 							<view class="group mr20 row">
 								<view class="group-img row-center">
-									<image class="icon-sm" src="../../static/images/icon_group_white.png"></image>
+									<image class="icon-sm" :src="staticAsset('bundle/icon_group_white.png')"></image>
 								</view>
 								<view class="primary xxs mr10 ml10">{{item.people_num}}人团</view>
 							</view>

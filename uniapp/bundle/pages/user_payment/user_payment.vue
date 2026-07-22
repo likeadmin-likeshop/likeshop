@@ -39,7 +39,7 @@
 		</view>
 		<u-popup class="pay-popup" v-model="showPopup" closeable round mode="center">
 			<view class="content bg-white">
-				<image class="img-icon" src="../../static/images/recharge_success.png"></image>
+				<image class="img-icon" :src="staticAsset('bundle/recharge_success.png')"></image>
 				<view class="xxl bold mt10">充值成功</view>
 				<view v-if="rechargeInfo.give_integral || rechargeInfo.give_growth" class="lg"
 					style="margin-top: 50rpx">恭喜您获得 <text><text class="primary"

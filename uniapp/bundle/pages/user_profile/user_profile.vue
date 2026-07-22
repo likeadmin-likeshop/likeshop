@@ -16,7 +16,7 @@
                     :src="
                         userInfo.avatar != ''
                             ? userInfo.avatar
-                            : '../../static/images/default_avatar.png'
+                            : staticAsset('bundle/default_avatar.png')
                     "
                     @click="handleUser"
                 >

@@ -23,7 +23,7 @@
                         placeholder="请填写手机号码"
                     />
                 </view>
-                <view @click="showRegion = true">
+                <view @click="openRegion">
                     <view class="form-item row">
                         <view class="label">所在地区</view>
                         <input
@@ -94,7 +94,7 @@
 // | author: likeshop.cn.team
 // +----------------------------------------------------------------------
 import { editAddress, getOneAddress, hasRegionCode, addAddress } from '@/api/user'
-import area from '@/utils/area'
+import { loadRegionTree } from '@/utils/region'
 export default {
     data() {
         return {
@@ -133,9 +133,6 @@ export default {
             })
             this.getWxAddressFun()
         }
-        this.$nextTick(() => {
-            this.lists = area
-        })
     },
 
     /**
@@ -150,6 +147,19 @@ export default {
      */
     // onShareAppMessage: function () {},
     methods: {
+        async openRegion() {
+            if (this.lists.length) {
+                this.showRegion = true
+                return
+            }
+            try {
+                this.lists = await loadRegionTree()
+                this.showRegion = true
+            } catch (error) {
+                this.$toast({ title: error.message || '地区数据加载失败' })
+            }
+        },
+
         formSubmit(e) {
             let { value } = e.detail
             let {

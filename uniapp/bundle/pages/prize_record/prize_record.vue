@@ -17,7 +17,7 @@
 		</view>
 		<loading-footer slotEmpty :status="loadingStatus">
 			<view class="data-null column-center" slot="empty">
-				<image src="../../static/images/null_gift.png" class="img-null"></image>
+				<image :src="staticAsset('bundle/null_gift.png')" class="img-null"></image>
 				<text class="xs muted">暂无抽奖记录～</text>
 			</view>
 		</loading-footer>

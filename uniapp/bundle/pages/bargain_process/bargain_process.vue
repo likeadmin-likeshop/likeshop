@@ -5,7 +5,7 @@
         <download-nav v-if="showDownload" :top="44"></download-nav>
         <!-- #endif -->
         <view v-show="status == -1">
-            <view class="bargain-process-header">
+            <view class="bargain-process-header" :style="bargainHeaderStyle">
                 <view class="mt20 column status-container">
                     <view class="white xxl">
                         {{activityObj.bargain_tips}}
@@ -210,7 +210,7 @@
         <loading-view v-if="showLoadingView" />
         <goods-bargain v-if="status != -1" ref="goodsBargain" />
         <u-popup v-model="showBargainPop" mode="center">
-            <view class="bargain-pop-container">
+            <view class="bargain-pop-container" :style="{ backgroundImage: 'url(' + staticAsset('bundle/bg_kanjia.png') + ')' }">
                 <view class="md normal bold row-center" style="padding-top: 64rpx;">
                     恭喜您成功砍下<text class="primary lg">{{knifePrice || 0}}</text>元
                 </view>
@@ -226,7 +226,7 @@
                     </view>
                 </view>
                 <view class="row-center">                    
-                    <view class="invite-btn row-center md" @click="shareToBargain">
+                    <view class="invite-btn row-center md" :style="{ backgroundImage: 'url(' + staticAsset('bundle/coupon_button.png') + ')' }" @click="shareToBargain">
                         {{isHelpKnife ? '确定' : '邀请好友帮砍'}}
                     </view>
                 </view>
@@ -343,6 +343,10 @@
 		
 		computed: {
 			...mapGetters(['userInfo']),
+			bargainHeaderStyle() {
+				const image = this.staticAsset('bg_hometop')
+				return image ? { backgroundImage: `url(${image})` } : {}
+			},
 		},
 		
         methods: {
@@ -501,7 +505,7 @@
 <style lang="scss">
     .bargain-process-container {
         .bargain-process-header {
-            background-image: url(../../../static/images/bg_hometop.png);
+            background-color: #ff6b57;
             height: 420rpx;
             background-size: 100% 100%;
             padding-top: 30rpx;
@@ -674,7 +678,6 @@
         .bargain-pop-container {
             width: 559rpx;
             height: 580rpx;
-            background-image: url(../../static/images/bg_kanjia.png);
             background-size: 100% 100%;
             .differ-price {
                 font-size: 58rpx;
@@ -697,7 +700,6 @@
                 }
             }
             .invite-btn {
-                background-image: url(../../static/images/coupon_button.png);
                 background-size: 100% 100%;
                 height: 106rpx;
                 color: #7B3200;

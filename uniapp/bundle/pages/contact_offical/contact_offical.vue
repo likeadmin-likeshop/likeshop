@@ -8,7 +8,7 @@
                 <img class="content-img" :src="server.image" />
                 <view class="primary wechat-num lg">客服微信</view>
                 <view class="row-center copy-btn xxl white" @click="onCopy(server.wechat)">
-                    <image class="mr5" style="width: 32px;height: 25px;" src="../../static/images/wechat-btn-icon.png" />
+                    <image class="mr5" style="width: 32px;height: 25px;" :src="staticAsset('bundle/wechat-btn-icon.png')" />
                     微信扫码添加
                 </view>
                 <view class="mt20 normal xs" style="line-height: 35px">{{server.time}}</view>

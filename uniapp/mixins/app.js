@@ -58,6 +58,14 @@ export default {
             } else {
                 wechath5.share(options)
             }
+        },
+        staticAsset(name) {
+            const config = this.$store && this.$store.getters.appConfig
+            const assets = config && config.static_assets
+            if (assets && assets.bundle_base && name.indexOf('bundle/') === 0) {
+                return assets.bundle_base + name.slice('bundle/'.length)
+            }
+            return assets && assets[name] ? assets[name] : ''
         }
     },
     computed: {

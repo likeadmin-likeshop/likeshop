@@ -10,7 +10,7 @@
 			<product-swiper :imgUrls="swiperList" :video="goodsDetail.video"></product-swiper>
 			<!-- 秒杀 -->
 			<view class="seckill row-between" v-if="goodsType == 1">
-				<view class="price row">
+				<view class="price row" :style="remoteBackground('bg_seckill')">
 					<view class="row white info">
 						<view style="align-items: baseline;" class="row ml20">
 							<view class="mr10">秒杀价</view>
@@ -36,7 +36,7 @@
 				</view>
 			</view>
 			<!-- 拼团 -->
-			<view class="group" v-show="goodsType == 2">
+			<view class="group" v-show="goodsType == 2" :style="remoteBackground('pintuan_bg')">
 				<view class="row info" style="height: 100%">
 					<view class="row-between ml20 white" style="flex: 1;">
 						<view style="align-items: baseline;" class="row">
@@ -296,7 +296,7 @@
 					<u-icon name="close" size="16" color="#fff"></u-icon>
 				</view>
 			</view>
-			<view class="share-con mt10" @tap="showShareBtn=true">
+			<view class="share-con mt10" :style="remoteBackground('bg_packet_img')" @tap="showShareBtn=true">
 				<view class="primary" style="font-size: 45rpx;">
 					{{distribution.earnings}}<text class="xs">元</text>
 				</view>
@@ -411,6 +411,11 @@
 			this.scrollTop = scrollTop
 		},
 		methods: {
+			remoteBackground(name) {
+				const image = this.staticAsset(name)
+				return image ? { backgroundImage: `url(${image})` } : {}
+			},
+
 			...mapActions(['getCartNum']),
 			async getGoodsDetailFun() {
 				const {
@@ -668,7 +673,7 @@
 			.price {
 				width: 504rpx;
 				height: 100%;
-				background: url(../../static/images/bg_seckill.png) no-repeat;
+				background-repeat: no-repeat;
 				background-size: 100%;
 			}
 
@@ -680,7 +685,6 @@
 		.group {
 			height: 100rpx;
 			width: 100%;
-			background-image: url(../../static/images/pintuan_bg.png);
 			background-size: 100%;
 
 			.group-num {
@@ -968,7 +972,7 @@
 			}
 
 			.share-con {
-				background: url('../../static/images/bg_packet_img.png');
+				background-repeat: no-repeat;
 				width: 241rpx;
 				height: 208rpx;
 				background-size: 100%;

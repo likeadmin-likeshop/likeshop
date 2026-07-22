@@ -127,6 +127,9 @@ class Index extends ApiBase
           $item['selected_icon'] =  empty($item['selected_icon']) ? '' : UrlServer::getFileUrl($item['selected_icon']);
           $item['un_selected_icon'] =  empty($item['un_selected_icon']) ? '' : UrlServer::getFileUrl($item['un_selected_icon']);
         }
+        $mobileStaticPath = '/static/mobile/images/';
+        $indexTopBg = ConfigServer::get('decoration', 'index_setting_top_bg_image', '');
+        $centerTopBg = ConfigServer::get('decoration', 'center_setting_top_bg_image', '');
         $config = [
             'register_setting' => ConfigServer::get('register_setting', 'open', 0),//注册设置-是否开启短信验证注册
             'app_wechat_login' => ConfigServer::get('app', 'wechat_login', 0),//APP是否允许微信授权登录
@@ -141,6 +144,15 @@ class Index extends ApiBase
             'android_download' => ConfigServer::get('app', 'line_android', ''),//安卓下载链接
             'download_doc'     => ConfigServer::get('app', 'download_doc', ''),//app下载文案
             'cate_style'       => ConfigServer::get('decoration', 'layout_no', 1),//分类页面风格
+            'static_assets' => [
+              'bg_hometop' => UrlServer::getFileUrl($mobileStaticPath . 'bg_hometop.png'),
+              'bg_packet_img' => UrlServer::getFileUrl($mobileStaticPath . 'bg_packet_img.png'),
+              'bg_seckill' => UrlServer::getFileUrl($mobileStaticPath . 'bg_seckill.png'),
+              'home_coupon_bg' => UrlServer::getFileUrl($mobileStaticPath . 'home_coupon_bg.png'),
+              'home_seckill_bg' => UrlServer::getFileUrl($mobileStaticPath . 'home_seckill_bg.png'),
+              'my_topbg' => UrlServer::getFileUrl($mobileStaticPath . 'my_topbg.png'),
+              'pintuan_bg' => UrlServer::getFileUrl($mobileStaticPath . 'pintuan_bg.png'),
+            ],
             'index_setting' => [ // 首页设置
               // 热销榜单
               'logo' => ConfigServer::get('decoration', 'index_setting_logo', 1),
@@ -149,11 +161,11 @@ class Index extends ApiBase
               // 新品推荐
               'news' => ConfigServer::get('decoration', 'index_setting_news', 1),
               // 顶部背景图
-              'top_bg_image' => UrlServer::getFileUrl(ConfigServer::get('decoration', 'index_setting_top_bg_image', ''))
+              'top_bg_image' => UrlServer::getFileUrl($indexTopBg ?: $mobileStaticPath . 'bg_hometop.png')
             ],
             'center_setting' => [ // 个人中心设置
               // 顶部背景图
-              'top_bg_image' => UrlServer::getFileUrl(ConfigServer::get('decoration', 'center_setting_top_bg_image', ''))
+              'top_bg_image' => UrlServer::getFileUrl($centerTopBg ?: $mobileStaticPath . 'my_topbg.png')
             ],
             'navigation_setting' => [ // 底部导航设置
               // 未选中文字颜色

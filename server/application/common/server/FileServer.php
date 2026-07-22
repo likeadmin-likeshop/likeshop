@@ -49,7 +49,7 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file');
+            $StorageDriver->setUploadFile('file', config('project.file_image'));
             
             // 验证是否是图片文件
             if (! check_is_image($StorageDriver->getFileInfo()['tmp_name'] ?? '')) {
@@ -110,7 +110,7 @@ class FileServer extends ServerBase
 
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file');
+            $StorageDriver->setUploadFile('file', config('project.file_image'));
             $fileName = $StorageDriver->getFileName();
             $fileInfo = $StorageDriver->getFileInfo();
     
@@ -172,7 +172,7 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file');
+            $StorageDriver->setUploadFile('file', config('project.file_video'));
             
             $fileName = $StorageDriver->getFileName();
             $fileInfo = $StorageDriver->getFileInfo();
@@ -217,7 +217,7 @@ class FileServer extends ServerBase
      * @return array
      * @author 张无忌(2021/2/20 9:53)
      */
-    public static function other($save_dir='uploads/other', $isLocal=false )
+    public static function other($save_dir='uploads/other', $isLocal=false, array $extensions = [] )
     {
         try {
             if ($isLocal == false) {
@@ -236,7 +236,7 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file');
+            $StorageDriver->setUploadFile('file', $extensions);
 
             if (!$StorageDriver->upload($save_dir)) {
                 throw new Exception('上传失败' . $StorageDriver->getError());
@@ -366,7 +366,7 @@ class FileServer extends ServerBase
             }
 
             $StorageDriver = new StorageDriver($config);
-            $StorageDriver->setUploadFile('file');
+            $StorageDriver->setUploadFile('file', config('project.file_video'));
     
     
             // 视频上传路径

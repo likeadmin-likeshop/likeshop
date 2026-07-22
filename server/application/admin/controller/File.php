@@ -86,12 +86,19 @@ class File extends AdminBase
             $sub_dir = $this->request->get('sub_dir','');
             $local = $local == 0 ? false : true;
             $save_path = 'uploads/other';
+            $extensions = [];
 
-            if ($local && $local !== '') {
+            if ($local && $sub_dir !== '') {
+                if (!preg_match('/^[A-Za-z0-9_-]+$/', $sub_dir)) {
+                    return $this->_error('上传目录不合法');
+                }
                 $save_path = 'uploads/other/'.$sub_dir;
+                if ($sub_dir === 'cert') {
+                    $extensions = ['pem'];
+                }
             }
 
-            $result = FileServer::other($save_path, $local);
+            $result = FileServer::other($save_path, $local, $extensions);
             $this->successOrError($result);
         }
         $this->_success();

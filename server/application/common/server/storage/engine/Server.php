@@ -34,7 +34,7 @@ abstract class Server
      * @param string $name
      * @throws Exception
      */
-    public function setUploadFile($name)
+    public function setUploadFile($name, array $extensions = [])
     {
         // 接收上传的文件
         $this->file = request()->file($name);
@@ -42,8 +42,8 @@ abstract class Server
             throw new Exception('未找到上传文件的信息');
         }
         // 校验文件
-        $validate = (new Upload());
-        if (!$validate->check(['file' => request()->file($name)])){
+        $validate = (new Upload())->setAllowedExtensions($extensions);
+        if (!$validate->check(['file' => $this->file])){
             throw new Exception($validate->getError());
         }
         // 文件信息

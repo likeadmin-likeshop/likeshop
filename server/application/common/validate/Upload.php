@@ -31,4 +31,18 @@ class Upload extends Validate
         'file.fileExt' => '该文件类型不允许上传',
     ];
 
+    /**
+     * 按上传场景收窄允许的文件后缀。
+     * @param array $extensions
+     * @return $this
+     */
+    public function setAllowedExtensions(array $extensions)
+    {
+        $extensions = array_filter(array_unique(array_map('strtolower', $extensions)));
+        if (!empty($extensions)) {
+            $this->rule['file'] = 'fileExt:' . implode(',', $extensions);
+        }
+        return $this;
+    }
+
 }

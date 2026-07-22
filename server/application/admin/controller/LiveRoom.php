@@ -21,6 +21,7 @@ namespace app\admin\controller;
 
 
 use app\admin\logic\LiveRoomLogic;
+use app\common\validate\Upload as UploadValidate;
 
 class LiveRoom extends AdminBase
 {
@@ -96,7 +97,24 @@ class LiveRoom extends AdminBase
     {
         if ($this->request->isPost()) {
             $file = request()->file('file');
+            if (empty($file)) {
+                return $this->_error('未找到上传文件的信息');
+            }
+
+            $validate = (new UploadValidate())->setAllowedExtensions(config('project.file_image'));
+            if (!$validate->check(['file' => $file])) {
+                return $this->_error($validate->getError());
+            }
+
+            $fileInfo = $file->getInfo();
+            if (!check_is_image($fileInfo['tmp_name'] ?? '')) {
+                return $this->_error('不是有效的图像文件');
+            }
+
             $info = $file->move( './uploads/temp');
+            if (empty($info)) {
+                return $this->_error($file->getError());
+            }
             $result = LiveRoomLogic::upload($info->getSaveName());
             if (is_string($result)) {
                 return $this->_error($result);

@@ -12,6 +12,15 @@
     #logo{
         width: 176px;height: 42px
     }
+    .captcha-box input {
+        width: 178px !important;
+    }
+    .captcha-img {
+        width: 100px;
+        height: 38px;
+        margin-left: 12px;
+        cursor: pointer;
+    }
 </style>
 <body>
 <div class="login">
@@ -49,6 +58,18 @@
                                placeholder="请输入密码"/>
                     </div>
                 </div>
+                <div class="form-box-item captcha-box">
+                    <div class="icon">
+                        <img src="__PUBLIC__/static/common/image/login/login_code.png"/>
+                    </div>
+                    <div style="display: flex;align-items: center;">
+                        <input type="text" name="captcha" lay-verify="required" lay-vertype="tips"
+                               class="layui-input" style="border:none;padding-left: 20px;"
+                               placeholder="请输入图形验证码"/>
+                        <img id="captcha-img" class="captcha-img" src="" title="点击刷新验证码"/>
+                        <input type="hidden" name="captcha_key" value=""/>
+                    </div>
+                </div>
 
                 <div class="form-box-checked">
                     <div>
@@ -80,6 +101,19 @@
             , form = layui.form
         form.render();
 
+        function getCaptcha() {
+            $.get('{:url("account/captcha")}', function (res) {
+                if (res.code == 1) {
+                    $('#captcha-img').attr('src', res.data.image || '');
+                    $('[name="captcha_key"]').val(res.data.key || '');
+                }
+            });
+        }
+
+        $('#captcha-img').on('click', function () {
+            getCaptcha();
+        });
+        getCaptcha();
 
         function login(obj) {
             like.ajax({
@@ -95,8 +129,10 @@
                         }, function () {
                             location.href = '../'; //后台主页
                         });
+                    } else {
+                        getCaptcha();
+                        $('[name="captcha"]').val('');
                     }
-                    $('#captcha').attr('src', '{:captcha_src()}?t=' + new Date().getTime());
                 },
             });
         }
@@ -118,7 +154,7 @@
                 $('#login').trigger('click');
             }
         });
-        $('[name="code"]').keyup(function (event) {
+        $('[name="captcha"]').keyup(function (event) {
             if (event.keyCode == 13) {
                 $('#login').trigger('click');
             }

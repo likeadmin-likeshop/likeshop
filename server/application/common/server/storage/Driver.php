@@ -33,9 +33,9 @@ class Driver
      * @param string $name
      * @return mixed
      */
-    public function setUploadFile($name = 'iFile')
+    public function setUploadFile($name = 'iFile', array $extensions = [])
     {
-        return $this->engine->setUploadFile($name);
+        return $this->engine->setUploadFile($name, $extensions);
     }
 
     /**

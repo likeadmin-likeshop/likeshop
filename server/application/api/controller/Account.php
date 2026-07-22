@@ -21,12 +21,23 @@
 namespace app\api\controller;
 use app\api\logic\LoginLogic;
 use app\api\validate\WechatLoginValidate;
+use app\common\server\CaptchaService;
 use app\common\server\ConfigServer;
+use Exception;
 
 class Account extends ApiBase
 {
 
-    public $like_not_need_login = ['register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+    public $like_not_need_login = ['captcha', 'register','applogin', 'login', 'mnplogin', 'codeurl', 'oalogin', 'oplogin','logout','smslogin', 'uinAppLogin', 'silentLogin', 'authLogin'];
+
+    /**
+     * @notes 图形验证码
+     * @throws Exception
+     */
+    public function captcha()
+    {
+        $this->_success('OK', CaptchaService::create());
+    }
 
 
     /**

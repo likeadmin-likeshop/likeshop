@@ -19,6 +19,7 @@
 
 namespace app\admin\validate;
 
+use app\common\server\CaptchaService;
 use think\Db;
 use think\facade\Cache;
 use think\Validate;
@@ -27,14 +28,37 @@ class Login extends Validate
 {
     protected $rule = [
         'account' => 'require',
+        'captcha_key' => 'require',
+        'captcha' => 'require|checkCaptcha',
         'password' => 'require|password',
     ];
 
     protected $message = [
         'account.require' => '账号不能为空',
+        'captcha_key.require' => '图形验证码已失效，请重新获取',
+        'captcha.require' => '请输入图形验证码',
         'password.require' => '密码不能为空',
         'password.password' => '账号密码错误',
     ];
+
+    /**
+     * @notes 校验图形验证码
+     * @param $captcha
+     * @param $rule
+     * @param $data
+     * @return string|true
+     */
+    public function checkCaptcha($captcha, $rule, $data)
+    {
+        unset($rule);
+        $key = trim($data['captcha_key'] ?? '');
+
+        if (CaptchaService::verify($key, (string) $captcha)) {
+            return true;
+        }
+
+        return '图形验证码错误';
+    }
 
     /**
      * 账号密码验证码

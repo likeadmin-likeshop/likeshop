@@ -23,12 +23,23 @@ namespace app\admin\controller;
 
 use app\admin\logic\LoginLogic;
 use app\admin\validate\Login;
+use app\common\server\CaptchaService;
+use Exception;
 use think\facade\Url;
 
 class Account extends AdminBase
 {
 
-    public $like_not_need_login = ['login'];
+    public $like_not_need_login = ['login', 'captcha'];
+
+    /**
+     * @notes 图形验证码
+     * @throws Exception
+     */
+    public function captcha()
+    {
+        $this->_success('OK', CaptchaService::create());
+    }
 
     /**
      * 登录

@@ -532,6 +532,8 @@ class OrderLogic
             $shipping['create_time_text'] = date('Y-m-d H:i:s', $shipping['create_time']);
         }
         $shipping['traces'] = self::getShipping($order_id);
+        $shipping['express_way'] = ConfigServer::get('express', 'way', '', '');
+
         return $shipping;
     }
 
@@ -577,19 +579,15 @@ class OrderLogic
             ->value($shipping_field);
 
         //获取物流轨迹
-        if (in_array(strtolower($shipping_code ), [ 'sf', 'shunfeng' ])) {
-            if ($express === 'kdniao') {
-                $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'],-4));
-            } else {
-                $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
-            }
-        }else {
-            $expressage->logistics($shipping_code, $order['invoice_no']);
+        if ($express === 'kdniao') {
+            $expressage->logistics($shipping_code, $order['invoice_no'], substr($order['mobile'], -4));
+        } else {
+            $expressage->logistics($shipping_code, $order['invoice_no'], $order['mobile']);
         }
 
         $traces = $expressage->logisticsFormat();
         if ($traces == false) {
-            $traces[] = [$expressage->getError()];
+            $traces = [$expressage->getError()];
         } else {
             foreach ($traces as &$item) {
                 $item = array_values(array_unique($item));

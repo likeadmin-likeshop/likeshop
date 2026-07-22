@@ -135,9 +135,19 @@
                 {foreach $detail.shipping.traces as $k => $item}
                 <tr>
                     {if is_array($item)}
-                        {foreach $item as $k1 => $value}
-                            <td>{$value}</td>
-                        {/foreach}
+                        {if $detail.shipping.express_way == 'kd100'}
+                            <td>{$item[0] ?? ''}</td>
+                            <td>{$item[1] ?? $item[0] ?? ''}</td>
+                        {else /}
+                            {if isset($item[2])}
+                                <td>{$item[2]}</td>
+                            {elseif isset($item[1]) /}
+                                <td>{$item[0] ?? ''}</td>
+                            {else /}
+                                <td></td>
+                            {/if}
+                            <td>{$item[1] ?? $item[0] ?? ''}</td>
+                        {/if}
                     {else /}
                         <td>{$item}</td>
                     {/if}

@@ -383,7 +383,7 @@ class installModel
      */
     public function connectDB()
     {
-        $dsn = "mysql:host={$this->host}; port={$this->port}";
+        $dsn = "mysql:host={$this->host};port={$this->port}";
         try {
             $dbh = new PDO($dsn, $this->user, $this->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -763,8 +763,8 @@ class installModel
         try {
             $code = '56076556ddf1e5060927a0825c60c6b7';
             $data = $this->dataEncrypt($this->getHost(), $code);
-//            $url = "https://server.likeshop.cn/api/version/installLog";
-            $url = "https://likeshoptc.yixiangonline.com/api/version/installLog";
+            $url = "https://server.likeshop.cn/api/version/installLog";
+            //$url = "https://likeshoptc.yixiangonline.com/api/version/installLog";
 
             $curl = curl_init();
             curl_setopt_array($curl, [

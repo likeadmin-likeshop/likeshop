@@ -56,9 +56,9 @@
                             <el-timeline-item
                                 v-for="(item, index) in this.delivery.traces"
                                 :key="index"
-                                :timestamp="item[0]"
+                                :timestamp="traceTime(item)"
                             >
-                                <div class="muted">{{item[1]}}</div>
+                                <div class="muted">{{traceContent(item)}}</div>
                             </el-timeline-item>
                         </el-timeline-item>
                         <!-- 完成 -->
@@ -104,6 +104,7 @@ export default {
             deliverOrder: {},
             deliverShipment: {},
             deliverTake: {},
+            express: '',
             timeLineArray: []
         }
     },
@@ -129,7 +130,7 @@ export default {
             }
             let res = await this.$get("order/orderTraces", {params: data});
             if(res.code == 1) {
-                let {buy, delivery, finish, order, shipment, take} = res.data
+                let {buy, delivery, finish, order, shipment, take, express} = res.data
                 this.deliverBuy = buy;
                 this.delivery = delivery;
                 this.deliverFinish = finish;
@@ -140,8 +141,24 @@ export default {
                 this.timeLineArray.push(this.delivery);
                 this.timeLineArray.push(this.deliverShipment);
                 this.timeLineArray.push(this.deliverBuy);
+                this.express = express;
                 console.log(this.timeLineArray)
             }
+        },
+        traceTime(item) {
+            if (!Array.isArray(item)) {
+                return '';
+            }
+            if (this.express === 'kdniao') {
+                return item[2] || (item[1] ? item[0] : '');
+            }
+            return item[0] || item[2] || '';
+        },
+        traceContent(item) {
+            if (!Array.isArray(item)) {
+                return item || '';
+            }
+            return item[1] || item[0] || '';
         },
         onCopy() {
             // this.deliverOrder.invoice_no;

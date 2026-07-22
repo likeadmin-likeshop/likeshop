@@ -72,6 +72,7 @@
                     :value="item.goods_num"
                     :min="1"
                     :max="item.item_stock"
+                    :longPress="false"
                     @change="countChange($event, item.cart_id, item)"
                   />
                 </view>
@@ -245,6 +246,7 @@ export default {
           this.totalPrice = total_amount;
           this.isShow = true;
           this.getCartNum();
+          uni.hideLoading();
         }
       });
     },
@@ -275,6 +277,9 @@ export default {
     },
 
     countChange({ value }, cartId, item) {
+      uni.showLoading({
+        mask: true,
+      });
       console.log("countChange", value, cartId, item);
       changeGoodsCount({
         cart_id: cartId,

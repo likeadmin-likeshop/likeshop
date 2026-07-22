@@ -28,10 +28,50 @@ class Expressage
             return false;
         }
         $info = $this->logistics_info;
+        usort($info, function ($left, $right) {
+            $left_time = self::getTraceTimestamp($left);
+            $right_time = self::getTraceTimestamp($right);
+            if ($left_time == $right_time) {
+                return 0;
+            }
+            return $left_time < $right_time ? 1 : -1;
+        });
+
         foreach ($info as $k => $v) {
             $info[$k] = array_values($v);
         }
         return $info;
+    }
+
+    /**
+     * 获取不同物流供应商轨迹中的时间戳
+     * @param array $trace
+     * @return int
+     */
+    private static function getTraceTimestamp($trace)
+    {
+        foreach ($trace as $key => $value) {
+            if (!is_string($key) || !is_string($value)
+                || !in_array(strtolower($key), ['time', 'ftime', 'accepttime', 'accept_time'])) {
+                continue;
+            }
+            $timestamp = strtotime($value);
+            if ($timestamp !== false) {
+                return $timestamp;
+            }
+        }
+
+        foreach ($trace as $value) {
+            if (!is_string($value) || !preg_match('/^\d{4}[-\/]\d{1,2}[-\/]\d{1,2}/', $value)) {
+                continue;
+            }
+            $timestamp = strtotime($value);
+            if ($timestamp !== false) {
+                return $timestamp;
+            }
+        }
+
+        return 0;
     }
 
     /**

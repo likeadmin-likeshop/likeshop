@@ -80,8 +80,49 @@ class ConsumeTokenService
 
     private static function isExcluded($request)
     {
-        return strtolower($request->controller()) === 'account'
-            && strtolower($request->action()) === 'consumetoken';
+        $paths = config('consume_token.exclude_paths');
+        if (!is_array($paths)) {
+            $paths = [];
+        }
+        $paths[] = '/api/account/consumeToken';
+
+        $candidates = [];
+        if (method_exists($request, 'path')) {
+            $candidates[] = self::normalizePath($request->path());
+        }
+        $candidates[] = self::normalizePath('/api/' . $request->controller() . '/' . $request->action());
+
+        foreach ($paths as $pattern) {
+            foreach ($candidates as $path) {
+                if ($path !== '' && self::pathMatches($pattern, $path)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static function normalizePath($path)
+    {
+        $path = '/' . trim(strtolower((string) $path), '/');
+        return $path === '/' ? '' : $path;
+    }
+
+    private static function pathMatches($pattern, $path)
+    {
+        $pattern = self::normalizePath($pattern);
+        if ($pattern === '' || $path === '') {
+            return false;
+        }
+        if ($pattern === $path) {
+            return true;
+        }
+
+        $regex = preg_quote($pattern, '#');
+        $regex = str_replace('\*\*', '.*', $regex);
+        $regex = str_replace('\*', '[^/]*', $regex);
+        return preg_match('#^' . $regex . '$#', $path) === 1;
     }
 
     private static function create()

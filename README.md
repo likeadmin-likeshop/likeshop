@@ -133,8 +133,7 @@ LikeShop 采用“开源 + 商业支持”模式：
 + 版本：v3.5.1
 + 完整开源，支持商用（需保留版权信息）
 + 功能完整：分销 / 拼团 / 砍价 / 抽奖 / 支付等均可使用
-+ 包含端：H5、小程序、APP、后台管理
-+ 不包含：PC 商城端
++ 包含端：H5、微信小程序、APP、PC商城、后台管理
 + 不支持：在线升级与自动更新
 
  <br>
@@ -144,7 +143,7 @@ LikeShop 采用“开源 + 商业支持”模式：
 
 + 持续更新版本（领先免费版）
 + 支持在线升级与更新服务
-+ 包含完整端口：H5、小程序、APP、PC商城、后台
++ 包含完整端口：H5、微信小程序、APP、PC商城、后台管理
 + 可移除版权标识
 + 提供更完善的技术支持与服务体系
 
@@ -207,7 +206,7 @@ QQ群：192683602
 
 ## 项目技术栈
 ### 📡服务端
-<a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-7.2-8892bf"></a> <a href="https://www.thinkphp.cn/"><img src="https://img.shields.io/badge/ThinkPHP-5.1-6fb737"></a><a href="https://www.mysql.com/"> <img src="https://img.shields.io/badge/Mysql-5.7-315a80"></a><a href="https://redis.io/"> <img src="https://img.shields.io/badge/Redis-6-d12222"></a><a href="https://redis.io/"> <img src="https://img.shields.io/badge/Docker--139cff"></a>
+<a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-7.4-8892bf"></a> <a href="https://www.thinkphp.cn/"><img src="https://img.shields.io/badge/ThinkPHP-5.1-6fb737"></a><a href="https://www.mysql.com/"> <img src="https://img.shields.io/badge/Mysql-5.7-315a80"></a><a href="https://redis.io/"> <img src="https://img.shields.io/badge/Redis-6-d12222"></a><a href="https://redis.io/"> <img src="https://img.shields.io/badge/Docker--139cff"></a>
 
 <br>
 
@@ -263,8 +262,6 @@ likeshop单商户商城系统，产品定位为B2C模式，类似京东自营商
 
 <br>
 
-### 产品终端
-![产品终端.png](/server/public/readme/gitee/cpzd.png?v=2)
 ### 产品功能
 likeshop单商户商城系统具备PC商城、H5商城、微信小程序商城、APP商城，各商城终端数据打通，使用PC管理后台进行统一的数据管理。
 

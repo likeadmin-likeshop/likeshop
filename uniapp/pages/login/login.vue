@@ -54,7 +54,7 @@
                 </view>
             </block>
             <block v-if="isPhonelogin == 0">
-                <view>
+                <view class="mpwx-login-form">
                     <view v-if="loginType == 0">
                         <view class="input row" style="padding: 15rpx">
                             <u-input
@@ -790,7 +790,7 @@ page {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0 60rpx;
+            padding: 0 20px;
             .logo {
                 width: 180rpx;
                 height: 180rpx;
@@ -802,6 +802,20 @@ page {
                 width: 100%;
                 margin: 80rpx auto 0;
                 height: 100rpx;
+            }
+
+            .input {
+                width: 100%;
+                max-width: 670rpx;
+                box-sizing: border-box;
+            }
+
+            .mpwx-login-form {
+                width: 100%;
+            }
+
+            .captcha-img {
+                flex: none;
             }
         }
         .phonebtn {
@@ -846,12 +860,6 @@ page {
                 box-sizing: border-box;
             }
 
-            .captcha-img {
-                width: 210rpx;
-                height: 90rpx;
-                margin-left: 20rpx;
-            }
-
             .wx-login {
                 margin-top: 60rpx;
 
@@ -873,5 +881,10 @@ page {
 }
 .inactive {
     opacity: 0.5;
+}
+.captcha-img {
+    width: 210rpx;
+    height: 90rpx;
+    margin-left: 20rpx;
 }
 </style>

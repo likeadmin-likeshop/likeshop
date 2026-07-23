@@ -2,6 +2,7 @@ import { getUser } from '@/api/user'
 import { getCartNum } from '@/api/store'
 import { USER_INFO, TOKEN, CONFIG } from '@/config/cachekey'
 import Cache from '@/utils/cache'
+import { createConsumeToken, clearConsumeToken } from '@/utils/consumeToken'
 const state = {
     config: Cache.get(CONFIG) || {
         app_agreement: 0,
@@ -26,6 +27,7 @@ const mutations = {
         // const { register_setting_must_bind_mobile } = state.config
         state.token = opt.token
         Cache.set(TOKEN, opt.token, 59 * 24 * 60 * 60)
+        createConsumeToken(opt.token).catch(() => {})
         this.dispatch('getUser')
     },
     LOGOUT(state) {
@@ -36,6 +38,7 @@ const mutations = {
             coupon: 0
         }
         Cache.remove(TOKEN)
+        clearConsumeToken()
     },
     SETCARTNUM(state, num) {
         state.cartNum = num

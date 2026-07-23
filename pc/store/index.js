@@ -1,5 +1,6 @@
 const cookieparser = process.server ? require("cookieparser") : undefined;
 import Cookies from "js-cookie";
+import { createConsumeToken, clearConsumeToken } from "~/utils/consumeToken";
 export const state = () => ({
   token: "",
   category: [],
@@ -10,10 +11,14 @@ export const state = () => ({
 export const mutations = {
   setToken(state, token) {
     state.token = token;
+    if (token) {
+      createConsumeToken(token).catch(() => {});
+    }
   },
   logout() {
     state.token = "";
     Cookies.remove("token");
+    clearConsumeToken();
   },
   setCategory(state, data) {
     state.category = data;

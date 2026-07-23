@@ -207,21 +207,21 @@
             </view>
         </u-popup>
         <u-popup v-model="showPwd" closeable mode="center" border-radius="14">
-            <view class="modify-container column-center bg-white" v-show="showPwd">
+            <view class="modify-container password-modify-container column-center bg-white" v-show="showPwd">
                 <view class="title xl">设置密码</view>
                 <view class="modify-row row">
                     <view style="width: 56px; border-right: 1px solid #e5e5e5">+86</view>
                     <view style="margin-left: 15px">{{ userInfo.mobile }}</view>
                 </view>
-                <view class="modify-row row">
-                    <view style="width: 142rpx">图形验证码</view>
+                <view class="modify-row password-captcha-row row">
+                    <view class="password-captcha-label">图形验证码</view>
                     <input
+                        class="password-captcha-input"
                         v-model="captchaCode"
-                        style="padding-left: 10rpx; width: 130rpx"
                         placeholder="请输入"
                     />
                     <image
-                        class="captcha-img"
+                        class="captcha-img password-captcha-img"
                         :src="captchaImg"
                         mode="aspectFit"
                         @click="getCaptchaImg"
@@ -774,6 +774,37 @@ export default {
         }
     }
 }
+
+/* #ifdef H5 */
+.user-profile-container {
+    .password-modify-container {
+        .password-captcha-row {
+            align-items: center;
+
+            .password-captcha-label {
+                flex: 0 0 120rpx;
+                font-size: 26rpx;
+                white-space: nowrap;
+            }
+
+            .password-captcha-input {
+                flex: 1;
+                min-width: 0;
+                padding-left: 8rpx;
+                font-size: 26rpx;
+            }
+
+            .password-captcha-img {
+                flex: 0 0 168rpx;
+                width: 168rpx;
+                height: 64rpx;
+                margin-left: 12rpx;
+            }
+        }
+    }
+}
+/* #endif */
+
 .text-name {
     display: flex;
     flex-direction: column;

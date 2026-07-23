@@ -117,10 +117,27 @@
         getCaptcha();
 
         function login(obj) {
+            $.getJSON('{:url("account/passwordKey")}', function (keyRes) {
+                if (keyRes.code !== 1 || !keyRes.data || !keyRes.data.key) {
+                    layer.msg(keyRes.msg || '获取密码加密密钥失败', {icon: 2});
+                    return;
+                }
+                var encryptor = new JSEncrypt();
+                encryptor.setPublicKey(keyRes.data.key);
+                var encrypted = encryptor.encrypt(obj.field.password);
+                if (!encrypted) {
+                    layer.msg('密码加密失败', {icon: 2});
+                    return;
+                }
+                var field = $.extend({}, obj.field, {
+                    password: 'RSA:' + encrypted,
+                    password_key_id: keyRes.data.key_id || keyRes.data.keyId
+                });
             like.ajax({
                 url: '{:url("account/login")}' //实际使用请改成服务端真实接口
-                , data: obj.field
+                , data: field
                 , type: 'post'
+                , passwordEncrypted: true
                 , success: function (res) {
                     if (res.code == 1) {
                         layer.msg(res.msg, {
@@ -135,6 +152,9 @@
                         $('[name="captcha"]').val('');
                     }
                 },
+            });
+            }).fail(function () {
+                layer.msg('获取密码加密密钥失败', {icon: 2});
             });
         }
 

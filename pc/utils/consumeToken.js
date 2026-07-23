@@ -32,6 +32,11 @@ export async function createConsumeToken(loginToken) {
   }
 }
 
+export async function refreshConsumeToken(loginToken, failedToken) {
+  clearConsumeToken(failedToken)
+  return createConsumeToken(loginToken)
+}
+
 async function issue(loginToken) {
   const host = String(config.baseUrl || '').replace(/\/$/, '')
   if (!host && typeof process !== 'undefined' && process.server) {
@@ -57,10 +62,14 @@ async function issue(loginToken) {
   return token
 }
 
-export function clearConsumeToken() {
+export function clearConsumeToken(expectedToken) {
+  if (expectedToken && cachedToken !== expectedToken) {
+    return false
+  }
   cachedToken = ''
   cachedLoginToken = ''
   refreshAt = 0
+  return true
 }
 
 function clearCache() {

@@ -90,7 +90,8 @@
             var response = {
               data: res.data,
               statusCode: res.statusCode,
-              header: res.header
+              header: res.header,
+              config: config
             };
 
             if (!validateStatus || validateStatus(res.statusCode)) {
@@ -409,7 +410,7 @@
       var config = Object.create(null); // 创建空对象，作为最终的合并结果
       // 1.常规属性，如果用户配置了就用用户配置的，如果用户没配置，则用默认配置的；
 
-      var defaultToUserConfig = ["baseURL", "transformRequest", "transformResponse", "paramsSerializer", "timeout", "withCredentials", "adapter", "responseType", "xsrfCookieName", "xsrfHeaderName", "onUploadProgress", "onDownloadProgress", "maxContentLength", "validateStatus", "maxRedirects", "httpAgent", "httpsAgent", "cancelToken", "socketPath"];
+      var defaultToUserConfig = ["baseURL", "transformRequest", "transformResponse", "paramsSerializer", "timeout", "withCredentials", "adapter", "responseType", "xsrfCookieName", "xsrfHeaderName", "onUploadProgress", "onDownloadProgress", "maxContentLength", "validateStatus", "maxRedirects", "httpAgent", "httpsAgent", "cancelToken", "socketPath", "_consumeTokenRetry"];
       defaultToUserConfig.forEach(function (prop) {
         userConfig = userConfig || {}; // 如果用户配置里有
 

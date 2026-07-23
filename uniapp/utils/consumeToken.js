@@ -33,6 +33,11 @@ export async function createConsumeToken(loginToken) {
     }
 }
 
+export async function refreshConsumeToken(loginToken, failedToken) {
+    clearConsumeToken(failedToken)
+    return createConsumeToken(loginToken)
+}
+
 function issue(loginToken) {
     return new Promise((resolve, reject) => {
         const host = String(baseURL || '').replace(/\/$/, '')
@@ -68,10 +73,14 @@ function issue(loginToken) {
     })
 }
 
-export function clearConsumeToken() {
+export function clearConsumeToken(expectedToken) {
+    if (expectedToken && cachedToken !== expectedToken) {
+        return false
+    }
     cachedToken = ''
     cachedLoginToken = ''
     refreshAt = 0
+    return true
 }
 
 function clearCache() {

@@ -1,7 +1,7 @@
 import { Message } from 'element-ui';
 import JSEncrypt from 'jsencrypt'
 import config from '~/config/app'
-import { createConsumeToken, clearConsumeToken } from '~/utils/consumeToken'
+import { createConsumeToken, refreshConsumeToken } from '~/utils/consumeToken'
 
 const passwordFields = [
   'password', 'password2', 'password_confirm', 'passwordConfirm',
@@ -18,6 +18,7 @@ export default function ({ $axios, redirect, app, store }, inject) {
     requestConfig.headers = requestConfig.headers || {}
     requestConfig.headers.token = requestConfig.headers.token || store.state.token
     if (
+      !requestConfig._consumeTokenRetry &&
       requestConfig.data &&
       passwordFields.some(field => typeof requestConfig.data[field] === 'string' && requestConfig.data[field])
     ) {
@@ -46,14 +47,22 @@ export default function ({ $axios, redirect, app, store }, inject) {
     }
     return requestConfig
   })
-  $axios.onResponse((response) => {
+  $axios.onResponse(async (response) => {
     const {
       code,
       show,
       msg
     } = response.data;
     if (code == 0 && response.data.data && response.data.data.error === 'consume_token_invalid') {
-      clearConsumeToken()
+      const requestConfig = response.config || {}
+      const headers = requestConfig.headers || {}
+      const failedToken = headers['X-Consume-Token'] || ''
+      if (!requestConfig._consumeTokenRetry) {
+        requestConfig._consumeTokenRetry = true
+        await refreshConsumeToken(headers.token || store.state.token, failedToken)
+        return $axios.request(requestConfig)
+      }
+      return response
     }
     if (code == 0 && show && msg) {
       Message({

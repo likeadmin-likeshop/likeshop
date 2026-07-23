@@ -1,4 +1,4 @@
-import axios from '../js_sdk/xtshadow-axios/axios.min'
+import axios from '../js_sdk/xtshadow-axios/axios'
 import JSEncrypt from 'jsencrypt'
 import store from '../store'
 import { paramsToStr, currentPage, tabbarList, acountList } from './tools'
@@ -6,7 +6,7 @@ import Cache from './cache'
 import { TOKEN, BACK_URL } from '../config/cachekey'
 import { baseURL } from '../config/app'
 import { getWxCode, toLogin, wxMnpLogin } from './login'
-import { createConsumeToken, clearConsumeToken } from './consumeToken'
+import { createConsumeToken, refreshConsumeToken } from './consumeToken'
 
 const passwordFields = [
     'password', 'password2', 'password_confirm', 'passwordConfirm',
@@ -41,6 +41,7 @@ service.interceptors.request.use(
         config.data = checkParams(config.data)
         config.params = checkParams(config.params)
         if (
+            !config._consumeTokenRetry &&
             config.data &&
             passwordFields.some((field) => typeof config.data[field] === 'string' && config.data[field])
         ) {
@@ -64,7 +65,7 @@ service.interceptors.request.use(
             data.password_key_id = response.data.key_id || response.data.keyId
             config.data = data
         }
-        if (config.method == 'GET') {
+        if (config.method == 'GET' && !config._consumeTokenRetry) {
             config.url += paramsToStr(config.params)
         }
         config.header = config.header || {}
@@ -88,7 +89,15 @@ service.interceptors.response.use(
             const { code, show, msg, data } = response.data
             const { route, options } = currentPage()
             if (code == 0 && data && data.error === 'consume_token_invalid') {
-                clearConsumeToken()
+                const config = response.config || {}
+                const header = config.header || {}
+                const failedToken = header['X-Consume-Token'] || ''
+                if (!config._consumeTokenRetry) {
+                    config._consumeTokenRetry = true
+                    await refreshConsumeToken(header.token || Cache.get(TOKEN), failedToken)
+                    return service(config)
+                }
+                return Promise.resolve(response.data)
             }
             if (code == 0 && show && msg) {
                 uni.showToast({

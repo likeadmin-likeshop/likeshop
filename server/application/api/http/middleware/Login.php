@@ -101,9 +101,9 @@ class Login
     {
         return json([
             'code' => 0,
-            'msg' => '消费Token无效或已过期',
+            'msg' => '',
             'data' => ['error' => 'consume_token_invalid'],
-            'show' => 1,
+            'show' => 0,
             'time' => 0,
         ]);
     }

@@ -190,7 +190,7 @@ LikeShop 适用于以下用户群体：
 <br>
 
 ### 联系微信客服（专业解答、获取功能清单）
-![联系微信客服.png](/server/public/readme/gitee/lxwm.png)
+![联系微信客服.jpg](/server/public/readme/gitee/lxwm.jpg)
 
 小提示：当你预算购买付费企业版时，联系微信客服是有优惠的，请添加她们吧。
 
@@ -300,7 +300,7 @@ likeshop单商户商城系统包含分销裂变，限时秒杀，拼团活动，
 ![ht_step03.png](/server/public/readme/gitee/admin3.png)
 ![ht_step04.png](/server/public/readme/gitee/admin4.png)
 ![ht_step05.png](/server/public/readme/gitee/admin5.png)
-![ht_step07.png](/server/public/readme/gitee/admin6.png)
+![ht_step07.jpg](/server/public/readme/gitee/admin6.jpg)
 
 <br>
 

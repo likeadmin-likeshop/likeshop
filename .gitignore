@@ -3,3 +3,4 @@
 
 # macOS
 .DS_Store
+/server/tests

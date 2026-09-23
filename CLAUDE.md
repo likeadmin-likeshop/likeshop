@@ -62,6 +62,15 @@
 - 交互优先复用 Layui table/form/layer 和 `like.ajax`，不要为单页引入新 SPA 框架。
 - 新增菜单或受控 action 时同步角色权限、缓存逻辑和安装 SQL 中的菜单/权限数据。
 
+### 安全基线
+
+- `config/app.php` 的 `app_debug` 默认 `true`（未配置 `.env` 时调试模式开启）、`app_trace` 默认 `false`；生产部署在 `.env` 显式 `[app] app_debug = false` 关闭调试；判断开关用 `filter_var(..., FILTER_VALIDATE_BOOLEAN)`，`.env` 解析值是字符串，不能 `=== true` 严格比较。
+- trace 输出的 `debug.request.header` 会掩码 token/X-Consume-Token/authorization/cookie/set-cookie。
+- `admin/upgrade/index|choosePage|handleUpgrade|addUpdatePkgLog` 与 `admin/upgrade/fixAncestorRelation` 仅超管（admin id=1）可用；存量环境执行 `server/public/install/db/security_3.5.1.sql` 移除菜单 245 授权并清权限缓存。
+- 提现申请在事务内锁行重读余额 + 条件原子 `setDec`，`checkMoney()` 拒绝 0/负数/非数字且最低提现金额未配置时拒绝。
+- 远程下载经 `check_url_safety()`（仅 http/https，拒绝回环/私网/链路本地/云元数据地址），安全 HTTP 助手限时 10s/30s、不跟随重定向、150MB 上限并用 `CURLOPT_RESOLVE` 固定 IP；`download_file()`、海报合成、`check_file_exists()` 远程分支统一走该助手。
+- 微信 URL 验证仅在 `echostr` GET 分支做 token/timestamp/nonce 排序 SHA1 + `hash_equals` 校验，POST 回调仍走 EasyWeChat。
+
 ## PC 商城边界
 
 管理后台不是 PC 商城。PC 前台源码位于 `pc/`，后端接入位于以下位置：

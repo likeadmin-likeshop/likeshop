@@ -122,6 +122,15 @@ ThinkPHP 开启多模块但未强制路由，因此主要 URL 由“模块/控�
 - 当前没有正式 migration 框架。结构变更至少要同步新安装 SQL，并明确现有环境的升级 SQL/操作步骤；不能只改 `like.sql` 后假设老库会自动升级。
 - `.env` 只保存本地/部署环境值。不要提交数据库、Redis、支付、短信、微信、对象存储或地图等密钥。
 
+## 安全基线
+
+- `config/app.php` 的 `app_debug` 默认 `true`（未配置 `.env` 时调试模式开启）、`app_trace` 默认 `false`。生产部署应在 `.env` 显式设置 `[app] app_debug = false` 关闭调试，需要 trace 时设置 `[app] app_trace = true`。`.env` 解析出的值是字符串（如 `"1"`），判断是否开启时必须用 `filter_var($value, FILTER_VALIDATE_BOOLEAN)`，不要做 `=== true` 严格比较。
+- 开启 trace 时，`ApiBase::_success()/_error()` 返回的 `debug.request.header` 会掩码 `token`、`X-Consume-Token`、`authorization`、`cookie`、`set-cookie`，不要在 debug 输出中引入新的敏感字段。
+- 在线升级入口 `admin/upgrade/index|choosePage|handleUpgrade|addUpdatePkgLog` 以及关系链修复 `admin/upgrade/fixAncestorRelation` 仅超级管理员（admin id=1）可用；权限同时收敛在控制器 `checkSuperAdmin()` 和角色授权数据上。存量环境需执行 `server/public/install/db/security_3.5.1.sql` 移除 `ls_role_dev_auth_index` 中菜单 245（系统更新）的授权，并清理角色权限缓存。
+- 提现 `WithdrawLogic::apply()` 在事务内先插提现单，再用 `lock(true)` 锁行重读可提现余额，最后以 `where('earnings', '>=', $money)->setDec()` 条件原子扣减并校验受影响行数，防止并发超提。`Withdraw.php::checkMoney()` 拒绝 0、负数和非数字，最低提现金额未配置时拒绝申请。
+- 远程图片/头像下载必须经过 `check_url_safety()`：仅允许 `http/https`，DNS 解析后拒绝回环、私网、链路本地、CGNAT 及云元数据地址（如 `169.254.169.254`）。安全 HTTP 助手连接超时 10s、总超时 30s、不跟随重定向、最大下载 150MB，并通过 `CURLOPT_RESOLVE` 固定已校验 IP；`download_file()`、海报合成、`check_file_exists()` 的远程分支统一走该助手。`StorageDriver->fetch()` 在云存储侧发起抓取，调用方仍需先过 `check_url_safety()`，属于已知残余边界。
+- 微信服务器 URL 验证：`WeChatLogic::index()` 仅在携带 `echostr` 的 GET 分支按 token/timestamp/nonce 字典序排序后 SHA1，并用 `hash_equals` 与 `signature` 比对，匹配才回显 `echostr`；`oa.token` 未配置时验证失败。POST 消息回调仍走 EasyWeChat。
+
 ## Admin 架构
 
 admin 是 `server/` 内的服务端渲染模块，不存在独立安装或前端构建步骤。

@@ -95,7 +95,7 @@ class ApiBase extends Controller
                 'request' => [
                     'get' => $this->request->get(),
                     'post' => PasswordCryptoService::maskPasswordFields($this->request->post()),
-                    'header' => $this->request->header(),
+                    'header' => self::maskSensitiveHeaders($this->request->header()),
                 ]
             ];
         }
@@ -136,7 +136,7 @@ class ApiBase extends Controller
                 'request' => [
                     'get' => $this->request->get(),
                     'post' => PasswordCryptoService::maskPasswordFields($this->request->post()),
-                    'header' => $this->request->header(),
+                    'header' => self::maskSensitiveHeaders($this->request->header()),
                 ]
             ];
         }
@@ -148,6 +148,23 @@ class ApiBase extends Controller
         $response = Response::create($result, $type)->header($header)->options(['jump_template' => $this->app['config']->get('dispatch_error_tmpl')]);
 
         throw new HttpResponseException($response);
+    }
+
+    /**
+     * User: 意象信息科技 lr
+     * Desc: 过滤调试信息中的敏感请求头
+     * @param array $headers
+     * @return array
+     */
+    private static function maskSensitiveHeaders(array $headers)
+    {
+        $sensitive = ['token', 'x-consume-token', 'authorization', 'cookie', 'set-cookie'];
+        foreach ($sensitive as $key) {
+            if (array_key_exists($key, $headers)) {
+                $headers[$key] = '******';
+            }
+        }
+        return $headers;
     }
 
 

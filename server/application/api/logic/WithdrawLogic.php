@@ -22,7 +22,7 @@ namespace app\api\logic;
 
 
 use app\common\logic\{AccountLogLogic, LogicBase};
-use app\common\model\{AccountLog, Client_, User, Withdraw};
+use app\common\model\{AccountLog, Client_, Withdraw};
 use app\admin\logic\WechatMerchantTransferLogic;
 use app\admin\model\WithdrawApply;
 use app\common\server\ConfigServer;
@@ -96,10 +96,18 @@ class WithdrawLogic extends LogicBase
             ];
             $withdraw_id = Db::name('withdraw_apply')->insertGetId($data);
 
-            //提交申请后,扣减用户的佣金
-            $user = User::get($user_id);
-            $user->earnings = ['dec', $post['money']];
-            $user->save();
+            //提交申请后,锁行重读可提现余额并条件原子扣减,防止并发超提
+            $user = Db::name('user')->where('id', $user_id)->lock(true)->find();
+            if (empty($user) || !is_numeric($user['earnings']) || $user['earnings'] < $post['money']) {
+                throw new Exception('可提现金额不足');
+            }
+            $affected = Db::name('user')
+                ->where('id', $user_id)
+                ->where('earnings', '>=', $post['money'])
+                ->setDec('earnings', $post['money']);
+            if ($affected !== 1) {
+                throw new Exception('可提现金额不足');
+            }
             //增加佣金变动记录
             AccountLogLogic::AccountRecord(
                 $user_id,
@@ -113,7 +121,7 @@ class WithdrawLogic extends LogicBase
 
             Db::commit();
             return self::dataSuccess('', ['id' => $withdraw_id]);
-        }catch (Exception $e){
+        }catch (\Exception $e){
             Db::rollback();
             return self::dataError($e->getMessage());
         }

@@ -66,6 +66,9 @@ class Withdraw extends Validate
     //提现佣金验证
     protected function checkMoney($value, $rule, $data = [])
     {
+        if (!is_numeric($value) || $value <= 0) {
+            return '提现金额不正确';
+        }
         $able_withdraw = Db::name('user')->where('id', $data['user_id'])->value('earnings');
         if ($value > $able_withdraw){
             return '可提现金额不足';
@@ -73,6 +76,9 @@ class Withdraw extends Validate
 
         //1.最低提现金额
         $min_withdraw = ConfigServer::get('withdraw', 'min_withdraw', 0);
+        if (!is_numeric($min_withdraw) || $min_withdraw <= 0) {
+            return '最低提现金额未设置';
+        }
         if($value < $min_withdraw){
             return '最低提现'.$min_withdraw.'元';
         }

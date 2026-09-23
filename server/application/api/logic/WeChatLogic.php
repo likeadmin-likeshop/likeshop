@@ -22,6 +22,7 @@ namespace app\api\logic;
 
 
 use app\common\model\WeChat;
+use app\common\server\ConfigServer;
 use app\common\server\WeChatServer;
 use EasyWeChat\Kernel\Exceptions\Exception;
 use EasyWeChat\Kernel\Messages\Text;
@@ -72,7 +73,23 @@ class WeChatLogic
     {
 
         if (isset($params['echostr'])) {
-            echo $params["echostr"];
+            $token = ConfigServer::get('oa', 'token', '');
+            $timestamp = isset($params['timestamp']) ? $params['timestamp'] : '';
+            $nonce = isset($params['nonce']) ? $params['nonce'] : '';
+            $signature = isset($params['signature']) ? $params['signature'] : '';
+            if (empty($token) || empty($timestamp) || empty($nonce) || empty($signature)) {
+                echo 'invalid signature';
+                exit;
+            }
+            // 微信官方验证算法: token、timestamp、nonce 字典序排序后 SHA1
+            $tmpArr = [$token, $timestamp, $nonce];
+            sort($tmpArr, SORT_STRING);
+            $tmpStr = sha1(implode($tmpArr));
+            if (!hash_equals($tmpStr, $signature)) {
+                echo 'invalid signature';
+                exit;
+            }
+            echo $params['echostr'];
             exit;
         }
         //微信配置

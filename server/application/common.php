@@ -99,6 +99,238 @@ function data_error($msg = '', $data = [], $code = 0, $show = 1)
 
 /**
  * User: 意象信息科技 lr
+ * Desc: 判断IP是否为内网/回环/链路本地等不安全地址
+ * @param string $ip
+ * @return bool
+ */
+function is_private_ip($ip)
+{
+    if (!is_string($ip) || !filter_var($ip, FILTER_VALIDATE_IP)) {
+        return true;
+    }
+
+    // IPv4
+    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        $long = sprintf('%u', ip2long($ip));
+        $inRange = function ($min, $max) use ($long) {
+            return $long >= $min && $long <= $max;
+        };
+        if ($inRange(0, 16777215)) return true;             // 0.0.0.0/8
+        if ($inRange(167772160, 184549375)) return true;    // 10.0.0.0/8
+        if ($inRange(2130706432, 2147483647)) return true;  // 127.0.0.0/8 回环
+        if ($inRange(2851995648, 2852061183)) return true;  // 169.254.0.0/16 链路本地
+        if ($inRange(2886729728, 2887778303)) return true;  // 172.16.0.0/12
+        if ($inRange(3232235520, 3232301055)) return true;  // 192.168.0.0/16
+        if ($inRange(1681915904, 1686110207)) return true;  // 100.64.0.0/10 CGNAT
+        if ($inRange(3221225472, 3221225727)) return true;  // 192.0.0.0/24
+        if ($inRange(3221225984, 3221226239)) return true;  // 192.0.2.0/24
+        if ($inRange(3323068416, 3323199487)) return true;  // 198.18.0.0/15
+        if ($inRange(3325256704, 3325256959)) return true;  // 198.51.100.0/24
+        if ($inRange(3405803776, 3405804031)) return true;  // 203.0.113.0/24
+        if ($inRange(3758096384, 4026531839)) return true;  // 224.0.0.0/4 组播
+        if ($inRange(4026531840, 4294967295)) return true;  // 240.0.0.0/4 保留
+        return false;
+    }
+
+    // IPv6
+    $packed = inet_pton($ip);
+    if (false === $packed) {
+        return true;
+    }
+    $hex = bin2hex($packed);
+    if ($hex === str_repeat('0', 31) . '1') return true;    // ::1 回环
+    if ($hex === str_repeat('0', 32)) return true;          // :: 未指定
+    if (strncmp($hex, 'fc', 2) === 0 || strncmp($hex, 'fd', 2) === 0) return true;  // fc00::/7
+    if (strncmp($hex, 'fe8', 3) === 0 || strncmp($hex, 'fe9', 3) === 0
+        || strncmp($hex, 'fea', 3) === 0 || strncmp($hex, 'feb', 3) === 0) return true; // fe80::/10
+    if (strncmp($hex, 'ff', 2) === 0) return true;          // ff00::/8 组播
+    // ::ffff:0:0/96 IPv4 映射地址
+    if (substr($hex, 0, 20) === str_repeat('0', 20) && substr($hex, 20, 4) === 'ffff') {
+        $v4 = long2ip(hexdec(substr($hex, 24, 8)));
+        return is_private_ip($v4);
+    }
+    return false;
+}
+
+/**
+ * User: 意象信息科技 lr
+ * Desc: 校验网络资源地址是否安全(仅允许 http/https 且解析后非内网地址)
+ * @param string $url
+ * @return bool
+ */
+function check_url_safety($url)
+{
+    if (empty($url) || !is_string($url)) {
+        return false;
+    }
+    $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+    if (!in_array($scheme, ['http', 'https'], true)) {
+        return false;
+    }
+    $host = parse_url($url, PHP_URL_HOST);
+    if (empty($host) || !is_string($host)) {
+        return false;
+    }
+    $host = rtrim(trim($host, '[]'), '.');
+    if (empty($host)) {
+        return false;
+    }
+    return !empty(safe_resolve_ips($host));
+}
+
+/**
+ * User: 意象信息科技 lr
+ * Desc: 解析域名并返回全部安全的IP(任一解析结果为不安全地址则整体拒绝)
+ * @param string $host
+ * @return array
+ */
+function safe_resolve_ips($host)
+{
+    if (!is_string($host) || empty($host)) {
+        return [];
+    }
+    // IP 字面量直接判断
+    if (filter_var($host, FILTER_VALIDATE_IP)) {
+        return is_private_ip($host) ? [] : [$host];
+    }
+    // 域名解析后逐个判断
+    $ips = gethostbynamel($host);
+    if (false === $ips || empty($ips)) {
+        return [];
+    }
+    foreach ($ips as $ip) {
+        if (is_private_ip($ip)) {
+            return [];
+        }
+    }
+    return $ips;
+}
+
+/**
+ * User: 意象信息科技 lr
+ * Desc: 安全HTTP请求(校验URL、固定已解析IP、限时限量、不跟随重定向)
+ * @param string $url
+ * @param callable|null $write_callback 响应体逐块回调,返回写入字节数
+ * @param bool $head 是否只发起 HEAD 请求
+ * @param int $max_size 最大下载字节数
+ * @param int $timeout 总超时秒数
+ * @return bool
+ */
+function safe_http_fetch($url, $write_callback = null, $head = false, $max_size = 157286400, $timeout = 30)
+{
+    if (!check_url_safety($url)) {
+        return false;
+    }
+    $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+    $host = parse_url($url, PHP_URL_HOST);
+    if (empty($host) || !is_string($host)) {
+        return false;
+    }
+    $host = rtrim(trim($host, '[]'), '.');
+    $ips = safe_resolve_ips($host);
+    if (empty($ips)) {
+        return false;
+    }
+    $port = (int)parse_url($url, PHP_URL_PORT);
+    if ($port <= 0) {
+        $port = ($scheme === 'https') ? 443 : 80;
+    }
+    $ch = curl_init();
+    if (false === $ch) {
+        return false;
+    }
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_TIMEOUT, max(1, (int)$timeout));
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
+    curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+    curl_setopt($ch, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+    // 固定已校验的解析结果,缓解 DNS rebinding
+    $resolve = [];
+    foreach ($ips as $ip) {
+        $resolve[] = $host . ':' . $port . ':' . $ip;
+    }
+    curl_setopt($ch, CURLOPT_RESOLVE, $resolve);
+
+    $downloaded = 0;
+    $aborted = false;
+    if ($head) {
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    } else {
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use ($write_callback, &$downloaded, $max_size, &$aborted) {
+            $len = strlen($data);
+            if ($downloaded + $len > $max_size) {
+                $aborted = true;
+                return 0;
+            }
+            $downloaded += $len;
+            if (is_callable($write_callback)) {
+                return (int)$write_callback($data);
+            }
+            return $len;
+        });
+    }
+
+    $result = curl_exec($ch);
+    $status = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+    if (false === $result || $aborted || !in_array($status, [200, 304], true)) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * User: 意象信息科技 lr
+ * Desc: 安全获取远程文件内容
+ * @param string $url
+ * @param int $max_size 最大下载字节数
+ * @param int $timeout 总超时秒数
+ * @return bool|string
+ */
+function safe_get_remote_content($url, $max_size = 157286400, $timeout = 30)
+{
+    $content = '';
+    $ok = safe_http_fetch($url, function ($data) use (&$content) {
+        $content .= $data;
+        return strlen($data);
+    }, false, $max_size, $timeout);
+    if (!$ok || $content === '') {
+        return false;
+    }
+    return $content;
+}
+
+/**
+ * User: 意象信息科技 lr
+ * Desc: 安全读取本地文件或远程文件内容(远程仅允许 http/https)
+ * @param string $uri
+ * @return bool|string
+ */
+function safe_read_file($uri)
+{
+    if (!is_string($uri) || empty($uri)) {
+        return false;
+    }
+    if (strpos($uri, '://') !== false) {
+        $scheme = strtolower((string)parse_url($uri, PHP_URL_SCHEME));
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return false;
+        }
+        return safe_get_remote_content($uri);
+    }
+    if (!is_file($uri) || !is_readable($uri)) {
+        return false;
+    }
+    $content = file_get_contents($uri);
+    return false === $content ? false : $content;
+}
+
+/**
+ * User: 意象信息科技 lr
  * Desc: 下载文件
  * @param $url 文件url
  * @param $save_dir 保存目录
@@ -107,22 +339,24 @@ function data_error($msg = '', $data = [], $code = 0, $show = 1)
  */
 function download_file($url, $save_dir, $file_name)
 {
+    if (!check_url_safety($url)) {
+        return '';
+    }
     if (!file_exists($save_dir)) {
         mkdir($save_dir, 0775, true);
     }
     $file_src = $save_dir . $file_name;
     file_exists($file_src) && unlink($file_src);
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-    $file = curl_exec($ch);
-    curl_close($ch);
-    $resource = fopen($file_src, 'a');
-    fwrite($resource, $file);
-    fclose($resource);
-    if (filesize($file_src) == 0) {
-        unlink($file_src);
+    $fp = fopen($file_src, 'wb');
+    if (false === $fp) {
+        return '';
+    }
+    $ok = safe_http_fetch($url, function ($data) use ($fp) {
+        return fwrite($fp, $data);
+    }, false, 157286400, 30);
+    fclose($fp);
+    if (!$ok || filesize($file_src) == 0) {
+        file_exists($file_src) && unlink($file_src);
         return '';
     }
     return $file_src;
@@ -553,11 +787,7 @@ function check_file_exists($file)
 {
     //远程文件
     if ('http' == strtolower(substr($file, 0, 4))) {
-
-        $header = get_headers($file, true);
-
-        return isset($header[0]) && (strpos($header[0], '200') || strpos($header[0], '304'));
-
+        return safe_http_fetch($file, null, true, 157286400, 30);
     } else {
 
         return file_exists($file);
@@ -1072,5 +1302,3 @@ function check_is_video($video) : bool
     
     return strpos($type, 'video') !== false;
 }
-
-

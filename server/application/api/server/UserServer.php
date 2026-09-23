@@ -72,6 +72,9 @@ class UserServer
                     $avatar = download_file($avatar_url, 'uploads/user/avatar/', $file_name);
                 } else {
                     $avatar = 'uploads/user/avatar/' . md5($openid . $time) . '.jpeg';
+                    if (!check_url_safety($avatar_url)) {
+                        throw new Exception('头像地址不合法');
+                    }
                     $StorageDriver = new StorageDriver($config);
                     if (!$StorageDriver->fetch($avatar_url, $avatar)) {
                         throw new Exception( '头像保存失败:'. $StorageDriver->getError());
@@ -200,6 +203,9 @@ class UserServer
                     $avatar = download_file($avatar_url, 'uploads/user/avatar/', $file_name);
                 } else {
                     $avatar = 'uploads/user/avatar/' . md5($openid . $time) . '.jpeg';
+                    if (!check_url_safety($avatar_url)) {
+                        throw new Exception('头像地址不合法');
+                    }
                     $StorageDriver = new StorageDriver($config);
                     if (!$StorageDriver->fetch($avatar_url, $avatar)) {
                         throw new Exception( '头像保存失败:'. $StorageDriver->getError());

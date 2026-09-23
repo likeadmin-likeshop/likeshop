@@ -131,7 +131,18 @@ class QrCodeLogic extends LogicBase{
 
             $qr_code_logic = new QrCodeLogic();
             //获取背景图
-            $share_background_img = imagecreatefromstring(file_get_contents($background_img));
+            $background_content = safe_read_file($background_img);
+            if (false === $background_content) {
+                throw new Exception('背景图读取失败');
+            }
+            $background_size = getimagesizefromstring($background_content);
+            if (false === $background_size) {
+                throw new Exception('背景图读取失败');
+            }
+            $share_background_img = imagecreatefromstring($background_content);
+            if (false === $share_background_img) {
+                throw new Exception('背景图解析失败');
+            }
 
             //合成头像
             $qr_code_logic->writeImg($share_background_img, $user_avatar, $poster_config['head_pic'],true);
@@ -153,7 +164,7 @@ class QrCodeLogic extends LogicBase{
             $qr_code_logic->writeText($share_background_img, floatval($goods['min_price']), $poster_config['price']);
 
             //合成商品标题
-            $goods_name = auto_adapt($poster_config['title']['font_size'], 0, $poster_config['title']['font_face'], $goods['name'], $poster_config['title']['w'],$poster_config['title']['y'],getimagesize($background_img));
+            $goods_name = auto_adapt($poster_config['title']['font_size'], 0, $poster_config['title']['font_face'], $goods['name'], $poster_config['title']['w'],$poster_config['title']['y'],$background_size);
             $qr_code_logic->writeText($share_background_img, $goods_name, $poster_config['title']);
 
             //合成二维码
@@ -323,7 +334,18 @@ class QrCodeLogic extends LogicBase{
             $qr_code_logic = new QrCodeLogic();
 
             //获取背景图
-            $share_background_img = imagecreatefromstring(file_get_contents($background_img));
+            $background_content = safe_read_file($background_img);
+            if (false === $background_content) {
+                throw new Exception('背景图读取失败');
+            }
+            $background_size = getimagesizefromstring($background_content);
+            if (false === $background_size) {
+                throw new Exception('背景图读取失败');
+            }
+            $share_background_img = imagecreatefromstring($background_content);
+            if (false === $share_background_img) {
+                throw new Exception('背景图解析失败');
+            }
             //合成头像
             $qr_code_logic->writeImg($share_background_img, $user_avatar, $poster_config['head_pic'],true);
 
@@ -334,7 +356,7 @@ class QrCodeLogic extends LogicBase{
             $notice = '长按识别二维码 >>';
             $qr_code_logic->writeText($share_background_img, $notice, $poster_config['notice']);
             //合成商品标题
-            $title = auto_adapt($poster_config['title']['font_size'], 0, $poster_config['title']['font_face'], '邀请你一起来赚大钱', $poster_config['title']['w'],$poster_config['title']['y'],getimagesize($background_img));
+            $title = auto_adapt($poster_config['title']['font_size'], 0, $poster_config['title']['font_face'], '邀请你一起来赚大钱', $poster_config['title']['w'],$poster_config['title']['y'],$background_size);
             $qr_code_logic->writeText($share_background_img, $title, $poster_config['title']);
             //邀请码
             $qr_code_logic->writeText($share_background_img, '邀请码 '.$user['distribution_code'], $poster_config['code_text']);
@@ -468,7 +490,18 @@ class QrCodeLogic extends LogicBase{
 
             $qr_code_logic = new QrCodeLogic();
             //获取背景图
-            $share_background_img = imagecreatefromstring(file_get_contents($background_img));
+            $background_content = safe_read_file($background_img);
+            if (false === $background_content) {
+                throw new Exception('背景图读取失败');
+            }
+            $background_size = getimagesizefromstring($background_content);
+            if (false === $background_size) {
+                throw new Exception('背景图读取失败');
+            }
+            $share_background_img = imagecreatefromstring($background_content);
+            if (false === $share_background_img) {
+                throw new Exception('背景图解析失败');
+            }
 
             //合成头像
             $qr_code_logic->writeImg($share_background_img, $user_avatar, $poster_config['head_pic'],true);
@@ -494,7 +527,7 @@ class QrCodeLogic extends LogicBase{
             $qr_code_logic->writeText($share_background_img, $brief_title, $poster_config['brief_title']);
 
             //合成商品标题
-            $goods_name = auto_adapt($poster_config['title']['font_size'], 0, $poster_config['title']['font_face'], $bargain_launch['goods_snap']['name'], $poster_config['title']['w'],$poster_config['title']['y'],getimagesize($background_img));
+            $goods_name = auto_adapt($poster_config['title']['font_size'], 0, $poster_config['title']['font_face'], $bargain_launch['goods_snap']['name'], $poster_config['title']['w'],$poster_config['title']['y'],$background_size);
             $qr_code_logic->writeText($share_background_img, $goods_name, $poster_config['title']);
 
             //合成二维码
@@ -555,7 +588,14 @@ class QrCodeLogic extends LogicBase{
 
     //写入图片
     public function writeImg($poster, $img_uri, $config, $is_rounded = false){
-        $pic_img = imagecreatefromstring(file_get_contents($img_uri));
+        $img_content = safe_read_file($img_uri);
+        if (false === $img_content) {
+            throw new Exception('图片读取失败');
+        }
+        $pic_img = imagecreatefromstring($img_content);
+        if (false === $pic_img) {
+            throw new Exception('图片解析失败');
+        }
         $is_rounded?$pic_img = rounded_corner($pic_img):'';//切成圆角返回头像资源
         $pic_w = imagesx($pic_img);
         $pic_h = imagesy($pic_img);

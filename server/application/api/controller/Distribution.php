@@ -26,7 +26,7 @@ use app\common\model\User;
 
 class Distribution extends ApiBase
 {
-    public $like_not_need_login = ['fixAncestorRelation'];
+    public $like_not_need_login = [];
     /**
      * 填写邀请码
      */
@@ -148,19 +148,6 @@ class Distribution extends ApiBase
             $this->_success('', '',20001);//未是分销会员
         }
     }
-
-    /**
-     * 修复旧的关系链
-     */
-    public function fixAncestorRelation()
-    {
-        $result = DistributionLogic::fixAncestorRelation();
-        if ($result['flag']) {
-            $this->_success($result['msg']);
-        }
-        $this->_error($result['msg']);
-    }
-
 
     /**
      * @notes 获取背景海报

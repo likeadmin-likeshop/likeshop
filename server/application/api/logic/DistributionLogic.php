@@ -25,6 +25,7 @@ use app\common\model\{AccountLog, AfterSale, DistributionOrder, NoticeSetting, O
 use app\common\server\{AreaServer, ConfigServer, UrlServer};
 use think\Db;
 use think\Exception;
+use think\facade\Cache;
 use think\facade\Hook;
 
 class DistributionLogic
@@ -572,6 +573,14 @@ class DistributionLogic
 
     public static function fixAncestorRelation()
     {
+        $lock_key = 'distribution_fix_ancestor_relation_lock';
+        if (Cache::get($lock_key)) {
+            return [
+                "flag" => false,
+                "msg" => '修复任务正在执行中'
+            ];
+        }
+        Cache::set($lock_key, 1, 60);
         Db::startTrans();
         try {
             $userList = User::select()->toArray();
@@ -592,12 +601,14 @@ class DistributionLogic
             (new User())->saveAll($updateData);
 
             Db::commit();
+            Cache::rm($lock_key);
             return [
                 "flag" => true,
                 "msg" => '修复成功'
             ];
         } catch (\Exception $e) {
             Db::rollback();
+            Cache::rm($lock_key);
             return [
                 "flag" => false,
                 "msg" => $e->getMessage()
@@ -614,18 +625,22 @@ class DistributionLogic
         return trim(self::findAncestorRelation($user['first_leader']), ',');
     }
 
-    public static function findAncestorRelation($id, $flag = true)
+    public static function findAncestorRelation($id, $flag = true, $depth = 0)
     {
         static $ancestor_relation = '';
         if ($flag) {
             $ancestor_relation = '';
+        }
+        // 防止坏数据导致的循环递归
+        if ($depth > 100) {
+            return $ancestor_relation;
         }
         $ancestor_relation .= $id . ',';
         $user = User::findOrEmpty($id)->toArray();
         if (empty($user['first_leader'])) {
             return $ancestor_relation;
         }
-        return self::findAncestorRelation($user['first_leader'], false);
+        return self::findAncestorRelation($user['first_leader'], false, $depth + 1);
     }
 
     /**

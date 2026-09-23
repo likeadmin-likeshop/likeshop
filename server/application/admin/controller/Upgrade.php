@@ -21,6 +21,7 @@
 namespace app\admin\controller;
 
 
+use app\api\logic\DistributionLogic;
 use app\admin\logic\UpgradeLogic;
 
 /** 升级更新
@@ -37,6 +38,7 @@ class Upgrade extends AdminBase
      */
     public function index()
     {
+        $this->checkSuperAdmin();
         if ($this->request->isAjax()) {
             $page = $this->request->get('page', $this->page_no);
             $size = $this->request->get('limit', $this->page_size);
@@ -53,6 +55,7 @@ class Upgrade extends AdminBase
      */
     public function choosePage()
     {
+        $this->checkSuperAdmin();
         return $this->fetch();
     }
 
@@ -63,6 +66,7 @@ class Upgrade extends AdminBase
      */
     public function handleUpgrade()
     {
+        $this->checkSuperAdmin();
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $post['update_type'] = 1;
@@ -84,11 +88,35 @@ class Upgrade extends AdminBase
     // 下载更新包更新
     public function addUpdatePkgLog()
     {
+        $this->checkSuperAdmin();
         $post = $this->request->post();
         $res = UpgradeLogic::getPkgLine($post);
         if(false === $res) {
             $this->_error(UpgradeLogic::getError() ?? '系统错误');
         }
         $this->_success('', $res);
+    }
+
+    /**
+     * Notes: 修复旧的关系链(仅超级管理员)
+     */
+    public function fixAncestorRelation()
+    {
+        $this->checkSuperAdmin();
+        $result = DistributionLogic::fixAncestorRelation();
+        if (!empty($result['flag'])) {
+            $this->_success(!empty($result['msg']) ? $result['msg'] : '修复成功');
+        }
+        $this->_error(!empty($result['msg']) ? $result['msg'] : '修复失败');
+    }
+
+    /**
+     * Notes: 系统更新相关操作仅超级管理员可用
+     */
+    private function checkSuperAdmin()
+    {
+        if ((int)session('admin_info.id') !== 1) {
+            $this->_error('无权限操作');
+        }
     }
 }
